@@ -1,0 +1,32 @@
+.list-dashboard{
+    font-size: 12px;
+    padding-left: 2px;
+}
+.header{
+    margin-top: 10px;
+}
+.title_graph{
+    color: #139DC9;
+    font-size: 13px;
+}
+.collapsible {
+    background-color: lightgray;
+    color: black;
+    cursor: pointer;
+    padding: 5px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    margin-top: 10px;
+  }
+
+.content {
+    border-color: #008CBA;
+    border-style: solid;
+    border-width: thin;
+}
+.header2{
+    margin-left: -28px;
+}
