@@ -292,18 +292,12 @@ export class RealTime276 extends React.Component{
         this.setState({
             startDate: date
         });
-        setTimeout(() => {
-            this.getData()
-        }, 50);
     };
 
     handleEndChange(date) {
         this.setState({
             endDate: date
         });
-        setTimeout(() => {
-            this.getData()
-        }, 50);
     }
 
     onSelect(event, key){
@@ -316,10 +310,6 @@ export class RealTime276 extends React.Component{
                 [key] : event.target.options[event.target.selectedIndex].text
             })
         }
-
-        setTimeout(() => {
-            this.getData()
-        }, 50);
     }
 
     renderTopbar() {
@@ -382,7 +372,7 @@ export class RealTime276 extends React.Component{
 
                 <div className="form-group col-3">
                     <div className="list-dashboard">Transaction Id</div>
-                    <input className="datepicker" onChange={(text) => {this.setState({transactionId : text})}}/>  
+                    <input className="datepicker" onChange={(event) => {this.setState({transactionId : event.target.value})}}/>  
                 </div>
 
                 <div className="form-group">

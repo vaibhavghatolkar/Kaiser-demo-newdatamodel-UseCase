@@ -110,14 +110,14 @@ export class Sidebar extends React.Component{
     renderSidebarItems(){
         return(
             <div>
-                {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)}
+                {/* ** {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)} */}
                 {this.renderItems(Strings.REALTIME270, 'Eligibility Real-time', this.state.RealTime270)}
-                {this.renderItems(Strings.REALTIME276, '276 Claim Status Real-time', this.state.RealTime276)}
+                {/* ** {this.renderItems(Strings.REALTIME276, '276 Claim Status Real-time', this.state.RealTime276)} */}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
-                {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)}
+                {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
                 {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
-                {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)}
-                {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)}
+                {/* ** {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)} */}
+                {/* ** {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.REP_MANAGEMENT, 'Report Generation', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.ACK_MANAGEMENT, 'Acknowledgment Generation', this.state.pageArray)} */}

@@ -4,6 +4,7 @@ import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
+import DatePicker from "react-datepicker";
 
 export class EligibilityDetails extends React.Component{
     
@@ -31,6 +32,8 @@ export class EligibilityDetails extends React.Component{
         }
 
         this.getData = this.getData.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentWillReceiveProps(){
@@ -87,9 +90,11 @@ export class EligibilityDetails extends React.Component{
         if(this.state.apiflag == 1){
             typeId = this.state.status
         }
-
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        
         query = `{
-            EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+this.state.startDate+`" EndDt:"`+this.state.endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
+            EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
                 RecCount
                 HiPaaSUniqueID
                 Date
@@ -114,7 +119,7 @@ export class EligibilityDetails extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
-                let count = 0
+                let count = 1
                 let data = res.data.EligibilityAllDtlTypewise
                 if(data && data.length > 0){
                     count = Math.floor(data[0].RecCount / 10)
@@ -265,14 +270,31 @@ export class EligibilityDetails extends React.Component{
         })
         return row
     }
+    
+    onSelect(event, key){
+        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+            this.setState({
+                [key] : ''
+            })
+        } else {
+            this.setState({
+                [key] : event.target.options[event.target.selectedIndex].text
+            })
+        }
+    }
+
     renderTopbar() {
         return (
             <div className="row header">
                 <div className="form-group col-3">
                     <div className="list-dashboard">Select State</div>
-                    <select className="form-control list-dashboard" id="state">
-                        <option value="">Select State</option>
-                        <option selected="selected" value="1">California</option>
+                    <select className="form-control list-dashboard" id="state"
+                        onChange={(event) => {
+                            this.onSelect(event, 'State')
+                        }}
+                    >
+                        <option selected="selected" value=""></option>
+                        <option value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
                         <option value="4">New York</option>
@@ -292,54 +314,74 @@ export class EligibilityDetails extends React.Component{
 
                 <div className="form-group col-3">
                     <div className="list-dashboard">Select Trading Partner </div>
-                    <select className="form-control list-dashboard" id="TradingPartner" >
-                        <option value="select">Select Trading Partner</option>
+                    <select className="form-control list-dashboard" id="TradingPartner"
+                        onChange={(event) => {
+                            this.onSelect(event, 'selectedTradingPartner')
+                        }}
+                    >
+                        <option value="select"></option>
                         {this.getoptions()}
                     </select>
                 </div>
                 <div className="form-group col-3">
-                    <div className="list-dashboard">Select Provider Name</div>
-                    <select className="form-control list-dashboard" id="option" 
-                        
-                    >
-                        <option value="">Select Provider Name</option>
-                        <option selected="selected" value="1">Provider Name 1</option>
-                        <option value="2">Provider Name 2</option>
-                    </select>
+                    <div className="list-dashboard">Start Date</div>
+                    <DatePicker 
+                        className="datepicker"
+                        selected={this.state.startDate}
+                        onChange={this.handleStartChange}
+                    />
                 </div>
-               
+                <div className="form-group col-3">
+                    <div className="list-dashboard">End Date</div>
+                    <DatePicker 
+                        className="datepicker"
+                        selected={this.state.endDate}
+                        onChange={this.handleEndChange}
+                    />
+                </div>
             </div>
         )
     }
 
+    handleStartChange(date) {
+        this.setState({
+            startDate: date
+        });
+    }
+
+    handleEndChange(date) {
+        this.setState({
+            endDate: date
+        });
+    }
+
     renderDetailsheader(){
         return(
-            <div className="row header2">
+            <div className="row header">
                 <div className="form-group col-sm-3">
-                    <label className="list-header">Transaction Id</label>
-                    <input className="form-control list-header" id="state">
-                    </input>
-                </div>
-                <div className="form-group col-sm-3">
-                    <label className="list-header">Date</label>
-                    <input className="form-control list-header" id="state">
-                    </input>
-                </div>
-                <div className="form-group col-sm-3">
-                    <label className="list-header">Submiter</label>
-                    <input className="form-control list-header" id="state">
-                    </input>
+                    <div className="list-dashboard">Transaction Id</div>
+                    <input className="form-control list-dashboard" id="state"
+                        onChange={(e) => {
+                            this.setState({transactionId : e.target.value})
+                        }}
+                    />
                 </div>
                 {
                     this.state.status != 'Pass'
                     ?
                     <div className="form-group col-sm-3">
-                        <label className="list-header">Error Code</label>
-                        <input className="form-control list-header" id="state">
-                        </input>
+                        <div className="list-dashboard">Error Code</div>
+                        <input className="form-control list-dashboard" id="state"
+                            onChange={(e) => {
+                                this.setState({errorcode : e.target.value})
+                            }}
+                        />
                     </div>
                     : null
                 }
+                <div className="form-group">
+                    <div class="button"><a href='#' onClick={() => {this.getTransactions()}}>Search</a></div>
+                </div>
             </div>
             
         )
@@ -348,7 +390,7 @@ export class EligibilityDetails extends React.Component{
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
+                {/* {this.renderSearchBar()} */}
                 <div>
                     <label style={{color:"#139DC9" , fontWeight:"bold" , marginTop:"10px"}}>Transaction Details</label>
                     {this.renderTopbar()}
