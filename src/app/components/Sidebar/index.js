@@ -41,9 +41,10 @@ export class Sidebar extends React.Component{
                 {value: 'Manage Rule Set'},
             ],
             RealTime270: [
-                {value: 'Real Time - 270', key: 'realTime_270'},
-                {value: 'Audit Summary - 270', key: 'AuditSummary270'},
-                {value: 'Elilgibility Details - 270', key: 'elilgibilityDetails270'},
+                {value: 'Real Time', key: 'realTime_270'},
+                // {value: 'Audit Summary - 270', key: 'AuditSummary270'},
+                {value: 'Elilgibility Details', key: 'elilgibilityDetails270'},
+                {value: 'Elilgibility Errors', key: 'elilgibilityErrors270'},
                 
             ],
             RealTime276: [
@@ -73,8 +74,12 @@ export class Sidebar extends React.Component{
                 addon = '/0' 
             } else if(element.key == Strings.RealTime270){
                 addon = '/1' 
-            } else if(element.key == Strings.ElilgibilityDetails270){
-                addon = '/1' 
+            } else if(element.key == Strings.ElilgibilityDetails270 || element.key == Strings.elilgibilityErrors270){
+                let key = 'n'
+                if(element.key == Strings.elilgibilityErrors270){
+                    key = 'Fail'
+                }
+                addon = '/1/n/n/n/n/n/'+key+'/n'
             } else if(element.key == Strings.ElilgibilityDetails276){
                 addon = '/0' 
             } else if(element.key == Strings.claimDetails){
@@ -85,8 +90,10 @@ export class Sidebar extends React.Component{
 
             row.push(
                 <li>
-                    {/* <a href="#" onClick={() => {this.handleClick(element.key)}}>{element.value}</a> */}
-                    <Link to={'/' + element.key + addon}>{element.value}</Link>
+                    {
+                        // <a href="#" onClick={() => {this.handleClick(1)}}>{element.value}</a>
+                        <Link to={'/' + element.key + addon}>{element.value}</Link>
+                    }
                 </li>
             )
         });
@@ -104,7 +111,7 @@ export class Sidebar extends React.Component{
         return(
             <div>
                 {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)}
-                {this.renderItems(Strings.REALTIME270, '270 Eligibility Real-time', this.state.RealTime270)}
+                {this.renderItems(Strings.REALTIME270, 'Eligibility Real-time', this.state.RealTime270)}
                 {this.renderItems(Strings.REALTIME276, '276 Claim Status Real-time', this.state.RealTime276)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)}

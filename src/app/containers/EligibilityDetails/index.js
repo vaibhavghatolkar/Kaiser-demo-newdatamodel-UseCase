@@ -3,18 +3,39 @@ import '../Claims/Dashboard/styles.css'
 import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
+import ReactPaginate from 'react-paginate';
 
 export class EligibilityDetails extends React.Component{
     
     constructor(props){
         super(props);
+        let count = 0
+        try {
+            count = props.match.params.count / 10
+            if(props.match.params.count % 10 > 0){
+                count = count + 1
+            }
+        } catch (error) {
+            
+        }
+
         this.state={
             claimsList : [],
             summaryList : [],
             showDetails: false,
             files_list : [],
             tradingpartner: [],
-            // key : props.match.params.key,
+
+            State: props.match.params.State != 'n' ? props.match.params.State : '',
+            status: props.match.params.status != 'n' ? props.match.params.status : '',
+            startDate: props.match.params.startDate != 'n' ? props.match.params.startDate : '',
+            endDate: props.match.params.endDate != 'n' ? props.match.params.endDate : '',
+            transactionId: props.match.params.transactionId != 'n' ? props.match.params.transactionId : '',
+            count: count,
+            errorcode: '',
+            
+            selectedTradingPartner: '',
+            page: 1,
             apiflag: props.match.params.apiflag
         }
 
@@ -62,7 +83,7 @@ export class EligibilityDetails extends React.Component{
         .then(res => {
             if(res.data){
                 this.setState({
-                    tradingpartner: res.data.Trading_PartnerList
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : []
                 })
             }
         })
@@ -71,18 +92,26 @@ export class EligibilityDetails extends React.Component{
         });
     }
 
-    getTransactions(key){
+    getTransactions(){
         let query = ''
         let typeId = "276"
         if(this.state.apiflag == 1){
-            typeId = "270"
+            typeId = this.state.status
         }
 
-        query = "{ EligibilityErrorDtlTypewise (TypeID:\""+typeId+"\"){ Trans_CountID TypeOfTransaction AvgResTime TotalNumOfReq Success Error Date Trans_type Submiter Trans_ID Error_Code } }"
-        // if(this.state.key == 'Total Number Of Requests'){
-        //     query = "{ EligibilityAllDtlTypewise (TypeID:\""+typeId+"\"){ Trans_CountID TypeOfTransaction AvgResTime TotalNumOfReq Success Error Date Trans_type Submiter Trans_ID Error_Code } }"
-        // } else {
-        // }
+        query = `{
+            EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+this.state.startDate+`" EndDt:"`+this.state.endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
+                HiPaaSUniqueID
+                Date
+                Trans_type
+                Submiter
+                Trans_ID
+                Error_Code
+                ErrorDescription
+            }
+        }`
+
+        console.log('query ', query)
 
         fetch(Urls.base_url, {
             method: 'POST',
@@ -96,7 +125,7 @@ export class EligibilityDetails extends React.Component{
         .then(res => {
             if(res.data){
                 this.setState({
-                    files_list : key == 'Total Number Of Requests' ? res.data.EligibilityAllDtlTypewise : res.data.EligibilityErrorDtlTypewise,
+                    files_list : res.data.EligibilityAllDtlTypewise,
                 })
             }
         })
@@ -119,46 +148,112 @@ export class EligibilityDetails extends React.Component{
         })
     }
 
+    handlePageClick(data){
+        let page = data.selected + 1
+        this.setState({
+            page : page
+        })
+
+        setTimeout(() => {
+            this.getTransactions()
+        }, 50);
+    }
+
+    getDetails(uuid){
+        let query = `{
+            Eligibilty270Request(HiPaaSUniqueID:"`+uuid+`") {
+              Message
+            }
+            Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
+                Message
+            }
+        }`
+
+        console.log('query ', query)
+
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.setState({
+                    showDetails: true,
+                    message_270 : res.data.Eligibilty270Request[0].Message,
+                    message_271 : res.data.Eligibilty271Response[0].Message,
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    } 
+
     renderTransactions(){
         let row = []
-        const data = this.state.files_list;
+        const data = this.state.files_list ? this.state.files_list : []
 
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td>{d.Trans_ID}</td>
+                    <td><a href="#" onClick={() => {this.getDetails(d.HiPaaSUniqueID)}} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
                     <td>{moment.unix(d.Date/1000).format("MM/DD/YYYY")}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
                     <td>{d.Error_Code}</td>
-                    <td><a href="#" onClick={() => {this.showDetails()}} className="btn-background">View</a></td>
+                    {this.state.status != 'Pass' ? <td>{d.ErrorDescription}</td> : null}
                 </tr>
             )
         });
         return(
-            <table className="table table-bordered claim-list">
-               <thead>
-                   <tr className="table-head" style={{fontSize:"9px"}}>
-                       <td className="table-head-text">Transaction Id</td>
-                       <td className="table-head-text list-item-style">Transaction Date</td>
-                       <td className="table-head-text list-item-style">Trans Type</td>
-                       <td className="table-head-text list-item-style">Submitter</td>
-                       <td className="table-head-text list-item-style">Error Code</td>
-                       <td className="table-head-text list-item-style">View</td>
-                   </tr>
-               </thead>
-               <tbody>
-                   {row}
-               </tbody>
-           </table>
+            <div>
+                <table className="table table-bordered claim-list">
+                    <thead>
+                        <tr className="table-head" style={{fontSize:"9px"}}>
+                            <td className="table-head-text">Transaction Id</td>
+                            <td className="table-head-text list-item-style">Transaction Date</td>
+                            <td className="table-head-text list-item-style">Trans Type</td>
+                            <td className="table-head-text list-item-style">Submitter</td>
+                            <td className="table-head-text list-item-style">Error Type</td>
+                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Description</td> : null}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.count}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => {this.handlePageClick(page)}}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                    />
+            </div>
         )
     }
 
-    renderDetails(){
+    renderDetails(flag){
         return(
             <div>
-                <div className="top-padding">Transaction Request</div>
-                <div className="border-view">ISA*00* *00* *ZZ*SUBMITTERID *ZZ*CMS *160127*0734*^*00501*000005014*1*P*|~ GS*HS*SUBMITTERID*CMS*20160127*073411*5014*X*005010X279A1~ ST*270*000000001*005010X279A1~ BHT*0022*13*TRANSA*20160127*073411~ HL*1**20*1~ NM1*PR*2*CMS*****PI*CMS~ HL*2*1*21*1~ NM1*1P*2*IRNAME*****XX*1234567893~ HL*3*2*22*0~..............</div>
+                <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">Transaction Request</a></div>
+                <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
             </div>
         )
     }
@@ -235,11 +330,16 @@ export class EligibilityDetails extends React.Component{
                     <input className="form-control list-header" id="state">
                     </input>
                 </div>
-                <div className="form-group col-sm-3">
-                    <label className="list-header">Error Code</label>
-                    <input className="form-control list-header" id="state">
-                    </input>
-                </div>
+                {
+                    this.state.status != 'Pass'
+                    ?
+                    <div className="form-group col-sm-3">
+                        <label className="list-header">Error Code</label>
+                        <input className="form-control list-header" id="state">
+                        </input>
+                    </div>
+                    : null
+                }
             </div>
             
         )
@@ -258,7 +358,7 @@ export class EligibilityDetails extends React.Component{
                     </div>
                     <div className="col-6" style={{float:"right"}}>
                         {this.state.showDetails ? this.renderDetails() : null}
-                        {this.state.showDetails ? this.renderDetails() : null}
+                        {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
                 </div>
             </div>

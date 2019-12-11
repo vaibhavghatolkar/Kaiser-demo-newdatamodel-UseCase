@@ -6,7 +6,8 @@ import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import { EligibilityDetails } from '../../EligibilityDetails';
 import Strings from '../../../../helpers/Strings';
-import { Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import DatePicker from "react-datepicker";
 
 const data = {
 	labels: [
@@ -54,10 +55,17 @@ export class RealTime276 extends React.Component{
             showDetails: false,
             files_list : [],
             tradingpartner: [],
+            State: '',
+            startDate: '',
+            endDate: '',
+            transactionId: '',
+            selectedTradingPartner: '',
             apiflag : Number(this.props.match.params.apiflag)
         }
 
         this.getData = this.getData.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentWillReceiveProps(){
@@ -84,9 +92,12 @@ export class RealTime276 extends React.Component{
             }
         }`
 
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
         if(this.state.apiflag == 1){
             query = `{
-                Eligibilty270 {
+                Eligibilty270(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
                     AvgResTime
                     TotalNumOfReq
                     Success
@@ -98,6 +109,8 @@ export class RealTime276 extends React.Component{
                 }
             }`
         }
+
+        console.log('query ', query)
 
         fetch(Urls.base_url, {
             method: 'POST',
@@ -127,7 +140,7 @@ export class RealTime276 extends React.Component{
                 
                 this.setState({
                     summaryList: summary,
-                    tradingpartner: res.data.Trading_PartnerList
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : []
                 })
             }
         })
@@ -238,8 +251,17 @@ export class RealTime276 extends React.Component{
                         (d.name == 'Total Success Count') ? 'green bold-text summary-values' :
                         (d.name == 'Total Number Of Requests' || d.name == 'Total Error Count') ? 'red bold-text summary-values' : ''
                     }>
-                        {/* <a href="#" onClick={() => {this.gotoRealTimeTransactions(d.name)}}>{d.value}</a> */}
-                        <Link to={'/' + url}>{d.value}</Link>
+                        <Link 
+                            to={
+                                '/' + url + 
+                                '/' + (this.state.State ? this.state.State : 'n') + 
+                                '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
+                                '/' + (this.state.startDate ? this.state.startDate : 'n') + 
+                                '/' + (this.state.endDate ? this.state.endDate : 'n') + 
+                                '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
+                                '/' + (d.name == 'Total Number Of Requests' ? 'n' : d.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
+                                '/' + d.value
+                            }>{d.value}</Link>
                     </td>
                 </tr>
             )
@@ -267,13 +289,52 @@ export class RealTime276 extends React.Component{
         })
         return row
     }
+
+    handleStartChange(date) {
+        this.setState({
+            startDate: date
+        });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    };
+
+    handleEndChange(date) {
+        this.setState({
+            endDate: date
+        });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
+    onSelect(event, key){
+        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+            this.setState({
+                [key] : ''
+            })
+        } else {
+            this.setState({
+                [key] : event.target.options[event.target.selectedIndex].text
+            })
+        }
+
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
     renderTopbar() {
         return (
             <div className="row header">
                 <div className="form-group col-3">
-                    <div className="list-dashboard">Select State</div>
-                    <select className="form-control list-dashboard" id="state">
-                        <option value="">Select State</option>
+                    <div className="list-dashboard">State</div>
+                    <select className="form-control list-dashboard" id="state"
+                        onChange={(event) => {
+                            this.onSelect(event, 'State')
+                        }}
+                    >
+                        <option value="">State</option>
                         <option selected="selected" value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
@@ -293,36 +354,42 @@ export class RealTime276 extends React.Component{
                 </div>
 
                 <div className="form-group col-3">
-                    <div className="list-dashboard">Select Trading Partner </div>
-                    <select className="form-control list-dashboard" id="TradingPartner" >
-                        <option value="select">Select Trading Partner</option>
+                    <div className="list-dashboard">
+                        Trading Partner 
+                    </div>
+                    <select className="form-control list-dashboard" id="TradingPartner"
+                        onChange={(event) => {
+                            this.onSelect(event, 'selectedTradingPartner')
+                        }}
+                    >
+                        <option value="select">Trading Partner</option>
                         {this.getoptions()}
                     </select>
                 </div>
-                <div className="form-group col-3">
-                    <div className="list-dashboard">Select Provider Name</div>
-                    <select className="form-control list-dashboard" id="option" 
-                        
-                    >
-                        <option value="">Select Provider Name</option>
-                        <option selected="selected" value="1">Provider Name 1</option>
-                        <option value="2">Provider Name 2</option>
-                    </select>
-                </div>
-               {/* <div className="form-group col-2">
-                    <div className="list-header-dashboard">Start Date</div>
-                    <DatePicker className="datepicker form-control"
+               <div className="form-group col-3">
+                    <div className="list-dashboard">Start Date</div>
+                    <DatePicker 
+                        className="datepicker"
                         selected={this.state.startDate}
                         onChange={this.handleStartChange}
                     />
                 </div>
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">End Date</div>
-                    <DatePicker className="datepicker form-control"
+                <div className="form-group col-3">
+                    <div className="list-dashboard">End Date</div>
+                    <DatePicker className="datepicker"
                         selected={this.state.endDate}
                         onChange={this.handleEndChange}
                     />  
-                    </div> */ }
+                </div>
+
+                <div className="form-group col-3">
+                    <div className="list-dashboard">Transaction Id</div>
+                    <input className="datepicker" onChange={(text) => {this.setState({transactionId : text})}}/>  
+                </div>
+
+                <div className="form-group">
+                    <div class="button"><a href='#' onClick={() => {this.getData()}}>Search</a></div>
+                </div>
             </div>
         )
     }
@@ -382,7 +449,7 @@ for (i = 0; i < coll.length; i++) {
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
+                {/* {this.renderSearchBar()} */}
                 
                     {
                         this.state.key
@@ -393,8 +460,8 @@ for (i = 0; i < coll.length; i++) {
                         />
                         :
                         <div>
-                        <label style={{color:"#139DC9" , fontWeight:"bold" , marginTop:"10px"}}>{this.state.apiflag == 1 ? '270 Real Time': '276 Real Time'} </label>
-                        {this.renderTopbar()}
+                        {/* <label style={{color:"#139DC9" , fontWeight:"bold" , marginTop:"10px"}}>{this.state.apiflag == 1 ? '270 Real Time': '276 Real Time'} </label> */}
+                            {this.renderTopbar()}
                             <div className="row">
                             <div className="col-9">
                                 {this.renderCharts()}
@@ -402,7 +469,7 @@ for (i = 0; i < coll.length; i++) {
                             <div className="col-3">
                                 {this.renderSummary()}
                             </div>
-                            {this.RealTime276MonthWiseData()}
+                            {/* {this.RealTime276MonthWiseData()} */}
                         </div>
                         </div>
                     }

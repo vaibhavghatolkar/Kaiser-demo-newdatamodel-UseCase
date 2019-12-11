@@ -65,7 +65,8 @@ const routing = (
                     <Route path={'/'+ Strings.validation} component={Claims} />
                     <Route path={'/'+ Strings.ViewCustomEdits} component={ViewCustomEdits} />
                     <Route path={'/'+ Strings.files_834 + '/:flag'} component={Files_834} />
-                    <Route path={'/'+ Strings.ElilgibilityDetails270 + '/:apiflag'} component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.ElilgibilityDetails270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.elilgibilityErrors270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                     <Route path={'/'+ Strings.ElilgibilityDetails276 + '/:apiflag'} component={EligibilityDetails} />
                 </div>
             </div>
