@@ -86,8 +86,7 @@ export class RealTime276 extends React.Component{
                   Success
                   Error
                 }
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList(Transaction:"EligibilityStatus") {
                 Trading_Partner_Name 
             }
         }`
@@ -103,8 +102,7 @@ export class RealTime276 extends React.Component{
                     Success
                     Error
                 }
-                Trading_PartnerList { 
-                    ID 
+                Trading_PartnerList(Transaction:"EligibilityStatus") {
                     Trading_Partner_Name 
                 }
             }`
@@ -334,8 +332,8 @@ export class RealTime276 extends React.Component{
                             this.onSelect(event, 'State')
                         }}
                     >
-                        <option value="">State</option>
-                        <option selected="selected" value="1">California</option>
+                        <option  selected="selected" value=""></option>
+                        <option value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
                         <option value="4">New York</option>
@@ -362,7 +360,7 @@ export class RealTime276 extends React.Component{
                             this.onSelect(event, 'selectedTradingPartner')
                         }}
                     >
-                        <option value="select">Trading Partner</option>
+                        <option value="select"></option>
                         {this.getoptions()}
                     </select>
                 </div>

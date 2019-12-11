@@ -9,15 +9,6 @@ export class EligibilityDetails extends React.Component{
     
     constructor(props){
         super(props);
-        let count = 0
-        try {
-            count = props.match.params.count / 10
-            if(props.match.params.count % 10 > 0){
-                count = count + 1
-            }
-        } catch (error) {
-            
-        }
 
         this.state={
             claimsList : [],
@@ -31,11 +22,11 @@ export class EligibilityDetails extends React.Component{
             startDate: props.match.params.startDate != 'n' ? props.match.params.startDate : '',
             endDate: props.match.params.endDate != 'n' ? props.match.params.endDate : '',
             transactionId: props.match.params.transactionId != 'n' ? props.match.params.transactionId : '',
-            count: count,
             errorcode: '',
             
             selectedTradingPartner: '',
             page: 1,
+            count : 0,
             apiflag: props.match.params.apiflag
         }
 
@@ -56,16 +47,14 @@ export class EligibilityDetails extends React.Component{
 
     getData(){
         let query = `{
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList(Transaction:"EligibilityStatus")  {
                 Trading_Partner_Name 
             }
         }`
 
         if(this.state.apiflag == 1){
             query = `{
-                Trading_PartnerList { 
-                    ID 
+                Trading_PartnerList(Transaction:"EligibilityStatus")  {
                     Trading_Partner_Name 
                 }
             }`
@@ -101,6 +90,7 @@ export class EligibilityDetails extends React.Component{
 
         query = `{
             EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+this.state.startDate+`" EndDt:"`+this.state.endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
+                RecCount
                 HiPaaSUniqueID
                 Date
                 Trans_type
@@ -124,8 +114,18 @@ export class EligibilityDetails extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
+                let count = 0
+                let data = res.data.EligibilityAllDtlTypewise
+                if(data && data.length > 0){
+                    count = Math.floor(data[0].RecCount / 10)
+                    if(data[0].RecCount % 10 > 0){
+                        count = count + 1
+                    }
+                }
+
                 this.setState({
-                    files_list : res.data.EligibilityAllDtlTypewise,
+                    files_list : data,
+                    count: count
                 })
             }
         })
@@ -209,7 +209,7 @@ export class EligibilityDetails extends React.Component{
                     {this.state.status != 'Pass' ? <td>{d.ErrorDescription}</td> : null}
                 </tr>
             )
-        });
+        })
         return(
             <div>
                 <table className="table table-bordered claim-list">
