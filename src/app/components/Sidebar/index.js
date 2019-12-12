@@ -48,9 +48,9 @@ export class Sidebar extends React.Component{
                 
             ],
             RealTime276: [
-                
                 {value: 'Real Time - 276', key: 'realTime_276'},
                 {value: 'Elilgibility Details - 276', key: 'elilgibilityDetails276'},
+                {value: 'Elilgibility Errors', key: 'elilgibilityErrors276'},
                 
             ],
             fullfile: [
@@ -80,8 +80,12 @@ export class Sidebar extends React.Component{
                     key = 'Fail'
                 }
                 addon = '/1/n/n/n/n/n/'+key+'/n'
-            } else if(element.key == Strings.ElilgibilityDetails276){
-                addon = '/0' 
+            } else if(element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276){
+                let key = 'n'
+                if(element.key == Strings.elilgibilityErrors276){
+                    key = 'Fail'
+                }
+                addon = '/0/n/n/n/n/n/'+key+'/n'
             } else if(element.key == Strings.claimDetails){
                 addon = '/n/n/n/n'
             } else {
@@ -112,7 +116,7 @@ export class Sidebar extends React.Component{
             <div>
                 {/* ** {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)} */}
                 {this.renderItems(Strings.REALTIME270, 'Eligibility Real-time', this.state.RealTime270)}
-                {/* ** {this.renderItems(Strings.REALTIME276, '276 Claim Status Real-time', this.state.RealTime276)} */}
+                {this.renderItems(Strings.REALTIME276, 'Claim Status Real-time', this.state.RealTime276)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
                 {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}

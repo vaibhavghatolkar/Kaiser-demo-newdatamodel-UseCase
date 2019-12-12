@@ -86,15 +86,12 @@ export class EligibilityDetails extends React.Component{
 
     getTransactions(){
         let query = ''
-        let typeId = "276"
-        if(this.state.apiflag == 1){
-            typeId = this.state.status
-        }
+        let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         
         query = `{
-            EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
+            ClaimRequest_Datewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
                 RecCount
                 HiPaaSUniqueID
                 Date
@@ -105,6 +102,21 @@ export class EligibilityDetails extends React.Component{
                 ErrorDescription
             }
         }`
+        
+        if(this.state.apiflag == 1){
+            query = `{
+                EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
+                    RecCount
+                    HiPaaSUniqueID
+                    Date
+                    Trans_type
+                    Submiter
+                    Trans_ID
+                    Error_Code
+                    ErrorDescription
+                }
+            }`
+        }
 
         console.log('query ', query)
 
@@ -120,7 +132,13 @@ export class EligibilityDetails extends React.Component{
         .then(res => {
             if(res.data){
                 let count = 1
-                let data = res.data.EligibilityAllDtlTypewise
+                let data = []
+                if(this.state.apiflag == 1){
+                    data = res.data.EligibilityAllDtlTypewise
+                } else {
+                    data = res.data.ClaimRequest_Datewise
+                }
+                
                 if(data && data.length > 0){
                     count = Math.floor(data[0].RecCount / 10)
                     if(data[0].RecCount % 10 > 0){
@@ -166,13 +184,24 @@ export class EligibilityDetails extends React.Component{
 
     getDetails(uuid){
         let query = `{
-            Eligibilty270Request(HiPaaSUniqueID:"`+uuid+`") {
+            ClaimRequest(HiPaaSUniqueID:"`+uuid+`") {
               Message
             }
-            Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
+            ClaimStatus277(HiPaaSUniqueID:"`+uuid+`") {
                 Message
             }
         }`
+
+        if(this.state.apiflag == 1){
+            query = `{
+                Eligibilty270Request(HiPaaSUniqueID:"`+uuid+`") {
+                  Message
+                }
+                Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
+                    Message
+                }
+            }`
+        }
 
         console.log('query ', query)
 
@@ -189,8 +218,8 @@ export class EligibilityDetails extends React.Component{
             if(res.data){
                 this.setState({
                     showDetails: true,
-                    message_270 : res.data.Eligibilty270Request[0].Message,
-                    message_271 : res.data.Eligibilty271Response[0].Message,
+                    message_270 : this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
+                    message_271 : this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
                 })
             }
         })
@@ -207,7 +236,7 @@ export class EligibilityDetails extends React.Component{
             row.push(
                 <tr>
                     <td><a href="#" onClick={() => {this.getDetails(d.HiPaaSUniqueID)}} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
-                    <td>{moment.unix(d.Date/1000).format("MM/DD/YYYY")}</td>
+                    <td>{moment.unix(d.Date/1000).format("DD MMM YYYY hh:mm:ss")}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
                     <td>{d.Error_Code}</td>

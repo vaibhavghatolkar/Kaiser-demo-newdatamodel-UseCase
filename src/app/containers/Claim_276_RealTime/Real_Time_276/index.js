@@ -60,7 +60,7 @@ export class RealTime276 extends React.Component{
             endDate: '',
             transactionId: '',
             selectedTradingPartner: '',
-            apiflag : Number(this.props.match.params.apiflag)
+            apiflag : Number(this.props.match.params.apiflag ? this.props.match.params.apiflag : 1)
         }
 
         this.getData = this.getData.bind(this)
@@ -79,20 +79,21 @@ export class RealTime276 extends React.Component{
     }
 
     getData(){
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        
         let query = `{
-           Eligibilty276 {
-                  AvgResTime
-                  TotalNumOfReq
-                  Success
-                  Error
-                }
-            Trading_PartnerList(Transaction:"EligibilityStatus") {
+            ClaimRequest276(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
+                AvgResTime
+                TotalNumOfReq
+                Success
+                Error
+            }
+            Trading_PartnerList(Transaction:"ClaimRequest") {
                 Trading_Partner_Name 
             }
         }`
 
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         if(this.state.apiflag == 1){
             query = `{
@@ -126,7 +127,7 @@ export class RealTime276 extends React.Component{
                 if(this.state.apiflag){
                     data = res.data.Eligibilty270[0]
                 } else {
-                    data = res.data.Eligibilty276[0]
+                    data = res.data.ClaimRequest276[0]
                 }
 
                 let summary = [

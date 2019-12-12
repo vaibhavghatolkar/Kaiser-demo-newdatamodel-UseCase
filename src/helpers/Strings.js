@@ -37,6 +37,7 @@ const Strings = {
     ElilgibilityDetails270: 'elilgibilityDetails270',
     ElilgibilityDetails276: 'elilgibilityDetails276',
     elilgibilityErrors270: 'elilgibilityErrors270',
+    elilgibilityErrors276: 'elilgibilityErrors276',
     ViewCustomEdits: 'ViewCustomEdits',
 }
 

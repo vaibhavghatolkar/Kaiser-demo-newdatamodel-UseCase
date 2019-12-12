@@ -41,7 +41,7 @@ const routing = (
                     <Sidebar />
                 </div>
                 <div className="col-10 container-fluid" style={{height : $(window).height()}}>
-                    <Route exact path="/" component={Claims} />
+                    <Route exact path="/" component={RealTime276} />
                     <Route path={'/' + Strings.claimsDashboard} component={Claims} />
                     <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
@@ -67,7 +67,8 @@ const routing = (
                     <Route path={'/'+ Strings.files_834 + '/:flag'} component={Files_834} />
                     <Route path={'/'+ Strings.ElilgibilityDetails270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                     <Route path={'/'+ Strings.elilgibilityErrors270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
-                    <Route path={'/'+ Strings.ElilgibilityDetails276 + '/:apiflag'} component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.ElilgibilityDetails276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.elilgibilityErrors276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                 </div>
             </div>
         </div>
