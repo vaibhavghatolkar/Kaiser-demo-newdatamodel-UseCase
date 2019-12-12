@@ -5,6 +5,7 @@ import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
+import { Pie } from 'react-chartjs-2';
 
 export class EligibilityDetails extends React.Component{
     
@@ -28,7 +29,10 @@ export class EligibilityDetails extends React.Component{
             selectedTradingPartner: '',
             page: 1,
             count : 0,
-            apiflag: props.match.params.apiflag
+            apiflag: props.match.params.apiflag,
+
+            pieArray : [],
+            labelArray : [],
         }
 
         this.getData = this.getData.bind(this)
@@ -49,17 +53,28 @@ export class EligibilityDetails extends React.Component{
     }
 
     getData(){
+        let chartQuery = ''
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        
+        if(this.state.status != 'Pass'){
+            chartQuery = `Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorCode:"`+this.state.errorcode+`") {
+                                ErrorType
+                                RecCount
+                            }`
+        }
+
         let query = `{
             Trading_PartnerList(Transaction:"EligibilityStatus")  {
                 Trading_Partner_Name 
-            }
+            }`+chartQuery+`
         }`
 
         if(this.state.apiflag == 1){
             query = `{
                 Trading_PartnerList(Transaction:"EligibilityStatus")  {
                     Trading_Partner_Name 
-                }
+                }`+chartQuery+`
             }`
         }
 
@@ -74,8 +89,18 @@ export class EligibilityDetails extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
+                let pieArray = []
+                let labelArray = []
+                if(this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount){
+                    res.data.Eligibilty271ErrorwiseCount.forEach(item => {
+                        pieArray.push(item.RecCount)
+                        labelArray.push(item.ErrorType)
+                    })
+                }
+
                 this.setState({
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : []
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    pieArray
                 })
             }
         })
@@ -286,7 +311,7 @@ export class EligibilityDetails extends React.Component{
     renderDetails(flag){
         return(
             <div>
-                <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">Transaction Request</a></div>
+                <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
                 <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
             </div>
         )
@@ -416,6 +441,43 @@ export class EligibilityDetails extends React.Component{
         )
     }
 
+    renderPieChart(){
+        const data = {
+            labels: this.state.labelArray,
+            datasets: [{
+                data: this.state.pieArray,
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DCA15',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DCA15',
+                ]
+            }],
+            flag: ''
+        };
+        return(
+            <div>
+                <Pie data={data}
+                    options={{
+                        elements: {
+                            arc: {
+                                borderWidth: 0
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }}
+                    width={80}
+                    height={40} />
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -428,6 +490,7 @@ export class EligibilityDetails extends React.Component{
                         {this.renderTransactions()}
                     </div>
                     <div className="col-6" style={{float:"right"}}>
+                        {this.state.status != 'Pass' ? this.renderPieChart() : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>

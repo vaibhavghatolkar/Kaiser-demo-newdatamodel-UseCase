@@ -48,9 +48,9 @@ export class Sidebar extends React.Component{
                 
             ],
             RealTime276: [
-                {value: 'Real Time - 276', key: 'realTime_276'},
-                {value: 'Elilgibility Details - 276', key: 'elilgibilityDetails276'},
-                {value: 'Elilgibility Errors', key: 'elilgibilityErrors276'},
+                {value: 'Real Time', key: 'realTime_276'},
+                {value: 'Claim Status Details', key: 'elilgibilityDetails276'},
+                {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
                 
             ],
             fullfile: [
