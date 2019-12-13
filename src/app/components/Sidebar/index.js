@@ -150,7 +150,7 @@ export class Sidebar extends React.Component{
         return (
             <nav id="sidebar">
                 <ul className="list-unstyled components">
-                    {this.renderTabs()}
+                    {/* {this.renderTabs()} */}
                     {this.renderSidebarItems()}
                 </ul>
             </nav>

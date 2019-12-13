@@ -110,6 +110,7 @@ export class EligibilityDetails extends React.Component{
                                 RecCount
                             }`
         }
+
         query = `{
             ClaimRequest_Datewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
                 RecCount
@@ -430,7 +431,9 @@ export class EligibilityDetails extends React.Component{
                     <div className="form-row">
                         <div className="form-group col-md-2">
                             <div className="list-dashboard">Transaction Id</div>
-                            <input className="form-control list-dashboard" id="state"
+                            <input className="form-control list-dashboard" 
+                                value={this.state.transactionId}
+                                id="state"
                                 onChange={(e) => {
                                     clearTimeout(val)
                                     let value = e.target.value
@@ -535,7 +538,7 @@ export class EligibilityDetails extends React.Component{
                     </div>
                     
                     <div className="col-6">
-                        {this.state.status != 'Pass' ? this.renderPieChart() : null}
+                        {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
