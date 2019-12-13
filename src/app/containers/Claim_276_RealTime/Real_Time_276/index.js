@@ -9,23 +9,6 @@ import Strings from '../../../../helpers/Strings';
 import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 
-const data = {
-	labels: [
-		'Completed',
-		'Errored'
-	],
-	datasets: [{
-		data: [98.60,1.40],
-		backgroundColor: [
-		'#139DC9',
-		'#83D2B4'
-		],
-		hoverBackgroundColor: [
-		'#139DC9',
-		'#83D2B4'
-		]
-    }]
-};
 const bardata = {
     labels: ['20:22', '20:23', '20:24', '20:25', '20:26', '20:27', '20:28'],
     showFile: false,
@@ -45,6 +28,8 @@ const bardata = {
     }
 };
 
+var val = ''
+
 export class RealTime276 extends React.Component{
     
     constructor(props){
@@ -55,6 +40,7 @@ export class RealTime276 extends React.Component{
             showDetails: false,
             files_list : [],
             tradingpartner: [],
+            pieArray: [],
             State: '',
             startDate: '',
             endDate: '',
@@ -136,9 +122,14 @@ export class RealTime276 extends React.Component{
                     {name:'Total Success Count', value : data.Success},
                     {name:'Total Error Count', value : data.Error},
                 ]
+
+                let pieArray = []
+                pieArray.push(data.Success)
+                pieArray.push(data.Error)
                 
                 this.setState({
                     summaryList: summary,
+                    pieArray: pieArray,
                     tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : []
                 })
             }
@@ -190,20 +181,25 @@ export class RealTime276 extends React.Component{
     }
 
     renderCharts(){
+        const data = {
+            labels: [
+                'Success',
+                'Errors'
+            ],
+            datasets: [{
+                data: this.state.pieArray,
+                backgroundColor: [
+                '#139DC9',
+                '#83D2B4'
+                ],
+                hoverBackgroundColor: [
+                '#139DC9',
+                '#83D2B4'
+                ]
+            }]
+        };
         return(
             <div className="row chart">
-            <div className="col-6">
-                    <span className="title_graph">Execution Status</span>
-                    <Bar
-                        data={bardata}
-                        width={100}
-                        height={60}
-                        options={{
-                            legend: {
-                                display: false,
-                            }
-                        }}/>
-                </div>
                 <div className="col-6">
                     <span className="title_graph">Execution Status Time</span>
                     <Pie data={data}
@@ -220,7 +216,18 @@ export class RealTime276 extends React.Component{
                         width={100}
                         height={60}/>
                 </div>
-                
+                <div className="col-6">
+                    <span className="title_graph">Execution Status</span>
+                    <Bar
+                        data={bardata}
+                        width={100}
+                        height={60}
+                        options={{
+                            legend: {
+                                display: false,
+                            }
+                        }}/>
+                </div>
             </div>
         )
     }
@@ -238,6 +245,9 @@ export class RealTime276 extends React.Component{
     renderSummary(){
         let row = []
         const data = this.state.summaryList;
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+
         data.forEach((d) => {
             let apiflag = this.state.apiflag
             let url = Strings.ElilgibilityDetails270 + '/' + apiflag
@@ -255,8 +265,8 @@ export class RealTime276 extends React.Component{
                                 '/' + url + 
                                 '/' + (this.state.State ? this.state.State : 'n') + 
                                 '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
-                                '/' + (this.state.startDate ? this.state.startDate : 'n') + 
-                                '/' + (this.state.endDate ? this.state.endDate : 'n') + 
+                                '/' + startDate + 
+                                '/' + endDate + 
                                 '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
                                 '/' + (d.name == 'Total Number Of Requests' ? 'n' : d.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
                                 '/' + d.value
@@ -293,12 +303,18 @@ export class RealTime276 extends React.Component{
         this.setState({
             startDate: date
         });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
     };
 
     handleEndChange(date) {
         this.setState({
             endDate: date
         });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
     }
 
     onSelect(event, key){
@@ -311,6 +327,10 @@ export class RealTime276 extends React.Component{
                 [key] : event.target.options[event.target.selectedIndex].text
             })
         }
+
+        setTimeout(() => {
+            this.getData()
+        }, 50);
     }
 
     renderTopbar() {
@@ -349,6 +369,9 @@ export class RealTime276 extends React.Component{
                     <select className="form-control list-dashboard" id="TradingPartner"
                         onChange={(event) => {
                             this.onSelect(event, 'selectedTradingPartner')
+                            setTimeout(() => {
+                                this.getData()
+                            }, 50);
                         }}
                     >
                         <option value="select"></option>
@@ -373,11 +396,16 @@ export class RealTime276 extends React.Component{
 
                 <div className="form-group col-3">
                     <div className="list-dashboard">Transaction Id</div>
-                    <input className="datepicker" onChange={(event) => {this.setState({transactionId : event.target.value})}}/>  
-                </div>
-
-                <div className="form-group">
-                    <div class="button"><a href='#' onClick={() => {this.getData()}}>Search</a></div>
+                    <input className="datepicker" onChange={(e) => {
+                        clearTimeout(val)
+                        let value = e.target.value
+                        val = setTimeout(() => {
+                            this.setState({transactionId : value, showDetails : false})
+                            setTimeout(() => {
+                                this.getTransactions()
+                            }, 50);
+                        }, 300);
+                    }}/>  
                 </div>
             </div>
         )
@@ -438,30 +466,19 @@ for (i = 0; i < coll.length; i++) {
     render() {
         return (
             <div>
-                {/* {this.renderSearchBar()} */}
-                
-                    {
-                        this.state.key
-                        ?
-                        <EligibilityDetails
-                            apiflag={this.state.apiflag}
-                            key={this.state.key}
-                        />
-                        :
-                        <div>
-                        {/* <label style={{color:"#139DC9" , fontWeight:"bold" , marginTop:"10px"}}>{this.state.apiflag == 1 ? '270 Real Time': '276 Real Time'} </label> */}
-                            {this.renderTopbar()}
-                            <div className="row">
+                {
+                    <div>
+                        {this.renderTopbar()}
+                        <div className="row">
                             <div className="col-9">
                                 {this.renderCharts()}
                             </div>
                             <div className="col-3">
                                 {this.renderSummary()}
                             </div>
-                            {/* {this.RealTime276MonthWiseData()} */}
                         </div>
-                        </div>
-                    }
+                    </div>
+                }
             </div>
         );
     }

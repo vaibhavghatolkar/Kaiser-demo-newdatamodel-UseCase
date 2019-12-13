@@ -52,3 +52,28 @@
     padding-left: 24px;
     padding-right: 24px;
 }
+.margin-less-button{
+    border: 1px solid #139DC9;
+    color: white;
+    background: #139DC9;
+    font-size: 12px;
+    padding: 6px;
+    margin-top : 16px;
+    margin-left : 16px;
+    text-align: center;
+    border-radius: 4px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+.form-style{
+    font-size: 12px;
+    padding-top: 16px;
+    padding-left: 2px;
+}
+.table-head-text-view{
+    color: white;
+    font-size: 10px;
+}
+.table-head-text-item{
+    font-size: 10px;
+}
