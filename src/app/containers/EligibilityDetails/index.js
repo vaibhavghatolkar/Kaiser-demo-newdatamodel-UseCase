@@ -55,10 +55,6 @@ export class EligibilityDetails extends React.Component{
     }
 
     getData(){
-        let chartQuery = ''
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
         let query = `{
             Trading_PartnerList(Transaction:"EligibilityStatus")  {
                 Trading_Partner_Name 

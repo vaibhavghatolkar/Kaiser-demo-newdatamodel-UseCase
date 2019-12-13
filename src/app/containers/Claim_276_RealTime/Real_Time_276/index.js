@@ -335,8 +335,9 @@ export class RealTime276 extends React.Component{
 
     renderTopbar() {
         return (
-            <div className="row header">
-                <div className="form-group col-3">
+            <form className="form-style" id='filters'>
+                    <div className="form-row">
+                <div className="form-group col-2">
                     <div className="list-dashboard">State</div>
                     <select className="form-control list-dashboard" id="state"
                         onChange={(event) => {
@@ -362,7 +363,7 @@ export class RealTime276 extends React.Component{
                     </select>
                 </div>
 
-                <div className="form-group col-3">
+                <div className="form-group col-2">
                     <div className="list-dashboard">
                         Trading Partner 
                     </div>
@@ -378,7 +379,7 @@ export class RealTime276 extends React.Component{
                         {this.getoptions()}
                     </select>
                 </div>
-               <div className="form-group col-3">
+               <div className="form-group col-2">
                     <div className="list-dashboard">Start Date</div>
                     <DatePicker 
                         className="datepicker"
@@ -386,7 +387,7 @@ export class RealTime276 extends React.Component{
                         onChange={this.handleStartChange}
                     />
                 </div>
-                <div className="form-group col-3">
+                <div className="form-group col-2">
                     <div className="list-dashboard">End Date</div>
                     <DatePicker className="datepicker"
                         selected={this.state.endDate}
@@ -394,7 +395,7 @@ export class RealTime276 extends React.Component{
                     />  
                 </div>
 
-                <div className="form-group col-3">
+                <div className="form-group col-2">
                     <div className="list-dashboard">Transaction Id</div>
                     <input className="datepicker" onChange={(e) => {
                         clearTimeout(val)
@@ -402,12 +403,13 @@ export class RealTime276 extends React.Component{
                         val = setTimeout(() => {
                             this.setState({transactionId : value, showDetails : false})
                             setTimeout(() => {
-                                this.getTransactions()
+                                this.getData()
                             }, 50);
                         }, 300);
                     }}/>  
                 </div>
             </div>
+        </form>
         )
     }
 
