@@ -9,27 +9,6 @@ import Strings from '../../../../helpers/Strings';
 import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 
-const bardata = {
-    labels: ['20:22', '20:23', '20:24', '20:25', '20:26', '20:27', '20:28'],
-    showFile: false,
-    datasets: [
-        {
-            label: 'Total Claims',
-            backgroundColor: '#139DC9',
-            borderColor: '#139DC9',
-            borderWidth: 1,
-            hoverBackgroundColor: '#139DC9',
-            hoverBorderColor: '#139DC9',
-            data: [100, 79, 85, 85, 89, 95, 83]
-        }
-    ],
-    legend: {
-        display: false
-    }
-};
-
-var val = ''
-
 export class RealTime276 extends React.Component{
     
     constructor(props){
@@ -41,11 +20,27 @@ export class RealTime276 extends React.Component{
             files_list : [],
             tradingpartner: [],
             pieArray: [],
+            pieLabels: [],
+            tradingChartLabel : [],
+            tradingChartData : [],
+            dateChartLabel : [],
+            dateChartData : [],
+            errorPieArray : [],
+            errorLabelArray : [],
             State: '',
             startDate: '',
             endDate: '',
             transactionId: '',
             selectedTradingPartner: '',
+            colorArray : [
+                '#139DC9',
+                '#83D2B4'
+            ],
+            errorColorArray : [
+                '#139DC9',
+                '#83D2B4',
+                '#9DCA15',
+            ],
             apiflag : Number(this.props.match.params.apiflag ? this.props.match.params.apiflag : 1)
         }
 
@@ -78,6 +73,18 @@ export class RealTime276 extends React.Component{
             Trading_PartnerList(Transaction:"ClaimRequest") {
                 Trading_Partner_Name 
             }
+            tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestTradingPartner") {
+                X_axis
+                Y_axis
+            }
+            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestDatewise") {
+                X_axis
+                Y_axis
+            }
+            ClaimStatuswiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
+                ClaimStatus
+                Total
+            }
         }`
 
 
@@ -91,6 +98,18 @@ export class RealTime276 extends React.Component{
                 }
                 Trading_PartnerList(Transaction:"EligibilityStatus") {
                     Trading_Partner_Name 
+                }
+                tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityTradingPartner") {
+                    X_axis
+                    Y_axis
+                }
+                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityDatewise") {
+                    X_axis
+                    Y_axis
+                }
+                Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
+                    ErrorType
+                    RecCount
                 }
             }`
         }
@@ -109,7 +128,13 @@ export class RealTime276 extends React.Component{
         .then(res => {
             if(res.data){
                 let data = []
-                console.log(this.state.apiflag)
+                let tradingChartData = []
+                let tradingChartLabel = []
+                let dateChartData = []
+                let dateChartLabel = []
+                let errorPieArray = []
+                let errorLabelArray = []
+
                 if(this.state.apiflag){
                     data = res.data.Eligibilty270[0]
                 } else {
@@ -126,11 +151,50 @@ export class RealTime276 extends React.Component{
                 let pieArray = []
                 pieArray.push(data.Success)
                 pieArray.push(data.Error)
+
+                let pieLabels = []
+                pieLabels.push("Success")
+                pieLabels.push("Error")
+
+                if(res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0){
+                    res.data.tradingPartnerwise.forEach(item => {
+                        tradingChartLabel.push(item.X_axis)
+                        tradingChartData.push(item.Y_axis)
+                    })
+                }
+
+                if(res.data.datewise && res.data.datewise.length > 0){
+                    res.data.datewise.forEach(item => {
+                        try {
+                            dateChartLabel.push(moment(Number(item.X_axis)).format('DD MMM'))
+                            dateChartData.push(item.Y_axis)
+                        } catch (error) {}
+                    })
+                }
+
+                if(res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1){
+                    res.data.Eligibilty271ErrorwiseCount.forEach(item => {
+                        errorPieArray.push(item.RecCount)
+                        errorLabelArray.push(item.ErrorType)
+                    })
+                } else if(res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0){
+                    res.data.ClaimStatuswiseCount.forEach(item => {
+                        errorPieArray.push(item.Total)
+                        errorLabelArray.push(item.ClaimStatus)
+                    })
+                }
                 
                 this.setState({
                     summaryList: summary,
                     pieArray: pieArray,
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : []
+                    pieLabels: pieLabels,
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    tradingChartLabel: tradingChartLabel,
+                    tradingChartData: tradingChartData,
+                    dateChartLabel: dateChartLabel,
+                    dateChartData: dateChartData,
+                    errorPieArray : errorPieArray,
+                    errorLabelArray : errorLabelArray,
                 })
             }
         })
@@ -180,53 +244,115 @@ export class RealTime276 extends React.Component{
         )
     }
 
-    renderCharts(){
-        const data = {
-            labels: [
-                'Success',
-                'Errors'
+    getBarData(labelArray, dataArray, color){
+        let bardata = {
+            labels: labelArray,
+            showFile: false,
+            datasets: [
+                {
+                    label: 'Total Claims',
+                    backgroundColor: color,
+                    borderColor: color,
+                    borderWidth: 1,
+                    hoverBackgroundColor: color,
+                    hoverBorderColor: color,
+                    data: dataArray
+                }
             ],
+            legend: {
+                display: false
+            }
+        }
+
+        return bardata
+    }
+
+    getPieData(array, labels, colorArray){
+        let data = {
+            labels: labels,
             datasets: [{
-                data: this.state.pieArray,
-                backgroundColor: [
-                '#139DC9',
-                '#83D2B4'
-                ],
-                hoverBackgroundColor: [
-                '#139DC9',
-                '#83D2B4'
-                ]
+                data: array,
+                backgroundColor: colorArray,
+                hoverBackgroundColor: colorArray
             }]
-        };
+        }
+
+        return data
+    }
+
+    renderCharts(){
         return(
-            <div className="row chart">
-                <div className="col-6">
-                    <span className="title_graph">Execution Status Time</span>
-                    <Pie data={data}
-                        options={{
-                            elements: {
-                                arc: {
-                                    borderWidth: 0
-                                }
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }}
-                        width={100}
-                        height={60}/>
+            <div>
+                <div className="row chart-div">
+                    {
+                        this.state.pieArray && this.state.pieArray.length > 0
+                        ?
+                        <div className="chart-container chart">
+                            <Pie data={this.getPieData(this.state.pieArray, this.state.pieLabels, this.state.colorArray)}
+                                options={{
+                                    elements: {
+                                        arc: {
+                                            borderWidth: 0
+                                        }
+                                    },
+                                    legend: {position: 'bottom'}
+                                }}
+                                width={100}
+                                height={64}/>
+                        </div> : null
+                    }
+
+                    {
+                        this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
+                        ?
+                        <div className="chart-container chart">
+                            <Bar
+                                data={this.getBarData(this.state.tradingChartLabel, this.state.tradingChartData, '#139DC9')}
+                                width={100}
+                                height={60}
+                                options={{
+                                    legend: {
+                                        display: false,
+                                    }
+                                }}/>
+                        </div> : null
+                    }
                 </div>
-                <div className="col-6">
-                    <span className="title_graph">Execution Status</span>
-                    <Bar
-                        data={bardata}
-                        width={100}
-                        height={60}
-                        options={{
-                            legend: {
-                                display: false,
-                            }
-                        }}/>
+
+                <div className="row chart-div">
+                    {
+                        this.state.dateChartLabel && this.state.dateChartLabel.length > 0
+                        ?
+                        <div className="chart-container chart">
+                            <Bar
+                                data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
+                                width={100}
+                                height={60}
+                                options={{
+                                    legend: {
+                                        display: false,
+                                    }
+                                }}/>
+                        </div> : null
+                    }
+
+                    {
+                        this.state.errorPieArray && this.state.errorPieArray.length > 0
+                        ?
+                        <div className="chart-container chart">
+                            <Pie data={this.getPieData(this.state.errorPieArray, this.state.errorLabelArray, this.state.errorColorArray)}
+                                options={{
+                                    elements: {
+                                        arc: {
+                                            borderWidth: 0
+                                        }
+                                    },
+                                    legend: {position: 'bottom'}
+                                }}
+                                width={100}
+                                height={64}/>
+                        </div> : null
+                    }
                 </div>
             </div>
         )
@@ -236,10 +362,6 @@ export class RealTime276 extends React.Component{
         this.setState({
             key : key
         })
-
-        // setTimeout(() => {
-        //     this.getTransactions(key)
-        // }, 50);
     }
 
     renderSummary(){
@@ -394,82 +516,17 @@ export class RealTime276 extends React.Component{
                         onChange={this.handleEndChange}
                     />  
                 </div>
-
-                <div className="form-group col-2">
-                    <div className="list-dashboard">Transaction Id</div>
-                    <input className="datepicker" onChange={(e) => {
-                        clearTimeout(val)
-                        let value = e.target.value
-                        val = setTimeout(() => {
-                            this.setState({transactionId : value, showDetails : false})
-                            setTimeout(() => {
-                                this.getData()
-                            }, 50);
-                        }, 300);
-                    }}/>  
-                </div>
             </div>
         </form>
         )
     }
-
-    RealTime276MonthWiseData(){
-        var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
- coll[i].addEventListener("click", function() {
-   this.classList.toggle("active");
-   var content = this.nextElementSibling;
-  
-   if (content.style.display === "block") {
-     content.style.display = "none";
-   } else {
-     content.style.display = "block";
-   }
- });
-}
-        return (
-            <div className="container">
-            <div className="panel-group">
-                <div className="panel panel-default"  >
-                    <div className="panel-heading collapsible" data-toggle="collapse" href="#BasicX12Options">
-                        <span className="panel-title">2019</span>
-                    </div>
-                   
-                    <div id="BasicX12Options"  className="panel-collapse content collapse">
-                        <div style={{display:'block'}} className="panel-body">
-                        <div className="col-12">
-                        <button type="button" class="collapsible">November</button>
-                        <div class="content" style={{display:'none'}}>
-                        <table className="table">
-                        <tr>
-                        <td>1 Fri 2019</td> <td>0</td> <td>0</td> <td>0</td> <td>0</td>
-                        </tr>
-                        <tr>
-                        <td>2 Sat 2019</td> <td>0</td> <td>0</td> <td>0</td> <td>0</td>
-                        </tr>
-                        <tr>
-                        <td>3 Sun 2019</td> <td>0</td> <td>0</td> <td>0</td> <td>0</td>
-                        </tr>
-                        </table>
-                        </div>
-                        </div>
-                        </div>
-                    </div>        
-                    
-                </div>
-            </div>
-            </div>                           
-        )  
-    }
-    
 
     render() {
         return (
             <div>
                 {
                     <div>
+                        <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Real Time 270'}</label>
                         {this.renderTopbar()}
                         <div className="row">
                             <div className="col-9">

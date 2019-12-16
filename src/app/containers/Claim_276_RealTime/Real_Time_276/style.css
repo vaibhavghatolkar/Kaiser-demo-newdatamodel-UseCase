@@ -77,3 +77,13 @@
 .table-head-text-item{
     font-size: 10px;
 }
+.chart-container{
+    border-radius: 20px;
+    margin: 12px;
+    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
+    width : 45%;
+    padding : 24px
+}
+.chart-div{
+    justify-content: center;
+}

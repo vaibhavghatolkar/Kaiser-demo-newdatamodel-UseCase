@@ -20,6 +20,7 @@ export class EligibilityDetails extends React.Component{
             files_list : [],
             tradingpartner: [],
             errorList: [],
+            eventLog: [],
 
             State: props.match.params.State != 'n' ? props.match.params.State : '',
             status: props.match.params.status != 'n' ? props.match.params.status : '',
@@ -225,6 +226,13 @@ export class EligibilityDetails extends React.Component{
             ClaimStatus277(HiPaaSUniqueID:"`+uuid+`") {
                 Message
             }
+            EventLogData(HiPaaS_UUID:"`+uuid+`") {
+                HiPaaS_UUID
+                EventName
+                EventCreationDateTime
+                Exception
+                ErrorMessage
+            }
         }`
 
         if(this.state.apiflag == 1){
@@ -234,6 +242,13 @@ export class EligibilityDetails extends React.Component{
                 }
                 Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
                     Message
+                }
+                EventLogData(HiPaaS_UUID:"`+uuid+`") {
+                    HiPaaS_UUID
+                    EventName
+                    EventCreationDateTime
+                    Exception
+                    ErrorMessage
                 }
             }`
         }
@@ -255,6 +270,7 @@ export class EligibilityDetails extends React.Component{
                     showDetails: true,
                     message_270 : this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
                     message_271 : this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
+                    eventLog: res.data.EventLogData
                 })
             }
         })
@@ -431,8 +447,7 @@ export class EligibilityDetails extends React.Component{
                     <div className="form-row">
                         <div className="form-group col-md-2">
                             <div className="list-dashboard">Transaction Id</div>
-                            <input className="form-control list-dashboard" 
-                                value={this.state.transactionId}
+                            <input className="form-control list-dashboard"
                                 id="state"
                                 onChange={(e) => {
                                     clearTimeout(val)
@@ -527,6 +542,35 @@ export class EligibilityDetails extends React.Component{
         )
     }
 
+    renderEventLog(){
+        let row = []
+        const data = this.state.eventLog ? this.state.eventLog : []
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td>{d.EventName}</td>
+                    <td>{moment.unix(d.EventCreationDateTime/1000).format('DD MMM YYYY hh:mm:ss')}</td>
+                    <td>{d.Exception}</td>
+                </tr>
+            )
+        })
+        return(
+            <table className="table table-bordered claim-list">
+                <thead>
+                    <tr className="table-head" style={{fontSize:"9px"}}>
+                        <td className="table-head-text list-item-style">EventName</td>
+                        <td className="table-head-text list-item-style">EventCreationDateTime</td>
+                        <td className="table-head-text list-item-style">Exception</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {row}
+                </tbody>
+            </table>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -541,6 +585,7 @@ export class EligibilityDetails extends React.Component{
                         {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
+                        {this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                     </div>
                 </div>
             </div>
