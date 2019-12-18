@@ -8,6 +8,7 @@ import { EligibilityDetails } from '../../EligibilityDetails';
 import Strings from '../../../../helpers/Strings';
 import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
+import Images from '../../../../theme/Images';
 
 export class RealTime276 extends React.Component{
     
@@ -27,11 +28,19 @@ export class RealTime276 extends React.Component{
             dateChartData : [],
             errorPieArray : [],
             errorLabelArray : [],
+            inComplaince : '',
+            outComplaince : '',
+            thisMonth : '',
+            lastMonth : '',
             State: '',
+            realTimePercent: '',
             startDate: '',
             endDate: '',
             transactionId: '',
+            selected_val: '',
+            averageResponseTime: '',
             selectedTradingPartner: '',
+            noResponsePercent: '',
             colorArray : [
                 '#139DC9',
                 '#83D2B4'
@@ -40,6 +49,7 @@ export class RealTime276 extends React.Component{
                 '#139DC9',
                 '#83D2B4',
                 '#9DCA15',
+                '#03d9c6',
             ],
             apiflag : Number(this.props.match.params.apiflag ? this.props.match.params.apiflag : 1)
         }
@@ -59,9 +69,12 @@ export class RealTime276 extends React.Component{
         this.getData()
     }
 
-    getData(){
+    getData(chartType){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        if(!chartType){
+            chartType = "Eligibilitymonthwise"
+        }
         
         let query = `{
             ClaimRequest276(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
@@ -95,7 +108,17 @@ export class RealTime276 extends React.Component{
                     TotalNumOfReq
                     Success
                     Error
-                }
+                    Daily_Volume
+                    LastMonth_Volume
+                    ThisMonth_Volume
+                    In_Compliance
+                    out_of_Compliance
+                    Error_Per
+                    In_Compliance_Per
+                    out_of_Compliance_per
+                    NoResponse_Per
+                    RealTime_Per
+                } 
                 Trading_PartnerList(Transaction:"EligibilityStatus") {
                     Trading_Partner_Name 
                 }
@@ -103,13 +126,24 @@ export class RealTime276 extends React.Component{
                     X_axis
                     Y_axis
                 }
-                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityDatewise") {
+                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
                     X_axis
                     Y_axis
                 }
                 Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
                     ErrorType
                     RecCount
+                }
+                EligibilityAllDtlTypewise(TypeID:"" page:1 State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
+                    RecCount
+                    HiPaaSUniqueID
+                    Date
+                    Trans_type
+                    Submiter
+                    Trans_ID
+                    Error_Type
+                    Error_Code
+                    ErrorDescription
                 }
             }`
         }
@@ -127,75 +161,7 @@ export class RealTime276 extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
-                let data = []
-                let tradingChartData = []
-                let tradingChartLabel = []
-                let dateChartData = []
-                let dateChartLabel = []
-                let errorPieArray = []
-                let errorLabelArray = []
-
-                if(this.state.apiflag){
-                    data = res.data.Eligibilty270[0]
-                } else {
-                    data = res.data.ClaimRequest276[0]
-                }
-
-                let summary = [
-                    {name:'Avg Response Time (sec)', value : data.AvgResTime},
-                    {name:'Total Number Of Requests', value : data.TotalNumOfReq},
-                    {name:'Total Success Count', value : data.Success},
-                    {name:'Total Error Count', value : data.Error},
-                ]
-
-                let pieArray = []
-                pieArray.push(data.Success)
-                pieArray.push(data.Error)
-
-                let pieLabels = []
-                pieLabels.push("Success")
-                pieLabels.push("Error")
-
-                if(res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0){
-                    res.data.tradingPartnerwise.forEach(item => {
-                        tradingChartLabel.push(item.X_axis)
-                        tradingChartData.push(item.Y_axis)
-                    })
-                }
-
-                if(res.data.datewise && res.data.datewise.length > 0){
-                    res.data.datewise.forEach(item => {
-                        try {
-                            dateChartLabel.push(moment(Number(item.X_axis)).format('DD MMM'))
-                            dateChartData.push(item.Y_axis)
-                        } catch (error) {}
-                    })
-                }
-
-                if(res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1){
-                    res.data.Eligibilty271ErrorwiseCount.forEach(item => {
-                        errorPieArray.push(item.RecCount)
-                        errorLabelArray.push(item.ErrorType)
-                    })
-                } else if(res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0){
-                    res.data.ClaimStatuswiseCount.forEach(item => {
-                        errorPieArray.push(item.Total)
-                        errorLabelArray.push(item.ClaimStatus)
-                    })
-                }
-                
-                this.setState({
-                    summaryList: summary,
-                    pieArray: pieArray,
-                    pieLabels: pieLabels,
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                    tradingChartLabel: tradingChartLabel,
-                    tradingChartData: tradingChartData,
-                    dateChartLabel: dateChartLabel,
-                    dateChartData: dateChartData,
-                    errorPieArray : errorPieArray,
-                    errorLabelArray : errorLabelArray,
-                })
+                this.performOperations(res, chartType)
             }
         })
         .catch(err => {
@@ -203,37 +169,96 @@ export class RealTime276 extends React.Component{
         });
     }
 
-    getTransactions(key){
-        let query = ''
-        let typeId = "276"
-        if(this.state.apiflag == 1){
-            typeId = "270"
-        }
-        if(key == 'Total Number Of Requests'){
-            query = "{ EligibilityAllDtlTypewise (TypeID:\""+typeId+"\"){ Trans_CountID TypeOfTransaction AvgResTime TotalNumOfReq Success Error Date Trans_type Submiter Trans_ID Error_Code } }"
+    async performOperations(res, flag){
+        let data = []
+        let tradingChartData = []
+        let tradingChartLabel = []
+        let dateChartData = []
+        let dateChartLabel = []
+        let errorPieArray = []
+        let errorLabelArray = []
+        let transactionData = []
+
+        if(this.state.apiflag){
+            data = res.data.Eligibilty270[0]
+            transactionData = res.data.EligibilityAllDtlTypewise
         } else {
-            query = "{ EligibilityErrorDtlTypewise (TypeID:\""+typeId+"\"){ Trans_CountID TypeOfTransaction AvgResTime TotalNumOfReq Success Error Date Trans_type Submiter Trans_ID Error_Code } }"
+            data = res.data.ClaimRequest276[0]
         }
 
-        fetch(Urls.base_url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: JSON.stringify({query: query})
+        let summary = [
+            {name:'OVERALL VOLUME (DAILY)', value : data.Daily_Volume},
+            {name:'TOTAL TRANSACTION VOLUME', value : data.TotalNumOfReq},
+            {name:'ERROR PERCENTAGE', value : data.Error_Per},
+            {name:'AVG RESPONSE TIME', value : data.AvgResTime + ' sec'},
+            {name:'NO RESPONSE', value : data.NoResponse_Per},
+        ]
+
+        let pieArray = []
+        pieArray.push(data.Success)
+        pieArray.push(data.Error)
+
+        let pieLabels = []
+        pieLabels.push("Success")
+        pieLabels.push("Error")
+
+        if(res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0){
+            res.data.tradingPartnerwise.forEach(item => {
+                tradingChartLabel.push(item.X_axis)
+                tradingChartData.push(item.Y_axis)
+            })
+        }
+
+        if(res.data.datewise && res.data.datewise.length > 0){
+            let count = 1
+            res.data.datewise.forEach(item => {
+                try {
+                    if(flag == 'Eligibilityweekwise'){
+                        dateChartLabel.push('week ' + count)
+                    } else if(flag == 'EligibilityDatewise'){
+                        dateChartLabel.push(moment(item.X_axis).format('DD MMM'))
+                    } else {
+                        dateChartLabel.push(moment(item.X_axis).format('MMM'))
+                    }
+                    dateChartData.push(item.Y_axis)
+                } catch (error) {}
+                count++
+            })
+        }
+
+        if(res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1){
+            res.data.Eligibilty271ErrorwiseCount.forEach(item => {
+                errorPieArray.push(item.RecCount)
+                errorLabelArray.push(item.ErrorType)
+            })
+        } else if(res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0){
+            res.data.ClaimStatuswiseCount.forEach(item => {
+                errorPieArray.push(item.Total)
+                errorLabelArray.push(item.ClaimStatus)
+            })
+        }
+        
+        this.setState({
+            summaryList: summary,
+            pieArray: pieArray,
+            pieLabels: pieLabels,
+            tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+            tradingChartLabel: tradingChartLabel,
+            tradingChartData: tradingChartData,
+            dateChartLabel: dateChartLabel,
+            dateChartData: dateChartData,
+            errorPieArray : errorPieArray,
+            errorLabelArray : errorLabelArray,
+            inComplaince : data.In_Compliance_Per,
+            outComplaince : data.out_of_Compliance_per,
+            thisMonth: data.ThisMonth_Volume,
+            lastMonth : data.LastMonth_Volume,
+            transactionData : transactionData,
+            averageResponseTime : data.AvgResTime,
+            noResponsePercent : data.NoResponse_Per,
+            errorCount: data.Error,
+            realTimePercent: data.RealTime_Per
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    files_list : key == 'Total Number Of Requests' ? res.data.EligibilityAllDtlTypewise : res.data.EligibilityErrorDtlTypewise,
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
     }
 
     renderSearchBar(){
@@ -282,78 +307,39 @@ export class RealTime276 extends React.Component{
 
     renderCharts(){
         return(
-            <div>
-                <div className="row chart-div">
-                    {
-                        this.state.pieArray && this.state.pieArray.length > 0
-                        ?
-                        <div className="chart-container chart">
-                            <Pie data={this.getPieData(this.state.pieArray, this.state.pieLabels, this.state.colorArray)}
-                                options={{
-                                    elements: {
-                                        arc: {
-                                            borderWidth: 0
-                                        }
-                                    },
-                                    legend: {position: 'bottom'}
-                                }}
-                                width={100}
-                                height={64}/>
-                        </div> : null
-                    }
-
-                    {
-                        this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
-                        ?
-                        <div className="chart-container chart">
-                            <Bar
-                                data={this.getBarData(this.state.tradingChartLabel, this.state.tradingChartData, '#139DC9')}
-                                width={100}
-                                height={60}
-                                options={{
-                                    legend: {
-                                        display: false,
-                                    }
-                                }}/>
-                        </div> : null
-                    }
-                </div>
-
-                <div className="row chart-div">
-                    {
-                        this.state.dateChartLabel && this.state.dateChartLabel.length > 0
-                        ?
-                        <div className="chart-container chart">
-                            <Bar
-                                data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
-                                width={100}
-                                height={60}
-                                options={{
-                                    legend: {
-                                        display: false,
-                                    }
-                                }}/>
-                        </div> : null
-                    }
-
-                    {
-                        this.state.errorPieArray && this.state.errorPieArray.length > 0
-                        ?
-                        <div className="chart-container chart">
-                            <Pie data={this.getPieData(this.state.errorPieArray, this.state.errorLabelArray, this.state.errorColorArray)}
-                                options={{
-                                    elements: {
-                                        arc: {
-                                            borderWidth: 0
-                                        }
-                                    },
-                                    legend: {position: 'bottom'}
-                                }}
-                                width={100}
-                                height={64}/>
-                        </div> : null
-                    }
-                </div>
+            <div className="row chart-div">
+                {
+                    this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
+                    ?
+                    <div className="chart-container chart">
+                        <label className="chart-header">Submitter volume</label>
+                        <Bar
+                            data={this.getBarData(this.state.tradingChartLabel, this.state.tradingChartData, '#139DC9')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                }
+                            }}/>
+                    </div> : null
+                }
+                {
+                    this.state.dateChartLabel && this.state.dateChartLabel.length > 0
+                    ?
+                    <div className="chart-container chart">
+                        <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label>
+                        <Bar
+                            data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                }
+                            }}/>
+                    </div> : null
+                }
             </div>
         )
     }
@@ -362,49 +348,6 @@ export class RealTime276 extends React.Component{
         this.setState({
             key : key
         })
-    }
-
-    renderSummary(){
-        let row = []
-        const data = this.state.summaryList;
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-
-        data.forEach((d) => {
-            let apiflag = this.state.apiflag
-            let url = Strings.ElilgibilityDetails270 + '/' + apiflag
-
-            row.push(
-                <tr>
-                    <td className="bold-text">{d.name}</td>
-                    <td className={
-                        (d.name == 'Avg Response Time (sec)') ? 'blue bold-text summary-values' :
-                        (d.name == 'Total Success Count') ? 'green bold-text summary-values' :
-                        (d.name == 'Total Number Of Requests' || d.name == 'Total Error Count') ? 'red bold-text summary-values' : ''
-                    }>
-                        <Link 
-                            to={
-                                '/' + url + 
-                                '/' + (this.state.State ? this.state.State : 'n') + 
-                                '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
-                                '/' + startDate + 
-                                '/' + endDate + 
-                                '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
-                                '/' + (d.name == 'Total Number Of Requests' ? 'n' : d.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
-                                '/' + d.value
-                            }>{d.value}</Link>
-                    </td>
-                </tr>
-            )
-        });
-    
-        return (
-            <table className="table table-bordered claim-list summary-list">
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
-        );
     }
 
     showDetails(){
@@ -440,7 +383,7 @@ export class RealTime276 extends React.Component{
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
             this.setState({
                 [key] : ''
             })
@@ -487,7 +430,7 @@ export class RealTime276 extends React.Component{
 
                 <div className="form-group col-2">
                     <div className="list-dashboard">
-                        Trading Partner 
+                        Submitter 
                     </div>
                     <select className="form-control list-dashboard" id="TradingPartner"
                         onChange={(event) => {
@@ -501,43 +444,222 @@ export class RealTime276 extends React.Component{
                         {this.getoptions()}
                     </select>
                 </div>
-               <div className="form-group col-2">
-                    <div className="list-dashboard">Start Date</div>
-                    <DatePicker 
-                        className="datepicker"
-                        selected={this.state.startDate}
-                        onChange={this.handleStartChange}
-                    />
-                </div>
                 <div className="form-group col-2">
-                    <div className="list-dashboard">End Date</div>
-                    <DatePicker className="datepicker"
-                        selected={this.state.endDate}
-                        onChange={this.handleEndChange}
-                    />  
+                    <div className="list-dashboard">Time Range</div>
+                    <select 
+                        className="form-control list-dashboard" id="state"
+                        onChange={(event) => {
+                            let day = 0
+                            let chartType = ''
+                            let selected_val = event.target.options[event.target.selectedIndex].text
+
+                            if(selected_val == 'Last week'){
+                                day = 7
+                                chartType = 'EligibilityDatewise'
+                            } else if(selected_val == 'Last month'){
+                                day = 30
+                                chartType = 'Eligibilityweekwise'
+                            } else if(selected_val == 'Last 3 months'){
+                                day = 90
+                            } else if(selected_val == 'Last 6 months'){
+                                day = 180
+                            } else if(selected_val == 'Last year'){
+                                day = 365
+                            }
+
+                            let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
+                            let endDate = moment().format('YYYY-MM-DD')
+
+                            if(!selected_val){
+                                startDate = ''
+                                endDate = ''
+                            }
+
+                            this.setState({
+                                startDate : startDate,
+                                endDate: endDate,
+                                selected_val: selected_val
+                            })
+
+                            setTimeout(() => {
+                                this.getData(chartType)
+                            }, 50);
+                        }}
+                        >
+                        <option  selected="selected" value=""></option>
+                        <option value="1">Last week</option>
+                        <option value="2">Last month</option>
+                        <option value="2">Last 3 months</option>
+                        <option value="2">Last 6 months</option>
+                        <option value="2">Last year</option>
+                    </select>
                 </div>
             </div>
         </form>
         )
     }
 
+    handleClick(){
+        
+    }
+
+    renderSummaryDetails(){
+        let row = []
+        let array = this.state.summaryList
+        let apiflag = this.state.apiflag
+        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+
+        array.forEach(item => {
+            row.push(
+                <Link 
+                    to={
+                        '/' + url + 
+                        '/' + (this.state.State ? this.state.State : 'n') + 
+                        '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
+                        '/' + startDate + 
+                        '/' + endDate + 
+                        '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
+                        '/' + (item.name == 'TOTAL TRANSACTION VOLUME' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
+                        '/' + item.value
+                    } className="col-2 summary-container">
+                    <div>
+                        <div className="summary-header">{item.name}</div>
+                        <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    </div>
+                </Link>
+            )
+        });
+
+        return(
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
+    }
+
+    renderVolumeSummary(header, initialHeader, initialValue, laterHeader, laterValue, rise){
+        return(
+            <div className="volume-summary chart">
+                <div className="volume-summary-header">{header}</div>
+                <div className="row">
+                    <div className="col nopadding">
+                        <div className="volume-header center-align-vol">{initialHeader}</div>
+                        <div className="volume-title center-align-vol">{initialValue}</div>
+                    </div>
+                    <div className="vertical-line"></div>
+                    <div className="col nopadding">
+                        <div className="volume-header center-align-vol">{laterHeader}</div>
+                        <div className="volume-title center-align-vol">{laterValue}</div>
+                    </div>
+                </div>
+                {rise ? <div className="increase-percent">{rise}</div> : null}
+            </div>
+        )
+    }
+
+    renderTransactions(){
+            let row = []
+            const data = this.state.transactionData ? this.state.transactionData : []
+    
+            data.forEach((d) => {
+                row.push(
+                    <tr>
+                        <td>{d.Trans_ID}</td>
+                        <td>{moment.unix(d.Date/1000).format("DD MMM YYYY hh:mm:ss")}</td>
+                        <td>{d.Submiter}</td>
+                        <td>{d.Trans_type}</td>
+                    </tr>
+                )
+            })
+
+            return(
+                <div>
+                    <table className="table table-bordered claim-list">
+                        <thead>
+                            <tr className="table-head" style={{fontSize:"9px"}}>
+                                <td className="table-head-text">Transaction Id</td>
+                                <td className="table-head-text list-item-style">Transaction Date</td>
+                                <td className="table-head-text list-item-style">Submitter</td>
+                                <td className="table-head-text list-item-style">Status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {row}
+                        </tbody>
+                    </table>
+                </div>
+            )
+    }
+
+    renderTransactionIdChart(){
+        return(
+            <div>
+                {
+                    this.state.errorPieArray && this.state.errorPieArray.length > 0
+                    ?
+                    <div className="lower-chart-container chart">
+                        <label className="chart-header">Error code wise volume</label>
+                        <Pie data={this.getPieData(this.state.errorPieArray, this.state.errorLabelArray, this.state.errorColorArray)}
+                            options={{
+                                elements: {
+                                    arc: {
+                                        borderWidth: 0
+                                    }
+                                },
+                                legend: {position: 'bottom'}
+                            }}
+                            width={100}
+                            height={64}/>
+                    </div> : null
+                }
+            </div>
+        )
+    }
+
+    renderAvgSummaryDetails(){
+        return(
+            <div className="col-5 summary-container">
+                <div className="summary-header">Average Response Times</div>
+                <div className="row">
+                    <div className="col-6">
+                        <div className="response-summary-title">Response Time : {this.state.averageResponseTime}sec</div>
+                        <div className="response-summary-title">No Response : {this.state.noResponsePercent}</div>
+                    </div>
+                    <div>
+                        <div className="response-summary-title">In Compliance {this.state.inComplaince}</div>
+                        <div className="response-summary-title">Out of Compliance {this.state.outComplaince}</div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
-                {
-                    <div>
-                        <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Real Time 270'}</label>
-                        {this.renderTopbar()}
-                        <div className="row">
-                            <div className="col-9">
-                                {this.renderCharts()}
-                            </div>
-                            <div className="col-3">
-                                {this.renderSummary()}
-                            </div>
-                        </div>
+                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
+                {this.renderTopbar()}
+                {this.renderSummaryDetails()}
+                <div className="row">
+                    <div className="col-9">
+                        {this.renderCharts()}
                     </div>
-                }
+                    <div className="col-3 nopadding">
+                        {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
+                        {this.renderVolumeSummary('Compliance Ratio', 'In Compliance', this.state.inComplaince, 'Out of Compliance', this.state.outComplaince)}
+                    </div>
+                </div>
+
+                <div className="row nopadding">
+                    <div className="col-7">
+                        {this.renderTransactions()}
+                    </div>
+                    <div className="col-5">
+                        {this.renderTransactionIdChart()}
+                    </div>
+                </div>
             </div>
         );
     }

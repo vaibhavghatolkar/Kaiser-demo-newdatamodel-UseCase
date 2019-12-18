@@ -342,7 +342,7 @@ export class EligibilityDetails extends React.Component{
                 {this.state.status != 'n' ? <div className="col-1"></div> : null}
                 <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
-                    <div className="border-view" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
+                    <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
                 </div>
             </div>
         )
@@ -365,7 +365,7 @@ export class EligibilityDetails extends React.Component{
     }
     
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
             this.setState({
                 [key] : '',
                 showDetails : false
@@ -413,11 +413,13 @@ export class EligibilityDetails extends React.Component{
                     '#139DC9',
                     '#83D2B4',
                     '#9DCA15',
+                    '#03d9c6',
                 ],
                 hoverBackgroundColor: [
                     '#139DC9',
                     '#83D2B4',
                     '#9DCA15',
+                    '#03d9c6',
                 ]
             }],
             flag: ''
@@ -488,7 +490,7 @@ export class EligibilityDetails extends React.Component{
                         </div>
                         
                         <div className="form-group col-md-2">
-                            <div className="list-dashboard">Trading Partner </div>
+                            <div className="list-dashboard">Submitter </div>
                             <select className="form-control list-dashboard" id="TradingPartner"
                                 onChange={(event) => {
                                     this.onSelect(event, 'selectedTradingPartner')
@@ -556,18 +558,26 @@ export class EligibilityDetails extends React.Component{
             )
         })
         return(
-            <table className="table table-bordered claim-list">
-                <thead>
-                    <tr className="table-head" style={{fontSize:"9px"}}>
-                        <td className="table-head-text list-item-style">EventName</td>
-                        <td className="table-head-text list-item-style">EventCreationDateTime</td>
-                        <td className="table-head-text list-item-style">Exception</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
+            <div className="row">
+                {this.state.status != 'n' ? <div className="col-1"></div> : null}
+                <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Stage Details</a></div>
+                    <div id={'event'}>
+                        <table className="table table-bordered background-color">
+                            <thead>
+                                <tr className="table-head" style={{fontSize:"9px"}}>
+                                    <td className="table-head-text list-item-style">Stage</td>
+                                    <td className="table-head-text list-item-style">Execution Time</td>
+                                    <td className="table-head-text list-item-style">Exception</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         )
     }
 
@@ -583,9 +593,9 @@ export class EligibilityDetails extends React.Component{
                     
                     <div className="col-6">
                         {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null}
+                        {this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
-                        {this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                     </div>
                 </div>
             </div>

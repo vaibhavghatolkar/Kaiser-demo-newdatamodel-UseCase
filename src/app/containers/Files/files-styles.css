@@ -23,13 +23,6 @@
 .summary-list{
     line-height: 2.5em;
 }
-.chart{
-    background-color: #ffffff;
-    margin : 0px;
-    margin-top : 16px;
-    padding-top : 24px;
-    padding-bottom : 24px;
-}
 .summary-values{
     font-size: 18px;
 }

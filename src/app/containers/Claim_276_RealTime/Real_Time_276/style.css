@@ -78,12 +78,106 @@
     font-size: 10px;
 }
 .chart-container{
-    border-radius: 20px;
+    border-radius: 8px;
     margin: 12px;
     box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
-    width : 45%;
-    padding : 24px
+    width : 46%;
+    padding-left : 24px;
+    padding-right : 24px;
+}
+.volume-summary{
+    padding : 16px;
+    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
+    border-radius: 8px;
+    margin: 12px;
 }
 .chart-div{
-    justify-content: center;
+    /* justify-content: center; */
+}
+.background-color{
+    background-color: white
+}
+
+
+
+.summary-container{
+    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
+    background-color: white;
+    margin-right : 16px;
+    margin-top : 16px;
+    margin-bottom : 16px;
+}
+.summary-header{
+    font-size: 10px;
+    color: grey;
+    padding-top: 12px;
+    padding-bottom: 2px;
+}
+.summary-title{
+    font-size: 20px;
+    color: #424242;
+    padding-left: 8px;
+    padding-bottom: 12px;
+}
+.padding-left{
+    padding-left: 16px;
+}
+.volume-summary-header{
+    padding-bottom: 24px;
+    font-size: 11px;
+    color: #515151;
+    text-align: center
+}
+.center-align-vol{
+    text-align: center
+}
+.vertical-line{
+    border-left: 1px solid grey;
+    height: 54px;
+}
+.volume-header{
+    font-size: 10px;
+    color: grey;
+}
+.volume-title{
+    font-size: 20px;
+    padding-top : 12px;
+    color: #424242;
+}
+.chart-header{
+    font-size: 12px;
+    padding-top: 16px;
+    padding-bottom: 12px;
+}
+.chart{
+    background-color: #ffffff;
+    margin-top : 16px;
+    padding-bottom : 24px;
+}
+.response-summary-title{
+    font-size: 14px;
+}
+.increase-percent{
+    background-color: #65C204;
+    color: white;
+    padding-top : 4px;
+    padding-bottom : 4px;
+    margin-top : 16px;
+    font-size: 12px;
+    align-self: center;
+    border-radius : 12px;
+    text-align: center
+}
+.lower-chart-container{
+    border-radius: 8px;
+    margin: 12px;
+    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);   
+    padding-left : 16px;
+    padding-right : 16px;
+}
+.color-background{
+    background-color: #448dce;
+}
+.white-font{
+    color: white
 }

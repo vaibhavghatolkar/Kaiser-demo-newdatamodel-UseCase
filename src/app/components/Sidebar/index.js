@@ -41,16 +41,16 @@ export class Sidebar extends React.Component{
                 {value: 'Manage Rule Set'},
             ],
             RealTime270: [
-                {value: 'Real Time', key: 'realTime_270'},
+                {value: 'Real Time Dashboard', key: 'realTime_270'},
                 // {value: 'Audit Summary - 270', key: 'AuditSummary270'},
                 {value: 'Elilgibility Details', key: 'elilgibilityDetails270'},
-                {value: 'Elilgibility Errors', key: 'elilgibilityErrors270'},
+                // {value: 'Elilgibility Errors', key: 'elilgibilityErrors270'},
                 
             ],
             RealTime276: [
-                {value: 'Real Time', key: 'realTime_276'},
+                {value: 'Real Time Dashboard', key: 'realTime_276'},
                 {value: 'Claim Status Details', key: 'elilgibilityDetails276'},
-                {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
+                // {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
                 
             ],
             fullfile: [
