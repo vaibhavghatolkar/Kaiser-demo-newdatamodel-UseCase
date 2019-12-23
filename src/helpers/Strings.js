@@ -39,6 +39,10 @@ const Strings = {
     elilgibilityErrors270: 'elilgibilityErrors270',
     elilgibilityErrors276: 'elilgibilityErrors276',
     ViewCustomEdits: 'ViewCustomEdits',
+    UserManagement:'UserManagement',
+    UserList:'UserList',
+    MenuCreate:'MenuCreate',
+    ChangePassword:'ChangePassword',
 }
 
 export default Strings;

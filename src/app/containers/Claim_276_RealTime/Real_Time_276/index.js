@@ -149,6 +149,7 @@ export class RealTime276 extends React.Component{
                 Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
                     ErrorType
                     RecCount
+                    Percentage
                 }
                 EligibilityAllDtlTypewise(TypeID:"" page:1 State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
                     RecCount
@@ -252,6 +253,7 @@ export class RealTime276 extends React.Component{
             res.data.Eligibilty271ErrorwiseCount.forEach(item => {
                 errorPieArray.push(item.RecCount)
                 errorLabelArray.push(item.ErrorType)
+                errorLabelArray.push(item.Percentage)
             })
         } else if(res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0){
             errorArray = res.data.ClaimStatuswiseCount
@@ -650,18 +652,29 @@ export class RealTime276 extends React.Component{
     renderSummary(){
         let row = []
         const data = this.state.errorArray
-
+       var check = this.state.apiflag;
         data.forEach((d) => {
+          
             row.push(
+                
                 <tr>
-                    <td><a href="#" className="bold-text">{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
-                    <td className="bold-text summary-values">{this.state.apiflag == 1 ? d.RecCount : d.Total}</td>
+                    <td style={{fontSize:"11px"}}><a href="#" >{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
+                    <td >{this.state.apiflag == 1 ? d.RecCount : d.Total}</td>
+                    {this.state.apiflag== 1 ?  <td >{this.state.apiflag == 1 ? d.Percentage : ''}</td> : "" }
+        
+        
                 </tr>
             )
         });
 
         return (
             <table className="table table-bordered claim-list summary-list chart-container chart">
+                
+                <thead>
+                 <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Error Description" : "Claim Status"}</th>     <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Total Error" : "Total Claims"}</th>  
+                 {this.state.apiflag== 1 ?   <th style={{fontSize:"11px"}}>Error %</th> : "" }
+                   
+                </thead>
                 <tbody>
                     {row}
                 </tbody>

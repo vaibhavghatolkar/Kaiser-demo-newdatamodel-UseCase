@@ -29,6 +29,11 @@ import Strings from './helpers/Strings';
 import { Header } from './app/components/Header';
 import { Files_834 } from './app/containers/Files_834';
 import { ViewCustomEdits } from './app/containers/View_customEdit';
+import { UserList } from './app/containers/User_List';
+import { MenuCreate } from './app/containers/Menu_Create';
+import { ChangePassword } from './app/containers/Change_Password';
+
+
 import { Login } from './app/containers/login';
 
 const $ = window.$;
@@ -70,6 +75,11 @@ const routing = (
                     <Route path={'/'+ Strings.elilgibilityErrors270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                     <Route path={'/'+ Strings.ElilgibilityDetails276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                     <Route path={'/'+ Strings.elilgibilityErrors276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.UserList} component={UserList} />
+                    <Route path={'/'+ Strings.MenuCreate} component={MenuCreate} />
+                    <Route path={'/'+ Strings.ChangePassword} component={ChangePassword} />
+                    
+                    
                 </div>
             </div>
         </div>

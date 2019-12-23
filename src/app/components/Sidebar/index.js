@@ -53,6 +53,14 @@ export class Sidebar extends React.Component{
                 // {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
                 
             ],
+            UserManagement: [
+                {value: 'HiPaaS User List', key: 'UserList'},
+                {value: 'User Role Management', key: 'MenuCreate'},
+                {value: 'Change Password', key: 'ChangePassword'},
+              
+             // {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
+                
+            ],
             fullfile: [
                 {value: '834 Full File Compare', key: 'fullFile834'},
             ]
@@ -88,9 +96,15 @@ export class Sidebar extends React.Component{
                 addon = '/0/n/n/n/n/n/'+key+'/n'
             } else if(element.key == Strings.claimDetails){
                 addon = '/n/n/n/n'
-            } else {
-                addon = ''
             }
+           
+            else {
+                addon = ''
+           
+           
+           
+            }
+            
 
             row.push(
                 <li>
@@ -117,6 +131,8 @@ export class Sidebar extends React.Component{
                 {/* ** {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)} */}
                 {this.renderItems(Strings.REALTIME270, 'Eligibility Real-time', this.state.RealTime270)}
                 {this.renderItems(Strings.REALTIME276, 'Claim Status Real-time', this.state.RealTime276)}
+                {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
+            
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
                 {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
