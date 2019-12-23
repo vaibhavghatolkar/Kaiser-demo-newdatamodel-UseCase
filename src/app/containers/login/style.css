@@ -1,0 +1,31 @@
+padding-top.Title
+{
+    font-weight: bold;
+    font-size: 14x;
+    margin-left: 15px;
+    color:white;
+   
+}
+
+.headernm
+{
+    font-weight: bold;
+    font-size: 10x;
+    margin-left: 37px;
+   
+}
+.form-control
+{
+    font-size: 12px;
+}
+.btn-demo {
+	margin: 15px;
+	padding: 10px 15px;
+	border-radius: 150;
+	font-size: 12px;
+    background-color: #139DC9;
+    color: white
+}
+.btn-demo:hover {
+    color: white;
+}

@@ -21,6 +21,7 @@ export class EligibilityDetails extends React.Component{
             tradingpartner: [],
             errorList: [],
             eventLog: [],
+            Transaction_Compliance: '',
 
             State: props.match.params.State != 'n' ? props.match.params.State : '',
             status: props.match.params.status != 'n' ? props.match.params.status : '',
@@ -232,6 +233,7 @@ export class EligibilityDetails extends React.Component{
                 EventCreationDateTime
                 Exception
                 ErrorMessage
+                Transaction_Compliance
             }
         }`
 
@@ -249,6 +251,7 @@ export class EligibilityDetails extends React.Component{
                     EventCreationDateTime
                     Exception
                     ErrorMessage
+                    Transaction_Compliance
                 }
             }`
         }
@@ -270,7 +273,8 @@ export class EligibilityDetails extends React.Component{
                     showDetails: true,
                     message_270 : this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
                     message_271 : this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
-                    eventLog: res.data.EventLogData
+                    eventLog: res.data.EventLogData,
+                    Transaction_Compliance : res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
                 })
             }
         })
@@ -561,7 +565,7 @@ export class EligibilityDetails extends React.Component{
             <div className="row">
                 {this.state.status != 'n' ? <div className="col-1"></div> : null}
                 <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Stage Details</a></div>
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Stage Details ({this.state.Transaction_Compliance})</a></div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
@@ -592,7 +596,7 @@ export class EligibilityDetails extends React.Component{
                     </div>
                     
                     <div className="col-6">
-                        {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null}
+                        {/* {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null} */}
                         {this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}

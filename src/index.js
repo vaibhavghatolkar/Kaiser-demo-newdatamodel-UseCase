@@ -29,6 +29,7 @@ import Strings from './helpers/Strings';
 import { Header } from './app/components/Header';
 import { Files_834 } from './app/containers/Files_834';
 import { ViewCustomEdits } from './app/containers/View_customEdit';
+import { Login } from './app/containers/login';
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}

@@ -28,6 +28,7 @@ export class RealTime276 extends React.Component{
             dateChartData : [],
             errorPieArray : [],
             errorLabelArray : [],
+            errorArray : [],
             inComplaince : '',
             outComplaince : '',
             thisMonth : '',
@@ -72,8 +73,10 @@ export class RealTime276 extends React.Component{
     getData(chartType){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        if(!chartType){
+        if(!chartType && this.state.apiflag == 1){
             chartType = "Eligibilitymonthwise"
+        } else if (!chartType && this.state.apiflag == 0){
+            chartType = "ClaimRequestMonthwise"
         }
         
         let query = `{
@@ -82,6 +85,18 @@ export class RealTime276 extends React.Component{
                 TotalNumOfReq
                 Success
                 Error
+                Daily_Volume
+                LastMonth_Volume
+                ThisMonth_Volume
+                In_Compliance
+                out_of_Compliance
+                Error_Per
+                In_Compliance_Per
+                out_of_Compliance_per
+                NoResponse_Per
+                RealTime_Per
+                Invalid_Trans
+                Total_Paid
             }
             Trading_PartnerList(Transaction:"ClaimRequest") {
                 Trading_Partner_Name 
@@ -90,7 +105,7 @@ export class RealTime276 extends React.Component{
                 X_axis
                 Y_axis
             }
-            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestDatewise") {
+            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
                 X_axis
                 Y_axis
             }
@@ -118,6 +133,7 @@ export class RealTime276 extends React.Component{
                     out_of_Compliance_per
                     NoResponse_Per
                     RealTime_Per
+                    Invalid_Trans
                 } 
                 Trading_PartnerList(Transaction:"EligibilityStatus") {
                     Trading_Partner_Name 
@@ -189,10 +205,14 @@ export class RealTime276 extends React.Component{
         let summary = [
             {name:'OVERALL VOLUME (DAILY)', value : data.Daily_Volume},
             {name:'TOTAL TRANSACTION VOLUME', value : data.TotalNumOfReq},
+            {name:'INVALID TRANSACTIONS', value : data.Invalid_Trans},
             {name:'ERROR PERCENTAGE', value : data.Error_Per},
             {name:'AVG RESPONSE TIME', value : data.AvgResTime + ' sec'},
-            {name:'NO RESPONSE', value : data.NoResponse_Per},
         ]
+
+        if(this.state.apiflag == 0){
+            summary.push({name : 'TOTAL PAID', value: data.Total_Paid})
+        }
 
         let pieArray = []
         pieArray.push(data.Success)
@@ -213,9 +233,9 @@ export class RealTime276 extends React.Component{
             let count = 1
             res.data.datewise.forEach(item => {
                 try {
-                    if(flag == 'Eligibilityweekwise'){
+                    if(flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise'){
                         dateChartLabel.push('week ' + count)
-                    } else if(flag == 'EligibilityDatewise'){
+                    } else if(flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise'){
                         dateChartLabel.push(moment(item.X_axis).format('DD MMM'))
                     } else {
                         dateChartLabel.push(moment(item.X_axis).format('MMM'))
@@ -226,12 +246,15 @@ export class RealTime276 extends React.Component{
             })
         }
 
+        let errorArray = []
         if(res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1){
+            errorArray = res.data.Eligibilty271ErrorwiseCount
             res.data.Eligibilty271ErrorwiseCount.forEach(item => {
                 errorPieArray.push(item.RecCount)
                 errorLabelArray.push(item.ErrorType)
             })
         } else if(res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0){
+            errorArray = res.data.ClaimStatuswiseCount
             res.data.ClaimStatuswiseCount.forEach(item => {
                 errorPieArray.push(item.Total)
                 errorLabelArray.push(item.ClaimStatus)
@@ -257,6 +280,7 @@ export class RealTime276 extends React.Component{
             averageResponseTime : data.AvgResTime,
             noResponsePercent : data.NoResponse_Per,
             errorCount: data.Error,
+            errorArray: errorArray,
             realTimePercent: data.RealTime_Per
         })
     }
@@ -307,7 +331,8 @@ export class RealTime276 extends React.Component{
 
     renderCharts(){
         return(
-            <div className="row chart-div">
+            <div>
+                <div className="row chart-div">
                 {
                     this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
                     ?
@@ -340,6 +365,13 @@ export class RealTime276 extends React.Component{
                             }}/>
                     </div> : null
                 }
+                </div>
+                <div className="row chart-div">
+                    {
+                        this.state.errorArray && this.state.errorArray.length > 0 ? 
+                        this.renderSummary() : null
+                    }
+                </div>
             </div>
         )
     }
@@ -401,106 +433,102 @@ export class RealTime276 extends React.Component{
     renderTopbar() {
         return (
             <form className="form-style" id='filters'>
-                    <div className="form-row">
-                <div className="form-group col-2">
-                    <div className="list-dashboard">State</div>
-                    <select className="form-control list-dashboard" id="state"
-                        onChange={(event) => {
-                            this.onSelect(event, 'State')
-                        }}
-                    >
-                        <option  selected="selected" value=""></option>
-                        <option value="1">California</option>
-                        <option value="2">Michigan</option>
-                        <option value="3">Florida</option>
-                        <option value="4">New York</option>
-                        <option value="5">Idaho</option>
-                        <option value="6">Ohio</option>
-                        <option value="7">Illinois</option>
-                        <option value="8">Texas</option>
-                        <option value="9">Mississippi</option>
-                        <option value="10">South Carolina</option>
-                        <option value="11">New Mexico</option>
-                        <option value="12">Puerto Rico</option>
-                        <option value="13">Washington</option>
-                        <option value="14">Utah</option>
-                        <option value="15">Wisconsin</option>
-                    </select>
-                </div>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Time Range</div>
+                        <select 
+                            className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                let day = 0
+                                let chartType = ''
+                                let selected_val = event.target.options[event.target.selectedIndex].text
 
-                <div className="form-group col-2">
-                    <div className="list-dashboard">
-                        Submitter 
+                                if(selected_val == 'Last week'){
+                                    day = 7
+                                    chartType = this.state.apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise'
+                                } else if(selected_val == 'Last month'){
+                                    day = 30
+                                    chartType = this.state.apiflag == 1 ? 'Eligibilityweekwise' : 'ClaimRequestweekwise'
+                                } else if(selected_val == 'Last 3 months'){
+                                    day = 90
+                                } else if(selected_val == 'Last 6 months'){
+                                    day = 180
+                                } else if(selected_val == 'Last year'){
+                                    day = 365
+                                }
+
+                                let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
+                                let endDate = moment().format('YYYY-MM-DD')
+
+                                if(!selected_val){
+                                    startDate = ''
+                                    endDate = ''
+                                }
+
+                                this.setState({
+                                    startDate : startDate,
+                                    endDate: endDate,
+                                    selected_val: selected_val
+                                })
+
+                                setTimeout(() => {
+                                    this.getData(chartType)
+                                }, 50);
+                            }}
+                            >
+                            <option  selected="selected" value=""></option>
+                            <option value="1">Last week</option>
+                            <option value="2">Last month</option>
+                            <option value="2">Last 3 months</option>
+                            <option value="2">Last 6 months</option>
+                            <option value="2">Last year</option>
+                        </select>
                     </div>
-                    <select className="form-control list-dashboard" id="TradingPartner"
-                        onChange={(event) => {
-                            this.onSelect(event, 'selectedTradingPartner')
-                            setTimeout(() => {
-                                this.getData()
-                            }, 50);
-                        }}
-                    >
-                        <option value="select"></option>
-                        {this.getoptions()}
-                    </select>
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-dashboard">Time Range</div>
-                    <select 
-                        className="form-control list-dashboard" id="state"
-                        onChange={(event) => {
-                            let day = 0
-                            let chartType = ''
-                            let selected_val = event.target.options[event.target.selectedIndex].text
-
-                            if(selected_val == 'Last week'){
-                                day = 7
-                                chartType = 'EligibilityDatewise'
-                            } else if(selected_val == 'Last month'){
-                                day = 30
-                                chartType = 'Eligibilityweekwise'
-                            } else if(selected_val == 'Last 3 months'){
-                                day = 90
-                            } else if(selected_val == 'Last 6 months'){
-                                day = 180
-                            } else if(selected_val == 'Last year'){
-                                day = 365
-                            }
-
-                            let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
-                            let endDate = moment().format('YYYY-MM-DD')
-
-                            if(!selected_val){
-                                startDate = ''
-                                endDate = ''
-                            }
-
-                            this.setState({
-                                startDate : startDate,
-                                endDate: endDate,
-                                selected_val: selected_val
-                            })
-
-                            setTimeout(() => {
-                                this.getData(chartType)
-                            }, 50);
-                        }}
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.onSelect(event, 'State')
+                            }}
                         >
-                        <option  selected="selected" value=""></option>
-                        <option value="1">Last week</option>
-                        <option value="2">Last month</option>
-                        <option value="2">Last 3 months</option>
-                        <option value="2">Last 6 months</option>
-                        <option value="2">Last year</option>
-                    </select>
+                            <option  selected="selected" value=""></option>
+                            <option value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">
+                            Submitter 
+                        </div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                                setTimeout(() => {
+                                    this.getData()
+                                }, 50);
+                            }}
+                        >
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
-            </div>
         </form>
         )
-    }
-
-    handleClick(){
-        
     }
 
     renderSummaryDetails(){
@@ -554,7 +582,15 @@ export class RealTime276 extends React.Component{
                         <div className="volume-title center-align-vol">{laterValue}</div>
                     </div>
                 </div>
-                {rise ? <div className="increase-percent">{rise}</div> : null}
+                {
+                    rise ? 
+                    <div className="increase-percent">{rise}</div>
+                    :
+                    <div className="col padding-top">
+                        <div className="volume-header center-align-vol">No Response</div>
+                        <div className="no-response-title center-align-vol">{this.state.noResponsePercent} %</div>
+                    </div>
+                }
             </div>
         )
     }
@@ -593,31 +629,6 @@ export class RealTime276 extends React.Component{
             )
     }
 
-    renderTransactionIdChart(){
-        return(
-            <div>
-                {
-                    this.state.errorPieArray && this.state.errorPieArray.length > 0
-                    ?
-                    <div className="lower-chart-container chart">
-                        <label className="chart-header">Error code wise volume</label>
-                        <Pie data={this.getPieData(this.state.errorPieArray, this.state.errorLabelArray, this.state.errorColorArray)}
-                            options={{
-                                elements: {
-                                    arc: {
-                                        borderWidth: 0
-                                    }
-                                },
-                                legend: {position: 'bottom'}
-                            }}
-                            width={100}
-                            height={64}/>
-                    </div> : null
-                }
-            </div>
-        )
-    }
-
     renderAvgSummaryDetails(){
         return(
             <div className="col-5 summary-container">
@@ -628,12 +639,34 @@ export class RealTime276 extends React.Component{
                         <div className="response-summary-title">No Response : {this.state.noResponsePercent}</div>
                     </div>
                     <div>
-                        <div className="response-summary-title">In Compliance {this.state.inComplaince}</div>
-                        <div className="response-summary-title">Out of Compliance {this.state.outComplaince}</div>
+                        <div className="response-summary-title">In Compliance {this.state.inComplaince} %</div>
+                        <div className="response-summary-title">Out of Compliance {this.state.outComplaince} %</div>
                     </div>
                 </div>
             </div>
         )
+    }
+
+    renderSummary(){
+        let row = []
+        const data = this.state.errorArray
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td><a href="#" className="bold-text">{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
+                    <td className="bold-text summary-values">{this.state.apiflag == 1 ? d.RecCount : d.Total}</td>
+                </tr>
+            )
+        });
+
+        return (
+            <table className="table table-bordered claim-list summary-list chart-container chart">
+                <tbody>
+                    {row}
+                </tbody>
+            </table>
+        );
     }
 
     render() {
@@ -648,16 +681,7 @@ export class RealTime276 extends React.Component{
                     </div>
                     <div className="col-3 nopadding">
                         {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
-                        {this.renderVolumeSummary('Compliance Ratio', 'In Compliance', this.state.inComplaince, 'Out of Compliance', this.state.outComplaince)}
-                    </div>
-                </div>
-
-                <div className="row nopadding">
-                    <div className="col-7">
-                        {this.renderTransactions()}
-                    </div>
-                    <div className="col-5">
-                        {this.renderTransactionIdChart()}
+                        {this.renderVolumeSummary('Compliance Ratio', 'In Compliance', this.state.inComplaince + ' %', 'Out of Compliance', this.state.outComplaince + ' %')}
                     </div>
                 </div>
             </div>

@@ -181,3 +181,22 @@
 .white-font{
     color: white
 }
+
+.padding-top{
+    padding-top: 16px;
+}
+.no-response-title{
+    font-size: 20px;
+    padding-top : 4px;
+    color: #424242;  
+}
+.error-title{
+    font-size: 14px;
+    flex: 1
+}
+.error-value{
+    font-size: 20px;
+}
+.error-chart{
+    padding-bottom: 0px   
+}
