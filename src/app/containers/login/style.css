@@ -29,3 +29,17 @@ padding-top.Title
 .btn-demo:hover {
     color: white;
 }
+.widthText{
+    width: 50%;
+    float: inherit !important; 
+}
+.small{
+    font-size: 12px;
+}
+.dot{
+    height: 8px;
+    width: 8px;
+    background-color: white;
+    border-radius: 50%;
+    display: inline-block;
+}

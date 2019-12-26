@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app/App';
+import  { Redirect } from 'react-router-dom'
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import { Claims } from './app/containers/Claims/Dashboard';
 import { TradingPartnerConfiguration } from './app/containers/TradingPartnerConfiguration';
@@ -32,21 +33,47 @@ import { ViewCustomEdits } from './app/containers/View_customEdit';
 import { UserList } from './app/containers/User_List';
 import { MenuCreate } from './app/containers/Menu_Create';
 import { ChangePassword } from './app/containers/Change_Password';
-
-
-import { Login } from './app/containers/login';
+import { Login } from './app/containers/login'
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
-const routing = (
+class PrivateRoute extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+
+            flag1: 0
+        };
+        
+        this.handleFlag = this.handleFlag.bind(this)
+      
+    }
+
+    handleFlag(flag1) {
+        this.setState({
+
+            flag1: flag1
+        })
+
+    }
+
+
+    render() {
+        return (
     <Router>
         <Header/>
         <div className="container-fluid background">
+        { this.state.flag1=== 0 || localStorage.getItem('sessionValue') == 0?
+                        <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> :
             <div className="row">
                 <div className="col-2 nopadding white-background">
                     <Sidebar />
                 </div>
                 <div className="col-10 container-fluid" style={{height : $(window).height()}}>
+                    <Route exact path="/">
+                    {localStorage.getItem('sessionValue') == 1 ? <Redirect to="/realTime_270/1" />:  <Redirect to="/" />}>
+                    </Route> 
                     <Route exact path="/" component={RealTime276} />
                     <Route path={'/' + Strings.claimsDashboard} component={Claims} />
                     <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
@@ -82,11 +109,14 @@ const routing = (
                     
                 </div>
             </div>
+    }
         </div>
     </Router>
 )
+}
+}
 
-ReactDOM.render(routing, document.getElementById('app'));
+ReactDOM.render(<PrivateRoute />, document.getElementById('app'));
 // ReactDOM.render(<App />, document.getElementById('app'));
 
 // If you want your app to work offline and load faster, you can change
