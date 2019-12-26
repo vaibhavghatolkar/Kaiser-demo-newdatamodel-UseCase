@@ -64,10 +64,11 @@ export class MatchClaims extends React.Component{
     renderSearchBar(){
         return(
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search"/>
-                <div style={{ width: '95%', height: '28px' , marginLeft:'20px' }}>
-                            <p style={{ fontWeight:'bold' , color:'#139DC9' }}>Claim Match & Resend</p>
-                        </div><br></br>
+                {/* <input type="text" name="name" className="input-style" placeholder="Search"/> */}
+                <div style={{ width: '95%', height: '45px' , marginLeft:'20px' }}>
+                    <br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim Match & Resend</h5>
+                        </div>
             </div>
         )
     }

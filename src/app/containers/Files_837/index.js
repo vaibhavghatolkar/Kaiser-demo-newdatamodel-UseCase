@@ -38,6 +38,13 @@ export class Files_837 extends React.Component {
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
+            ICDCode: '',
+            ClaimExt: '',
+            SelectFileID: '',
+            AccidentDate: '',
+            Icdcode: [],
+            checkError: '',
+            selectedICdCode:'',
         }
 
         this.getData = this.getData.bind(this)
@@ -47,11 +54,13 @@ export class Files_837 extends React.Component {
         this.handleClick = this.handleClick.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
+        this.getICDCode = this.getICDCode.bind(this)
     }
 
     componentDidMount() {
         this.getData()
         this.getTradingData()
+    this.getICDCode()  
     }
 
     getTradingData(){
@@ -213,7 +222,37 @@ export class Files_837 extends React.Component {
             })
             .then(data => console.log('data returned:', data));
     }
+    getICDCode() {
+        let query = `{
+            ClaimsICDCODE {
+                SeqId
+                ICD_CODE
+                Year
+                ExtraField1
+              }
+          }
+          `
 
+
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(r => {
+
+                this.setState({
+                    Icdcode:"",
+                    Icdcode: r.data.ClaimsICDCODE
+                })
+
+            })
+            .then(data => console.log('data returned:', data));
+    }
     onClick(fileId){
         let query = "{ IntakeClaimDatatblwithFile(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
         if(this.state.flag == 'Accepted Claims'){
@@ -323,9 +362,11 @@ export class Files_837 extends React.Component {
             .then(data => console.log('data returned:', data));
 
     }
-
-    getClaimTableData(fileId, claimId){
-        let query = '{ IntakeClaimData(fileId: '+fileId+', ClaimID: '+'"'+claimId +'"'+') { ClaimTMTrackingID SubscriberFirstName SubscriberLastName AdmissionDate Claim_Amount BillingProviderFirstName BillingProviderLastName BillingProviderAddress BillingProviderCity_State_Zip ClaimStatus DiagnosisCodes SeqID ClaimID } }'
+    getClaimTableData(fileId, claimId) {
+       
+        this.getICDCode();
+        let query = '{ IntakeClaimData(fileId: ' + fileId + ', ClaimID: ' + '"' + claimId + '"' + ') { ClaimTMTrackingID SubscriberFirstName SubscriberLastName AdmissionDate Claim_Amount BillingProviderFirstName BillingProviderLastName BillingProviderAddress BillingProviderCity_State_Zip ClaimStatus DiagnosisCodes SeqID ClaimID ClaimLevelErrors  ClaimExtNmbr} }'
+        console.log(query);
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -338,17 +379,43 @@ export class Files_837 extends React.Component {
             .then(r => {
                 let data = []
                 data = r.data.IntakeClaimData[0]
-
+                this.state.ICDCode = "";
+                this.state.ICDCode = data.ClaimLevelErrors;
+                var Accidentnm = '';
+                var date = '';
+                var IcdCode = '';
+                this.checkError = data.ClaimLevelErrors;
+                if (data.ClaimLevelErrors == "Accident Date Not Present") {
+                    Accidentnm = "Accident Date";
+                    date = <input onChange={(e) => this.ClaimExtNm(e)} type='text' style={{ width: "80px" }}></input>
+                }
+                else {
+                    Accidentnm = "Accident Date";
+                    date = data.ClaimExtNmbr;
+                }
+                if (data.ClaimLevelErrors == "ICD Code not found") {
+                    
+                    IcdCode = <select id="fao1"  onChange={(e) => this.ChangeVal(e)}>
+                        <option value="0" >Select ICD Code</option>
+                        {/* {this.getIcdcodeoptions()} */}
+                    </select>
+                }
+                else {
+                    IcdCode = data.DiagnosisCodes;
+                }
+                this.state.SelectFileID = data.SeqID;
+            
                 let claimsDetails = [
-                    { key: 'Claim HiPaaS Id', value : data.ClaimTMTrackingID},
-                    { key: 'SubscriberFirstName', value : data.SubscriberFirstName},
-                    { key: 'SubscriberLastName', value : data.SubscriberLastName},
-                    { key: 'AdmissionDate', value : data.AdmissionDate},
-                    { key: 'Claim_Amount', value : data.Claim_Amount},
-                    { key: 'BillingProvider', value : (data.BillingProviderFirstName ? data.BillingProviderFirstName : '') + ' ' + (data.BillingProviderLastName ? data.BillingProviderLastName : '')},
-                    { key: 'BillingProviderAddress', value : (data.BillingProviderAddress ?  data.BillingProviderAddress : '') + ' ' + (data.BillingProviderCity_State_Zip ? data.BillingProviderCity_State_Zip : '')},
-                    { key: 'ClaimStatus', value : data.ClaimStatus},
-                    { key: 'ICD Code', value : data.DiagnosisCodes},
+                    { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
+                    { key: 'SubscriberFirstName', value: data.SubscriberFirstName },
+                    { key: 'SubscriberLastName', value: data.SubscriberLastName },
+                    { key: 'AdmissionDate', value: data.AdmissionDate },
+                    { key: 'Claim_Amount', value: data.Claim_Amount },
+                    { key: 'BillingProvider', value: (data.BillingProviderFirstName ? data.BillingProviderFirstName : '') + ' ' + (data.BillingProviderLastName ? data.BillingProviderLastName : '') },
+                    { key: 'BillingProviderAddress', value: (data.BillingProviderAddress ? data.BillingProviderAddress : '') + ' ' + (data.BillingProviderCity_State_Zip ? data.BillingProviderCity_State_Zip : '') },
+                    { key: 'ClaimStatus', value: data.ClaimStatus },
+                    { key: 'ICD Code', value: IcdCode },
+                    { key: Accidentnm, value: date },
                 ]
 
                 this.setState({
@@ -358,7 +425,14 @@ export class Files_837 extends React.Component {
             })
             .then(data => console.log('data returned:', data));
     }
-
+    getIcdcodeoptions() {
+        let row = []
+        this.state.Icdcode.forEach(element => {
+             
+            row.push(<option value="">{element.ICD_CODE}</option>)
+        })
+        return row
+    }
     handleClick(fileId, subscriber, type) {
         let query = '{ IntakeClaimLineDataFileIDClaimID(FileID: '+'"'+fileId +'"'+', ClaimID:'+'"'+subscriber +'"'+') { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID Subscriber_ID Member_ID ExtSubscriber_ID ICD9ICD10 ProcNo DiagnosisXRef DiagnosisCodes PatientWeight Units UnitMeasure Proc_Amount PatientPaid NetBalance Adjust InsuranceBalance DateofService DateofServiceEnd LineStatus OtherID ExternalCorrelationToken AmbulanceInfo XRayInfo TransportInfo ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HCP01_PricingMethodology HCP02_Amount HCP03 HCP04 HCP05_Rate HCP06 HCP07 HCP08 HCP12_Quantity HCP13 HCP14 HCP15_ExceptionCode AttendingProviderNameLastOrOrganizationName AttendingProviderNameFirst NM108_AttendingProvider NM109_AttendingProvider AttendingProviderCode AttendingProvider_PRV02 AttendingProvider_PRV03 AttendingProvider_REF01 AttendingProvider_REF02 OperatingPhysicianNameLastOrOrganizationName OperatingPhysicianNameFirst NM108_OperatingPhysician NM109_OperatingPhysician OperatingPhysician_REF01 OperatingPhysician_REF02 OtherOperatingPhysicianNameLastOrOrganizationName OtherOperatingPhysicianNameFirst NM108_OtherOperatingPhysician NM109_OtherOperatingPhysician OtherOperatingPhysician_REF01 OtherOperatingPhysician_REF02 RenderingPhysicianNameLastOrOrganizationName RenderingPhysicianNameFirst NM108_RenderingPhysician NM109_RenderingPhysician RenderingPhysician_REF01 RenderingPhysician_REF02 ServiceFacilityLocationName ServiceFacilityLocation_NM102 ServiceFacilityLocation_NM108 ServiceFacilityLocation_NM109 ServiceFacilityLocationAddress ServiceFacilityLocation_City_State_Zip ServiceFacilityLocation_REF01 ServiceFacilityLocation_REF02 ReferringProviderNameLastOrOrganizationName ReferringProviderNameFirst NM108_ReferringProvider NM109_ReferringProvider ReferringProvider_REF01 ReferringProvider_REF02 SBR01_PayerResponsibilityCode SBR02 SBR03 SBR04 SBR09 CAS01_ClaimAdjustMentGroupCode CAS02 CAS03 CAS04 CAS05 CAS06 CAS07 CAS08 CAS09 CAS10 CAS11 CAS12 CAS13 CAS14 CAS15 CAS16 CAS17 CAS18 CAS19 AMT01_PayerPaidAmmount AMT02_Amount AMT01_RemainingPatientLiability AMT02_RPAmount AMT01_NonCoveredChargeAmmount AMT02_NCAmount OtherInsuranceCoverage_OI03 OtherInsuranceCoverage_OI06 MIA01 MIA02 MIA03 MIA04 MIA05 MIA06 MIA07 MIA08 MIA09 MIA10 MOA01 MOA02 MOA03 MOA04 MOA05 MOA06 MOA07 MOA08 MOA09 MOA10 OtherSubscriberNameLastOrOrganizationName OtherSubscriberNameFirst OtherSubscriber_NM102 NM108_OtherSubscriber NM109_OtherSubscriber OtherSubscriberAddress OtherSubscriberCityStateZip OtherSubscriber_REF01 OtherSubscriber_RF02 OtherPayerNameLastOrOrganizationName OtherPayerNameFirst OtherPayer_NM102 NM108_OtherPayer NM109_OtherPayer OtherPayerAddress OtherPayerCityStateZip ClaimCheckOrRemittanceDate LX SV201 SV202 SV202_1 SV202_2 SV202_3 SV202_4 SV202_5 SV202_6 SV202_7 SV203 SV204 SV205 SV207 LinSupplimentalInfo_PWK01 PWK02 PWK05 ServiceDate LIN02_DrugIdentification LIN03 CTP04_DrugQuantity CTP05 CTP05_1 SVD01 SVD02 SVD03 SVD03_1 SVD03_2 SVD03_3 SVD05 LineCheckOrRemittanceDate RemainingPatientLiability ErrorCode ClaimLineLevelErrors Field1 Field2 Field3 Field4 adjustment type_of_adjustment RemainigAmt } }'
         fetch(Urls.base_url, {
@@ -716,8 +790,10 @@ export class Files_837 extends React.Component {
     render() {
         return (
             <div>
-                {this.renderSearch()}
-                <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Claim Details</p> 
+                {/* {this.renderSearch()} */}
+                <br></br>
+                {/* <h5 style="color: rgb(19, 157, 201); font-size: 20px;">Claim Details</h5> */}
+                { <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim Details</h5> }  <br></br>
                 {this.renderTopbar()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

@@ -126,9 +126,10 @@ export class Claims extends React.Component {
               Submitter_N103
               dCount
             }
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList(Transaction:"Claim837") { 
+               
                 Trading_Partner_Name 
+                
             }
             ClaimCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
                 SubCount
@@ -493,8 +494,10 @@ export class Claims extends React.Component {
                         />
                         :
                         <div>
-                        {this.renderSearchBar()}
-                        <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Claims Dashboard</p> 
+                        {/* {this.renderSearchBar()} */}
+                        <br></br>
+                        <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Dashboard</h5><br></br>
+                        {/* <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Claims Dashboard</p>  */}
                             {this.renderTopbar()}
                             <div className="row">
                                 <div className="col-9">
