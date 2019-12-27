@@ -53,9 +53,10 @@ export class AuditSummary extends React.Component{
             FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
                 totalFile
             }
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList(Transaction:"Claim837") { 
+               
                 Trading_Partner_Name 
+                
             }
         }`
 

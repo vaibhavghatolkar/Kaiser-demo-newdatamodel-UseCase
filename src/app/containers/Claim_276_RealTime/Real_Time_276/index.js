@@ -671,7 +671,7 @@ export class RealTime276 extends React.Component{
             <table className="table table-bordered claim-list summary-list chart-container chart">
                 
                 <thead>
-                 <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Error Description" : "Claim Status"}</th>     <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Total Error" : "Total Claims"}</th>  
+                 <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Error Description" : "Claim Status"}</th>     <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Total Errors" : "Total Claims"}</th>  
                  {this.state.apiflag== 1 ?   <th style={{fontSize:"11px"}}>Error %</th> : "" }
                    
                 </thead>

@@ -31,7 +31,8 @@ export class ClaimsError extends React.Component{
     }
 
     getData(){
-        let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList { ID Trading_Partner_Name }}'
+        
+        let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(Transaction:"Claim837") { Trading_Partner_Name }}'
 
         fetch(Urls.base_url, {
             method: 'POST',
@@ -44,6 +45,8 @@ export class ClaimsError extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
+               
+  
                 this.setState({
                     claimsError: res.data.SP_GetRejectedClaims,
                     rejectedCount : res.data.ClaimRejCount[0].RejCount,
@@ -67,7 +70,7 @@ export class ClaimsError extends React.Component{
     renderClaimsError(){
         let row = []
         const data = this.state.claimsError;
-
+console.log(data);
         data.forEach((d) => {
             row.push(
                 <tr>
