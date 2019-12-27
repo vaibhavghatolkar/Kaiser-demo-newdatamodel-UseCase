@@ -54,7 +54,10 @@ export class Files_837 extends React.Component {
         this.handleClick = this.handleClick.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
+        this.Saved = this.Saved.bind(this)
         this.getICDCode = this.getICDCode.bind(this)
+        this.ChangeVal = this.ChangeVal.bind(this)
+        this.ClaimExtNm = this.ClaimExtNm.bind(this)
     }
 
     componentDidMount() {
@@ -159,6 +162,18 @@ export class Files_837 extends React.Component {
   
     }
 
+    
+    ClaimExtNm(event, key) {
+    
+        this.setState({
+            ClaimExt: event.target.value
+            
+        });
+    }
+    ChangeVal(event, key){
+        this.state.selectedICdCode=  event.target.options[event.target.selectedIndex].text;
+   
+     }
     getData() {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : ''
@@ -397,7 +412,7 @@ export class Files_837 extends React.Component {
                     
                     IcdCode = <select id="fao1"  onChange={(e) => this.ChangeVal(e)}>
                         <option value="0" >Select ICD Code</option>
-                        {/* {this.getIcdcodeoptions()} */}
+                        {this.getIcdcodeoptions()}
                     </select>
                 }
                 else {
@@ -663,7 +678,83 @@ export class Files_837 extends React.Component {
             </tbody>
         )
     }
+    renderButton() {
+        if (this.state.ICDCode != null) {
+            return (
 
+                <div>
+
+                    <button onClick={this.Saved} style={{ backgroundColor: "#139DC9", color: "#FFFFFF", marginLeft: "20px" }}>Save</button>
+
+                </div>
+            )
+        }
+
+    }
+
+    Saved() {
+   
+      
+        if (this.checkError == "Accident Date Not Present") {
+            if(this.state.ClaimExt!="")
+            {
+            var query = 'mutation{ updateAccidentDate(SeqID :' + this.state.SelectFileID + ' ' + 'AccidentDate :"' + this.state.ClaimExt + '"' +
+                ')' +
+                '}'
+            console.log(query);
+            fetch(Urls.base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    query
+
+                })
+            })
+                .then(r => r.json())
+                .then(data =>
+                    alert(data.data.updateAccidentDate),
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+
+                );
+            }
+
+        }
+        else if (this.checkError == "ICD Code not found") {
+          if(this.state.selectedICdCode!="")
+          {
+            var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
+                ')' +
+                '}'
+            console.log(query);
+            fetch(Urls.base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    query
+
+                })
+            })
+                .then(r => r.json())
+                .then(data =>
+                    alert(data.data.updateICDCode),
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+
+                );
+
+        }
+    }
+
+    }
     renderSummary() {
         return (
             <div>
@@ -679,6 +770,8 @@ export class Files_837 extends React.Component {
                         <table className="table claim-list">
                             {this.renderHeader('Claim #'+ this.state.claimId)}
                             {this.renderRows(this.state.claimsDetails)}
+                            <br></br>
+                            {this.renderButton()}
                         </table> : null
                 }
                 {
@@ -688,6 +781,7 @@ export class Files_837 extends React.Component {
                             <table className="table-bordered body-style">
                                 {this.renderCoverageHeader()}
                                 {this.renderTable()}
+                             
                             </table> 
                         </div> : null
                 }

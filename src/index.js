@@ -78,6 +78,8 @@ const routing = (
                     <Route path={'/'+ Strings.UserList} component={UserList} />
                     <Route path={'/'+ Strings.MenuCreate} component={MenuCreate} />
                     <Route path={'/'+ Strings.ChangePassword} component={ChangePassword} />
+                    <Route path={'/'+ Strings.claimsDashboard_834_details + '/:new_path'} component={Files_834}/>
+                    <Route path={'/'+ Strings.EnrollmentError  + '/:new_path'} component={Files_834} />
                     
                     
                 </div>

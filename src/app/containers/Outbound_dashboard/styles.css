@@ -1,7 +1,7 @@
 
 .input-style{
     border: 0px;
-    padding: 19px;
+    padding: 24px;
     width: 100%;
 }
 .claim-list{
@@ -26,7 +26,7 @@
     line-height: 2.5em;
 }
 .chart{
-    background-color: #ffffff;
+    background-color: #ffffff !important;
     margin : 0px;
     margin-top : 16px;
     padding-top : 24px;
@@ -77,17 +77,15 @@ td a {
     display:block;
     width:100%;
 }
-.purple{
-    color: #A0538F;
+.column {
+    float: left;
+    width: 15%;
+    padding: 10px;
 }
-.background-color{
-    background-color: white;
-    font-size: 12px;
+hr
+{
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    border-color: black;
+    line-height: 0px;
 }
-.barchartcss{
-    margin-top: 50px;
-}
-.colorhr{
-    background-color: #139DC9;
-    margin-top: 0px;
-}   

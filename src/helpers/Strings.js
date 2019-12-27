@@ -15,6 +15,7 @@ const Strings = {
     tradingPartnerConfiguration : 'tradingPartnerConfiguration',
     claimsDashboard_835 : 'claimsDashboard_835',
     claimsDashboard_834 : 'claimsDashboard_834',
+    claimsDashboard_834_details : 'claimsDashboard_834_details',
     editConfiguration : 'editConfiguration',
     RealTime276 : 'realTime_276',
     RealTime270 : 'realTime_270',
@@ -43,6 +44,9 @@ const Strings = {
     UserList:'UserList',
     MenuCreate:'MenuCreate',
     ChangePassword:'ChangePassword',
+    EnrollmentError : 'Enrollment_Error', 
+    EnrollmentDetails: 'EnrollmentDetails',
+    EnrollmentErrors: 'EnrollmentErrors',
 }
 
 export default Strings;

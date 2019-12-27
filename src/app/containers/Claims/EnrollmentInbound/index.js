@@ -2,52 +2,47 @@ import React from 'react';
 import './style.css';
 import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
-import {Files_834} from '../../Files_834';
+import { Files_834 } from '../../Files_834';
 import { Topbar } from '../../../components/Topbar';
 import Urls from '../../../../helpers/Urls';
-import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 const data = {
     labels: [
-        'Accepted Claims',
-        'Rejected Claims'
+        'Additions (55%)',
+        'Terminations (15%)',
+        'Changes (30%)',
     ],
     datasets: [{
-        data: [180, 50],
+        data: [160, 60, 140],
         backgroundColor: [
             '#139DC9',
-            '#83D2B4'
+            '#9dc913',
+            '#83D2B4',
+
         ],
         hoverBackgroundColor: [
             '#139DC9',
-            '#83D2B4'
+            '#9dc913',
+            '#83D2B4',
         ]
     }],
     flag: ''
 };
 
 const bardata = {
-    labels: ['January', 'February', 'March', 'April'],
+    labels: ['TP1', 'TP2', 'TP3', 'TP4', 'TP5'],
     showFile: false,
     datasets: [
         {
-            label: 'My First dataset',
+            label: 'Total Enrollments',
             backgroundColor: '#139DC9',
             borderColor: '#139DC9',
             borderWidth: 1,
             hoverBackgroundColor: '#139DC9',
             hoverBorderColor: '#139DC9',
-            data: [65, 59, 80, 81]
-        },
-        {
-            label: 'My second dataset',
-            backgroundColor: '#83D2B4',
-            borderColor: '#83D2B4',
-            borderWidth: 1,
-            hoverBackgroundColor: '#83D2B4',
-            hoverBorderColor: '#83D2B4',
-            data: [25, 56, 55, 40]
+            data: [9, 20, 10, 15, 27]
         }
     ],
     legend: {
@@ -55,13 +50,42 @@ const bardata = {
     }
 };
 
+const pieErrorData = {
+    labels: [
+        'Missing subscriber demographic details(40%)',
+        'Matching SSN not found(10%)',
+        'Missing member Policy Number(20%)',
+        'Missing employee begin/hiring date(15%)',
+        'Dependent original benefit effective date(15%)',
+    ],
+    datasets: [{
+        data: [140, 40, 80, 50, 50],
+        backgroundColor: [
+            '#139DC9',
+            '#1342c9',
+            '#83D2B4',
+            '#9dc913',
+            '#c9139d',
+        ],
+        hoverBackgroundColor: [
+            '#139DC9',
+            '#1342c9',
+            '#83D2B4',
+            '#9dc913',
+            '#c9139d',
+        ]
+    }],
+    flag: ''
+}
+
 export class EnrollmentInbound extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             claimsList: [],
-            summaryList: []
+            summaryList: [],
+            errorCount: []
         }
 
         this.showFile = this.showFile.bind(this)
@@ -71,11 +95,38 @@ export class EnrollmentInbound extends React.Component {
     componentWillReceiveProps() {
         setTimeout(() => {
             this.getData()
+            setTimeout(() => {
+                this.getErrorCount()
+            }, 50);
         }, 50);
     }
 
     componentDidMount() {
         this.getData()
+        setTimeout(() => {
+            this.getErrorCount()
+        }, 50);
+    }
+
+    getErrorCount() {
+        let query = '{ CompareFileError834 { dbdesc error_desc RCount } }'
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(r => {
+                let data = []
+                data = r.data.CompareFileError834
+                this.setState({
+                    errorCount: data
+                })
+            })
+            .then(data => console.log('data returned:', data));
     }
 
     getData() {
@@ -97,6 +148,7 @@ export class EnrollmentInbound extends React.Component {
                 term
                 Auditcount
                 Error
+                Resubmit
             }
         }`
 
@@ -129,11 +181,12 @@ export class EnrollmentInbound extends React.Component {
 
                 summary = [
                     { name: 'Total Files', value: counts.total_file },
-                    { name: 'Total Enrollment', value: counts.Total_enrollment },
-                    { name: 'Additional', value: counts.addition },
-                    { name: 'Change', value: counts.Change },
-                    { name: 'Term', value: counts.term },
-                    { name: 'Error', value: counts.Error }
+                    // { name: 'Total Enrollment', value: counts.Total_enrollment },
+                    // { name: 'Additions', value: counts.addition },
+                    // { name: 'Changes', value: counts.Change },
+                    // { name: 'Termination', value: counts.term },
+                    { name: 'Total Errors', value: counts.Error },
+                    { name: 'Resubmit', value: counts.Resubmit }
                 ]
 
                 this.setState({
@@ -149,7 +202,8 @@ export class EnrollmentInbound extends React.Component {
     renderSearchBar() {
         return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
+
+                <input type="text" name="name" className="input-style" placeholder="Search" />
             </div>
         )
     }
@@ -157,11 +211,12 @@ export class EnrollmentInbound extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
+                <td className="table-head-text"></td>
                 <td className="table-head-text">File Name</td>
                 <td className="table-head-text list-item-style">File Date</td>
-                <td className="table-head-text list-item-style">Sender</td>
-                <td className="table-head-text list-item-style">Receiver</td>
-                <td className="table-head-text list-item-style">Status</td>
+                <td className="table-head-text list-item-style">Submitter</td>
+                <td className="table-head-text list-item-style">Enrollments | Errors</td>
+                <td className="table-head-text list-item-style">File Status</td>
             </tr>
         )
     }
@@ -169,8 +224,7 @@ export class EnrollmentInbound extends React.Component {
     renderCharts() {
         return (
             <div className="row chart">
-                <div className="col-6">
-                    <span>Total</span>
+                <div className="col-7 barchartcss">
                     <Pie data={data}
                         options={{
                             elements: {
@@ -178,37 +232,88 @@ export class EnrollmentInbound extends React.Component {
                                     borderWidth: 0
                                 }
                             },
+                            tooltips: {
+                                enabled: false
+                            },
+                            pieceLabel: {
+                                render: 'label',
+                                position: 'outside'
+                            },
+                            responsive: true,
                             legend: {
-                                display: false,
+                                position: 'bottom',
+                                display: 'false'
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
                             }
                         }}
                         width={100}
-                        height={60} />
+                        height={70} />
                 </div>
-                <div className="col-6">
-                    <span>Response Time</span>
+                <div className="col-5 barchartcss">
                     <Bar
                         data={bardata}
                         width={100}
-                        height={60}
+                        height={100}
                         options={{
                             legend: {
-                                display: false,
-                            }
+                                position: 'bottom',
+                            },
+                            pieceLabel: {
+                                render: 'label',
+                                position: 'outside'
+                            },
                         }} />
                 </div>
             </div>
         )
     }
 
+    renderPieChart() {
+        return (
+            <div className="row chart">
+                <div className="col-12">
+                    <Pie data={pieErrorData}
+                        options={{
+                            elements: {
+                                arc: {
+                                    borderWidth: 0
+                                }
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            pieceLabel: {
+                                render: 'label',
+                                position: 'outside'
+                            },
+                            responsive: true,
+                            legend: {
+                                position: 'bottom',
+                                display: 'false'
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        }}
+                        width={100}
+                        height={100} />
+                </div>
+            </div>
+        )
+    }
     renderList() {
         let row = []
         const data = this.state.claimsList;
         data.forEach((d) => {
             row.push(
                 <tr>
+                    <td><input type="checkbox" /></td>
                     <td className="bold-text">{d.name}</td>
-                    <td className="list-item-style bold-text">{moment(d.date).format('MM/DD/YYYY')}<br />{moment(d.date).format('h:m a')}</td>
+                    <td className="list-item-style bold-text">{moment(d.date).format('YYYY/MM/DD')}</td>
                     <td className="list-item-style bold-text">{d.submitter}</td>
                     <td className="list-item-style bold-text">{d.receiver}</td>
                     <td className={"list-item-style bold-text " + (d.status == 'Errors' || d.status == 'File Error' ? 'red ' : (d.status == 'Verified' ? 'green ' : ''))}>{d.status}</td>
@@ -228,16 +333,19 @@ export class EnrollmentInbound extends React.Component {
 
     showFile(name) {
         let input = ''
-        if(name == 'Additional'){
+        if (name == 'Additions') {
             input = 'add'
-        } else if(name == 'Total Files'){
+        } else if (name == 'Total Files') {
             input = 'total'
-        } else if(name == 'Change'){
+        } else if (name == 'Changes') {
             input = 'change'
-        } else if(name == 'Term'){
+        } else if (name == 'Termination') {
             input = 'term'
-        } else if(name == 'Error'){
+        } else if (name == 'Total Errors') {
             input = 'error'
+        }
+        else if (name == 'Resubmit') {
+            input = 'Resubmit'
         }
 
         this.setState({
@@ -251,19 +359,15 @@ export class EnrollmentInbound extends React.Component {
         const data = this.state.summaryList;
 
         data.forEach((d) => {
-            let input = ''
-            let name = d.name
-            if(name == 'Additional'){
-                input = 'add'
-            } else if(name == 'Total Files'){
-                input = 'total'
-            } else if(name == 'Change'){
-                input = 'change'
-            } else if(name == 'Term'){
-                input = 'term'
-            } else if(name == 'Error'){
-                input = 'error'
+            let url = ''
+            if(d.name == 'Total Files'){
+                url = Strings.claimsDashboard_834_details + '/total'
+            } else if(d.name == 'Total Errors'){
+                url = Strings.EnrollmentError + '/error'
+            } else if(d.name == 'Resubmit'){
+                url = Strings.claimsDashboard_834_details + '/Resubmit'
             }
+
             row.push(
                 <tr>
                     <td className="bold-text">{d.name}</td>
@@ -274,14 +378,12 @@ export class EnrollmentInbound extends React.Component {
                             <a href="#" 
                                 onClick={() => { 
                                     // this.showFile(d.name) 
-                                }} 
-                                className={
-                                    (d.name == 'Total Enrollment' || d.name == 'Additional' || d.name == 'Total Files') ? 'blue bold-text summary-values' :
-                                    (d.name == 'Change' || d.name == 'Term') ? 'purple bold-text summary-values' :
-                                    (d.name == 'Error') ? 'red bold-text summary-values' : ''
-                                }>
-                                <Link to={'/' + Strings.files_834 + '/' + input}>{d.value}</Link>
-                            </a>
+                                }} className={
+                                (d.name == 'Total Enrollment' || d.name == 'Additions' || d.name == 'Total Files') ? 'blue bold-text summary-values' :
+                                (d.name == 'Changes' || d.name == 'Termination') ? 'purple bold-text summary-values' :
+                                (d.name == 'Total Errors' || d.name == 'Resubmit') ? 'red bold-text summary-values' : ''
+                                
+                            }><Link to={url}>{d.value}</Link></a>
                         </td>
                     }
                 </tr>
@@ -297,25 +399,51 @@ export class EnrollmentInbound extends React.Component {
         );
     }
 
+    renderCountTable() {
+        let row = []
+        let data = this.state.errorCount
+        data.forEach(element => {
+            row.push(
+                <tr>
+                    <td className="padding">{element.error_desc}</td>
+                    <td className="padding" style={{ paddingLeft: "30px", padding: "5px", textAlign: "right" }}>
+                        {element.RCount}
+                    </td>
+                </tr>
+            )
+        });
+
+        return (row)
+    }
+
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
-                <Topbar/>
+
                 {
-                    this.state.showFile
-                        ?
-                        <Files_834
-                            flag={this.state.flag}
-                        />
-                        :
-                        <div className="row">
-                            <div className="col-9">
-                                {this.renderCharts()}
-                                {this.renderList()}
-                            </div>
-                            <div className="col-3">
-                                {this.renderSummary()}
+                    // this.state.showFile
+                    //     ?
+                    //     <Files_834
+                    //         flag={this.state.flag}
+                    //     />
+                    //     :
+                  
+                        <div>
+                            {this.renderSearchBar()}
+                            <hr className="colorhr"></hr>
+                            <label style={{ color: '#139DC9' }}><b>834 Enrollment Dashboard</b></label>
+                            <Topbar flag={2} />
+
+                            <div className="row">
+                                <div className="col-8">
+                                    {this.renderCharts()}
+                                    {this.renderList()}
+                                </div>
+                                <div className="col-4">
+                                    {this.renderSummary()}
+                                    {this.renderPieChart()}
+
+                                </div>
                             </div>
                         </div>
                 }
