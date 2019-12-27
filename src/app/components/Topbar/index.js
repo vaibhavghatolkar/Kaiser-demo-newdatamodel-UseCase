@@ -33,11 +33,9 @@ export class Topbar extends React.Component {
     }
  
       getData() {
-        this.props.flag == 1
-        ?        
+          
        this.state.Transaction="Claim837"
-       :
-       this.state.Transaction="Enrollment834"
+      
         let query = `{
       
             Trading_PartnerList ( Transaction:"`+this.state.Transaction+`") {

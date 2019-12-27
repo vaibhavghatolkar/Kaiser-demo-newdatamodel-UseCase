@@ -168,7 +168,7 @@ export class ClaimsError extends React.Component{
         return (
             <div>
                 {this.renderSearchBar()}
-                <Topbar
+                <Topbar 
                     tradingpartner={this.state.tradingpartner} 
                     onSelect={this.onSelect}
                 />
