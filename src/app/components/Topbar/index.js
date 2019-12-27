@@ -1,16 +1,94 @@
 import React from 'react';
 import '../../containers/Files/files-styles.css';
-
+import Urls from '../../../helpers/Urls';
 export class Topbar extends React.Component {
 
-    getOptions() {
+    constructor(props){
+        super(props);
+        this.state = {
+            startDate: new Date(),
+            files: [],
+            tradingpartner: [],            
+            Transaction:'',
+        };
+        this.state = {
+            endDate: new Date(),
+            files: [],
+            tradingpartner: [],
+        }
+    }
+    displayFile() {
+        this.setState({ files: this.state.files });
+    }
+      handleChange(date){
+        this.setState({
+          startDate: date
+        });
+       
+      };
+      componentDidMount() {
+        this.getData()
+       
+
+    }
+ 
+      getData() {
+          
+       this.state.Transaction="Claim837"
+      
+        let query = `{
+      
+            Trading_PartnerList ( Transaction:"`+this.state.Transaction+`") {
+              
+                Trading_Partner_Name 
+                
+            }
+           
+        }`
+          console.log(query);
+          fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {    
+                         
+                this.setState({
+                   
+                     tradingpartner: res.data.Trading_PartnerList
+                })
+            })
+           
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    // getOptions() {
+    //     let row = []
+    
+    //     this.state.tradingpartner.forEach(element => {
+    //         row.push(<option value="">{element.Trading_Partner_Name}</option>)
+    //     })
+    //     return row
+    // }
+      changeDate(date1){
+        this.setState({
+            endDate: date1
+        })
+      }
+      getOptions() {
         let row = []
-        this.props.tradingpartner.forEach(element => {
+       
+        this.state.tradingpartner.forEach(element => {
             row.push(<option value="">{element.Trading_Partner_Name}</option>)
         })
         return row
     }
-
     render(){
         return(
             <div className="row">
@@ -35,19 +113,37 @@ export class Topbar extends React.Component {
                         <option value="15">Wisconsin</option>
                     </select>
                 </div>
-
+                {
+                    this.props.flag == 1
+                    ?
+                    ""
+                // <div className="form-group col-sm-3">
+                //     <label className="list-header">Select Trading Partner </label>
+                //     <select className="form-control list-header" id="TradingPartner" 
+                //         onChange={(event) => {
+                //             this.props.onSelect(event, 'selectedTradingPartner')
+                //         }}>
+                //         <option selected="selected" value="">Select Trading Partner</option>
+                //         {
+                //             this.props.tradingpartner ? this.getOptions() : null
+                //         }
+                //     </select>
+                // </div>
+                :
                 <div className="form-group col-sm-3">
-                    <label className="list-header">Select Trading Partner </label>
-                    <select className="form-control list-header" id="TradingPartner" 
-                        onChange={(event) => {
-                            this.props.onSelect(event, 'selectedTradingPartner')
-                        }}>
-                        <option selected="selected" value="">Select Trading Partner</option>
-                        {
-                            this.props.tradingpartner ? this.getOptions() : null
-                        }
-                    </select>
-                </div>
+                <label className="list-header">Select Trading Partner </label>
+                <select className="form-control list-header" id="TradingPartner" 
+                    // onChange={(event) => {
+                    //     this.props.onSelect(event, 'selectedTradingPartner')
+                    // }}
+                    >
+                    <option selected="selected" value="">Select Trading Partner</option>
+                    {
+                         this.getOptions() 
+                    }
+                </select>
+            </div>
+                    }
 
                 {
                     this.props.flag == 1

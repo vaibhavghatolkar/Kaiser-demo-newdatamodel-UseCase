@@ -19,7 +19,10 @@ export class Sidebar extends React.Component{
                 {value: 'Research Queue', key: 'researchQueue'}
             ],
             enrollmentArray: [
-                {value: 'Enrollment Inbound - 834', key: 'claimsDashboard_834'},
+                {value: '834 Enrollment Dashboard', key: 'claimsDashboard_834'},
+                {value: 'Enrollment Details', key: 'claimsDashboard_834_details'},
+                {value: 'Enrollment Error', key: 'Enrollment_Error'},
+              
             ],
             pageArray : [
                 {value: 'Page 1'},
@@ -97,7 +100,14 @@ export class Sidebar extends React.Component{
             } else if(element.key == Strings.claimDetails){
                 addon = '/n/n/n/n'
             }
-           
+           else if(element.key == Strings.claimsDashboard_834_details)
+           {
+            addon = '/total' 
+           }
+           else if(element.key == Strings.EnrollmentError)
+           {
+            addon = '/error' 
+           }
             else {
                 addon = ''
            
@@ -137,7 +147,7 @@ export class Sidebar extends React.Component{
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
                 {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
                 {/* ** {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)} */}
-                {/* ** {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
+                {/* {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.REP_MANAGEMENT, 'Report Generation', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.ACK_MANAGEMENT, 'Acknowledgment Generation', this.state.pageArray)} */}
