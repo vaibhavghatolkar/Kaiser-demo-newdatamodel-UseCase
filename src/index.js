@@ -40,20 +40,26 @@ const $ = window.$;
 class PrivateRoute extends React.Component {
     constructor(props) {
         super(props);
+        const token = localStorage.getItem("token");
+        let loggedIn;
+
+        if(token == null){
+            loggedIn = false;
+        }
 
         this.state = {
 
-            flag1: 0
+            loggedIn
         };
         
         this.handleFlag = this.handleFlag.bind(this)
       
     }
 
-    handleFlag(flag1) {
+    handleFlag(loggedIn) {
         this.setState({
 
-            flag1: flag1
+            loggedIn:  loggedIn
         })
 
     }
@@ -64,17 +70,19 @@ class PrivateRoute extends React.Component {
     <Router>
         <Header/>
         <div className="container-fluid background">
-        { this.state.flag1=== 0 || localStorage.getItem('sessionValue') == 0?
+        { this.state.loggedIn=== false ?
                         <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> :
             <div className="row">
                 <div className="col-2 nopadding white-background">
-                    <Sidebar />
+                    <Sidebar 
+                    handleFlag={this.handleFlag}
+                    />
                 </div>
                 <div className="col-10 container-fluid" style={{height : $(window).height()}}>
                     <Route exact path="/">
-                    {localStorage.getItem('sessionValue') == 1 ? <Redirect to="/realTime_270/1" />:  <Redirect to="/" />}>
+                    {this.state.loggedIn === true ? <Redirect to="/realTime_270/1" />:  <Redirect to="/" />}>
                     </Route> 
-                    <Route exact path="/" component={RealTime276} />
+                    {/* <Route exact path="/" component={RealTime276} /> */}
                     <Route path={'/' + Strings.claimsDashboard} component={Claims} />
                     <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
