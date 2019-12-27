@@ -68,8 +68,8 @@ export class Files_837 extends React.Component {
 
     getTradingData(){
         let query = `{
-            Trading_PartnerList {
-              ID
+            Trading_PartnerList(Transaction:"Claim837") {
+              
               Trading_Partner_Name
             }
           }`
