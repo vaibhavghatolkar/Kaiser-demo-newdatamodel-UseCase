@@ -45,6 +45,8 @@ class PrivateRoute extends React.Component {
 
         if(token == null){
             loggedIn = false;
+        }else{
+            loggedIn = true
         }
 
         this.state = {
@@ -71,7 +73,9 @@ class PrivateRoute extends React.Component {
         <Header/>
         <div className="container-fluid background">
         { this.state.loggedIn=== false ?
-                        <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> :
+                       <div> <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> 
+                       <Route render={() => <Redirect to={{pathname: "/"}} />} />
+                       </div>:
             <div className="row">
                 <div className="col-2 nopadding white-background">
                     <Sidebar 
@@ -80,7 +84,8 @@ class PrivateRoute extends React.Component {
                 </div>
                 <div className="col-10 container-fluid" style={{height : $(window).height()}}>
                     <Route exact path="/">
-                    {this.state.loggedIn === true ? <Redirect to="/realTime_270/1" />:  <Redirect to="/" />}>
+                    {this.state.loggedIn === true ? 
+                    <Redirect to="/realTime_270/1" />:  <Redirect to="/" />}>
                     </Route> 
                     {/* <Route exact path="/" component={RealTime276} /> */}
                     <Route path={'/' + Strings.claimsDashboard} component={Claims} />
