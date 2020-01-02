@@ -429,9 +429,10 @@ export class EnrollmentInbound extends React.Component {
                     //     :
                   
                         <div>
-                            {this.renderSearchBar()}
+                            {/* {this.renderSearchBar()} */}
                             <hr className="colorhr"></hr>
-                            <label style={{ color: '#139DC9' }}><b>834 Enrollment Dashboard</b></label>
+                            <br></br>
+                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>834 Enrollment Dashboard</h5><br></br>
                             <Topbar flag={2} />
 
                             <div className="row">

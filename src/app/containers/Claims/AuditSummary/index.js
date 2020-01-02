@@ -196,8 +196,9 @@ export class AuditSummary extends React.Component{
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
-                <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Claims Audit</p>
+                {/* {this.renderSearchBar()} */}
+                <br></br>
+                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Audit</h5><br></br>
                 <Topbar 
                     tradingpartner={this.state.tradingpartner} 
                     onSelect={this.onSelect}

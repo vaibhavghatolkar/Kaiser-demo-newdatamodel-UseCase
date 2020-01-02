@@ -31,10 +31,11 @@ export class SubmitClaim extends React.Component {
                     <div>
                         <div style={{borderBottom: "1.5px solid #139DC9"}}>
                             {/* <img src="/home/amol/hipaas/hipass-edival/client/src/app/components/Images/Search.png" style={{width:"14px", height:"14px"}} /> */}
-                            <input type="text" name="name" style={{padding:"10px", width:"100%" , border:"none" , lineHeight: "25px"}} placeholder="Search"/>
+                            {/* <input type="text" name="name" style={{padding:"10px", width:"100%" , border:"none" , lineHeight: "25px"}} placeholder="Search"/> */}
                         </div>
                         <div>
-                            <p style={{ fontWeight: "bold", color: "#139DC9" }}>Submit Claim</p>
+                        <br></br>
+                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Submit Claim</h5><br></br>
                         </div>
                         <div className="row">
 

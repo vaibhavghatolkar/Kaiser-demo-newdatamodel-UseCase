@@ -65,7 +65,23 @@ export class Sidebar extends React.Component{
                 
             ],
             fullfile: [
-                {value: '834 Full File Compare', key: 'fullFile834'},
+                {value: 'Enrollment Details', key:'EnrollmentDetails'},
+                {value: 'Enrollment Errors', key:'EnrollmentErrors'},
+                {value: 'Outbound Dashboard ', key: 'Outbound_dashboard'},
+                {value: 'Eligibility Reconcile Search', key: 'Eligibility_Reconcile_Search'},
+                {value: 'Eligibility Errors', key: 'Eligibility_Errors'},
+                
+                {value: 'Eligibility Errors Delta', key:'EligibilityErrorsDelta'},
+                {value: 'History Eligibility Errors (Delta)', key:'HistoryEligibilityErrorsDelta'},
+                {value: 'RateCode Delta', key:'RateCodeDelta'},
+                {value: 'Eligibility Errors(PlanIntegration)', key:'PlanIntegrationEligibilityErrors'},
+                {value: 'History RateCode Delta', key:'HistoryRateCodeDelta'},
+                {value: 'Medical Monthly Metrics', key:'MedicalMonthly_Metrics'},
+                
+                {value: 'CustomDB Details', key: 'CustomDBDetails'},
+                {value: 'Eligibility Errors (Duplicate)', key: 'EligibilityErrorsDuplicate'},
+                {value: 'Outbound Details', key: 'OutboundDetails'},
+                {value: 'Full File Comparison Dashboard', key: 'FullComparsion_dashboard'}
             ]
         }
 
@@ -146,9 +162,10 @@ export class Sidebar extends React.Component{
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
-                {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
+
                 {/* ** {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)} */}
-                {/* {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
+                {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)}
+                {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)}
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.REP_MANAGEMENT, 'Report Generation', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.ACK_MANAGEMENT, 'Acknowledgment Generation', this.state.pageArray)} */}

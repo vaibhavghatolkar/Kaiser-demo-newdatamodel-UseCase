@@ -27,9 +27,10 @@ export class ResearchQueue extends React.Component {
                     <AssignedDetails/>
                     :
                     <div>
-                        <div style={{ borderBottom: '1px solid lightslategrey', width: '95%', height: '28px' }}>
-                            <p style={{ fontWeight:'bold' , color:'#139DC9' }}>Assigned Claim's Summary - John Smith</p>
-                        </div><br></br>
+                        <div>
+                        <br></br>
+                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Assigned Claim's Summary - John Smith</h5><br></br>
+                        </div>
                         <div className="row">
                             <div className="form-group col-sm-3">
                                 <label className="list-header">Select State</label>

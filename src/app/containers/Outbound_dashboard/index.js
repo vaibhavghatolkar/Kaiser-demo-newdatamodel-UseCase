@@ -360,8 +360,10 @@ export class Outbound_dashboard extends React.Component{
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
-                <label style={{ color: '#139DC9' }}><b>Outbound Dashboard</b></label>
+                {/* {this.renderSearchBar()} */}
+                <br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Outbound Dashboard</h5><br></br>
+                {/* <label style={{ color: '#139DC9' }}><b>Outbound Dashboard</b></label> */}
                 <div className="row" >
                                 <div className="col-2">
                                   <label  style={{fontSize:"15px"}}>Eligibility Status</label>

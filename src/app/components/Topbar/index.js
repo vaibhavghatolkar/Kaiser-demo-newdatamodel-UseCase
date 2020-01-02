@@ -33,8 +33,11 @@ export class Topbar extends React.Component {
     }
  
       getData() {
-          
-       this.state.Transaction="Claim837"
+        this.props.flag == 2
+        ?
+        this.state.Transaction="Enrollment834"
+        :
+        this.state.Transaction="Claim837"
       
         let query = `{
       

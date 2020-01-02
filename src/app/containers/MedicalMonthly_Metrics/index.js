@@ -231,8 +231,8 @@ export class MedicalMonthly_Metrics extends React.Component {
             <label className="medium-text" style={{ fontSize: "12px" , fontWeight:"bold" }}>Post Remediation</label> 
             </div>
             <div className="col-4" >
-                <label className="medium-text" style={{ fontSize: "12px", fontWeight:"bold" }}>Monthly Eligibility Errors
-</label>
+            {/* <label className="medium-text" style={{ fontSize: "12px", fontWeight:"bold" }}>Monthly Eligibility Errors
+</label> */}
             <table>
                     <tr>
                         <td>
@@ -348,10 +348,12 @@ export class MedicalMonthly_Metrics extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                {this.renderSearchBar()}
+                {/* {this.renderSearchBar()} */}
                 <hr style={{color:"#139DC9"}}></hr>
                 <div>
-                    <h6 style={{ color: "#139DC9", paddingTop: '16px', paddingBottom: '16px', fontWeight: '700' }}>Medical Monthly Metrics</h6>
+                <br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Medical Monthly Metrics</h5><br></br>
+               
                 </div>
                
                 {this.renderStatus()}

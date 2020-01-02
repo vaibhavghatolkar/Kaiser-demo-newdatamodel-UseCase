@@ -47,6 +47,19 @@ const Strings = {
     EnrollmentError : 'Enrollment_Error', 
     EnrollmentDetails: 'EnrollmentDetails',
     EnrollmentErrors: 'EnrollmentErrors',
+    Outbound_dashboard:'Outbound_dashboard',
+    Eligibility_Reconcile_Search:'Eligibility_Reconcile_Search',
+    Eligibility_Errors:'Eligibility_Errors',
+    EligibilityErrorsDelta :'EligibilityErrorsDelta',
+    HistoryEligibilityErrorsDelta: 'HistoryEligibilityErrorsDelta',
+    RateCodeDelta: 'RateCodeDelta',
+    PlanIntegrationEligibilityErrors: 'PlanIntegrationEligibilityErrors',
+    HistoryRateCodeDelta: 'HistoryRateCodeDelta',
+    MedicalMonthly_Metrics:'MedicalMonthly_Metrics',
+    CustomDBDetails: 'CustomDBDetails',
+    EligibilityErrorsDuplicate: 'EligibilityErrorsDuplicate',
+    OutboundDetails: 'OutboundDetails',
+    FullComparsion_dashboard: 'FullComparsion_dashboard'
 }
 
 export default Strings;

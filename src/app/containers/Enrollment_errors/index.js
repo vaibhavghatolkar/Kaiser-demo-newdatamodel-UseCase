@@ -249,9 +249,12 @@ topbar(){
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
-                <label style={{color: '#139DC9'}}><b>Enrollment Errors</b></label>
-                {this.topbar()}
+               {/* {this.renderSearchBar()} */}
+               <br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Enrollment Errors</h5><br></br>
+                {/* <label style={{color: '#139DC9'}}><b>Enrollment Errors</b></label> */}
+                {/* {this.topbar()} */}
+                <Topbar flag={2} />
                 {this.renderStatus()}
                 {this.renderList()}
             </div >

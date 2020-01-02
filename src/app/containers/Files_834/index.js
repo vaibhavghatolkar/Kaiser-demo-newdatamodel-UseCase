@@ -625,14 +625,14 @@ rendersearchbar()
             <div>
                 {
                     this.state.file && this.state.file.length > 0 ?
-                        <table className="table claim-list">
+                        <table className="table claim-Details">
                             {this.renderHeader('File')}
                             {this.renderRows(this.state.file)}
                         </table> : null
                 }
                 {
                     this.state.memberInfo && this.state.memberInfo.length > 0 ?
-                        <table className="table claim-list">
+                        <table className="table claim-Details">
                             {this.renderHeader('Member Info')}
                             {this.renderRows(this.state.memberInfo)}
                             <br></br>
@@ -667,10 +667,9 @@ rendersearchbar()
         return (
           
             <div>
-                  
-                {this.rendersearchbar()}
-                
-        <label style={{color: '#139DC9'}}><b>{title}</b></label>
+                  <br></br>
+                {/* {this.rendersearchbar()} */}
+        <h5 style={{ color: '#139DC9',fontsize: "20px" }}>{title}</h5><br></br>
             <div className="row padding-left">
                 <div className="col-7 claim-list file-table">
                     {this.state.claimsObj ? this.renderList() : null}

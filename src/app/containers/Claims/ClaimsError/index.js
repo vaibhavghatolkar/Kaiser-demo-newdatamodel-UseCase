@@ -170,11 +170,14 @@ console.log(data);
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
+                {/* {this.renderSearchBar()} */}
+                <br></br>
+                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Error</h5><br></br>
                 <Topbar 
                     tradingpartner={this.state.tradingpartner} 
                     onSelect={this.onSelect}
                 />
+                
                 {this.renderTopSubBar()}
                 {this.renderStatus()}
                 {this.renderClaimsError()}

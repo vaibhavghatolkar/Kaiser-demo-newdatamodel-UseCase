@@ -34,7 +34,21 @@ import { UserList } from './app/containers/User_List';
 import { MenuCreate } from './app/containers/Menu_Create';
 import { ChangePassword } from './app/containers/Change_Password';
 import { Login } from './app/containers/login'
-
+import { EnrollmentErrors } from './app/containers/Enrollment_errors';
+import { Outbound_dashboard } from './app/containers/Outbound_dashboard';
+import { Eligibility_Reconcile_Search } from './app/containers/Eligibility_Reconcile_Search';
+import { Eligibility_Errors } from './app/containers/Eligibility_Errors';
+import {CustomDBDetails} from './app/containers/CustomDB_Details'
+import { EligibilityErrorsDelta } from './app/containers/Eligibility_error_delta';
+import { HistoryEligibilityErrorsDelta } from './app/containers/History_eligibility_error'
+import {RateCodeDelta} from './app/containers/RateCode_delta'
+import {PlanIntegrationEligibilityErrors} from './app/containers/PlanIntegration_eligibility_errors'
+import {HistoryRateCodeDelta} from './app/containers/History_Ratecode_Delta'
+import {MedicalMonthly_Metrics} from './app/containers/MedicalMonthly_Metrics'
+import { EnrollmentDetails } from './app/containers/Enrollment_details';
+import {EligibilityErrorsDuplicate} from './app/containers/Duplicate_Eligibility_Error'
+import {OutboundDetails} from './app/containers/Outbound_details'
+import {FullComparsion_dashboard} from './app/containers/Full_file_comparison_dashboard'
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -120,8 +134,23 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.ChangePassword} component={ChangePassword} />
                     <Route path={'/'+ Strings.claimsDashboard_834_details + '/:new_path'} component={Files_834}/>
                     <Route path={'/'+ Strings.EnrollmentError  + '/:new_path'} component={Files_834} />
-                    
-                    
+                    <Route path={'/'+ Strings.EnrollmentErrors} component={EnrollmentErrors} />
+
+                    <Route path={'/'+ Strings.EnrollmentDetails} component={EnrollmentDetails} />
+                    <Route path={'/'+ Strings.Outbound_dashboard} component={Outbound_dashboard} />
+                    <Route path={'/'+ Strings.Eligibility_Reconcile_Search} component={Eligibility_Reconcile_Search} />
+                    <Route path={'/'+ Strings.Eligibility_Errors} component={Eligibility_Errors} />
+                    <Route path={'/'+ Strings.EligibilityErrorsDelta} component={EligibilityErrorsDelta} />
+                    <Route path={'/'+ Strings.HistoryEligibilityErrorsDelta} component={HistoryEligibilityErrorsDelta} />
+                    <Route path={'/'+ Strings.RateCodeDelta} component={RateCodeDelta} />
+                    <Route path={'/'+ Strings.PlanIntegrationEligibilityErrors} component={PlanIntegrationEligibilityErrors} />
+                    <Route path={'/'+ Strings.HistoryRateCodeDelta} component={HistoryRateCodeDelta} />
+                    <Route path={'/'+ Strings.MedicalMonthly_Metrics} component={MedicalMonthly_Metrics} />
+
+                    <Route path={'/'+ Strings.CustomDBDetails} component={CustomDBDetails} />
+                    <Route path={'/'+ Strings.EligibilityErrorsDuplicate} component={EligibilityErrorsDuplicate} />
+                    <Route path={'/'+ Strings.OutboundDetails} component={OutboundDetails} />
+                    <Route path={'/'+ Strings.FullComparsion_dashboard} component={FullComparsion_dashboard} />
                 </div>
             </div>
     }

@@ -558,7 +558,7 @@ export class Files_837 extends React.Component {
                 data[keys].array.forEach(item => {
                     col.push(
                         <tr>
-                            <td className="list-item-style claims-text"><a href="#" style={{ color: "#6AA2B8" }} 
+                            <td className="list-item-style"><a href="#" style={{ color: "#6AA2B8" }} 
                                 onClick={() => { 
                                     this.setState({
                                         submitter: item.FSubmitter_N103,
@@ -571,10 +571,10 @@ export class Files_837 extends React.Component {
                                         this.getFileData(keys)
                                     }, 50);
                                 }}>{item.ClaimID}</a></td>
-                            <td className="list-item-style claims-text">{item.ClaimStatus}</td>
-                            <td className="list-item-style claims-text">{item.adjudication_status}</td>
-                            <td className="list-item-style claims-text">{item.Claim_Amount}</td>
-                            <td className="list-item-style claims-text">{item.ClaimLevelErrors}</td>
+                            <td className="list-item-style ">{item.ClaimStatus}</td>
+                            <td className="list-item-style ">{item.adjudication_status}</td>
+                            <td className="list-item-style ">{item.Claim_Amount}</td>
+                            <td className="list-item-style ">{item.ClaimLevelErrors}</td>
                         </tr>
                     )
                 })
@@ -582,7 +582,7 @@ export class Files_837 extends React.Component {
 
             row.push(
                 <div id={keys} className="collapse">
-                <table id="" className="table table-bordered claim-list">
+                <table id="" className="table table-bordered claim-details">
                         {this.renderClaimsHeader()}
                         {col}
                     </table>
@@ -760,14 +760,14 @@ export class Files_837 extends React.Component {
             <div>
                 {
                     this.state.file && this.state.file.length > 0 ?
-                        <table className="table claim-list">
+                        <table className="table claim-Details">
                             {this.renderHeader('File #' + this.state.fileId)}
                             {this.renderRows(this.state.file)}
                         </table> : null
                 }
                 {
                     this.state.claimsDetails ?
-                        <table className="table claim-list">
+                        <table className="table claim-Details">
                             {this.renderHeader('Claim #'+ this.state.claimId)}
                             {this.renderRows(this.state.claimsDetails)}
                             <br></br>

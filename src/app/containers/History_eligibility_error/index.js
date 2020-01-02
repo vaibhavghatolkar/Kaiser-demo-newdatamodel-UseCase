@@ -344,9 +344,10 @@ export class HistoryEligibilityErrorsDelta extends React.Component {
     render() {
         return (
             <div className="container-fluid">
-                {this.renderSearchBar()}
+                {/* {this.renderSearchBar()} */}
                 <div>
-                    <h6 style={{ color: "#139DC9", paddingTop: '16px', paddingBottom: '16px', fontWeight: '700' }}>History Eligibility Errors (Delta)</h6>
+                <br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>History Eligibility Errors (Delta)</h5><br></br>
                 </div>
                 {this.renderStatus()}
 
