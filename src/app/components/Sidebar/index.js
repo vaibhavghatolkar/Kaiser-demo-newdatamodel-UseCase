@@ -64,6 +64,11 @@ export class Sidebar extends React.Component{
              // {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
                 
             ],
+            RealTime837: [
+                {value: 'RealTime Dashboard', key: 'RealTimeDashboard'},
+                {value: 'Claim Processing Summary', key: 'ClaimProcessingSummary'},
+                {value: 'Claim Details', key: 'ClaimDetails837'},
+            ],
             fullfile: [
                 {value: '834 Full File Compare', key: 'fullFile834'},
             ]
@@ -97,7 +102,9 @@ export class Sidebar extends React.Component{
                     key = 'Fail'
                 }
                 addon = '/0/n/n/n/n/n/'+key+'/n'
-            } else if(element.key == Strings.claimDetails){
+            } else if(element.key == Strings.ClaimDetails837){
+                addon = '/n/n/n/n'
+            } else if(element.key == Strings.ClaimDetails){
                 addon = '/n/n/n/n'
             }
            else if(element.key == Strings.claimsDashboard_834_details)
@@ -143,6 +150,7 @@ export class Sidebar extends React.Component{
                 {this.renderItems(Strings.REALTIME276, 'Claim Status Real-time', this.state.RealTime276)}
               
                 {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)}
+                {this.renderItems(Strings.REALTIME_837_CLAIM, 'RealTime 837 Claims', this.state.RealTime837)}
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
