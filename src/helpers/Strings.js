@@ -1,5 +1,6 @@
 const Strings = {
     CLAIMS : 'claimsManagement',
+    REALTIME_837_CLAIM: 'REALTIME_837_CLAIM',
     REALTIME276 : 'real_time_276',
     REALTIME270 : 'real_time_270',
     EDIT_CLAIM : 'editClaim',
@@ -59,7 +60,10 @@ const Strings = {
     CustomDBDetails: 'CustomDBDetails',
     EligibilityErrorsDuplicate: 'EligibilityErrorsDuplicate',
     OutboundDetails: 'OutboundDetails',
-    FullComparsion_dashboard: 'FullComparsion_dashboard'
+    FullComparsion_dashboard: 'FullComparsion_dashboard',
+    ClaimDetails837: 'ClaimDetails837',
+    RealTimeDashboard: 'RealTimeDashboard',
+    ClaimProcessingSummary: 'ClaimProcessingSummary'
 }
 
 export default Strings;

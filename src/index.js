@@ -49,6 +49,10 @@ import { EnrollmentDetails } from './app/containers/Enrollment_details';
 import {EligibilityErrorsDuplicate} from './app/containers/Duplicate_Eligibility_Error'
 import {OutboundDetails} from './app/containers/Outbound_details'
 import {FullComparsion_dashboard} from './app/containers/Full_file_comparison_dashboard'
+import {ClaimDetails837} from './app/containers/RealTime_837_Claim/Claim_Details_837'
+import {RealTimeDashboard} from './app/containers/RealTime_837_Claim/RealTimeDashboard'
+import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
+
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -151,6 +155,10 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.EligibilityErrorsDuplicate} component={EligibilityErrorsDuplicate} />
                     <Route path={'/'+ Strings.OutboundDetails} component={OutboundDetails} />
                     <Route path={'/'+ Strings.FullComparsion_dashboard} component={FullComparsion_dashboard} />
+                    <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} />
+                    <Route path={'/'+ Strings.RealTimeDashboard} component={RealTimeDashboard} />
+                    <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
+                    
                 </div>
             </div>
     }
