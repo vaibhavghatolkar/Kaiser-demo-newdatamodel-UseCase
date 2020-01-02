@@ -338,7 +338,7 @@ export class Claims extends React.Component {
                                     (d.name == 'Failed File Load' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
                                         (d.name == 'Partial Paid Claims') ? 'orange bold-text summary-values' : ''
                     }>
-                        <Link to={'/claimDetails' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link>
+                        <Link to={'/Files_837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link>
                     </a></td>
                 </tr>
             )

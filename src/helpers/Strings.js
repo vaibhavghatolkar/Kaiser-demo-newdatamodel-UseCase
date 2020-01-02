@@ -63,7 +63,8 @@ const Strings = {
     FullComparsion_dashboard: 'FullComparsion_dashboard',
     ClaimDetails837: 'ClaimDetails837',
     RealTimeDashboard: 'RealTimeDashboard',
-    ClaimProcessingSummary: 'ClaimProcessingSummary'
+    ClaimProcessingSummary: 'ClaimProcessingSummary',
+    Files_837 : 'Files_837',
 }
 
 export default Strings;

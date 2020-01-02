@@ -8,9 +8,6 @@ import { TradingPartnerConfiguration } from './app/containers/TradingPartnerConf
 import { SubmitClaim } from './app/containers/SubmitClaim';
 import { RealTime276 } from './app/containers/Claim_276_RealTime/Real_Time_276';
 import { AuditSummary270 } from './app/containers/AuditSummary270';
-import { Files_837 } from './app/containers/Files_837';
-
-
 import { ClaimsError } from './app/containers/Claims/ClaimsError';
 import { MatchClaims } from './app/containers/Claims/MatchClaims';
 import { ResearchQueue } from './app/containers/ResearchQueue';
@@ -52,7 +49,7 @@ import {FullComparsion_dashboard} from './app/containers/Full_file_comparison_da
 import {ClaimDetails837} from './app/containers/RealTime_837_Claim/Claim_Details_837'
 import {RealTimeDashboard} from './app/containers/RealTime_837_Claim/RealTimeDashboard'
 import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
-
+import { Files_837 } from './app/containers/Files_837'
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -111,9 +108,7 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
                     <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
                     <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} />
-                    <Route path={'/'+ Strings.AuditSummary270} component={AuditSummary270} />
-                    <Route path={'/'+ Strings.claimDetails + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={Files_837} />
-                    
+                    <Route path={'/'+ Strings.AuditSummary270} component={AuditSummary270} />                  
                     <Route path={'/'+ Strings.claimsAudit} component={AuditSummary} />
                     <Route path={'/'+ Strings.claimsError} component={ClaimsError} />
                     <Route path={'/'+ Strings.matchClaims} component={MatchClaims} />
@@ -158,6 +153,7 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} />
                     <Route path={'/'+ Strings.RealTimeDashboard} component={RealTimeDashboard} />
                     <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
+                    <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={Files_837} />
                     
                 </div>
             </div>

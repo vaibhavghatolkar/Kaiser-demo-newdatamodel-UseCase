@@ -12,11 +12,12 @@ export class Sidebar extends React.Component{
             claimsArray : [
                 {value: 'Claims Dashboard - 837', key: 'claimsDashboard'},
                 {value: 'Claims Audit Summary', key: 'claimsAudit'},
-                {value: 'Claim Details', key: 'claimDetails'},
+                {value: 'Claim Details', key: 'Files_837'},
                 {value: 'Claims Error', key: 'claimsError'},
                 {value: 'Match Claims', key: 'matchClaims'},
                 {value: 'Submit Claims', key: 'submitClaims'},
-                {value: 'Research Queue', key: 'researchQueue'}
+                {value: 'Research Queue', key: 'researchQueue'},
+           
             ],
             enrollmentArray: [
                 {value: '834 Enrollment Dashboard', key: 'claimsDashboard_834'},
@@ -81,8 +82,7 @@ export class Sidebar extends React.Component{
                 {value: 'RateCode Delta', key:'RateCodeDelta'},
                 {value: 'Eligibility Errors(PlanIntegration)', key:'PlanIntegrationEligibilityErrors'},
                 {value: 'History RateCode Delta', key:'HistoryRateCodeDelta'},
-                {value: 'Medical Monthly Metrics', key:'MedicalMonthly_Metrics'},
-                
+                {value: 'Medical Monthly Metrics', key:'MedicalMonthly_Metrics'},                
                 {value: 'CustomDB Details', key: 'CustomDBDetails'},
                 {value: 'Eligibility Errors (Duplicate)', key: 'EligibilityErrorsDuplicate'},
                 {value: 'Outbound Details', key: 'OutboundDetails'},
@@ -100,8 +100,10 @@ export class Sidebar extends React.Component{
 
     renderItems(key, value, array){
         let row = []
+       console.log("abcd" ,array)
         array.forEach(element => {
             let addon = ''
+            console.log('hello this is the element : ', element.key);
             if(element.key == Strings.RealTime276){
                 addon = '/0' 
             } else if(element.key == Strings.RealTime270){
@@ -120,7 +122,7 @@ export class Sidebar extends React.Component{
                 addon = '/0/n/n/n/n/n/'+key+'/n'
             } else if(element.key == Strings.ClaimDetails837){
                 addon = '/n/n/n/n'
-            } else if(element.key == Strings.ClaimDetails){
+            } else if(element.key == Strings.Files_837){
                 addon = '/n/n/n/n'
             }
            else if(element.key == Strings.claimsDashboard_834_details)
@@ -166,7 +168,7 @@ export class Sidebar extends React.Component{
                 {this.renderItems(Strings.REALTIME276, 'Claim Status Real-time', this.state.RealTime276)}
               
                 {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)}
-                {this.renderItems(Strings.REALTIME_837_CLAIM, 'RealTime 837 Claims', this.state.RealTime837)}
+                {/* {this.renderItems(Strings.REALTIME_837_CLAIM, 'RealTime 837 Claims', this.state.RealTime837)} */}
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
