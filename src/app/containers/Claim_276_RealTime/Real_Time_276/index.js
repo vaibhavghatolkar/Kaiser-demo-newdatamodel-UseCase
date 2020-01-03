@@ -56,18 +56,82 @@ export class RealTime276 extends React.Component{
         }
 
         this.getData = this.getData.bind(this)
+        this.getCommonData = this.getCommonData.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentWillReceiveProps(){
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     }
 
     componentDidMount(){
+        this.getCommonData()
         this.getData()
+    }
+
+    getCommonData(chartType){
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        if(!chartType && this.state.apiflag == 1){
+            chartType = "Eligibilitymonthwise"
+        } else if (!chartType && this.state.apiflag == 0){
+            chartType = "ClaimRequestMonthwise"
+        }
+        
+        let query = `{
+            Trading_PartnerList(Transaction:"ClaimRequest") {
+                Trading_Partner_Name 
+            }
+            tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestTradingPartner") {
+                X_axis
+                Y_axis
+            }
+            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+                X_axis
+                Y_axis
+            }
+        }`
+
+
+        if(this.state.apiflag == 1){
+            query = `{
+                Trading_PartnerList(Transaction:"EligibilityStatus") {
+                    Trading_Partner_Name 
+                }
+                tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityTradingPartner") {
+                    X_axis
+                    Y_axis
+                }
+                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+                    X_axis
+                    Y_axis
+                }
+            }`
+        }
+
+        console.log('query ', query)
+
+        fetch(Urls.eligibility_url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.performOperations(res, chartType)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
     }
 
     getData(chartType){
@@ -98,17 +162,17 @@ export class RealTime276 extends React.Component{
                 Invalid_Trans
                 Total_Paid
             }
-            Trading_PartnerList(Transaction:"ClaimRequest") {
-                Trading_Partner_Name 
-            }
-            tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestTradingPartner") {
-                X_axis
-                Y_axis
-            }
-            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
-                X_axis
-                Y_axis
-            }
+            #Trading_PartnerList(Transaction:"ClaimRequest") {
+            #    Trading_Partner_Name 
+            #}
+            #tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestTradingPartner") {
+            #    X_axis
+            #    Y_axis
+            #}
+            #datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+            #    X_axis
+            #    Y_axis
+            #}
             ClaimStatuswiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
                 ClaimStatus
                 Total
@@ -135,39 +199,28 @@ export class RealTime276 extends React.Component{
                     RealTime_Per
                     Invalid_Trans
                 } 
-                Trading_PartnerList(Transaction:"EligibilityStatus") {
-                    Trading_Partner_Name 
-                }
-                tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityTradingPartner") {
-                    X_axis
-                    Y_axis
-                }
-                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
-                    X_axis
-                    Y_axis
-                }
+                #Trading_PartnerList(Transaction:"EligibilityStatus") {
+                #    Trading_Partner_Name 
+                #}
+                #tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityTradingPartner") {
+                #    X_axis
+                #    Y_axis
+                #}
+                #datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+                #    X_axis
+                #    Y_axis
+                #}
                 Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
                     ErrorType
                     RecCount
                     Percentage
-                }
-                EligibilityAllDtlTypewise(TypeID:"" page:1 State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
-                    RecCount
-                    HiPaaSUniqueID
-                    Date
-                    Trans_type
-                    Submiter
-                    Trans_ID
-                    Error_Type
-                    Error_Code
-                    ErrorDescription
                 }
             }`
         }
 
         console.log('query ', query)
 
-        fetch(Urls.base_url, {
+        fetch(Urls.eligibility_url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -194,11 +247,9 @@ export class RealTime276 extends React.Component{
         let dateChartLabel = []
         let errorPieArray = []
         let errorLabelArray = []
-        let transactionData = []
 
         if(this.state.apiflag){
             data = res.data.Eligibilty270[0]
-            transactionData = res.data.EligibilityAllDtlTypewise
         } else {
             data = res.data.ClaimRequest276[0]
         }
@@ -278,7 +329,6 @@ export class RealTime276 extends React.Component{
             outComplaince : data.out_of_Compliance_per,
             thisMonth: data.ThisMonth_Volume,
             lastMonth : data.LastMonth_Volume,
-            transactionData : transactionData,
             averageResponseTime : data.AvgResTime,
             noResponsePercent : data.NoResponse_Per,
             errorCount: data.Error,
@@ -403,6 +453,7 @@ export class RealTime276 extends React.Component{
             startDate: date
         });
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     };
@@ -412,6 +463,7 @@ export class RealTime276 extends React.Component{
             endDate: date
         });
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     }
@@ -428,6 +480,7 @@ export class RealTime276 extends React.Component{
         }
 
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     }
@@ -595,40 +648,6 @@ export class RealTime276 extends React.Component{
                 }
             </div>
         )
-    }
-
-    renderTransactions(){
-            let row = []
-            const data = this.state.transactionData ? this.state.transactionData : []
-    
-            data.forEach((d) => {
-                row.push(
-                    <tr>
-                        <td>{d.Trans_ID}</td>
-                        <td>{moment.unix(d.Date/1000).format("DD MMM YYYY hh:mm:ss")}</td>
-                        <td>{d.Submiter}</td>
-                        <td>{d.Trans_type}</td>
-                    </tr>
-                )
-            })
-
-            return(
-                <div>
-                    <table className="table table-bordered claim-list">
-                        <thead>
-                            <tr className="table-head" style={{fontSize:"9px"}}>
-                                <td className="table-head-text">Transaction Id</td>
-                                <td className="table-head-text list-item-style">Transaction Date</td>
-                                <td className="table-head-text list-item-style">Submitter</td>
-                                <td className="table-head-text list-item-style">Status</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {row}
-                        </tbody>
-                    </table>
-                </div>
-            )
     }
 
     renderAvgSummaryDetails(){
