@@ -56,17 +56,20 @@ export class EligibilityDetails extends React.Component{
         this.getTransactions()
     }
 
-    getData(){
-        let query = `{
-            Trading_PartnerList(Transaction:"EligibilityStatus")  {
-                Trading_Partner_Name 
-            }
-            ErrorType_List(Transaction: "Eligibility") {
-                ErrorType
-            }
-        }`
-
-        if(this.state.apiflag == 1){
+    getData(uuid){
+        let query = ''
+        if(uuid){
+            query = `{
+                EventLogData(HiPaaS_UUID:"`+uuid+`") {
+                    HiPaaS_UUID
+                    EventName
+                    EventCreationDateTime
+                    Exception
+                    ErrorMessage
+                    Transaction_Compliance
+                }
+            }`
+        } else {
             query = `{
                 Trading_PartnerList(Transaction:"EligibilityStatus")  {
                     Trading_Partner_Name 
@@ -75,7 +78,20 @@ export class EligibilityDetails extends React.Component{
                     ErrorType
                 }
             }`
+    
+            if(this.state.apiflag == 1){
+                query = `{
+                    Trading_PartnerList(Transaction:"EligibilityStatus")  {
+                        Trading_Partner_Name 
+                    }
+                    ErrorType_List(Transaction: "Eligibility") {
+                        ErrorType
+                    }
+                }`
+            }   
         }
+
+        console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -88,10 +104,17 @@ export class EligibilityDetails extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
-                this.setState({
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                    errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
-                })
+                if(uuid){
+                    this.setState({
+                        eventLog: res.data.EventLogData,
+                        Transaction_Compliance : res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
+                    })
+                } else {
+                    this.setState({
+                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                        errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
+                    })
+                }
             }
         })
         .catch(err => {
@@ -222,6 +245,8 @@ export class EligibilityDetails extends React.Component{
     }
 
     getDetails(uuid){
+        let url = Urls.claimstatus
+
         let query = `{
             ClaimRequest(HiPaaSUniqueID:"`+uuid+`") {
               Message
@@ -229,17 +254,10 @@ export class EligibilityDetails extends React.Component{
             ClaimStatus277(HiPaaSUniqueID:"`+uuid+`") {
                 Message
             }
-            EventLogData(HiPaaS_UUID:"`+uuid+`") {
-                HiPaaS_UUID
-                EventName
-                EventCreationDateTime
-                Exception
-                ErrorMessage
-                Transaction_Compliance
-            }
         }`
 
         if(this.state.apiflag == 1){
+            url = Urls.eligibility_url
             query = `{
                 Eligibilty270Request(HiPaaSUniqueID:"`+uuid+`") {
                   Message
@@ -247,20 +265,12 @@ export class EligibilityDetails extends React.Component{
                 Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
                     Message
                 }
-                EventLogData(HiPaaS_UUID:"`+uuid+`") {
-                    HiPaaS_UUID
-                    EventName
-                    EventCreationDateTime
-                    Exception
-                    ErrorMessage
-                    Transaction_Compliance
-                }
             }`
         }
 
         console.log('query ', query)
 
-        fetch(Urls.base_url, {
+        fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -275,8 +285,6 @@ export class EligibilityDetails extends React.Component{
                     showDetails: true,
                     message_270 : this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
                     message_271 : this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
-                    eventLog: res.data.EventLogData,
-                    Transaction_Compliance : res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
                 })
             }
         })
@@ -292,8 +300,11 @@ export class EligibilityDetails extends React.Component{
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a href="#" onClick={() => {this.getDetails(d.HiPaaSUniqueID)}} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
-                    <td>{moment.unix(d.Date/1000).format("DD MMM YYYY hh:mm:ss")}</td>
+                    <td><a href="#" onClick={() => {
+                        this.getData(d.HiPaaSUniqueID)
+                        this.getDetails(d.HiPaaSUniqueID)
+                    }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
+                    <td>{d.Date}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
                     {this.state.status != 'Pass' ? <td>{d.Error_Type}</td> : null}
@@ -599,7 +610,7 @@ export class EligibilityDetails extends React.Component{
                     
                     <div className="col-6">
                         {/* {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null} */}
-                        {this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
+                        {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
