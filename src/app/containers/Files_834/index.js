@@ -130,7 +130,7 @@ export class Files_834 extends React.Component {
     getData() {
         let query = '{SP_834FilecountwisedetailsGQL(Type:'+'"'+this.props.match.params.new_path+'"'+'){ FileName FileID  sender receiver FileStatus CreateDateTime dcount  }}'
         console.log('query : ' + query)
-        fetch(Urls.base_url, {
+        fetch(Urls.enrollment_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export class Files_834 extends React.Component {
     }
 
     getClaimData(FileID, ClaimID) {
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ export class Files_834 extends React.Component {
         }
         let query = '{ SP_834FileDetailsPagingGQL(Type :'+'"'+this.props.match.params.new_path+'"'+', PageIndex:'+this.state.page+', FileID: '+fileId+') { SubscriberNo fileid Enrollment_type InsLineCode Insurer_Status TransCode MemberAmount Error CreateDateTime status1 } }'
         console.log(query)
-        fetch(Urls.base_url, {
+        fetch(Urls.enrollment_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -263,7 +263,7 @@ export class Files_834 extends React.Component {
     handleClick(fileId, subscriber, type) {
         let query = '{ SP_834FileHeaderDetails(FileID: '+'"'+fileId +'"'+', Subscriber:'+'"'+subscriber +'"'+', Type: '+type +') { FileName FileID sender receiver SubscriberNo MemberFName MemberLName Telephone StreetAddress City State PostalCode Enrollment_type dob gender InsLineCode MemberAmount EnrollmentStatus StartDate EndDate CreateDateTime relationship member_relationship_name } }'
         console.log('query : ', query)
-        fetch(Urls.base_url, {
+        fetch(Urls.enrollment_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -293,7 +293,7 @@ export class Files_834 extends React.Component {
 
             let query1 = '{ SP_834EnrollementDetails(FileID: '+'"'+fileId +'"'+', Subscriber:'+'"'+subscriber +'") { FileName   FileID   sender   receiver   IdentificationCode   InsurerStatus   SubscriberNo   MemberFName   MemberLName   Telephone   StreetAddress   City   State   PostalCode   Enrollment_type   dob   gender   Emplymentstatus   CreateDateTime   INS_Insurer_relationship   member_relationship_name   Plan_Coverage_Level   DTP_336_Employment_BeginDT   Member_Policy_No   Department_Agency   Error_Field   N1_Plan_insurer_name } }'
         
-            fetch(Urls.base_url, {
+            fetch(Urls.enrollment_details, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
