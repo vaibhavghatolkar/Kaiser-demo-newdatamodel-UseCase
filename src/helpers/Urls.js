@@ -8,6 +8,7 @@ const Urls = {
     claims_837 : base_url + '/claims_837',
     claim_details : base_url + '/claim_details',
     match_claims : base_url + '/match_claims',
+    users : base_url + '/users',
 }
 
 export default Urls;
