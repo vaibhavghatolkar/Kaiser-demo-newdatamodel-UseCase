@@ -77,7 +77,7 @@ export class EligibilityDetails extends React.Component{
             }`
         }
 
-        fetch(Urls.base_url, {
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -105,6 +105,7 @@ export class EligibilityDetails extends React.Component{
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
+        let url = Urls.claimstatus
 
         if(this.state.apiflag == 1 && this.state.status != 'Pass'){
             chartQuery = `Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
@@ -128,6 +129,7 @@ export class EligibilityDetails extends React.Component{
         }`
         
         if(this.state.apiflag == 1){
+            url = Urls.eligibility_url
             query = `{
                 EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
                     RecCount
@@ -145,7 +147,7 @@ export class EligibilityDetails extends React.Component{
 
         console.log('query ', query)
 
-        fetch(Urls.base_url, {
+        fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

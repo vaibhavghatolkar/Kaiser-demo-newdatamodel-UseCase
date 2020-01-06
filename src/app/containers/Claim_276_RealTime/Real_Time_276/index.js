@@ -137,6 +137,8 @@ export class RealTime276 extends React.Component{
     getData(chartType){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let url = Urls.claimstatus
+
         if(!chartType && this.state.apiflag == 1){
             chartType = "Eligibilitymonthwise"
         } else if (!chartType && this.state.apiflag == 0){
@@ -170,6 +172,7 @@ export class RealTime276 extends React.Component{
 
 
         if(this.state.apiflag == 1){
+            url = Urls.eligibility_url
             query = `{
                 Eligibilty270(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
                     AvgResTime
@@ -198,7 +201,7 @@ export class RealTime276 extends React.Component{
 
         console.log('query ', query)
 
-        fetch(Urls.eligibility_url, {
+        fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
