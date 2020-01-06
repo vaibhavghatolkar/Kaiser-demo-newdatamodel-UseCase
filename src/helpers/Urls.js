@@ -6,6 +6,7 @@ const Urls = {
     common_data : base_url + '/common_data',
     claimstatus : base_url + '/claimstatus',
     claims_837 : base_url + '/claims_837',
+    claim_details : base_url + '/claim_details',
 }
 
 export default Urls;
