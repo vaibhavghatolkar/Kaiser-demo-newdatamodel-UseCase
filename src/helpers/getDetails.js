@@ -18,7 +18,7 @@ export const getDetails = async(key) => {
     .then(res => res.json())
     .then(res => {
         if(res.data){
-            return(res.data.Trading_PartnerList)
+            return res.data.Trading_PartnerList
         }
     })
     .catch(err => {

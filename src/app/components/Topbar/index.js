@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../containers/Files/files-styles.css';
 import Urls from '../../../helpers/Urls';
+import { getDetails } from '../../../helpers/getDetails';
 export class Topbar extends React.Component {
 
     constructor(props){
@@ -11,11 +12,6 @@ export class Topbar extends React.Component {
             tradingpartner: [],            
             Transaction:'',
         };
-        this.state = {
-            endDate: new Date(),
-            files: [],
-            tradingpartner: [],
-        }
     }
     displayFile() {
         this.setState({ files: this.state.files });
@@ -33,42 +29,22 @@ export class Topbar extends React.Component {
     }
  
       getData() {
+        let transaction = ''
+
         this.props.flag == 2
         ?
-        this.state.Transaction="Enrollment834"
+        transaction="Enrollment834"
         :
-        this.state.Transaction="Claim837"
+        transaction="Claim837"
       
-        let query = `{
-      
-            Trading_PartnerList ( Transaction:"`+this.state.Transaction+`") {
-              
-                Trading_Partner_Name 
-                
-            }
-           
-        }`
-          console.log(query);
-          fetch(Urls.base_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {    
-                         
+        getDetails(transaction)
+        .then((tradingpartner) => {
+            if(tradingpartner && tradingpartner.length > 0){
                 this.setState({
-                   
-                     tradingpartner: res.data.Trading_PartnerList
+                    tradingpartner: tradingpartner
                 })
-            })
-           
-            .catch(err => {
-                console.log(err)
-            })
+            }
+        })
     }
 
     // getOptions() {
