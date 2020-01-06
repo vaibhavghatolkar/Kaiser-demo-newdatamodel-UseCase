@@ -5,6 +5,7 @@ const Urls = {
     eligibility_url : base_url + '/eligibility',
     common_data : base_url + '/common_data',
     claimstatus : base_url + '/claimstatus',
+    claims_837 : base_url + '/claims_837',
 }
 
 export default Urls;
