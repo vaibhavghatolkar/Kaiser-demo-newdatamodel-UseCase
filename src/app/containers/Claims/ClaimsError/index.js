@@ -5,6 +5,7 @@ import { Topbar } from '../../../components/Topbar';
 import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
+import { getDetails } from '../../../../helpers/getDetails';
 
 export class ClaimsError extends React.Component{
     
@@ -27,14 +28,40 @@ export class ClaimsError extends React.Component{
     }
 
     componentDidMount(){
+        this.getTradingPartnerDetails()
         this.getData()
+    }
+
+    getTradingPartnerDetails = async() => {
+        getDetails("Claim837")
+        .then((tradingpartner) => {
+            if(tradingpartner && tradingpartner.length > 0){
+                this.setState({
+                    tradingpartner: tradingpartner
+                })
+            }
+        })
     }
 
     getData(){
         
-        let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(Transaction:"Claim837") { Trading_Partner_Name }}'
+        // let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(Transaction:"Claim837") { Trading_Partner_Name }}'
+        let query = `{
+            SP_GetRejectedClaims(Date: "") {
+              Reason
+              BillingProviderLastName
+              FileName
+              FileDate
+              Member_Account_Number
+              SubscriberLastName
+              SubscriberFirstName
+            }
+            ClaimRejCount(submitter: "`+this.state.selectedTradingPartner+`", fromDt: "", ToDt: "") {
+              RejCount
+            }
+        }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -45,12 +72,9 @@ export class ClaimsError extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
-               
-  
                 this.setState({
                     claimsError: res.data.SP_GetRejectedClaims,
                     rejectedCount : res.data.ClaimRejCount[0].RejCount,
-                    tradingpartner: res.data.Trading_PartnerList
                 })
             }
         })
