@@ -183,7 +183,7 @@ export class AuditSummary extends React.Component{
                     <div className="center-align">Total Files</div>
                     <div className="center-align"><a href="#" className="blue bold-text summary-values" 
                         // onClick={() => {this.props.handleFlag(Strings.claimDetails)}}
-                    ><Link to={'/' + Strings.claimDetails + '/n/n/n/n'}>{this.state.totalFile}</Link></a></div>
+                    ><Link to={'/' + Strings.Files_837 + '/n/n/n/n'}>{this.state.totalFile}</Link></a></div>
                 </div>
                 <div className="col-2">
                     <div className="center-align">Dup Files</div>
