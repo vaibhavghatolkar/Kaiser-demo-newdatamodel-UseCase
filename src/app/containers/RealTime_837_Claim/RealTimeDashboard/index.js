@@ -10,24 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 
-const data = {
-    labels: [
-        'Accepted',
-        'Rejected'
-    ],
-    datasets: [{
-        data: [95, 5],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4'
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4'
-        ]
-    }],
-    flag: ''
-};
+
 
 const second_data = {
     labels: [
@@ -61,24 +44,6 @@ const second_data = {
 };
 
 
-const bardata = {
-    labels: ['TP1', 'TP2', 'TP3', 'TP4'],
-    showFile: false,
-    datasets: [
-        {
-            label: 'Total Claims',
-            backgroundColor: '#139DC9',
-            borderColor: '#139DC9',
-            borderWidth: 1,
-            hoverBackgroundColor: '#139DC9',
-            hoverBorderColor: '#139DC9',
-            data: [65, 59, 80, 81]
-        }
-    ],
-    legend: {
-        display: false
-    }
-};
 
 export class RealTimeDashboard extends React.Component {
 
@@ -91,7 +56,11 @@ export class RealTimeDashboard extends React.Component {
             tradingpartner: [],
             startDate: '',
             endDate: '',
-            selectedTradingPartner: ''
+            selectedTradingPartner: '',
+            Months: 0,
+            Accepted_per: 0,
+            rejected_per: 0,
+            ClaimBarChart: []
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -115,60 +84,26 @@ export class RealTimeDashboard extends React.Component {
     }
 
     getData() {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : ''
         
         let query = `{
-            FileInTake(fileId: 0, submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-              FileName
-              FileDate
-              ExtraField2
-              Submitter_N103
-              dCount
-            }
-            Trading_PartnerList(Transaction:"Claim837") { 
-               
-                Trading_Partner_Name 
-                
-            }
-            ClaimCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                SubCount
-            }
-            ClaimAccCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                AccCount
-            }
-            ClaimRejCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                RejCount
-            }
-            ClaimPaidCount {
-                PaidCount
-            }
-            ClaimDeniedCount {
-                DeniedCount
-            }
-            FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                totalFile
-            }
-            FileFailedFileCount {
-                FailedFileCount
-            }
+            Claim837RTDashboardCount (Sender:"",State:"",Provider:"",Month:${this.state.Months},Year:2020) {
+                TotalClaims
+                Accepted
+                Rejected
+                Accepted_Per
+                Rejected_Per
+              
+              }
+              Claim837RTClaimBarchart (Sender:"",State:"",Provider:"", Year: 2020 , Month :12, Flag: "${this.state.Months}") {
+                From
+                MonthNo
+                Year
+                To
+                Amount
+                TotalClaims
+              }
         }`
-
-        console.log('Query ', query)
-
-        if (this.state.apiflag) {
-            query = `{
-                FileInTake835 {
-                  FileName
-                  FileDate
-                  ExtraField2
-                  Submitter_N103
-                  Receiver_N103
-                }
-            }`
-            console.log("hey here it is !!", JSON.stringify(this.props.state))
-        }
-
+        console.log(query)
         fetch(Urls.base_url , {
             method: 'POST',
             headers: {
@@ -182,44 +117,53 @@ export class RealTimeDashboard extends React.Component {
                 let array = []
                 let summary = []
                 let data = res.data
-                let iterator = data.FileInTake
-                if (this.state.apiflag) {
-                    iterator = data.FileInTake835
-                }
-
-                iterator.forEach(item => {
-                    array.push({
-                        name: item.FileName,
-                        date: item.FileDate,
-                        status: item.ExtraField2,
-                        submitter: item.Submitter_N103,
-                        dCount: item.dCount
-                    })
-                })
-
-                summary = [
+                let totalData = data.Claim837RTDashboardCount
+                let Accepted_per1;
+                let rejected_per1;
+                let ClaimBarChart = res.data.Claim837RTClaimBarchart
+                
+                if(totalData == ""){
+                    summary = [
+                        { name: 'Total Claims', value: 0 },
+                        { name: 'Accepted Claims', value: 0 },
+                        { name: 'Rejected Claims', value: 0 },
+                        { name: 'Accepted Percentage', value: 0 },
+                        { name: 'Rejected Percentage', value: 0 },
+                    ]
+                    Accepted_per1 = 0
+                    rejected_per1 = 0
+                }else{
+                    summary = [
                    
-                    { name: 'Total Claims', value: data.ClaimCount ? data.ClaimCount[0].SubCount : '' },
-                    { name: 'Accepted Claims', value: data.ClaimAccCount ? data.ClaimAccCount[0].AccCount : '' },
-                    { name: 'Rejected Claims', value: data.ClaimRejCount ? data.ClaimRejCount[0].RejCount : '' },
-                    { name: 'Accepted %', value: data.FileInCount ? data.FileInCount[0].totalFile : '' },
-                    { name: 'Rejected %', value: data.FileFailedFileCount ? data.FileFailedFileCount[0].FailedFileCount : '' },
-                    // {name:'Claims Queue', value : 250},
-                    // {name:'Work in Progress', value : 123},
-                    // {name:'Paid Claims', value : data.ClaimPaidCount ? data.ClaimPaidCount[0].PaidCount : '' },
-                    // {name:'Partial Paid Claims', value : data.ClaimDeniedCount ? data.ClaimDeniedCount[0].DeniedCount : ''}
-                ]
-
+                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
+                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : ''   },
+                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : ''},
+                        { name: 'Accepted Percentage', value: data.Claim837RTDashboardCount[0].Accepted_Per  ? data.Claim837RTDashboardCount[0].Accepted_Per : ''},
+                        { name: 'Rejected Percentage', value: data.Claim837RTDashboardCount[0].Rejected_Per  ? data.Claim837RTDashboardCount[0].Rejected_Per : ''},
+                    ]
+                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
+                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
+                }
+                
+                ClaimBarChart.forEach((d)=> {
+                    array.push(
+                        d.TotalClaims ? parseFloat(d.TotalClaims) : 0
+                    )
+                })
+        
                 this.setState({
-                    claimsList: array,
                     summaryList: summary,
-                    tradingpartner: res.data.Trading_PartnerList
+                    Accepted_per: Accepted_per1,
+                    rejected_per: rejected_per1,
+                    ClaimBarChart:array
+                    // tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
                 console.log(err)
             })
     }
+
 
     renderSearchBar() {
         return (
@@ -241,7 +185,53 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
+    getBarData(labelArray, dataArray, color){
+      
+        let bardata = {
+            labels: labelArray,
+            showFile: false,
+            datasets: [
+                {
+                    label: 'Total Claims',
+                    backgroundColor: color,
+                    borderColor: color,
+                    borderWidth: 1,
+                    hoverBackgroundColor: color,
+                    hoverBorderColor: color,
+                    data: dataArray
+                }
+            ],
+            legend: {
+                display: false
+            }
+        }
+
+        return bardata
+    }
+
     renderCharts() {
+        const data = {
+            labels: [
+                'Accepted',
+                'Rejected'
+            ],
+            datasets: [{
+                data: [this.state.Accepted_per, this.state.rejected_per],
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4'
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4'
+                ]
+            }],
+            flag: ''
+        };
+
+        console.log(this.state.ClaimBarChart)
+        let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+        
         return (
             <div className="row chart">
                 <div className="col-6">
@@ -262,7 +252,7 @@ export class RealTimeDashboard extends React.Component {
                 <div className="col-6">
                     
                     <Bar
-                        data={bardata}
+                        data={this.getBarData(labels,this.state.ClaimBarChart, "#139DC9")}
                         width={100}
                         height={60}
                         options={{
@@ -333,10 +323,10 @@ export class RealTimeDashboard extends React.Component {
                     <td><a href="#" onClick={() => { 
                         // this.showFile(d.name) 
                     }} className={
-                        (d.name == 'Accepted %' || d.name == 'Total Claims') ? 'blue bold-text summary-values' :
+                        (d.name == 'Accepted Percentage' || d.name == 'Total Claims') ? 'blue bold-text summary-values' :
                             (d.name == 'Paid Claims' || d.name == 'Accepted Claims') ? 'green bold-text summary-values' :
                                 (d.name == 'Claims Queue' || d.name == 'Work in Progress') ? 'dark_red bold-text summary-values' :
-                                    (d.name == 'Rejected %' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
+                                    (d.name == 'Rejected Percentage' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
                                         (d.name == 'Partial Paid Claims') ? 'orange bold-text summary-values' : ''
                     }>
                         <Link to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link>
@@ -443,14 +433,23 @@ export class RealTimeDashboard extends React.Component {
         }, 50);
     }
 
+    MonthsEvent(event, key){
+        this.setState({
+            [key] : event.target.options[event.target.selectedIndex].value
+        })
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
     renderTopbar() {
         return (
             <div className="row">
                 <div className="form-group col-2">
                     <div className="list-header-dashboard">State</div>
                     <select className="form-control list-header-dashboard" id="state">
-                        <option value="">Select State</option>
-                        <option selected="selected" value="1">California</option>
+                        <option value=""></option>
+                        <option value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
                         <option value="4">New York</option>
@@ -474,12 +473,12 @@ export class RealTimeDashboard extends React.Component {
                         onChange={(event) => {
                             this.onSelect(event, 'selectedTradingPartner')
                         }}>
-                        <option value="select">Select Trading Partner</option>
+                        <option value="select"></option>
                         {this.getoptions()}
                     </select>
                 </div>
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Provider Name</div>
+                    <div className="list-header-dashboard">Provider</div>
                     <input className="form-control" type="text" />
                     {/* <select className="form-control list-header-dashboard" id="option" 
                         onChange={(event) => {
@@ -507,20 +506,23 @@ export class RealTimeDashboard extends React.Component {
                 </div> */}
                 <div className="form-group col-2">
                     <div className="list-header-dashboard">Month</div>
-                    <select className="form-control list-header-dashboard" id="state">
-                        <option value="all">All</option>
-                        <option value="jan">January</option>
-                        <option value="feb">February</option>
-                        <option value="mar">March</option>
-                        <option value="apr">April</option>
-                        <option value="may">May</option>
-                        <option value="jun">June</option>
-                        <option value="jul">July</option>
-                        <option value="aug">August</option>
-                        <option value="sept">September</option>
-                        <option value="oct">October</option>
-                        <option value="nov">November</option>
-                        <option value="dec">December</option>
+                    <select className="form-control list-header-dashboard" id="state"
+                     onChange={(event) => {
+                        this.MonthsEvent(event, 'Months')
+                    }}>>
+                        <option value="0">All</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
                         </select>
                 </div>
             </div>
@@ -554,7 +556,7 @@ export class RealTimeDashboard extends React.Component {
                                 </div>
                                 <div className="col-3">
                                     {this.renderSummary()}<br />
-                                    {this.renderErrors()}
+                                    {/* {this.renderErrors()} */}
                                 </div>
                             </div>
                         </div>
