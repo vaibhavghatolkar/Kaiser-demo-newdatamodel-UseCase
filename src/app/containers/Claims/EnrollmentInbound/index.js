@@ -110,7 +110,7 @@ export class EnrollmentInbound extends React.Component {
 
     getErrorCount() {
         let query = '{ CompareFileError834 { dbdesc error_desc RCount } }'
-        fetch(Urls.base_url, {
+        fetch(Urls.enrollment, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ export class EnrollmentInbound extends React.Component {
             }
         }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.enrollment, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

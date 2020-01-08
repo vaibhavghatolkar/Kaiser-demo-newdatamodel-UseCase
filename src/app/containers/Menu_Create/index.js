@@ -100,7 +100,7 @@ export class MenuCreate extends React.Component {
            
           }}`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.users, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ export class MenuCreate extends React.Component {
            
         }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.users, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

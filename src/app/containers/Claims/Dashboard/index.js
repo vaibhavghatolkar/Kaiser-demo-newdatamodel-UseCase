@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
+import { getDetails } from '../../../../helpers/getDetails';
 
 const data = {
     labels: [
@@ -111,7 +112,19 @@ export class Claims extends React.Component {
     }
 
     componentDidMount() {
+        this.getTradingPartnerDetails()
         this.getData()
+    }
+
+    getTradingPartnerDetails = async() => {
+        getDetails("Claim837")
+        .then((tradingpartner) => {
+            if(tradingpartner && tradingpartner.length > 0){
+                this.setState({
+                    tradingpartner: tradingpartner
+                })
+            }
+        })
     }
 
     getData() {
@@ -125,11 +138,6 @@ export class Claims extends React.Component {
               ExtraField2
               Submitter_N103
               dCount
-            }
-            Trading_PartnerList(Transaction:"Claim837") { 
-               
-                Trading_Partner_Name 
-                
             }
             ClaimCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
                 SubCount
@@ -169,7 +177,7 @@ export class Claims extends React.Component {
             console.log("hey here it is !!", JSON.stringify(this.props.state))
         }
 
-        fetch(Urls.base_url , {
+        fetch(Urls.claims_837 , {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -211,8 +219,7 @@ export class Claims extends React.Component {
 
                 this.setState({
                     claimsList: array,
-                    summaryList: summary,
-                    tradingpartner: res.data.Trading_PartnerList
+                    summaryList: summary
                 })
             })
             .catch(err => {
@@ -372,7 +379,7 @@ export class Claims extends React.Component {
         )
     }
 
-    getoptions() {
+    getoptions = () => {
         let row = []
         this.state.tradingpartner.forEach(element => {
             row.push(<option value="">{element.Trading_Partner_Name}</option>)

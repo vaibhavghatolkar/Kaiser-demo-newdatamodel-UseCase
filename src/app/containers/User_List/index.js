@@ -81,7 +81,7 @@ export class UserList extends React.Component {
                 role_description
               }
             }`
-        fetch(Urls.base_url, {
+        fetch(Urls.users, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
