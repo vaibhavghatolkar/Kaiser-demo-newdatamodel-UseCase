@@ -13,7 +13,7 @@ export class ClaimProcessingSummary extends React.Component {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             recCount: 0,
-            pageCount: 0,
+            pageCount: 1,
             Months: 0,
             startDate: "",
             endDate: "",
@@ -33,65 +33,80 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     componentDidMount() {
+        this.getCountData()
         this.getData()
     }
 
+    getCountData(){
+        let query = `{
+            Claim837RTDashboardCount (Sender:"",State:"",Provider:"", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+                TotalClaims
+                Accepted
+                Rejected
+                Accepted_Per
+                Rejected_Per
+                Total999
+                Total277CA
+                TotalSentToQNXT
+            }
+        }`
+        
+        console.log(query)
+
+        fetch(Urls.real_time_claim, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                var data = res.data.Claim837RTDashboardCount
+                if(data && data.length > 0){
+                    let Accepted = data[0].Accepted
+                    let Rejected = data[0].Rejected
+                    let TotalSentToQNXT = data[0].TotalSentToQNXT
+                    let Total999 = data[0].Total999
+                    let Total277CA = data[0].Total277CA
+
+                    this.setState({
+                        Accepted: Accepted,
+                        Rejected: Rejected,
+                        TotalSentToQNXT: TotalSentToQNXT,
+                        Total999: Total999,
+                        Total277CA: Total277CA,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     getData() {
-        // let query = `{
-        //     ClaimsDailyAudit(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
-        //       FileID
-        //       filename
-        //       Submitted
-        //       Rejected
-        //       Pending
-        //       Verified
-        //       Error
-        //       InBizstock
-        //     }
-        //     ClaimsDailyAuditCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
-        //         SubTotal
-        //         VeriTotal
-        //         InBizstockTotal
-        //         PenTotal
-        //         RejTotal
-        //         errTotal
-        //     }
-        //     FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
-        //         totalFile
-        //     }
-        //     Trading_PartnerList(Transaction:"Claim837") { 
-
-        //         Trading_Partner_Name 
-
-        //     }
-        // }`
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
       
-        let query = `{
-
-            
-                Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}") {
-                  RecCount
-                  Accepted
-                  Rejected
-                  Total999
-                  Total277CA
-                  TotalSentToQNXT
-                  ClaimID
-                  ClaimDate
-                  ClaimTMTrackingID
-                  Subscriber_ID
-                  Claim_Amount
-                  ClaimStatus
-                  ProviderLastName
-                  ProviderFirstName
-                } 
-                  
-             
+        let query = `{            
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}") {
+                RecCount
+                ClaimID
+                ClaimDate
+                Subscriber_ID
+                Claim_Amount
+                ClaimStatus
+                ProviderLastName
+                ProviderFirstName
+                SubscriberLastName
+                SubscriberFirstName
+                adjudication_status
+                ClaimLevelErrors
+            }
         }`
         console.log(query)
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,11 +120,6 @@ export class ClaimProcessingSummary extends React.Component {
                 if(data && data.length > 0){
                 let recCount = data[0].RecCount
                 let TotalClaims = data[0].RecCount
-                let Accepted = data[0].Accepted
-                let Rejected = data[0].Rejected
-                let TotalSentToQNXT = data[0].TotalSentToQNXT
-                let Total999 = data[0].Total999
-                let Total277CA = data[0].Total277CA
                 let count = 0
 
                 try {
@@ -126,32 +136,7 @@ export class ClaimProcessingSummary extends React.Component {
                     Claim837RTProcessingSummary: data,
                     recCount: count,
                     TotalClaims: TotalClaims,
-                    Accepted: Accepted,
-                    Rejected: Rejected,
-                    TotalSentToQNXT: TotalSentToQNXT,
-                    Total999: Total999,
-                    Total277CA: Total277CA,
                 })
-                // if(res.data){
-                //     let totalFile = 0
-                //     try {
-                //         totalFile = res.data.FileInCount[0].totalFile
-                //     } catch (error) {
-
-                //     }
-
-                //     this.setState({
-                //         claimsAudit: res.data.ClaimsDailyAudit,
-                //         SubTotal : res.data.ClaimsDailyAuditCount[0].SubTotal,
-                //         VeriTotal : res.data.ClaimsDailyAuditCount[0].VeriTotal,
-                //         InBizstockTotal : res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
-                //         PenTotal : res.data.ClaimsDailyAuditCount[0].PenTotal,
-                //         RejTotal : res.data.ClaimsDailyAuditCount[0].RejTotal,
-                //         errTotal : res.data.ClaimsDailyAuditCount[0].errTotal,
-                //         tradingpartner: res.data.Trading_PartnerList,
-                //         totalFile : totalFile
-                //     })
-                // }
             }
             })
             .catch(err => {
@@ -184,30 +169,34 @@ export class ClaimProcessingSummary extends React.Component {
 
         data.forEach((d) => {
             var providerName = d.ProviderFirstName ? d.ProviderFirstName : '' + " " + d.ProviderLastName ? d.ProviderLastName : ''
-
             row.push(
                 <tr>
-                    <td>{d.ClaimID}</td>
-                    <td>{d.ClaimDate}</td>
-                    <td>{d.Claim_Amount}</td>
-                    <td>{d.ClaimStatus}</td>
-                    <td>{d.Subscriber_ID}</td>
-                    <td>{providerName ? providerName : ''}</td>
-
+                    <td className="list-item-style">{d.ClaimID}</td>
+                    <td className="list-item-style">{d.ClaimDate}</td>
+                    <td className="list-item-style">{d.Subscriber_ID}</td>
+                    <td className="list-item-style">{d.SubscriberLastName}</td>
+                    <td className="list-item-style">{d.SubscriberFirstName}</td>
+                    <td className="list-item-style">{d.ProviderLastName}</td>
+                    <td className="list-item-style">{d.ProviderFirstName}</td>
+                    <td className="list-item-style">{d.Claim_Amount}</td>
+                    <td className="list-item-style">{d.ClaimStatus}</td>
                 </tr>
             )
-        });
+        })
         return (
             <div>
-                <table className="table table-bordered">
+                <table className="table table-bordered claim-list">
                     <thead>
                         <tr className="table-head">
                             <td className="table-head-text"><small>Claim Id</small></td>
                             <td className="table-head-text"><small>Claim Date</small></td>
+                            <td className="table-head-text"><small>Subscriber Id</small></td>
+                            <td className="table-head-text"><small>Subscriber Last Name</small></td>
+                            <td className="table-head-text"><small>Subscriber First Name</small></td>
+                            <td className="table-head-text"><small>Provider Last Name</small></td>
+                            <td className="table-head-text"><small>Provider First Name</small></td>
                             <td className="table-head-text"><small>Claim Amount</small></td>
                             <td className="table-head-text"><small>Claim Status</small></td>
-                            <td className="table-head-text"><small>Subscriber Id</small></td>
-                            <td className="table-head-text"><small>Provider Name</small></td>
                         </tr>
                     </thead>
 
@@ -252,61 +241,70 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
+    getoptions() {
+        let row = []
+        this.state.tradingpartner.forEach(element => {
+            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
+
     renderTopBar() {
         return (
-            <div className="row">
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">State</div>
-                    <select className="form-control list-header-dashboard" id="state">
-                        <option value=""></option>
-                        <option value="1">California</option>
-                        <option value="2">Michigan</option>
-                        <option value="3">Florida</option>
-                        <option value="4">New York</option>
-                        <option value="5">Idaho</option>
-                        <option value="6">Ohio</option>
-                        <option value="7">Illinois</option>
-                        <option value="8">Texas</option>
-                        <option value="9">Mississippi</option>
-                        <option value="10">South Carolina</option>
-                        <option value="11">New Mexico</option>
-                        <option value="12">Puerto Rico</option>
-                        <option value="13">Washington</option>
-                        <option value="14">Utah</option>
-                        <option value="15">Wisconsin</option>
-                    </select>
-                </div>
+            <div className="form-style" id='filters'>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state">
+                            <option value=""></option>
+                            <option value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input className="form-control" type="text" />
 
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Trading Partner </div>
-                    <select className="form-control list-header-dashboard" id="TradingPartner"
-                        onChange={(event) => {
-                            this.onSelect(event, 'selectedTradingPartner')
-                        }}>
-                        <option value="select"></option>
-                        {/* {this.getoptions()} */}
-                    </select>
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Provider</div>
-                    <input className="form-control" type="text" />
-
-                </div>
-                <div className="form-group col-md-2">
-                    <div className="list-dashboard">Start Date</div>
-                    <DatePicker
-                        className="datepicker"
-                        selected={this.state.startDate ? new Date(this.state.startDate) : ''}
-                        onChange={this.handleStartChange}
-                    />
-                </div>
-                <div className="form-group col-md-2">
-                    <div className="list-dashboard">End Date</div>
-                    <DatePicker
-                        className="datepicker"
-                        selected={this.state.endDate ? new Date(this.state.endDate) : ''}
-                        onChange={this.handleEndChange}
-                    />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            onChange={this.handleStartChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
             </div>
         )
@@ -336,36 +334,50 @@ export class ClaimProcessingSummary extends React.Component {
 
     renderStats() {
         return (
-            <div className="row">
-                {/* <div className="col-2">
-                    <div className="center-align">Total Files</div>
-                    <div className="center-align"><a href="#" className="blue bold-text summary-values" 
-                    ><Link to={'/' + Strings.claimDetails + '/n/n/n/n'}>{this.state.totalFile}</Link></a></div>
-                </div> */}
-                <div className="col-2">
-                    <div className="center-align">Total Claims</div>
-            <div className="blue bold-text summary-values center-align">{this.state.TotalClaims}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">Accepted</div>
-            <div className="blue bold-text summary-values center-align">{this.state.Accepted}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">Rejected</div>
-            <div className="blue bold-text summary-values center-align">{this.state.Rejected}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">Sent to QNXT</div>
-            <div className="blue bold-text summary-values center-align">{this.state.TotalSentToQNXT}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">999</div>
-                    <div className="green bold-text summary-values center-align">{this.state.Total999}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">277 CA</div>
-            <div className="red bold-text summary-values center-align">{this.state.Total277CA}</div>
-                </div>
+            <div className="row padding-left">
+                {/* { 
+                    this.state.TotalClaims ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Total Claims</div>
+                        <div className="summary-title">{this.state.TotalClaims}</div>
+                    </div> : null 
+                } */}
+                { 
+                    this.state.Accepted ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Accepted</div>
+                        <div className="summary-title">{this.state.Accepted}</div>
+                    </div> : null 
+                }
+                { 
+                    this.state.Rejected ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Rejected</div>
+                        <div className="summary-title">{this.state.Rejected}</div>
+                    </div> : null 
+                }
+                { 
+                    this.state.TotalSentToQNXT ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Sent to QNXT</div>
+                        <div className="summary-title">{this.state.TotalSentToQNXT}</div>
+                    </div> : null 
+                }
+
+                { 
+                    this.state.Total999 ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">999</div>
+                        <div className="summary-title">{this.state.Total999}</div>
+                    </div> : null 
+                }
+                { 
+                    this.state.Total277CA ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">277 CA</div>
+                        <div className="summary-title">{this.state.Total277CA}</div>
+                    </div> : null 
+                }
             </div>
         )
     }

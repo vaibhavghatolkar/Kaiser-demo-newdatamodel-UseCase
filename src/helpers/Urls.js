@@ -12,6 +12,8 @@ const Urls = {
     enrollment : base_url + '/enrollment',
     enrollment_details : base_url + '/enrollment_details',
     full_file : base_url + '/full_file',
+    real_time_claim : base_url + '/real_time_claim',
+    claim_processing : base_url + '/claim_processing',
 }
 
 export default Urls;
