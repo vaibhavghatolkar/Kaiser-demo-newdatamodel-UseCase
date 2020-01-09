@@ -326,7 +326,7 @@ export class RealTimeDashboard extends React.Component {
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
             this.setState({
                 [key] : ''
             })
@@ -402,12 +402,12 @@ export class RealTimeDashboard extends React.Component {
                                 if(selected_val == 'Last week'){
                                     day = 7
                                     chartType = 'Datewise'
-                                } else if(selected_val == 'Last month'){
+                                } else if(selected_val == 'Last 30 days'){
                                     day = 30
                                     chartType = 'Weekwise'
-                                } else if(selected_val == 'Last 3 months'){
+                                } else if(selected_val == 'Last 90 days'){
                                     day = 90
-                                } else if(selected_val == 'Last 6 months'){
+                                } else if(selected_val == 'Last 180 days'){
                                     day = 180
                                 } else if(selected_val == 'Last year'){
                                     day = 365
@@ -434,9 +434,9 @@ export class RealTimeDashboard extends React.Component {
                             >
                             <option  selected="selected" value=""></option>
                             <option value="1">Last week</option>
-                            <option value="2">Last month</option>
-                            <option value="2">Last 3 months</option>
-                            <option value="2">Last 6 months</option>
+                            <option value="2">Last 30 days</option>
+                            <option value="2">Last 60 days</option>
+                            <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>
                         </select>
                     </div>

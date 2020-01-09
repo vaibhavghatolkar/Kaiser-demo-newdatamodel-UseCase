@@ -1,114 +1,82 @@
-import React from 'react';
-import '../../Files/files-styles.css';
+import React from 'react'
+import '../../Claims/Dashboard/styles.css'
+import '../../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Urls from '../../../../helpers/Urls';
-import { getDetails } from '../../../../helpers/getDetails';
+import { Pie } from 'react-chartjs-2';
 
-export class ClaimDetails837 extends React.Component {
-
-    constructor(props) {
+var val = ''
+export class ClaimDetails837 extends React.Component{
+    
+    constructor(props){
         super(props);
-        console.log('hello these are the props', props)
-        let flag = props.match.params.flag
-        if(flag == 'accept'){
-            flag = 'Accepted Claims'
-        } else if(flag == 'reject'){
-            flag = 'Rejected Claims'
-        } else {
-            flag = 'Other'
-        }
 
-        this.state = {
-            intakeClaims: [],
-            page: 1,
-            initialPage: 0,
-            lineData: [],
-            file: [],
+        this.state={
+            claimsList : [],
+            summaryList : [],
             showDetails: false,
-            memberInfo: {},
-            subscriberNo : '',
-            selectedTradingPartner: props.match.params && props.match.params.selectedTradingPartner != 'n'? props.match.params.selectedTradingPartner : '',
-            enrollment_type : '',
-            plan_code : '',
-            startDate: props.match.params && props.match.params.startDate != 'n' ? props.match.params.startDate : '',
-            endDate: props.match.params && props.match.params.endDate != 'n' ? props.match.params.endDate : '',
-            flag: flag,
-            coverage_data: [],
+            files_list : [],
             tradingpartner: [],
-            ICDCode: '',
-            ClaimExt: '',
-            SelectFileID: '',
-            AccidentDate: '',
-            Icdcode: [],
-            checkError: '',
-            selectedICdCode:'',
+            errorList: [],
+            eventLog: [],
+            claimDetails: [],
+            claimLineDetails: [],
+            Transaction_Compliance: '',
+
+            State: props.match.params.State != 'n' ? props.match.params.State : '',
+            status: props.match.params.status != 'n' ? props.match.params.status : '',
+            startDate: props.match.params.startDate != 'n' ? props.match.params.startDate : '',
+            endDate: props.match.params.endDate != 'n' ? props.match.params.endDate : '',
+            transactionId: props.match.params.transactionId != 'n' ? props.match.params.transactionId : '',
+            errorcode: '',
+            
+            selectedTradingPartner: props.match.params.selectedTradingPartner != 'n' ? props.match.params.selectedTradingPartner : '',
+            page: 1,
+            count : 0,
+            apiflag: props.match.params.apiflag,
+
+            pieArray : [],
+            labelArray : [],
         }
 
-        this.getData = this.getData.bind(this)
-        this.getClaimData = this.getClaimData.bind(this)
-        this.renderList = this.renderList.bind(this)
-        this.sortData = this.sortData.bind(this)
-        this.handleClick = this.handleClick.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
-        this.Saved = this.Saved.bind(this)
-        this.getICDCode = this.getICDCode.bind(this)
-        this.ChangeVal = this.ChangeVal.bind(this)
-        this.ClaimExtNm = this.ClaimExtNm.bind(this)
     }
 
-    componentDidMount() {
-        this.getData()
-        this.getTradingData()
-        this.getICDCode()  
+    componentWillReceiveProps(){
+        setTimeout(() => {
+            this.getTransactions()
+        }, 50);
     }
 
-    getTradingData(){
-        getDetails("Claim837")
-        .then((tradingpartner) => {
-            if(tradingpartner && tradingpartner.length > 0){
-                this.setState({
-                    tradingpartner: tradingpartner
-                })
+    componentDidMount(){
+        this.getTransactions()
+    }
+
+    getTransactions(){
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+      
+        let query = `{            
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
+                RecCount
+                ClaimID
+                ClaimDate
+                Subscriber_ID
+                Claim_Amount
+                ClaimStatus
+                ProviderLastName
+                ProviderFirstName
+                SubscriberLastName
+                SubscriberFirstName
+                adjudication_status
+                ClaimLevelErrors
             }
-        }).catch(error => {
-            console.log(error)
-        })
-
-        this.getData();
-    }
-
-    
-    ClaimExtNm(event, key) {
-    
-        this.setState({
-            ClaimExt: event.target.value
-            
-        });
-    }
-    ChangeVal(event, key){
-        this.state.selectedICdCode=  event.target.options[event.target.selectedIndex].text;
-   
-     }
-    getData() {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : ''
-
-        let query = '{ ClaimSubCountDataFileSummary(submitter:"'+this.state.selectedTradingPartner+'",fromDt:"'+startDate+'",ToDt:"'+endDate+'") { FileID FileName FileDate FSubmitter_N103 FReceiver_N103 FExtraField2 BillingProviderLastName BillingProviderFirstName CreateDateTime CountData } }'
-        if(this.state.flag == 'Accepted Claims'){
-            query = '{ ClaimAccCountDataFileSummary(submitter:"'+this.state.selectedTradingPartner+'",fromDt:"'+startDate+'",ToDt:"'+endDate+'") { FileID FileName FileDate FSubmitter_N103 FReceiver_N103 FExtraField2 BillingProviderLastName BillingProviderFirstName CreateDateTime CountData } }'
-        } else if (this.state.flag == 'Rejected Claims'){
-            query = '{ ClaimRejCountDataFileSummary(submitter:"'+this.state.selectedTradingPartner+'",fromDt:"'+startDate+'",ToDt:"'+endDate+'") { FileID FileName FileDate FSubmitter_N103 FReceiver_N103 FExtraField2 BillingProviderLastName BillingProviderFirstName CreateDateTime CountData } }'
-        }
-
+        }`
         console.log(query)
-
-        fetch(Urls.claim_details, {
+        fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -117,437 +85,132 @@ export class ClaimDetails837 extends React.Component {
             body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
-            .then(r => {
-                let data = []
-                
-                if(this.state.flag == 'Accepted Claims'){
-                    data = r.data.ClaimAccCountDataFileSummary
-                } else if (this.state.flag == 'Rejected Claims'){
-                    data = r.data.ClaimRejCountDataFileSummary
-                } else {
-                    data = r.data.ClaimSubCountDataFileSummary
+            .then(res => {
+                var data = res.data.Claim837RTProcessingSummary
+                if(data && data.length > 0){
+                let recCount = data[0].RecCount ? Number(data[0].RecCount) : 0
+                let TotalClaims = data[0].RecCount
+                let count = 0
+
+                try {
+                    count = recCount / 10
+                    count = count.floor(count)
+                    if (recCount % 10 > 0) {
+                        count = count + 1
+                    }
+                } catch (error) {
+
                 }
-                this.setState({
-                    intakeClaims: data
-                })
-
-                setTimeout(() => {
-                    this.sortData()
-                }, 50);
-            })
-            .then(data => console.log('data returned:', data));
-    }
-
-    getClaimData(FileID, ClaimID) {
-        fetch(Urls.claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                query: "{ IntakeClaimLineDataFileIDClaimID(FileID:\"" + FileID + "\",ClaimID:\"" + ClaimID + "\"){ ClaimID LX SVD02 ServiceDate SVD03 SVD05 ErrorCode type_of_adjustment adjustment RemainigAmt RemainingPatientLiability } }"
-            })
-        })
-            .then(res => res.json())
-            .then(r => {
-                console.log("Here is the data hurray : " + JSON.stringify(r))
-                this.setState({
-                    lineData: r.data.IntakeClaimLineDataFileIDClaimID
-                })
-            })
-            .then(data => console.log('data returned:', data));
-    }
-    getICDCode() {
-        let query = `{
-            ClaimsICDCODE {
-                SeqId
-                ICD_CODE
-                Year
-                ExtraField1
-              }
-          }
-          `
-
-
-        fetch(Urls.claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(r => {
+                console.log(count)
 
                 this.setState({
-                    Icdcode:"",
-                    Icdcode: r.data.ClaimsICDCODE
+                    Claim837RTProcessingSummary: data,
+                    recCount: count,
+                    TotalClaims: TotalClaims,
                 })
-
-            })
-            .then(data => console.log('data returned:', data));
-    }
-    onClick(fileId){
-        let query = "{ IntakeClaimDatatblwithFile(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
-        if(this.state.flag == 'Accepted Claims'){
-            query = "{ ClaimAccCountData(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
-        } else if(this.state.flag == 'Rejected Claims'){
-            query = "{ ClaimRejCountData(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
-        }
-        console.log("Query : " + query)
-        fetch(Urls.claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(r => {
-                let data = []
-                if(this.state.flag == 'Accepted Claims'){
-                    data = r.data.ClaimAccCountData
-                } else if(this.state.flag == 'Rejected Claims'){
-                    data = r.data.ClaimRejCountData
-                } else {
-                    data = r.data.IntakeClaimDatatblwithFile
-                }
-                this.sortData(fileId, data)
-            })
-            .then(data => console.log('data returned:', data));
-    }
-
-    sortData(fileId, data) {
-        let files = {}
-        let intakeClaims = this.state.intakeClaims
-
-        if(fileId && data){
-            files = this.state.claimsObj
-            if (fileId in files) {
-                files[fileId].array = []
-                data.forEach(item => {
-                    files[fileId].array.push(item)
-                });
             }
-        } else {
-            intakeClaims.forEach(item => {
-                files[item.FileID] = {
-                    value: item,
-                    array: []
-                }
             })
-        }
-
-        this.setState({
-            claimsObj: files
-        })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-    handleStartChange(date) {
-        this.setState({
-            showDetails: false,
-            startDate: date
-        });
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    };
-
-    handleEndChange(date) {
-        this.setState({
-            showDetails: false,
-            endDate: date
-        });
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    }
-
-    getFileData(fileId){
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : ''
-
-        let query = '{ FileInTake(fileId:'+fileId+', submitter:"'+this.state.selectedTradingPartner+'",fromDt:"'+startDate+'",ToDt:"'+endDate+'") { FileName, FileDate, Submitter_N103, Receiver_N103, Created_Date, FileID } }'
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(r => {
-                let data = []
-                data = r.data.FileInTake[0]
-
-                let file = [
-                    {key : "File Name", value : data.FileName},
-                    {key : "File Date", value : moment(data.FileDate).format('MM/DD/YYYY hh:mm A')},
-                    {key : "Sender", value : data.Submitter_N103},
-                    {key : "Receiver", value : data.Receiver_N103},
-                    {key : "Created Date", value : data.Created_Date},
-                ]
-
-                this.setState({
-                    fileId: data.FileID,
-                    file: file
-                })
-            })
-            .then(data => console.log('data returned:', data));
-
-    }
-    getClaimTableData(fileId, claimId) {
-       
-        this.getICDCode();
-        let query = '{ IntakeClaimData(fileId: ' + fileId + ', ClaimID: ' + '"' + claimId + '"' + ') { ClaimTMTrackingID SubscriberFirstName SubscriberLastName AdmissionDate Claim_Amount BillingProviderFirstName BillingProviderLastName BillingProviderAddress BillingProviderCity_State_Zip ClaimStatus DiagnosisCodes SeqID ClaimID ClaimLevelErrors  ClaimExtNmbr} }'
-        console.log(query);
-        fetch(Urls.claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(r => {
-                let data = []
-                data = r.data.IntakeClaimData[0]
-                this.state.ICDCode = "";
-                this.state.ICDCode = data.ClaimLevelErrors;
-                var Accidentnm = '';
-                var date = '';
-                var IcdCode = '';
-                this.checkError = data.ClaimLevelErrors;
-                if (data.ClaimLevelErrors == "Accident Date Not Present") {
-                    Accidentnm = "Accident Date";
-                    date = <input onChange={(e) => this.ClaimExtNm(e)} type='text' style={{ width: "80px" }}></input>
-                }
-                else {
-                    Accidentnm = "Accident Date";
-                    date = data.ClaimExtNmbr;
-                }
-                if (data.ClaimLevelErrors == "ICD Code not found") {
-                    
-                    IcdCode = <select id="fao1"  onChange={(e) => this.ChangeVal(e)}>
-                        <option value="0" >Select ICD Code</option>
-                        {this.getIcdcodeoptions()}
-                    </select>
-                }
-                else {
-                    IcdCode = data.DiagnosisCodes;
-                }
-                this.state.SelectFileID = data.SeqID;
-            
-                let claimsDetails = [
-                    { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
-                    { key: 'SubscriberFirstName', value: data.SubscriberFirstName },
-                    { key: 'SubscriberLastName', value: data.SubscriberLastName },
-                    { key: 'AdmissionDate', value: data.AdmissionDate },
-                    { key: 'Claim_Amount', value: data.Claim_Amount },
-                    { key: 'BillingProvider', value: (data.BillingProviderFirstName ? data.BillingProviderFirstName : '') + ' ' + (data.BillingProviderLastName ? data.BillingProviderLastName : '') },
-                    { key: 'BillingProviderAddress', value: (data.BillingProviderAddress ? data.BillingProviderAddress : '') + ' ' + (data.BillingProviderCity_State_Zip ? data.BillingProviderCity_State_Zip : '') },
-                    { key: 'ClaimStatus', value: data.ClaimStatus },
-                    { key: 'ICD Code', value: IcdCode },
-                    { key: Accidentnm, value: date },
-                ]
-
-                this.setState({
-                    claimId: data.ClaimID,
-                    claimsDetails: claimsDetails
-                })
-            })
-            .then(data => console.log('data returned:', data));
-    }
-    getIcdcodeoptions() {
-        let row = []
-        this.state.Icdcode.forEach(element => {
-             
-            row.push(<option value="">{element.ICD_CODE}</option>)
-        })
-        return row
-    }
-    handleClick(fileId, subscriber, type) {
-        let query = '{ IntakeClaimLineDataFileIDClaimID(FileID: '+'"'+fileId +'"'+', ClaimID:'+'"'+subscriber +'"'+') { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID Subscriber_ID Member_ID ExtSubscriber_ID ICD9ICD10 ProcNo DiagnosisXRef DiagnosisCodes PatientWeight Units UnitMeasure Proc_Amount PatientPaid NetBalance Adjust InsuranceBalance DateofService DateofServiceEnd LineStatus OtherID ExternalCorrelationToken AmbulanceInfo XRayInfo TransportInfo ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HCP01_PricingMethodology HCP02_Amount HCP03 HCP04 HCP05_Rate HCP06 HCP07 HCP08 HCP12_Quantity HCP13 HCP14 HCP15_ExceptionCode AttendingProviderNameLastOrOrganizationName AttendingProviderNameFirst NM108_AttendingProvider NM109_AttendingProvider AttendingProviderCode AttendingProvider_PRV02 AttendingProvider_PRV03 AttendingProvider_REF01 AttendingProvider_REF02 OperatingPhysicianNameLastOrOrganizationName OperatingPhysicianNameFirst NM108_OperatingPhysician NM109_OperatingPhysician OperatingPhysician_REF01 OperatingPhysician_REF02 OtherOperatingPhysicianNameLastOrOrganizationName OtherOperatingPhysicianNameFirst NM108_OtherOperatingPhysician NM109_OtherOperatingPhysician OtherOperatingPhysician_REF01 OtherOperatingPhysician_REF02 RenderingPhysicianNameLastOrOrganizationName RenderingPhysicianNameFirst NM108_RenderingPhysician NM109_RenderingPhysician RenderingPhysician_REF01 RenderingPhysician_REF02 ServiceFacilityLocationName ServiceFacilityLocation_NM102 ServiceFacilityLocation_NM108 ServiceFacilityLocation_NM109 ServiceFacilityLocationAddress ServiceFacilityLocation_City_State_Zip ServiceFacilityLocation_REF01 ServiceFacilityLocation_REF02 ReferringProviderNameLastOrOrganizationName ReferringProviderNameFirst NM108_ReferringProvider NM109_ReferringProvider ReferringProvider_REF01 ReferringProvider_REF02 SBR01_PayerResponsibilityCode SBR02 SBR03 SBR04 SBR09 CAS01_ClaimAdjustMentGroupCode CAS02 CAS03 CAS04 CAS05 CAS06 CAS07 CAS08 CAS09 CAS10 CAS11 CAS12 CAS13 CAS14 CAS15 CAS16 CAS17 CAS18 CAS19 AMT01_PayerPaidAmmount AMT02_Amount AMT01_RemainingPatientLiability AMT02_RPAmount AMT01_NonCoveredChargeAmmount AMT02_NCAmount OtherInsuranceCoverage_OI03 OtherInsuranceCoverage_OI06 MIA01 MIA02 MIA03 MIA04 MIA05 MIA06 MIA07 MIA08 MIA09 MIA10 MOA01 MOA02 MOA03 MOA04 MOA05 MOA06 MOA07 MOA08 MOA09 MOA10 OtherSubscriberNameLastOrOrganizationName OtherSubscriberNameFirst OtherSubscriber_NM102 NM108_OtherSubscriber NM109_OtherSubscriber OtherSubscriberAddress OtherSubscriberCityStateZip OtherSubscriber_REF01 OtherSubscriber_RF02 OtherPayerNameLastOrOrganizationName OtherPayerNameFirst OtherPayer_NM102 NM108_OtherPayer NM109_OtherPayer OtherPayerAddress OtherPayerCityStateZip ClaimCheckOrRemittanceDate LX SV201 SV202 SV202_1 SV202_2 SV202_3 SV202_4 SV202_5 SV202_6 SV202_7 SV203 SV204 SV205 SV207 LinSupplimentalInfo_PWK01 PWK02 PWK05 ServiceDate LIN02_DrugIdentification LIN03 CTP04_DrugQuantity CTP05 CTP05_1 SVD01 SVD02 SVD03 SVD03_1 SVD03_2 SVD03_3 SVD05 LineCheckOrRemittanceDate RemainingPatientLiability ErrorCode ClaimLineLevelErrors Field1 Field2 Field3 Field4 adjustment type_of_adjustment RemainigAmt } }'
-        fetch(Urls.claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(r => {
-                let data = []
-                let coverage_data = []
-                data = r.data.IntakeClaimLineDataFileIDClaimID
-                data.forEach(element => {
-                    coverage_data.push({
-                        'ClaimID': element.ClaimID,
-                        'LX' : element.LX,
-                        'SVD02' : element.SVD02,
-                        'ServiceDate' : element.ServiceDate,
-                        'SVD03' : element.SVD03,
-                        'SVD05' : element.SVD05
-                    })
-                });
-
-                this.setState({
-                    showDetails: true,
-                    coverage_data: coverage_data
-                })
-            })
-            .then(data => console.log('data returned:', data));
-    }
-
-    renderTableHeader() {
-        return (
+    renderSearchBar(){
+        return(
             <div className="row">
-                <div className="col-4 col-header">File Name</div>
-                <div className="col-2 col-header">File Date</div>
-                <div className="col-3 col-header">File Status</div>
-                <div className="col-3 col-header">Submitter</div>
-                {/* <div className="col-2 col-header">Status</div> */}
+                <input type="text" name="name" className="input-style" placeholder="Search Claim"/>
             </div>
         )
     }
 
-    renderClaimsHeader() {
-        return (
-            <tr className="table-head claims-text">
-                <td className="table-head-text">Claim ID</td>
-                <td className="table-head-text">Claim Status</td>
-                <td className="table-head-text list-item-style">Current State</td>
-                <td className="table-head-text list-item-style">Claim Amount</td>
-                <td className="table-head-text list-item-style">Error Code</td>
-            </tr>
-        )
+    showDetails(){
+        this.setState({
+            showDetails: true
+        })
     }
 
-    renderCoverageHeader() {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text small-font">Claim ID</td>
-                <td className="table-head-text small-font">Service Line Count</td>
-                <td className="table-head-text  small-font list-item-style">Provider Paid Amount</td>
-                <td className="table-head-text  small-font list-item-style">Service Date</td>
-                <td className="table-head-text  small-font list-item-style">Procedure Date</td>
-                <td className="table-head-text  small-font list-item-style">Paid Service Unit Count</td>
-            </tr>
-        )
-    }
-
-    handlePageClick(data, fileId){
+    handlePageClick(data){
         let page = data.selected + 1
         this.setState({
             page : page
         })
 
         setTimeout(() => {
-            this.onClick(fileId)
+            this.getTransactions()
         }, 50);
     }
 
-    renderList() {
-        let row = []
-        let col = []
-        let data = this.state.claimsObj;
-        let count = 0
-        try {
-            count = data[Object.keys(data)[0]].value.CountData / 10
-            if(data[Object.keys(data)[0]].value.dcount % 10 > 0){
-                count = count + 1
+    getDetails(claimId){
+        let url = Urls.real_time_claim_details
+        let query = `{
+            Claim837RTDetails(ClaimID:"`+claimId+`") {
+              ClaimID
+              ClaimDate
+              ClaimTMTrackingID
+              Subscriber_ID
+              Claim_Amount
+              ClaimStatus
+              ProviderLastName
+              ProviderFirstName
+              SubscriberLastName
+              SubscriberFirstName
+              adjudication_status
+              ClaimLevelErrors
+              AdmissionDate
+              BillingProviderAddress
+              BillingProviderCity_State_Zip
+              ICDCode
+              AccidentDate
             }
-        } catch (error) {
-            
-        }
+            Claim837RTLineDetails(ClaimID:"`+claimId+`") {
+              ClaimID
+              ServiceLineCount
+              ProviderPaidAmount
+              ServiceDate
+              ProcedureDate
+              PaidServiceUnitCount
+            }
+          }
+          `
 
-        Object.keys(data).map((keys) => {
-            row.push(
-                <div className="row">
-                    <div className="col-4 col-style"><a href={"#" + data[keys].value.FileID} onClick={() => {this.onClick(data[keys].value.FileID)}} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('h:m a')}</div>
-                    <div className="col-3 col-style">{data[keys].value.FExtraField2}</div>
-                    <div className="col-3 col-style">{data[keys].value.FSubmitter_N103}</div>
-                </div>
-            )
+        console.log('query ', query)
 
-            {
-                col = []
-                data[keys].array.forEach(item => {
-                    col.push(
-                        <tr>
-                            <td className="list-item-style"><a href="#" style={{ color: "#6AA2B8" }} 
-                                onClick={() => { 
-                                    this.setState({
-                                        submitter: item.FSubmitter_N103,
-                                        receiver: item.FReceiver_N103,
-                                    })
-
-                                    setTimeout(() => {
-                                        this.handleClick(keys, item.ClaimID, 2)
-                                        this.getClaimTableData(keys, item.ClaimID, 2)
-                                        this.getFileData(keys)
-                                    }, 50);
-                                }}>{item.ClaimID}</a></td>
-                            <td className="list-item-style ">{item.ClaimStatus}</td>
-                            <td className="list-item-style ">{item.adjudication_status}</td>
-                            <td className="list-item-style ">{item.Claim_Amount}</td>
-                            <td className="list-item-style ">{item.ClaimLevelErrors}</td>
-                        </tr>
-                    )
+        fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0){
+                let data = res.data.Claim837RTDetails[0]
+                let claimDetails = 
+                [
+                    { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
+                    { key: 'Claim Date', value: data.ClaimDate },
+                    { key: 'Subscriber first name', value: data.SubscriberFirstName },
+                    { key: 'Subscriber last name', value: data.SubscriberLastName },
+                    { key: 'Admission date', value: data.AdmissionDate },
+                    { key: 'Claim amount', value: data.Claim_Amount },
+                    { key: 'Provider address', value: data.BillingProviderAddress },
+                    { key: 'Claim Status', value: data.ClaimStatus },
+                    { key: 'ICD Code', value: data.ICDCode },
+                    { key: 'Accident Date', value: data.AccidentDate }
+                ]
+                this.setState({
+                    showDetails: true,
+                    claimDetails : claimDetails,
+                    claimLineDetails : res.data.Claim837RTLineDetails,
                 })
             }
-
-            row.push(
-                <div id={keys} className="collapse">
-                    <table id="" className="table table-bordered claim-details">
-                        {this.renderClaimsHeader()}
-                        {col}
-                    </table>
-                    <ReactPaginate
-                        previousLabel={'previous'}
-                        nextLabel={'next'}
-                        breakLabel={'...'}
-                        breakClassName={'page-link'}
-                        initialPage={this.state.initialPage}
-                        pageCount={count}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={(page) => {this.handlePageClick(page, keys)}}
-                        containerClassName={'pagination'}
-                        pageClassName={'page-item'}
-                        previousClassName={'page-link'}
-                        nextClassName={'page-link'}
-                        pageLinkClassName={'page-link'}
-                        subContainerClassName={'pages pagination'}
-                        activeClassName={'active'}
-                        />
-                    
-                </div>
-            ) 
+        })
+        .catch(err => {
+            console.log(err)
         });
-
-        return (
-            <div>
-                {this.renderTableHeader()}
-                {row}
-            </div>
-        );
-    }
-
-    renderHeader(header) {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text">{header}</td>
-            </tr>
-        )
-    }
+    } 
 
     renderRows(dictionary) {
         let row = []
@@ -579,174 +242,183 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
-    renderTable() {
+    renderTransactions(){
         let row = []
-        const data = this.state.coverage_data;
+        const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
 
-        data.forEach((item) => {
+        data.forEach((d) => {
             row.push(
                 <tr>
-                    <td className="claim-line-data">{item.ClaimID}</td>
-                    <td className="claim-line-data">{item.LX}</td>
-                    <td className="claim-line-data">{item.SVD02}</td>
-                    <td className="claim-line-data">{item.ServiceDate}</td>
-                    <td className="claim-line-data">{item.SVD03}</td>
-                    <td className="claim-line-data">{item.SVD05}</td>
+                    <td><a href="#" onClick={() => {
+                        this.setState({
+                            claimId : d.ClaimID
+                        }, () => {
+                            this.getDetails(d.ClaimID)
+                        })
+                    }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
+                    <td>{d.ClaimDate}</td>
+                    <td>{d.Claim_Amount}</td>
+                    <td>{d.ClaimStatus}</td>
+                    <td>{d.adjudication_status}</td>
+                    <td>{d.ClaimLevelErrors}</td>
                 </tr>
             )
-        });
-
-        return (
-            <tbody>
-                {row}
-            </tbody>
+        })
+        return(
+            <div>
+                <table className="table table-bordered claim-list">
+                    <thead>
+                        <tr className="table-head" style={{fontSize:"9px"}}>
+                            <td className="table-head-text">Claim Id</td>
+                            <td className="table-head-text list-item-style">Claim Date</td>
+                            <td className="table-head-text list-item-style">Claim Amount</td>
+                            <td className="table-head-text list-item-style">Claim Status</td>
+                            <td className="table-head-text list-item-style">Current State</td>
+                            <td className="table-head-text list-item-style">Error Code</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.recCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => {this.handlePageClick(page)}}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                    />
+            </div>
         )
     }
-    renderButton() {
-        if (this.state.ICDCode != null) {
-            return (
 
-                <div>
-
-                    <button onClick={this.Saved} style={{ backgroundColor: "#139DC9", color: "#FFFFFF", marginLeft: "20px" }}>Save</button>
-
+    renderDetails(flag){
+        return(
+            <div className="row">
+                {this.state.status != 'n' ? <div className="col-1"></div> : null}
+                <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
+                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
+                    <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
                 </div>
-            )
-        }
-
-    }
-
-    Saved() {
-   
-      
-        if (this.checkError == "Accident Date Not Present") {
-            if(this.state.ClaimExt!="")
-            {
-            var query = 'mutation{ updateAccidentDate(SeqID :' + this.state.SelectFileID + ' ' + 'AccidentDate :"' + this.state.ClaimExt + '"' +
-                ')' +
-                '}'
-            console.log(query);
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
-
-                })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateAccidentDate),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
-
-                );
-            }
-
-        }
-        else if (this.checkError == "ICD Code not found") {
-          if(this.state.selectedICdCode!="")
-          {
-            var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
-                ')' +
-                '}'
-            console.log(query);
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
-
-                })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateICDCode),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
-
-                );
-
-        }
-    }
-
-    }
-    renderSummary() {
-        return (
-            <div>
-                {
-                    this.state.file && this.state.file.length > 0 ?
-                        <table className="table claim-Details">
-                            {this.renderHeader('File #' + this.state.fileId)}
-                            {this.renderRows(this.state.file)}
-                        </table> : null
-                }
-                {
-                    this.state.claimsDetails ?
-                        <table className="table claim-Details">
-                            {this.renderHeader('Claim #'+ this.state.claimId)}
-                            {this.renderRows(this.state.claimsDetails)}
-                            <br></br>
-                            {this.renderButton()}
-                        </table> : null
-                }
-                {
-                    this.state.coverage_data.length > 0 ?
-                        <div>
-                            <div className="table-head header-style claim-list">Claim Line Data</div>
-                            <table className="table-bordered body-style">
-                                {this.renderCoverageHeader()}
-                                {this.renderTable()}
-                             
-                            </table> 
-                        </div> : null
-                }
             </div>
-        );
+        )
     }
 
-    getoptions(){
+    getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
-            row.push(<option selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? 'selected' : ''} value="">{element.Trading_Partner_Name}</option>)
+            row.push(<option value="" selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""}>{element.Trading_Partner_Name}</option>)
         })
         return row
     }
 
+    getErrorOptions(){
+        let row = []
+        this.state.errorList.forEach(element => {
+            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
+        })
+        return row
+    }
+    
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
             this.setState({
-                showDetails: false,
-                [key] : ''
+                [key] : '',
+                showDetails : false
             })
         } else {
             this.setState({
-                showDetails: false,
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key] : event.target.options[event.target.selectedIndex].text,
+                showDetails : false
             })
         }
 
         setTimeout(() => {
-            this.getData()
+            this.getTransactions()
         }, 50);
     }
 
-    renderTopbar(){
+    handleStartChange(date) {
+        this.setState({
+            startDate: date,
+            showDetails : false
+        });
+
+        setTimeout(() => {
+            this.getTransactions()
+        }, 50);
+    }
+
+    handleEndChange(date) {
+        this.setState({
+            endDate: date,
+            showDetails : false
+        });
+
+        setTimeout(() => {
+            this.getTransactions()
+        }, 50);
+    }
+
+    renderPieChart(){
+        const data = {
+            labels: this.state.labelArray,
+            datasets: [{
+                data: this.state.pieArray,
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DCA15',
+                    '#03d9c6',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DCA15',
+                    '#03d9c6',
+                ]
+            }],
+            flag: ''
+        };
         return(
-            <div className="row">
+            <div>
+                <Pie data={data}
+                    options={{
+                        elements: {
+                            arc: {
+                                borderWidth: 0
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }}
+                    width={80}
+                    height={40} />
+            </div>
+        )
+    }
+
+    renderFilters(){
+        return(
+            <div className="form-style" id='filters'>
+            <div className="form-row">
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select State</div>
-                    <select className="form-control list-header-dashboard" id="state">
-                        <option value="">Select State</option>
-                        <option selected="selected" value="1">California</option>
+                    <div className="list-dashboard">State</div>
+                    <select className="form-control list-dashboard" id="state">
+                        <option value=""></option>
+                        <option value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
                         <option value="4">New York</option>
@@ -763,64 +435,112 @@ export class ClaimDetails837 extends React.Component {
                         <option value="15">Wisconsin</option>
                     </select>
                 </div>
+                <div className="form-group col-2">
+                    <div className="list-dashboard">Provider</div>
+                    <input className="form-control" type="text" />
 
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select Trading Partner </div>
-                    <select className="form-control list-header-dashboard" id="TradingPartner"
-                        onChange={(event) => {
-                            this.onSelect(event, 'selectedTradingPartner')
-                        }}>
-                        <option value="select">Select Trading Partner</option>
-                        {this.getoptions()}
-                    </select>
                 </div>
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select Provider Name</div>
-                    <select className="form-control list-header-dashboard" id="option">
-                        <option value="">Select Provider Name</option>
-                        <option selected="selected" value="1">Provider Name 1</option>
-                        <option value="2">Provider Name 2</option>
-                    </select>
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Start Date</div>
-                    <DatePicker className="datepicker form-control list-header-dashboard"
-                        selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD')) : ''}
+                    <div className="list-dashboard">Start Date</div>
+                    <DatePicker
+                        className="form-control list-header-dashboard"
+                        selected={this.state.startDate ? new Date(this.state.startDate) : ''}
                         onChange={this.handleStartChange}
                     />
                 </div>
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">End Date</div>
-                    <DatePicker className="datepicker form-control list-header-dashboard"
-                        selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD')) : ''}
+                    <div className="list-dashboard">End Date</div>
+                    <DatePicker
+                        className="form-control list-header-dashboard"
+                        selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                         onChange={this.handleEndChange}
                     />
+                </div>
+                <div className="form-group col-2">
+                    <div className="list-dashboard">Submitter</div>
+                    <select className="form-control list-dashboard" id="TradingPartner"
+                        onChange={(event) => {
+                            this.onSelect(event, 'selectedTradingPartner')
+                        }}>
+                        <option value="select"></option>
+                        {this.getoptions()}
+                    </select>
+                </div>
+            </div>
+        </div>
+        )
+    }
+
+    renderClaimDetails(){
+        let row = []
+        const data = this.state.claimLineDetails ? this.state.claimLineDetails : []
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td>{d.ClaimID}</td>
+                    <td>{d.ServiceLineCount}</td>
+                    <td>{d.ProviderPaidAmount}</td>
+                    <td>{d.ServiceDate}</td>
+                    <td>{d.ProcedureDate}</td>
+                    <td>{d.PaidServiceUnitCount}</td>
+                </tr>
+            )
+        })
+        return(
+            <div className="row">
+                <div className="col-12">
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim line data</a></div>
+                    <div id={'event'}>
+                        <table className="table table-bordered background-color">
+                            <thead>
+                                <tr className="table-head" style={{fontSize:"9px"}}>
+                                    <td className="table-head-text list-item-style">Claim Id</td>
+                                    <td className="table-head-text list-item-style">Service line count</td>
+                                    <td className="table-head-text list-item-style">Provider paid amount</td>
+                                    <td className="table-head-text list-item-style">Service date</td>
+                                    <td className="table-head-text list-item-style">Procedure date</td>
+                                    <td className="table-head-text list-item-style">Paid service unit count</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         )
     }
 
-    renderSearch(){
-        return(
-            <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search"/>
-            </div>
+    renderHeader(header) {
+        return (
+            <tr className="table-head">
+                <td className="table-head-text">{header}</td>
+            </tr>
         )
     }
+
     render() {
         return (
             <div>
-                {/* {this.renderSearch()} */}
-                <br></br>
-                {/* <h5 style="color: rgb(19, 157, 201); font-size: 20px;">Claim Details</h5> */}
-                { <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim Details</h5> }  <br></br>
-                {this.renderTopbar()}
-                <div className="row padding-left">
-                    <div className="col-6 claim-list file-table">
-                        {this.state.claimsObj ? this.renderList() : null}
-                    </div>
+                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>Claim Details</label>
+                {this.renderFilters()}
+                <div className="row">
                     <div className="col-6">
-                        {this.state.showDetails ? this.renderSummary() : null}
+                        {this.renderTransactions()}
+                    </div>
+                    
+                    <div className="col-6">
+                        {
+                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ? 
+                                <table className="table claim-Details">
+                                    {this.renderHeader('Claim #'+ this.state.claimId)}
+                                    {this.renderRows(this.state.claimDetails) }
+                                </table>
+                            : null
+                            }
+                        {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
                     </div>
                 </div>
             </div>

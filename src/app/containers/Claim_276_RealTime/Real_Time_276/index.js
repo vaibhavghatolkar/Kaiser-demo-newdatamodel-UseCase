@@ -488,12 +488,12 @@ export class RealTime276 extends React.Component{
                                 if(selected_val == 'Last week'){
                                     day = 7
                                     chartType = this.state.apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise'
-                                } else if(selected_val == 'Last month'){
+                                } else if(selected_val == 'Last 30 days'){
                                     day = 30
                                     chartType = this.state.apiflag == 1 ? 'Eligibilityweekwise' : 'ClaimRequestweekwise'
-                                } else if(selected_val == 'Last 3 months'){
+                                } else if(selected_val == 'Last 90 days'){
                                     day = 90
-                                } else if(selected_val == 'Last 6 months'){
+                                } else if(selected_val == 'Last 180 days'){
                                     day = 180
                                 } else if(selected_val == 'Last year'){
                                     day = 365
@@ -521,9 +521,9 @@ export class RealTime276 extends React.Component{
                             >
                             <option  selected="selected" value=""></option>
                             <option value="1">Last week</option>
-                            <option value="2">Last month</option>
-                            <option value="2">Last 3 months</option>
-                            <option value="2">Last 6 months</option>
+                            <option value="2">Last 30 days</option>
+                            <option value="2">Last 90 days</option>
+                            <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>
                         </select>
                     </div>

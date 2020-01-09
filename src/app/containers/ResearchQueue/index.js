@@ -33,7 +33,7 @@ export class ResearchQueue extends React.Component {
                         </div>
                         <div className="row">
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Select State</label>
+                                <label className="list-header">State</label>
                                 <select className="form-control list-header" id="selState">
                                     <option selected="selected" value="1">California</option>
                                     <option value="2">Michigan</option>
@@ -53,17 +53,17 @@ export class ResearchQueue extends React.Component {
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Select Trading Partner</label>
+                                <label className="list-header">Trading partner</label>
                                 <select className="form-control list-header" id="selTradingPartner">
-                                    <option value="">Select Trading Partner</option>
+                                    <option value="">Trading partner</option>
                                     <option selected="selected" value="1">Trading Partner 1</option>
                                     <option value="2">Trading Partner 2</option>
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Select Provider Name </label>
+                                <label className="list-header">Provider Name </label>
                                 <select className="form-control list-header" id="selProviderName">
-                                    <option value="">Select Provider Name</option>
+                                    <option value="">Provider Name</option>
                                     <option selected="selected" value="1">Provider Name 1</option>
                                     <option value="2">Provider Name 2</option>
                                 </select>

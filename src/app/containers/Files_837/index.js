@@ -722,7 +722,7 @@ export class Files_837 extends React.Component {
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
             this.setState({
                 showDetails: false,
                 [key] : ''
@@ -743,9 +743,9 @@ export class Files_837 extends React.Component {
         return(
             <div className="row">
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select State</div>
+                    <div className="list-header-dashboard">State</div>
                     <select className="form-control list-header-dashboard" id="state">
-                        <option value="">Select State</option>
+                        <option value="">State</option>
                         <option selected="selected" value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
@@ -765,19 +765,19 @@ export class Files_837 extends React.Component {
                 </div>
 
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select Trading Partner </div>
+                    <div className="list-header-dashboard">Trading partner </div>
                     <select className="form-control list-header-dashboard" id="TradingPartner"
                         onChange={(event) => {
                             this.onSelect(event, 'selectedTradingPartner')
                         }}>
-                        <option value="select">Select Trading Partner</option>
+                        <option value="select">Trading partner</option>
                         {this.getoptions()}
                     </select>
                 </div>
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select Provider Name</div>
+                    <div className="list-header-dashboard">Provider Name</div>
                     <select className="form-control list-header-dashboard" id="option">
-                        <option value="">Select Provider Name</option>
+                        <option value="">Provider Name</option>
                         <option selected="selected" value="1">Provider Name 1</option>
                         <option value="2">Provider Name 2</option>
                     </select>

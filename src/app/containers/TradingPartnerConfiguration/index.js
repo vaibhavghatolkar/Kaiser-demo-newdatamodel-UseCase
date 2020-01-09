@@ -375,9 +375,9 @@ export class TradingPartnerConfiguration extends React.Component {
                         <div className="row">
 
                             <div className="form-group col-sm-3">
-                                <label className="list-header1">Select Trading Partner</label>
+                                <label className="list-header1">Trading partner</label>
                                 <select className="form-control list-header1" id="fao1" onChange={this.ChangeTradingPartner}>
-                                    <option value="0">Select Trading Partner</option>
+                                    <option value="0">Trading partner</option>
                                     {this.getoptions()}
                                 </select>
                             </div>

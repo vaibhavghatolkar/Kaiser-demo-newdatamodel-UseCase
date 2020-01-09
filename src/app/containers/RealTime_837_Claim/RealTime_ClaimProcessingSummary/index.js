@@ -90,7 +90,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
       
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -226,7 +226,7 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner') {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.setState({
                 [key]: ''
             })
