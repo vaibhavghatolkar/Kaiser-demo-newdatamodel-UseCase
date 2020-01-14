@@ -55,12 +55,15 @@ export class ClaimDetails837 extends React.Component{
         this.getTransactions()
     }
 
-    getTransactions(){
+    getTransactions(providerName){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-      
+        if(!providerName){
+            providerName = ''
+        }
+
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -410,13 +413,28 @@ export class ClaimDetails837 extends React.Component{
         )
     }
 
+    onHandleChange(e){
+        let providerName = e.target.value
+        clearTimeout(val)
+        val = setTimeout(() => {
+            this.getTransactions(providerName)
+        }, 300);
+    }
+
     renderFilters(){
         return(
             <div className="form-style" id='filters'>
             <div className="form-row">
                 <div className="form-group col-2">
                     <div className="list-dashboard">State</div>
-                    <select className="form-control list-dashboard" id="state">
+                    <select className="form-control list-dashboard" id="state"
+                        onChange={(event) => {
+                            this.setState({
+                                State: event.target.options[event.target.selectedIndex].text
+                            }, () => {
+                                this.getTransactions()
+                            })
+                        }}>
                         <option value=""></option>
                         <option value="1">California</option>
                         <option value="2">Michigan</option>
@@ -437,8 +455,9 @@ export class ClaimDetails837 extends React.Component{
                 </div>
                 <div className="form-group col-2">
                     <div className="list-dashboard">Provider</div>
-                    <input className="form-control" type="text" />
-
+                    <input
+                        onChange={(e) => this.onHandleChange(e)}
+                        className="form-control" type="text" />
                 </div>
                 <div className="form-group col-2">
                     <div className="list-dashboard">Start Date</div>

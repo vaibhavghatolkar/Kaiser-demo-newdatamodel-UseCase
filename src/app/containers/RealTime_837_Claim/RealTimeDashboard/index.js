@@ -11,7 +11,7 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
 
-
+let val = ''
 const second_data = {
     labels: [
         'ICD Code not found',
@@ -56,7 +56,10 @@ export class RealTimeDashboard extends React.Component {
             tradingpartner: [],
             startDate: '',
             endDate: '',
+            providerName: '',
+            chartType: '',
             selectedTradingPartner: '',
+            State: '',
             Months: 0,
             Accepted_per: 0,
             rejected_per: 0,
@@ -83,13 +86,14 @@ export class RealTimeDashboard extends React.Component {
         this.getData()
     }
 
-    getData(chartType) {
+    getData() {
+        let chartType = this.state.chartType
         if(!chartType){
             chartType = "Monthwise"
         }
         
         let query = `{
-            Claim837RTDashboardCount (Sender:"",State:"",Provider:"", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
                 TotalClaims
                 Accepted
                 Rejected
@@ -99,7 +103,7 @@ export class RealTimeDashboard extends React.Component {
                 Total277CA
                 TotalSentToQNXT
             }
-            Claim837RTClaimBarchart (Sender:"",State:"",Provider:"", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`") {
+            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`") {
                 From
                 MonthNo
                 Year
@@ -386,6 +390,18 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
+    onHandleChange(e){
+        clearTimeout(val)
+        let providerName = e.target.value
+        val = setTimeout(() => {
+            this.setState({
+                providerName : providerName
+            }, () => {
+                this.getData()
+            })
+        }, 300);
+    }
+
     renderTopbar() {
         return (
             <div className="form-style" id='filters'>
@@ -424,11 +440,12 @@ export class RealTimeDashboard extends React.Component {
                                 this.setState({
                                     startDate : startDate,
                                     endDate: endDate,
-                                    selected_val: selected_val
+                                    selected_val: selected_val,
+                                    chartType : chartType
                                 })
 
                                 setTimeout(() => {
-                                    this.getData(chartType)
+                                    this.getData()
                                 }, 50);
                             }}
                             >
@@ -442,7 +459,15 @@ export class RealTimeDashboard extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state">
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.setState({
+                                    State: event.target.options[event.target.selectedIndex].text
+                                }, () => {
+                                    this.getData()
+                                })
+                            }}
+                        >
                             <option value=""></option>
                             <option value="1">California</option>
                             <option value="2">Michigan</option>
@@ -463,7 +488,9 @@ export class RealTimeDashboard extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text" />
+                        <input className="form-control" type="text" 
+                            onChange={(e) => this.onHandleChange(e)}
+                        />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>

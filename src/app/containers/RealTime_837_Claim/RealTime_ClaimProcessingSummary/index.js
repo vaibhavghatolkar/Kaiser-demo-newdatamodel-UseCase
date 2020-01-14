@@ -5,6 +5,7 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 
+let val = ''
 export class ClaimProcessingSummary extends React.Component {
 
     constructor(props) {
@@ -15,6 +16,9 @@ export class ClaimProcessingSummary extends React.Component {
             recCount: 0,
             pageCount: 1,
             Months: 0,
+            selectedTradingPartner: "",
+            State: "",
+            providerName: "",
             startDate: "",
             endDate: "",
             TotalClaims : 0,
@@ -39,7 +43,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     getCountData(){
         let query = `{
-            Claim837RTDashboardCount (Sender:"",State:"",Provider:"", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
                 TotalClaims
                 Accepted
                 Rejected
@@ -90,7 +94,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
       
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"",State:"",Provider:"",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -117,27 +121,25 @@ export class ClaimProcessingSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 var data = res.data.Claim837RTProcessingSummary
-                if(data && data.length > 0){
-                let recCount = data[0].RecCount
-                let TotalClaims = data[0].RecCount
                 let count = 0
+                if(data && data.length > 0){
+                    let recCount = data[0].RecCount
+                    try {
+                        count = recCount / 10
+                        count = count.floor(count)
+                        if (recCount % 10 > 0) {
+                            count = count + 1
+                        }
+                    } catch (error) {
 
-                try {
-                    count = recCount / 10
-                    count = count.floor(count)
-                    if (recCount % 10 > 0) {
-                        count = count + 1
                     }
-                } catch (error) {
-
+                    console.log(count)
                 }
-                console.log(count)
+
                 this.setState({
                     Claim837RTProcessingSummary: data,
                     recCount: count,
-                    TotalClaims: TotalClaims,
                 })
-            }
             })
             .catch(err => {
                 console.log(err)
@@ -241,6 +243,19 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
+    onHandleChange(e){
+        clearTimeout(val)
+        let providerName = e.target.value
+        val = setTimeout(() => {
+            this.setState({
+                providerName : providerName
+            }, () => {
+                this.getCountData()
+                this.getData()
+            })
+        }, 300);
+    }
+
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
@@ -255,7 +270,16 @@ export class ClaimProcessingSummary extends React.Component {
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state">
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.setState({
+                                    State: event.target.options[event.target.selectedIndex].text
+                                }, () => {
+                                    this.getCountData()
+                                    this.getData()
+                                })
+                            }}
+                        >
                             <option value=""></option>
                             <option value="1">California</option>
                             <option value="2">Michigan</option>
@@ -276,7 +300,9 @@ export class ClaimProcessingSummary extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text" />
+                        <input className="form-control" type="text" 
+                            onChange={(e) => this.onHandleChange(e)}
+                        />
 
                     </div>
                     <div className="form-group col-2">
@@ -317,6 +343,7 @@ export class ClaimProcessingSummary extends React.Component {
         });
 
         setTimeout(() => {
+            this.getCountData()
             this.getData()
         }, 50);
     }
@@ -328,6 +355,7 @@ export class ClaimProcessingSummary extends React.Component {
         });
 
         setTimeout(() => {
+            this.getCountData()
             this.getData()
         }, 50);
     }
@@ -335,13 +363,6 @@ export class ClaimProcessingSummary extends React.Component {
     renderStats() {
         return (
             <div className="row padding-left">
-                {/* { 
-                    this.state.TotalClaims ? 
-                    <div className="col-2 summary-container">
-                        <div className="summary-header">Total Claims</div>
-                        <div className="summary-title">{this.state.TotalClaims}</div>
-                    </div> : null 
-                } */}
                 { 
                     this.state.Accepted ? 
                     <div className="col-2 summary-container">
