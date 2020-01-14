@@ -33,7 +33,7 @@ export class Login extends React.Component {
             })
                 .then(res => res.json())
                 .then(res => {
-                    if(res.data.UserLogin[0].Login === 1){
+                    if(res.data.UserLogin[0].Login == 1){
                         this.setState({
                             loggedIn: true
                         })

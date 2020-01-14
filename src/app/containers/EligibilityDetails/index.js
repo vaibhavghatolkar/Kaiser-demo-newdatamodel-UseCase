@@ -59,8 +59,9 @@ export class EligibilityDetails extends React.Component{
     getData(uuid){
         let query = ''
         if(uuid){
+            if(this.state.apiflag == 1){
             query = `{
-                EventLogData(HiPaaS_UUID:"`+uuid+`") {
+                EventLogData(Transaction:"Eligibility" HiPaaS_UUID:"`+uuid+`") {
                     HiPaaS_UUID
                     EventName
                     EventCreationDateTime
@@ -69,12 +70,24 @@ export class EligibilityDetails extends React.Component{
                     Transaction_Compliance
                 }
             }`
+        }else{
+            query = `{
+                EventLogData(Transaction:"ClaimRequest" HiPaaS_UUID:"`+uuid+`") {
+                    HiPaaS_UUID
+                    EventName
+                    EventCreationDateTime
+                    Exception
+                    ErrorMessage
+                    Transaction_Compliance
+                }
+            }`
+        }
         } else {
             query = `{
-                Trading_PartnerList(Transaction:"EligibilityStatus")  {
+                Trading_PartnerList(Transaction:"ClaimRequest")  {
                     Trading_Partner_Name 
                 }
-                ErrorType_List(Transaction: "Eligibility") {
+                ErrorType_List(Transaction: "ClaimRequest") {
                     ErrorType
                 }
             }`
