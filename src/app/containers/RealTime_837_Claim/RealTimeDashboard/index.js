@@ -54,10 +54,10 @@ export class RealTimeDashboard extends React.Component {
             summaryList: [],
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            startDate: '',
-            endDate: '',
+            startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
+            endDate : moment().format('YYYY-MM-DD'),
             providerName: '',
-            chartType: '',
+            chartType: 'Weekwise',
             selectedTradingPartner: '',
             State: '',
             Months: 0,
@@ -154,9 +154,7 @@ export class RealTimeDashboard extends React.Component {
                     if(chartType == 'Weekwise'){
                         claimLabels.push('week' + count)
                     } else {
-                        claimLabels.push(
-                            d.X_axis
-                        )
+                        claimLabels.push(d.X_axis)
                     }
                 })
         
@@ -253,17 +251,24 @@ export class RealTimeDashboard extends React.Component {
                                 position: 'bottom'
                             }
                         }}
-                        width={100}
-                        height={60} />
+                        width={110}
+                        height={70} />
                 </div>
                 <div className="chart-container chart">
                     <Bar
                         data={this.getBarData(this.state.claimLabels,this.state.ClaimBarChart, "#139DC9")}
-                        width={100}
-                        height={60}
+                        width={110}
+                        height={70}
                         options={{
                             legend: {
                                 position: 'bottom'
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        fontSize: 10
+                                    }
+                                }]
                             }
                         }} />
                 </div>
@@ -365,16 +370,26 @@ export class RealTimeDashboard extends React.Component {
         
         array.forEach(item => {
             let addon = ''
+            let claimStatus = ''
             if(item.name == 'Accepted Claims'){
                 addon = '/accept'
+                claimStatus = 'Accepted'
             } else if(item.name == 'Rejected Claims'){
                 addon = '/reject'
+                claimStatus = 'Rejected'
             } else {
                 addon = '/other'
             }
             row.push(
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
+                ?
+                <div className="col-2 summary-container">
+                    <div className="summary-header">{item.name}</div>
+                    <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                </div>
+                :
                 <Link 
-                    to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate} className="col-2 summary-container">
+                    to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate + '/' + claimStatus} className="col-2 summary-container">
                     <div>
                         <div className="summary-header">{item.name}</div>
                         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
@@ -449,10 +464,10 @@ export class RealTimeDashboard extends React.Component {
                                 }, 50);
                             }}
                             >
-                            <option  selected="selected" value=""></option>
+                            <option value=""></option>
                             <option value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
-                            <option value="2">Last 60 days</option>
+                            <option selected="selected" value="2">Last 30 days</option>
+                            <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>
                         </select>

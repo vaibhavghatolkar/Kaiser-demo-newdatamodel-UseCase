@@ -30,6 +30,7 @@ export class ClaimDetails837 extends React.Component{
             startDate: props.match.params.startDate != 'n' ? props.match.params.startDate : '',
             endDate: props.match.params.endDate != 'n' ? props.match.params.endDate : '',
             transactionId: props.match.params.transactionId != 'n' ? props.match.params.transactionId : '',
+            claimStatus: props.match.params.claimStatus != 'n' ? props.match.params.claimStatus : '',
             errorcode: '',
             
             selectedTradingPartner: props.match.params.selectedTradingPartner != 'n' ? props.match.params.selectedTradingPartner : '',
@@ -63,7 +64,7 @@ export class ClaimDetails837 extends React.Component{
         }
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}") {
                 RecCount
                 ClaimID
                 ClaimDate
