@@ -309,7 +309,8 @@ export class RealTimeDashboard extends React.Component {
 
     renderSummary() {
         let row = []
-        const data = this.state.summaryList;
+        const details = this.state.summaryList;
+        let data=[]
         // this.state.flag
         // this.state.selectedTradingPartner
         // this.state.startDate
@@ -318,7 +319,7 @@ export class RealTimeDashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
 
-        data.forEach((d) => {
+        details.forEach((d) => {
             let addon = ''
             if(d.name == 'Accepted Claims'){
                 addon = '/accept'
@@ -327,7 +328,11 @@ export class RealTimeDashboard extends React.Component {
             } else {
                 addon = '/other'
             }
+            data = [
+                {flag:addon, selectedTradingPartner:selectedTradingPartner, startDate:startDate ,endDate:endDate},
+               ]
             row.push(
+                
                 <tr>
                     <td className="bold-text">{d.name}</td>
                     <td><a href="#" onClick={() => { 
@@ -339,7 +344,9 @@ export class RealTimeDashboard extends React.Component {
                                     (d.name == 'Rejected %' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
                                         (d.name == 'Partial Paid Claims') ? 'orange bold-text summary-values' : ''
                     }>
-                        <Link to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link>
+                        {/* <Link to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link> */}
+
+                        <Link to={{ pathname: '/ClaimDetails837' , state: {data}}}> {d.value} </Link>  
                     </a></td>
                 </tr>
             )

@@ -13,7 +13,9 @@ export class Files_837 extends React.Component {
     constructor(props) {
         super(props);
         console.log('hello these are the props', props)
-        let flag = props.match.params.flag
+        let flag 
+      flag = props.location.state.data[0].flag;
+      
         if(flag == 'accept'){
             flag = 'Accepted Claims'
         } else if(flag == 'reject'){
@@ -21,7 +23,7 @@ export class Files_837 extends React.Component {
         } else {
             flag = 'Other'
         }
-
+  
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -30,11 +32,11 @@ export class Files_837 extends React.Component {
             file: [],
             memberInfo: {},
             subscriberNo : '',
-            selectedTradingPartner: props.match.params && props.match.params.selectedTradingPartner != 'n'? props.match.params.selectedTradingPartner : '',
+            selectedTradingPartner:props.location.state.data[0] &&props.location.state.data[0].selectedTradingPartner != 'n'?props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type : '',
             plan_code : '',
-            startDate: props.match.params && props.match.params.startDate != 'n' ? props.match.params.startDate : '',
-            endDate: props.match.params && props.match.params.endDate != 'n' ? props.match.params.endDate : '',
+            startDate:props.location.state.data[0] &&props.location.state.data[0].startDate != 'n' ?props.location.state.data[0].startDate : '',
+            endDate:props.location.state.data[0] &&props.location.state.data[0].endDate != 'n' ?props.location.state.data[0].endDate : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -61,6 +63,7 @@ export class Files_837 extends React.Component {
     }
 
     componentDidMount() {
+      
         this.getData()
         this.getTradingData()
     this.getICDCode()  
@@ -558,7 +561,7 @@ export class Files_837 extends React.Component {
                 data[keys].array.forEach(item => {
                     col.push(
                         <tr>
-                            <td className="list-item-style"><a href="#" style={{ color: "#6AA2B8" }} 
+                            <td className="list-item-style"><a style={{ color: "#6AA2B8" }} 
                                 onClick={() => { 
                                     this.setState({
                                         submitter: item.FSubmitter_N103,

@@ -83,8 +83,14 @@ class PrivateRoute extends React.Component {
 
 
     render() {
+        let data =[]
+        data = [
+            { apiflag: '0' },
+        ]
         return (
+
     <Router>
+        
         <Header/>
         <div className="container-fluid background">
         { this.state.loggedIn=== false ?
@@ -99,15 +105,20 @@ class PrivateRoute extends React.Component {
                 </div>
                 <div className="col-10 container-fluid" style={{height : $(window).height()}}>
                     <Route exact path="/">
-                    {this.state.loggedIn === true ? 
-                    <Redirect to="/realTime_270/1" />:  <Redirect to="/" />}>
+                    {this.state.loggedIn == true ? 
+                    
+                    <Redirect to={{
+                        pathname: '/'+ Strings.RealTime270, state: { data } }} />:  <Redirect to="/" />}
                     </Route> 
                     {/* <Route exact path="/" component={RealTime276} /> */}
                     <Route path={'/' + Strings.claimsDashboard} component={Claims} />
                     <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
-                    <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
-                    <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} />
+                    {/* <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
+                    <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} /> */}
+
+                    <Route path={'/'+ Strings.RealTime276 } component={RealTime276}/>
+                    <Route path={'/'+ Strings.RealTime270} component={RealTime276} />
                     <Route path={'/'+ Strings.AuditSummary270} component={AuditSummary270} />                  
                     <Route path={'/'+ Strings.claimsAudit} component={AuditSummary} />
                     <Route path={'/'+ Strings.claimsError} component={ClaimsError} />
@@ -124,10 +135,15 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.validation} component={Claims} />
                     <Route path={'/'+ Strings.ViewCustomEdits} component={ViewCustomEdits} />
                     <Route path={'/'+ Strings.files_834 + '/:flag'} component={Files_834} />
-                    <Route path={'/'+ Strings.ElilgibilityDetails270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
+                    {/* <Route path={'/'+ Strings.ElilgibilityDetails270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                     <Route path={'/'+ Strings.elilgibilityErrors270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
                     <Route path={'/'+ Strings.ElilgibilityDetails276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
-                    <Route path={'/'+ Strings.elilgibilityErrors276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.elilgibilityErrors276 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} /> */}
+                    <Route path={'/'+ Strings.ElilgibilityDetails270 } component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.elilgibilityErrors270  }component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.ElilgibilityDetails276 } component={EligibilityDetails} />
+                    <Route path={'/'+ Strings.elilgibilityErrors276 } component={EligibilityDetails} />
+                  
                     <Route path={'/'+ Strings.UserList} component={UserList} />
                     <Route path={'/'+ Strings.MenuCreate} component={MenuCreate} />
                     <Route path={'/'+ Strings.ChangePassword} component={ChangePassword} />
@@ -150,10 +166,16 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.EligibilityErrorsDuplicate} component={EligibilityErrorsDuplicate} />
                     <Route path={'/'+ Strings.OutboundDetails} component={OutboundDetails} />
                     <Route path={'/'+ Strings.FullComparsion_dashboard} component={FullComparsion_dashboard} />
-                    <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} />
+                    {/* <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} /> */}
+                    <Route path={'/'+ Strings.ClaimDetails837} component={ClaimDetails837} />
                     <Route path={'/'+ Strings.RealTimeDashboard} component={RealTimeDashboard} />
                     <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
-                    <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={Files_837} />
+  <Route path={'/'+ Strings.Files_837} component={Files_837} />
+                 
+                       
+  {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
+                
+
                     
                 </div>
             </div>

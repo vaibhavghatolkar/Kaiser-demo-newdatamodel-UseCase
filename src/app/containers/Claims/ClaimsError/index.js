@@ -132,6 +132,10 @@ console.log(data);
 
 
     renderStatus(){
+        let data=[]
+        data = [
+            {flag:'reject', selectedTradingPartner:'n', startDate:'n' ,endDate:'n'},
+           ]
         return (
             <div class="dashfrm-LR1 row">
                 <div className="col-2">
@@ -141,7 +145,8 @@ console.log(data);
                             // this.props.handleFlag(Strings.claimDetails, 1)
                             // '/'+ Strings.claimDetails + '/:flag/:selectedTradingPartner/:startDate/:endDate'
                         }}>
-                        <Link to={'/' + Strings.claimDetails + '/reject/n/n/n'}>{this.state.rejectedCount}</Link>
+                              <Link to={{pathname: '/Files_837' , state: {data}}}> {this.state.rejectedCount} </Link>            
+                        {/* <Link to={'/' + Strings.claimDetails + '/reject/n/n/n'}>{this.state.rejectedCount}</Link> */}
                         </a></div>
                 </div>
                 <div className="col-4 div-inner"><span style={{padding:"10px"}}>Misdirected Claims</span></div>

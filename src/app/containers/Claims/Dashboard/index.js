@@ -319,6 +319,7 @@ export class Claims extends React.Component {
 
         data.forEach((d) => {
             let addon = ''
+            let data=[]
             if(d.name == 'Accepted Claims'){
                 addon = '/accept'
             } else if(d.name == 'Rejected Claims'){
@@ -326,6 +327,10 @@ export class Claims extends React.Component {
             } else {
                 addon = '/other'
             }
+ 
+            data = [
+                {flag:addon, selectedTradingPartner:selectedTradingPartner, startDate:startDate ,endDate:endDate},
+               ]
             row.push(
                 <tr>
                     <td className="bold-text">{d.name}</td>
@@ -338,13 +343,14 @@ export class Claims extends React.Component {
                                     (d.name == 'Failed File Load' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
                                         (d.name == 'Partial Paid Claims') ? 'orange bold-text summary-values' : ''
                     }>
-                        <Link to={'/Files_837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link>
+                        
+                          <Link to={{ pathname: '/Files_837' , state: {data}}}> {d.value} </Link>     
+                        {/* <Link to={'/Files_837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link> */}
                     </a></td>
                 </tr>
             )
         });
-
-        return (
+     return (
             <table className="table table-bordered claim-list summary-list">
                 <tbody>
                     {row}

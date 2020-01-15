@@ -121,3 +121,19 @@
     margin-top: 16px;
     font-size: 10px;
 }
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #139DC9;
+    border-color: #139DC9;
+}
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 0.90;
+    color: #139DC9;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
