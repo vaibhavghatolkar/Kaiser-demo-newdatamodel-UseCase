@@ -42,6 +42,7 @@ export class RealTime276 extends React.Component{
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
+            chartType: '',
             colorArray : [
                 '#139DC9',
                 '#83D2B4'
@@ -75,11 +76,17 @@ export class RealTime276 extends React.Component{
 
     getCommonData(chartType){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        if(!chartType && this.state.apiflag == 1){
-            chartType = "Eligibilitymonthwise"
-        } else if (!chartType && this.state.apiflag == 0){
-            chartType = "ClaimRequestMonthwise"
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''  
+        console.log(this.state.chartType)
+        if(!this.state.chartType && this.state.apiflag == 1){
+            this.setState({
+                chartType: "Eligibilitymonthwise"
+            })
+        } else if (!this.state.chartType && this.state.apiflag == 0){
+            this.setState({
+                chartType: "ClaimRequestMonthwise"
+            })
+            // this.state.chartType = "ClaimRequestMonthwise"
         }
         
         let query = `{
@@ -90,7 +97,7 @@ export class RealTime276 extends React.Component{
                 X_axis
                 Y_axis
             }
-            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ this.state.chartType + `") {
                 X_axis
                 Y_axis
             }
@@ -106,7 +113,7 @@ export class RealTime276 extends React.Component{
                     X_axis
                     Y_axis
                 }
-                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ this.state.chartType + `") {
                     X_axis
                     Y_axis
                 }
@@ -138,12 +145,12 @@ export class RealTime276 extends React.Component{
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.claimstatus
-
-        if(!chartType && this.state.apiflag == 1){
-            chartType = "Eligibilitymonthwise"
-        } else if (!chartType && this.state.apiflag == 0){
-            chartType = "ClaimRequestMonthwise"
-        }
+        // console.log(this.state.chartType)
+        // if(!this.state.chartType && this.state.apiflag == 1){
+        //     chartType = "Eligibilitymonthwise"
+        // } else if (!this.state.chartType && this.state.apiflag == 0){
+        //     chartType = "ClaimRequestMonthwise"
+        // }
         
         let query = `{
             ClaimRequest276(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
@@ -238,11 +245,11 @@ export class RealTime276 extends React.Component{
             res.data.datewise.forEach(item => {
                 try {
                     if(flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise'){
-                        dateChartLabel.push('week ' + count)
+                        dateChartLabel.push(item.X_axis)
                     } else if(flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise'){
-                        dateChartLabel.push(moment(item.X_axis).format('DD MMM'))
+                        dateChartLabel.push(item.X_axis)
                     } else {
-                        dateChartLabel.push(moment(item.X_axis).format('MMM'))
+                        dateChartLabel.push(item.X_axis)
                     }
                     dateChartData.push(item.Y_axis)
                 } catch (error) {}
@@ -510,7 +517,8 @@ export class RealTime276 extends React.Component{
                                 this.setState({
                                     startDate : startDate,
                                     endDate: endDate,
-                                    selected_val: selected_val
+                                    selected_val: selected_val,
+                                    chartType: chartType
                                 })
 
                                 setTimeout(() => {
