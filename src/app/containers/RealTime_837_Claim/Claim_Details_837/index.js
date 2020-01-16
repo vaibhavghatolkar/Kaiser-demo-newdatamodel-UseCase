@@ -496,7 +496,8 @@ export class ClaimDetails837 extends React.Component{
                     <select className="form-control list-dashboard" id="state"
                         onChange={(event) => {
                             this.setState({
-                                State: event.target.options[event.target.selectedIndex].text
+                                State: event.target.options[event.target.selectedIndex].text,
+                                showDetails: false
                             }, () => {
                                 this.getData()
                             })
@@ -648,7 +649,7 @@ export class ClaimDetails837 extends React.Component{
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 col-style"><a href={"#" + data[keys].value.FileID} onClick={() => {this.getTransactions(data[keys].value.FileID)}} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
+                    <div className="col-4 left-align"><a href={"#" + data[keys].value.FileID} onClick={() => {this.getTransactions(data[keys].value.FileID)}} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
                     <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
                     <div className="col-3 col-style">{data[keys].value.Sender}</div>

@@ -585,7 +585,7 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Dashboard</h5><br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}

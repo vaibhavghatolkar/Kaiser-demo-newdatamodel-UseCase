@@ -66,7 +66,7 @@ export class Sidebar extends React.Component{
                 
             ],
             RealTime837: [
-                {value: 'RealTime Dashboard', key: 'RealTimeDashboard'},
+                {value: "Claim's Dashboard", key: 'RealTimeDashboard'},
                 {value: 'Claim Processing Summary', key: 'ClaimProcessingSummary'},
                 {value: 'Claim Details', key: 'ClaimDetails837'},
             ],
@@ -167,8 +167,8 @@ export class Sidebar extends React.Component{
                 {this.renderItems(Strings.REALTIME270, 'Eligibility Real-time', this.state.RealTime270)}
                 {this.renderItems(Strings.REALTIME276, 'Claim Status Real-time', this.state.RealTime276)}
               
-                {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)}
-                {this.renderItems(Strings.REALTIME_837_CLAIM, 'RealTime 837 Claims', this.state.RealTime837)}
+                {/* {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)} */}
+                {this.renderItems(Strings.REALTIME_837_CLAIM, '837 Claim Management', this.state.RealTime837)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
 

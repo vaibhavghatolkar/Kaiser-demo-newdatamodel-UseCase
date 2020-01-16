@@ -48,6 +48,13 @@
     text-align: center;
     padding: 12px;
 }
+.left-align{
+    background-color: #ffffff; 
+    border-right: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+    font-size: 12px;
+    padding: 12px;
+}
 .col-header{
     background-color: #139DC9; 
     border-right: 1px solid #ffffff;

@@ -133,7 +133,7 @@ export class RealTime276 extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
-                this.performCommonOperations(res, chartType)
+                this.performCommonOperations(res, this.state.chartType)
             }
         })
         .catch(err => {
@@ -245,7 +245,7 @@ export class RealTime276 extends React.Component{
             res.data.datewise.forEach(item => {
                 try {
                     if(flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise'){
-                        dateChartLabel.push(item.X_axis)
+                        dateChartLabel.push('week ' + count)
                     } else if(flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise'){
                         dateChartLabel.push(item.X_axis)
                     } else {
@@ -568,10 +568,10 @@ export class RealTime276 extends React.Component{
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
-                                setTimeout(() => {
-                                    this.getCommonData()
-                                    this.getData()
-                                }, 50);
+                                // setTimeout(() => {
+                                //     this.getCommonData()
+                                //     this.getData()
+                                // }, 50);
                             }}
                         >
                             <option value="select"></option>
