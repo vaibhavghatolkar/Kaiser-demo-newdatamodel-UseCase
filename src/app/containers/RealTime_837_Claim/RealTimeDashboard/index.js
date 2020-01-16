@@ -61,6 +61,9 @@ export class RealTimeDashboard extends React.Component {
             selectedTradingPartner: '',
             State: '',
             Months: 0,
+            accepted: 0,
+            rejected: 0,
+            inProgress: 0,
             Accepted_per: 0,
             rejected_per: 0,
             ClaimBarChart: [],
@@ -133,6 +136,7 @@ export class RealTimeDashboard extends React.Component {
                 Total999
                 Total277CA
                 TotalSentToQNXT
+                InProgress
             }
             Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`") {
                 From
@@ -161,6 +165,9 @@ export class RealTimeDashboard extends React.Component {
                 let data = res.data
                 let Accepted_per1 = 0
                 let rejected_per1 = 0
+                let accepted = 0
+                let rejected = 0
+                let inProgress = 0
                 let ClaimBarChart = res.data.Claim837RTClaimBarchart
                 let claimLabels = []
                 
@@ -175,6 +182,9 @@ export class RealTimeDashboard extends React.Component {
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
                     rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
+                    accepted = data.Claim837RTDashboardCount[0].Accepted
+                    rejected = data.Claim837RTDashboardCount[0].Rejected
+                    inProgress = data.Claim837RTDashboardCount[0].InProgress
                 }
                 
                 let count = 0
@@ -195,7 +205,10 @@ export class RealTimeDashboard extends React.Component {
                     Accepted_per: Accepted_per1,
                     rejected_per: rejected_per1,
                     ClaimBarChart:array,
-                    claimLabels : claimLabels
+                    claimLabels : claimLabels,
+                    accepted : accepted,
+                    rejected : rejected,
+                    inProgress : inProgress
                 })
             })
             .catch(err => {
@@ -251,17 +264,20 @@ export class RealTimeDashboard extends React.Component {
         const data = {
             labels: [
                 'Accepted',
-                'Rejected'
+                'Rejected',
+                'In Progress',
             ],
             datasets: [{
-                data: [this.state.Accepted_per, this.state.rejected_per],
+                data: [this.state.accepted, this.state.rejected, this.state.inProgress],
                 backgroundColor: [
+                    '#83D2B4',
+                    '#EC6236',
                     '#139DC9',
-                    '#83D2B4'
                 ],
                 hoverBackgroundColor: [
+                    '#83D2B4',
+                    '#EC6236',
                     '#139DC9',
-                    '#83D2B4'
                 ]
             }],
             flag: ''

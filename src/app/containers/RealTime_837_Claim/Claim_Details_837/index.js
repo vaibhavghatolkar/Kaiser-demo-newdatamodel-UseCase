@@ -649,7 +649,7 @@ export class ClaimDetails837 extends React.Component{
             row.push(
                 <div className="row">
                     <div className="col-4 col-style"><a href={"#" + data[keys].value.FileID} onClick={() => {this.getTransactions(data[keys].value.FileID)}} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('h:m a')}</div>
+                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
                     <div className="col-3 col-style">{data[keys].value.Sender}</div>
                 </div>
