@@ -37,8 +37,38 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     componentDidMount() {
+        this.getCommonData()
         this.getCountData()
         this.getData()
+    }
+
+    getCommonData(){
+        let query = `{
+            Trading_PartnerList(Transaction:"Claim837RT") {
+                Trading_Partner_Name 
+            }
+        }`
+
+        console.log('query ', query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.setState({
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
     }
 
     getCountData(){
@@ -94,7 +124,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
       
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -259,6 +289,9 @@ export class ClaimProcessingSummary extends React.Component {
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
+            if(!element){
+                return
+            }
             row.push(<option value="">{element.Trading_Partner_Name}</option>)
         })
         return row

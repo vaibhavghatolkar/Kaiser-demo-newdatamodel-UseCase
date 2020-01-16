@@ -83,7 +83,37 @@ export class RealTimeDashboard extends React.Component {
     }
 
     componentDidMount() {
+        this.getCommonData()
         this.getData()
+    }
+
+    getCommonData(){
+        let query = `{
+            Trading_PartnerList(Transaction:"Claim837RT") {
+                Trading_Partner_Name 
+            }
+        }`
+
+        console.log('query ', query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.setState({
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
     }
 
     getData() {
@@ -94,6 +124,7 @@ export class RealTimeDashboard extends React.Component {
         
         let query = `{
             Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+                TotalFiles
                 TotalClaims
                 Accepted
                 Rejected
@@ -135,6 +166,7 @@ export class RealTimeDashboard extends React.Component {
                 
                 if(data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0){
                     summary = [
+                        { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : ''   },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : ''},
@@ -251,14 +283,14 @@ export class RealTimeDashboard extends React.Component {
                                 position: 'bottom'
                             }
                         }}
-                        width={110}
-                        height={70} />
+                        width={100}
+                        height={60} />
                 </div>
                 <div className="chart-container chart">
                     <Bar
-                        data={this.getBarData(this.state.claimLabels,this.state.ClaimBarChart, "#139DC9")}
-                        width={110}
-                        height={70}
+                        data={this.getBarData(this.state.claimLabels,this.state.ClaimBarChart, "#83D2B4")}
+                        width={100}
+                        height={60}
                         options={{
                             legend: {
                                 position: 'bottom'
@@ -311,6 +343,9 @@ export class RealTimeDashboard extends React.Component {
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
+            if(!element){
+                return
+            }
             row.push(<option value="">{element.Trading_Partner_Name}</option>)
         })
         return row

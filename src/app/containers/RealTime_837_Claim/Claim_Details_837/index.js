@@ -1,6 +1,7 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import '../../Claim_276_RealTime/Real_Time_276/style.css'
+import '../../Files/files-styles.css';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
@@ -24,6 +25,7 @@ export class ClaimDetails837 extends React.Component{
             claimDetails: [],
             claimLineDetails: [],
             Transaction_Compliance: '',
+            providerName: '',
 
             State: props.match.params.State != 'n' ? props.match.params.State : '',
             status: props.match.params.status != 'n' ? props.match.params.status : '',
@@ -46,25 +48,119 @@ export class ClaimDetails837 extends React.Component{
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
-    componentWillReceiveProps(){
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
-
     componentDidMount(){
-        this.getTransactions()
+        this.getCommonData()
+        this.getData()
     }
 
-    getTransactions(providerName){
+    getCommonData(){
+        let query = `{
+            Trading_PartnerList(Transaction:"Claim837RT") {
+                Trading_Partner_Name 
+            }
+        }`
+
+        console.log('query ', query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.setState({
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
+
+    getData = () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let providerName = this.state.providerName
         if(!providerName){
             providerName = ''
         }
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}") {
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}") {
+                RecCount
+                FileID
+                FileName
+                Sender
+                FileDate
+                Claimcount
+                FileStatus
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res && res.data && res.data.Claim837RTFileDetails){
+                    this.setState({
+                        intakeClaims: res.data.Claim837RTFileDetails
+                    }, () => {
+                        this.sortData()
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    sortData(fileId, data) {
+        let files = {}
+        let intakeClaims = this.state.intakeClaims
+
+        if(fileId && data){
+            files = this.state.claimsObj
+            if (fileId in files) {
+                files[fileId].array = []
+                data.forEach(item => {
+                    files[fileId].array.push(item)
+                });
+            }
+        } else {
+            intakeClaims.forEach(item => {
+                files[item.FileID] = {
+                    value: item,
+                    array: []
+                }
+            })
+        }
+
+        this.setState({
+            claimsObj: files
+        })
+    }
+
+    getTransactions(fileId){
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let providerName = this.state.providerName
+        if(!providerName){
+            providerName = ''
+        }
+
+        let query = `{            
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "`+fileId+`") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -77,6 +173,8 @@ export class ClaimDetails837 extends React.Component{
                 SubscriberFirstName
                 adjudication_status
                 ClaimLevelErrors
+                ClaimUniqueID
+                FileID
             }
         }`
         console.log(query)
@@ -92,27 +190,8 @@ export class ClaimDetails837 extends React.Component{
             .then(res => {
                 var data = res.data.Claim837RTProcessingSummary
                 if(data && data.length > 0){
-                let recCount = data[0].RecCount ? Number(data[0].RecCount) : 0
-                let TotalClaims = data[0].RecCount
-                let count = 0
-
-                try {
-                    count = recCount / 10
-                    count = count.floor(count)
-                    if (recCount % 10 > 0) {
-                        count = count + 1
-                    }
-                } catch (error) {
-
+                    this.sortData(fileId, data)
                 }
-                console.log(count)
-
-                this.setState({
-                    Claim837RTProcessingSummary: data,
-                    recCount: count,
-                    TotalClaims: TotalClaims,
-                })
-            }
             })
             .catch(err => {
                 console.log(err)
@@ -133,21 +212,19 @@ export class ClaimDetails837 extends React.Component{
         })
     }
 
-    handlePageClick(data){
+    handlePageClick(data, fileId){
         let page = data.selected + 1
         this.setState({
             page : page
+        }, () => {
+            this.getTransactions(fileId)
         })
-
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
     }
 
-    getDetails(claimId){
+    getDetails(claimId, fileId){
         let url = Urls.real_time_claim_details
         let query = `{
-            Claim837RTDetails(ClaimID:"`+claimId+`") {
+            Claim837RTDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
               ClaimID
               ClaimDate
               ClaimTMTrackingID
@@ -166,7 +243,7 @@ export class ClaimDetails837 extends React.Component{
               ICDCode
               AccidentDate
             }
-            Claim837RTLineDetails(ClaimID:"`+claimId+`") {
+            Claim837RTLineDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
               ClaimID
               ServiceLineCount
               ProviderPaidAmount
@@ -246,66 +323,48 @@ export class ClaimDetails837 extends React.Component{
         )
     }
 
-    renderTransactions(){
-        let row = []
-        const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
+    // renderTransactions(){
+    //     let row = []
+    //     const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
 
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td><a href="#" onClick={() => {
-                        this.setState({
-                            claimId : d.ClaimID
-                        }, () => {
-                            this.getDetails(d.ClaimID)
-                        })
-                    }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-                    <td>{d.ClaimDate}</td>
-                    <td>{d.Claim_Amount}</td>
-                    <td>{d.ClaimStatus}</td>
-                    <td>{d.adjudication_status}</td>
-                    <td>{d.ClaimLevelErrors}</td>
-                </tr>
-            )
-        })
-        return(
-            <div>
-                <table className="table table-bordered claim-list">
-                    <thead>
-                        <tr className="table-head" style={{fontSize:"9px"}}>
-                            <td className="table-head-text">Claim Id</td>
-                            <td className="table-head-text list-item-style">Claim Date</td>
-                            <td className="table-head-text list-item-style">Claim Amount</td>
-                            <td className="table-head-text list-item-style">Claim Status</td>
-                            <td className="table-head-text list-item-style">Current State</td>
-                            <td className="table-head-text list-item-style">Error Code</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {row}
-                    </tbody>
-                </table>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.state.recCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => {this.handlePageClick(page)}}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                    />
-            </div>
-        )
-    }
+    //     data.forEach((d) => {
+    //         row.push(
+    //             <tr>
+    //                 <td><a href="#" onClick={() => {
+    //                     this.setState({
+    //                         claimId : d.ClaimID
+    //                     }, () => {
+    //                         this.getDetails(d.ClaimID)
+    //                     })
+    //                 }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
+    //                 <td>{d.ClaimDate}</td>
+    //                 <td>{d.Claim_Amount}</td>
+    //                 <td>{d.ClaimStatus}</td>
+    //                 <td>{d.adjudication_status}</td>
+    //                 <td>{d.ClaimLevelErrors}</td>
+    //             </tr>
+    //         )
+    //     })
+    //     return(
+    //         <div>
+    //             <table className="table table-bordered claim-list">
+    //                 <thead>
+    //                     <tr className="table-head" style={{fontSize:"9px"}}>
+    //                         <td className="table-head-text">Claim Id</td>
+    //                         <td className="table-head-text list-item-style">Claim Date</td>
+    //                         <td className="table-head-text list-item-style">Claim Amount</td>
+    //                         <td className="table-head-text list-item-style">Claim Status</td>
+    //                         <td className="table-head-text list-item-style">Current State</td>
+    //                         <td className="table-head-text list-item-style">Error Code</td>
+    //                     </tr>
+    //                 </thead>
+    //                 <tbody>
+    //                     {row}
+    //                 </tbody>
+    //             </table>
+    //         </div>
+    //     )
+    // }
 
     renderDetails(flag){
         return(
@@ -322,6 +381,9 @@ export class ClaimDetails837 extends React.Component{
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
+            if(!element){
+                return
+            }
             row.push(<option value="" selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""}>{element.Trading_Partner_Name}</option>)
         })
         return row
@@ -349,7 +411,7 @@ export class ClaimDetails837 extends React.Component{
         }
 
         setTimeout(() => {
-            this.getTransactions()
+            this.getData()
         }, 50);
     }
 
@@ -360,7 +422,7 @@ export class ClaimDetails837 extends React.Component{
         });
 
         setTimeout(() => {
-            this.getTransactions()
+            this.getData()
         }, 50);
     }
 
@@ -371,7 +433,7 @@ export class ClaimDetails837 extends React.Component{
         });
 
         setTimeout(() => {
-            this.getTransactions()
+            this.getData()
         }, 50);
     }
 
@@ -418,7 +480,10 @@ export class ClaimDetails837 extends React.Component{
         let providerName = e.target.value
         clearTimeout(val)
         val = setTimeout(() => {
-            this.getTransactions(providerName)
+            this.setState({
+                providerName: providerName
+            })
+            this.getData()
         }, 300);
     }
 
@@ -433,7 +498,7 @@ export class ClaimDetails837 extends React.Component{
                             this.setState({
                                 State: event.target.options[event.target.selectedIndex].text
                             }, () => {
-                                this.getTransactions()
+                                this.getData()
                             })
                         }}>
                         <option value=""></option>
@@ -541,14 +606,123 @@ export class ClaimDetails837 extends React.Component{
         )
     }
 
+    renderClaimsHeader() {
+        return (
+            <tr className="table-head" style={{fontSize:"9px"}}>
+                <td className="table-head-text list-item-style">Claim Id</td>
+                <td className="table-head-text list-item-style">Service line count</td>
+                <td className="table-head-text list-item-style">Provider paid amount</td>
+                <td className="table-head-text list-item-style">Service date</td>
+                <td className="table-head-text list-item-style">Procedure date</td>
+                <td className="table-head-text list-item-style">Paid service unit count</td>
+            </tr>
+        )
+    }
+
+    renderTableHeader() {
+        return (
+            <div className="row">
+                <div className="col-4 col-header">File Name</div>
+                <div className="col-2 col-header">File Date</div>
+                <div className="col-3 col-header">File Status</div>
+                <div className="col-3 col-header">Submitter</div>
+                {/* <div className="col-2 col-header">Status</div> */}
+            </div>
+        )
+    }
+
+    renderList() {
+        let row = []
+        let col = []
+        let data = this.state.claimsObj;
+        let count = 0
+        try {
+            count = data[Object.keys(data)[0]].value.Claimcount / 10
+            if(data[Object.keys(data)[0]].value.Claimcount % 10 > 0){
+                count = count + 1
+            }
+        } catch (error) {
+            
+        }
+
+        Object.keys(data).map((keys) => {
+            row.push(
+                <div className="row">
+                    <div className="col-4 col-style"><a href={"#" + data[keys].value.FileID} onClick={() => {this.getTransactions(data[keys].value.FileID)}} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
+                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('h:m a')}</div>
+                    <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
+                    <div className="col-3 col-style">{data[keys].value.Sender}</div>
+                </div>
+            )
+
+            {
+                col = []
+                data[keys].array.forEach((d) => {
+                    col.push(
+                        <tr>
+                            <td className="list-item-style"><a href="#" onClick={() => {
+                                this.setState({
+                                    claimId : d.ClaimID
+                                }, () => {
+                                    this.getDetails(d.ClaimID, d.FileID)
+                                })
+                            }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
+                            <td className="list-item-style">{d.ClaimDate}</td>
+                            <td className="list-item-style">{d.Claim_Amount}</td>
+                            <td className="list-item-style">{d.ClaimStatus}</td>
+                            <td className="list-item-style">{d.adjudication_status}</td>
+                            <td className="list-item-style">{d.ClaimLevelErrors}</td>
+                        </tr>
+                    )
+                })
+            }
+
+            row.push(
+                <div id={keys} className="collapse">
+                    <table id="" className="table table-bordered claim-details">
+                        {this.renderClaimsHeader()}
+                        {col}
+                    </table>
+                    
+                    <ReactPaginate
+                        previousLabel={'previous'}
+                        nextLabel={'next'}
+                        breakLabel={'...'}
+                        breakClassName={'page-link'}
+                        initialPage={this.state.initialPage}
+                        pageCount={count}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={(page) => {this.handlePageClick(page, keys)}}
+                        containerClassName={'pagination'}
+                        pageClassName={'page-item'}
+                        previousClassName={'page-link'}
+                        nextClassName={'page-link'}
+                        pageLinkClassName={'page-link'}
+                        subContainerClassName={'pages pagination'}
+                        activeClassName={'active'}
+                        />
+                    
+                </div>
+            ) 
+        });
+
+        return (
+            <div>
+                {this.renderTableHeader()}
+                {row}
+            </div>
+        );
+    }
+
     render() {
         return (
             <div>
                 <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>Claim Details</label>
                 {this.renderFilters()}
-                <div className="row">
-                    <div className="col-6">
-                        {this.renderTransactions()}
+                <div className="row padding-left">
+                    <div className="col-6 claim-list file-table">
+                        {this.state.claimsObj ? this.renderList() : null}
                     </div>
                     
                     <div className="col-6">
