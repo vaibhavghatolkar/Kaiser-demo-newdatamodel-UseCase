@@ -556,7 +556,7 @@ export class EligibilityDetails extends React.Component{
                         <div className="form-group col-md-2">
                             <div className="list-dashboard">Start Date</div>
                             <DatePicker 
-                                className="datepicker"
+                                className="form-control list-dashboard"
                                 selected={this.state.startDate ? new Date(this.state.startDate) : ''}
                                 onChange={this.handleStartChange}
                             />
@@ -564,7 +564,7 @@ export class EligibilityDetails extends React.Component{
                         <div className="form-group col-md-2">
                             <div className="list-dashboard">End Date</div>
                             <DatePicker 
-                                className="datepicker"
+                                className="form-control list-dashboard"
                                 selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                                 onChange={this.handleEndChange}
                             />
