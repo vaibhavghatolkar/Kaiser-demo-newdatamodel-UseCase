@@ -277,11 +277,16 @@ export class MenuCreate extends React.Component {
                 isDisabled = "disabled";
                 d.isAccessValue = false
             }
+            if(d.isChecked == "0"){
+                d.isChecked = false
+            }
+            if(d.isAccessValue == "0") d.isAccessValue = false;
+            
             row.push(
 
                 <tr>
 
-                    <td style={{ fontWeight: roletype ? "0" : "bold" }}>
+                    <td style={{ fontWeight: roletype=="0" ? "bold" : "" }}>
 
                         {d.loopid}
                     </td>
