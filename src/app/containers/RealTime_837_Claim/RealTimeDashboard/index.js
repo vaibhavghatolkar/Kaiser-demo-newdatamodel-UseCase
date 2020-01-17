@@ -270,14 +270,14 @@ export class RealTimeDashboard extends React.Component {
             datasets: [{
                 data: [this.state.accepted, this.state.rejected, this.state.inProgress],
                 backgroundColor: [
-                    '#83D2B4',
-                    '#EC6236',
                     '#139DC9',
+                    '#daea00',
+                    '#83D2B4',
                 ],
                 hoverBackgroundColor: [
-                    '#83D2B4',
-                    '#EC6236',
                     '#139DC9',
+                    '#daea00',
+                    '#83D2B4',
                 ]
             }],
             flag: ''

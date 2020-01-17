@@ -610,12 +610,12 @@ export class ClaimDetails837 extends React.Component{
     renderClaimsHeader() {
         return (
             <tr className="table-head" style={{fontSize:"9px"}}>
-                <td className="table-head-text list-item-style">Claim Id</td>
-                <td className="table-head-text list-item-style">Service line count</td>
-                <td className="table-head-text list-item-style">Provider paid amount</td>
-                <td className="table-head-text list-item-style">Service date</td>
-                <td className="table-head-text list-item-style">Procedure date</td>
-                <td className="table-head-text list-item-style">Paid service unit count</td>
+                <td className="table-head-text">Claim Id</td>
+                <td className="table-head-text list-item-style">Claim Date</td>
+                <td className="table-head-text list-item-style">Claim Amount</td>
+                <td className="table-head-text list-item-style">Claim Status</td>
+                <td className="table-head-text list-item-style">Current State</td>
+                <td className="table-head-text list-item-style">Error Code</td>
             </tr>
         )
     }
