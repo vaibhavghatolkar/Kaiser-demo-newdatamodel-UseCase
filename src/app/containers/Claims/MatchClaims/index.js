@@ -42,7 +42,7 @@ export class MatchClaims extends React.Component{
             }
           }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.match_claims, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

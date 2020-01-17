@@ -35,14 +35,15 @@ export class RealTime276 extends React.Component {
             lastMonth: '',
             State: '',
             realTimePercent: '',
-            startDate: '',
-            endDate: '',
+            startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
+            endDate : moment().format('YYYY-MM-DD'),
             transactionId: '',
             selected_val: '',
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
-            colorArray: [
+            chartType: this.props.match.params.apiflag ? 'Eligibilityweekwise' : 'ClaimRequestweekwise',
+            colorArray : [
                 '#139DC9',
                 '#83D2B4'
             ],
@@ -56,29 +57,101 @@ export class RealTime276 extends React.Component {
         }
 
         this.getData = this.getData.bind(this)
+        this.getCommonData = this.getCommonData.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentWillReceiveProps() {
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     }
 
-    componentDidMount() {
+    componentDidMount(){
+        this.getCommonData()
         this.getData()
     }
 
-    getData(chartType) {
+    getCommonData(chartType){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        if (!chartType && this.state.apiflag == 1) {
-            chartType = "Eligibilitymonthwise"
-        } else if (!chartType && this.state.apiflag == 0) {
-            chartType = "ClaimRequestMonthwise"
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''  
+        console.log(this.state.chartType)
+        if(!this.state.chartType && this.state.apiflag == 1){
+            this.setState({
+                chartType: "Eligibilitymonthwise"
+            })
+        } else if (!this.state.chartType && this.state.apiflag == 0){
+            this.setState({
+                chartType: "ClaimRequestMonthwise"
+            })
+            // this.state.chartType = "ClaimRequestMonthwise"
+        }
+        
+        let query = `{
+            Trading_PartnerList(Transaction:"ClaimRequest") {
+                Trading_Partner_Name 
+            }
+            tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestTradingPartner") {
+                X_axis
+                Y_axis
+            }
+            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ this.state.chartType + `") {
+                X_axis
+                Y_axis
+            }
+        }`
+
+
+        if(this.state.apiflag == 1){
+            query = `{
+                Trading_PartnerList(Transaction:"EligibilityStatus") {
+                    Trading_Partner_Name 
+                }
+                tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityTradingPartner") {
+                    X_axis
+                    Y_axis
+                }
+                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ this.state.chartType + `") {
+                    X_axis
+                    Y_axis
+                }
+            }`
         }
 
+        console.log('query ', query)
+
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.performCommonOperations(res, this.state.chartType)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
+
+    getData(chartType){
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let url = Urls.claimstatus
+        // console.log(this.state.chartType)
+        // if(!this.state.chartType && this.state.apiflag == 1){
+        //     chartType = "Eligibilitymonthwise"
+        // } else if (!this.state.chartType && this.state.apiflag == 0){
+        //     chartType = "ClaimRequestMonthwise"
+        // }
+        
         let query = `{
             ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 AvgResTime
@@ -98,25 +171,15 @@ export class RealTime276 extends React.Component {
                 Invalid_Trans
                 Total_Paid
             }
-            Trading_PartnerList(Transaction:"ClaimRequest") {
-                Trading_Partner_Name 
-            }
-            tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "ClaimRequestTradingPartner") {
-                X_axis
-                Y_axis
-            }
-            datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
-                X_axis
-                Y_axis
-            }
-            ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
+            ClaimStatuswiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
                 ClaimStatus
                 Total
             }
         }`
 
 
-        if (this.state.apiflag == 1) {
+        if(this.state.apiflag == 1){
+            url = Urls.eligibility_url
             query = `{
                 Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                     AvgResTime
@@ -134,40 +197,18 @@ export class RealTime276 extends React.Component {
                     NoResponse_Per
                     RealTime_Per
                     Invalid_Trans
-                } 
-                Trading_PartnerList(Transaction:"EligibilityStatus") {
-                    Trading_Partner_Name 
-                }
-                tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "EligibilityTradingPartner") {
-                    X_axis
-                    Y_axis
-                }
-                datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
-                    X_axis
-                    Y_axis
                 }
                 Eligibilty271ErrorwiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
                     ErrorType
                     RecCount
                     Percentage
                 }
-                EligibilityAllDtlTypewise(TypeID:"" page:1 State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
-                    RecCount
-                    HiPaaSUniqueID
-                    Date
-                    Trans_type
-                    Submiter
-                    Trans_ID
-                    Error_Type
-                    Error_Code
-                    ErrorDescription
-                }
             }`
         }
 
         console.log('query ', query)
 
-        fetch(Urls.base_url, {
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -186,19 +227,52 @@ export class RealTime276 extends React.Component {
             });
     }
 
-    async performOperations(res, flag) {
-        let data = []
+    async performCommonOperations(res, flag){
         let tradingChartData = []
         let tradingChartLabel = []
         let dateChartData = []
         let dateChartLabel = []
+
+        if(res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0){
+            res.data.tradingPartnerwise.forEach(item => {
+                tradingChartLabel.push(item.X_axis)
+                tradingChartData.push(item.Y_axis)
+            })
+        }
+
+        if(res.data.datewise && res.data.datewise.length > 0){
+            let count = 1
+            res.data.datewise.forEach(item => {
+                try {
+                    if(flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise'){
+                        dateChartLabel.push('week ' + count)
+                    } else if(flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise'){
+                        dateChartLabel.push(item.X_axis)
+                    } else {
+                        dateChartLabel.push(item.X_axis)
+                    }
+                    dateChartData.push(item.Y_axis)
+                } catch (error) {}
+                count++
+            })
+        }
+
+        this.setState({
+            tradingChartLabel: tradingChartLabel,
+            tradingChartData: tradingChartData,
+            dateChartLabel: dateChartLabel,
+            dateChartData: dateChartData,
+            tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+        })
+    }
+
+    async performOperations(res, flag){
+        let data = []
         let errorPieArray = []
         let errorLabelArray = []
-        let transactionData = []
 
         if (this.state.apiflag) {
             data = res.data.Eligibilty270[0]
-            transactionData = res.data.EligibilityAllDtlTypewise
         } else {
             data = res.data.ClaimRequest276[0]
         }
@@ -223,30 +297,6 @@ export class RealTime276 extends React.Component {
         pieLabels.push("Success")
         pieLabels.push("Error")
 
-        if (res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0) {
-            res.data.tradingPartnerwise.forEach(item => {
-                tradingChartLabel.push(item.X_axis)
-                tradingChartData.push(item.Y_axis)
-            })
-        }
-
-        if (res.data.datewise && res.data.datewise.length > 0) {
-            let count = 1
-            res.data.datewise.forEach(item => {
-                try {
-                    if (flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise') {
-                        dateChartLabel.push('week ' + count)
-                    } else if (flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise') {
-                        dateChartLabel.push(moment(item.X_axis).format('DD MMM'))
-                    } else {
-                        dateChartLabel.push(moment(item.X_axis).format('MMM'))
-                    }
-                    dateChartData.push(item.Y_axis)
-                } catch (error) { }
-                count++
-            })
-        }
-
         let errorArray = []
         if (res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1) {
             errorArray = res.data.Eligibilty271ErrorwiseCount
@@ -267,20 +317,14 @@ export class RealTime276 extends React.Component {
             summaryList: summary,
             pieArray: pieArray,
             pieLabels: pieLabels,
-            tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-            tradingChartLabel: tradingChartLabel,
-            tradingChartData: tradingChartData,
-            dateChartLabel: dateChartLabel,
-            dateChartData: dateChartData,
-            errorPieArray: errorPieArray,
-            errorLabelArray: errorLabelArray,
-            inComplaince: data.In_Compliance_Per,
-            outComplaince: data.out_of_Compliance_per,
+            errorPieArray : errorPieArray,
+            errorLabelArray : errorLabelArray,
+            inComplaince : data.In_Compliance_Per,
+            outComplaince : data.out_of_Compliance_per,
             thisMonth: data.ThisMonth_Volume,
-            lastMonth: data.LastMonth_Volume,
-            transactionData: transactionData,
-            averageResponseTime: data.AvgResTime,
-            noResponsePercent: data.NoResponse_Per,
+            lastMonth : data.LastMonth_Volume,
+            averageResponseTime : data.AvgResTime,
+            noResponsePercent : data.NoResponse_Per,
             errorCount: data.Error,
             errorArray: errorArray,
             realTimePercent: data.RealTime_Per
@@ -403,6 +447,7 @@ export class RealTime276 extends React.Component {
             startDate: date
         });
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     };
@@ -412,6 +457,7 @@ export class RealTime276 extends React.Component {
             endDate: date
         });
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     }
@@ -428,6 +474,7 @@ export class RealTime276 extends React.Component {
         }
 
         setTimeout(() => {
+            this.getCommonData()
             this.getData()
         }, 50);
     }
@@ -448,12 +495,12 @@ export class RealTime276 extends React.Component {
                                 if (selected_val == 'Last week') {
                                     day = 7
                                     chartType = this.state.apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise'
-                                } else if (selected_val == 'Last month') {
+                                } else if(selected_val == 'Last 30 days'){
                                     day = 30
                                     chartType = this.state.apiflag == 1 ? 'Eligibilityweekwise' : 'ClaimRequestweekwise'
-                                } else if (selected_val == 'Last 3 months') {
+                                } else if(selected_val == 'Last 90 days'){
                                     day = 90
-                                } else if (selected_val == 'Last 6 months') {
+                                } else if(selected_val == 'Last 180 days'){
                                     day = 180
                                 } else if (selected_val == 'Last year') {
                                     day = 365
@@ -470,19 +517,21 @@ export class RealTime276 extends React.Component {
                                 this.setState({
                                     startDate: startDate,
                                     endDate: endDate,
-                                    selected_val: selected_val
+                                    selected_val: selected_val,
+                                    chartType: chartType
                                 })
 
                                 setTimeout(() => {
+                                    this.getCommonData(chartType)
                                     this.getData(chartType)
                                 }, 50);
                             }}
-                        >
-                            <option selected="selected" value=""></option>
+                            >
+                            <option value=""></option>
                             <option value="1">Last week</option>
-                            <option value="2">Last month</option>
-                            <option value="2">Last 3 months</option>
-                            <option value="2">Last 6 months</option>
+                            <option selected="selected" value="2">Last 30 days</option>
+                            <option value="2">Last 90 days</option>
+                            <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>
                         </select>
                     </div>
@@ -519,9 +568,10 @@ export class RealTime276 extends React.Component {
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
-                                setTimeout(() => {
-                                    this.getData()
-                                }, 50);
+                                // setTimeout(() => {
+                                //     this.getCommonData()
+                                //     this.getData()
+                                // }, 50);
                             }}
                         >
                             <option value="select"></option>
@@ -619,42 +669,8 @@ export class RealTime276 extends React.Component {
         )
     }
 
-    renderTransactions() {
-        let row = []
-        const data = this.state.transactionData ? this.state.transactionData : []
-
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td>{d.Trans_ID}</td>
-                    <td>{moment.unix(d.Date / 1000).format("DD MMM YYYY hh:mm:ss")}</td>
-                    <td>{d.Submiter}</td>
-                    <td>{d.Trans_type}</td>
-                </tr>
-            )
-        })
-
-        return (
-            <div>
-                <table className="table table-bordered claim-list">
-                    <thead>
-                        <tr className="table-head" style={{ fontSize: "9px" }}>
-                            <td className="table-head-text">Transaction Id</td>
-                            <td className="table-head-text list-item-style">Transaction Date</td>
-                            <td className="table-head-text list-item-style">Submitter</td>
-                            <td className="table-head-text list-item-style">Status</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {row}
-                    </tbody>
-                </table>
-            </div>
-        )
-    }
-
-    renderAvgSummaryDetails() {
-        return (
+    renderAvgSummaryDetails(){
+        return(
             <div className="col-5 summary-container">
                 <div className="summary-header">Average Response Times</div>
                 <div className="row">

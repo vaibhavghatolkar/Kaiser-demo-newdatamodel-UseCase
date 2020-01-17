@@ -9,26 +9,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
+import Strings from '../../../../helpers/Strings';
 
-const data = {
-    labels: [
-        'Accepted',
-        'Rejected'
-    ],
-    datasets: [{
-        data: [95, 5],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4'
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4'
-        ]
-    }],
-    flag: ''
-};
-
+let val = ''
 const second_data = {
     labels: [
         'ICD Code not found',
@@ -61,24 +44,6 @@ const second_data = {
 };
 
 
-const bardata = {
-    labels: ['TP1', 'TP2', 'TP3', 'TP4'],
-    showFile: false,
-    datasets: [
-        {
-            label: 'Total Claims',
-            backgroundColor: '#139DC9',
-            borderColor: '#139DC9',
-            borderWidth: 1,
-            hoverBackgroundColor: '#139DC9',
-            hoverBorderColor: '#139DC9',
-            data: [65, 59, 80, 81]
-        }
-    ],
-    legend: {
-        display: false
-    }
-};
 
 export class RealTimeDashboard extends React.Component {
 
@@ -89,16 +54,26 @@ export class RealTimeDashboard extends React.Component {
             summaryList: [],
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            startDate: '',
-            endDate: '',
-            selectedTradingPartner: ''
+            startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
+            endDate : moment().format('YYYY-MM-DD'),
+            providerName: '',
+            chartType: 'Weekwise',
+            selectedTradingPartner: '',
+            State: '',
+            Months: 0,
+            accepted: 0,
+            rejected: 0,
+            inProgress: 0,
+            Accepted_per: 0,
+            rejected_per: 0,
+            ClaimBarChart: [],
+            claimLabels: [],
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
 
         this.showFile = this.showFile.bind(this)
-        this.renderSummary = this.renderSummary.bind(this)
-        // this.getData = this.getData.bind(this)
+        this.getData = this.getData.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -111,65 +86,71 @@ export class RealTimeDashboard extends React.Component {
     }
 
     componentDidMount() {
+        this.getCommonData()
         this.getData()
     }
 
-    getData() {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : ''
-        
+    getCommonData(){
         let query = `{
-            FileInTake(fileId: 0, submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-              FileName
-              FileDate
-              ExtraField2
-              Submitter_N103
-              dCount
-            }
-            Trading_PartnerList(Transaction:"Claim837") { 
-               
+            Trading_PartnerList(Transaction:"Claim837RT") {
                 Trading_Partner_Name 
-                
-            }
-            ClaimCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                SubCount
-            }
-            ClaimAccCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                AccCount
-            }
-            ClaimRejCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                RejCount
-            }
-            ClaimPaidCount {
-                PaidCount
-            }
-            ClaimDeniedCount {
-                DeniedCount
-            }
-            FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
-                totalFile
-            }
-            FileFailedFileCount {
-                FailedFileCount
             }
         }`
 
-        console.log('Query ', query)
+        console.log('query ', query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data){
+                this.setState({
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
 
-        if (this.state.apiflag) {
-            query = `{
-                FileInTake835 {
-                  FileName
-                  FileDate
-                  ExtraField2
-                  Submitter_N103
-                  Receiver_N103
-                }
-            }`
-            console.log("hey here it is !!", JSON.stringify(this.props.state))
+    getData() {
+        let chartType = this.state.chartType
+        if(!chartType){
+            chartType = "Monthwise"
         }
-
-        fetch(Urls.base_url , {
+        
+        let query = `{
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+                TotalFiles
+                TotalClaims
+                Accepted
+                Rejected
+                Accepted_Per
+                Rejected_Per
+                Total999
+                Total277CA
+                TotalSentToQNXT
+                InProgress
+            }
+            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`") {
+                From
+                MonthNo
+                Year
+                To
+                Amount
+                TotalClaims
+                X_axis
+                Y_axis
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim , {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -182,44 +163,59 @@ export class RealTimeDashboard extends React.Component {
                 let array = []
                 let summary = []
                 let data = res.data
-                let iterator = data.FileInTake
-                if (this.state.apiflag) {
-                    iterator = data.FileInTake835
+                let Accepted_per1 = 0
+                let rejected_per1 = 0
+                let accepted = 0
+                let rejected = 0
+                let inProgress = 0
+                let ClaimBarChart = res.data.Claim837RTClaimBarchart
+                let claimLabels = []
+                
+                if(data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0){
+                    summary = [
+                        { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
+                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
+                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : ''   },
+                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : ''},
+                        { name: 'Accepted Percentage', value: data.Claim837RTDashboardCount[0].Accepted_Per  ? data.Claim837RTDashboardCount[0].Accepted_Per : ''},
+                        { name: 'Rejected Percentage', value: data.Claim837RTDashboardCount[0].Rejected_Per  ? data.Claim837RTDashboardCount[0].Rejected_Per : ''},
+                    ]
+                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
+                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
+                    accepted = data.Claim837RTDashboardCount[0].Accepted
+                    rejected = data.Claim837RTDashboardCount[0].Rejected
+                    inProgress = data.Claim837RTDashboardCount[0].InProgress
                 }
-
-                iterator.forEach(item => {
-                    array.push({
-                        name: item.FileName,
-                        date: item.FileDate,
-                        status: item.ExtraField2,
-                        submitter: item.Submitter_N103,
-                        dCount: item.dCount
-                    })
+                
+                let count = 0
+                ClaimBarChart.forEach((d)=> {
+                    count++;
+                    array.push(
+                        d.Y_axis ? parseFloat(d.Y_axis) : 0
+                    )
+                    if(chartType == 'Weekwise'){
+                        claimLabels.push('week' + count)
+                    } else {
+                        claimLabels.push(d.X_axis)
+                    }
                 })
-
-                summary = [
-                   
-                    { name: 'Total Claims', value: data.ClaimCount ? data.ClaimCount[0].SubCount : '' },
-                    { name: 'Accepted Claims', value: data.ClaimAccCount ? data.ClaimAccCount[0].AccCount : '' },
-                    { name: 'Rejected Claims', value: data.ClaimRejCount ? data.ClaimRejCount[0].RejCount : '' },
-                    { name: 'Accepted %', value: data.FileInCount ? data.FileInCount[0].totalFile : '' },
-                    { name: 'Rejected %', value: data.FileFailedFileCount ? data.FileFailedFileCount[0].FailedFileCount : '' },
-                    // {name:'Claims Queue', value : 250},
-                    // {name:'Work in Progress', value : 123},
-                    // {name:'Paid Claims', value : data.ClaimPaidCount ? data.ClaimPaidCount[0].PaidCount : '' },
-                    // {name:'Partial Paid Claims', value : data.ClaimDeniedCount ? data.ClaimDeniedCount[0].DeniedCount : ''}
-                ]
-
+        
                 this.setState({
-                    claimsList: array,
                     summaryList: summary,
-                    tradingpartner: res.data.Trading_PartnerList
+                    Accepted_per: Accepted_per1,
+                    rejected_per: rejected_per1,
+                    ClaimBarChart:array,
+                    claimLabels : claimLabels,
+                    accepted : accepted,
+                    rejected : rejected,
+                    inProgress : inProgress
                 })
             })
             .catch(err => {
                 console.log(err)
             })
     }
+
 
     renderSearchBar() {
         return (
@@ -241,10 +237,57 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
+    getBarData(labelArray, dataArray, color){
+        let bardata = {
+            labels: labelArray,
+            showFile: false,
+            datasets: [
+                {
+                    label: 'Total Claims',
+                    backgroundColor: color,
+                    borderColor: color,
+                    borderWidth: 1,
+                    hoverBackgroundColor: color,
+                    hoverBorderColor: color,
+                    data: dataArray
+                }
+            ],
+            legend: {
+                display: false
+            }
+        }
+
+        return bardata
+    }
+
     renderCharts() {
+        const data = {
+            labels: [
+                'Accepted',
+                'Rejected',
+                'In Progress',
+            ],
+            datasets: [{
+                data: [this.state.accepted, this.state.rejected, this.state.inProgress],
+                backgroundColor: [
+                    '#139DC9',
+                    '#daea00',
+                    '#83D2B4',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#daea00',
+                    '#83D2B4',
+                ]
+            }],
+            flag: ''
+        };
+
+        console.log(this.state.ClaimBarChart)
+        
         return (
-            <div className="row chart">
-                <div className="col-6">
+            <div className="row chart-div">
+                <div className="chart-container chart">
                     <Pie data={data}
                         options={{
                             elements: {
@@ -259,15 +302,21 @@ export class RealTimeDashboard extends React.Component {
                         width={100}
                         height={60} />
                 </div>
-                <div className="col-6">
-                    
+                <div className="chart-container chart">
                     <Bar
-                        data={bardata}
+                        data={this.getBarData(this.state.claimLabels,this.state.ClaimBarChart, "#83D2B4")}
                         width={100}
                         height={60}
                         options={{
                             legend: {
                                 position: 'bottom'
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        fontSize: 10
+                                    }
+                                }]
                             }
                         }} />
                 </div>
@@ -307,110 +356,12 @@ export class RealTimeDashboard extends React.Component {
         })
     }
 
-    renderSummary() {
-        let row = []
-        const details = this.state.summaryList;
-        let data=[]
-        // this.state.flag
-        // this.state.selectedTradingPartner
-        // this.state.startDate
-        // this.state.endDate
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-
-        details.forEach((d) => {
-            let addon = ''
-            if(d.name == 'Accepted Claims'){
-                addon = '/accept'
-            } else if(d.name == 'Rejected Claims'){
-                addon = '/reject'
-            } else {
-                addon = '/other'
-            }
-            data = [
-                {flag:addon, selectedTradingPartner:selectedTradingPartner, startDate:startDate ,endDate:endDate},
-               ]
-            row.push(
-                
-                <tr>
-                    <td className="bold-text">{d.name}</td>
-                    <td><a href="#" onClick={() => { 
-                        // this.showFile(d.name) 
-                    }} className={
-                        (d.name == 'Accepted %' || d.name == 'Total Claims') ? 'blue bold-text summary-values' :
-                            (d.name == 'Paid Claims' || d.name == 'Accepted Claims') ? 'green bold-text summary-values' :
-                                (d.name == 'Claims Queue' || d.name == 'Work in Progress') ? 'dark_red bold-text summary-values' :
-                                    (d.name == 'Rejected %' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
-                                        (d.name == 'Partial Paid Claims') ? 'orange bold-text summary-values' : ''
-                    }>
-                        {/* <Link to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link> */}
-
-                        <Link to={{ pathname: '/ClaimDetails837' , state: {data}}}> {d.value} </Link>  
-                    </a></td>
-                </tr>
-            )
-        });
-
-        return (
-            <table className="table table-bordered claim-list summary-list">
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
-        );
-    }
-
-    renderErrors() {
-        let row = []
-        const data = this.state.summaryList;
-        // this.state.flag
-        // this.state.selectedTradingPartner
-        // this.state.startDate
-        // this.state.endDate
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-
-        data.forEach((d) => {
-            let addon = ''
-            if(d.name == 'Accepted Claims'){
-                addon = '/accept'
-            } else if(d.name == 'Rejected Claims'){
-                addon = '/reject'
-            } else {
-                addon = '/other'
-            }
-            row.push(
-                <tr>
-                    <td className="bold-text">{d.name}</td>
-                    <td><a href="#" onClick={() => { 
-                        // this.showFile(d.name) 
-                    }} className={
-                        (d.name == 'Accepted %' || d.name == 'Total Claims') ? 'blue bold-text summary-values' :
-                            (d.name == 'Paid Claims' || d.name == 'Accepted Claims') ? 'green bold-text summary-values' :
-                                (d.name == 'Claims Queue' || d.name == 'Work in Progress') ? 'dark_red bold-text summary-values' :
-                                    (d.name == 'Rejected %' || d.name == 'Rejected Claims') ? 'red bold-text summary-values' :
-                                        (d.name == 'Partial Paid Claims') ? 'orange bold-text summary-values' : ''
-                    }>
-                        <Link to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link>
-                    </a></td>
-                </tr>
-            )
-        });
-
-        return (
-            <table className="table table-bordered claim-list summary-list">
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
-        );
-    }
-
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
+            if(!element){
+                return
+            }
             row.push(<option value="">{element.Trading_Partner_Name}</option>)
         })
         return row
@@ -435,7 +386,7 @@ export class RealTimeDashboard extends React.Component {
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
             this.setState({
                 [key] : ''
             })
@@ -450,122 +401,198 @@ export class RealTimeDashboard extends React.Component {
         }, 50);
     }
 
+    MonthsEvent(event, key){
+        this.setState({
+            [key] : event.target.options[event.target.selectedIndex].value
+        })
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
+    renderSummaryDetails(){
+        let row = []
+        let array = this.state.summaryList
+        let apiflag = this.state.apiflag
+        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let data = []
+            if(item.name == 'Accepted Claims'){
+                addon = '/accept'
+                claimStatus = 'Accepted'
+            } else if(item.name == 'Rejected Claims'){
+                addon = '/reject'
+                claimStatus = 'Rejected'
+            } else {
+                addon = '/other'
+            }
+            data = [
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, claimStatus: claimStatus },
+            ]
+            row.push(
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
+                ?
+                <div className="col-2 summary-container">
+                    <div className="summary-header">{item.name}</div>
+                    <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                </div>
+                :
+                <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col-2 summary-container">
+                    <div>
+                        <div className="summary-header">{item.name}</div>
+                        <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    </div>
+                </Link>
+            )
+        });
+
+        return(
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
+    }
+
+    onHandleChange(e){
+        clearTimeout(val)
+        let providerName = e.target.value
+        val = setTimeout(() => {
+            this.setState({
+                providerName : providerName
+            }, () => {
+                this.getData()
+            })
+        }, 300);
+    }
+
     renderTopbar() {
         return (
-            <div className="row">
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">State</div>
-                    <select className="form-control list-header-dashboard" id="state">
-                        <option value="">Select State</option>
-                        <option selected="selected" value="1">California</option>
-                        <option value="2">Michigan</option>
-                        <option value="3">Florida</option>
-                        <option value="4">New York</option>
-                        <option value="5">Idaho</option>
-                        <option value="6">Ohio</option>
-                        <option value="7">Illinois</option>
-                        <option value="8">Texas</option>
-                        <option value="9">Mississippi</option>
-                        <option value="10">South Carolina</option>
-                        <option value="11">New Mexico</option>
-                        <option value="12">Puerto Rico</option>
-                        <option value="13">Washington</option>
-                        <option value="14">Utah</option>
-                        <option value="15">Wisconsin</option>
-                    </select>
-                </div>
+            <div className="form-style" id='filters'>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Time Range</div>
+                        <select 
+                            className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                let day = 0
+                                let chartType = ''
+                                let selected_val = event.target.options[event.target.selectedIndex].text
 
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Trading Partner </div>
-                    <select className="form-control list-header-dashboard" id="TradingPartner" 
-                        onChange={(event) => {
-                            this.onSelect(event, 'selectedTradingPartner')
-                        }}>
-                        <option value="select">Select Trading Partner</option>
-                        {this.getoptions()}
-                    </select>
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Provider Name</div>
-                    <input className="form-control" type="text" />
-                    {/* <select className="form-control list-header-dashboard" id="option" 
-                        onChange={(event) => {
-                            this.onSelect(event, 'providerName')
-                        }}
-                    >
-                        <option value="0">Select Provider Name</option>
-                        <option value="1">Provider Name 1</option>
-                        <option value="2">Provider Name 2</option>
-                    </select> */}
-                </div>
-                {/* <div className="form-group col-2">
-                    <div className="list-header-dashboard">Start Date</div>
-                    <DatePicker className="datepicker form-control list-header-dashboard"
-                        selected={this.state.startDate}
-                        onChange={this.handleStartChange}
-                    />
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">End Date</div>
-                    <DatePicker className="datepicker form-control list-header-dashboard"
-                        selected={this.state.endDate}
-                        onChange={this.handleEndChange}
-                    />
-                </div> */}
-                <div className="form-group col-2">
-                    <div className="list-header-dashboard">Month</div>
-                    <select className="form-control list-header-dashboard" id="state">
-                        <option value="all">All</option>
-                        <option value="jan">January</option>
-                        <option value="feb">February</option>
-                        <option value="mar">March</option>
-                        <option value="apr">April</option>
-                        <option value="may">May</option>
-                        <option value="jun">June</option>
-                        <option value="jul">July</option>
-                        <option value="aug">August</option>
-                        <option value="sept">September</option>
-                        <option value="oct">October</option>
-                        <option value="nov">November</option>
-                        <option value="dec">December</option>
+                                if(selected_val == 'Last week'){
+                                    day = 7
+                                    chartType = 'Datewise'
+                                } else if(selected_val == 'Last 30 days'){
+                                    day = 30
+                                    chartType = 'Weekwise'
+                                } else if(selected_val == 'Last 90 days'){
+                                    day = 90
+                                } else if(selected_val == 'Last 180 days'){
+                                    day = 180
+                                } else if(selected_val == 'Last year'){
+                                    day = 365
+                                }
+
+                                let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
+                                let endDate = moment().format('YYYY-MM-DD')
+
+                                if(!selected_val){
+                                    startDate = ''
+                                    endDate = ''
+                                }
+
+                                this.setState({
+                                    startDate : startDate,
+                                    endDate: endDate,
+                                    selected_val: selected_val,
+                                    chartType : chartType
+                                })
+
+                                setTimeout(() => {
+                                    this.getData()
+                                }, 50);
+                            }}
+                            >
+                            <option value=""></option>
+                            <option value="1">Last week</option>
+                            <option selected="selected" value="2">Last 30 days</option>
+                            <option value="2">Last 90 days</option>
+                            <option value="2">Last 180 days</option>
+                            <option value="2">Last year</option>
                         </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.setState({
+                                    State: event.target.options[event.target.selectedIndex].text
+                                }, () => {
+                                    this.getData()
+                                })
+                            }}
+                        >
+                            <option value=""></option>
+                            <option value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input className="form-control" type="text" 
+                            onChange={(e) => this.onHandleChange(e)}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner" 
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
             </div>
         )
     }
 
+    setData = (startDate, endDate, selected_val) => {
+        this.setState({
+            startDate,
+            endDate,
+            selected_val
+        })
+    }
+
     render() {
         return (
             <div>
-                
-                {
-                    this.state.showFile
-                        ?
-                        <Files_837
-                            flag={this.state.flag}
-                            selectedTradingPartner = {this.state.selectedTradingPartner}
-                            startDate={this.state.startDate}
-                            endDate={this.state.endDate}
-                        />
-                        :
-                        <div>
-                        {/* {this.renderSearchBar()} */}
-                        <br></br>
-                        <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Dashboard</h5><br></br>
-                        {/* <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Claims Dashboard</p>  */}
-                            {this.renderTopbar()}
-                            <div className="row">
-                                <div className="col-9">
-                                    {this.renderCharts()}
-                                    {/* {this.renderList()} */}
-                                </div>
-                                <div className="col-3">
-                                    {this.renderSummary()}<br />
-                                    {this.renderErrors()}
-                                </div>
-                            </div>
-                        </div>
-                }
+                <br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
+                {this.renderTopbar()}
+                {this.renderSummaryDetails()}
+                {this.renderCharts()}
             </div>
         );
     }

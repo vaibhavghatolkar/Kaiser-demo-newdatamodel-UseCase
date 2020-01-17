@@ -1,67 +1,56 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
-import { Topbar } from '../../../components/Topbar';
-import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
-import { Link } from 'react-router-dom'
+import DatePicker from "react-datepicker";
 
-export class ClaimProcessingSummary extends React.Component{
-    
-    constructor(props){
+let val = ''
+export class ClaimProcessingSummary extends React.Component {
+
+    constructor(props) {
         super(props);
-        this.state={
-            claimsAudit: [],
+        this.state = {
             tradingpartner: [],
-            SubTotal : 0,
-            VeriTotal : 0,
-            InBizstockTotal : 0,
-            selectedTradingPartner: '',
-            PenTotal : 0,
-            RejTotal : 0,
-            errTotal : 0
+            Claim837RTProcessingSummary: [],
+            recCount: 0,
+            pageCount: 1,
+            Months: 0,
+            selectedTradingPartner: "",
+            State: "",
+            providerName: "",
+            startDate: "",
+            endDate: "",
+            TotalClaims : 0,
+            Accepted : 0,
+            Rejected : 0,
+            TotalSentToQNXT : 0,
+            Total999 : 0,
+            Total277CA : 0
         }
 
         this.getData = this.getData.bind(this)
         this.onSelect = this.onSelect.bind(this)
+        this.handlePageClick = this.handlePageClick.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        this.getCommonData()
+        this.getCountData()
         this.getData()
     }
 
-    getData(){
+    getCommonData(){
         let query = `{
-            ClaimsDailyAudit(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
-              FileID
-              filename
-              Submitted
-              Rejected
-              Pending
-              Verified
-              Error
-              InBizstock
-            }
-            ClaimsDailyAuditCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
-                SubTotal
-                VeriTotal
-                InBizstockTotal
-                PenTotal
-                RejTotal
-                errTotal
-            }
-            FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
-                totalFile
-            }
-            Trading_PartnerList(Transaction:"Claim837") { 
-               
+            Trading_PartnerList(Transaction:"Claim837RT") {
                 Trading_Partner_Name 
-                
             }
         }`
 
-        fetch(Urls.base_url, {
+        console.log('query ', query)
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -71,25 +60,9 @@ export class ClaimProcessingSummary extends React.Component{
         })
         .then(res => res.json())
         .then(res => {
-            console.log(res)
             if(res.data){
-                let totalFile = 0
-                try {
-                    totalFile = res.data.FileInCount[0].totalFile
-                } catch (error) {
-                    
-                }
-
                 this.setState({
-                    claimsAudit: res.data.ClaimsDailyAudit,
-                    SubTotal : res.data.ClaimsDailyAuditCount[0].SubTotal,
-                    VeriTotal : res.data.ClaimsDailyAuditCount[0].VeriTotal,
-                    InBizstockTotal : res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
-                    PenTotal : res.data.ClaimsDailyAuditCount[0].PenTotal,
-                    RejTotal : res.data.ClaimsDailyAuditCount[0].RejTotal,
-                    errTotal : res.data.ClaimsDailyAuditCount[0].errTotal,
-                    tradingpartner: res.data.Trading_PartnerList,
-                    totalFile : totalFile
+                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
                 })
             }
         })
@@ -98,97 +71,200 @@ export class ClaimProcessingSummary extends React.Component{
         });
     }
 
-    renderSearchBar(){
-        return(
+    getCountData(){
+        let query = `{
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+                TotalClaims
+                Accepted
+                Rejected
+                Accepted_Per
+                Rejected_Per
+                Total999
+                Total277CA
+                TotalSentToQNXT
+            }
+        }`
+        
+        console.log(query)
+
+        fetch(Urls.real_time_claim, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                var data = res.data.Claim837RTDashboardCount
+                if(data && data.length > 0){
+                    let Accepted = data[0].Accepted
+                    let Rejected = data[0].Rejected
+                    let TotalSentToQNXT = data[0].TotalSentToQNXT
+                    let Total999 = data[0].Total999
+                    let Total277CA = data[0].Total277CA
+
+                    this.setState({
+                        Accepted: Accepted,
+                        Rejected: Rejected,
+                        TotalSentToQNXT: TotalSentToQNXT,
+                        Total999: Total999,
+                        Total277CA: Total277CA,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    getData() {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+      
+        let query = `{            
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "") {
+                RecCount
+                ClaimID
+                ClaimDate
+                Subscriber_ID
+                Claim_Amount
+                ClaimStatus
+                ProviderLastName
+                ProviderFirstName
+                SubscriberLastName
+                SubscriberFirstName
+                adjudication_status
+                ClaimLevelErrors
+            }
+        }`
+        console.log(query)
+        fetch(Urls.claim_processing, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                var data = res.data.Claim837RTProcessingSummary
+                let count = 0
+                if(data && data.length > 0){
+                    let recCount = data[0].RecCount
+                    try {
+                        count = recCount / 10
+                        count = count.floor(count)
+                        if (recCount % 10 > 0) {
+                            count = count + 1
+                        }
+                    } catch (error) {
+
+                    }
+                    console.log(count)
+                }
+
+                this.setState({
+                    Claim837RTProcessingSummary: data,
+                    recCount: count,
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    renderSearchBar() {
+        return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search"/>
+                <input type="text" name="name" className="input-style" placeholder="Search" />
             </div>
         )
     }
-    handlePageClick(data, fileId){
+
+    handlePageClick(data, fileId) {
         let page = data.selected + 1
         this.setState({
-            page : page
+            pageCount: page
         })
 
         setTimeout(() => {
-            this.onClick()
+            this.getData()
         }, 50);
     }
 
-    renderTransactions(){
+    renderTransactions() {
         let row = []
-        const data = this.state.claimsAudit;
-        console.log(data)
+        const data = this.state.Claim837RTProcessingSummary;
 
         data.forEach((d) => {
+            var providerName = d.ProviderFirstName ? d.ProviderFirstName : '' + " " + d.ProviderLastName ? d.ProviderLastName : ''
             row.push(
                 <tr>
-                    <td style={{color:"#6AA2B8"}}>{d.filename}</td>
-                    <td>{d.Submitted}</td>
-                    <td>{d.InBizstock}</td>
-                    <td>{d.Rejected}</td>
-                    <td>{d.Error}</td>
-                    <td>{d.Pending}</td>
-                    
+                    <td className="list-item-style">{d.ClaimID}</td>
+                    <td className="list-item-style">{d.ClaimDate}</td>
+                    <td className="list-item-style">{d.Subscriber_ID}</td>
+                    <td className="list-item-style">{d.SubscriberLastName}</td>
+                    <td className="list-item-style">{d.SubscriberFirstName}</td>
+                    <td className="list-item-style">{d.ProviderLastName}</td>
+                    <td className="list-item-style">{d.ProviderFirstName}</td>
+                    <td className="list-item-style">{d.Claim_Amount}</td>
+                    <td className="list-item-style">{d.ClaimStatus}</td>
                 </tr>
             )
-        });
-        return(
+        })
+        return (
             <div>
-            <table className="table table-bordered claim-list summary-list">
-                <thead>
-                    <tr className="table-head">
-                        <td className="table-head-text">Claim Id</td>
-                        <td className="table-head-text list-item-style">Claim Date</td>
-                        <td className="table-head-text list-item-style">Claim Amount</td>
-                        <td className="table-head-text list-item-style">Claim Status</td>
-                        <td className="table-head-text list-item-style">Subscriber Name</td>
-                        <td className="table-head-text list-item-style">Provider Name</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{this.state.SubTotal}</td>
-                        <td>{this.state.VeriTotal}</td>
-                        <td>{this.state.InBizstockTotal}</td>
-                        <td>{this.state.PenTotal}</td>
-                        <td>{this.state.RejTotal}</td>
-                        <td>{this.state.errTotal}</td>
-                    </tr>
+                <table className="table table-bordered claim-list">
+                    <thead>
+                        <tr className="table-head">
+                            <td className="table-head-text"><small>Claim Id</small></td>
+                            <td className="table-head-text"><small>Claim Date</small></td>
+                            <td className="table-head-text"><small>Subscriber Id</small></td>
+                            <td className="table-head-text"><small>Subscriber Last Name</small></td>
+                            <td className="table-head-text"><small>Subscriber First Name</small></td>
+                            <td className="table-head-text"><small>Provider Last Name</small></td>
+                            <td className="table-head-text"><small>Provider First Name</small></td>
+                            <td className="table-head-text"><small>Claim Amount</small></td>
+                            <td className="table-head-text"><small>Claim Status</small></td>
+                        </tr>
+                    </thead>
+
                     {row}
-                </tbody>
-            </table>
-            {/* <ReactPaginate
-            previousLabel={'previous'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            breakClassName={'page-link'}
-            initialPage={0}
-            pageCount={count}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={(page) => {this.handlePageClick(page, keys)}}
-            containerClassName={'pagination'}
-            pageClassName={'page-item'}
-            previousClassName={'page-link'}
-            nextClassName={'page-link'}
-            pageLinkClassName={'page-link'}
-            subContainerClassName={'pages pagination'}
-            activeClassName={'active'}
-            /> */}
+
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.recCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
             </div>
         )
     }
 
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.setState({
-                [key] : ''
+                [key]: ''
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key]: event.target.options[event.target.selectedIndex].text
             })
         }
 
@@ -197,34 +273,165 @@ export class ClaimProcessingSummary extends React.Component{
         }, 50);
     }
 
-    renderStats(){
+    onHandleChange(e){
+        clearTimeout(val)
+        let providerName = e.target.value
+        val = setTimeout(() => {
+            this.setState({
+                providerName : providerName
+            }, () => {
+                this.getCountData()
+                this.getData()
+            })
+        }, 300);
+    }
+
+    getoptions() {
+        let row = []
+        this.state.tradingpartner.forEach(element => {
+            if(!element){
+                return
+            }
+            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
+
+    renderTopBar() {
         return (
-            <div className="row">
-                {/* <div className="col-2">
-                    <div className="center-align">Total Files</div>
-                    <div className="center-align"><a href="#" className="blue bold-text summary-values" 
-                    ><Link to={'/' + Strings.claimDetails + '/n/n/n/n'}>{this.state.totalFile}</Link></a></div>
-                </div> */}
-                <div className="col-2">
-                    <div className="center-align">Total Accepted</div>
-                    <div className="blue bold-text summary-values center-align">-</div>
+            <div className="form-style" id='filters'>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.setState({
+                                    State: event.target.options[event.target.selectedIndex].text
+                                }, () => {
+                                    this.getCountData()
+                                    this.getData()
+                                })
+                            }}
+                        >
+                            <option value=""></option>
+                            <option value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input className="form-control" type="text" 
+                            onChange={(e) => this.onHandleChange(e)}
+                        />
+
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            onChange={this.handleStartChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
-                <div className="col-2">
-                    <div className="center-align">Rejected</div>
-                    <div className="blue bold-text summary-values center-align">-</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">Sent to QNXT</div>
-                    <div className="blue bold-text summary-values center-align">-</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">999</div>
-                    <div className="green bold-text summary-values center-align">{this.state.totalFile}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">277 CA</div>
-                    <div className="red bold-text summary-values center-align">0</div>
-                </div>
+            </div>
+        )
+    }
+
+    handleStartChange(date) {
+        this.setState({
+            startDate: date,
+            showDetails : false
+        });
+
+        setTimeout(() => {
+            this.getCountData()
+            this.getData()
+        }, 50);
+    }
+
+    handleEndChange(date) {
+        this.setState({
+            endDate: date,
+            showDetails : false
+        });
+
+        setTimeout(() => {
+            this.getCountData()
+            this.getData()
+        }, 50);
+    }
+
+    renderStats() {
+        return (
+            <div className="row padding-left">
+                { 
+                    this.state.Accepted ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Accepted</div>
+                        <div className="summary-title">{this.state.Accepted}</div>
+                    </div> : null 
+                }
+                { 
+                    this.state.Rejected ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Rejected</div>
+                        <div className="summary-title">{this.state.Rejected}</div>
+                    </div> : null 
+                }
+                { 
+                    this.state.TotalSentToQNXT ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">Sent to QNXT</div>
+                        <div className="summary-title">{this.state.TotalSentToQNXT}</div>
+                    </div> : null 
+                }
+
+                { 
+                    this.state.Total999 ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">999</div>
+                        <div className="summary-title">{this.state.Total999}</div>
+                    </div> : null 
+                }
+                { 
+                    this.state.Total277CA ? 
+                    <div className="col-2 summary-container">
+                        <div className="summary-header">277 CA</div>
+                        <div className="summary-title">{this.state.Total277CA}</div>
+                    </div> : null 
+                }
             </div>
         )
     }
@@ -233,13 +440,10 @@ export class ClaimProcessingSummary extends React.Component{
         return (
             <div>
                 <br />
-                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim Processing Summary</h5> <br/>
-                <Topbar 
-                    tradingpartner={this.state.tradingpartner} 
-                    onSelect={this.onSelect}
-                    />
+                <h5 style={{ color: '#139DC9', fontsize: "20px" }}>Claim Processing Summary</h5> <br />
+                {this.renderTopBar()}
                 {this.renderStats()}
-                {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
+                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 ? this.renderTransactions() : null}
             </div>
         );
     }

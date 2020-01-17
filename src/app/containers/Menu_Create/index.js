@@ -97,10 +97,10 @@ export class MenuCreate extends React.Component {
             menuflag
             usermenuflag
             is_editor      
-           
+            is_editable
           }}`
-
-        fetch(Urls.base_url, {
+          
+        fetch(Urls.users, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export class MenuCreate extends React.Component {
                         menu_id: item.menu_id,
                         isChecked: item.usermenuflag,
                         isAccessValue: item.is_editor,
-
+                        is_editable: item.is_editable
 
 
                     })
@@ -154,8 +154,8 @@ export class MenuCreate extends React.Component {
             }
            
         }`
-
-        fetch(Urls.base_url, {
+        
+        fetch(Urls.users, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -217,7 +217,10 @@ export class MenuCreate extends React.Component {
         if (checkboxValue == true) {
 
             data.forEach((d) => {
-                d.isAccessValue = true
+                if(d.is_editable == true){
+                    d.isAccessValue = true
+                }
+                
 
             })
             console.log(data);
@@ -269,11 +272,21 @@ export class MenuCreate extends React.Component {
         data.forEach((d) => {
             var roletype = d.parent_node;
             var menuID = d.menu_id;
+            var isDisabled = "";
+            if(d.is_editable == false){
+                isDisabled = "disabled";
+                d.isAccessValue = false
+            }
+            if(d.isChecked == "0"){
+                d.isChecked = false
+            }
+            if(d.isAccessValue == "0") d.isAccessValue = false;
+            
             row.push(
 
                 <tr>
 
-                    <td style={{ fontWeight: roletype ? "0" : "bold" }}>
+                    <td style={{ fontWeight: roletype=="0" ? "bold" : "" }}>
 
                         {d.loopid}
                     </td>
@@ -284,7 +297,7 @@ export class MenuCreate extends React.Component {
                             customList: [...data]
                         })
                     }} /></td>
-                    <td className="list-item-style"><input checked={d.isAccessValue} type="checkbox" onChange={(e) => {
+                    <td className="list-item-style"><input checked={d.isAccessValue} type="checkbox" disabled={isDisabled} onChange={(e) => {
                         d.isAccessValue = e.target.checked
                         this.setState({
                             customList: [...data]

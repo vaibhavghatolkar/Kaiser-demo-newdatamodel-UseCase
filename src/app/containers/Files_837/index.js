@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../helpers/Urls';
+import { getDetails } from '../../../helpers/getDetails';
 
 export class Files_837 extends React.Component {
 
@@ -30,6 +31,7 @@ export class Files_837 extends React.Component {
             initialPage: 0,
             lineData: [],
             file: [],
+            showDetails: false,
             memberInfo: {},
             subscriberNo : '',
             selectedTradingPartner:props.location.state.data[0] &&props.location.state.data[0].selectedTradingPartner != 'n'?props.location.state.data[0].selectedTradingPartner : '',
@@ -66,103 +68,22 @@ export class Files_837 extends React.Component {
       
         this.getData()
         this.getTradingData()
-    this.getICDCode()  
+        this.getICDCode()  
     }
 
     getTradingData(){
-        let query = `{
-            Trading_PartnerList(Transaction:"Claim837") {
-              
-              Trading_Partner_Name
-            }
-          }`
-
-        fetch(Urls.base_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({query: query})
-        })
-            .then(res => res.json())
-            .then(res => {
+        getDetails("Claim837")
+        .then((tradingpartner) => {
+            if(tradingpartner && tradingpartner.length > 0){
                 this.setState({
-                    tradingpartner: res.data.Trading_PartnerList
+                    tradingpartner: tradingpartner
                 })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+            }
+        }).catch(error => {
+            console.log(error)
+        })
+
         this.getData();
-
-// var query = `mutation{ SP_Trading_Partner_Save(ID : 8
-//             Trading_Partner_Name : "AAA"
-//             Identifier : "ABC"
-//             Functional_Ack_Options : "A"
-//             Doc_Envelope_Option : "B"
-//             Element_Delimiter : "C"
-//             Segment_Termination_Character : "D"
-//             Filter_Functional_Acknowledgments: false
-//             Reject_Duplicate_ISA: false
-//             Validate_Outbound_Interchanges: false
-//             Outbound_Validation_Option :    "E"
-//             Authorization_Info_Qualifier : "F"
-//             Authorization_Info_ID : "G"
-//             Security_Information_Qualifier : "H"
-//             Security_Information_Id : "I"
-//             Interchange_ID_Qualifier : "J"
-//             Interchange_ID : "K"
-//             Interchange_Standard_ID : "L"
-//             Interchange_Version : "M"
-//             ISA14: true
-//             Test_Indicator : "N"
-//             Component_Separator :"O"
-//             X12 : "P"
-//             Application_Code : "Q"
-//             Responsible_Agency_Code :"R"
-//             GSVersion : "S"
-//             Communication_Type :"T"
-//             Use_Default_Settings: true
-//             Host : "U"
-//             Port : "V"
-//             UserName :"W"
-//             Password : "X"
-//             Directory : "Y"
-//             Create_Directory: true
-//             File_Naming_Options :"Z"  )
-//         }`
-//      fetch('http://192.168.1.16:4000/graphQl', {
-//        method: 'POST',
-//        headers: {
-//          'Content-Type': 'application/json',
-//          'Accept': 'application/json',
-//        },
-//        body: JSON.stringify({
-//          query
-//        })
-//      })
-//        .then(r => r.json())
-//        .then(data => console.log('data returned:', data));
-
-
-//    var FileID = '399';
-//   // var content = 'hope is a good thing';
-//   var query = "mutation { updateFileInTake(FileID:\"" + FileID + "\")}"
-//   fetch('http://192.168.1.16:4000/graphQl', {
-//    method: 'POST',
-//    headers: {
-//      'Content-Type': 'application/json',
-//      'Accept': 'application/json',
-//    },
-//    body: JSON.stringify({
-//      query
-//    })
-//   })
-//    .then(r => r.json())
-//    .then(data => console.log('data returned:', data));
-//   }
-  
     }
 
     
@@ -190,7 +111,7 @@ export class Files_837 extends React.Component {
 
         console.log(query)
 
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -221,7 +142,7 @@ export class Files_837 extends React.Component {
     }
 
     getClaimData(FileID, ClaimID) {
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -252,7 +173,7 @@ export class Files_837 extends React.Component {
           `
 
 
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -279,7 +200,7 @@ export class Files_837 extends React.Component {
             query = "{ ClaimRejCountData(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
         }
         console.log("Query : " + query)
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -330,6 +251,7 @@ export class Files_837 extends React.Component {
 
     handleStartChange(date) {
         this.setState({
+            showDetails: false,
             startDate: date
         });
         setTimeout(() => {
@@ -339,6 +261,7 @@ export class Files_837 extends React.Component {
 
     handleEndChange(date) {
         this.setState({
+            showDetails: false,
             endDate: date
         });
         setTimeout(() => {
@@ -351,7 +274,7 @@ export class Files_837 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : ''
 
         let query = '{ FileInTake(fileId:'+fileId+', submitter:"'+this.state.selectedTradingPartner+'",fromDt:"'+startDate+'",ToDt:"'+endDate+'") { FileName, FileDate, Submitter_N103, Receiver_N103, Created_Date, FileID } }'
-        fetch(Urls.base_url, {
+        fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -385,7 +308,7 @@ export class Files_837 extends React.Component {
         this.getICDCode();
         let query = '{ IntakeClaimData(fileId: ' + fileId + ', ClaimID: ' + '"' + claimId + '"' + ') { ClaimTMTrackingID SubscriberFirstName SubscriberLastName AdmissionDate Claim_Amount BillingProviderFirstName BillingProviderLastName BillingProviderAddress BillingProviderCity_State_Zip ClaimStatus DiagnosisCodes SeqID ClaimID ClaimLevelErrors  ClaimExtNmbr} }'
         console.log(query);
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -453,7 +376,7 @@ export class Files_837 extends React.Component {
     }
     handleClick(fileId, subscriber, type) {
         let query = '{ IntakeClaimLineDataFileIDClaimID(FileID: '+'"'+fileId +'"'+', ClaimID:'+'"'+subscriber +'"'+') { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID Subscriber_ID Member_ID ExtSubscriber_ID ICD9ICD10 ProcNo DiagnosisXRef DiagnosisCodes PatientWeight Units UnitMeasure Proc_Amount PatientPaid NetBalance Adjust InsuranceBalance DateofService DateofServiceEnd LineStatus OtherID ExternalCorrelationToken AmbulanceInfo XRayInfo TransportInfo ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HCP01_PricingMethodology HCP02_Amount HCP03 HCP04 HCP05_Rate HCP06 HCP07 HCP08 HCP12_Quantity HCP13 HCP14 HCP15_ExceptionCode AttendingProviderNameLastOrOrganizationName AttendingProviderNameFirst NM108_AttendingProvider NM109_AttendingProvider AttendingProviderCode AttendingProvider_PRV02 AttendingProvider_PRV03 AttendingProvider_REF01 AttendingProvider_REF02 OperatingPhysicianNameLastOrOrganizationName OperatingPhysicianNameFirst NM108_OperatingPhysician NM109_OperatingPhysician OperatingPhysician_REF01 OperatingPhysician_REF02 OtherOperatingPhysicianNameLastOrOrganizationName OtherOperatingPhysicianNameFirst NM108_OtherOperatingPhysician NM109_OtherOperatingPhysician OtherOperatingPhysician_REF01 OtherOperatingPhysician_REF02 RenderingPhysicianNameLastOrOrganizationName RenderingPhysicianNameFirst NM108_RenderingPhysician NM109_RenderingPhysician RenderingPhysician_REF01 RenderingPhysician_REF02 ServiceFacilityLocationName ServiceFacilityLocation_NM102 ServiceFacilityLocation_NM108 ServiceFacilityLocation_NM109 ServiceFacilityLocationAddress ServiceFacilityLocation_City_State_Zip ServiceFacilityLocation_REF01 ServiceFacilityLocation_REF02 ReferringProviderNameLastOrOrganizationName ReferringProviderNameFirst NM108_ReferringProvider NM109_ReferringProvider ReferringProvider_REF01 ReferringProvider_REF02 SBR01_PayerResponsibilityCode SBR02 SBR03 SBR04 SBR09 CAS01_ClaimAdjustMentGroupCode CAS02 CAS03 CAS04 CAS05 CAS06 CAS07 CAS08 CAS09 CAS10 CAS11 CAS12 CAS13 CAS14 CAS15 CAS16 CAS17 CAS18 CAS19 AMT01_PayerPaidAmmount AMT02_Amount AMT01_RemainingPatientLiability AMT02_RPAmount AMT01_NonCoveredChargeAmmount AMT02_NCAmount OtherInsuranceCoverage_OI03 OtherInsuranceCoverage_OI06 MIA01 MIA02 MIA03 MIA04 MIA05 MIA06 MIA07 MIA08 MIA09 MIA10 MOA01 MOA02 MOA03 MOA04 MOA05 MOA06 MOA07 MOA08 MOA09 MOA10 OtherSubscriberNameLastOrOrganizationName OtherSubscriberNameFirst OtherSubscriber_NM102 NM108_OtherSubscriber NM109_OtherSubscriber OtherSubscriberAddress OtherSubscriberCityStateZip OtherSubscriber_REF01 OtherSubscriber_RF02 OtherPayerNameLastOrOrganizationName OtherPayerNameFirst OtherPayer_NM102 NM108_OtherPayer NM109_OtherPayer OtherPayerAddress OtherPayerCityStateZip ClaimCheckOrRemittanceDate LX SV201 SV202 SV202_1 SV202_2 SV202_3 SV202_4 SV202_5 SV202_6 SV202_7 SV203 SV204 SV205 SV207 LinSupplimentalInfo_PWK01 PWK02 PWK05 ServiceDate LIN02_DrugIdentification LIN03 CTP04_DrugQuantity CTP05 CTP05_1 SVD01 SVD02 SVD03 SVD03_1 SVD03_2 SVD03_3 SVD05 LineCheckOrRemittanceDate RemainingPatientLiability ErrorCode ClaimLineLevelErrors Field1 Field2 Field3 Field4 adjustment type_of_adjustment RemainigAmt } }'
-        fetch(Urls.base_url, {
+        fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -478,6 +401,7 @@ export class Files_837 extends React.Component {
                 });
 
                 this.setState({
+                    showDetails: true,
                     coverage_data: coverage_data
                 })
             })
@@ -801,12 +725,14 @@ export class Files_837 extends React.Component {
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
             this.setState({
+                showDetails: false,
                 [key] : ''
             })
         } else {
             this.setState({
+                showDetails: false,
                 [key] : event.target.options[event.target.selectedIndex].text
             })
         }
@@ -820,9 +746,9 @@ export class Files_837 extends React.Component {
         return(
             <div className="row">
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select State</div>
+                    <div className="list-header-dashboard">State</div>
                     <select className="form-control list-header-dashboard" id="state">
-                        <option value="">Select State</option>
+                        <option value="">State</option>
                         <option selected="selected" value="1">California</option>
                         <option value="2">Michigan</option>
                         <option value="3">Florida</option>
@@ -842,19 +768,19 @@ export class Files_837 extends React.Component {
                 </div>
 
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select Trading Partner </div>
+                    <div className="list-header-dashboard">Trading partner </div>
                     <select className="form-control list-header-dashboard" id="TradingPartner"
                         onChange={(event) => {
                             this.onSelect(event, 'selectedTradingPartner')
                         }}>
-                        <option value="select">Select Trading Partner</option>
+                        <option value="select">Trading partner</option>
                         {this.getoptions()}
                     </select>
                 </div>
                 <div className="form-group col-2">
-                    <div className="list-header-dashboard">Select Provider Name</div>
+                    <div className="list-header-dashboard">Provider Name</div>
                     <select className="form-control list-header-dashboard" id="option">
-                        <option value="">Select Provider Name</option>
+                        <option value="">Provider Name</option>
                         <option selected="selected" value="1">Provider Name 1</option>
                         <option value="2">Provider Name 2</option>
                     </select>
@@ -897,7 +823,7 @@ export class Files_837 extends React.Component {
                         {this.state.claimsObj ? this.renderList() : null}
                     </div>
                     <div className="col-6">
-                        {this.renderSummary()}
+                        {this.state.showDetails ? this.renderSummary() : null}
                     </div>
                 </div>
             </div>

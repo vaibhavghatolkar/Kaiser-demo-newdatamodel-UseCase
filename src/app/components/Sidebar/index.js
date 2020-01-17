@@ -68,9 +68,9 @@ export class Sidebar extends React.Component {
 
             ],
             RealTime837: [
-                { value: 'RealTime Dashboard', key: 'RealTimeDashboard' },
-                { value: 'Claim Processing Summary', key: 'ClaimProcessingSummary' },
-                { value: 'Claim Details', key: 'ClaimDetails837' },
+                {value: "Claim's Dashboard", key: 'RealTimeDashboard'},
+                {value: 'Claim Processing Summary', key: 'ClaimProcessingSummary'},
+                {value: 'Claim Details', key: 'ClaimDetails837'},
             ],
             fullfile: [
                 { value: 'Enrollment Details', key: 'EnrollmentDetails' },
@@ -185,15 +185,14 @@ export class Sidebar extends React.Component {
 
                 {this.renderItems(Strings.REALTIME270, 'Eligibility Real-time', this.state.RealTime270)}
                 {this.renderItems(Strings.REALTIME276, 'Claim Status Real-time', this.state.RealTime276)}
-
-                {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)}
-                {this.renderItems(Strings.REALTIME_837_CLAIM, 'RealTime 837 Claims', this.state.RealTime837)}
-
+              
+                {/* {this.renderItems(Strings.CLAIMS, 'Claims Management', this.state.claimsArray)} */}
+                {this.renderItems(Strings.REALTIME_837_CLAIM, '837 Claim Management', this.state.RealTime837)}
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
 
                 {/* ** {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)} */}
-                {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)}
+                {/* {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
                 {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)}
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}

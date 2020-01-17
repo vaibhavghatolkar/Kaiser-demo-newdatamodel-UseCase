@@ -5,6 +5,7 @@ import { Topbar } from '../../../components/Topbar';
 import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
+import { getDetails } from '../../../../helpers/getDetails';
 
 export class AuditSummary extends React.Component{
     
@@ -27,7 +28,19 @@ export class AuditSummary extends React.Component{
     }
 
     componentDidMount(){
+        this.getTradingPartnerDetails()
         this.getData()
+    }
+
+    getTradingPartnerDetails = async() => {
+        getDetails("Claim837")
+        .then((tradingpartner) => {
+            if(tradingpartner && tradingpartner.length > 0){
+                this.setState({
+                    tradingpartner: tradingpartner
+                })
+            }
+        })
     }
 
     getData(){
@@ -53,14 +66,9 @@ export class AuditSummary extends React.Component{
             FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
                 totalFile
             }
-            Trading_PartnerList(Transaction:"Claim837") { 
-               
-                Trading_Partner_Name 
-                
-            }
         }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -153,7 +161,7 @@ export class AuditSummary extends React.Component{
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Select Provider Name' || event.target.options[event.target.selectedIndex].text == 'Select Trading Partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
             this.setState({
                 [key] : ''
             })

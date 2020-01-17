@@ -152,7 +152,7 @@
 .chart{
     background-color: #ffffff;
     margin-top : 16px;
-    padding-bottom : 24px;
+    padding: 24px;
 }
 .response-summary-title{
     font-size: 14px;

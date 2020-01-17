@@ -57,28 +57,57 @@ export class EligibilityDetails extends React.Component{
         this.getTransactions()
     }
 
-    getData(){
-        let query = `{
-            Trading_PartnerList(Transaction:"EligibilityStatus")  {
-                Trading_Partner_Name 
-            }
-            ErrorType_List(Transaction: "Eligibility") {
-                ErrorType
-            }
-        }`
-
-        if(this.state.apiflag == 1){
+    getData(uuid){
+        let query = ''
+        if(uuid){
+            if(this.state.apiflag == 1){
             query = `{
-                Trading_PartnerList(Transaction:"EligibilityStatus")  {
-                    Trading_Partner_Name 
+                EventLogData(Transaction:"Eligibility" HiPaaS_UUID:"`+uuid+`") {
+                    HiPaaS_UUID
+                    EventName
+                    EventCreationDateTime
+                    Exception
+                    ErrorMessage
+                    Transaction_Compliance
                 }
-                ErrorType_List(Transaction: "Eligibility") {
-                    ErrorType
+            }`
+        }else{
+            query = `{
+                EventLogData(Transaction:"ClaimRequest" HiPaaS_UUID:"`+uuid+`") {
+                    HiPaaS_UUID
+                    EventName
+                    EventCreationDateTime
+                    Exception
+                    ErrorMessage
+                    Transaction_Compliance
                 }
             }`
         }
+        } else {
+            query = `{
+                Trading_PartnerList(Transaction:"ClaimRequest")  {
+                    Trading_Partner_Name 
+                }
+                ErrorType_List(Transaction: "ClaimRequest") {
+                    ErrorType
+                }
+            }`
+    
+            if(this.state.apiflag == 1){
+                query = `{
+                    Trading_PartnerList(Transaction:"EligibilityStatus")  {
+                        Trading_Partner_Name 
+                    }
+                    ErrorType_List(Transaction: "Eligibility") {
+                        ErrorType
+                    }
+                }`
+            }   
+        }
 
-        fetch(Urls.base_url, {
+        console.log(query)
+
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -89,10 +118,17 @@ export class EligibilityDetails extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data){
-                this.setState({
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                    errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
-                })
+                if(uuid){
+                    this.setState({
+                        eventLog: res.data.EventLogData,
+                        Transaction_Compliance : res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
+                    })
+                } else {
+                    this.setState({
+                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                        errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
+                    })
+                }
             }
         })
         .catch(err => {
@@ -107,6 +143,7 @@ export class EligibilityDetails extends React.Component{
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
+        let url = Urls.claimstatus
 
         if(this.state.apiflag == 1 && this.state.status != 'Pass'){
             chartQuery = `Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
@@ -131,7 +168,7 @@ export class EligibilityDetails extends React.Component{
         }`
         
         if(this.state.apiflag == 1){
-   
+            url = Urls.eligibility_url
             query = `{
                 EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`" ) {
                     RecCount
@@ -149,7 +186,7 @@ export class EligibilityDetails extends React.Component{
 
         console.log('query ', query)
 
-        fetch(Urls.base_url, {
+        fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -234,6 +271,8 @@ export class EligibilityDetails extends React.Component{
     }
 
     getDetails(uuid){
+        let url = Urls.claimstatus
+
         let query = `{
             ClaimRequest(HiPaaSUniqueID:"`+uuid+`") {
               Message
@@ -241,17 +280,10 @@ export class EligibilityDetails extends React.Component{
             ClaimStatus277(HiPaaSUniqueID:"`+uuid+`") {
                 Message
             }
-            EventLogData(HiPaaS_UUID:"`+uuid+`") {
-                HiPaaS_UUID
-                EventName
-                EventCreationDateTime
-                Exception
-                ErrorMessage
-                Transaction_Compliance
-            }
         }`
 
         if(this.state.apiflag == 1){
+            url = Urls.eligibility_url
             query = `{
                 Eligibilty270Request(HiPaaSUniqueID:"`+uuid+`") {
                   Message
@@ -259,20 +291,12 @@ export class EligibilityDetails extends React.Component{
                 Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
                     Message
                 }
-                EventLogData(HiPaaS_UUID:"`+uuid+`") {
-                    HiPaaS_UUID
-                    EventName
-                    EventCreationDateTime
-                    Exception
-                    ErrorMessage
-                    Transaction_Compliance
-                }
             }`
         }
 
         console.log('query ', query)
 
-        fetch(Urls.base_url, {
+        fetch(url, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -287,8 +311,6 @@ export class EligibilityDetails extends React.Component{
                     showDetails: true,
                     message_270 : this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
                     message_271 : this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
-                    eventLog: res.data.EventLogData,
-                    Transaction_Compliance : res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
                 })
             }
         })
@@ -304,8 +326,11 @@ export class EligibilityDetails extends React.Component{
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a onClick={() => {this.getDetails(d.HiPaaSUniqueID)}} style={{ color: "#6AA2B8", cursor:"default" }}>{d.Trans_ID}</a></td>
-                    <td>{moment.unix(d.Date/1000).format("DD MMM YYYY hh:mm:ss")}</td>
+                    <td><a href="#" onClick={() => {
+                        this.getData(d.HiPaaSUniqueID)
+                        this.getDetails(d.HiPaaSUniqueID)
+                    }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
+                    <td>{d.Date}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
                     {this.state.status != 'Pass' ? <td>{d.Error_Type}</td> : null}
@@ -547,7 +572,7 @@ export class EligibilityDetails extends React.Component{
                         <div className="form-group col-md-2">
                             <div className="list-dashboard">Start Date</div>
                             <DatePicker 
-                                className="datepicker"
+                                className="form-control list-dashboard"
                                 selected={this.state.startDate ? new Date(this.state.startDate) : ''}
                                 onChange={this.handleStartChange}
                             />
@@ -555,7 +580,7 @@ export class EligibilityDetails extends React.Component{
                         <div className="form-group col-md-2">
                             <div className="list-dashboard">End Date</div>
                             <DatePicker 
-                                className="datepicker"
+                                className="form-control list-dashboard"
                                 selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                                 onChange={this.handleEndChange}
                             />
@@ -573,7 +598,7 @@ export class EligibilityDetails extends React.Component{
             row.push(
                 <tr>
                     <td>{d.EventName}</td>
-                    <td>{moment.unix(d.EventCreationDateTime/1000).format('DD MMM YYYY hh:mm:ss')}</td>
+                    <td>{d.EventCreationDateTime}</td>
                     <td>{d.Exception}</td>
                 </tr>
             )
@@ -605,7 +630,7 @@ export class EligibilityDetails extends React.Component{
     render() {
         return (
             <div>
-                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
+                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-6">
@@ -614,7 +639,7 @@ export class EligibilityDetails extends React.Component{
                     
                     <div className="col-6">
                         {/* {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null} */}
-                        {this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
+                        {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
