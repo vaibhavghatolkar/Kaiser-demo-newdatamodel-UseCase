@@ -376,6 +376,9 @@ export class RealTime276 extends React.Component{
     }
 
     renderCharts(){
+       let minimumValue = Math.min(...this.state.dateChartData)
+        minimumValue = (minimumValue==0 ? 0 : (minimumValue-(minimumValue*10/100)))
+        minimumValue = Math.ceil(minimumValue)
         return(
             <div>
                 <div className="row chart-div">
@@ -407,6 +410,13 @@ export class RealTime276 extends React.Component{
                             options={{
                                 legend: {
                                     display: false,
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            min: minimumValue,
+                                        }
+                                    }]
                                 }
                             }}/>
                     </div> : null

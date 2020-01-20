@@ -99,7 +99,7 @@ export class MenuCreate extends React.Component {
             is_editor      
             is_editable
           }}`
-          
+        
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -280,8 +280,10 @@ export class MenuCreate extends React.Component {
             if(d.isChecked == "0"){
                 d.isChecked = false
             }
-            if(d.isAccessValue == "0") d.isAccessValue = false;
-            
+            if(d.isAccessValue == "0"){
+                d.isAccessValue = false
+            }
+           console.log(d.isAccessValue)
             row.push(
 
                 <tr>
@@ -297,12 +299,13 @@ export class MenuCreate extends React.Component {
                             customList: [...data]
                         })
                     }} /></td>
-                    <td className="list-item-style"><input checked={d.isAccessValue} type="checkbox" disabled={isDisabled} onChange={(e) => {
+                    <td className="list-item-style">{d.is_editable == false ? '' : <input checked={d.isAccessValue} type="checkbox" onChange={(e) => {
                         d.isAccessValue = e.target.checked
+                        d.isChecked = e.target.checked
                         this.setState({
                             customList: [...data]
                         })
-                    }} /></td>
+        }} />}</td>
 
 
                 </tr>
