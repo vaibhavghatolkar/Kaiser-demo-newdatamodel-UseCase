@@ -19,7 +19,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          dockerImage =  docker build . -t devcoolinc/hipass_reactdocker +":$BUILD_NUMBER" --network host
         }
       }
     }
