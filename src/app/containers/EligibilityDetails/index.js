@@ -12,7 +12,7 @@ export class EligibilityDetails extends React.Component{
     
     constructor(props){
         super(props);
-
+       
         this.state={
             claimsList : [],
             summaryList : [],
@@ -23,20 +23,21 @@ export class EligibilityDetails extends React.Component{
             eventLog: [],
             Transaction_Compliance: '',
 
-            State: props.match.params.State != 'n' ? props.match.params.State : '',
-            status: props.match.params.status != 'n' ? props.match.params.status : '',
-            startDate: props.match.params.startDate != 'n' ? props.match.params.startDate : '',
-            endDate: props.match.params.endDate != 'n' ? props.match.params.endDate : '',
-            transactionId: props.match.params.transactionId != 'n' ? props.match.params.transactionId : '',
+            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            startDate: props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             errorcode: '',
             
-            selectedTradingPartner: props.match.params.selectedTradingPartner != 'n' ? props.match.params.selectedTradingPartner : '',
+            selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
             count : 0,
-            apiflag: props.match.params.apiflag,
+            apiflag: props.location.state.data[0].apiflag,
 
             pieArray : [],
             labelArray : [],
+            orderby:'',
         }
 
         this.getData = this.getData.bind(this)
@@ -136,6 +137,7 @@ export class EligibilityDetails extends React.Component{
     }
 
     getTransactions(){
+        
         let query = ''
         let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -151,6 +153,7 @@ export class EligibilityDetails extends React.Component{
         }
 
         query = `{
+            
             ClaimRequest_Datewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
                 RecCount
                 HiPaaSUniqueID
@@ -167,7 +170,7 @@ export class EligibilityDetails extends React.Component{
         if(this.state.apiflag == 1){
             url = Urls.eligibility_url
             query = `{
-                EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
+                EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`" ) {
                     RecCount
                     HiPaaSUniqueID
                     Date
@@ -245,7 +248,17 @@ export class EligibilityDetails extends React.Component{
             showDetails: true
         })
     }
-
+    handleSort(e)
+    {
+        alert(e)
+        this.setState({
+            orderby: e
+            
+        })
+        setTimeout(() => {
+            this.getTransactions()
+        }, 50);
+    }
     handlePageClick(data){
         let page = data.selected + 1
         this.setState({
@@ -331,8 +344,11 @@ export class EligibilityDetails extends React.Component{
                 <table className="table table-bordered claim-list">
                     <thead>
                         <tr className="table-head" style={{fontSize:"9px"}}>
-                            <td className="table-head-text">Transaction Id</td>
-                            <td className="table-head-text list-item-style">Transaction Date</td>
+                            <td className="table-head-text">Transaction Id </td>
+                            <td className="table-head-text list-item-style" >Transaction Date  
+                            {/* <button  >Asce</button >
+                            <img src={require('../../components/Images/pencil.png')} onClick={() => this.handleSort('order by Response.TransactionStatus')} style={{ width: '20px' }}></img>  */}
+                            </td>
                             <td className="table-head-text list-item-style">Status</td>
                             <td className="table-head-text list-item-style">Submitter</td>
                             {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Type</td> : null}

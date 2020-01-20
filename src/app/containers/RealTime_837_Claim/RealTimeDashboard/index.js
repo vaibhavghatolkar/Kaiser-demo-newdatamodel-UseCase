@@ -270,14 +270,14 @@ export class RealTimeDashboard extends React.Component {
             datasets: [{
                 data: [this.state.accepted, this.state.rejected, this.state.inProgress],
                 backgroundColor: [
-                    '#83D2B4',
-                    '#EC6236',
                     '#139DC9',
+                    '#daea00',
+                    '#83D2B4',
                 ],
                 hoverBackgroundColor: [
-                    '#83D2B4',
-                    '#EC6236',
                     '#139DC9',
+                    '#daea00',
+                    '#83D2B4',
                 ]
             }],
             flag: ''
@@ -418,10 +418,12 @@ export class RealTimeDashboard extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
         
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
+            let data = []
             if(item.name == 'Accepted Claims'){
                 addon = '/accept'
                 claimStatus = 'Accepted'
@@ -431,6 +433,9 @@ export class RealTimeDashboard extends React.Component {
             } else {
                 addon = '/other'
             }
+            data = [
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, claimStatus: claimStatus },
+            ]
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
                 ?
@@ -439,8 +444,7 @@ export class RealTimeDashboard extends React.Component {
                     <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 </div>
                 :
-                <Link 
-                    to={'/ClaimDetails837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate + '/' + claimStatus} className="col-2 summary-container">
+                <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col-2 summary-container">
                     <div>
                         <div className="summary-header">{item.name}</div>
                         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>

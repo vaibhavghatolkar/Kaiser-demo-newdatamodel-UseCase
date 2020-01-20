@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import './style.css'
-import {Pie, Bar} from 'react-chartjs-2';
+import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import { EligibilityDetails } from '../../EligibilityDetails';
@@ -10,50 +10,50 @@ import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import Images from '../../../../theme/Images';
 
-export class RealTime276 extends React.Component{
-    
-    constructor(props){
+export class RealTime276 extends React.Component {
+
+    constructor(props) {
         super(props);
-        this.state={
-            claimsList : [],
-            summaryList : [],
+        this.state = {
+            claimsList: [],
+            summaryList: [],
             showDetails: false,
-            files_list : [],
+            files_list: [],
             tradingpartner: [],
             pieArray: [],
             pieLabels: [],
-            tradingChartLabel : [],
-            tradingChartData : [],
-            dateChartLabel : [],
-            dateChartData : [],
-            errorPieArray : [],
-            errorLabelArray : [],
-            errorArray : [],
-            inComplaince : '',
-            outComplaince : '',
-            thisMonth : '',
-            lastMonth : '',
+            tradingChartLabel: [],
+            tradingChartData: [],
+            dateChartLabel: [],
+            dateChartData: [],
+            errorPieArray: [],
+            errorLabelArray: [],
+            errorArray: [],
+            inComplaince: '',
+            outComplaince: '',
+            thisMonth: '',
+            lastMonth: '',
             State: '',
             realTimePercent: '',
-            startDate: '',
-            endDate: '',
+            startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
+            endDate : moment().format('YYYY-MM-DD'),
             transactionId: '',
             selected_val: '',
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
-            chartType: '',
+            chartType: this.props.match.params.apiflag ? 'Eligibilityweekwise' : 'ClaimRequestweekwise',
             colorArray : [
                 '#139DC9',
                 '#83D2B4'
             ],
-            errorColorArray : [
+            errorColorArray: [
                 '#139DC9',
                 '#83D2B4',
                 '#9DCA15',
                 '#03d9c6',
             ],
-            apiflag : Number(this.props.match.params.apiflag ? this.props.match.params.apiflag : 1)
+            apiflag: Number(this.props.location.state.data[0].apiflag ? this.props.location.state.data[0].apiflag : 1)
         }
 
         this.getData = this.getData.bind(this)
@@ -62,7 +62,7 @@ export class RealTime276 extends React.Component{
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         setTimeout(() => {
             this.getCommonData()
             this.getData()
@@ -153,7 +153,7 @@ export class RealTime276 extends React.Component{
         // }
         
         let query = `{
-            ClaimRequest276(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
+            ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 AvgResTime
                 TotalNumOfReq
                 Success
@@ -181,7 +181,7 @@ export class RealTime276 extends React.Component{
         if(this.state.apiflag == 1){
             url = Urls.eligibility_url
             query = `{
-                Eligibilty270(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
+                Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                     AvgResTime
                     TotalNumOfReq
                     Success
@@ -198,7 +198,7 @@ export class RealTime276 extends React.Component{
                     RealTime_Per
                     Invalid_Trans
                 }
-                Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"") {
+                Eligibilty271ErrorwiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
                     ErrorType
                     RecCount
                     Percentage
@@ -211,20 +211,20 @@ export class RealTime276 extends React.Component{
         fetch(url, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.performOperations(res, chartType)
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.performOperations(res, chartType)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     async performCommonOperations(res, flag){
@@ -271,22 +271,22 @@ export class RealTime276 extends React.Component{
         let errorPieArray = []
         let errorLabelArray = []
 
-        if(this.state.apiflag){
+        if (this.state.apiflag) {
             data = res.data.Eligibilty270[0]
         } else {
             data = res.data.ClaimRequest276[0]
         }
 
         let summary = [
-            {name:'OVERALL VOLUME (DAILY)', value : data.Daily_Volume},
-            {name:'TOTAL TRANSACTION VOLUME', value : data.TotalNumOfReq},
-            {name:'INVALID TRANSACTIONS', value : data.Invalid_Trans},
-            {name:'ERROR PERCENTAGE', value : data.Error_Per},
-            {name:'AVG RESPONSE TIME', value : data.AvgResTime + ' sec'},
+            { name: 'OVERALL VOLUME (DAILY)', value: data.Daily_Volume },
+            { name: 'TOTAL TRANSACTION VOLUME', value: data.TotalNumOfReq },
+            { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
+            { name: 'ERROR PERCENTAGE', value: data.Error_Per },
+            { name: 'AVG RESPONSE TIME', value: data.AvgResTime + ' sec' },
         ]
 
-        if(this.state.apiflag == 0){
-            summary.push({name : 'TOTAL PAID', value: data.Total_Paid})
+        if (this.state.apiflag == 0) {
+            summary.push({ name: 'TOTAL PAID', value: data.Total_Paid })
         }
 
         let pieArray = []
@@ -298,21 +298,21 @@ export class RealTime276 extends React.Component{
         pieLabels.push("Error")
 
         let errorArray = []
-        if(res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1){
+        if (res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1) {
             errorArray = res.data.Eligibilty271ErrorwiseCount
             res.data.Eligibilty271ErrorwiseCount.forEach(item => {
                 errorPieArray.push(item.RecCount)
                 errorLabelArray.push(item.ErrorType)
                 errorLabelArray.push(item.Percentage)
             })
-        } else if(res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0){
+        } else if (res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0) {
             errorArray = res.data.ClaimStatuswiseCount
             res.data.ClaimStatuswiseCount.forEach(item => {
                 errorPieArray.push(item.Total)
                 errorLabelArray.push(item.ClaimStatus)
             })
         }
-        
+
         this.setState({
             summaryList: summary,
             pieArray: pieArray,
@@ -331,15 +331,15 @@ export class RealTime276 extends React.Component{
         })
     }
 
-    renderSearchBar(){
-        return(
+    renderSearchBar() {
+        return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim"/>
+                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
             </div>
         )
     }
 
-    getBarData(labelArray, dataArray, color){
+    getBarData(labelArray, dataArray, color) {
         let bardata = {
             labels: labelArray,
             showFile: false,
@@ -362,7 +362,7 @@ export class RealTime276 extends React.Component{
         return bardata
     }
 
-    getPieData(array, labels, colorArray){
+    getPieData(array, labels, colorArray) {
         let data = {
             labels: labels,
             datasets: [{
@@ -424,21 +424,21 @@ export class RealTime276 extends React.Component{
                 </div>
                 <div className="row chart-div">
                     {
-                        this.state.errorArray && this.state.errorArray.length > 0 ? 
-                        this.renderSummary() : null
+                        this.state.errorArray && this.state.errorArray.length > 0 ?
+                            this.renderSummary() : null
                     }
                 </div>
             </div>
         )
     }
 
-    gotoRealTimeTransactions(key){
+    gotoRealTimeTransactions(key) {
         this.setState({
-            key : key
+            key: key
         })
     }
 
-    showDetails(){
+    showDetails() {
         this.setState({
             showDetails: true
         })
@@ -472,14 +472,14 @@ export class RealTime276 extends React.Component{
         }, 50);
     }
 
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
             this.setState({
-                [key] : ''
+                [key]: ''
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key]: event.target.options[event.target.selectedIndex].text
             })
         }
 
@@ -495,14 +495,14 @@ export class RealTime276 extends React.Component{
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
-                        <select 
+                        <select
                             className="form-control list-dashboard" id="state"
                             onChange={(event) => {
                                 let day = 0
                                 let chartType = ''
                                 let selected_val = event.target.options[event.target.selectedIndex].text
 
-                                if(selected_val == 'Last week'){
+                                if (selected_val == 'Last week') {
                                     day = 7
                                     chartType = this.state.apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise'
                                 } else if(selected_val == 'Last 30 days'){
@@ -512,20 +512,20 @@ export class RealTime276 extends React.Component{
                                     day = 90
                                 } else if(selected_val == 'Last 180 days'){
                                     day = 180
-                                } else if(selected_val == 'Last year'){
+                                } else if (selected_val == 'Last year') {
                                     day = 365
                                 }
 
-                                let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
+                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
                                 let endDate = moment().format('YYYY-MM-DD')
 
-                                if(!selected_val){
+                                if (!selected_val) {
                                     startDate = ''
                                     endDate = ''
                                 }
 
                                 this.setState({
-                                    startDate : startDate,
+                                    startDate: startDate,
                                     endDate: endDate,
                                     selected_val: selected_val,
                                     chartType: chartType
@@ -537,9 +537,9 @@ export class RealTime276 extends React.Component{
                                 }, 50);
                             }}
                             >
-                            <option  selected="selected" value=""></option>
+                            <option value=""></option>
                             <option value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
+                            <option selected="selected" value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>
@@ -552,7 +552,7 @@ export class RealTime276 extends React.Component{
                                 this.onSelect(event, 'State')
                             }}
                         >
-                            <option  selected="selected" value=""></option>
+                            <option selected="selected" value=""></option>
                             <option value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
@@ -573,7 +573,7 @@ export class RealTime276 extends React.Component{
 
                     <div className="form-group col-2">
                         <div className="list-dashboard">
-                            Submitter 
+                            Submitter
                         </div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -589,48 +589,70 @@ export class RealTime276 extends React.Component{
                         </select>
                     </div>
                 </div>
-        </form>
+            </form>
         )
     }
 
-    renderSummaryDetails(){
+    renderSummaryDetails() {
         let row = []
+        let data = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let url = Strings.ElilgibilityDetails270
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-
+       
         array.forEach(item => {
+            data = [
+                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n' , selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION VOLUME' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
+               ]
             row.push(
-                <Link 
-                    to={
-                        '/' + url + 
-                        '/' + (this.state.State ? this.state.State : 'n') + 
-                        '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
-                        '/' + startDate + 
-                        '/' + endDate + 
-                        '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
-                        '/' + (item.name == 'TOTAL TRANSACTION VOLUME' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
-                        '/' + item.value
-                    } className="col-2 summary-container">
-                    <div>
+
+
+                // <Link 
+                //     to={
+                //         '/' + url + 
+                //         '/' + (this.state.State ? this.state.State : 'n') + 
+                //         '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
+                //         '/' + startDate + 
+                //         '/' + endDate + 
+                //         '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
+                //         '/' + (item.name == 'TOTAL TRANSACTION VOLUME' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
+                //         '/' + item.value
+                //     } className="col-2 summary-container">
+                //     <div>
+                //         <div className="summary-header">{item.name}</div>
+                //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                //     </div>
+                // </Link>
+                <Link to={{ pathname: '/'+ url , state: {data}}} className="col-2 summary-container"> 
+                <div>
                         <div className="summary-header">{item.name}</div>
                         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
-                </Link>
+                 </Link>     
+                // <Link
+                //     to={
+                //         '/' + url, 
+                       
+                //     } className="col-2 summary-container">
+                //     <div>
+                //         <div className="summary-header">{item.name}</div>
+                //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                //     </div>
+                // </Link>
             )
         });
 
-        return(
+        return (
             <div className="row padding-left">
                 {row}
             </div>
         )
     }
 
-    renderVolumeSummary(header, initialHeader, initialValue, laterHeader, laterValue, rise){
-        return(
+    renderVolumeSummary(header, initialHeader, initialValue, laterHeader, laterValue, rise) {
+        return (
             <div className="volume-summary chart">
                 <div className="volume-summary-header">{header}</div>
                 <div className="row">
@@ -645,13 +667,13 @@ export class RealTime276 extends React.Component{
                     </div>
                 </div>
                 {
-                    rise ? 
-                    <div className="increase-percent">{rise}</div>
-                    :
-                    <div className="col padding-top">
-                        <div className="volume-header center-align-vol">No Response</div>
-                        <div className="no-response-title center-align-vol">{this.state.noResponsePercent} %</div>
-                    </div>
+                    rise ?
+                        <div className="increase-percent">{rise}</div>
+                        :
+                        <div className="col padding-top">
+                            <div className="volume-header center-align-vol">No Response</div>
+                            <div className="no-response-title center-align-vol">{this.state.noResponsePercent} %</div>
+                        </div>
                 }
             </div>
         )
@@ -675,31 +697,31 @@ export class RealTime276 extends React.Component{
         )
     }
 
-    renderSummary(){
+    renderSummary() {
         let row = []
         const data = this.state.errorArray
-       var check = this.state.apiflag;
+        var check = this.state.apiflag;
         data.forEach((d) => {
-          
+
             row.push(
-                
+
                 <tr>
-                    <td style={{fontSize:"11px"}}><a href="#" >{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
+                    <td style={{ fontSize: "11px" }}><a style={{cursor:"pointer"}} >{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
                     <td >{this.state.apiflag == 1 ? d.RecCount : d.Total}</td>
-                    {this.state.apiflag== 1 ?  <td >{this.state.apiflag == 1 ? d.Percentage : ''}</td> : "" }
-        
-        
+                    {this.state.apiflag == 1 ? <td >{this.state.apiflag == 1 ? d.Percentage : ''}</td> : ""}
+
+
                 </tr>
             )
         });
 
         return (
             <table className="table table-bordered claim-list summary-list chart-container chart">
-                
+
                 <thead>
-                 <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Error Description" : "Claim Status"}</th>     <th style={{fontSize:"11px"}}>{this.state.apiflag == 1 ?"Total Errors" : "Total Claims"}</th>  
-                 {this.state.apiflag== 1 ?   <th style={{fontSize:"11px"}}>Error %</th> : "" }
-                   
+                    <th style={{ fontSize: "11px" }}>{this.state.apiflag == 1 ? "Error Description" : "Claim Status"}</th>     <th style={{ fontSize: "11px" }}>{this.state.apiflag == 1 ? "Total Errors" : "Total Claims"}</th>
+                    {this.state.apiflag == 1 ? <th style={{ fontSize: "11px" }}>Error %</th> : ""}
+
                 </thead>
                 <tbody>
                     {row}
@@ -711,7 +733,7 @@ export class RealTime276 extends React.Component{
     render() {
         return (
             <div>
-                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
+                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 <div className="row">

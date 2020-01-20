@@ -12,6 +12,7 @@ export class Files_834 extends React.Component {
 
     constructor(props) {
         super(props);
+    
         this.state = {
             intakeClaims: [],
             page: 1,

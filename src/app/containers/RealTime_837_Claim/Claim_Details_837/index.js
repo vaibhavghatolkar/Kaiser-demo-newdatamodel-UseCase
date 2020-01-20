@@ -13,13 +13,36 @@ export class ClaimDetails837 extends React.Component{
     
     constructor(props){
         super(props);
+        console.log('hello these are the props', props)
+        let flag =props.location.state.data[0].flag
+        if(flag == 'accept'){
+            flag = 'Accepted Claims'
+        } else if(flag == 'reject'){
+            flag = 'Rejected Claims'
+        } else {
+            flag = 'Other'
+        }
 
-        this.state={
+        this.state = {
+            intakeClaims: [],
+            page: 1,
+            initialPage: 0,
+            lineData: [],
+            file: [],
+            memberInfo: {},
+            subscriberNo : '',
+            selectedTradingPartner:props.location.state.data[0] &&props.location.state.data[0].selectedTradingPartner != 'n'?props.location.state.data[0].selectedTradingPartner : '',
+            enrollment_type : '',
+            plan_code : '',
+            startDate:props.location.state.data[0] &&props.location.state.data[0].startDate != 'n' ?props.location.state.data[0].startDate : '',
+            endDate:props.location.state.data[0] &&props.location.state.data[0].endDate != 'n' ?props.location.state.data[0].endDate : '',
+            flag: flag,
+            coverage_data: [],
+            tradingpartner: [],
             claimsList : [],
             summaryList : [],
             showDetails: false,
             files_list : [],
-            tradingpartner: [],
             errorList: [],
             eventLog: [],
             claimDetails: [],
@@ -27,18 +50,15 @@ export class ClaimDetails837 extends React.Component{
             Transaction_Compliance: '',
             providerName: '',
 
-            State: props.match.params.State != 'n' ? props.match.params.State : '',
-            status: props.match.params.status != 'n' ? props.match.params.status : '',
-            startDate: props.match.params.startDate != 'n' ? props.match.params.startDate : '',
-            endDate: props.match.params.endDate != 'n' ? props.match.params.endDate : '',
-            transactionId: props.match.params.transactionId != 'n' ? props.match.params.transactionId : '',
-            claimStatus: props.match.params.claimStatus != 'n' ? props.match.params.claimStatus : '',
+            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            transactionId:props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
-            
-            selectedTradingPartner: props.match.params.selectedTradingPartner != 'n' ? props.match.params.selectedTradingPartner : '',
+
             page: 1,
             count : 0,
-            apiflag: props.match.params.apiflag,
+            apiflag: props.location.state.data[0].apiflag,
 
             pieArray : [],
             labelArray : [],
@@ -502,22 +522,22 @@ export class ClaimDetails837 extends React.Component{
                                 this.getData()
                             })
                         }}>
-                        <option value=""></option>
-                        <option value="1">California</option>
-                        <option value="2">Michigan</option>
-                        <option value="3">Florida</option>
-                        <option value="4">New York</option>
-                        <option value="5">Idaho</option>
-                        <option value="6">Ohio</option>
-                        <option value="7">Illinois</option>
-                        <option value="8">Texas</option>
-                        <option value="9">Mississippi</option>
-                        <option value="10">South Carolina</option>
-                        <option value="11">New Mexico</option>
-                        <option value="12">Puerto Rico</option>
-                        <option value="13">Washington</option>
-                        <option value="14">Utah</option>
-                        <option value="15">Wisconsin</option>
+                        <option selected={this.state.State == ''  ? "selected" : "" }value=""></option>
+                        <option selected={this.state.State == 'California'  ? "selected" : "" } value="1">California</option>
+                        <option selected={this.state.State == 'Michigan'  ? "selected" : "" } value="2">Michigan</option>
+                        <option selected={this.state.State == 'Florida'  ? "selected" : "" } value="3">Florida</option>
+                        <option selected={this.state.State == 'New York'  ? "selected" : "" } value="4">New York</option>
+                        <option selected={this.state.State == 'Idaho'  ? "selected" : "" } value="5">Idaho</option>
+                        <option selected={this.state.State == 'Ohio'  ? "selected" : "" } value="6">Ohio</option>
+                        <option selected={this.state.State == 'Illinois'  ? "selected" : "" } value="7">Illinois</option>
+                        <option selected={this.state.State == 'Texas'  ? "selected" : "" } value="8">Texas</option>
+                        <option selected={this.state.State == 'Mississippi'  ? "selected" : "" } value="9">Mississippi</option>
+                        <option selected={this.state.State == 'South Carolina'  ? "selected" : "" } value="10">South Carolina</option>
+                        <option selected={this.state.State == 'New Mexico'  ? "selected" : "" } value="11">New Mexico</option>
+                        <option selected={this.state.State == 'Puerto Rico'  ? "selected" : "" } value="12">Puerto Rico</option>
+                        <option selected={this.state.State == 'Washington'  ? "selected" : "" } value="13">Washington</option>
+                        <option selected={this.state.State == 'Utah'  ? "selected" : "" } value="14">Utah</option>
+                        <option selected={this.state.State == 'Wisconsin'  ? "selected" : "" } value="15">Wisconsin</option>
                     </select>
                 </div>
                 <div className="form-group col-2">
@@ -610,12 +630,12 @@ export class ClaimDetails837 extends React.Component{
     renderClaimsHeader() {
         return (
             <tr className="table-head" style={{fontSize:"9px"}}>
-                <td className="table-head-text list-item-style">Claim Id</td>
-                <td className="table-head-text list-item-style">Service line count</td>
-                <td className="table-head-text list-item-style">Provider paid amount</td>
-                <td className="table-head-text list-item-style">Service date</td>
-                <td className="table-head-text list-item-style">Procedure date</td>
-                <td className="table-head-text list-item-style">Paid service unit count</td>
+                <td className="table-head-text">Claim Id</td>
+                <td className="table-head-text list-item-style">Claim Date</td>
+                <td className="table-head-text list-item-style">Claim Amount</td>
+                <td className="table-head-text list-item-style">Claim Status</td>
+                <td className="table-head-text list-item-style">Current State</td>
+                <td className="table-head-text list-item-style">Error Code</td>
             </tr>
         )
     }
