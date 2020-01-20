@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: hviewjenkins
-        image: devcoolinc/hipass_reactdocker:1
+        image: devcoolinc/hipaas-frontend:1
         imagePullPolicy: Always
         ports:
         - containerPort: 80
