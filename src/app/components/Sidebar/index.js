@@ -142,7 +142,7 @@ export class Sidebar extends React.Component {
             } else if (element.key == Strings.ClaimDetails837) {
                 // addon = '/n/n/n/n'
                 data = [
-                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
             }
             else if (element.key == Strings.Files_837) {

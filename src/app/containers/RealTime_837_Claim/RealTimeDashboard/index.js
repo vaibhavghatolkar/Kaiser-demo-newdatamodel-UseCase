@@ -265,7 +265,7 @@ export class RealTimeDashboard extends React.Component {
             labels: [
                 'Accepted',
                 'Rejected',
-                'In Progress',
+                'Validating',
             ],
             datasets: [{
                 data: [this.state.accepted, this.state.rejected, this.state.inProgress],
@@ -434,7 +434,7 @@ export class RealTimeDashboard extends React.Component {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, claimStatus: claimStatus },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus },
             ]
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')

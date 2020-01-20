@@ -345,7 +345,7 @@ export class RealTime276 extends React.Component {
             showFile: false,
             datasets: [
                 {
-                    label: 'Total Claims',
+                    label: 'Total Transactions',
                     backgroundColor: color,
                     borderColor: color,
                     borderWidth: 1,

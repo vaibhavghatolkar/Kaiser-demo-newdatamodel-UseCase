@@ -210,7 +210,7 @@ export class ClaimProcessingSummary extends React.Component {
             row.push(
                 <tr>
                     <td className="list-item-style">{d.FileName}</td>
-                    <td className="list-item-style">{d.FileCrDate}</td>
+                    <td className="list-item-style">{moment(d.FileCrDate).format('MMM D YYYY hh:mm a')}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.ClaimID}</td>
                     <td className="list-item-style">{d.ClaimDate}</td>

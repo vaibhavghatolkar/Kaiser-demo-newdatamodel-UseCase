@@ -85,7 +85,7 @@ class PrivateRoute extends React.Component {
     render() {
         let data =[]
         data = [
-            { apiflag: '0' },
+            { apiflag: '1' },
         ]
         return (
 
