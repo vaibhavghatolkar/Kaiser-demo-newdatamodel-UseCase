@@ -128,6 +128,7 @@ export class ClaimProcessingSummary extends React.Component {
                 RecCount
                 ClaimID
                 ClaimDate
+                ClaimTMTrackingID
                 Subscriber_ID
                 Claim_Amount
                 ClaimStatus
@@ -137,6 +138,11 @@ export class ClaimProcessingSummary extends React.Component {
                 SubscriberFirstName
                 adjudication_status
                 ClaimLevelErrors
+                ClaimUniqueID
+                FileID
+                FileName
+                FileCrDate
+                FileStatus
             }
         }`
         console.log(query)
@@ -203,6 +209,9 @@ export class ClaimProcessingSummary extends React.Component {
             var providerName = d.ProviderFirstName ? d.ProviderFirstName : '' + " " + d.ProviderLastName ? d.ProviderLastName : ''
             row.push(
                 <tr>
+                    <td className="list-item-style">{d.FileName}</td>
+                    <td className="list-item-style">{d.FileCrDate}</td>
+                    <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.ClaimID}</td>
                     <td className="list-item-style">{d.ClaimDate}</td>
                     <td className="list-item-style">{d.Subscriber_ID}</td>
@@ -220,6 +229,9 @@ export class ClaimProcessingSummary extends React.Component {
                 <table className="table table-bordered claim-list">
                     <thead>
                         <tr className="table-head">
+                            <td className="table-head-text"><small>File Name</small></td>
+                            <td className="table-head-text"><small>File Date</small></td>
+                            <td className="table-head-text"><small>File Status</small></td>
                             <td className="table-head-text"><small>Claim Id</small></td>
                             <td className="table-head-text"><small>Claim Date</small></td>
                             <td className="table-head-text"><small>Subscriber Id</small></td>
