@@ -19,8 +19,7 @@ pipeline {
     stage('Build image') {
       steps{
         script {
-          dockerImage =  docker build  --network host -t devcoolinc/hipass_reactdocker:(env.$BUILD_NUMBER") .
-        }
+          dockerImage =  docker build  -t devcoolinc/hipass_reactdocker:(env.$BUILD_NUMBER") . --network host        }
       }
     }
 
