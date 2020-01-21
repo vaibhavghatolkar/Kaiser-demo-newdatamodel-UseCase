@@ -42,7 +42,7 @@ export class RealTime276 extends React.Component {
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
-            chartType: this.props.match.params.apiflag ? 'Eligibilityweekwise' : 'ClaimRequestweekwise',
+            chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilityweekwise' : 'ClaimRequestweekwise',
             colorArray : [
                 '#139DC9',
                 '#83D2B4'
@@ -53,7 +53,7 @@ export class RealTime276 extends React.Component {
                 '#9DCA15',
                 '#03d9c6',
             ],
-            apiflag: Number(this.props.location.state.data[0].apiflag ? this.props.location.state.data[0].apiflag : 1)
+            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 1)
         }
 
         this.getData = this.getData.bind(this)
@@ -77,17 +77,13 @@ export class RealTime276 extends React.Component {
     getCommonData(chartType){
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''  
-        console.log(this.state.chartType)
+        chartType = this.state.chartType
         if(!this.state.chartType && this.state.apiflag == 1){
-            this.setState({
-                chartType: "Eligibilitymonthwise"
-            })
+            chartType = "Eligibilitymonthwise"
         } else if (!this.state.chartType && this.state.apiflag == 0){
-            this.setState({
-                chartType: "ClaimRequestMonthwise"
-            })
-            // this.state.chartType = "ClaimRequestMonthwise"
+            chartType = "ClaimRequestMonthwise"
         }
+        console.log('I am here check me out ' +  this.state.chartType)
         
         let query = `{
             Trading_PartnerList(Transaction:"ClaimRequest") {
@@ -97,7 +93,7 @@ export class RealTime276 extends React.Component {
                 X_axis
                 Y_axis
             }
-            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ this.state.chartType + `") {
+            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
                 X_axis
                 Y_axis
             }
@@ -113,7 +109,7 @@ export class RealTime276 extends React.Component {
                     X_axis
                     Y_axis
                 }
-                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ this.state.chartType + `") {
+                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
                     X_axis
                     Y_axis
                 }
@@ -133,7 +129,7 @@ export class RealTime276 extends React.Component {
         .then(res => res.json())
         .then(res => {
             if(res.data){
-                this.performCommonOperations(res, this.state.chartType)
+                this.performCommonOperations(res, chartType)
             }
         })
         .catch(err => {
@@ -271,7 +267,7 @@ export class RealTime276 extends React.Component {
         let errorPieArray = []
         let errorLabelArray = []
 
-        if (this.state.apiflag) {
+        if (this.state.apiflag == 1) {
             data = res.data.Eligibilty270[0]
         } else {
             data = res.data.ClaimRequest276[0]
@@ -376,6 +372,9 @@ export class RealTime276 extends React.Component {
     }
 
     renderCharts() {
+        let minimumValue = Math.min(...this.state.dateChartData)
+        minimumValue = (minimumValue==0 ? 0 : (minimumValue-(minimumValue*10/100)))
+        minimumValue = Math.ceil(minimumValue)
         return (
             <div>
                 <div className="row chart-div">
@@ -407,6 +406,13 @@ export class RealTime276 extends React.Component {
                                     options={{
                                         legend: {
                                             display: false,
+                                        },
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    min: minimumValue,
+                                                }
+                                            }]
                                         }
                                     }} />
                             </div> : null
