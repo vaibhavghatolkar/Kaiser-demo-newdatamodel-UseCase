@@ -371,52 +371,52 @@ export class RealTime276 extends React.Component {
         return data
     }
 
-    renderCharts() {
-        let minimumValue = Math.min(...this.state.dateChartData)
+    renderCharts(){
+       let minimumValue = Math.min(...this.state.dateChartData)
         minimumValue = (minimumValue==0 ? 0 : (minimumValue-(minimumValue*10/100)))
         minimumValue = Math.ceil(minimumValue)
-        return (
+        return(
             <div>
                 <div className="row chart-div">
-                    {
-                        this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
-                            ?
-                            <div className="chart-container chart">
-                                <label className="chart-header">Submitter volume</label>
-                                <Bar
-                                    data={this.getBarData(this.state.tradingChartLabel, this.state.tradingChartData, '#139DC9')}
-                                    width={100}
-                                    height={60}
-                                    options={{
-                                        legend: {
-                                            display: false,
+                {
+                    this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
+                    ?
+                    <div className="chart-container chart">
+                        <label className="chart-header">Submitter volume</label>
+                        <Bar
+                            data={this.getBarData(this.state.tradingChartLabel, this.state.tradingChartData, '#139DC9')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                }
+                            }}/>
+                    </div> : null
+                }
+                {
+                    this.state.dateChartLabel && this.state.dateChartLabel.length > 0
+                    ?
+                    <div className="chart-container chart">
+                        <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label>
+                        <Bar
+                            data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            min: minimumValue,
                                         }
-                                    }} />
-                            </div> : null
-                    }
-                    {
-                        this.state.dateChartLabel && this.state.dateChartLabel.length > 0
-                            ?
-                            <div className="chart-container chart">
-                                <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')' : '(Monthly)'}</label>
-                                <Bar
-                                    data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
-                                    width={100}
-                                    height={60}
-                                    options={{
-                                        legend: {
-                                            display: false,
-                                        },
-                                        scales: {
-                                            yAxes: [{
-                                                ticks: {
-                                                    min: minimumValue,
-                                                }
-                                            }]
-                                        }
-                                    }} />
-                            </div> : null
-                    }
+                                    }]
+                                }
+                            }}/>
+                    </div> : null
+                }
                 </div>
                 <div className="row chart-div">
                     {
