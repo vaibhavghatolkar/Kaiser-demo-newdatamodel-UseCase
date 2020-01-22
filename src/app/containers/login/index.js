@@ -33,12 +33,14 @@ export class Login extends React.Component {
             })
                 .then(res => res.json())
                 .then(res => {
+                    
                     if(res.data.UserLogin[0].Login == 1){
                         this.setState({
                             loggedIn: true
                         })
                         setTimeout(() => {
                             localStorage.setItem("token", "sdjjasdnjas")
+                            localStorage.setItem("UserId",  res.data.UserLogin[0].Id)
                             this.props.handleFlag(this.state.loggedIn)
                         }, 100);
                         

@@ -19,10 +19,11 @@ export class ChangePassword extends React.Component {
     }
 
     updatePassword(){
-
+        let userId = localStorage.getItem("UserId")
         let query = `mutation{
-            ChangePassword(Id:`+1001+` OldPassword:"`+this.state.oldPassword+`" NewPassword:"`+this.state.newPassword+`" ForgotOrNot:0)
+            ChangePassword(Id:`+userId+` OldPassword:"`+this.state.oldPassword+`" NewPassword:"`+this.state.newPassword+`" ForgotOrNot:0)
           }`
+          console.log(query)
             fetch(Urls.base_url , {
                 method: 'POST',
                 headers: {

@@ -53,7 +53,8 @@ export class RealTime276 extends React.Component {
                 '#9DCA15',
                 '#03d9c6',
             ],
-            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 1)
+            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 0),
+            
         }
 
         this.getData = this.getData.bind(this)
