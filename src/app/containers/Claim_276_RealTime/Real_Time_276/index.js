@@ -53,7 +53,7 @@ export class RealTime276 extends React.Component {
                 '#9DCA15',
                 '#03d9c6',
             ],
-            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 1)
+            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 0)
         }
 
         this.getData = this.getData.bind(this)
@@ -390,7 +390,21 @@ export class RealTime276 extends React.Component {
                             options={{
                                 legend: {
                                     display: false,
-                                }
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            userCallback: function(label, index, labels) {
+                                                // when the floored value is the same as the value we have a whole number
+                                                if (Math.floor(label) === label) {
+                                                    return label;
+                                                }
+                           
+                                            },
+                                        }
+                                    }],
+                                },
                             }}/>
                     </div> : null
                 }
@@ -533,7 +547,6 @@ export class RealTime276 extends React.Component {
                                 }, 50);
                             }}
                             >
-                            <option value=""></option>
                             <option value="1">Last week</option>
                             <option selected="selected" value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>

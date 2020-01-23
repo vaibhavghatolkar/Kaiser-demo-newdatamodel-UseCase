@@ -330,7 +330,7 @@ export class EligibilityDetails extends React.Component{
                         this.getData(d.HiPaaSUniqueID)
                         this.getDetails(d.HiPaaSUniqueID)
                     }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
-                    <td>{d.Date}</td>
+                    <td>{moment(d.Date).format("MMM DD YYYY hh:mm a")}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
                     {this.state.status != 'Pass' ? <td>{d.Error_Type}</td> : null}
@@ -598,7 +598,7 @@ export class EligibilityDetails extends React.Component{
             row.push(
                 <tr>
                     <td>{d.EventName}</td>
-                    <td>{moment(d.EventCreationDateTime).format('MMM D YYYY hh:mm:ss:SSS')}</td>
+                    <td>{moment(Number(d.EventCreationDateTime) ? Number(d.EventCreationDateTime) : d.EventCreationDateTime).format('MMM DD YYYY hh:mm:ss:SSS')}</td>
                     <td>{d.Exception}</td>
                 </tr>
             )
