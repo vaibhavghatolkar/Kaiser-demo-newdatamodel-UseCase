@@ -20,7 +20,7 @@ export class Login extends React.Component {
     loginUser(){
         let query = `{
             UserLogin(Email:"`+ this.state.EmailId +`" Password:"`+ this.state.Password +`") {
-              Login, Id
+              Login, Id, DbTech
             }
           }`
             fetch(Urls.base_url , {
@@ -33,12 +33,15 @@ export class Login extends React.Component {
             })
                 .then(res => res.json())
                 .then(res => {
+                    
                     if(res.data.UserLogin[0].Login == 1){
                         this.setState({
                             loggedIn: true
                         })
                         setTimeout(() => {
                             localStorage.setItem("token", "sdjjasdnjas")
+                            localStorage.setItem("UserId", res.data.UserLogin[0].Id)
+                            localStorage.setItem("DbTech", res.data.UserLogin[0].DbTech)
                             this.props.handleFlag(this.state.loggedIn)
                         }, 100);
                         

@@ -52,11 +52,14 @@ export class UserList extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
+                if(res.errors){
+                    alert(res.errors[0].message)
+                }else{
                 alert(res.data.updateuser);
                 setTimeout(() => {
                     this.getUserRole()
                 }, 50);
-
+            }
             }).catch(err => {
                 console.log(err)
             })
