@@ -1,9 +1,7 @@
 import React from 'react';
-import './style.css';
-import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 
-export class MenuCreate extends React.Component {
+export class MenuManagement extends React.Component {
 
     constructor(props) {
         super(props);
@@ -17,8 +15,7 @@ export class MenuCreate extends React.Component {
             unchecked: [],
             Menucheckall: '',
             isChecked: '',
-            menuType: "I",
-            userroleID: ""
+            menuType: "I"
         }
 
         this.showFile = this.showFile.bind(this)
@@ -39,7 +36,6 @@ export class MenuCreate extends React.Component {
     }
 
     componentDidMount() {
-
         this.getData()
         this.getbinduser()
     }
@@ -75,7 +71,7 @@ export class MenuCreate extends React.Component {
             })
     }
     onHandleChange(e, key) {
-
+        
         this.setState({
             [key]: e.target.value
         });
@@ -89,7 +85,7 @@ export class MenuCreate extends React.Component {
 
         })
 
-        let query = '{UserwiseMenu (role_id:' + this.state.userroleID + ` menutype:"${this.state.menuType}" For:"A") {
+        let query = '{UserwiseMenu (role_id:' + 0 + ` menutype:"${this.state.menuType}" For:"A") {
             role_id
             menu_id
             menu_description
@@ -100,7 +96,7 @@ export class MenuCreate extends React.Component {
             is_editor      
             is_editable
           }}`
-        console.log(query)
+          console.log(query)
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -121,8 +117,8 @@ export class MenuCreate extends React.Component {
                         loopid: item.menu_description,
                         parent_node: item.parent_node,
                         menu_id: item.menu_id,
-                        isChecked: item.usermenuflag,
-                        isAccessValue: item.is_editor,
+                        isChecked: item.menuflag,
+                        // isAccessValue: item.is_editor,
                         is_editable: item.is_editable
 
 
@@ -197,11 +193,11 @@ export class MenuCreate extends React.Component {
         return (
             <tr className="table-head">
                 <th className="table-head-text">Menu List</th>
-                <th className="table-head-text">View Access
+                <th className="table-head-text">Enable / Disable
 
                 <input style={{ marginLeft: "20px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
                 </th>
-                <th className="table-head-text">Edit Functionality
+                <th className="table-head-text">Editable
                 <input style={{ marginLeft: "30px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
                 </th>
 
@@ -218,9 +214,9 @@ export class MenuCreate extends React.Component {
         if (checkboxValue == true) {
 
             data.forEach((d) => {
-                if(d.is_editable == true){
-                    d.isAccessValue = true
-                }
+                
+                    d.is_editable = true
+                
                 
 
             })
@@ -231,7 +227,7 @@ export class MenuCreate extends React.Component {
         }
         else {
             data.forEach((d) => {
-                d.isAccessValue = false
+                d.is_editable = false
 
             })
             console.log(data);
@@ -273,18 +269,17 @@ export class MenuCreate extends React.Component {
         data.forEach((d) => {
             var roletype = d.parent_node;
             var menuID = d.menu_id;
-            var isDisabled = "";
-            if(d.is_editable == false){
-                isDisabled = "disabled";
-                d.isAccessValue = false
-            }
+           
+            // console.log(roletype)
+            // console.log(d.menu_id)
+         
             if(d.isChecked == "0"){
                 d.isChecked = false
             }
-            if(d.isAccessValue == "0"){
-                d.isAccessValue = false
+            if(d.is_editable == "0"){
+                d.is_editable = false
             }
-           console.log(d.isAccessValue)
+           
             row.push(
 
                 <tr>
@@ -296,13 +291,18 @@ export class MenuCreate extends React.Component {
 
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
                         d.isChecked = e.target.checked
+                        let menu = 1
+                        // if(menu == roletype){
+                        //    alert(menuID)
+                        // }
+                    
                         this.setState({
                             customList: [...data]
                         })
                     }} /></td>
-                    <td className="list-item-style">{d.is_editable == false ? '' : <input checked={d.isAccessValue} type="checkbox" onChange={(e) => {
-                        d.isAccessValue = e.target.checked
-                        d.isChecked = e.target.checked
+                    <td className="list-item-style">{<input checked={d.is_editable} type="checkbox" onChange={(e) => {
+                        d.is_editable = e.target.checked
+                        d.isChecked = true
                         this.setState({
                             customList: [...data]
                         })
@@ -354,20 +354,18 @@ export class MenuCreate extends React.Component {
         })
     }
 
-    ChangeVal(event, key) {
+    ChangeVal(e, key) {
         this.setState({
-            [key]: event.target.value
+            [key]: e.target.value
         });
-
         setTimeout(() => {
-            this.getData();
+            this.getData()
         }, 50);
-
     }
 
 
     Update() {
-        if (this.state.userroleID != 0) {
+        
             let data = this.state.customList
             let true_val = ''
             let false_val = ''
@@ -388,7 +386,7 @@ export class MenuCreate extends React.Component {
             let access_Val_str1 = ''
             let falseaccess_Val_str2 = ''
             data.forEach(element => {
-                if (element.isAccessValue) {
+                if (element.is_editable) {
                     access_Val = access_Val + element.menu_id + ','
                     access_Val_str1 = access_Val.replace(/,(?=\s*$)/, '');
 
@@ -398,7 +396,12 @@ export class MenuCreate extends React.Component {
                 }
             });
 
-            var query = 'mutation{ updateuserwisemenu(roleid : ' + this.state.userroleID+ ' ' +
+            console.log(str2);
+            console.log(str1)
+            console.log(falseaccess_Val_str2)
+            console.log(access_Val_str1)
+
+            var query = 'mutation{ MenuMasterUpdate('+
                 'uncheck :"' + str2 + '"' +
                 'check :"' + str1 + '"' +
                 'unchkeditor :"' + falseaccess_Val_str2 + '"' +
@@ -419,13 +422,16 @@ export class MenuCreate extends React.Component {
                 })
             })
                 .then(r => r.json())
-                .then(data => console.log('data returned:', alert(data.data.updateuserwisemenu)));
-        }
-        else {
-            alert("Please Select User Role")
-        }
-
-
+                .then(data => 
+                    alert(data.data.MenuMasterUpdate),
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 2000)
+                   
+                    )
+                .catch(err => 
+                    console.log(err)
+                    )
     }
 
     RenderUserRoleList() {
@@ -461,13 +467,7 @@ export class MenuCreate extends React.Component {
     renderTopbar() {
         return (
             <div className="row">
-                <div className="form-group col-3" style={{ marginLeft: "25px" }}>
-                    <div className="list-header-dashboard">Select User Role</div>
-                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
-                        <option value="0">Select User Role</option>
-                        {this.getoptions()}
-                    </select>
-                </div>
+                
                 <div className="form-group col-3" style={{ marginLeft: "25px" }}>
                     <div className="list-header-dashboard">Select Menu Type</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')}>
@@ -479,13 +479,6 @@ export class MenuCreate extends React.Component {
 
                 <div className="form-group col-sm-1">
                     <button type="submit" className="btn btn-display" onClick={this.Update}>Save</button>
-                </div>
-                <div className="form-group col-sm-2">
-                    <button type="button" class="btn btn-display" data-toggle="modal" data-target="#myModal"
-                        onClick={this.RenderUserRoleList}
-                    >
-                        Add User Role
-                    </button>
                 </div>
 
                 <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
@@ -528,7 +521,7 @@ export class MenuCreate extends React.Component {
             <div>
                 <br></br>
                 <div>
-                    <h5 style={{ color: '#139DC9', fontSize:"20px" }}>User Role Management</h5>
+                    <h5 style={{ color: '#139DC9', fontSize:"20px" }}>Menu Management</h5>
                 </div>
                 {
 

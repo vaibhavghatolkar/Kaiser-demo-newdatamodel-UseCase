@@ -63,6 +63,7 @@ export class Sidebar extends React.Component {
                 { value: 'HiPaaS User List', key: 'UserList' },
                 { value: 'User Role Management', key: 'MenuCreate' },
                 { value: 'Change Password', key: 'ChangePassword' },
+                { value: 'Menu Management', key: 'MenuManagement'}
 
                 // {value: 'Claim Status Errors', key: 'elilgibilityErrors276'},
 
