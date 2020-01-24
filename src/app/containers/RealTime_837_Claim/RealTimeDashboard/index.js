@@ -52,6 +52,7 @@ export class RealTimeDashboard extends React.Component {
         this.state = {
             claimsList: [],
             summaryList: [],
+            type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
             startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
@@ -126,7 +127,7 @@ export class RealTimeDashboard extends React.Component {
         }
         
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`") {
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", Type : "` + this.state.type + `") {
                 TotalFiles
                 TotalClaims
                 Accepted
@@ -138,7 +139,7 @@ export class RealTimeDashboard extends React.Component {
                 TotalSentToQNXT
                 InProgress
             }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`") {
+            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`", Type : "` + this.state.type + `") {
                 From
                 MonthNo
                 Year
@@ -324,6 +325,34 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
+    handleSort(e) {
+        this.setState({
+            type: e
+        })
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
+    tab() {
+        return (
+            <div>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total Claims</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('I')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Institutional</a>
+                        <a class="nav-item nav-link" id="nav-contact-tab" onClick={() => this.handleSort('P')} data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Professional</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"></div>
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
+                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"></div>
+                </div>
+            </div>
+        )
+    }
+
     renderList() {
         let row = []
         const data = this.state.claimsList;
@@ -419,6 +448,7 @@ export class RealTimeDashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
         
         array.forEach(item => {
             let addon = ''
@@ -434,7 +464,7 @@ export class RealTimeDashboard extends React.Component {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type : type },
             ]
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
@@ -519,7 +549,6 @@ export class RealTimeDashboard extends React.Component {
                                 }, 50);
                             }}
                             >
-                            <option value=""></option>
                             <option value="1">Last week</option>
                             <option selected="selected" value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
@@ -591,6 +620,7 @@ export class RealTimeDashboard extends React.Component {
                 <br></br>
                 <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
                 {this.renderTopbar()}
+                {this.tab()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}
             </div>

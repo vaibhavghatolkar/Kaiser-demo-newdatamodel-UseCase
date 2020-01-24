@@ -31,6 +31,7 @@ export class ClaimDetails837 extends React.Component{
             file: [],
             memberInfo: {},
             subscriberNo : '',
+            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             selectedTradingPartner:props.location.state.data[0] &&props.location.state.data[0].selectedTradingPartner != 'n'?props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type : '',
             plan_code : '',
@@ -111,7 +112,7 @@ export class ClaimDetails837 extends React.Component{
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}") {
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "`+this.state.type+`") {
                 RecCount
                 FileID
                 FileName
@@ -171,7 +172,7 @@ export class ClaimDetails837 extends React.Component{
         })
     }
 
-    getTransactions(fileId){
+    getTransactions = (fileId) => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -180,7 +181,7 @@ export class ClaimDetails837 extends React.Component{
         }
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "`+fileId+`") {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "`+fileId+`", Type : "`+this.state.type+`") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -232,7 +233,7 @@ export class ClaimDetails837 extends React.Component{
         })
     }
 
-    handlePageClick(data, fileId){
+    handlePageClick = (data, fileId) => {
         let page = data.selected + 1
         this.setState({
             page : page
@@ -669,7 +670,10 @@ export class ClaimDetails837 extends React.Component{
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 left-align"><a href={"#" + data[keys].value.FileID} onClick={() => {this.getTransactions(data[keys].value.FileID)}} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
+                    <div className="col-4 left-align"><a href={"#" + data[keys].value.FileID} 
+                        onClick={() => {
+                            this.getTransactions(data[keys].value.FileID)
+                        }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
                     <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
                     <div className="col-3 col-style">{data[keys].value.Sender}</div>
@@ -711,7 +715,7 @@ export class ClaimDetails837 extends React.Component{
                         breakLabel={'...'}
                         breakClassName={'page-link'}
                         initialPage={this.state.initialPage}
-                        pageCount={count}
+                        pageCount={Math.floor((data[keys].value.Claimcount / 10) + (data[keys].value.Claimcount % 10 > 0 ? 1 : 0))}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}
                         onPageChange={(page) => {this.handlePageClick(page, keys)}}
