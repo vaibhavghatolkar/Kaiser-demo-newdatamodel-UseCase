@@ -65,6 +65,7 @@ const Strings = {
     RealTimeDashboard: 'RealTimeDashboard',
     ClaimProcessingSummary: 'ClaimProcessingSummary',
     Files_837 : 'Files_837',
+    MenuManagement: 'MenuManagement'
 }
 
 export default Strings;
