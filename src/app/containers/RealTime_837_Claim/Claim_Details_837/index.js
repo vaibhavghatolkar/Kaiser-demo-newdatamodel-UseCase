@@ -323,7 +323,7 @@ export class ClaimDetails837 extends React.Component{
             col.push(
                 <div className="col">
                     <div className="header">{item.key}</div>
-                    <div>{item.value}</div>
+                    <div>{(moment(item.value).format('MMM D YYYY hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MMM D YYYY hh:mm a') : item.value}</div>
                 </div>
             )
 
@@ -692,7 +692,7 @@ export class ClaimDetails837 extends React.Component{
                                     this.getDetails(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-                            <td className="list-item-style">{d.ClaimDate}</td>
+                            <td className="list-item-style">{moment(d.ClaimDate).format('MMM D YYYY hh:mm a') != "Invalid date" ? moment(d.ClaimDate).format('MMM D YYYY hh:mm a') : d.ClaimDate}</td>
                             <td className="list-item-style">{d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.adjudication_status}</td>
