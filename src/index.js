@@ -50,6 +50,7 @@ import {ClaimDetails837} from './app/containers/RealTime_837_Claim/Claim_Details
 import {RealTimeDashboard} from './app/containers/RealTime_837_Claim/RealTimeDashboard'
 import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
 import { Files_837 } from './app/containers/Files_837'
+import { MenuManagement } from './app/containers/Menu_Management'
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -57,6 +58,7 @@ class PrivateRoute extends React.Component {
         super(props);
         const token = localStorage.getItem("token");
         let loggedIn;
+        // let timeOut
 
         if(token == null){
             loggedIn = false;
@@ -66,12 +68,21 @@ class PrivateRoute extends React.Component {
 
         this.state = {
 
-            loggedIn
+            loggedIn,
+            // timeOut,
         };
         
         this.handleFlag = this.handleFlag.bind(this)
       
     }
+
+    // componentDidMount(){
+    //     setTimeout(() => {
+    //         localStorage.clear()
+    //         this.setState({timeOut:true});
+    //       },600000000);
+      
+    // }
 
     handleFlag(loggedIn) {
         this.setState({
@@ -93,7 +104,7 @@ class PrivateRoute extends React.Component {
         
         <Header/>
         <div className="container-fluid background">
-        { this.state.loggedIn=== false ?
+        { this.state.loggedIn=== false  ?
                        <div> <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> 
                        <Route render={() => <Redirect to={{pathname: "/"}} />} />
                        </div>:
@@ -170,8 +181,8 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.ClaimDetails837} component={ClaimDetails837} />
                     <Route path={'/'+ Strings.RealTimeDashboard} component={RealTimeDashboard} />
                     <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
-  <Route path={'/'+ Strings.Files_837} component={Files_837} />
-                 
+                    <Route path={'/'+ Strings.Files_837} component={Files_837} />
+                    <Route path={'/'+ Strings.MenuManagement} component={MenuManagement} />
                        
   {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
                 
