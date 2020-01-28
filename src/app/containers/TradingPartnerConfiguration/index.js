@@ -55,45 +55,47 @@ export class TradingPartnerConfiguration extends React.Component {
         
     }
     handleEntailmentRequest(e) {
-        e.preventDefault();
-    
-       this.setState({
-        files: [],
-        tradingpartner : [],
-        Change_Trading_Partner: '',
-        FunctionalAcknowledgmentOptions: '',
-        Element_Delimiter:'',
-        Doc_Envelope_Option: '',
-        Segment_Termination_Character:'',
-        Filter_Functional_Acknowledgments: false,
-        Reject_Duplicate_ISA: false,
-        Validate_Outbound_Interchanges: false,
-        Outbound_Validation_Option: '',
-        Authorization_Info_Qualifier: '',
-        Authorization_Info_ID: '',
-        Security_Information_Qualifier: '',
-        Security_Information_Id: '',
-        Interchange_ID_Qualifier: '',
-        Interchange_ID: '',
-        Interchange_Standard_ID: '',
-        Interchange_Version: '',
-        ISA14: false,
-        Test_Indicator: '',
-        Component_Separator: '',
-        Application_Code: '',
-        Responsible_Agency_Code: '',
-        GSVersion: '',
-        Communication_Type: '',
-        Use_Default_Settings: false,
-        Host: '',
-        Port: '',
-        UserName: '',
-        Password: '',
 
-       })
-       setTimeout(() => {
-        this.getData()
-       }, 50);
+        window.location.reload();
+    //     e.preventDefault();
+    
+    //    this.setState({
+    //     files: [],
+    //     tradingpartner : [],
+    //     Change_Trading_Partner: '',
+    //     FunctionalAcknowledgmentOptions: '',
+    //     Element_Delimiter:'',
+    //     Doc_Envelope_Option: '',
+    //     Segment_Termination_Character:'',
+    //     Filter_Functional_Acknowledgments: false,
+    //     Reject_Duplicate_ISA: false,
+    //     Validate_Outbound_Interchanges: false,
+    //     Outbound_Validation_Option: '',
+    //     Authorization_Info_Qualifier: '',
+    //     Authorization_Info_ID: '',
+    //     Security_Information_Qualifier: '',
+    //     Security_Information_Id: '',
+    //     Interchange_ID_Qualifier: '',
+    //     Interchange_ID: '',
+    //     Interchange_Standard_ID: '',
+    //     Interchange_Version: '',
+    //     ISA14: false,
+    //     Test_Indicator: '',
+    //     Component_Separator: '',
+    //     Application_Code: '',
+    //     Responsible_Agency_Code: '',
+    //     GSVersion: '',
+    //     Communication_Type: '',
+    //     Use_Default_Settings: false,
+    //     Host: '',
+    //     Port: '',
+    //     UserName: '',
+    //     Password: '',
+
+    //    })
+    //    setTimeout(() => {
+    //     this.getData()
+    //    }, 50);
     }
     getData() {
         let query = `{
@@ -297,7 +299,11 @@ export class TradingPartnerConfiguration extends React.Component {
         })
           .then(r => r.json())
           .then(data => alert(data.data.SP_Trading_Partner_Save))
-        //   .then(window.location.reload())
+
+          setTimeout(() => {
+            window.location.reload()
+        }, 1000)
+
     }
 
     ChangeVal(event, key){

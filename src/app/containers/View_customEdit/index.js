@@ -268,7 +268,7 @@ export class ViewCustomEdits extends React.Component {
                 {
                 
                         <div>
-                              <label style={{color:"rgb(19, 157, 201)" , marginleft: "15px" ,fontWeight:"500" , marginTop:"10px", fontSize: '20px'}}>View Custom Edits</label>
+                              <label style={{color:"rgb(19, 157, 201)" , fontWeight:"500" , marginTop:"10px", fontSize: '20px'}}>View Custom Edits</label>
                         <br></br>
                             {this.renderTopbar()}
                             <div className="row">
