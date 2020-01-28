@@ -18,6 +18,7 @@ const Urls = {
     real_time_claim : base_url + '/real_time_claim',
     claim_processing : base_url + '/claim_processing',
     real_time_claim_details : base_url + '/real_time_claim_details',
+    tradingPartner : base_url + '/tradingPartner',
 }
 
 export default Urls;
