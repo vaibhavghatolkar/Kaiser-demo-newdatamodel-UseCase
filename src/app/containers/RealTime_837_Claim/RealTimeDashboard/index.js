@@ -315,7 +315,14 @@ export class RealTimeDashboard extends React.Component {
                             scales: {
                                 xAxes: [{
                                     ticks: {
-                                        fontSize: 10
+                                        fontSize: 10,
+                                        userCallback: function(label, index, labels) {
+                                            // when the floored value is the same as the value we have a whole number
+                                            if (Math.floor(label) === label) {
+                                                return label;
+                                            }
+                       
+                                        },
                                     }
                                 }]
                             }

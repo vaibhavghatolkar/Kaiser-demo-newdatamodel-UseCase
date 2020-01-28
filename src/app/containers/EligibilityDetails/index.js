@@ -8,16 +8,16 @@ import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 
 var val = ''
-export class EligibilityDetails extends React.Component{
-    
-    constructor(props){
+export class EligibilityDetails extends React.Component {
+
+    constructor(props) {
         super(props);
-       
-        this.state={
-            claimsList : [],
-            summaryList : [],
+
+        this.state = {
+            claimsList: [],
+            summaryList: [],
             showDetails: false,
-            files_list : [],
+            files_list: [],
             tradingpartner: [],
             errorList: [],
             eventLog: [],
@@ -29,15 +29,15 @@ export class EligibilityDetails extends React.Component{
             endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             errorcode: '',
-            
+
             selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
-            count : 0,
+            count: 0,
             apiflag: props.location.state.data[0].apiflag,
 
-            pieArray : [],
-            labelArray : [],
-            orderby:'',
+            pieArray: [],
+            labelArray: [],
+            orderby: '',
         }
 
         this.getData = this.getData.bind(this)
@@ -45,24 +45,24 @@ export class EligibilityDetails extends React.Component{
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         setTimeout(() => {
             this.getData()
             this.getTransactions()
         }, 50);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getData()
         this.getTransactions()
     }
 
-    getData(uuid){
+    getData(uuid) {
         let query = ''
-        if(uuid){
-            if(this.state.apiflag == 1){
-            query = `{
-                EventLogData(Transaction:"Eligibility" HiPaaS_UUID:"`+uuid+`") {
+        if (uuid) {
+            if (this.state.apiflag == 1) {
+                query = `{
+                EventLogData(Transaction:"Eligibility" HiPaaS_UUID:"`+ uuid + `") {
                     HiPaaS_UUID
                     EventName
                     EventCreationDateTime
@@ -71,9 +71,9 @@ export class EligibilityDetails extends React.Component{
                     Transaction_Compliance
                 }
             }`
-        }else{
-            query = `{
-                EventLogData(Transaction:"ClaimRequest" HiPaaS_UUID:"`+uuid+`") {
+            } else {
+                query = `{
+                EventLogData(Transaction:"ClaimRequest" HiPaaS_UUID:"`+ uuid + `") {
                     HiPaaS_UUID
                     EventName
                     EventCreationDateTime
@@ -82,7 +82,7 @@ export class EligibilityDetails extends React.Component{
                     Transaction_Compliance
                 }
             }`
-        }
+            }
         } else {
             query = `{
                 Trading_PartnerList(Transaction:"ClaimRequest")  {
@@ -92,8 +92,8 @@ export class EligibilityDetails extends React.Component{
                     ErrorType
                 }
             }`
-    
-            if(this.state.apiflag == 1){
+
+            if (this.state.apiflag == 1) {
                 query = `{
                     Trading_PartnerList(Transaction:"EligibilityStatus")  {
                         Trading_Partner_Name 
@@ -102,7 +102,7 @@ export class EligibilityDetails extends React.Component{
                         ErrorType
                     }
                 }`
-            }   
+            }
         }
 
         console.log(query)
@@ -110,43 +110,44 @@ export class EligibilityDetails extends React.Component{
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                if(uuid){
-                    this.setState({
-                        eventLog: res.data.EventLogData,
-                        Transaction_Compliance : res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
-                    })
-                } else {
-                    this.setState({
-                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                        errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
-                    })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    if (uuid) {
+                        this.setState({
+                            eventLog: res.data.EventLogData,
+                            Transaction_Compliance: res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
+                        })
+                    } else {
+                        this.setState({
+                            tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                            errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
+                        })
+                    }
                 }
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-    getTransactions(){
-        
+    getTransactions() {
+
         let query = ''
         let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
         let url = Urls.claimstatus
+        let loginflag = localStorage.getItem("DbTech");
 
-        if(this.state.apiflag == 1 && this.state.status != 'Pass'){
-            chartQuery = `Eligibilty271ErrorwiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
+        if (this.state.apiflag == 1 && this.state.status != 'Pass') {
+            chartQuery = `Eligibilty271ErrorwiseCount(State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `") {
                                 ErrorType
                                 RecCount
                             }`
@@ -154,7 +155,7 @@ export class EligibilityDetails extends React.Component{
 
         query = `{
             
-            ClaimRequest_Datewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`") {
+            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
                 RecCount
                 HiPaaSUniqueID
                 Date
@@ -164,13 +165,13 @@ export class EligibilityDetails extends React.Component{
                 Error_Type
                 Error_Code
                 ErrorDescription
-            }`+chartQuery+`
+            }`+ chartQuery + `
         }`
-        
-        if(this.state.apiflag == 1){
+        console.log(query);
+        if (this.state.apiflag == 1) {
             url = Urls.eligibility_url
             query = `{
-                EligibilityAllDtlTypewise(TypeID:"`+typeId+`" page:`+this.state.page+` State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`" ErrorType:"`+this.state.errorcode+`" ) {
+                EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
                     RecCount
                     HiPaaSUniqueID
                     Date
@@ -180,7 +181,7 @@ export class EligibilityDetails extends React.Component{
                     Error_Type
                     Error_Code
                     ErrorDescription
-                }`+chartQuery+`
+                }`+ chartQuery + `
             }`
         }
 
@@ -189,80 +190,79 @@ export class EligibilityDetails extends React.Component{
         fetch(url, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                let count = 1
-                let data = []
-                let pieArray = []
-                let labelArray = []
-                
-                if(this.state.apiflag == 1){
-                    data = res.data.EligibilityAllDtlTypewise
-                } else {
-                    data = res.data.ClaimRequest_Datewise
-                }
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let count = 1
+                    let data = []
+                    let pieArray = []
+                    let labelArray = []
 
-                if(this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount){
-                    res.data.Eligibilty271ErrorwiseCount.forEach(item => {
-                        pieArray.push(item.RecCount)
-                        labelArray.push(item.ErrorType)
+                    if (this.state.apiflag == 1) {
+                        data = res.data.EligibilityAllDtlTypewise
+                    } else {
+                        data = res.data.ClaimRequest_Datewise
+                    }
+
+                    if (this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount) {
+                        res.data.Eligibilty271ErrorwiseCount.forEach(item => {
+                            pieArray.push(item.RecCount)
+                            labelArray.push(item.ErrorType)
+                        })
+                    }
+
+                    if (data && data.length > 0) {
+                        count = Math.floor(data[0].RecCount / 10)
+                        if (data[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                    }
+
+                    this.setState({
+                        files_list: data,
+                        count: count,
+                        pieArray: pieArray,
+                        labelArray: labelArray,
                     })
                 }
-                
-                if(data && data.length > 0){
-                    count = Math.floor(data[0].RecCount / 10)
-                    if(data[0].RecCount % 10 > 0){
-                        count = count + 1
-                    }
-                }
-
-                this.setState({
-                    files_list : data,
-                    count: count,
-                    pieArray: pieArray,
-                    labelArray: labelArray,
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-    renderSearchBar(){
-        return(
+    renderSearchBar() {
+        return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim"/>
+                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
             </div>
         )
     }
 
-    showDetails(){
+    showDetails() {
         this.setState({
             showDetails: true
         })
     }
-    handleSort(e)
-    {
+    handleSort(e) {
         alert(e)
         this.setState({
             orderby: e
-            
+
         })
         setTimeout(() => {
             this.getTransactions()
         }, 50);
     }
-    handlePageClick(data){
+    handlePageClick(data) {
         let page = data.selected + 1
         this.setState({
-            page : page
+            page: page
         })
 
         setTimeout(() => {
@@ -270,25 +270,25 @@ export class EligibilityDetails extends React.Component{
         }, 50);
     }
 
-    getDetails(uuid){
+    getDetails(uuid) {
         let url = Urls.claimstatus
 
         let query = `{
-            ClaimRequest(HiPaaSUniqueID:"`+uuid+`") {
+            ClaimRequest(HiPaaSUniqueID:"`+ uuid + `") {
               Message
             }
-            ClaimStatus277(HiPaaSUniqueID:"`+uuid+`") {
+            ClaimStatus277(HiPaaSUniqueID:"`+ uuid + `") {
                 Message
             }
         }`
 
-        if(this.state.apiflag == 1){
+        if (this.state.apiflag == 1) {
             url = Urls.eligibility_url
             query = `{
-                Eligibilty270Request(HiPaaSUniqueID:"`+uuid+`") {
+                Eligibilty270Request(HiPaaSUniqueID:"`+ uuid + `") {
                   Message
                 }
-                Eligibilty271Response(HiPaaSUniqueID:"`+uuid+`") {
+                Eligibilty271Response(HiPaaSUniqueID:"`+ uuid + `") {
                     Message
                 }
             }`
@@ -299,34 +299,34 @@ export class EligibilityDetails extends React.Component{
         fetch(url, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    showDetails: true,
-                    message_270 : this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
-                    message_271 : this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
-    } 
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        showDetails: true,
+                        message_270: this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
+                        message_271: this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
 
-    renderTransactions(){
+    renderTransactions() {
         let row = []
         const data = this.state.files_list ? this.state.files_list : []
 
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a href="#" onClick={() => {
+                    <td><a  onClick={() => {
                         this.getData(d.HiPaaSUniqueID)
                         this.getDetails(d.HiPaaSUniqueID)
                     }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
@@ -339,21 +339,49 @@ export class EligibilityDetails extends React.Component{
                 </tr>
             )
         })
-        return(
+        return (
             <div>
                 <table className="table table-bordered claim-list">
                     <thead>
-                        <tr className="table-head" style={{fontSize:"9px"}}>
-                            <td className="table-head-text">Transaction Id </td>
-                            <td className="table-head-text list-item-style" >Transaction Date  
-                            {/* <button  >Asce</button >
-                            <img src={require('../../components/Images/pencil.png')} onClick={() => this.handleSort('order by Response.TransactionStatus')} style={{ width: '20px' }}></img>  */}
+                        <tr className="table-head" style={{ fontSize: "9px" }}>
+                            <td className="table-head-text">Transaction Id
+<div>
+                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID asc" : "order by Trans_ID asc")} src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
+                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID desc" : "order by Trans_ID desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>
+                                </div>
                             </td>
-                            <td className="table-head-text list-item-style">Status</td>
-                            <td className="table-head-text list-item-style">Submitter</td>
-                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Type</td> : null}
-                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Code</td> : null}
-                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Description</td> : null}
+                            <td className="table-head-text list-item-style" >Transaction Date
+                            <div>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime asc" : "order by Date asc")} src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px' }}></img>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime desc" : "order by Date desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img>
+                                </div>
+                            </td>
+                            <td className="table-head-text list-item-style">Status
+                            <div>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus asc" : "order by Trans_type asc")} src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'}}></img>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus desc" : "order by Trans_type desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img>
+                                </div>
+                            </td>
+                            <td className="table-head-text list-item-style">Submitter
+                            <div>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender asc" : "order by Submiter asc")} src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px' }}></img>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender desc" : "order by Submiter desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img>
+                                </div>
+                            </td>
+                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Type
+                            <div>
+                             <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage asc" : "order by Error_Type asc")} src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px' }}></img>
+                                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage desc" : "order by Error_Type desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img>
+                                </div>
+                            </td> : null}
+                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Code
+                            {/* <img src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '8px' }}></img>
+                                <img src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '8px' }}></img> */}
+                            </td> : null}
+                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Description
+                            {/* <img src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '8px' }}></img>
+                                <img src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '8px' }}></img> */}
+                            </td> : null}
                         </tr>
                     </thead>
                     <tbody>
@@ -369,7 +397,7 @@ export class EligibilityDetails extends React.Component{
                     pageCount={this.state.count}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
-                    onPageChange={(page) => {this.handlePageClick(page)}}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
                     containerClassName={'pagination'}
                     pageClassName={'page-item'}
                     previousClassName={'page-link'}
@@ -377,13 +405,22 @@ export class EligibilityDetails extends React.Component{
                     pageLinkClassName={'page-link'}
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
-                    />
+                />
             </div>
         )
     }
+    handleSort(e) {
+   
+        this.setState({
+            orderby: e
 
-    renderDetails(flag){
-        return(
+        })
+        setTimeout(() => {
+            this.getTransactions()
+        }, 50);
+    }
+    renderDetails(flag) {
+        return (
             <div className="row">
                 {this.state.status != 'n' ? <div className="col-1"></div> : null}
                 <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
@@ -402,24 +439,24 @@ export class EligibilityDetails extends React.Component{
         return row
     }
 
-    getErrorOptions(){
+    getErrorOptions() {
         let row = []
         this.state.errorList.forEach(element => {
             row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
         })
         return row
     }
-    
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
+
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
             this.setState({
-                [key] : '',
-                showDetails : false
+                [key]: '',
+                showDetails: false
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text,
-                showDetails : false
+                [key]: event.target.options[event.target.selectedIndex].text,
+                showDetails: false
             })
         }
 
@@ -431,7 +468,7 @@ export class EligibilityDetails extends React.Component{
     handleStartChange(date) {
         this.setState({
             startDate: date,
-            showDetails : false
+            showDetails: false
         });
 
         setTimeout(() => {
@@ -442,7 +479,7 @@ export class EligibilityDetails extends React.Component{
     handleEndChange(date) {
         this.setState({
             endDate: date,
-            showDetails : false
+            showDetails: false
         });
 
         setTimeout(() => {
@@ -450,7 +487,7 @@ export class EligibilityDetails extends React.Component{
         }, 50);
     }
 
-    renderPieChart(){
+    renderPieChart() {
         const data = {
             labels: this.state.labelArray,
             datasets: [{
@@ -470,7 +507,7 @@ export class EligibilityDetails extends React.Component{
             }],
             flag: ''
         };
-        return(
+        return (
             <div>
                 <Pie data={data}
                     options={{
@@ -489,69 +526,69 @@ export class EligibilityDetails extends React.Component{
         )
     }
 
-    renderFilters(){
-        return(
-                <form className="form-style" id='filters'>
-                    <div className="form-row">
-                        <div className="form-group col-md-2">
-                            <div className="list-dashboard">Transaction Id</div>
-                            <input className="form-control list-dashboard"
-                                id="state"
-                                onChange={(e) => {
-                                    clearTimeout(val)
-                                    let value = e.target.value
-                                    val = setTimeout(() => {
-                                        this.setState({transactionId : value, showDetails : false})
-                                        setTimeout(() => {
-                                            this.getTransactions()
-                                        }, 50);
-                                    }, 300);
-                                }}
-                            />
-                        </div>
-                        <div className="form-group col-md-2">
-                            <div className="list-dashboard">State</div>
-                            <select className="form-control list-dashboard" id="state"
-                                onChange={(event) => {
-                                    this.onSelect(event, 'State')
-                                }}
-                            >
-                                <option selected={this.state.State == "" ? "selected" : ""} value=""></option>
-                                <option selected={this.state.State == "California" ? "selected" : ''} value="1">California</option>
-                                <option selected={this.state.State == "Michigan" ? "selected" : ''} value="2">Michigan</option>
-                                <option selected={this.state.State == "Florida" ? "selected" : ''} value="3">Florida</option>
-                                <option selected={this.state.State == "New York" ? "selected" : ''} value="4">New York</option>
-                                <option selected={this.state.State == "Idaho" ? "selected" : ''} value="5">Idaho</option>
-                                <option selected={this.state.State == "Ohio" ? "selected" : ''} value="6">Ohio</option>
-                                <option selected={this.state.State == "Illinois" ? "selected" : ''} value="7">Illinois</option>
-                                <option selected={this.state.State == "Texas" ? "selected" : ''} value="8">Texas</option>
-                                <option selected={this.state.State == "Mississippi" ? "selected" : ''} value="9">Mississippi</option>
-                                <option selected={this.state.State == "South Carolina" ? "selected" : ''} value="10">South Carolina</option>
-                                <option selected={this.state.State == "New Mexico" ? "selected" : ''} value="11">New Mexico</option>
-                                <option selected={this.state.State == "Puerto Rico" ? "selected" : ''} value="12">Puerto Rico</option>
-                                <option selected={this.state.State == "Washington" ? "selected" : ''} value="13">Washington</option>
-                                <option selected={this.state.State == "Utah" ? "selected" : ''} value="14">Utah</option>
-                                <option selected={this.state.State == "Wisconsin" ? "selected" : ''} value="15">Wisconsin</option>
-                            </select>
-                        </div>
-                        
-                        <div className="form-group col-md-2">
-                            <div className="list-dashboard">Submitter </div>
-                            <select className="form-control list-dashboard" id="TradingPartner"
-                                onChange={(event) => {
-                                    this.onSelect(event, 'selectedTradingPartner')
+    renderFilters() {
+        return (
+            <form className="form-style" id='filters'>
+                <div className="form-row">
+                    <div className="form-group col-md-2">
+                        <div className="list-dashboard">Transaction Id</div>
+                        <input className="form-control list-dashboard"
+                            id="state"
+                            onChange={(e) => {
+                                clearTimeout(val)
+                                let value = e.target.value
+                                val = setTimeout(() => {
+                                    this.setState({ transactionId: value, showDetails: false })
                                     setTimeout(() => {
                                         this.getTransactions()
                                     }, 50);
-                                }}
-                            >
-                                <option value="select"></option>
-                                {this.getoptions()}
-                            </select>
-                        </div>
+                                }, 300);
+                            }}
+                        />
+                    </div>
+                    <div className="form-group col-md-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.onSelect(event, 'State')
+                            }}
+                        >
+                            <option selected={this.state.State == "" ? "selected" : ""} value=""></option>
+                            <option selected={this.state.State == "California" ? "selected" : ''} value="1">California</option>
+                            <option selected={this.state.State == "Michigan" ? "selected" : ''} value="2">Michigan</option>
+                            <option selected={this.state.State == "Florida" ? "selected" : ''} value="3">Florida</option>
+                            <option selected={this.state.State == "New York" ? "selected" : ''} value="4">New York</option>
+                            <option selected={this.state.State == "Idaho" ? "selected" : ''} value="5">Idaho</option>
+                            <option selected={this.state.State == "Ohio" ? "selected" : ''} value="6">Ohio</option>
+                            <option selected={this.state.State == "Illinois" ? "selected" : ''} value="7">Illinois</option>
+                            <option selected={this.state.State == "Texas" ? "selected" : ''} value="8">Texas</option>
+                            <option selected={this.state.State == "Mississippi" ? "selected" : ''} value="9">Mississippi</option>
+                            <option selected={this.state.State == "South Carolina" ? "selected" : ''} value="10">South Carolina</option>
+                            <option selected={this.state.State == "New Mexico" ? "selected" : ''} value="11">New Mexico</option>
+                            <option selected={this.state.State == "Puerto Rico" ? "selected" : ''} value="12">Puerto Rico</option>
+                            <option selected={this.state.State == "Washington" ? "selected" : ''} value="13">Washington</option>
+                            <option selected={this.state.State == "Utah" ? "selected" : ''} value="14">Utah</option>
+                            <option selected={this.state.State == "Wisconsin" ? "selected" : ''} value="15">Wisconsin</option>
+                        </select>
+                    </div>
 
-                        {
-                            this.state.status != 'Pass'
+                    <div className="form-group col-md-2">
+                        <div className="list-dashboard">Submitter </div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                                setTimeout(() => {
+                                    this.getTransactions()
+                                }, 50);
+                            }}
+                        >
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
+
+                    {
+                        this.state.status != 'Pass'
                             ?
                             <div className="form-group col-md-2">
                                 <div className="list-dashboard">Error Type</div>
@@ -568,29 +605,29 @@ export class EligibilityDetails extends React.Component{
                                 </select>
                             </div>
                             : null
-                        }
-                        <div className="form-group col-md-2">
-                            <div className="list-dashboard">Start Date</div>
-                            <DatePicker 
-                                className="form-control list-dashboard"
-                                selected={this.state.startDate ? new Date(this.state.startDate) : ''}
-                                onChange={this.handleStartChange}
-                            />
-                        </div>
-                        <div className="form-group col-md-2">
-                            <div className="list-dashboard">End Date</div>
-                            <DatePicker 
-                                className="form-control list-dashboard"
-                                selected={this.state.endDate ? new Date(this.state.endDate) : ''}
-                                onChange={this.handleEndChange}
-                            />
-                        </div>
+                    }
+                    <div className="form-group col-md-2">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker
+                            className="form-control list-dashboard"
+                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            onChange={this.handleStartChange}
+                        />
                     </div>
-                </form>
+                    <div className="form-group col-md-2">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker
+                            className="form-control list-dashboard"
+                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
+                </div>
+            </form>
         )
     }
 
-    renderEventLog(){
+    renderEventLog() {
         let row = []
         const data = this.state.eventLog ? this.state.eventLog : []
 
@@ -603,7 +640,7 @@ export class EligibilityDetails extends React.Component{
                 </tr>
             )
         })
-        return(
+        return (
             <div className="row">
                 {this.state.status != 'n' ? <div className="col-1"></div> : null}
                 <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
@@ -611,7 +648,7 @@ export class EligibilityDetails extends React.Component{
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
-                                <tr className="table-head" style={{fontSize:"9px"}}>
+                                <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Stage</td>
                                     <td className="table-head-text list-item-style">Execution Time</td>
                                     <td className="table-head-text list-item-style">Exception</td>
@@ -630,13 +667,13 @@ export class EligibilityDetails extends React.Component{
     render() {
         return (
             <div>
-                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
+                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-6">
                         {this.renderTransactions()}
                     </div>
-                    
+
                     <div className="col-6">
                         {/* {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null} */}
                         {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}

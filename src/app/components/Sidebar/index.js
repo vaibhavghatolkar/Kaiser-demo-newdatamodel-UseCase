@@ -109,13 +109,10 @@ export class Sidebar extends React.Component {
         array.forEach(element => {
             let addon = ''
             if (element.key == Strings.RealTime276) {
-                // addon = '/0' 
-            
                 data = [
                     { apiflag: '0' },
                 ]
             } else if (element.key == Strings.RealTime270) {
-                // addon = '/1' 
                 data = [
                     { apiflag: '1' },
                 ]
@@ -124,49 +121,38 @@ export class Sidebar extends React.Component {
                 if (element.key == Strings.elilgibilityErrors270) {
                     key = 'Fail'
                 }
-                //  addon = '/1/n/n/n/n/n/'+key+'/n'
-
                 data = [
                     { apiflag: '1', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
-            }
-            else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276) {
+            } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276) {
                 let key = 'n'
                 if (element.key == Strings.elilgibilityErrors276) {
                     key = 'Fail'
                 }
-                // addon = '/0/n/n/n/n/n/'+key+'/n'
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
 
             } else if (element.key == Strings.ClaimDetails837) {
-                // addon = '/n/n/n/n'
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
-            }
-            else if (element.key == Strings.Files_837) {
-                // addon = '/n/n/n/n'  
+            } else if (element.key == Strings.Files_837) {
                 data = [
                     { flag: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n' },
                 ]
 
-            }
-            else if (element.key == Strings.claimsDashboard_834_details) {
+            } else if (element.key == Strings.claimsDashboard_834_details) {
                 addon = '/total'
-
-            }
-            else if (element.key == Strings.EnrollmentError) {
+            } else if (element.key == Strings.EnrollmentError) {
                 addon = '/error'
-            }
-            else {
+            } else {
                 addon = ''
             }
+
             row.push(
                 <li>
-                    {/* <Link to={{pathname:'/' + element.key   }}>{element.value}</Link> */}
-                    <Link to={{ pathname: '/' + element.key + addon, state: { data } }}> {element.value} </Link>
+                    <Link to={{ pathname: '/' + element.key + addon, state: { data } }}>{element.value}</Link>
                 </li>
             )
         });
@@ -192,9 +178,9 @@ export class Sidebar extends React.Component {
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
 
-                {/* ** {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)} */}
+                {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)}
                 {/* {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
-                {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)}
+                {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.REP_MANAGEMENT, 'Report Generation', this.state.pageArray)} */}
@@ -224,7 +210,6 @@ export class Sidebar extends React.Component {
         return (
             <nav id="sidebar">
                 <ul className="list-unstyled components">
-                    {/* {this.renderTabs()} */}
                     {this.renderSidebarItems()}
                 </ul>
             </nav>
