@@ -192,14 +192,14 @@ export class MenuManagement extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <th className="table-head-text">Menu List</th>
-                <th className="table-head-text">Enable / Disable
+                <td className="table-text">Menu List</td>
+                <td className="table-text">Enable / Disable
 
-                <input style={{ marginLeft: "20px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
-                </th>
-                <th className="table-head-text">Editable
-                <input style={{ marginLeft: "30px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
-                </th>
+                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
+                </td>
+                <td className="table-text">Editable
+                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
+                </td>
 
 
             </tr>
@@ -291,7 +291,7 @@ export class MenuManagement extends React.Component {
 
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
                         d.isChecked = e.target.checked
-                        let menu = 1
+                        // let menu = 1
                         // if(menu == roletype){
                         //    alert(menuID)
                         // }
@@ -395,11 +395,6 @@ export class MenuManagement extends React.Component {
                     falseaccess_Val_str2 = falseaccess_Val.replace(/,(?=\s*$)/, '');
                 }
             });
-
-            console.log(str2);
-            console.log(str1)
-            console.log(falseaccess_Val_str2)
-            console.log(access_Val_str1)
 
             var query = 'mutation{ MenuMasterUpdate('+
                 'uncheck :"' + str2 + '"' +

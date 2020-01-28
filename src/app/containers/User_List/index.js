@@ -136,11 +136,11 @@ export class UserList extends React.Component {
         return (
             <table className="table table-bordered" id="userList" style={{ fontSize: "10px" }}>
                 <tr>
-                    <th >Email</th>
-                    <th>User Role</th>
-                    <th>Name</th>
-                    <th></th>
-                    <th></th>
+                    <td className="table-text">Email</td>
+                    <td className="table-text">User Role</td>
+                    <td className="table-text">Name</td>
+                    <td className="table-text"></td>
+                    <td className="table-text"></td>
                 </tr>
                 <tbody>
                     {row}
@@ -170,7 +170,7 @@ export class UserList extends React.Component {
 
                 <div className="row">
                     <h5 style={{ color: '#139DC9', padding: '20px' }}>HiPaaS User List</h5>
-                    <button type="button" class="btn btn-demo" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
+                    <button type="button" class="btn btn-display" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
                         Add New
                     </button>
                 </div>

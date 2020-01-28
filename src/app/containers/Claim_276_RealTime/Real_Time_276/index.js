@@ -425,6 +425,13 @@ export class RealTime276 extends React.Component {
                                     yAxes: [{
                                         ticks: {
                                             min: minimumValue,
+                                            userCallback: function(label, index, labels) {
+                                                // when the floored value is the same as the value we have a whole number
+                                                if (Math.floor(label) === label) {
+                                                    return label;
+                                                }
+                           
+                                            }
                                         }
                                     }]
                                 }
@@ -634,12 +641,19 @@ export class RealTime276 extends React.Component {
                 //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 //     </div>
                 // </Link>
+                item.name == 'TOTAL TRANSACTION VOLUME' || item.name == 'ERROR PERCENTAGE'
+                ?
                 <Link to={{ pathname: '/'+ url , state: {data}}} className="col-2 summary-container"> 
-                <div>
+                    <div>
                         <div className="summary-header">{item.name}</div>
                         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
-                 </Link>     
+                </Link>
+                :
+                <div className="col-2 summary-container">
+                    <div className="summary-header">{item.name}</div>
+                    <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                </div>
                 // <Link
                 //     to={
                 //         '/' + url, 

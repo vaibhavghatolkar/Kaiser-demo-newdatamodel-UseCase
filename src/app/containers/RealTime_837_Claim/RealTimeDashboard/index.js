@@ -178,8 +178,8 @@ export class RealTimeDashboard extends React.Component {
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : ''   },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : ''},
-                        { name: 'Accepted Percentage', value: data.Claim837RTDashboardCount[0].Accepted_Per  ? data.Claim837RTDashboardCount[0].Accepted_Per : ''},
-                        { name: 'Rejected Percentage', value: data.Claim837RTDashboardCount[0].Rejected_Per  ? data.Claim837RTDashboardCount[0].Rejected_Per : ''},
+                        { name: 'Accepted Percentage', value: data.Claim837RTDashboardCount[0].Accepted_Per  ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : ''},
+                        { name: 'Rejected Percentage', value: data.Claim837RTDashboardCount[0].Rejected_Per  ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : ''},
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
                     rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
@@ -315,7 +315,14 @@ export class RealTimeDashboard extends React.Component {
                             scales: {
                                 xAxes: [{
                                     ticks: {
-                                        fontSize: 10
+                                        fontSize: 10,
+                                        userCallback: function(label, index, labels) {
+                                            // when the floored value is the same as the value we have a whole number
+                                            if (Math.floor(label) === label) {
+                                                return label;
+                                            }
+                       
+                                        },
                                     }
                                 }]
                             }

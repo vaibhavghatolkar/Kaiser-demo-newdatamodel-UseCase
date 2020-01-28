@@ -102,13 +102,15 @@ class PrivateRoute extends React.Component {
 
     <Router>
         
-        <Header/>
-        <div className="container-fluid background">
+        
+       
         { this.state.loggedIn=== false  ?
                        <div> <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> 
                        <Route render={() => <Redirect to={{pathname: "/"}} />} />
                        </div>:
-            <div className="row">
+                       <div className="container-fluid background">
+                       <Header/> <br /><br /><br /><br />
+                <div className="row">
                 <div className="col-2 nopadding white-background">
                     <Sidebar 
                     handleFlag={this.handleFlag}
@@ -190,8 +192,9 @@ class PrivateRoute extends React.Component {
                     
                 </div>
             </div>
+            </div>
     }
-        </div>
+       
     </Router>
 )
 }

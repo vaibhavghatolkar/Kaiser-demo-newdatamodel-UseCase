@@ -19,18 +19,17 @@ padding-top.Title
     font-size: 12px;
 }
 .btn-demo {
-	margin: 15px;
-	padding: 10px 15px;
 	border-radius: 150;
 	font-size: 12px;
-    background-color: #139DC9;
-    color: white
+    background-color: #05274D;
+    color: white;
+    width: 100%;
 }
 .btn-demo:hover {
     color: white;
 }
 .widthText{
-    width: 50%;
+    width: 100%;
     float: inherit !important; 
 }
 .small{
@@ -42,4 +41,33 @@ padding-top.Title
     background-color: white;
     border-radius: 50%;
     display: inline-block;
+}
+
+.Hipaas_logo {
+    width: 300px;
+    height: 100px;
+    position: absolute;
+    left: 50%;
+    top: 50%; 
+    margin-left: -150px;
+    margin-top: -100px;
+    }
+.para{
+    position: sticky;
+    left: 5%;
+    top: 85%; 
+    text-align: center;
+    color: white;
+}
+.contact{
+    position: sticky;
+    left: 35%;
+    top: 95%; 
+    text-align: center;
+    color: white !important;
+    font-weight: 700;
+    text-decoration: underline;
+}
+.headerText{
+    padding-left: 10px;
 }
