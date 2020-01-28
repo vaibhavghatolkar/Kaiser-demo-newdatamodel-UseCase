@@ -291,7 +291,7 @@ export class MenuManagement extends React.Component {
 
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
                         d.isChecked = e.target.checked
-                        let menu = 1
+                        // let menu = 1
                         // if(menu == roletype){
                         //    alert(menuID)
                         // }
@@ -395,11 +395,6 @@ export class MenuManagement extends React.Component {
                     falseaccess_Val_str2 = falseaccess_Val.replace(/,(?=\s*$)/, '');
                 }
             });
-
-            console.log(str2);
-            console.log(str1)
-            console.log(falseaccess_Val_str2)
-            console.log(access_Val_str1)
 
             var query = 'mutation{ MenuMasterUpdate('+
                 'uncheck :"' + str2 + '"' +

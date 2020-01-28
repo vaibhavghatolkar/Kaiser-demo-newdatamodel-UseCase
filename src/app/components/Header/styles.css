@@ -11,3 +11,7 @@
     font-size: 20px;
     
 }
+.dropdown-item:hover {
+    background-color: #139DC9;
+    color: white
+  }
