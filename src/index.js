@@ -51,6 +51,7 @@ import {RealTimeDashboard} from './app/containers/RealTime_837_Claim/RealTimeDas
 import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
 import { Files_837 } from './app/containers/Files_837'
 import { MenuManagement } from './app/containers/Menu_Management'
+import { DynamicSidebar } from './app/components/DynamicSidebar';
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -110,9 +111,9 @@ class PrivateRoute extends React.Component {
                        </div>:
             <div className="row">
                 <div className="col-2 nopadding white-background">
-                    <Sidebar 
-                    handleFlag={this.handleFlag}
-                    />
+                    <DynamicSidebar
+                        handleFlag={this.handleFlag}
+                        />
                 </div>
                 <div className="col-10 container-fluid" style={{height : $(window).height()}}>
                     <Route exact path="/">

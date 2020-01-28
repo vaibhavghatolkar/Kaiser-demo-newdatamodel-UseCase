@@ -326,7 +326,7 @@ export class EligibilityDetails extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a  onClick={() => {
+                    <td><a href="" onClick={() => {
                         this.getData(d.HiPaaSUniqueID)
                         this.getDetails(d.HiPaaSUniqueID)
                     }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
