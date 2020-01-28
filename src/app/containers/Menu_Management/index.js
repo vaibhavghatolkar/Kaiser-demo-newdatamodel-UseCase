@@ -192,14 +192,14 @@ export class MenuManagement extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <th className="table-head-text">Menu List</th>
-                <th className="table-head-text">Enable / Disable
+                <td className="table-text">Menu List</td>
+                <td className="table-text">Enable / Disable
 
-                <input style={{ marginLeft: "20px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
-                </th>
-                <th className="table-head-text">Editable
-                <input style={{ marginLeft: "30px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
-                </th>
+                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
+                </td>
+                <td className="table-text">Editable
+                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
+                </td>
 
 
             </tr>

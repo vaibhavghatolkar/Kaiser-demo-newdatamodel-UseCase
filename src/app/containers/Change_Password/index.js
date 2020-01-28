@@ -74,7 +74,7 @@ export class ChangePassword extends React.Component {
                         </div>
                         
                         <div class="form-group" style={{ marginTop: "15px" }}>
-                            <button style={{ marginLeft: "20px",marginTop:"10px", backgroundColor: '#139DC9' }} onClick={this.updatePassword} class="btn btn-primary">Update Password</button>
+                            <button style={{ marginLeft: "20px",marginTop:"10px", backgroundColor: '#139DC9' }} onClick={this.updatePassword} class="btn btn-display">Update Password</button>
                         </div>
                        
                     </div>

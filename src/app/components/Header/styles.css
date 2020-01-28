@@ -4,6 +4,8 @@
     position: fixed;
     width: 100%;
     z-index: 1;
+    margin-left: -17px;
+    padding-right: 20px;
 }
 .header_text{
     color: white;
@@ -15,3 +17,6 @@
     background-color: #139DC9;
     color: white
   }
+.dropdown-item {
+    font-size: 12px;
+}
