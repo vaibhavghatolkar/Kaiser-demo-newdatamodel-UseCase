@@ -190,7 +190,7 @@ export class TradingPartnerConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                           
+                           console.log(";fksdlfjsjfs", r.data)
                 this.setState({
                     Trading_Partner_id:r.data.Trading_Partner[0].ID,
                     
@@ -286,7 +286,7 @@ export class TradingPartnerConfiguration extends React.Component {
                 'File_Naming_Options : "")'+
   
            '}' 
-     console.log(query);
+     
            fetch(Urls.base_url, {
           method: 'POST',
           headers: {
@@ -678,8 +678,8 @@ export class TradingPartnerConfiguration extends React.Component {
                                                     <label className="list-header1">Communication Type</label>
                                                     <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
                                                         <option value="0">Select Communication</option>
-                                                        <option selected={this.state.Communication_Type == 1 ? "selected" : ''} value="1">SFTP</option>
-                                                        <option selected={this.state.Communication_Type == 2 ? "selected" : ''} value="2">Disk</option>
+                                                        <option selected={this.state.Communication_Type == "SFTP" ? "selected" : ''} value="SFTP">SFTP</option>
+                                                        <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
                                                     </select>
                                                 </div>
                                                 <div className="form-group checkbox center col" style={{marginTop: "4px"}}>

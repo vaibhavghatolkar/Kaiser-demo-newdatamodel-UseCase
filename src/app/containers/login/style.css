@@ -24,6 +24,7 @@ padding-top.Title
     background-color: #05274D;
     color: white;
     width: 100%;
+    text-align: left;
 }
 .btn-demo:hover {
     color: white;
@@ -69,5 +70,10 @@ padding-top.Title
     text-decoration: underline;
 }
 .headerText{
-    padding-left: 10px;
+    padding-left: 0px;
+}
+.vartical-center{
+    position: absolute;
+    left: 73%;
+    top: 25%; 
 }

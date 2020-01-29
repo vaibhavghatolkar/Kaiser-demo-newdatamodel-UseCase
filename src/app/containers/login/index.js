@@ -65,7 +65,7 @@ export class Login extends React.Component {
         return (
 
 
-            <div className="container-fluid" style={{ marginTop: "-10px" }}>
+            <div className="container-fluid">
                 <div className="row">
                     <div class=" col-9" style={{ backgroundColor: '#05274D', minHeight: '100vh', marginLeft: '-15px' }}>
                         <img src={require('../../components/Images/HiPaaS_logo.png')} alt="logo" className="Hipaas_logo" align="center" />
@@ -75,13 +75,13 @@ export class Login extends React.Component {
                         <a href="https://www.hipaas.com/" target="blank" className="contact"> Contact Us </a>
 
                     </div>
-                    <div className="col-3" style={{marginTop: '130px'}}>
+                    <div className="col-3 vartical-center" >
                        
                             <div style={{ padding: "20px" }}>
                                 <span style={{ color: "#6C6969", fontSize: "16px" }}>Log in to <b>HiPaaS Portal </b></span>
                                 <p>Enter your username and password to log into your HiPaaS Portal</p>
                             </div>
-                            <div class="form-group" style={{ paddingLeft: "20px" }}>
+                            <div class="form-group" style={{ paddingLeft: "20px", marginTop: "-5px" }}>
                                 <label className="headerText"><b>Username</b></label>
                                 <input onChange={(e) => this.onHandleChange(e, 'EmailId')} name="email" type="text" className="form-control shadow-none widthText" id="Email"
                                     placeholder="Enter Username" />
