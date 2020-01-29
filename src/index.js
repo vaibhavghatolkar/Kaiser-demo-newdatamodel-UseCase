@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app/App';
 import  { Redirect } from 'react-router-dom'
+import IdleTimer from 'react-idle-timer';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 import { Claims } from './app/containers/Claims/Dashboard';
 import { TradingPartnerConfiguration } from './app/containers/TradingPartnerConfiguration';
@@ -58,7 +59,6 @@ class PrivateRoute extends React.Component {
         super(props);
         const token = localStorage.getItem("token");
         let loggedIn;
-        // let timeOut
 
         if(token == null){
             loggedIn = false;
@@ -69,10 +69,16 @@ class PrivateRoute extends React.Component {
         this.state = {
 
             loggedIn,
+            timeout:900000,
+            isTimedOut: false
             // timeOut,
         };
         
         this.handleFlag = this.handleFlag.bind(this)
+        this.idleTimer = null
+        this.onAction = this.onAction.bind(this)
+        this.onActive = this.onActive.bind(this)
+        this.onIdle = this.onIdle.bind(this)
       
     }
 
@@ -92,6 +98,29 @@ class PrivateRoute extends React.Component {
 
     }
 
+    onAction(e) {
+        console.log('user did something', e)
+        this.setState({isTimedOut: false})
+      }
+     
+      onActive(e) {
+        console.log('user is active', e)
+        this.setState({isTimedOut: false})
+      }
+     
+      onIdle(e) {
+        console.log('user is idle', e)
+        const isTimedOut = this.state.isTimedOut
+        
+        if (isTimedOut) {
+            localStorage.clear()
+            window.location.reload()
+        } else {
+          this.setState({showModal: true})
+          this.idleTimer.reset();
+          this.setState({isTimedOut: true})
+        }
+    }
 
     render() {
         let data =[]
@@ -102,9 +131,16 @@ class PrivateRoute extends React.Component {
 
     <Router>
         
-        
+        <IdleTimer
+            ref={ref => { this.idleTimer = ref }}
+            element={document}
+            onActive={this.onActive}
+            onIdle={this.onIdle}
+            onAction={this.onAction}
+            debounce={250}
+            timeout={this.state.timeout} />
        
-        { this.state.loggedIn=== false  ?
+        { this.state.loggedIn=== false ?
                        <div> <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />}/> 
                        <Route render={() => <Redirect to={{pathname: "/"}} />} />
                        </div>:
