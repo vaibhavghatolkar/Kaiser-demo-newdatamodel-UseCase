@@ -178,11 +178,11 @@ export class Sidebar extends React.Component {
                 {/* {this.renderItems(Strings.EDIT_CLAIM, 'Edit / Resubmit Claim', this.state.pageArray)} */}
                 {/* ** {this.renderItems(Strings.TRAN_MANAGMENT, 'Transaction Management', this.state.transactionArray)} */}
 
-            
+                {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)}
                 {/* {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
                 {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
-                {this.renderItems(Strings.TRAD_MANAGEMENT, 'Admin', this.state.tradingPartner)}
+          
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.REP_MANAGEMENT, 'Report Generation', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.ACK_MANAGEMENT, 'Acknowledgment Generation', this.state.pageArray)} */}

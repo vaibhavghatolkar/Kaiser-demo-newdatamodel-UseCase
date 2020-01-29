@@ -66,6 +66,7 @@ td a {
   }
 .collapsible[aria-expanded="true"], .collapsible:hover {
     background-color: #008CBA;
+    color: white;
 }
 .content {
     border-color: #008CBA;
