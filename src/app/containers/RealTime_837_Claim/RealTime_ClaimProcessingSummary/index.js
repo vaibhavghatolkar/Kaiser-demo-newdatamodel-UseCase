@@ -214,7 +214,7 @@ export class ClaimProcessingSummary extends React.Component {
                     <td className="list-item-style">{moment(d.FileCrDate).format('MMM D YYYY hh:mm a')}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.ClaimID}</td>
-                    <td className="list-item-style">{d.ClaimDate}</td>
+                    <td className="list-item-style">{moment(d.ClaimDate).format('MMM D YYYY hh:mm a') != 'Invalid date' ? moment(d.ClaimDate).format('MMM D YYYY hh:mm a') : d.ClaimDate}</td>
                     <td className="list-item-style">{d.ClaimStatus}</td>
                     <td className="list-item-style">{d.Subscriber_ID}</td>
                     <td className="list-item-style">{d.SubscriberLastName}</td>

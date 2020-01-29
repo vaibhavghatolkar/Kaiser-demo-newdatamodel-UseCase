@@ -127,14 +127,14 @@ export class UserList extends React.Component {
                     <td>{d.Email}</td>
                     <td>{d.role_description}</td>
                     <td>{FullName}</td>
-                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} style={{ width: '20px' }}></img></td>
-                    <td><img src={require('../../components/Images/trash.png')} style={{ width: '20px' }}></img></td>
+                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} style={{ width: '14px', marginLeft: '10px'}}></img></td>
+                    <td><img src={require('../../components/Images/trash.png')} style={{ width: '14px', marginLeft: '10px' }}></img></td>
                 </tr>
             )
         });
 
         return (
-            <table className="table table-bordered" id="userList" style={{ fontSize: "10px" }}>
+            <table className="table table-bordered" id="userList" style={{ fontSize: "10px", backgroundColor: 'white' }}>
                 <tr>
                     <td className="table-text">Email</td>
                     <td className="table-text">User Role</td>
