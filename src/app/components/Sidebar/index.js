@@ -38,7 +38,7 @@ export class Sidebar extends React.Component {
             tradingPartner: [
                 { value: 'Trading Partner', key: 'tradingPartnerConfiguration' },
                 // { value: 'Transaction Setup', key: 'transactionSetup' },
-                { value: 'Configure Custom Edit', key: 'editConfiguration' },
+                // { value: 'Configure Custom Edit', key: 'editConfiguration' },
                 { value: 'View Custom Edits', key: 'ViewCustomEdits' },
                 // { value: 'Covered', key: 'covered' },
                 // { value: 'Non Covered', key: 'noncovered' },
@@ -182,6 +182,7 @@ export class Sidebar extends React.Component {
                 {/* {this.renderItems(Strings.ENR_MANAGEMENT, 'Enrollment Management', this.state.enrollmentArray)} */}
                 {/* {this.renderItems(Strings.FULL_FILE, 'Full File Compare', this.state.fullfile)} */}
                 {this.renderItems(Strings.UserManagement, 'User Management', this.state.UserManagement)}
+          
                 {/* {this.renderItems(Strings.PROC_MANAGEMENT, 'Process Management', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.REP_MANAGEMENT, 'Report Generation', this.state.pageArray)} */}
                 {/* {this.renderItems(Strings.ACK_MANAGEMENT, 'Acknowledgment Generation', this.state.pageArray)} */}

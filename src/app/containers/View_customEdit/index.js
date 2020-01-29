@@ -138,7 +138,7 @@ export class ViewCustomEdits extends React.Component {
         return (
             <div>
             <div className="panel-heading collapsible" data-toggle="collapse" href="#customEdits">
-                <span className="panel-title">Custom Edits </span>
+                <span className="panel-title" style={{color:"white"}}>Custom Edits </span>
             </div>
             <div id="customEdits" className="panel-collapse content collapse">
                 <div className="panel-body">
@@ -268,8 +268,8 @@ export class ViewCustomEdits extends React.Component {
                 {
                 
                         <div>
-                        {this.renderSearchBar()}
-                        <p style={{ color: '#139DC9', fontWeight: 'bold' }}>View Custom Edits</p> 
+                              <label style={{color:"rgb(19, 157, 201)" , fontWeight:"500" , marginTop:"10px", fontSize: '20px'}}>View Custom Edits</label>
+                        <br></br>
                             {this.renderTopbar()}
                             <div className="row">
                                 <div className="col-12">

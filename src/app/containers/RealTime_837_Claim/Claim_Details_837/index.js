@@ -59,10 +59,13 @@ export class ClaimDetails837 extends React.Component{
 
             page: 1,
             count : 0,
+            recount:0,
+            Firstgridpage:1,
             apiflag: props.location.state.data[0].apiflag,
 
             pieArray : [],
             labelArray : [],
+            orderby: '',
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -104,6 +107,7 @@ export class ClaimDetails837 extends React.Component{
     }
 
     getData = () => {
+        let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -112,7 +116,7 @@ export class ClaimDetails837 extends React.Component{
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "`+this.state.type+`") {
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "`+this.state.type+`" , page: `+ this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `"  ) {
                 RecCount
                 FileID
                 FileName
@@ -134,12 +138,30 @@ export class ClaimDetails837 extends React.Component{
             .then(res => res.json())
             .then(res => {
                 if(res && res.data && res.data.Claim837RTFileDetails){
+                  
+                    if (res.data.Claim837RTFileDetails.length > 0) {
+                      
+                        count = Math.floor(res.data.Claim837RTFileDetails[0].RecCount / 10)
+                        if (res.data.Claim837RTFileDetails[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                        this.setState.recount=count;
+
+                    }
+
                     this.setState({
-                        intakeClaims: res.data.Claim837RTFileDetails
+                        intakeClaims: res.data.Claim837RTFileDetails,
+                     
+                       
+                        
                     }, () => {
                         this.sortData()
                     })
+
+                  
                 }
+
+
             })
             .catch(err => {
                 console.log(err)
@@ -173,6 +195,7 @@ export class ClaimDetails837 extends React.Component{
     }
 
     getTransactions = (fileId) => {
+       
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -181,7 +204,7 @@ export class ClaimDetails837 extends React.Component{
         }
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "`+fileId+`", Type : "`+this.state.type+`") {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "`+fileId+`", Type : "`+this.state.type+`" , OrderBy:"` + this.state.orderby + `") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -234,6 +257,7 @@ export class ClaimDetails837 extends React.Component{
     }
 
     handlePageClick = (data, fileId) => {
+    
         let page = data.selected + 1
         this.setState({
             page : page
@@ -243,6 +267,7 @@ export class ClaimDetails837 extends React.Component{
     }
 
     getDetails(claimId, fileId){
+     
         let url = Urls.real_time_claim_details
         let query = `{
             Claim837RTDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
@@ -640,14 +665,35 @@ export class ClaimDetails837 extends React.Component{
             </tr>
         )
     }
+    handleSort(e) {
+      
+        this.setState({
+            orderby: e
 
+        })
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
     renderTableHeader() {
         return (
             <div className="row">
-                <div className="col-4 col-header">File Name</div>
-                <div className="col-2 col-header">File Date</div>
-                <div className="col-3 col-header">File Status</div>
-                <div className="col-3 col-header">Submitter</div>
+                <div className="col-4 col-header">File Name
+                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName asc" : "Order By Claim837RTFileDetails.FileName asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
+                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName desc" : "Order By Claim837RTFileDetails.FileName desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>    
+                </div>
+                <div className="col-2 col-header">File Date
+                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate asc" : "Order by Claim837RTFileDetails.FileDate asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
+                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate desc" : "Order by Claim837RTFileDetails.FileDate desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+               </div>
+                <div className="col-3 col-header">File Status
+                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 asc" : "Order By Claim837RTFileDetails.FileStatus asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
+                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 desc" : "Order By Claim837RTFileDetails.FileStatus desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                </div>
+                <div className="col-3 col-header">Submitter
+                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 asc" : "Order By Claim837RTFileDetails.Sender asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
+                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 desc" : "Order By Claim837RTFileDetails.Sender desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                </div>
                 {/* <div className="col-2 col-header">Status</div> */}
             </div>
         )
@@ -658,7 +704,9 @@ export class ClaimDetails837 extends React.Component{
         let col = []
         let data = this.state.claimsObj;
         let count = 0
-        try {
+       
+        console.log(data)
+        try {         
             count = data[Object.keys(data)[0]].value.Claimcount / 10
             if(data[Object.keys(data)[0]].value.Claimcount % 10 > 0){
                 count = count + 1
@@ -666,7 +714,8 @@ export class ClaimDetails837 extends React.Component{
         } catch (error) {
             
         }
-
+        
+        
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
@@ -734,12 +783,41 @@ export class ClaimDetails837 extends React.Component{
 
         return (
             <div>
+                
                 {this.renderTableHeader()}
                 {row}
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.setState.recount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick1(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
             </div>
         );
     }
+    handlePageClick1(data) {
+     
+        let page = data.selected + 1
+        this.setState({
+            Firstgridpage: page
+        })
 
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
     render() {
         return (
             <div>

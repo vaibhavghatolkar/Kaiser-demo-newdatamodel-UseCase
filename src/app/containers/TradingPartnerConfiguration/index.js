@@ -38,6 +38,7 @@ export class TradingPartnerConfiguration extends React.Component {
             Port: '',
             UserName: '',
             Password: '',
+        
 
         };
         this.onChange = this.onChange.bind(this);
@@ -54,54 +55,57 @@ export class TradingPartnerConfiguration extends React.Component {
         
     }
     handleEntailmentRequest(e) {
-        e.preventDefault();
-    
-       this.setState({
-        files: [],
-        tradingpartner : [],
-        Change_Trading_Partner: '',
-        FunctionalAcknowledgmentOptions: '',
-        Element_Delimiter:'',
-        Doc_Envelope_Option: '',
-        Segment_Termination_Character:'',
-        Filter_Functional_Acknowledgments: false,
-        Reject_Duplicate_ISA: false,
-        Validate_Outbound_Interchanges: false,
-        Outbound_Validation_Option: '',
-        Authorization_Info_Qualifier: '',
-        Authorization_Info_ID: '',
-        Security_Information_Qualifier: '',
-        Security_Information_Id: '',
-        Interchange_ID_Qualifier: '',
-        Interchange_ID: '',
-        Interchange_Standard_ID: '',
-        Interchange_Version: '',
-        ISA14: false,
-        Test_Indicator: '',
-        Component_Separator: '',
-        Application_Code: '',
-        Responsible_Agency_Code: '',
-        GSVersion: '',
-        Communication_Type: '',
-        Use_Default_Settings: false,
-        Host: '',
-        Port: '',
-        UserName: '',
-        Password: '',
 
-       })
-       setTimeout(() => {
-        this.getData()
-       }, 50);
+        window.location.reload();
+    //     e.preventDefault();
+    
+    //    this.setState({
+    //     files: [],
+    //     tradingpartner : [],
+    //     Change_Trading_Partner: '',
+    //     FunctionalAcknowledgmentOptions: '',
+    //     Element_Delimiter:'',
+    //     Doc_Envelope_Option: '',
+    //     Segment_Termination_Character:'',
+    //     Filter_Functional_Acknowledgments: false,
+    //     Reject_Duplicate_ISA: false,
+    //     Validate_Outbound_Interchanges: false,
+    //     Outbound_Validation_Option: '',
+    //     Authorization_Info_Qualifier: '',
+    //     Authorization_Info_ID: '',
+    //     Security_Information_Qualifier: '',
+    //     Security_Information_Id: '',
+    //     Interchange_ID_Qualifier: '',
+    //     Interchange_ID: '',
+    //     Interchange_Standard_ID: '',
+    //     Interchange_Version: '',
+    //     ISA14: false,
+    //     Test_Indicator: '',
+    //     Component_Separator: '',
+    //     Application_Code: '',
+    //     Responsible_Agency_Code: '',
+    //     GSVersion: '',
+    //     Communication_Type: '',
+    //     Use_Default_Settings: false,
+    //     Host: '',
+    //     Port: '',
+    //     UserName: '',
+    //     Password: '',
+
+    //    })
+    //    setTimeout(() => {
+    //     this.getData()
+    //    }, 50);
     }
     getData() {
         let query = `{
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList (Transaction:"TradingPartner") { 
+                 
                 Trading_Partner_Name 
             }
         }`
-        fetch(Urls.base_url, {
+        console.log(query);
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,7 +115,7 @@ export class TradingPartnerConfiguration extends React.Component {
         })
         .then(res => res.json())
             .then(res => {
-                // console.log('Data : ',res)
+                 console.log('Data : ',res)
                 this.setState({
                     tradingpartner: res.data.Trading_PartnerList
                 })
@@ -124,7 +128,7 @@ export class TradingPartnerConfiguration extends React.Component {
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
-            row.push(<option value={element.ID}>{element.Trading_Partner_Name}</option>)
+            row.push(<option>{element.Trading_Partner_Name}</option>)
         })
         return row
     }
@@ -132,6 +136,7 @@ export class TradingPartnerConfiguration extends React.Component {
         if(!event){
             return
         }
+   
         this.setState({
             Change_Trading_Partner: event.target.options[event.target.selectedIndex].text,
             Trading_Partner_id : event.target.options[event.target.selectedIndex].value,
@@ -172,8 +177,10 @@ export class TradingPartnerConfiguration extends React.Component {
             Directory
             Create_Directory
             File_Naming_Options
-          }}`
-          fetch(Urls.base_url, {
+          }}`    
+          
+          console.log(query1)
+          fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -183,9 +190,10 @@ export class TradingPartnerConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-               // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
-                
+                           console.log(";fksdlfjsjfs", r.data)
                 this.setState({
+                    Trading_Partner_id:r.data.Trading_Partner[0].ID,
+                    
                     FunctionalAcknowledgmentOptions: r.data.Trading_Partner[0].Functional_Ack_Options,
                     Doc_Envelope_Option: r.data.Trading_Partner[0]. Doc_Envelope_Option,
                     Element_Delimiter: r.data.Trading_Partner[0].Element_Delimiter,
@@ -236,7 +244,7 @@ export class TradingPartnerConfiguration extends React.Component {
     // }
 
     Save(){
-        // console.log(this.state.Trading_Partner_Name);
+   
         if(this.state.Trading_Partner_id == undefined){
             this.state.Trading_Partner_id = 0
         }
@@ -278,7 +286,7 @@ export class TradingPartnerConfiguration extends React.Component {
                 'File_Naming_Options : "")'+
   
            '}' 
-     console.log(query);
+     
            fetch(Urls.base_url, {
           method: 'POST',
           headers: {
@@ -291,7 +299,11 @@ export class TradingPartnerConfiguration extends React.Component {
         })
           .then(r => r.json())
           .then(data => alert(data.data.SP_Trading_Partner_Save))
-        //   .then(window.location.reload())
+
+          setTimeout(() => {
+            window.location.reload()
+        }, 1000)
+
     }
 
     ChangeVal(event, key){
@@ -370,8 +382,8 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
 
                         <div>
-                            <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Trading Partner Configuration</p>
-                        </div>
+                        <label style={{color:"#139DC9" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Trading Partner Configuration</label>
+                        </div><br></br>
                         <div className="row">
 
                             <div className="form-group col-sm-3">
@@ -666,8 +678,8 @@ export class TradingPartnerConfiguration extends React.Component {
                                                     <label className="list-header1">Communication Type</label>
                                                     <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
                                                         <option value="0">Select Communication</option>
-                                                        <option selected={this.state.Communication_Type == 1 ? "selected" : ''} value="1">SFTP</option>
-                                                        <option selected={this.state.Communication_Type == 2 ? "selected" : ''} value="2">Disk</option>
+                                                        <option selected={this.state.Communication_Type == "SFTP" ? "selected" : ''} value="SFTP">SFTP</option>
+                                                        <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
                                                     </select>
                                                 </div>
                                                 <div className="form-group checkbox center col" style={{marginTop: "4px"}}>
