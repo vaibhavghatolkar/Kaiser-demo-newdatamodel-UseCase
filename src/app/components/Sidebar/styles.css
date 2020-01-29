@@ -76,7 +76,8 @@ ul ul a {
 .underline{
     height : 2;
     background-color: #139DC9;
-    margin-bottom: 12px;
+    margin-left: 12px !important;
+    margin-right: 12px !important;
 }
 .p {
     margin: 0px;

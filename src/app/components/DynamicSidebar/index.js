@@ -24,13 +24,14 @@ export class DynamicSidebar extends React.Component {
         try {
             if(isOutbound){
                 menuType = "O"
-            }   
+            }
         } catch (error) {
             
         }
-
+        
+        let role_id = JSON.parse(localStorage.getItem('role_id'))
         let query = `{
-            UserwiseMenu(role_id:0 menutype:"`+menuType+`" For:"S"){
+            UserwiseMenu(role_id:`+role_id+` menutype:"`+menuType+`" For:"S"){
               role_id
               menu_id
               menu_description
