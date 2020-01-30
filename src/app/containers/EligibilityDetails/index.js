@@ -6,6 +6,7 @@ import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
+import EnhancedTable from '../../components/DataTable';
 
 var val = ''
 export class EligibilityDetails extends React.Component {
@@ -332,10 +333,12 @@ export class EligibilityDetails extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a href="" onClick={() => {
-                        this.getData(d.HiPaaSUniqueID)
-                        this.getDetails(d.HiPaaSUniqueID)
-                    }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
+                    <td><a 
+                        className="cursor-value"
+                        onClick={() => {
+                            this.getData(d.HiPaaSUniqueID)
+                            this.getDetails(d.HiPaaSUniqueID)
+                        }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
                     <td>{moment(d.Date).format("MMM DD YYYY hh:mm a")}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
@@ -675,6 +678,12 @@ export class EligibilityDetails extends React.Component {
         )
     }
 
+    renderEnhancedTable = () => {
+        return(
+            <EnhancedTable/>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -683,6 +692,7 @@ export class EligibilityDetails extends React.Component {
                 <div className="row">
                     <div className="col-6">
                         {this.renderTransactions()}
+                        {/* {this.renderEnhancedTable()} */}
                     </div>
 
                     <div className="col-6">
