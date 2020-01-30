@@ -116,6 +116,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 45){ name = Strings.UserList } 
         else if (key == 46){ name = Strings.MenuCreate } 
         else if (key == 47){ name = Strings.ChangePassword } 
+        else if (key == 48){ name = Strings.MenuManagement } 
         
         return name 
     }
@@ -229,6 +230,9 @@ export class DynamicSidebar extends React.Component {
                             onClick={() => {
                                 isOutbound = false
                                 sessionStorage.setItem('isOutbound', false)
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 50);
                             }}>
                             <p className="p smaller-font">Inbound</p>
                             {!isOutbound ? <hr className="underline p" /> : null}
@@ -240,6 +244,9 @@ export class DynamicSidebar extends React.Component {
                             onClick={() => {
                                 isOutbound = true
                                 sessionStorage.setItem('isOutbound', true)
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 50);
                             }}>
                             <p className="p smaller-font">Outbound</p>
                             {isOutbound ? <hr className="underline p" /> : null}

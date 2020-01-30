@@ -302,7 +302,6 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
     handleSort(e) {
-alert(e)
         this.setState({
             orderby: e
 
