@@ -47,7 +47,7 @@
     color: #AD320D
 }
 .light_blue{
-    background-color: #008CBA;
+    background-color: #139DC9;
     color : white;
 }
 .red{
@@ -76,10 +76,10 @@ td a {
     margin-top: 10px;
   }
 .collapsible[aria-expanded="true"], .collapsible:hover {
-    background-color: #008CBA;
+    background-color: #139DC9;
   }
 .content {
-    border-color: #008CBA;
+    border-color: #139DC9;
     border-style: solid;
     border-width: thin;
    }

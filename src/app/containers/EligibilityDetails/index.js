@@ -333,8 +333,8 @@ export class EligibilityDetails extends React.Component {
             row.push(
                 <tr>
                     <td><a href="" onClick={() => {
-                        this.getData(d.HiPaaSUniqueID)
-                        this.getDetails(d.HiPaaSUniqueID)
+                        // this.getData(d.HiPaaSUniqueID)
+                        // this.getDetails(d.HiPaaSUniqueID)
                     }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></td>
                     <td>{moment(d.Date).format("MMM DD YYYY hh:mm a")}</td>
                     <td>{d.Trans_type}</td>
