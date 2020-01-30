@@ -30,7 +30,7 @@
     color: #AD320D
 }
 .light_blue{
-    background-color: #008CBA;
+    background-color: #139DC9;
     color : white;
     margin-top: 30px;
     margin-left: 40px;
@@ -65,17 +65,31 @@ td a {
     margin-top: 10px;
   }
 .collapsible[aria-expanded="true"], .collapsible:hover {
-    background-color: #008CBA;
+    background-color: #139DC9;
     color: white;
 }
 .content {
-    border-color: #008CBA;
+    border-color: #139DC9;
     border-style: solid;
     border-width: thin;
 }
-.top-space{
-    margin-top: 24px; 
-    padding-top: 24px; 
-    padding-bottom: 16px;
-    border-top: 1px grey solid;
-}
+
+.Editbutton {
+    margin-top: -18px;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    margin-left: 15px;
+  }
+  
+  .button2 {background-color: #139DC9;} /* Blue */
+  
+
+

@@ -179,7 +179,7 @@ export class TradingPartnerConfiguration extends React.Component {
             File_Naming_Options
           }}`    
           
-          console.log(query1)
+          
           fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
@@ -248,6 +248,8 @@ export class TradingPartnerConfiguration extends React.Component {
         if(this.state.Trading_Partner_id == undefined){
             this.state.Trading_Partner_id = 0
         }
+        if(this.state.Change_Trading_Partner!=undefined && this.state.Change_Trading_Partner!="" )
+        {
           var query = 'mutation{'+
                 'SP_Trading_Partner_Save(ID : '+ this.state.Trading_Partner_id +
                 'Trading_Partner_Name : "'+ this.state.Change_Trading_Partner +'"'+
@@ -303,6 +305,11 @@ export class TradingPartnerConfiguration extends React.Component {
           setTimeout(() => {
             window.location.reload()
         }, 1000)
+    }
+    else
+    {
+        alert("Please Enter the Trading Partner Name");
+    }
 
     }
 

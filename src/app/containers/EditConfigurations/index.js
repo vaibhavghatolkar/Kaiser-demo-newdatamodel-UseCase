@@ -22,6 +22,7 @@ export class EditConfiguration extends React.Component {
         this.renderView = this.renderView.bind(this)
         this.clicked = this.clicked.bind(this)
         this.getData = this.getData.bind(this)
+        this.onSelect=this.onSelect.bind(this)
     }
 
     componentDidMount() {
@@ -34,7 +35,7 @@ export class EditConfiguration extends React.Component {
     }
 
     getData(query, flag, iter){
-        fetch(Urls.base_url, {
+        fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -163,7 +164,7 @@ export class EditConfiguration extends React.Component {
                                         </select>
                                     </div>
                                     
-                                    <div className="form-group col">
+                                    <div className="form-group col-sm-3">
                                         <label className="list-header">Operator</label>
                                         <select className="form-control list-header" style={{ marginLeft: "10px" }} id="qualifier">
                                             <option value="0">Equal to</option>
@@ -184,7 +185,7 @@ export class EditConfiguration extends React.Component {
                                     {
                                         item == 0
                                         ?
-                                        <div className="form-group col">
+                                        <div className="form-group col-sm-3">
                                             <label className="list-header">Severity</label>
                                             <select className="form-control list-header" style={{ marginLeft: "10px" }} id="Qualifier">
                                                 <option value="0">Fail</option>
@@ -226,10 +227,10 @@ export class EditConfiguration extends React.Component {
         return(
             <div className="pull-left" style={{margin: 12}}>
                 {
-                    iter == 1 ? <a href={"#"} style={{ color: "#6AA2B8" }}>AND</a> :
+                    iter == 1 ? <a href={"#"} style={{ color: "#6AA2B8"  }}>AND</a> :
                     iter == 2 ? <a href={"#"} style={{ color: "#6AA2B8" }}>OR</a> :
                     <div>
-                        <a href={"#"} style={{ color: "#6AA2B8" }} onClick={() => {this.operation()}}>AND</a> /  <a href={"#"} onClick={() => {this.operation(1)}} style={{ color: "#6AA2B8" }}>OR</a>
+                        <a href={"#"} style={{ color: "#6AA2B8" , fontWeight:"bold" }} onClick={() => {this.operation()}}>AND</a> /  <a href={"#"} onClick={() => {this.operation(1)}} style={{ color: "#6AA2B8"  , fontWeight:"bold"  }}>OR</a>
                     </div>
                 }
             </div>
@@ -237,6 +238,7 @@ export class EditConfiguration extends React.Component {
     }
 
     onSelect(e){
+    
         this.setState({
             transaction : document.getElementById('option').value
         })
@@ -252,13 +254,14 @@ export class EditConfiguration extends React.Component {
 
     render() {
         return (
-            <div>
+            <div> 
                 <div className="container">
+                <label style={{color:"#139DC9" , fontWeight:"500" , marginLeft:"12px" , marginTop:"10px", fontSize: '20px'}}>Configure Custom Edits</label>
                     <Topbar flag={1} onSelect={this.onSelect}/>
                     {this.renderView()}
                 </div>
                 <div className="pull-left" style={{margin: 12}}>
-                    <button type="button"className="btn light_blue list-header" onClick={this.clicked}>Save</button>
+                <button class="button button2" onClick={this.clicked}>Save</button>
                 </div>
             </div>
         );

@@ -33,33 +33,77 @@ export class ViewCustomEdits extends React.Component {
 
     componentDidMount() {
         this.getData()
+        this.gettranaction();
     }
+
+gettranaction(){
+
+     let query = `{
+           
+                Rules(transaction:"`+this.state.transaction+`") {
+                    seqid
+                    loopid
+                    segment
+                    element
+                    opert
+                    value
+                    flag
+                    severity
+                    condition
+                    Ignore
+                  }
+                
+            }`
+    
+            console.log('Query ', query)
+    
+            fetch(Urls.tradingPartner , {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    let array = []
+                    let summary = []
+                    let data = res.data
+                    let iterator = data.Rules
+                    iterator.forEach(item => {
+                        array.push({
+                            loopid: item.loopid,
+                            segment: item.segment,
+                            element: item.element,
+                            condition: item.condition,
+                            value: item.value,
+                            severity: item.severity,
+                            Ignore: item.Ignore,
+                            seqid: item.seqid
+                        })
+                    })
+    
+                    this.setState({
+                        customList: array,
+                        // tradingpartner: res.data.Trading_PartnerList
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+}
 
     getData() {
         
         let query = `{
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList (Transaction:"TradingPartner") { 
+                 
                 Trading_Partner_Name 
             }
-            Rules(transaction:"`+this.state.transaction+`") {
-                seqid
-                loopid
-                segment
-                element
-                opert
-                value
-                flag
-                severity
-                condition
-                Ignore
-              }
-            
         }`
-
-        console.log('Query ', query)
-
-        fetch(Urls.base_url , {
+        console.log(query);
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,33 +111,20 @@ export class ViewCustomEdits extends React.Component {
             },
             body: JSON.stringify({ query: query })
         })
-            .then(res => res.json())
+        .then(res => res.json())
             .then(res => {
-                let array = []
-                let summary = []
-                let data = res.data
-                let iterator = data.Rules
-                iterator.forEach(item => {
-                    array.push({
-                        loopid: item.loopid,
-                        segment: item.segment,
-                        element: item.element,
-                        condition: item.condition,
-                        value: item.value,
-                        severity: item.severity,
-                        Ignore: item.Ignore,
-                        seqid: item.seqid
-                    })
-                })
-
+                 console.log('Data : ',res)
                 this.setState({
-                    customList: array,
                     tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
                 console.log(err)
             })
+
+           
+
+      
     }
 
     renderSearchBar() {
@@ -186,6 +217,7 @@ export class ViewCustomEdits extends React.Component {
     }
 
     onSelect(event, key){
+       
         if(event.target.options[event.target.selectedIndex].text == 'Select Transaction Name'){
             this.setState({
                 [key] : ''
@@ -197,13 +229,41 @@ export class ViewCustomEdits extends React.Component {
         }
 
         setTimeout(() => {
-            this.getData()
+            this.gettranaction()
         }, 50);
     }
 
     Update(){
-            // alert(this.state.checked);
-            // alert(this.state.unchecked)
+        let data = this.state.customList
+        let true_val = ''
+        let false_val = ''
+        data.forEach(element => {
+            if(element.isChecked){
+                true_val = true_val + element.seqid + ','
+            } else {
+                false_val = false_val + element.seqid + ','
+            }
+        });
+        let query = `
+            mutation{
+                updateIgnoreCode(uncheck:"`+ false_val +`" check:"`+ true_val +`")
+              }
+        `
+        fetch(Urls.base_url , {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                alert(res.data.updateIgnoreCode)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
     renderTopbar() {
         return (
