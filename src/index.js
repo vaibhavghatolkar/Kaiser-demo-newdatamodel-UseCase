@@ -100,17 +100,17 @@ class PrivateRoute extends React.Component {
     }
 
     onAction(e) {
-        console.log('user did something', e)
+        // console.log('user did something', e)
         this.setState({isTimedOut: false})
       }
      
       onActive(e) {
-        console.log('user is active', e)
+        // console.log('user is active', e)
         this.setState({isTimedOut: false})
       }
      
       onIdle(e) {
-        console.log('user is idle', e)
+        // console.log('user is idle', e)
         const isTimedOut = this.state.isTimedOut
         
         if (isTimedOut) {

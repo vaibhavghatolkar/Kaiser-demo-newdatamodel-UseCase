@@ -61,6 +61,12 @@ export class Login extends React.Component {
         });
     }
 
+    handleKeyPress = event => {
+        if (event.key == 'Enter') {
+          this.loginUser();
+        }
+      };
+
     render() {
         return (
 
@@ -84,12 +90,12 @@ export class Login extends React.Component {
                             <div class="form-group" style={{ paddingLeft: "20px", marginTop: "-5px" }}>
                                 <label className="headerText"><b>Username</b></label>
                                 <input onChange={(e) => this.onHandleChange(e, 'EmailId')} name="email" type="text" className="form-control shadow-none widthText" id="Email"
-                                    placeholder="Enter Username" />
+                                    placeholder="Enter Username" onKeyPress={this.handleKeyPress} />
                             </div>
                             <div class="form-group" style={{ paddingLeft: "20px" }}>
                                 <label className="headerText"><b>Password</b></label>
                                 <input onChange={(e) => this.onHandleChange(e, 'Password')} name="password" type="password" className="form-control shadow-none widthText" id="Password"
-                                    placeholder="Enter Password" />
+                                    placeholder="Enter Password" onKeyPress={this.handleKeyPress} />
                             </div>
                             <div style={{ marginTop: "15px", paddingLeft: "22px" }} >
                                 <a href="#" style={{ color: "#05274D", fontSize: "12px" }}>Forgot your password?</a>

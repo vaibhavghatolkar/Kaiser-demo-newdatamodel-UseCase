@@ -14,12 +14,16 @@ export class UserList extends React.Component {
             phoneNo: '',
             userRole: '',
             userRoleList: [],
-            userListDisplay: []
+            userListDisplay: [],
+            disabled: false,
+            UserStatus: 'Create User',
+            id: 0
         }
         this.onHandleChange = this.onHandleChange.bind(this);
         this.saveUser = this.saveUser.bind(this);
         this.getUserRole = this.getUserRole.bind(this);
-        this.clearState = this.clearState.bind(this)
+        this.clearState = this.clearState.bind(this);
+        this.displayUser = this.displayUser.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -30,8 +34,9 @@ export class UserList extends React.Component {
         this.getUserRole();
     }
     saveUser() {
+
         let query = `mutation{updateuser(
-            Id:`+ 0 + ` 
+            Id:`+ this.state.id + ` 
             roleid:`+ this.state.userRole + `  
             FirstName:"`+ this.state.firstName + `" 
             LastName:"`+ this.state.lastName + `" 
@@ -41,6 +46,7 @@ export class UserList extends React.Component {
             is_Active:`+ 1 + `
             )
           }`
+
         console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
@@ -52,14 +58,17 @@ export class UserList extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if(res.errors){
+                if (res.errors) {
                     alert(res.errors[0].message)
-                }else{
-                alert(res.data.updateuser);
-                setTimeout(() => {
-                    this.getUserRole()
-                }, 50);
-            }
+                } else {
+                    if (res.data.updateuser == "") {
+                        alert("User Updated Successfully.")
+                    } else {
+                        alert(res.data.updateuser);
+                    } setTimeout(() => {
+                        this.getUserRole()
+                    }, 50);
+                }
             }).catch(err => {
                 console.log(err)
             })
@@ -127,11 +136,12 @@ export class UserList extends React.Component {
                     <td>{d.Email}</td>
                     <td>{d.role_description}</td>
                     <td>{FullName}</td>
-                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} style={{ width: '14px', marginLeft: '10px'}}></img></td>
-                    <td><img src={require('../../components/Images/trash.png')} style={{ width: '14px', marginLeft: '10px' }}></img></td>
+                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} data-toggle="modal" data-target="#myModal2" style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }}></img></td>
+                    <td><img src={require('../../components/Images/trash.png')} style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }} ></img></td>
                 </tr>
             )
         });
+        // onClick={this.delete} data-value={d.Id} data-toggle="modal" data-target="#myModal"
 
         return (
             <table className="table table-bordered" id="userList" style={{ fontSize: "10px", backgroundColor: 'white' }}>
@@ -151,9 +161,46 @@ export class UserList extends React.Component {
 
     }
     displayUser(event) {
-        console.log(event.target.dataset.value)
+        // alert(event.target.dataset.value)
+        let query = `{
+              User(Userid:${event.target.dataset.value} Email:"") {
+                Id
+                role_id
+                FirstName
+                LastName
+                Email
+                PhoneNumber
+                PasswordHash
+              }
+            }`
+        fetch(Urls.users, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let data = res.data.User[0]
+
+                this.setState({
+                    firstName: data.FirstName,
+                    lastName: data.LastName,
+                    email: data.Email,
+                    password: data.PasswordHash,
+                    phoneNo: data.PhoneNumber,
+                    userRole: data.role_id,
+                    disabled: true,
+                    UserStatus: 'Update User',
+                    id: data.Id
+                })
+            }).catch(err => {
+                console.log(err)
+            })
     }
-    clearState(){
+    clearState() {
         this.setState({
             firstName: '',
             lastName: '',
@@ -161,10 +208,23 @@ export class UserList extends React.Component {
             password: '',
             phoneNo: '',
             userRole: 0,
+            disabled: false,
+            UserStatus: 'Create User',
+            id: 0
         })
     }
 
+    delete(event){
+        alert(event.target.dataset.value)
+
+    }   
+
+    deleteUser(event){
+        alert(event.target.dataset.value)
+    }
+
     UserList() {
+
         return (
             <div>
 
@@ -183,9 +243,9 @@ export class UserList extends React.Component {
 
                 <div class="modal right fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content" style={{paddingRight: "45px"}}> 
+                        <div class="modal-content" style={{ paddingRight: "45px" }}>
                             <div class="modal-header">
-                                <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>Create User</h5>
+                                <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>{this.state.UserStatus}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "10px" }}>&times;</span></button>
 
                             </div>
@@ -207,12 +267,12 @@ export class UserList extends React.Component {
                                 <div class="form-group">
                                     <label for="Email">Email address</label>
                                     <input onChange={(e) => this.onHandleChange(e, 'email')} name="email" type="text" className="form-control width1" id="Email"
-                                        placeholder="Enter email" value={this.state.email} />
+                                        disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter email" value={this.state.email} />
                                 </div>
                                 <div class="form-group">
                                     <label for="Password">Password</label>
                                     <input onChange={(e) => this.onHandleChange(e, 'password')} name="password" type="password" className="form-control width1" id="Password"
-                                        placeholder="Enter Password" value={this.state.password} />
+                                        disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter Password" value={this.state.password} />
                                 </div>
                                 <div class="form-group">
                                     <label for="PhoneNo">Phone No.</label>
@@ -226,9 +286,28 @@ export class UserList extends React.Component {
                                         {this.getoptions()}
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-demo" data-dismiss="modal" onClick={this.saveUser} >Create User</button>
+
+                                <button type="submit" class="btn btn-display" style={{ marginLeft: '0px' }} data-value={this.state.id} data-dismiss="modal" onClick={this.saveUser} >{this.state.UserStatus}</button>
+
                             </div>
                         </div>
+                    </div>
+                </div>
+
+
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete this user!</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-display" onClick={this.deleteUser} >Ok</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -236,10 +315,15 @@ export class UserList extends React.Component {
         )
     }
 
+    // modal(){
+    //     return(
+
+    //     )
+    // }
     render() {
         return (
             <div>
-               
+
                 {this.UserList()}
 
             </div>
