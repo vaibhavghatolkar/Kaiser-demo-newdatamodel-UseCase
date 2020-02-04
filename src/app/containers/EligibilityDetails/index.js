@@ -7,6 +7,9 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 import EnhancedTable from '../../components/DataTable';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import '../Files/files-styles.css';
 
 var val = ''
 export class EligibilityDetails extends React.Component {
@@ -436,8 +439,7 @@ export class EligibilityDetails extends React.Component {
     renderDetails(flag) {
         return (
             <div className="row">
-                {this.state.status != 'n' ? <div className="col-1"></div> : null}
-                <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
+                <div className={"col-12"}>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
                     <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
                 </div>
@@ -656,8 +658,7 @@ export class EligibilityDetails extends React.Component {
         })
         return (
             <div className="row">
-                {this.state.status != 'n' ? <div className="col-1"></div> : null}
-                <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
+                <div className={"col-12"}>
                     <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Stage Details ({this.state.Transaction_Compliance})</a></div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
@@ -678,9 +679,71 @@ export class EligibilityDetails extends React.Component {
         )
     }
 
-    renderEnhancedTable = () => {
-        return(
-            <EnhancedTable/>
+    createData(Trans_ID,Date,Trans_type,Submiter) {
+        return { Trans_ID,Date,Trans_type,Submiter };
+    }
+
+    renderEnhancedTable() {
+        let row = []
+        const data = this.state.files_list ? this.state.files_list : []
+
+        data.forEach((d) => {
+            row.push(
+                <div className="row">
+                    <div className="col col-small-style">
+                        <a className="cursor-value small-font"
+                            onClick={() => {
+                                this.getData(d.HiPaaSUniqueID)
+                                this.getDetails(d.HiPaaSUniqueID)
+                            }} style={{ color: "#6AA2B8" }}>{d.Trans_ID}</a></div>
+                    <div className="col col-small-style small-font">{moment(d.Date).format("MMM DD YYYY hh:mm a")}</div>
+                    <div className="col col-small-style small-font">{d.Trans_type}</div>
+                    <div className="col col-small-style small-font">{d.Submiter}</div>
+                    {this.state.status != 'Pass' ? <div className="col col-style small-font">{d.Error_Type}</div> : null}
+                    {this.state.status != 'Pass' ? <div className="col col-style small-font">{d.Error_Code}</div> : null}
+                    {this.state.status != 'Pass' ? <div className="col col-style small-font">{d.ErrorDescription}</div> : null}
+                </div>
+            )
+        })
+        return (
+            <div className="margin">
+                <div className="row">
+                    <div className="col-header justify-align col">
+                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.transactionRotation}deg)`, marginRight : '2px' }}></img> Transaction
+                    </div>
+                    <div className="col-header justify-align col" >
+                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight : '2px' }}></img>Date
+                    </div>
+                    <div className="col-header justify-align col">
+                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight : '2px' }}></img> Status
+                    </div>
+                    <div className="col-header justify-align col">
+                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight : '2px' }}></img> Submitter
+                    </div>
+                    {this.state.status != 'Pass' ? <div className="col-header justify-align col"><img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage" : "order by Error_Type", this.state.errorRotation, 'errorRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '13px', transform: `rotate(${this.state.errorRotation}deg)` }}></img> Error Type</div> : null}
+                    {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Code</div> : null}
+                    {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Description</div> : null}
+                </div>
+                {row}
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.count}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
+            </div>
         )
     }
 
@@ -689,19 +752,11 @@ export class EligibilityDetails extends React.Component {
             <div>
                 <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
                 {this.renderFilters()}
-                <div className="row">
-                    <div className="col-6">
-                        {this.renderTransactions()}
-                        {/* {this.renderEnhancedTable()} */}
-                    </div>
-
-                    <div className="col-6">
-                        {/* {this.state.status != 'Pass' && this.state.pieArray.length > 0 ? this.renderPieChart() : null} */}
-                        {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
-                        {this.state.showDetails ? this.renderDetails() : null}
-                        {this.state.showDetails ? this.renderDetails(1) : null}
-                    </div>
-                </div>
+                {this.renderEnhancedTable()}
+                {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
+                {this.state.showDetails ? this.renderDetails() : null}
+                {this.state.showDetails ? this.renderDetails(1) : null}
+                
             </div>
         );
     }

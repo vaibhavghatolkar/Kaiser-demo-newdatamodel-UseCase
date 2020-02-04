@@ -509,7 +509,7 @@ export class Files_837 extends React.Component {
 
             row.push(
                 <div id={keys} className="collapse">
-                <table id="" className="table table-bordered claim-details">
+                    <table id="" className="table table-bordered claim-details">
                         {this.renderClaimsHeader()}
                         {col}
                     </table>

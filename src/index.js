@@ -53,7 +53,7 @@ import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTi
 import { Files_837 } from './app/containers/Files_837'
 import { MenuManagement } from './app/containers/Menu_Management'
 import { DynamicSidebar } from './app/components/DynamicSidebar';
-import EnhancedTable from './app/components/DataTable';
+
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -130,8 +130,6 @@ class PrivateRoute extends React.Component {
             { apiflag: '1' },
         ]
         return (
-            // !this.state.hello ? 
-            // <EnhancedTable/> : 
     <Router>
         
         <IdleTimer

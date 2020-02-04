@@ -159,3 +159,15 @@ td a {
 .nav-tabs {
     border-bottom: 1px solid #26292b;
 }
+.justify-align{
+    justify-content: center;
+    font-size: 10px;
+    padding: 0px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+}
+.margin{
+    margin-left: 16px;
+    margin-right: 16px;
+}
