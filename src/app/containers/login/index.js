@@ -34,6 +34,7 @@ export class Login extends React.Component {
             .then(res => res.json())
             .then(res => {
 
+                console.log(res)
                 if (res.data.UserLogin[0].Login == 1) {
                     this.setState({
                         loggedIn: true
@@ -46,6 +47,8 @@ export class Login extends React.Component {
                         this.props.handleFlag(this.state.loggedIn)
                     }, 100);
 
+                }else if(res.data.UserLogin[0].Login == 2){
+                    alert("You do not have access to this portal, please contact Administrator")
                 } else {
                     alert("You have entered wrong username or password")
                 }

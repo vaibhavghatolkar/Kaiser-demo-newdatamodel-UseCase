@@ -24,6 +24,7 @@ export class UserList extends React.Component {
         this.getUserRole = this.getUserRole.bind(this);
         this.clearState = this.clearState.bind(this);
         this.displayUser = this.displayUser.bind(this)
+        this.deleteUser = this.deleteUser.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -129,19 +130,28 @@ export class UserList extends React.Component {
     RenderUserList() {
         let row = []
         const data = this.state.userListDisplay;
+        console.log(data)
         data.forEach((d) => {
             var FullName = d.FirstName + " " + d.LastName
+
             row.push(
                 <tr>
                     <td>{d.Email}</td>
                     <td>{d.role_description}</td>
                     <td>{FullName}</td>
+                    {
+                        d.is_active == "1" ?  
                     <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} data-toggle="modal" data-target="#myModal2" style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }}></img></td>
-                    <td><img src={require('../../components/Images/trash.png')} style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }} ></img></td>
+                    : <td></td>
+                    }
+                    {d.is_active == "1" ?
+                        <td><img src={require('../../components/Images/trash.png')} style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }} data-value={d.Id} onClick={this.displayUser} data-toggle="modal" data-target="#myModal" ></img></td>
+                    : <td>InActive</td>
+                    }
+                    
                 </tr>
             )
         });
-        // onClick={this.delete} data-value={d.Id} data-toggle="modal" data-target="#myModal"
 
         return (
             <table className="table table-bordered" id="userList" style={{ fontSize: "10px", backgroundColor: 'white' }}>
@@ -214,13 +224,33 @@ export class UserList extends React.Component {
         })
     }
 
-    delete(event){
-        alert(event.target.dataset.value)
-
-    }   
-
-    deleteUser(event){
-        alert(event.target.dataset.value)
+    deleteUser() {
+        let query = `
+            mutation{InactiveUser(
+                Id:${this.state.id}
+                Email:"${this.state.email}"
+                is_Active:0
+                )
+              }
+          `
+        //   console.log(query)
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                alert(res.data.InactiveUser)
+                setTimeout(() => {
+                    this.getUserRole()  
+                }, 50);
+            }).catch(err => {
+                console.log(err)
+            })
     }
 
     UserList() {
@@ -300,10 +330,10 @@ export class UserList extends React.Component {
 
                         <div class="modal-content">
                             <div class="modal-body">
-                                <p>Are you sure you want to delete this user!</p>
+                                <p>Are you sure you want to Inactivate this user!</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-display" onClick={this.deleteUser} >Ok</button>
+                                <button type="button" class="btn btn-display" data-dismiss="modal" onClick={this.deleteUser} >Ok</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
