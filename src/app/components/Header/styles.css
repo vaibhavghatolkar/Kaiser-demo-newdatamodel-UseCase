@@ -1,4 +1,5 @@
 .header_container{
+    /* background: linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%); */
     background-color: #139DC9;
     padding: 16px;
     position: fixed;

@@ -73,11 +73,11 @@ export class Login extends React.Component {
 
             <div className="container-fluid">
                 <div className="row">
-                    <div class=" col-9" style={{ backgroundColor: '#05274D', minHeight: '100vh', marginLeft: '-15px' }}>
+                    <div className="gradient-color col-9" style={{ minHeight: '100vh', marginLeft: '-15px' }}>
                         <img src={require('../../components/Images/HiPaaS_logo.png')} alt="logo" className="Hipaas_logo" align="center" />
                         <p className="para">HiPaaS is a HIPAA compliant microservices-based Healthcare cloud platform to enable EHR integration, resolve interoperability issues, <br />
                             simplify healthcare standards and aggregate healthcare data
-                    </p>
+                        </p>
                         <a href="https://www.hipaas.com/" target="blank" className="contact"> Contact Us </a>
 
                     </div>

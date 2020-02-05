@@ -53,6 +53,7 @@ import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTi
 import { Files_837 } from './app/containers/Files_837'
 import { MenuManagement } from './app/containers/Menu_Management'
 import { DynamicSidebar } from './app/components/DynamicSidebar';
+import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -222,6 +223,8 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
                     <Route path={'/'+ Strings.Files_837} component={Files_837} />
                     <Route path={'/'+ Strings.MenuManagement} component={MenuManagement} />
+                    
+                    <Route path={'/'+ Strings.claimPayment_835} component={ClaimPaymentDashboard} />
                        
   {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
                 
