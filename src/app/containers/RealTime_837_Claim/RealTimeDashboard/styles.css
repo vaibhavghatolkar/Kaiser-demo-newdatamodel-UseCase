@@ -157,5 +157,6 @@ td a {
     margin-bottom: 24px;
 }
 .nav-tabs {
-    border-bottom: 1px solid #26292b;
+    border-bottom: 1px solid #dddddd;
+    margin-bottom: 16px;   
 }
