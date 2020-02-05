@@ -561,7 +561,7 @@ getData() {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
+                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}

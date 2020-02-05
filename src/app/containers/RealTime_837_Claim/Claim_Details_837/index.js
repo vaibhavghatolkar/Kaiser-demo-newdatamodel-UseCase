@@ -679,20 +679,20 @@ export class ClaimDetails837 extends React.Component{
         return (
             <div className="row">
                 <div className="col-4 col-header">File Name
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName asc" : "Order By Claim837RTFileDetails.FileName asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName desc" : "Order By Claim837RTFileDetails.FileName desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>    
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName asc" : "Order By Claim837RTFileDetails.FileName asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img> */}
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName desc" : "Order By Claim837RTFileDetails.FileName desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>     */}
                 </div>
                 <div className="col-2 col-header">File Date
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate asc" : "Order by Claim837RTFileDetails.FileDate asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate desc" : "Order by Claim837RTFileDetails.FileDate desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate asc" : "Order by Claim837RTFileDetails.FileDate asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img> */}
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate desc" : "Order by Claim837RTFileDetails.FileDate desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>   */}
                </div>
                 <div className="col-3 col-header">File Status
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 asc" : "Order By Claim837RTFileDetails.FileStatus asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 desc" : "Order By Claim837RTFileDetails.FileStatus desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 asc" : "Order By Claim837RTFileDetails.FileStatus asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img> */}
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 desc" : "Order By Claim837RTFileDetails.FileStatus desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>   */}
                 </div>
                 <div className="col-3 col-header">Submitter
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 asc" : "Order By Claim837RTFileDetails.Sender asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 desc" : "Order By Claim837RTFileDetails.Sender desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 asc" : "Order By Claim837RTFileDetails.Sender asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img> */}
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 desc" : "Order By Claim837RTFileDetails.Sender desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>   */}
                 </div>
                 {/* <div className="col-2 col-header">Status</div> */}
             </div>
