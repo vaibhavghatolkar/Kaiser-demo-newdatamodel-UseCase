@@ -403,7 +403,7 @@ export class TradingPartnerConfiguration extends React.Component {
 
                             <div className="form-group col-sm-3">
                                 <label className="list-header1">Trading Partner Name</label>
-                                <input className="form-control list-header1" type="text" value={this.state.Change_Trading_Partner} onChange={(e) => this.onChangeName(e, 'Change_Trading_Partner')} />
+                                <input className="form-control list-header1" autoComplete="off" type="text" value={this.state.Change_Trading_Partner} onChange={(e) => this.onChangeName(e, 'Change_Trading_Partner')} />
                             </div>
 
                             <div className="form-group col-sm-1">

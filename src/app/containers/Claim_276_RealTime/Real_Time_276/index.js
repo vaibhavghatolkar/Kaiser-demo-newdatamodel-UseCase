@@ -26,7 +26,7 @@ export class RealTime276 extends React.Component {
             pieLabels: [],
             tradingChartLabel: [],
             tradingChartData: [],
-            providerChartLabel: [1,2,3,4,5],
+            providerChartLabel: ['provider 1','provider 2','provider 3','provider 4','provider 5'],
             providerChartData: [4,5,1,2,3],
             dateChartLabel: [],
             dateChartData: [],

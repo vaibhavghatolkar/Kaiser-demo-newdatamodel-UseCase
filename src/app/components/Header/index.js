@@ -7,6 +7,7 @@ export class Header extends React.Component {
 
     logout() {
         localStorage.clear();
+        sessionStorage.clear();
         window.location.reload()
     }
 

@@ -56,10 +56,10 @@ export class RealTimeDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
+            startDate : moment().subtract(365,'d').format('YYYY-MM-DD'),
             endDate : moment().format('YYYY-MM-DD'),
             providerName: '',
-            chartType: 'Weekwise',
+            chartType: 'Monthwise',
             selectedTradingPartner: '',
             State: '',
             Months: 0,
@@ -82,9 +82,6 @@ export class RealTimeDashboard extends React.Component {
         this.setState({
             apiflag: this.props.apiflag
         })
-        setTimeout(() => {
-            this.getData()
-        }, 50);
     }
 
     componentDidMount() {
@@ -317,13 +314,6 @@ export class RealTimeDashboard extends React.Component {
                                 xAxes: [{
                                     ticks: {
                                         fontSize: 10,
-                                        userCallback: function(label, index, labels) {
-                                            // when the floored value is the same as the value we have a whole number
-                                            if (Math.floor(label) === label) {
-                                                return label;
-                                            }
-                       
-                                        },
                                     }
                                 }]
                             }
@@ -558,10 +548,10 @@ export class RealTimeDashboard extends React.Component {
                             }}
                             >
                             <option value="1">Last week</option>
-                            <option selected="selected" value="2">Last 30 days</option>
+                            <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option value="2">Last year</option>
+                            <option selected="selected" value="2">Last year</option>
                         </select>
                     </div>
                     <div className="form-group col-2">
