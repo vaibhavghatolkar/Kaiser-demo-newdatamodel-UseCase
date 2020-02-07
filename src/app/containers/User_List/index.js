@@ -1,5 +1,6 @@
 import React from 'react';
 import './UserList.css';
+import '../color.css'
 import Urls from '../../../helpers/Urls';
 
 export class UserList extends React.Component {
@@ -259,7 +260,7 @@ export class UserList extends React.Component {
             <div>
 
                 <div className="row">
-                    <h5 style={{ color: '#139DC9', padding: '20px' }}>HiPaaS User List</h5>
+                    <h5 style={{ color: 'var(--main-bg-color)', padding: '20px' }}>HiPaaS User List</h5>
                     <button type="button" class="btn btn-display" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
                         Add New
                     </button>

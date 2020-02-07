@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles.css';
 import { Pie, Bar } from 'react-chartjs-2';
+import '../../color.css'
 import moment from 'moment';
 import { Files } from '../../Files';
 import { Topbar } from '../../../components/Topbar';
@@ -12,36 +13,36 @@ import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
 
 let val = ''
-const second_data = {
-    labels: [
-        'ICD Code not found',
-        'Accident Date not present',
-        'Member Not Found',
-        'Newborn Setup Pending',
-        'Provider Setup Pending',
-        'Misdirected Claims'
-    ],
-    datasets: [{
-        data: [100, 100, 70, 20, 50, 20],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ]
-    }],
-    flag: ''
-};
+// const second_data = {
+//     labels: [
+//         'ICD Code not found',
+//         'Accident Date not present',
+//         'Member Not Found',
+//         'Newborn Setup Pending',
+//         'Provider Setup Pending',
+//         'Misdirected Claims'
+//     ],
+//     datasets: [{
+//         data: [100, 100, 70, 20, 50, 20],
+//         backgroundColor: [
+//             '#139DC9',
+//             '#83D2B4',
+//             '#9DC913',
+//             '#EC6236',
+//             '#C9139D',
+//             'blue',
+//         ],
+//         hoverBackgroundColor: [
+//             '#139DC9',
+//             '#83D2B4',
+//             '#9DC913',
+//             '#EC6236',
+//             '#C9139D',
+//             'blue',
+//         ]
+//     }],
+//     flag: ''
+// };
 
 
 
@@ -476,7 +477,7 @@ export class RealTimeDashboard extends React.Component {
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
                 ?
-                <div className="col-2 summary-container">
+                <div className="col summary-container">
                     <div className="summary-header">{item.name}</div>
                     <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 </div>
@@ -625,7 +626,7 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
+                <h5 style={{ color: 'var(--main-bg-color)',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}

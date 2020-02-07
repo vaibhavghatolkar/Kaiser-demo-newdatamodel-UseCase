@@ -1,5 +1,6 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
+import '../../color.css'
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
@@ -493,7 +494,7 @@ export class ClaimProcessingSummary extends React.Component {
         return (
             <div>
                 <br />
-                <h5 style={{ color: '#139DC9', fontsize: "20px" }}>Claim Processing Summary</h5> <br />
+                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Claim Processing Summary</h5> <br />
                 {this.renderTopBar()}
                 {this.renderStats()}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 ? this.renderTransactions() : null}

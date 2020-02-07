@@ -1,5 +1,6 @@
 import React from 'react'
 import '../Claims/Dashboard/styles.css'
+import '../color.css'
 import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
@@ -335,7 +336,7 @@ export class EligibilityDetails extends React.Component {
                     <td><a onClick={() => {
                         this.getData(d.HiPaaSUniqueID)
                         this.getDetails(d.HiPaaSUniqueID)
-                    }} style={{ color: "#6AA2B8", cursor: "pointer" }}>{d.Trans_ID}</a></td>
+                    }} style={{ color: "var(--light-blue)", cursor: "pointer" }}>{d.Trans_ID}</a></td>
                     <td>{moment(d.Date).format("MMM DD YYYY hh:mm a")}</td>
                     <td>{d.Trans_type}</td>
                     <td>{d.Submiter}</td>
@@ -504,16 +505,16 @@ export class EligibilityDetails extends React.Component {
             datasets: [{
                 data: this.state.pieArray,
                 backgroundColor: [
-                    '#139DC9',
-                    '#83D2B4',
-                    '#9DCA15',
-                    '#03d9c6',
+                    'var(--main-bg-color)',
+                    'var(--cyan-color)',
+                    'var(--hex-color)',
+                    'var(--pacific-blue-color)',
                 ],
                 hoverBackgroundColor: [
-                    '#139DC9',
-                    '#83D2B4',
-                    '#9DCA15',
-                    '#03d9c6',
+                    'var(--main-bg-color)',
+                    'var(--cyan-color)',
+                    'var(--hex-color)',
+                    'var(--pacific-blue-color)',
                 ]
             }],
             flag: ''
@@ -678,7 +679,7 @@ export class EligibilityDetails extends React.Component {
     render() {
         return (
             <div>
-                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
+                <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-6">

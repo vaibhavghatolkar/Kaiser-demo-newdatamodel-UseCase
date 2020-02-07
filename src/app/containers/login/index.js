@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls';
+import '../color.css'
 
 export class Login extends React.Component {
 
@@ -87,7 +88,7 @@ export class Login extends React.Component {
                     <div className="col-3 vartical-center" >
                        
                             <div style={{ padding: "20px" }}>
-                                <span style={{ color: "#6C6969", fontSize: "16px" }}>Log in to <b>HiPaaS Portal </b></span>
+                                <span style={{ color: "var(--gray-dark-color)", fontSize: "16px" }}>Log in to <b>HiPaaS Portal </b></span>
                                 <p>Enter your username and password to log into your HiPaaS Portal</p>
                             </div>
                             <div class="form-group" style={{ paddingLeft: "20px", marginTop: "-5px" }}>
@@ -101,7 +102,7 @@ export class Login extends React.Component {
                                     placeholder="Enter Password" onKeyPress={this.handleKeyPress} />
                             </div>
                             <div style={{ marginTop: "15px", paddingLeft: "22px" }} >
-                                <a href="#" style={{ color: "#05274D", fontSize: "12px" }}>Forgot your password?</a>
+                                <a href="#" style={{ color: "var(--login-color)", fontSize: "12px" }}>Forgot your password?</a>
                             </div>
                             <div style={{ marginTop: "10px", paddingLeft: "10px" }}>
                                 <button onClick={this.loginUser} class="btn btn-demo">Log in to Account</button>

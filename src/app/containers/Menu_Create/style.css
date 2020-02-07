@@ -1,10 +1,12 @@
+@import "../color.css";
+
 .btn-display{
     margin: 15px;
     padding: 10px 15px;
     border-radius: 150;
     font-size: 12px;
-    background-color: #139DC9;
-    color: white
+    background-color: var(--main-bg-color);
+    color: var(--white-color);
 }
 .modal.right .modal-dialog {
     position: right;
@@ -41,8 +43,8 @@
     border: none;
 }
 .modal-header {
-    border-bottom-color: #EEEEEE;
-    background-color: #139DC9;
+    border-bottom-color: var(--white-gray-color);
+    background-color: var(--main-bg-color);
 }
 /* ----- v CAN BE DELETED v ----- */
 .form-control{
@@ -55,11 +57,11 @@
     font-size: 12px;
 }
 #userList th{
-    background-color: #139DC9;
-    color: white
+    background-color: var(--main-bg-color);
+    color: var(--white-color)
 }
 .btn-display:hover {
-    color: white;
+    color: var(--white-color);
   }
 .width1{
     width: 100% !important
