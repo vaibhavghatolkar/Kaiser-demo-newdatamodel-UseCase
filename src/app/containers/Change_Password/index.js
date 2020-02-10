@@ -53,9 +53,15 @@ export class ChangePassword extends React.Component {
 
             <div className="container-fluid" style={{marginTop: "-10px"}}>
                 <div class="row" >
-                    <div class=" col-5" >
+                    <div class=" col-8 linear_gradient" style={{ backgroundColor: '#139DC9', height: "615px"}}>
+                    <img src={require('../../components/Images/HiPaaS_logo.png')} alt="logo" className="Hipaas_logo" align="center" />
+                       
+
+                    </div>
+
+                    <div class=" col-4" >
                         <div style={{ paddingTop: "40px" }}>
-                            <h5 style={{ color: '#139DC9', fontSize:"20px" }}>Change Password</h5>
+                            <h5 style={{ color: '#33aff6', fontSize:"20px" }}>Change Password</h5>
                         </div>
                         <div class="form-group" style={{marginTop:"20px"}}>
                             <label>Old Password</label>
@@ -74,30 +80,7 @@ export class ChangePassword extends React.Component {
                         </div>
                         
                         <div class="form-group" style={{ marginTop: "15px" }}>
-                            <button style={{ marginLeft: "20px",marginTop:"10px", backgroundColor: '#139DC9' }} onClick={this.updatePassword} class="btn btn-display">Update Password</button>
-                        </div>
-                       
-                    </div>
-                    <div class=" col-7" style={{ backgroundColor: '#139DC9', height: "615px"}}>
-                        <div style={{ paddingTop: "30px", marginLeft: "20px" }}>
-                            <span class="dot"></span> <label className="small" style={{ color: "white" }}>  HiPaaS is HIPAA compliant.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> HiPaaS is cloud based, light weight, agile platform that can be running in days.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> Reduction of time and costs through ready to use process libraries and APIs.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> EDI API's to generate,validate,send,receive and reconcile transaction.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> HiPaaS Solution for SNIP L1-L7 validation.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> HiPaaS build on the Next Generation Healthcare Architecture.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> Saving of customer efforts with end-to-end managed services at affordable costs.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> High level of support and responsiveness to help solve business problems.</label>
-                            <br></br>
-                           <span class="dot"></span> <label className="small" style={{ color: "white" }}> Easy choice of offerings that can be deployed through a plug-and-play model.</label>
-                               
+                            <button style={{ marginLeft: "20px",marginTop:"10px", backgroundColor: '#4A80EC' }} onClick={this.updatePassword} class="btn btn-display">Update Password</button>
                         </div>
                        
                     </div>

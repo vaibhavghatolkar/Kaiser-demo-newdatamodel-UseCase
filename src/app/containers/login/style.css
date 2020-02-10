@@ -21,9 +21,9 @@ padding-top.Title
 .btn-demo {
 	border-radius: 150;
 	font-size: 12px;
-    background-color: #05274D;
+    background-color: #4A80EC;
     color: white;
-    width: 100%;
+    width: 95%;
     text-align: left;
 }
 .btn-demo:hover {
@@ -76,4 +76,7 @@ padding-top.Title
     position: absolute;
     left: 73%;
     top: 25%; 
+}
+.gradient-color{
+    background: linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%);   
 }

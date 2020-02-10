@@ -265,7 +265,8 @@ export class MenuManagement extends React.Component {
     renderList() {
         let row = []
         const data = this.state.customList;
-        console.log(data);
+        let menuOptions = {}
+        // console.log(data)
         data.forEach((d) => {
             var roletype = d.parent_node;
             var menuID = d.menu_id;
@@ -291,11 +292,41 @@ export class MenuManagement extends React.Component {
 
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
                         d.isChecked = e.target.checked
-                        // let menu = 1
-                        // if(menu == roletype){
-                        //    alert(menuID)
-                        // }
-                    
+                        let parent = d.parent_node
+                        let menuId = d.menu_id
+                        let data2 = [...data]
+                        let count=0;
+                        // alert(parent)true
+                        data2.forEach((item) => {
+                             
+                             if(item.parent_node == parent || item.menu_id == parent){
+                                // if(item.parent_node==1)
+                                // {
+                                                               
+                                //        count++;
+                                //        alert(count);
+                                                                      
+                                // }
+                                
+                                if(item.menu_id == parent){ 
+                                    if(item.isChecked == false) 
+                                    {
+                                        item.isChecked = true 
+                                    } 
+                                    // if(item.isChecked == false){
+                                    //     item.isChecked = true 
+                                    // }  
+                                   
+                                }
+                               
+
+                            }
+                            else if(menuId == item.parent_node){
+                                item.isChecked = e.target.checked
+                            }
+   
+                        })
+                       
                         this.setState({
                             customList: [...data]
                         })

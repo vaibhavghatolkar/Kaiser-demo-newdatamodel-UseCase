@@ -152,3 +152,6 @@
     background-color: #fff;
     border: 1px solid #DEE2E6;
 }
+.word-wrap{
+    word-wrap: break-word;
+}

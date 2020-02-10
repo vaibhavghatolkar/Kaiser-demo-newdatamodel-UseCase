@@ -65,14 +65,8 @@
     width: 100% !important
 }
 .textInput{
-    width: 60%
+    width: 100%
 }
-
-
-
-
-
-
-
-
-
+.linear_gradient{
+    background: linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%);
+}

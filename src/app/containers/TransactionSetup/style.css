@@ -30,7 +30,7 @@
     color: #AD320D
 }
 .light_blue1{
-    background-color: #008CBA;
+    background-color: #139DC9;
     color : white;
     margin-top: 0px;
     margin-left: 40px;
@@ -65,16 +65,10 @@ td a {
     margin-top: 10px;
   }
 .collapsible[aria-expanded="true"], .collapsible:hover {
-    background-color: #008CBA;
+    background-color: #139DC9;
 }
 .content {
-    border-color: #008CBA;
+    border-color: #139DC9;
     border-style: solid;
     border-width: thin;
-}
-.top-space{
-    margin-top: 24px; 
-    padding-top: 24px; 
-    padding-bottom: 16px;
-    border-top: 1px grey solid;
 }
