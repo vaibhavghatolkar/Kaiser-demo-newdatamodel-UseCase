@@ -1,6 +1,8 @@
+ @import "../../containers/color.css"; 
+
 .header_container{
     /* background: linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%); */
-    background-color: #139DC9;
+    background-color: var(--main-bg-color);
     padding: 16px;
     position: fixed;
     width: 100%;
@@ -9,14 +11,14 @@
     padding-right: 20px;
 }
 .header_text{
-    color: white;
+    color: var(--white-color);
     margin:0px;
     font-size: 20px;
     
 }
 .dropdown-item:hover {
-    background-color: #139DC9;
-    color: white
+    background-color: var(--main-bg-color);
+    color: var(--white-color);
   }
 .dropdown-item {
     font-size: 12px;

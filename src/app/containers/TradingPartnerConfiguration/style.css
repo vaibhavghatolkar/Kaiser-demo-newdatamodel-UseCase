@@ -1,3 +1,5 @@
+@import "../color.css";
+
 .pull-right{
     text-align: right;
     width: 940px;
@@ -14,10 +16,10 @@
     text-align: center;
 }
 .table-head{
-    background-color: #139DC9;
+    background-color: var(--main-bg-color);
 }
 .table-head-text{
-    color: white;
+    color: var(--white-color);
     font-size: 1.2em;
 }
 .summary-list{
@@ -27,11 +29,11 @@
     font-size: 18px;
 }
 .dark_red{
-    color: #AD320D
+    color: var(--dark-red)
 }
 .light_blue{
-    background-color: #139DC9;
-    color : white;
+    background-color: var(--main-bg-color);
+    color : var(--white-color);
     margin-top: 30px;
     margin-left: 40px;
     padding: .25rem .4rem;
@@ -40,21 +42,21 @@
     border-radius: .2rem;
 }
 .red{
-    color: #FF3B41
+    color: var(--red)
 }
 .green{
-    color: #2AC327
+    color: var(--green)
 }
 .orange{
-    color: #FA731A
+    color: var(--orange)
 }
 td a {
     display:block;
     width:100%;
 }
 .collapsible {
-    background-color: lightgray;
-    color: black;
+    background-color: var(--lightgray);
+    color: var(--black-color);
     cursor: pointer;
     padding: 5px;
     width: 100%;
@@ -65,20 +67,20 @@ td a {
     margin-top: 10px;
   }
 .collapsible[aria-expanded="true"], .collapsible:hover {
-    background-color: #139DC9;
-    color: white;
+    background-color: var(--main-bg-color);
+    color: var(--white-color);
 }
 .content {
-    border-color: #139DC9;
+    border-color: var(--main-bg-color);
     border-style: solid;
     border-width: thin;
 }
 
 .Editbutton {
     margin-top: -18px;
-    background-color: #4CAF50; /* Green */
+    background-color: var(--light-green-color); /* Green */
     border: none;
-    color: white;
+    color: var(--white-color);
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -89,7 +91,7 @@ td a {
     margin-left: 15px;
   }
   
-  .button2 {background-color: #139DC9;} /* Blue */
+  .button2 {background-color: var(--main-bg-color);} /* Blue */
   
 
 

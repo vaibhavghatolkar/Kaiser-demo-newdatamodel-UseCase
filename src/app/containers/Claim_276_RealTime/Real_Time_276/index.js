@@ -1,6 +1,7 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import './style.css'
+import '../../color.css'
 import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
@@ -47,14 +48,14 @@ export class RealTime276 extends React.Component {
             noResponsePercent: '',
             chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
             colorArray : [
-                '#139DC9',
-                '#83D2B4'
+                'var(--main-bg-color)',
+                'var(--cyan-color)'
             ],
             errorColorArray: [
-                '#139DC9',
-                '#83D2B4',
-                '#9DCA15',
-                '#03d9c6',
+                'var(--main-bg-color)',
+                'var(--cyan-color)',
+                'var(--hex-color)',
+                'var(--pacific-blue-color)',
             ],
             apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 0)
         }
@@ -816,7 +817,7 @@ export class RealTime276 extends React.Component {
     render() {
         return (
             <div>
-                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
+                <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 <div className="row">

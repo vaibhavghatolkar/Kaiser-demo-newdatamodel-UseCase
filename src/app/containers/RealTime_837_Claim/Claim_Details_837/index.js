@@ -1,6 +1,7 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import '../../Claim_276_RealTime/Real_Time_276/style.css'
+import '../../color.css'
 import '../../Files/files-styles.css';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
@@ -490,16 +491,16 @@ export class ClaimDetails837 extends React.Component{
             datasets: [{
                 data: this.state.pieArray,
                 backgroundColor: [
-                    '#139DC9',
-                    '#83D2B4',
-                    '#9DCA15',
-                    '#03d9c6',
+                    'var(--main-bg-color)',
+                    'var(--cyan-color)',
+                    'var(--hex-color)',
+                    'var(--pacific-blue-color)',
                 ],
                 hoverBackgroundColor: [
-                    '#139DC9',
-                    '#83D2B4',
-                    '#9DCA15',
-                    '#03d9c6',
+                    'var(--main-bg-color)',
+                    'var(--cyan-color)',
+                    'var(--hex-color)',
+                    'var(--pacific-blue-color)',
                 ]
             }],
             flag: ''
@@ -723,10 +724,10 @@ export class ClaimDetails837 extends React.Component{
                     <div className="col-4 small-font left-align"><a href={"#" + data[keys].value.FileID} 
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
-                        }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 small-font col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
-                    <div className="col-3 small-font col-style">{data[keys].value.FileStatus}</div>
-                    <div className="col-3 small-font col-style">{data[keys].value.Sender}</div>
+                        }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
+                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
+                    <div className="col-3 col-style">{data[keys].value.Sender}</div>
                 </div>
             )
 
@@ -741,7 +742,7 @@ export class ClaimDetails837 extends React.Component{
                                 }, () => {
                                     this.getDetails(d.ClaimID, d.FileID)
                                 })
-                            }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
+                            }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             <td className="list-item-style">{moment(d.ClaimDate).format('MMM D YYYY hh:mm a') != "Invalid date" ? moment(d.ClaimDate).format('MMM D YYYY hh:mm a') : d.ClaimDate}</td>
                             <td className="list-item-style">{d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
@@ -850,7 +851,7 @@ export class ClaimDetails837 extends React.Component{
     render() {
         return (
             <div>
-                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>Claim Details</label>
+                <label style={{color:"var(--main-bg-color)" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>Claim Details</label>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

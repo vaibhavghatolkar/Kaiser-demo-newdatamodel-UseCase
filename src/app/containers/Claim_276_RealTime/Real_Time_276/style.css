@@ -1,3 +1,6 @@
+@import "../../color.css";
+
+
 .list-dashboard{
     font-size: 12px;
     padding-left: 2px;
@@ -6,12 +9,12 @@
     margin-top: 10px;
 }
 .title_graph{
-    color: #139DC9;
+    color: var(--main-bg-color);
     font-size: 13px;
 }
 .collapsible {
-    background-color: lightgray;
-    color: black;
+    background-color: var(--lightgray);
+    color: var(--black-color);
     cursor: pointer;
     padding: 5px;
     width: 100%;
@@ -23,7 +26,7 @@
   }
 
 .content {
-    border-color: #139DC9;
+    border-color: var(--main-bg-color);
     border-style: solid;
     border-width: thin;
 }
@@ -32,7 +35,7 @@
 }
 
 .datepicker{
-    border: 1px solid #c3c3c3;
+    border: 1px solid var(--white-color);
     border-radius: 4px;
     height: 32px;
     width : 100%
@@ -42,9 +45,9 @@
 }
 .button{
     margin-top: 18px;
-    border: 1px solid #139DC9;
-    color: white;
-    background: #139DC9;
+    border: 1px solid var(--main-bg-color);
+    color: var(--white-color);
+    background: var(--main-bg-color);
     font-size: 12px;
     padding: 6px;
     text-align: center;
@@ -53,9 +56,9 @@
     padding-right: 24px;
 }
 .margin-less-button{
-    border: 1px solid #139DC9;
-    color: white;
-    background: #139DC9;
+    border: 1px solid var(--main-bg-color);
+    color: var(--white-color);
+    background: var(--main-bg-color);
     font-size: 12px;
     padding: 6px;
     margin-top : 16px;
@@ -71,7 +74,7 @@
     padding-left: 2px;
 }
 .table-head-text-view{
-    color: white;
+    color: var(--white-color);
     font-size: 10px;
 }
 .table-head-text-item{
@@ -95,27 +98,24 @@
     /* justify-content: center; */
 }
 .background-color{
-    background-color: white
+    background-color: var(--white-color)
 }
-
-
-
 .summary-container{
     box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
-    background-color: white;
+    background-color: var(--white-color);
     margin-right : 16px;
     margin-top : 16px;
     margin-bottom : 16px;
 }
 .summary-header{
     font-size: 10px;
-    color: grey;
+    color: var(--grey-color);
     padding-top: 12px;
     padding-bottom: 2px;
 }
 .summary-title{
     font-size: 20px;
-    color: #424242;
+    color: var(--grayBlack);
     padding-left: 8px;
     padding-bottom: 12px;
 }
@@ -125,24 +125,24 @@
 .volume-summary-header{
     padding-bottom: 24px;
     font-size: 11px;
-    color: #515151;
+    color: var(--grayBlack);
     text-align: center
 }
 .center-align-vol{
     text-align: center
 }
 .vertical-line{
-    border-left: 1px solid grey;
+    border-left: 1px solid var(--grey-color);
     height: 54px;
 }
 .volume-header{
     font-size: 10px;
-    color: grey;
+    color: var(--grey-color);
 }
 .volume-title{
     font-size: 20px;
     padding-top : 12px;
-    color: #424242;
+    color: var(--grayBlack);
 }
 .chart-header{
     font-size: 12px;
@@ -150,7 +150,7 @@
     padding-bottom: 12px;
 }
 .chart{
-    background-color: #ffffff;
+    background-color: var(--white-color);
     margin-top : 16px;
     padding: 24px;
 }
@@ -158,8 +158,8 @@
     font-size: 14px;
 }
 .increase-percent{
-    background-color: #65C204;
-    color: white;
+    background-color: var(--green-color);
+    color: var(--white-color);
     padding-top : 4px;
     padding-bottom : 4px;
     margin-top : 16px;
@@ -176,10 +176,10 @@
     padding-right : 16px;
 }
 .color-background{
-    background-color: #448dce;
+    background-color: var(--main-bg-color);
 }
 .white-font{
-    color: white
+    color: var(--white-color)
 }
 
 .padding-top{
@@ -188,7 +188,7 @@
 .no-response-title{
     font-size: 20px;
     padding-top : 4px;
-    color: #424242;  
+    color: var(--grayBlack);  
 }
 .error-title{
     font-size: 14px;

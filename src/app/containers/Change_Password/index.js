@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls';
+import '../color.css'
 
 export class ChangePassword extends React.Component {
 
@@ -53,7 +54,7 @@ export class ChangePassword extends React.Component {
 
             <div className="container-fluid" style={{marginTop: "-10px"}}>
                 <div class="row" >
-                    <div class=" col-8 linear_gradient" style={{ backgroundColor: '#139DC9', height: "615px"}}>
+                    <div class=" col-8 linear_gradient" style={{ backgroundColor: 'var(--main-bg-color)', height: "615px"}}>
                     <img src={require('../../components/Images/HiPaaS_logo.png')} alt="logo" className="Hipaas_logo" align="center" />
                        
 
@@ -61,7 +62,7 @@ export class ChangePassword extends React.Component {
 
                     <div class=" col-4" >
                         <div style={{ paddingTop: "40px" }}>
-                            <h5 style={{ color: '#33aff6', fontSize:"20px" }}>Change Password</h5>
+                            <h5 style={{ color: 'var(--navy-blue-color)', fontSize:"20px" }}>Change Password</h5>
                         </div>
                         <div class="form-group" style={{marginTop:"20px"}}>
                             <label>Old Password</label>
@@ -80,7 +81,7 @@ export class ChangePassword extends React.Component {
                         </div>
                         
                         <div class="form-group" style={{ marginTop: "15px" }}>
-                            <button style={{ marginLeft: "20px",marginTop:"10px", backgroundColor: '#4A80EC' }} onClick={this.updatePassword} class="btn btn-display">Update Password</button>
+                            <button style={{ marginLeft: "20px",marginTop:"10px", backgroundColor: 'var(--button-login-color)' }} onClick={this.updatePassword} class="btn btn-display">Update Password</button>
                         </div>
                        
                     </div>

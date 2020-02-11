@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../RealTime_837_Claim/RealTimeDashboard/styles.css';
+import '../../color.css'
 import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,38 +9,36 @@ import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
 
 let val = ''
-const second_data = {
-    labels: [
-        'ICD Code not found',
-        'Accident Date not present',
-        'Member Not Found',
-        'Newborn Setup Pending',
-        'Provider Setup Pending',
-        'Misdirected Claims'
-    ],
-    datasets: [{
-        data: [100, 100, 70, 20, 50, 20],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ]
-    }],
-    flag: ''
-};
-
-
+// const second_data = {
+//     labels: [
+//         'ICD Code not found',
+//         'Accident Date not present',
+//         'Member Not Found',
+//         'Newborn Setup Pending',
+//         'Provider Setup Pending',
+//         'Misdirected Claims'
+//     ],
+//     datasets: [{
+//         data: [100, 100, 70, 20, 50, 20],
+//         backgroundColor: [
+//             '#139DC9',
+//             '#83D2B4',
+//             '#9DC913',
+//             '#EC6236',
+//             '#C9139D',
+//             'blue',
+//         ],
+//         hoverBackgroundColor: [
+//             '#139DC9',
+//             '#83D2B4',
+//             '#9DC913',
+//             '#EC6236',
+//             '#C9139D',
+//             'blue',
+//         ]
+//     }],
+//     flag: ''
+// };
 
 export class ClaimPaymentDashboard extends React.Component {
 
@@ -561,7 +560,7 @@ getData() {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
+                <h5 style={{ color: 'var(--main-bg-color)',fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}

@@ -1,5 +1,6 @@
 import React from 'react';
 import Urls from '../../../helpers/Urls';
+import '../color.css'
 
 export class MenuManagement extends React.Component {
 
@@ -547,12 +548,12 @@ export class MenuManagement extends React.Component {
             <div>
                 <br></br>
                 <div>
-                    <h5 style={{ color: '#139DC9', fontSize:"20px" }}>Menu Management</h5>
+                    <h5 style={{ color: 'var(--main-bg-color)', fontSize:"20px" }}>Menu Management</h5>
                 </div>
                 {
 
                     <div>
-                        <p style={{ color: '#139DC9', fontWeight: 'bold' }}></p>
+                        <p style={{ color: 'var(--main-bg-color)', fontWeight: 'bold' }}></p>
                         {this.renderTopbar()}
                         <div className="row">
                             <div className="col-8">

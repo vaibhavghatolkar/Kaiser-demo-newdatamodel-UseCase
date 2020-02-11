@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls'
+import '../color.css'
 
 export class TradingPartnerConfiguration extends React.Component {
 
@@ -389,7 +390,7 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
 
                         <div>
-                        <label style={{color:"#139DC9" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Trading Partner Configuration</label>
+                        <label style={{color:"var(--main-bg-color)" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Trading Partner Configuration</label>
                         </div><br></br>
                         <div className="row">
 
