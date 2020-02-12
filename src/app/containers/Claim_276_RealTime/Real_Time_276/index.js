@@ -39,14 +39,14 @@ export class RealTime276 extends React.Component {
             lastMonth: '',
             State: '',
             realTimePercent: '',
-            startDate : moment().subtract(365,'d').format('YYYY-MM-DD'),
+            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
             endDate : moment().format('YYYY-MM-DD'),
             transactionId: '',
             selected_val: '',
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
-            chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
+            chartType: this.props.location.state.data[0].apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise',
             colorArray : [
                 'var(--main-bg-color)',
                 'var(--cyan-color)'
@@ -606,11 +606,11 @@ export class RealTime276 extends React.Component {
                                 }, 50);
                             }}
                             >
-                            <option value="1">Last week</option>
+                            <option selected="selected" value="1">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option selected="selected" value="2">Last year</option>
+                            <option value="2">Last year</option>
                         </select>
                     </div>
                     <div className="form-group col-2">

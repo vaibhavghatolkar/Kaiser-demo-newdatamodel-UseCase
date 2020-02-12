@@ -56,10 +56,10 @@ export class RealTimeDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            startDate : moment().subtract(365,'d').format('YYYY-MM-DD'),
+            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
             endDate : moment().format('YYYY-MM-DD'),
             providerName: '',
-            chartType: 'Monthwise',
+            chartType: 'Datewise',
             selectedTradingPartner: '',
             State: '',
             Months: 0,
@@ -547,11 +547,11 @@ export class RealTimeDashboard extends React.Component {
                                 }, 50);
                             }}
                             >
-                            <option value="1">Last week</option>
+                            <option selected="selected" value="1">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option selected="selected" value="2">Last year</option>
+                            <option value="2">Last year</option>
                         </select>
                     </div>
                     <div className="form-group col-2">

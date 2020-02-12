@@ -63,7 +63,7 @@ ul ul a {
     z-index: 999;
     background: var(--white-color);
     color: var(--black-color);
-    overflow: scroll;
+    /* overflow: scroll; */
     transition: all 0.3s;
 }
 
