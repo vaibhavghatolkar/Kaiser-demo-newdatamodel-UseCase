@@ -24,6 +24,7 @@ a, a:hover, a:focus {
     background: var(--white-color);
     color: var(--black-color);
     transition: all 0.3s;
+    /* position: fixed; */
 }
 
 #sidebar .sidebar-header {

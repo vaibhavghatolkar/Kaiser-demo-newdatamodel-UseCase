@@ -20,7 +20,7 @@ export class Header extends React.Component {
                 <p className="header_text">HiPaaS</p>
                 {
                     localStorage.getItem('UserId') ?
-                        <div class="dropdown" style={{ float: 'right', marginTop: '-30px', marginLeft: '-30px' }}>
+                        <div class="dropdown" style={{ float: 'right', marginTop: '-30px' }}>
                             <img src={require('../Images/user.png')} style={{ width: '25px' }} />
                             <div class="dropdown-content">
                                 <a onClick={this.changePassword}>Change Password</a>
