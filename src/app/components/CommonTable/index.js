@@ -72,9 +72,9 @@ export class CommonTable extends React.Component {
                             <a style={{ color: "#6AA2B8", cursor: "pointer" }}
                                 onClick={() => {this.props.onClick(data_item[this.props.onClickKey])}}
                             >
-                                {row_item.isDate == 1 ? moment(data_item[row_item.value]).format("MMM DD YYYY hh:mm a") != 'Invalid date' ? moment(data_item[row_item.value]).format("MMM DD YYYY hh:mm a") : data_item[row_item.value] : data_item[row_item.value]}
+                                {row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") : data_item[row_item.value] : data_item[row_item.value]}
                             </a> :
-                            row_item.isDate == 1 ? moment(data_item[row_item.value]).format("MMM DD YYYY hh:mm a") != 'Invalid date' ? moment(data_item[row_item.value]).format("MMM DD YYYY hh:mm a") : data_item[row_item.value] : data_item[row_item.value]
+                            row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") : data_item[row_item.value] : data_item[row_item.value]
                         }
                     </div>)
                 count++
