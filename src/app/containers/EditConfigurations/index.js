@@ -542,6 +542,8 @@ export class EditConfiguration extends React.Component {
     }
 
     clicked() {
+       let OperatorId= this.state.OperatorId != '' ? this.state.OperatorId : 0;
+     
         var query = 'mutation{' +
             'SP_ConfigureCustomEdits(ID : 0 ' +
             'State  :"' + this.state.state + '" ' +
@@ -559,7 +561,7 @@ export class EditConfiguration extends React.Component {
             'Loop_ID_2  :"' + this.state.LoopID1 + '" ' +
             'Segment_2  : "' + this.state.SegmentId1 + '" ' +
             'Field_2  : "' + this.state.FieldId1 + '" ' +
-            'Oprator_Id  :' + this.state.OperatorId + '  ' +
+            'Oprator_Id  :' + OperatorId + '  ' +
             'Min_Value  : "' + this.state.MinValue + '" ' +
             'Max_Value  : "' + this.state.MaxValue + '" ' +
             'Value  : "' + this.state.Value + '" ' +
@@ -592,9 +594,9 @@ export class EditConfiguration extends React.Component {
 
             )
 
-        setTimeout(() => {
-            window.location.reload()
-        }, 1000)
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 1000)
 
     }
     renderList() {
