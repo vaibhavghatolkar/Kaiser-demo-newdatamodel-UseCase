@@ -119,6 +119,9 @@ export class DynamicSidebar extends React.Component {
         else if (key == 48){ name = Strings.MenuManagement } 
         else if (key == 53){ name = Strings.EncounterDashboard } 
         else if (key == 54){ name = Strings.EncounterDetails } 
+
+        else if (key == 50){ name = Strings.claimPayment_835 } 
+        else if (key == 51){ name = Strings.MenuManagement } 
         
         return name 
     }

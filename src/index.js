@@ -57,8 +57,7 @@ import { EncounterDashboard } from './app/containers/Encounter/EncounterDashboar
 import { EncounterDetails } from './app/containers/Encounter/EncounterDetails'
 
 import { DynamicSidebar } from './app/components/DynamicSidebar';
-
-
+import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -77,6 +76,7 @@ class PrivateRoute extends React.Component {
 
             loggedIn,
             timeout:900000,
+            //  timeOut: 10000,
             isTimedOut: false
             // timeOut,
         };
@@ -106,19 +106,19 @@ class PrivateRoute extends React.Component {
     }
 
     onAction(e) {
-        console.log('user did something', e)
+        // console.log('user did something', e)
         this.setState({isTimedOut: false})
       }
      
       onActive(e) {
-        console.log('user is active', e)
+        // console.log('user is active', e)
         this.setState({isTimedOut: false})
       }
      
       onIdle(e) {
-        console.log('user is idle', e)
+        // console.log('user is idle', e)
         const isTimedOut = this.state.isTimedOut
-        
+
         if (isTimedOut) {
             localStorage.clear()
             window.location.reload()
@@ -135,7 +135,6 @@ class PrivateRoute extends React.Component {
             { apiflag: '1' },
         ]
         return (
-
     <Router>
         
         <IdleTimer
@@ -143,7 +142,7 @@ class PrivateRoute extends React.Component {
             element={document}
             onActive={this.onActive}
             onIdle={this.onIdle}
-            onAction={this.onAction}
+            // onAction={this.onAction}
             debounce={250}
             timeout={this.state.timeout} />
        
@@ -159,7 +158,7 @@ class PrivateRoute extends React.Component {
                         handleFlag={this.handleFlag}
                         />
                 </div>
-                <div className="col-10 container-fluid" style={{height : $(window).height()}}>
+                <div className="col-10 container-fluid" style={{ minHeight: '100vh'}}>
                     <Route exact path="/">
                     {this.state.loggedIn == true ? 
                     
@@ -230,6 +229,9 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.MenuManagement} component={MenuManagement} />
                     <Route path={'/'+ Strings.EncounterDashboard} component={EncounterDashboard} />
                     <Route path={'/'+ Strings.EncounterDetails} component={EncounterDetails} />
+                    
+                    <Route path={'/'+ Strings.claimPayment_835} component={ClaimPaymentDashboard} />
+                       
   {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
                 
 

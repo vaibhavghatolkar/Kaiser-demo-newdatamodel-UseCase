@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls'
+import '../color.css'
 
 export class TradingPartnerConfiguration extends React.Component {
 
@@ -389,7 +390,7 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
 
                         <div>
-                        <label style={{color:"#139DC9" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Trading Partner Configuration</label>
+                        <label style={{color:"var(--main-bg-color)" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Trading Partner Configuration</label>
                         </div><br></br>
                         <div className="row">
 
@@ -403,7 +404,7 @@ export class TradingPartnerConfiguration extends React.Component {
 
                             <div className="form-group col-sm-3">
                                 <label className="list-header1">Trading Partner Name</label>
-                                <input className="form-control list-header1" autocomplete="off" type="text" value={this.state.Change_Trading_Partner} onChange={(e) => this.onChangeName(e, 'Change_Trading_Partner')} />
+                                <input className="form-control list-header1" autoComplete="off" type="text" value={this.state.Change_Trading_Partner} onChange={(e) => this.onChangeName(e, 'Change_Trading_Partner')} />
                             </div>
 
                             <div className="form-group col-sm-1">

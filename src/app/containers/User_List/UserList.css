@@ -1,3 +1,4 @@
+@import "../color.css";
 
 .modal.right .modal-dialog {
     position: right;
@@ -41,8 +42,8 @@
 }
 
 .modal-header {
-    border-bottom-color: #EEEEEE;
-    background-color: #139DC9;
+    border-bottom-color: var(--white-gray-color);
+    background-color: var(--main-bg-color);
 }
 
 /* ----- v CAN BE DELETED v ----- */
@@ -61,13 +62,13 @@ font-size: 12px;
 	padding: 10px 15px;
 	border-radius: 150;
 	font-size: 12px;
-    background-color: #139DC9;
+    background-color: var(--main-bg-color);
  
 }
 .table-text{
-    background-color: #139DC9;
-    color: white
+    background-color: var(--main-bg-color);
+    color: var(--white-color)
 }
 .btn-demo:hover {
-    color: white;
+    color: var(--white-color);
   }

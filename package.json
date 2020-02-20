@@ -16,8 +16,7 @@
     "react-idle-timer": "^4.2.12",
     "react-paginate": "^6.3.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
-    "reactstrap": "^8.4.0"
+    "react-scripts": "3.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

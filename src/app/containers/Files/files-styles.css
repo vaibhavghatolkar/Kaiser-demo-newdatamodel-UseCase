@@ -48,6 +48,14 @@
     text-align: center;
     padding: 12px;
 }
+.col-small-style{
+    background-color: #ffffff; 
+    border-right: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+    font-size: 12px;
+    text-align: center;
+    padding: 6px;
+}
 .left-align{
     background-color: #ffffff; 
     border-right: 1px solid #dfdfdf;
@@ -143,4 +151,7 @@
     color: #139DC9;
     background-color: #fff;
     border: 1px solid #DEE2E6;
+}
+.word-wrap{
+    word-wrap: break-word;
 }

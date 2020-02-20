@@ -1,5 +1,8 @@
+ @import "../../containers/color.css"; 
+
 .header_container{
-    background-color: #139DC9;
+    /* background: linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%); */
+    background-color: var(--main-bg-color);
     padding: 16px;
     position: fixed;
     width: 100%;
@@ -8,15 +11,35 @@
     padding-right: 20px;
 }
 .header_text{
-    color: white;
+    color: var(--white-color);
     margin:0px;
     font-size: 20px;
     
 }
-.dropdown-item:hover {
-    background-color: #139DC9;
-    color: white
-  }
-.dropdown-item {
-    font-size: 12px;
+.dropdown {
+    position: relative;
+    display: inline-block;
+  } 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--white-color);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px var(--main-bg-color);
+    z-index: 1;
+    right: 0;
+    cursor: pointer;
 }
+.dropdown-content a {
+    color: var(--black-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:hover {
+      background-color: var(--main-bg-color);
+      color: var(--white-color) !important;
+}
+  
+.dropdown:hover .dropdown-content {display: block; }
+  

@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import '../color.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 
@@ -406,7 +407,6 @@ export class MenuCreate extends React.Component {
                 ')' +
                 '}'
 
-            console.log(query);
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -419,7 +419,13 @@ export class MenuCreate extends React.Component {
                 })
             })
                 .then(r => r.json())
-                .then(data => console.log('data returned:', alert(data.data.updateuserwisemenu)));
+                .then(data =>{
+                    alert(data.data.updateuserwisemenu)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 100);
+                } )
+                
         }
         else {
             alert("Please Select User Role")
@@ -528,12 +534,12 @@ export class MenuCreate extends React.Component {
             <div>
                 <br></br>
                 <div>
-                    <h5 style={{ color: '#139DC9', fontSize:"20px" }}>User Role Management</h5>
+                    <h5 style={{ color: 'var(--main-bg-color)', fontSize:"20px" }}>User Role Management</h5>
                 </div>
                 {
 
                     <div>
-                        <p style={{ color: '#139DC9', fontWeight: 'bold' }}></p>
+                        <p style={{ color: 'var(--main-bg-color)', fontWeight: 'bold' }}></p>
                         {this.renderTopbar()}
                         <div className="row">
                             <div className="col-8">

@@ -1,6 +1,7 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import './style.css'
+import '../../color.css'
 import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
@@ -10,6 +11,7 @@ import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import Images from '../../../../theme/Images';
 
+let val = ''
 export class RealTime276 extends React.Component {
 
     constructor(props) {
@@ -24,6 +26,8 @@ export class RealTime276 extends React.Component {
             pieLabels: [],
             tradingChartLabel: [],
             tradingChartData: [],
+            providerChartLabel: ['provider 1','provider 2','provider 3','provider 4','provider 5'],
+            providerChartData: [4,5,1,2,3],
             dateChartLabel: [],
             dateChartData: [],
             errorPieArray: [],
@@ -35,23 +39,23 @@ export class RealTime276 extends React.Component {
             lastMonth: '',
             State: '',
             realTimePercent: '',
-            startDate : moment().subtract(30,'d').format('YYYY-MM-DD'),
+            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
             endDate : moment().format('YYYY-MM-DD'),
             transactionId: '',
             selected_val: '',
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
-            chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilityweekwise' : 'ClaimRequestweekwise',
+            chartType: this.props.location.state.data[0].apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise',
             colorArray : [
-                '#139DC9',
-                '#83D2B4'
+                'var(--main-bg-color)',
+                'var(--cyan-color)'
             ],
             errorColorArray: [
-                '#139DC9',
-                '#83D2B4',
-                '#9DCA15',
-                '#03d9c6',
+                'var(--main-bg-color)',
+                'var(--cyan-color)',
+                'var(--hex-color)',
+                'var(--pacific-blue-color)',
             ],
             apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 0)
         }
@@ -371,6 +375,30 @@ export class RealTime276 extends React.Component {
         return data
     }
 
+    handleSort(e) {
+        this.setState({
+            type: e
+        })
+    }
+
+    renderTabs(flag){
+        return(
+            <nav>
+                {
+                    flag ?
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Real time volume</a>
+                    </div>
+                    :
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('Submitter')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submitter (top 5)</a>
+                        <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('Provider')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Provider (top 5)</a>
+                    </div>
+                }
+            </nav>
+        )
+    }
+
     renderCharts(){
        let minimumValue = Math.min(...this.state.dateChartData)
         minimumValue = (minimumValue==0 ? 0 : (minimumValue-(minimumValue*10/100)))
@@ -382,9 +410,10 @@ export class RealTime276 extends React.Component {
                     this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
                     ?
                     <div className="chart-container chart">
-                        <label className="chart-header">Submitter volume</label>
+                        {this.renderTabs()}
+                        {/* <label className="chart-header">{this.state.type == 'Providerwise' ? 'Provider (Top 5)' : 'Submitter volume (Top 5)'}</label> */}
                         <Bar
-                            data={this.getBarData(this.state.tradingChartLabel, this.state.tradingChartData, '#139DC9')}
+                            data={this.getBarData(this.state.type == 'Provider' ? this.state.providerChartLabel : this.state.tradingChartLabel, this.state.type == 'Provider' ? this.state.providerChartData : this.state.tradingChartData, '#139DC9')}
                             width={100}
                             height={60}
                             options={{
@@ -412,7 +441,8 @@ export class RealTime276 extends React.Component {
                     this.state.dateChartLabel && this.state.dateChartLabel.length > 0
                     ?
                     <div className="chart-container chart">
-                        <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label>
+                        {this.renderTabs(1)}
+                        {/* <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label> */}
                         <Bar
                             data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
                             width={100}
@@ -506,6 +536,28 @@ export class RealTime276 extends React.Component {
         }, 50);
     }
 
+    onHandleChange(e, flag){
+        clearTimeout(val)
+        let providerName = e.target.value
+        val = setTimeout(() => {
+            if(flag){
+                this.setState({
+                    selectedTradingPartner : providerName
+                }, () => {
+                    this.getCommonData()
+                    this.getData()
+                })
+            } else {
+                this.setState({
+                    providerName : providerName
+                }, () => {
+                    this.getCommonData()
+                    this.getData()
+                })
+            }
+        }, 300);
+    }
+
     renderTopbar() {
         return (
             <form className="form-style" id='filters'>
@@ -554,8 +606,8 @@ export class RealTime276 extends React.Component {
                                 }, 50);
                             }}
                             >
-                            <option value="1">Last week</option>
-                            <option selected="selected" value="2">Last 30 days</option>
+                            <option selected="selected" value="1">Last week</option>
+                            <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>
@@ -594,16 +646,26 @@ export class RealTime276 extends React.Component {
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
-                                // setTimeout(() => {
-                                //     this.getCommonData()
-                                //     this.getData()
-                                // }, 50);
                             }}
                         >
                             <option value="select"></option>
                             {this.getoptions()}
                         </select>
                     </div>
+
+                    {/* <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <input className="form-control" type="text" 
+                            onChange={(e) => this.onHandleChange(e, 1)}
+                        />
+                    </div>
+
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input className="form-control" type="text" 
+                            onChange={(e) => this.onHandleChange(e)}
+                        />
+                    </div> */}
                 </div>
             </form>
         )
@@ -740,7 +802,6 @@ export class RealTime276 extends React.Component {
 
         return (
             <table className="table table-bordered claim-list summary-list chart-container chart">
-
                 <thead>
                     <th style={{ fontSize: "11px" }}>{this.state.apiflag == 1 ? "Error Description" : "Claim Status"}</th>     <th style={{ fontSize: "11px" }}>{this.state.apiflag == 1 ? "Total Errors" : "Total Claims"}</th>
                     {this.state.apiflag == 1 ? <th style={{ fontSize: "11px" }}>Error %</th> : ""}
@@ -756,7 +817,7 @@ export class RealTime276 extends React.Component {
     render() {
         return (
             <div>
-                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
+                <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 <div className="row">

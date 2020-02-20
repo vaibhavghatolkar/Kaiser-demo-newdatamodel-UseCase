@@ -1,9 +1,11 @@
+@import "../color.css";
+
 padding-top.Title
 {
     font-weight: bold;
     font-size: 14x;
     margin-left: 15px;
-    color:white;
+    color:var(--white-color);
    
 }
 
@@ -21,13 +23,13 @@ padding-top.Title
 .btn-demo {
 	border-radius: 150;
 	font-size: 12px;
-    background-color: #05274D;
-    color: white;
-    width: 100%;
+    background-color: var(--button-login-color);
+    color: var(--white-color);
+    width: 95%;
     text-align: left;
 }
 .btn-demo:hover {
-    color: white;
+    color: var(--white-color);
 }
 .widthText{
     width: 100%;
@@ -39,7 +41,7 @@ padding-top.Title
 .dot{
     height: 8px;
     width: 8px;
-    background-color: white;
+    background-color: var(--white-color);
     border-radius: 50%;
     display: inline-block;
 }
@@ -58,14 +60,14 @@ padding-top.Title
     left: 5%;
     top: 85%; 
     text-align: center;
-    color: white;
+    color: var(--white-color);
 }
 .contact{
     position: sticky;
     left: 35%;
     top: 95%; 
     text-align: center;
-    color: white !important;
+    color: var(--white-color) !important;
     font-weight: 700;
     text-decoration: underline;
 }
@@ -77,3 +79,7 @@ padding-top.Title
     left: 73%;
     top: 25%; 
 }
+.gradient-color{
+    background: var(--gradient-color);   
+}
+/* linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%) */

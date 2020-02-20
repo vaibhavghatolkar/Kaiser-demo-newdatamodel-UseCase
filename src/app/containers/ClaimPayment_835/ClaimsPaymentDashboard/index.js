@@ -1,12 +1,8 @@
 import React from 'react';
-import './styles.css';
-import { Pie, Bar } from 'react-chartjs-2';
+import '../../RealTime_837_Claim/RealTimeDashboard/styles.css';
 import '../../color.css'
+import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
-import { Files } from '../../Files';
-import { Topbar } from '../../../components/Topbar';
-import { Files_837 } from '../../Files_837';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
@@ -44,9 +40,7 @@ let val = ''
 //     flag: ''
 // };
 
-
-
-export class RealTimeDashboard extends React.Component {
+export class ClaimPaymentDashboard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -56,6 +50,8 @@ export class RealTimeDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
+            pielabels : [],
+            pievalues : [],
             startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
             endDate : moment().format('YYYY-MM-DD'),
             providerName: '',
@@ -82,6 +78,9 @@ export class RealTimeDashboard extends React.Component {
         this.setState({
             apiflag: this.props.apiflag
         })
+        setTimeout(() => {
+            this.getData()
+        }, 50);
     }
 
     componentDidMount() {
@@ -118,36 +117,24 @@ export class RealTimeDashboard extends React.Component {
         });
     }
 
-    getData() {
+getData() {
         let chartType = this.state.chartType
         if(!chartType){
             chartType = "Monthwise"
         }
         
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", Type : "` + this.state.type + `") {
-                TotalFiles
-                TotalClaims
-                Accepted
-                Rejected
-                Accepted_Per
-                Rejected_Per
-                Total999
-                Total277CA
-                TotalSentToQNXT
-                InProgress
+            Claim835Dashboard {
+              Claims837
+              Claims835
+              PendingClaims835
             }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`", Type : "` + this.state.type + `") {
-                From
-                MonthNo
-                Year
-                To
-                Amount
-                TotalClaims
-                X_axis
-                Y_axis
+            Claim835Status {
+              ClaimStatus
+              Total
             }
         }`
+
         console.log(query)
         fetch(Urls.real_time_claim , {
             method: 'POST',
@@ -159,55 +146,32 @@ export class RealTimeDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                let array = []
                 let summary = []
                 let data = res.data
-                let Accepted_per1 = 0
-                let rejected_per1 = 0
-                let accepted = 0
-                let rejected = 0
-                let inProgress = 0
-                let ClaimBarChart = res.data.Claim837RTClaimBarchart
                 let claimLabels = []
+                let pielabels = []
+                let pievalues = []
                 
-                if(data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0){
+                if(data.Claim835Dashboard && data.Claim835Dashboard.length > 0){
                     summary = [
-                        { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
-                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : ''   },
-                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : ''},
-                        { name: 'Accepted Percentage', value: data.Claim837RTDashboardCount[0].Accepted_Per  ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : ''},
-                        { name: 'Rejected Percentage', value: data.Claim837RTDashboardCount[0].Rejected_Per  ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : ''},
+                        { name: '837 Claims', value: data.Claim835Dashboard[0].Claims837 ? data.Claim835Dashboard[0].Claims837 : '' },
+                        { name: '835 Claims', value: data.Claim835Dashboard[0].Claims835 ? data.Claim835Dashboard[0].Claims835 : '' },
+                        { name: 'Pending Claims', value: data.Claim835Dashboard[0].PendingClaims835 ? data.Claim835Dashboard[0].PendingClaims835 : ''   },
                     ]
-                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
-                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
-                    accepted = data.Claim837RTDashboardCount[0].Accepted
-                    rejected = data.Claim837RTDashboardCount[0].Rejected
-                    inProgress = data.Claim837RTDashboardCount[0].InProgress
                 }
-                
-                let count = 0
-                ClaimBarChart.forEach((d)=> {
-                    count++;
-                    array.push(
-                        d.Y_axis ? parseFloat(d.Y_axis) : 0
-                    )
-                    if(chartType == 'Weekwise'){
-                        claimLabels.push('week' + count)
-                    } else {
-                        claimLabels.push(d.X_axis)
-                    }
-                })
+
+                if(data.Claim835Status && data.Claim835Status.length > 0){
+                    data.Claim835Status.forEach(element => {
+                        pielabels.push(element.ClaimStatus)
+                        pievalues.push(element.Total)
+                    });
+                }
         
                 this.setState({
                     summaryList: summary,
-                    Accepted_per: Accepted_per1,
-                    rejected_per: rejected_per1,
-                    ClaimBarChart:array,
                     claimLabels : claimLabels,
-                    accepted : accepted,
-                    rejected : rejected,
-                    inProgress : inProgress
+                    pielabels : pielabels,
+                    pievalues : pievalues,
                 })
             })
             .catch(err => {
@@ -261,28 +225,20 @@ export class RealTimeDashboard extends React.Component {
 
     renderCharts() {
         const data = {
-            labels: [
-                'Accepted',
-                'Rejected',
-                'Validating',
-            ],
+            labels: this.state.pielabels,
             datasets: [{
-                data: [this.state.accepted, this.state.rejected, this.state.inProgress],
+                data: this.state.pievalues,
                 backgroundColor: [
                     '#139DC9',
                     '#daea00',
-                    '#83D2B4',
                 ],
                 hoverBackgroundColor: [
                     '#139DC9',
                     '#daea00',
-                    '#83D2B4',
                 ]
             }],
             flag: ''
         };
-
-        console.log(this.state.ClaimBarChart)
         
         return (
             <div className="row chart-div">
@@ -314,6 +270,13 @@ export class RealTimeDashboard extends React.Component {
                                 xAxes: [{
                                     ticks: {
                                         fontSize: 10,
+                                        userCallback: function(label, index, labels) {
+                                            // when the floored value is the same as the value we have a whole number
+                                            if (Math.floor(label) === label) {
+                                                return label;
+                                            }
+                       
+                                        },
                                     }
                                 }]
                             }
@@ -330,25 +293,6 @@ export class RealTimeDashboard extends React.Component {
         setTimeout(() => {
             this.getData()
         }, 50);
-    }
-
-    tab() {
-        return (
-            <div>
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total Claims</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('I')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Institutional</a>
-                        <a class="nav-item nav-link" id="nav-contact-tab" onClick={() => this.handleSort('P')} data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Professional</a>
-                    </div>
-                </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"></div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
-                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"></div>
-                </div>
-            </div>
-        )
     }
 
     renderList() {
@@ -467,7 +411,7 @@ export class RealTimeDashboard extends React.Component {
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
                 ?
-                <div className="col summary-container">
+                <div className="col-2 summary-container">
                     <div className="summary-header">{item.name}</div>
                     <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 </div>
@@ -616,9 +560,8 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: 'var(--main-bg-color)',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
+                <h5 style={{ color: 'var(--main-bg-color)',fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
                 {this.renderTopbar()}
-                {this.tab()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}
             </div>

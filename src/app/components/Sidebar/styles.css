@@ -1,17 +1,31 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-
+@import "../../containers/color.css"; 
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+    background: var(--white-background);
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+  }
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+
+::-webkit-scrollbar-thumb {
+    background: var(--filterColor); 
+    border-radius: 10px;
+  }
 
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
-    color: #000000;
+    color: var(--black-color);
 }
 
 a, a:hover, a:focus {
@@ -20,21 +34,13 @@ a, a:hover, a:focus {
     transition: all 0.3s;
 }
 
-#sidebar {
-    /* don't forget to add all the previously mentioned styles here too */
-    background: #fff;
-    color: #000000;
-    transition: all 0.3s;
- 
-}
-
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #ffffff;
+    background: var(--white-color);
 }
 
 #sidebar ul p {
-    color: #000000;
+    color: var(--black-color);
     padding: 10px;
 }
 
@@ -44,30 +50,30 @@ a, a:hover, a:focus {
     display: block;
 }
 #sidebar ul li a:hover {
-    color: #139DC9;
-    background: #fff;
+    color: var(--main-bg-color);
+    background: var(--white-color);
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
-    color: #000000;
-    background: #fff;
+    color: var(--black-color);
+    background: var(--white-color);
 }
 ul ul a {
     font-size: 12px !important;
     padding-left: 20px !important;
-    background: #ffffff;
+    background: var(--white-color);
 }
 
 #sidebar {
     left: 0;
-    margin-bottom: 24px;
+    padding-bottom: 70px;
     height: 100%;
     z-index: 999;
-    background: #fff;
-    color: #000;
-    overflow: scroll;
+    background: var(--white-color);
+    color: var(--black-color);
+    overflow: auto;
     transition: all 0.3s;
-    /* position: fixed; */
+    position: fixed;
 }
 
 .padding{
@@ -76,7 +82,7 @@ ul ul a {
 }
 .underline{
     height : 2;
-    background-color: #139DC9;
+    background-color: var(--main-bg-color);
     margin-left: 12px !important;
     margin-right: 12px !important;
 }
@@ -85,7 +91,7 @@ ul ul a {
 }
 #tabs{
     padding-top: 12px;
-    background-color: 'white';
+    background-color: var(--white-color);
 }
 .nopadding{
     padding: 0px;
@@ -93,12 +99,11 @@ ul ul a {
 .smaller-font{
     font-size: 14px;
     text-align: center;
-    color: #000
+    color: var(--black-color)
 }
 .background{
-    background-color: #f4f5f4;
-    /* padding-top: 64px; */
+    background-color: var(--background-color);
 }
 .white-background{
-    background-color: #ffffff;
+    background-color: var(--white-color);
 }
