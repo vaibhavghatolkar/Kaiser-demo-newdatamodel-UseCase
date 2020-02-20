@@ -52,6 +52,10 @@ import {RealTimeDashboard} from './app/containers/RealTime_837_Claim/RealTimeDas
 import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
 import { Files_837 } from './app/containers/Files_837'
 import { MenuManagement } from './app/containers/Menu_Management'
+import { StatewiseTradingPartner } from './app/containers/StatewiseTradingPartner'
+import { EncounterDashboard } from './app/containers/Encounter/EncounterDashboard'
+import { EncounterDetails } from './app/containers/Encounter/EncounterDetails'
+
 import { DynamicSidebar } from './app/components/DynamicSidebar';
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
 const $ = window.$;
@@ -72,6 +76,7 @@ class PrivateRoute extends React.Component {
 
             loggedIn,
             timeout:900000,
+            //  timeOut: 10000,
             isTimedOut: false
             // timeOut,
         };
@@ -113,7 +118,7 @@ class PrivateRoute extends React.Component {
       onIdle(e) {
         // console.log('user is idle', e)
         const isTimedOut = this.state.isTimedOut
-        
+
         if (isTimedOut) {
             localStorage.clear()
             window.location.reload()
@@ -137,7 +142,7 @@ class PrivateRoute extends React.Component {
             element={document}
             onActive={this.onActive}
             onIdle={this.onIdle}
-            onAction={this.onAction}
+            // onAction={this.onAction}
             debounce={250}
             timeout={this.state.timeout} />
        
@@ -153,7 +158,7 @@ class PrivateRoute extends React.Component {
                         handleFlag={this.handleFlag}
                         />
                 </div>
-                <div className="col-10 container-fluid" style={{height : $(window).height()}}>
+                <div className="col-10 container-fluid" style={{ minHeight: '100vh'}}>
                     <Route exact path="/">
                     {this.state.loggedIn == true ? 
                     
@@ -161,8 +166,8 @@ class PrivateRoute extends React.Component {
                         pathname: '/'+ Strings.RealTime270, state: { data } }} />:  <Redirect to="/" />}
                     </Route> 
                     {/* <Route exact path="/" component={RealTime276} /> */}
-                    <Route path={'/' + Strings.claimsDashboard} component={Claims} />
-                    <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
+                    {/* <Route path={'/' + Strings.claimsDashboard} component={Claims} /> */}
+                    <Route path={'/'+ Strings.tradingPartnerConfiguration} component={StatewiseTradingPartner} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
                     {/* <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
                     <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} /> */}
@@ -222,6 +227,8 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
                     <Route path={'/'+ Strings.Files_837} component={Files_837} />
                     <Route path={'/'+ Strings.MenuManagement} component={MenuManagement} />
+                    <Route path={'/'+ Strings.EncounterDashboard} component={EncounterDashboard} />
+                    <Route path={'/'+ Strings.EncounterDetails} component={EncounterDetails} />
                     
                     <Route path={'/'+ Strings.claimPayment_835} component={ClaimPaymentDashboard} />
                        

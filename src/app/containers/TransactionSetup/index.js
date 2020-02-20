@@ -13,6 +13,7 @@ export class TransactionSetup extends React.Component {
             Transaction_Type: '',
             Companion_Guide:'',
             Acceptance_Criteria:'',
+            Communication_Type:'',
             
         };
        
@@ -40,14 +41,14 @@ export class TransactionSetup extends React.Component {
     getData() {
         let query = `{
       
-            Trading_PartnerList { 
-                ID 
+            Trading_PartnerList (Transaction:"TradingPartner") { 
+                 
                 Trading_Partner_Name 
             }
            
         }`
 
-          fetch(Urls.base_url, {
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -85,10 +86,12 @@ export class TransactionSetup extends React.Component {
             'Transaction_Type :"'+this.state.Transaction_Type+'"'+
             'Acceptance_Criteria :"'+this.state.Acceptance_Criteria+'"'+
             'Campanion_Guide :"'+this.state.Companion_Guide+'"'+
+            'Communication_Type :"'+this.state.Communication_Type+'"'+
+            
              ')'+
 '}'
 
-
+         console.log(query)
         fetch(Urls.base_url, {
        method: 'POST',
        headers: {
@@ -100,8 +103,11 @@ export class TransactionSetup extends React.Component {
          
        })
      })
-       .then(r => r.json())
-       .then(data => console.log('data returned:', data));
+     .then(r => r.json())
+     .then(data => alert(data.data.SP_Save_TransactionSetup))
+     setTimeout(() => {
+        window.location.reload()
+    }, 1000)
       }
     ChangeTradingPartner(event){
         
@@ -117,9 +123,10 @@ export class TransactionSetup extends React.Component {
             Companion_Guide
             Acceptance_Criteria
             Trading_Partner         
+            Communication_Type
            
           }}`
-          fetch(Urls.base_url, {
+          fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -130,11 +137,12 @@ export class TransactionSetup extends React.Component {
             .then(res => res.json())
             .then(r => {
                // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
-               console.log(r.data.TransactionSetup[0].Transaction_Type)
+               console.log(r.data.TransactionSetup[0])
                 this.setState({
                     Transaction_Type: r.data.TransactionSetup[0].Transaction_Type,
                     Companion_Guide: r.data.TransactionSetup[0].Companion_Guide,
                     Acceptance_Criteria: r.data.TransactionSetup[0].Acceptance_Criteria,
+                    Communication_Type: r.data.TransactionSetup[0].Communication_Type,
                 })
             })
             .catch(err => {
@@ -150,9 +158,12 @@ export class TransactionSetup extends React.Component {
             <div>
                 {
                     <div>
-                        <div>
+                           <div>
+                        <label style={{color:"#139DC9" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Transaction Setup</label>
+                        </div><br></br>
+                        {/* <div>
                             <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Transaction Setup</p>
-                        </div>
+                        </div> */}
                         <div className="row">
 
                             <div className="form-group col-sm-3">
@@ -200,6 +211,14 @@ export class TransactionSetup extends React.Component {
                                                     <option selected={this.state.Acceptance_Criteria == 'Full Reject' ? 'selected' : ''} value="Full Reject">Full Reject</option>
                                                 </select>
                                             </div>
+                                            <div className="form-group col-sm-3">
+                                                    <label className="list-header1">Communication Type</label>
+                                                    <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
+                                                        <option value="0">Select Communication</option>
+                                                        <option selected={this.state.Communication_Type == "SFTP" ? "selected" : ''} value="SFTP">SFTP</option>
+                                                        <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
+                                                    </select>
+                                                </div>
                                         </div>
 
                                         <div className="row">

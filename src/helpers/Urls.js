@@ -1,10 +1,10 @@
-// let base_url = 'http://localhost:4000'
+let base_url = 'http://localhost:4000'
 // let base_url = 'http://10.0.1.71:30508'
-let base_url = 'http://10.0.1.248:30508'
+// let base_url = 'http://10.0.1.248:30508'
 const Urls = {
-    // base_url : 'http://localhost:4000/graphQl',
+    base_url : 'http://localhost:4000/graphQl',
     // base_url : 'http://10.0.1.71:30508/graphQl',
-    base_url : 'http://10.0.1.248:30508/graphQl',
+    // base_url : 'http://10.0.1.248:30508/graphQl',
     eligibility_url : base_url + '/eligibility',
     common_data : base_url + '/common_data',
     claimstatus : base_url + '/claimstatus',
@@ -19,6 +19,7 @@ const Urls = {
     claim_processing : base_url + '/claim_processing',
     real_time_claim_details : base_url + '/real_time_claim_details',
     tradingPartner : base_url + '/tradingPartner',
+    TradingPartner : base_url + '/TradingPartner',
 }
 
 export default Urls;

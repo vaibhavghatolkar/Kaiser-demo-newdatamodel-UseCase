@@ -50,12 +50,12 @@ export class ClaimPaymentDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            pielabels: [],
-            pievalues: [],
-            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
-            endDate: moment().format('YYYY-MM-DD'),
+            pielabels : [],
+            pievalues : [],
+            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
+            endDate : moment().format('YYYY-MM-DD'),
             providerName: '',
-            chartType: 'Weekwise',
+            chartType: 'Datewise',
             selectedTradingPartner: '',
             State: '',
             Months: 0,
@@ -494,9 +494,9 @@ export class ClaimPaymentDashboard extends React.Component {
                                     this.getData()
                                 }, 50);
                             }}
-                        >
-                            <option value="1">Last week</option>
-                            <option selected="selected" value="2">Last 30 days</option>
+                            >
+                            <option selected="selected" value="1">Last week</option>
+                            <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option value="2">Last year</option>

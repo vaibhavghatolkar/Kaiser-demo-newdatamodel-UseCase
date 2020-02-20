@@ -116,7 +116,7 @@ export class TradingPartnerConfiguration extends React.Component {
         })
         .then(res => res.json())
             .then(res => {
-                 console.log('Data : ',res)
+                 
                 this.setState({
                     tradingpartner: res.data.Trading_PartnerList
                 })
@@ -534,7 +534,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                                 <div className="form-group col-sm-3" style={{ marginRight: "500px" }}>
                                                     <label>
                                                         ID
-                            </label>
+                                                   </label>
                                                     <input type="text" className="list-header1 form-control" value={ this.state.Authorization_Info_ID == null ? '' : this.state.Authorization_Info_ID } onChange={(e) => this.onChangeName(e, 'Authorization_Info_ID')} />
                                                 </div>
 
@@ -682,7 +682,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                         <div className="panel-body">
                                         <br/>
                                             <div className="row">
-                                                <div className="form-group col">
+                                                <div className="form-group col" style={{display:"none"}}>
                                                     <label className="list-header1">Communication Type</label>
                                                     <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
                                                         <option value="0">Select Communication</option>
@@ -690,22 +690,22 @@ export class TradingPartnerConfiguration extends React.Component {
                                                         <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
                                                     </select>
                                                 </div>
-                                                <div className="form-group checkbox center col" style={{marginTop: "4px"}}>
+                                                <div className="form-group col-sm-3" style={{marginTop: "4px"}}>
                                                     <label className="list-header1">
                                                         Use Default Settings<br></br>
                                                         <input type="checkbox" checked={this.state.Use_Default_Settings == true ? "checked" : ''} 
                                                         onChange={(e) => {this.changeCheckbox(e, 'Use_Default_Settings')}}
-                                                        className="checkbox-margin" name="defaultSettings" value="" />
+                                                        className="checkbox-margin" name="defaultSettings" value="" style={{marginLeft:"50px"}} />
                                                     </label>
                                                 </div>
-                                                <div className="form-group list-header1 col">
+                                                <div className="form-group col-sm-3">
                                                     <label className="list-header1">
                                                         Host
                             </label>
-                                                    <input type="text" className="form-control list-header1" value={ this.state.Host } onChange={(e) => this.onChangeName(e, 'Host')} />
+                                                    <input type="text"  className="form-control list-header1" value={ this.state.Host } onChange={(e) => this.onChangeName(e, 'Host')} />
                                                 </div>
 
-                                                <div className="form-group list-header1 col" style={{ marginRight: "20px" }}>
+                                                <div className="form-group col-sm-3" style={{ marginRight: "20px" }}>
                                                     <label className="list-header1">
                                                         Port
                             </label>

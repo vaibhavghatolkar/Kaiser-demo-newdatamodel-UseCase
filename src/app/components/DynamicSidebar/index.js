@@ -117,6 +117,8 @@ export class DynamicSidebar extends React.Component {
         else if (key == 46){ name = Strings.MenuCreate } 
         else if (key == 47){ name = Strings.ChangePassword } 
         else if (key == 48){ name = Strings.MenuManagement } 
+        else if (key == 53){ name = Strings.EncounterDashboard } 
+        else if (key == 54){ name = Strings.EncounterDetails } 
 
         else if (key == 50){ name = Strings.claimPayment_835 } 
         else if (key == 51){ name = Strings.MenuManagement } 
@@ -190,7 +192,13 @@ export class DynamicSidebar extends React.Component {
                 addon = '/total'
             } else if (element.key == Strings.EnrollmentError) {
                 addon = '/error'
-            } else {
+            } 
+            else if (element.key == Strings.EncounterDetails) {
+                data = [
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
+                ]
+            } 
+            else {
                 addon = ''
             }
 

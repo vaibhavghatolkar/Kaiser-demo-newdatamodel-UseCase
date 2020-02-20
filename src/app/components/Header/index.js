@@ -1,7 +1,6 @@
 import React from 'react'
 import './styles.css'
-import "../../containers/color.css"; 
-import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
+import "../../containers/color.css";
 
 export class Header extends React.Component {
 
@@ -11,8 +10,8 @@ export class Header extends React.Component {
         window.location.reload()
     }
 
-    changePassword(){
-       
+    changePassword() {
+
     }
 
     render() {
@@ -21,16 +20,13 @@ export class Header extends React.Component {
                 <p className="header_text">HiPaaS</p>
                 {
                     localStorage.getItem('UserId') ?
-
-                        <UncontrolledDropdown style={{ float: 'right', marginTop: '-30px', }}>
-                            <DropdownToggle style={{ backgroundColor: 'var(--main-bg-color)', border: 'var(--main-bg-color)'}}>
-                                <img src={require('../Images/user.png')} style={{ width: '25px' }} />
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem onClick={this.changePassword}>Change Password</DropdownItem>
-                                <DropdownItem onClick={this.logout}>Logout</DropdownItem>
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
+                        <div class="dropdown" style={{ float: 'right', marginTop: '-30px' }}>
+                            <img src={require('../Images/user.png')} style={{ width: '25px' }} />
+                            <div class="dropdown-content">
+                                <a onClick={this.changePassword}>Change Password</a>
+                                <a onClick={this.logout}>Logout</a>
+                            </div>
+                        </div>
                         : ''
                 }
 
