@@ -40,7 +40,8 @@ export class EditConfiguration extends React.Component {
             Severity: '',
             valuerange: '',
             MinValue: '',
-            MaxValue: ''
+            MaxValue: '',
+            Min_Length:"",
 
 
         };
@@ -361,11 +362,13 @@ export class EditConfiguration extends React.Component {
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Max length
+                                        <label className="list-header" style={{marginRight:"90px"}}>
+                                            Min/Max length
                                         </label>
-                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} />
+                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{width:"105px"}}/>
+                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{width:"105px"}} />
                                     </div>
+                                    
                                     {
                                         item == 0
                                             ?
@@ -565,6 +568,8 @@ export class EditConfiguration extends React.Component {
             'Severity  : "' + this.state.Severity + '" ' +
             'is_active  : true ' +
             'is_condition  : true ' +
+            'Min_Length  :"' + this.state.Min_Length + '" ' +
+            
             'Condition : "")' +
 
             '}'
@@ -587,9 +592,9 @@ export class EditConfiguration extends React.Component {
 
             )
 
-        // setTimeout(() => {
-        //     window.location.reload()
-        // }, 1000)
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000)
 
     }
     renderList() {
