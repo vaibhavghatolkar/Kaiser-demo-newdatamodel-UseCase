@@ -384,8 +384,8 @@ export class StatewiseTradingPartner extends React.Component {
                     <td>{d.state}</td>
                     <td>{d.Transaction_Code}</td>
 
-                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displaydata} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
-                    <td><img src={require('../../components/Images/trash.png')} onClick={this.Inactive} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
+                    <td className="clickable"><img src={require('../../components/Images/pencil.png')} onClick={this.displaydata} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
+                    <td className="clickable"><img src={require('../../components/Images/trash.png')} onClick={this.Inactive} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
                 </tr>
             )
         });
@@ -499,9 +499,9 @@ export class StatewiseTradingPartner extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className="" data-toggle="collapse" href="#BasicX12Options1">
+                                <div className="clickable" data-toggle="collapse" href="#BasicX12Options1">
                                     <span style={{ fontSize: "15px", color: "#139DC9", fontWeight: "500", marginLeft: "30px" }}>
-                                        Serach
+                                        Search
        </span>
                                 </div>
                                 <div id="BasicX12Options1" className="collapse" >
