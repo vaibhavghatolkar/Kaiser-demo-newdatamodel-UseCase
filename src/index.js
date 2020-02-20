@@ -72,6 +72,7 @@ class PrivateRoute extends React.Component {
 
             loggedIn,
             timeout:900000,
+            //  timeOut: 10000,
             isTimedOut: false
             // timeOut,
         };
@@ -113,7 +114,7 @@ class PrivateRoute extends React.Component {
       onIdle(e) {
         // console.log('user is idle', e)
         const isTimedOut = this.state.isTimedOut
-        
+
         if (isTimedOut) {
             localStorage.clear()
             window.location.reload()
@@ -137,7 +138,7 @@ class PrivateRoute extends React.Component {
             element={document}
             onActive={this.onActive}
             onIdle={this.onIdle}
-            onAction={this.onAction}
+            // onAction={this.onAction}
             debounce={250}
             timeout={this.state.timeout} />
        
@@ -153,7 +154,7 @@ class PrivateRoute extends React.Component {
                         handleFlag={this.handleFlag}
                         />
                 </div>
-                <div className="col-10 container-fluid" style={{height : $(window).height()}}>
+                <div className="col-10 container-fluid" style={{ minHeight: '100vh'}}>
                     <Route exact path="/">
                     {this.state.loggedIn == true ? 
                     
