@@ -207,7 +207,10 @@ gettranaction(){
         })
     }
 
-
+    ChangeTradingPartner(event){
+        alert(event)
+    }
+    
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {

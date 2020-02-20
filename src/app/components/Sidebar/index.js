@@ -37,13 +37,13 @@ export class Sidebar extends React.Component {
             ],
             tradingPartner: [
                 { value: 'Trading Partner', key: 'tradingPartnerConfiguration' },
-                // { value: 'Transaction Setup', key: 'transactionSetup' },
+                { value: 'Transaction Setup', key: 'transactionSetup' },
                 // { value: 'Configure Custom Edit', key: 'editConfiguration' },
                 { value: 'View Custom Edits', key: 'ViewCustomEdits' },
                 // { value: 'Covered', key: 'covered' },
                 // { value: 'Non Covered', key: 'noncovered' },
                 // { value: 'TP Agreements' },
-                // { value: 'Companion Guide', key: 'companionGuide' },
+                { value: 'Companion Guide', key: 'companionGuide' },
                 // { value: 'Manage Rule Set' },
             ],
             RealTime270: [

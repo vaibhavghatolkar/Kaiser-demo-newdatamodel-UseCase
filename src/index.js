@@ -52,7 +52,13 @@ import {RealTimeDashboard} from './app/containers/RealTime_837_Claim/RealTimeDas
 import {ClaimProcessingSummary} from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
 import { Files_837 } from './app/containers/Files_837'
 import { MenuManagement } from './app/containers/Menu_Management'
+import { StatewiseTradingPartner } from './app/containers/StatewiseTradingPartner'
+import { EncounterDashboard } from './app/containers/Encounter/EncounterDashboard'
+import { EncounterDetails } from './app/containers/Encounter/EncounterDetails'
+
 import { DynamicSidebar } from './app/components/DynamicSidebar';
+
+
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */}
 class PrivateRoute extends React.Component {
@@ -162,7 +168,7 @@ class PrivateRoute extends React.Component {
                     </Route> 
                     {/* <Route exact path="/" component={RealTime276} /> */}
                     <Route path={'/' + Strings.claimsDashboard} component={Claims} />
-                    <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
+                    <Route path={'/'+ Strings.tradingPartnerConfiguration} component={StatewiseTradingPartner} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
                     {/* <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
                     <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} /> */}
@@ -222,7 +228,8 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
                     <Route path={'/'+ Strings.Files_837} component={Files_837} />
                     <Route path={'/'+ Strings.MenuManagement} component={MenuManagement} />
-                       
+                    <Route path={'/'+ Strings.EncounterDashboard} component={EncounterDashboard} />
+                    <Route path={'/'+ Strings.EncounterDetails} component={EncounterDetails} />
   {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
                 
 

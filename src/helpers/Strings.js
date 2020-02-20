@@ -13,7 +13,7 @@ const Strings = {
     ACK_MANAGEMENT : 'ackMng',
 
     claimsDashboard: 'claimsDashboard',
-    tradingPartnerConfiguration : 'tradingPartnerConfiguration',
+    tradingPartnerConfiguration : 'TradingPartner',
     claimsDashboard_835 : 'claimsDashboard_835',
     claimsDashboard_834 : 'claimsDashboard_834',
     claimsDashboard_834_details : 'claimsDashboard_834_details',
@@ -65,7 +65,10 @@ const Strings = {
     RealTimeDashboard: 'RealTimeDashboard',
     ClaimProcessingSummary: 'ClaimProcessingSummary',
     Files_837 : 'Files_837',
-    MenuManagement: 'MenuManagement'
+    MenuManagement: 'MenuManagement',
+    TradingPartner:'TradingPartner',
+    EncounterDashboard:'EncounterDashboard',
+    EncounterDetails:'EncounterDetails',
 }
 
 export default Strings;
