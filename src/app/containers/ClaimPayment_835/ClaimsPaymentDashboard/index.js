@@ -88,7 +88,7 @@ export class ClaimPaymentDashboard extends React.Component {
         this.getData()
     }
 
-    getCommonData(){
+    getCommonData() {
         let query = `{
             Trading_PartnerList(Transaction:"Claim837RT") {
                 Trading_Partner_Name 
@@ -99,44 +99,48 @@ export class ClaimPaymentDashboard extends React.Component {
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-getData() {
+    getData() {
         let chartType = this.state.chartType
-        if(!chartType){
+        if (!chartType) {
             chartType = "Monthwise"
         }
-        
+
         let query = `{
             Claim835Dashboard {
               Claims837
               Claims835
               PendingClaims835
             }
-            Claim835Status {
-              ClaimStatus
-              Total
+            chart1:Claim835Status(ChartType: "PaymenttypeWise") {
+                X_axis
+                Y_axis
+            }
+            chart2:Claim835Status(ChartType: "StatusWise") {
+                X_axis
+                Y_axis
             }
         }`
 
         console.log(query)
-        fetch(Urls.real_time_claim , {
+        fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,27 +155,27 @@ getData() {
                 let claimLabels = []
                 let pielabels = []
                 let pievalues = []
-                
-                if(data.Claim835Dashboard && data.Claim835Dashboard.length > 0){
+
+                if (data.Claim835Dashboard && data.Claim835Dashboard.length > 0) {
                     summary = [
                         { name: '837 Claims', value: data.Claim835Dashboard[0].Claims837 ? data.Claim835Dashboard[0].Claims837 : '' },
                         { name: '835 Claims', value: data.Claim835Dashboard[0].Claims835 ? data.Claim835Dashboard[0].Claims835 : '' },
-                        { name: 'Pending Claims', value: data.Claim835Dashboard[0].PendingClaims835 ? data.Claim835Dashboard[0].PendingClaims835 : ''   },
+                        { name: 'Pending Claims', value: data.Claim835Dashboard[0].PendingClaims835 ? data.Claim835Dashboard[0].PendingClaims835 : '' },
                     ]
                 }
 
-                if(data.Claim835Status && data.Claim835Status.length > 0){
+                if (data.Claim835Status && data.Claim835Status.length > 0) {
                     data.Claim835Status.forEach(element => {
-                        pielabels.push(element.ClaimStatus)
-                        pievalues.push(element.Total)
+                        pielabels.push(element.X_axis)
+                        pievalues.push(element.Y_axis)
                     });
                 }
-        
+
                 this.setState({
                     summaryList: summary,
-                    claimLabels : claimLabels,
-                    pielabels : pielabels,
-                    pievalues : pievalues,
+                    claimLabels: claimLabels,
+                    pielabels: pielabels,
+                    pievalues: pievalues,
                 })
             })
             .catch(err => {
@@ -200,7 +204,7 @@ getData() {
         )
     }
 
-    getBarData(labelArray, dataArray, color){
+    getBarData(labelArray, dataArray, color) {
         let bardata = {
             labels: labelArray,
             showFile: false,
@@ -239,7 +243,7 @@ getData() {
             }],
             flag: ''
         };
-        
+
         return (
             <div className="row chart-div">
                 <div className="chart-container chart">
@@ -259,7 +263,7 @@ getData() {
                 </div>
                 <div className="chart-container chart">
                     <Bar
-                        data={this.getBarData(this.state.claimLabels,this.state.ClaimBarChart, "#83D2B4")}
+                        data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={100}
                         height={60}
                         options={{
@@ -270,12 +274,12 @@ getData() {
                                 xAxes: [{
                                     ticks: {
                                         fontSize: 10,
-                                        userCallback: function(label, index, labels) {
+                                        userCallback: function (label, index, labels) {
                                             // when the floored value is the same as the value we have a whole number
                                             if (Math.floor(label) === label) {
                                                 return label;
                                             }
-                       
+
                                         },
                                     }
                                 }]
@@ -330,7 +334,7 @@ getData() {
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
-            if(!element){
+            if (!element) {
                 return
             }
             row.push(<option value="">{element.Trading_Partner_Name}</option>)
@@ -356,14 +360,14 @@ getData() {
         }, 50);
     }
 
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.setState({
-                [key] : ''
+                [key]: ''
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key]: event.target.options[event.target.selectedIndex].text
             })
         }
 
@@ -372,16 +376,16 @@ getData() {
         }, 50);
     }
 
-    MonthsEvent(event, key){
+    MonthsEvent(event, key) {
         this.setState({
-            [key] : event.target.options[event.target.selectedIndex].value
+            [key]: event.target.options[event.target.selectedIndex].value
         })
         setTimeout(() => {
             this.getData()
         }, 50);
     }
 
-    renderSummaryDetails(){
+    renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag
@@ -391,53 +395,53 @@ getData() {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-        
+
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
             let data = []
-            if(item.name == 'Accepted Claims'){
+            if (item.name == 'Accepted Claims') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if(item.name == 'Rejected Claims'){
+            } else if (item.name == 'Rejected Claims') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
             } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type : type },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
-                ?
-                <div className="col-2 summary-container">
-                    <div className="summary-header">{item.name}</div>
-                    <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                </div>
-                :
-                <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col-2 summary-container">
-                    <div>
+                    ?
+                    <div className="col-2 summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
-                </Link>
+                    :
+                    <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col-2 summary-container">
+                        <div>
+                            <div className="summary-header">{item.name}</div>
+                            <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        </div>
+                    </Link>
             )
         });
 
-        return(
+        return (
             <div className="row padding-left">
                 {row}
             </div>
         )
     }
 
-    onHandleChange(e){
+    onHandleChange(e) {
         clearTimeout(val)
         let providerName = e.target.value
         val = setTimeout(() => {
             this.setState({
-                providerName : providerName
+                providerName: providerName
             }, () => {
                 this.getData()
             })
@@ -450,40 +454,40 @@ getData() {
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
-                        <select 
+                        <select
                             className="form-control list-dashboard" id="state"
                             onChange={(event) => {
                                 let day = 0
                                 let chartType = ''
                                 let selected_val = event.target.options[event.target.selectedIndex].text
 
-                                if(selected_val == 'Last week'){
+                                if (selected_val == 'Last week') {
                                     day = 7
                                     chartType = 'Datewise'
-                                } else if(selected_val == 'Last 30 days'){
+                                } else if (selected_val == 'Last 30 days') {
                                     day = 30
                                     chartType = 'Weekwise'
-                                } else if(selected_val == 'Last 90 days'){
+                                } else if (selected_val == 'Last 90 days') {
                                     day = 90
-                                } else if(selected_val == 'Last 180 days'){
+                                } else if (selected_val == 'Last 180 days') {
                                     day = 180
-                                } else if(selected_val == 'Last year'){
+                                } else if (selected_val == 'Last year') {
                                     day = 365
                                 }
 
-                                let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
+                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
                                 let endDate = moment().format('YYYY-MM-DD')
 
-                                if(!selected_val){
+                                if (!selected_val) {
                                     startDate = ''
                                     endDate = ''
                                 }
 
                                 this.setState({
-                                    startDate : startDate,
+                                    startDate: startDate,
                                     endDate: endDate,
                                     selected_val: selected_val,
-                                    chartType : chartType
+                                    chartType: chartType
                                 })
 
                                 setTimeout(() => {
@@ -529,13 +533,13 @@ getData() {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text" 
+                        <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner" 
+                        <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
                             }}>
@@ -560,7 +564,7 @@ getData() {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: 'var(--main-bg-color)',fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
+                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}

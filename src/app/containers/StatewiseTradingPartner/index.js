@@ -24,13 +24,13 @@ export class StatewiseTradingPartner extends React.Component {
             ID: 0,
             page: 1,
             count: 0,
-            Search_Senderid:'',
-            Search_Sendername:'',
-            Search_PayerID:'',
-            Search_PayerName:'',
-            Search_State:"",
-            Search_Tran_Type:"",
-            
+            Search_Senderid: '',
+            Search_Sendername: '',
+            Search_PayerID: '',
+            Search_PayerName: '',
+            Search_State: "",
+            Search_Tran_Type: "",
+
         };
 
         this.displaydata = this.displaydata.bind(this)
@@ -46,7 +46,7 @@ export class StatewiseTradingPartner extends React.Component {
 
 
     gettranaction() {
-        
+
         let query =
             `{
                 TradingPartnerlist (ID:0 page:` + this.state.page + ` OrderBy:"" Transaction:"` + this.state.Search_Tran_Type + `" State:"` + this.state.Search_State + `" PayerID:"` + this.state.Search_PayerID + `" PayerName:"` + this.state.Search_PayerName + `"  ISA06_ID:"` + this.state.Search_Senderid + `" ISA06_Name:"` + this.state.Search_Sendername + `" ISA08_ID :"" ISA08_Name:"") { 
@@ -85,7 +85,7 @@ export class StatewiseTradingPartner extends React.Component {
                 let data = res.data
 
                 let iterator = data.TradingPartnerlist
-                console.log("ejfsdfhdj" , iterator)
+                console.log("ejfsdfhdj", iterator)
                 iterator.forEach(item => {
                     array.push({
                         ID: item.ID,
@@ -101,9 +101,9 @@ export class StatewiseTradingPartner extends React.Component {
                     })
                 })
 
-           
+
                 if (data && data.TradingPartnerlist.length > 0) {
-                
+
                     count = Math.floor(data.TradingPartnerlist[0].Rcount / 10)
                     if (data.TradingPartnerlist[0].Rcount % 10 > 0) {
                         count = count + 1
@@ -111,7 +111,7 @@ export class StatewiseTradingPartner extends React.Component {
                 }
                 this.setState({
                     TradingPartnerList: array,
-                    count:count
+                    count: count
                     // tradingpartner: res.data.Trading_PartnerList
                 })
             })
@@ -156,7 +156,7 @@ export class StatewiseTradingPartner extends React.Component {
                 StateCode
             }
        }`
-       console.log(query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -181,7 +181,7 @@ export class StatewiseTradingPartner extends React.Component {
         let page = data.selected + 1
         this.setState({
             page: page,
-           
+
         })
 
         setTimeout(() => {
@@ -207,7 +207,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.StateList.forEach(element => {
-            row.push(<option  value={element.StateCode}>{element.State}</option>)
+            row.push(<option value={element.StateCode}>{element.State}</option>)
         })
         return row
 
@@ -221,7 +221,7 @@ export class StatewiseTradingPartner extends React.Component {
         return row
 
     }
-     gettrans() {
+    gettrans() {
 
         let row = []
         this.state.TransactionMasterList.forEach(element => {
@@ -279,10 +279,10 @@ export class StatewiseTradingPartner extends React.Component {
                 <td className="table-head-text">Sender Id(ISA06)</td>
                 <td className="table-head-text">Payer Name</td>
                 <td className="table-head-text"> Payer ID</td>
-                <td className="table-head-text list-item-style">Receiver Name</td>
-                <td className="table-head-text list-item-style">Receiver Id(ISA08)</td>
-                <td className="table-head-text list-item-style">State</td>
-                <td className="table-head-text list-item-style">Transaction Type</td>
+                <td className="table-head-text">Receiver Name</td>
+                <td className="table-head-text">Receiver Id(ISA08)</td>
+                <td className="table-head-text">State</td>
+                <td className="table-head-text">Transaction Type</td>
                 <td style={{ width: "10px" }}></td>
                 <td style={{ width: "10px" }}></td>
             </tr>
@@ -335,7 +335,7 @@ export class StatewiseTradingPartner extends React.Component {
            }`
 
 
-console.log(query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -358,7 +358,7 @@ console.log(query)
                     ISA_08_Name: res.data.TradingPartnerlist[0].ISA08_Name,
                     ISA_06_Name: res.data.TradingPartnerlist[0].ISA06_Name,
                     ID: res.data.TradingPartnerlist[0].ID,
-                    
+
 
 
                 })
@@ -384,8 +384,8 @@ console.log(query)
                     <td>{d.state}</td>
                     <td>{d.Transaction_Code}</td>
 
-                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displaydata} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
-                    <td><img src={require('../../components/Images/trash.png')} onClick={this.Inactive} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
+                    <td className="clickable"><img src={require('../../components/Images/pencil.png')} onClick={this.displaydata} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
+                    <td className="clickable"><img src={require('../../components/Images/trash.png')} onClick={this.Inactive} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
                 </tr>
             )
         });
@@ -404,7 +404,7 @@ console.log(query)
                         {row}
                     </tbody>
                 </table>
-                <ReactPaginate 
+                <ReactPaginate
                     previousLabel={'previous'}
                     nextLabel={'next'}
                     breakLabel={'...'}
@@ -437,13 +437,13 @@ console.log(query)
                 <div className="container">
                     <div className="panel-group">
                         <div className="panel panel-default" style={{ border: "1px" }}>
-                            <div className="panel-heading collapsible" style={{ background: "#139DC9", }}  href="#BasicX12Options">
+                            <div className="panel-heading collapsible" style={{ background: "#139DC9", }} href="#BasicX12Options">
                                 <span className="panel-title" style={{ color: "white", fontSize: "12px" }}>
-                                Trading Partner Configuration
+                                    Trading Partner Configuration
        </span>
                             </div>
                             <div id="BasicX12Options"   > <div className=" content">
-                           
+
 
                                 <br />
                                 <div className="row" style={{ marginLeft: "2px" }}>
@@ -498,15 +498,15 @@ console.log(query)
                                         <button type="submit" className="btn light_blue1 btn-xs" style={{ marginRight: "120px" }} onClick={this.handleClick}>Save</button>
                                     </div>
                                 </div>
-                              
-                                <div className=""  data-toggle="collapse" href="#BasicX12Options1">
-                                <span  style={{ fontSize: "15px" ,color: "#139DC9" , fontWeight:"500" , marginLeft:"30px" }}>
-                                  Serach 
+
+                                <div className="clickable" data-toggle="collapse" href="#BasicX12Options1">
+                                    <span style={{ fontSize: "15px", color: "#139DC9", fontWeight: "500", marginLeft: "30px" }}>
+                                        Search
        </span>
-                            </div>
-                            <div id="BasicX12Options1"  className="collapse"  > <div >
-                            <div className="row" >
-                                    {/* <div className="form-group col-sm-2">
+                                </div>
+                                <div id="BasicX12Options1" className="collapse" >
+                                        <div className="row" style={{ marginLeft: "2px" }}>
+                                            {/* <div className="form-group col-sm-2">
                                         <label className="list-header1">Sender Name</label>
                                         <input className="form-control list-dashboard"  id="state"
                             onChange={(e) => {clearTimeout(val)
@@ -521,21 +521,22 @@ console.log(query)
                         />
                         
                                     </div> */}
-                                    <div className="form-group col-sm-2">
-                                        <label className="list-header1">Sender Id(ISA06)</label>
-                                        <input className="form-control list-dashboard"  id="state"
-                            onChange={(e) => {clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ Search_Senderid: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.gettranaction()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                                    </div>
-                                    {/* <div className="form-group col-sm-2">
+                                            <div className="form-group col-sm-2">
+                                                <label className="list-header1">Sender Id(ISA06)</label>
+                                                <input className="form-control list-header1" id="state"
+                                                    onChange={(e) => {
+                                                        clearTimeout(val)
+                                                        let value = e.target.value
+                                                        val = setTimeout(() => {
+                                                            this.setState({ Search_Senderid: value, showDetails: false })
+                                                            setTimeout(() => {
+                                                                this.gettranaction()
+                                                            }, 50);
+                                                        }, 300);
+                                                    }}
+                                                />
+                                            </div>
+                                            {/* <div className="form-group col-sm-2">
                                         <label className="list-header1">Payer Name</label>
                                         <input className="form-control list-dashboard"  id="state"
                             onChange={(e) => {clearTimeout(val)
@@ -549,52 +550,53 @@ console.log(query)
                             }}
                         />
                                     </div> */}
-                                    <div className="form-group col-sm-2">
-                                        <label className="list-header1">Payer Id</label>
-                                        <input className="form-control list-dashboard"  id="state"
-                            onChange={(e) => {clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ Search_PayerID: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.gettranaction()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                                    </div>
-                                    <div className="form-group col-sm-2">
-                                        <label className="list-header1">State</label>
-                                        <select className="form-control list-header1"  onChange={(event) => {
-                                        this.ChangeVal(event, 'Search_State')
-                                        setTimeout(() => {
-                                            this.gettranaction()
-                                        }, 50);
-                                    }} >
-                                            <option value=""></option>
-                                            {this.Search_getoptions()}
-                                        </select>
-                                    </div>
-                                    <div className="form-group col-sm-2">
-                                        <label className="list-header1">Transaction Type</label>
-                                        <select className="form-control list-header1" va id="fao1"
-                                        onChange={(event) => {
-                                            this.ChangeVal(event, 'Search_Tran_Type')
-                                            setTimeout(() => {
-                                                this.gettranaction()
-                                            }, 50);
-                                        }} >>
+                                            <div className="form-group col-sm-2">
+                                                <label className="list-header1">Payer Id</label>
+                                                <input className="form-control list-header1" id="state"
+                                                    onChange={(e) => {
+                                                        clearTimeout(val)
+                                                        let value = e.target.value
+                                                        val = setTimeout(() => {
+                                                            this.setState({ Search_PayerID: value, showDetails: false })
+                                                            setTimeout(() => {
+                                                                this.gettranaction()
+                                                            }, 50);
+                                                        }, 300);
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="form-group col-sm-2">
+                                                <label className="list-header1">State</label>
+                                                <select className="form-control list-header1" onChange={(event) => {
+                                                    this.ChangeVal(event, 'Search_State')
+                                                    setTimeout(() => {
+                                                        this.gettranaction()
+                                                    }, 50);
+                                                }} >
+                                                    <option value=""></option>
+                                                    {this.Search_getoptions()}
+                                                </select>
+                                            </div>
+                                            <div className="form-group col-sm-2">
+                                                <label className="list-header1">Transaction Type</label>
+                                                <select className="form-control list-header1" va id="fao1"
+                                                    onChange={(event) => {
+                                                        this.ChangeVal(event, 'Search_Tran_Type')
+                                                        setTimeout(() => {
+                                                            this.gettranaction()
+                                                        }, 50);
+                                                    }} >>
                                             <option value="" ></option>
-                                            {this.Search_gettrans()}
-                                          
-                                        </select>
+                                                    {this.Search_gettrans()}
+
+                                                </select>
+                                           
+
+                                        </div>
+
                                     </div>
 
                                 </div>
-
-                            </div>
-                            
-                            </div>
                                 {this.renderList()}
                             </div>
                             </div>

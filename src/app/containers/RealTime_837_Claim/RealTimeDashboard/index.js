@@ -264,7 +264,7 @@ export class RealTimeDashboard extends React.Component {
             labels: [
                 'Accepted',
                 'Rejected',
-                'Validating',
+                'Validated',
             ],
             datasets: [{
                 data: [this.state.accepted, this.state.rejected, this.state.inProgress],

@@ -166,7 +166,7 @@ class PrivateRoute extends React.Component {
                         pathname: '/'+ Strings.RealTime270, state: { data } }} />:  <Redirect to="/" />}
                     </Route> 
                     {/* <Route exact path="/" component={RealTime276} /> */}
-                    <Route path={'/' + Strings.claimsDashboard} component={Claims} />
+                    {/* <Route path={'/' + Strings.claimsDashboard} component={Claims} /> */}
                     <Route path={'/'+ Strings.tradingPartnerConfiguration} component={StatewiseTradingPartner} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
                     {/* <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
