@@ -41,7 +41,7 @@ export class EditConfiguration extends React.Component {
             valuerange: '',
             MinValue: '',
             MaxValue: '',
-            Min_Length:"",
+            Min_Length: "",
 
 
         };
@@ -61,7 +61,7 @@ export class EditConfiguration extends React.Component {
         //         $('.alert').show()
         //     }) 
         // });
-       
+
         this.getviewdetails()
         this.gettradingpatner()
         this.operator()
@@ -190,7 +190,7 @@ export class EditConfiguration extends React.Component {
         }
         let query = ''
         let inner_flag = 1
-        
+
         if (flag == 1) {
 
             query = '{segment(flag:"c" transaction:' + '"' + this.state.transaction + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
@@ -275,223 +275,225 @@ export class EditConfiguration extends React.Component {
         let options = this.state.options
         let SegmentItem = this.state.SegmentItem;
         let segementcheck = this.state.SegmentCompYesno + this.state.SegmentItem;
-        
+
         Object.keys(options).map(item => {
-            
+
             row.push(
-               
+
                 <div className="panel-group top-space"   >
-                     <div className="panel-heading collapsible"   style={{ background: "#139DC9" }}>
-                    <span className="panel-title"  style={{ color: "white" }}>Custom Details </span>
-                </div>
-                <div id="CustomDetails" className="panel-collapse content">
-                    <br></br>
-                    <div className="panel panel-default">
-                        <div id="ISAIdentificationOptions">
-                            <div className="panel-body">
-                                <div className="row">
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Rule Name
+                    <div className="panel-heading collapsible" style={{ background: "#139DC9" }}>
+                        <span className="panel-title" style={{ color: "white" }}>Custom Details </span>
+                    </div>
+                    <div id="CustomDetails" className="panel-collapse content">
+                        <br></br>
+                        <div className="panel panel-default">
+                            <div id="ISAIdentificationOptions">
+                                <div className="panel-body">
+                                    <div className="row">
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Rule Name
                                         </label>
-                                        <input type="text" className="list-header1 form-control" value={this.state.RuleName == null ? '' : this.state.RuleName} onChange={(e) => this.onChangeName(e, 'RuleName')} />
-                                    </div>
+                                            <input type="text" className="list-header1 form-control" value={this.state.RuleName == null ? '' : this.state.RuleName} onChange={(e) => this.onChangeName(e, 'RuleName')} />
+                                        </div>
 
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Description
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Description
                                         </label>
-                                        <input type="text" className="list-header form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(e) => this.onChangeName(e, 'Rule_Desc')} />
-                                    </div>
+                                            <input type="text" className="list-header form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(e) => this.onChangeName(e, 'Rule_Desc')} />
+                                        </div>
 
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Validation Level
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Validation Level
                                         </label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Validationlevel')}>
-                                            <option value=""></option>
-                                            <option value="4">SNIP Level 4</option>
-                                            <option value="5">SNIP Level 5</option>
-                                            <option value="6">SNIP Level 6</option>
-                                            <option value="7">SNIP Level 7</option>
-                                            {/* <option value="6">SNIP Level 8</option>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Validationlevel')}>
+                                                <option value=""></option>
+                                                <option value="4">SNIP Level 4</option>
+                                                <option value="5">SNIP Level 5</option>
+                                                <option value="6">SNIP Level 6</option>
+                                                <option value="7">SNIP Level 7</option>
+                                                {/* <option value="6">SNIP Level 8</option>
                                             <option value="7">SNIP Level 4</option> */}
 
-                                        </select>
+                                            </select>
+                                        </div>
+
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Loop Id
+                                        </label>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop').value, item, 1) }}>
+                                                <option value=""></option>
+                                                {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 1) : null}
+                                            </select>
+                                        </div>
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Segment
+                                        </label>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid) }}>
+                                                <option value=""></option>
+                                                {options[item].segmentArray ? this.renderOptions(options[item].segmentArray, 2) : null}
+                                            </select>
+                                        </div>
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Field
+                                        </label>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'FieldId')}>
+                                                <option value=""></option>
+                                                {options[item].elementArray ? this.renderOptions(options[item].elementArray, 3) : null}
+                                            </select>
+                                        </div>
+
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">Usage Req.</label>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Usage_Req')}>
+                                                <option value=""></option>
+                                                <option value="0">Required</option>
+                                                <option value="1">situation</option>
+
+                                            </select>
+                                        </div>
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Min/Max length
+                                            </label>
+                                            <div className="row" style={{marginLeft: "12px"}}>
+                                                <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{ width: "100px" }} />
+                                                <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{ width: "100px" }} />
+                                            </div>
+                                        </div>
+
+                                        {
+                                            item == 0
+                                                ?
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Segment Compare</label>
+                                                    <select className="form-control list-header" onChange={this.SegmentCompYesno} style={{ marginLeft: "10px" }} >
+                                                        <option value=""></option>
+
+                                                        <option value={item}> Yes</option>
+                                                        <option value={item}>No</option>
+
+                                                    </select>
+                                                </div> : ""}
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">Operator</label>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'OperatorId')}>
+                                                <option value=""></option>
+                                                {this.getOperatorMaster()}
+                                            </select>
+                                        </div>
+
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Value
+                                        </label>
+                                            <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Value')} />
+                                        </div>
+                                        {
+                                            this.state.valuerange == 1
+                                                ?
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">
+                                                        Min Value
+                                        </label>
+                                                    <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'MinValue')} />
+                                                </div> : ""}
+                                        {
+                                            this.state.valuerange == 1
+                                                ?
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">
+                                                        Max Value
+                                        </label>
+                                                    <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'MaxValue')} />
+                                                </div> : ""}
+
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">Error Type</label>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
+                                                <option value=""></option>
+                                                <option value="0">TA1</option>
+                                                <option value="1">999</option>
+
+                                            </select>
+                                        </div>
+                                        <div className="form-group col-sm-3">
+                                            <label className="list-header">
+                                                Error Description
+                                        </label>
+                                            <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'ErrorDescription')} />
+                                        </div>
+
+                                        {
+
+                                            segementcheck == "Yes" + item
+                                                ?
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">
+                                                        Loop Id
+                                        </label>
+                                                    <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop1').value, item, 4) }}>
+                                                        <option value=""></option>
+                                                        {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null}
+                                                    </select>
+                                                </div> : ""
+                                        }
+                                        {
+                                            segementcheck == "Yes" + item
+                                                ?
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">
+                                                        Segment
+                                        </label>
+                                                    <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid) }}>
+                                                        <option value=""></option>
+                                                        {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
+                                                    </select>
+                                                </div> : ""}
+
+                                        {
+                                            segementcheck == "Yes" + item
+                                                ? <div className="form-group col-sm-3">
+                                                    <label className="list-header">
+                                                        Field
+                                        </label>
+                                                    <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'FieldId1')}>
+                                                        <option value=""></option>
+                                                        {options[item].elementArray1 ? this.renderOptions(options[item].elementArray1, 3) : null}
+                                                    </select>
+                                                </div> : ""}
+
+                                        {
+                                            item == 0
+                                                ?
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Severity</label>
+                                                    <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Severity')}>
+                                                        <option value=""></option>
+                                                        <option value="0">Fail</option>
+                                                        <option value="1">Warning</option>
+                                                        <option value="2">Skip</option>
+                                                    </select>
+                                                </div> : <div className="form-group col"></div>
+                                        }
+
                                     </div>
-
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Loop Id
-                                        </label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop').value, item, 1) }}>
-                                            <option value=""></option>
-                                            {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 1) : null}
-                                        </select>
-                                    </div>
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Segment
-                                        </label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid) }}>
-                                            <option value=""></option>
-                                            {options[item].segmentArray ? this.renderOptions(options[item].segmentArray, 2) : null}
-                                        </select>
-                                    </div>
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Field
-                                        </label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'FieldId')}>
-                                            <option value=""></option>
-                                            {options[item].elementArray ? this.renderOptions(options[item].elementArray, 3) : null}
-                                        </select>
-                                    </div>
-
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">Usage Req.</label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Usage_Req')}>
-                                            <option value=""></option>
-                                            <option value="0">Required</option>
-                                            <option value="1">situation</option>
-
-                                        </select>
-                                    </div>
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header" style={{marginRight:"90px"}}>
-                                            Min/Max length
-                                        </label>
-                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{width:"105px"}}/>
-                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{width:"105px"}} />
-                                    </div>
-                                    
-                                    {
-                                        item == 0
-                                            ?
-                                            <div className="form-group col-sm-3">
-                                                <label className="list-header">Segment Compare</label>
-                                                <select className="form-control list-header" onChange={this.SegmentCompYesno} style={{ marginLeft: "10px" }} >
-                                                    <option value=""></option>
-
-                                                    <option value={item}> Yes</option>
-                                                    <option value={item}>No</option>
-
-                                                </select>
-                                            </div> : ""}
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">Operator</label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'OperatorId')}>
-                                            <option value=""></option>
-                                            {this.getOperatorMaster()}
-                                        </select>
-                                    </div>
-
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Value
-                                        </label>
-                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Value')} />
-                                    </div>
-                                    {
-                                         this.state.valuerange == 1
-                                            ?
-                                            <div className="form-group col-sm-3">
-                                                <label className="list-header">
-                                                    Min Value
-                                        </label>
-                                                <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'MinValue')} />
-                                            </div> : ""}
-                                    {
-                                       this.state.valuerange == 1
-                                            ?
-                                            <div className="form-group col-sm-3">
-                                                <label className="list-header">
-                                                    Max Value
-                                        </label>
-                                                <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'MaxValue')} />
-                                            </div> : ""}
-
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">Error Type</label>
-                                        <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
-                                            <option value=""></option>
-                                            <option value="0">TA1</option>
-                                            <option value="1">999</option>
-
-                                        </select>
-                                    </div>
-                                    <div className="form-group col-sm-3">
-                                        <label className="list-header">
-                                            Error Description
-                                        </label>
-                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'ErrorDescription')} />
-                                    </div>
-
-                                    {
-
-                                        segementcheck == "Yes" + item
-                                            ?
-                                            <div className="form-group col-sm-3">
-                                                <label className="list-header">
-                                                    Loop Id
-                                        </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop1').value, item, 4) }}>
-                                                    <option value=""></option>
-                                                    {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null}
-                                                </select>
-                                            </div> : ""
-                                    }
-                                    {
-                                        segementcheck == "Yes" + item
-                                            ?
-                                            <div className="form-group col-sm-3">
-                                                <label className="list-header">
-                                                    Segment
-                                        </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid) }}>
-                                                    <option value=""></option>
-                                                    {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
-                                                </select>
-                                            </div> : ""}
-
-                                    {
-                                        segementcheck == "Yes" + item
-                                            ? <div className="form-group col-sm-3">
-                                                <label className="list-header">
-                                                    Field
-                                        </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'FieldId1')}>
-                                                    <option value=""></option>
-                                                    {options[item].elementArray1 ? this.renderOptions(options[item].elementArray1, 3) : null}
-                                                </select>
-                                            </div> : ""}
-
-                                    {
-                                        item == 0
-                                            ?
-                                            <div className="form-group col-sm-3">
-                                                <label className="list-header">Severity</label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Severity')}>
-                                                    <option value=""></option>
-                                                    <option value="0">Fail</option>
-                                                    <option value="1">Warning</option>
-                                                    <option value="2">Skip</option>
-                                                </select>
-                                            </div> : <div className="form-group col"></div>
-                                    }
-
                                 </div>
                             </div>
                         </div>
+                        {/* {this.renderList()} */}
                     </div>
-                    {/* {this.renderList()} */}
-                </div>
                 </div>
             )
         })
@@ -500,7 +502,7 @@ export class EditConfiguration extends React.Component {
             row
         )
     }
-  
+
     operation(isOr) {
         let array = this.state.operation
         array.push(isOr ? 2 : 1)
@@ -569,7 +571,7 @@ export class EditConfiguration extends React.Component {
             'is_active  : true ' +
             'is_condition  : true ' +
             'Min_Length  :"' + this.state.Min_Length + '" ' +
-            
+
             'Condition : "")' +
 
             '}'
@@ -600,7 +602,7 @@ export class EditConfiguration extends React.Component {
     renderList() {
         let row = []
         const data = this.state.customList;
-        
+
         data.forEach((d) => {
             row.push(
                 <tr>
@@ -610,22 +612,22 @@ export class EditConfiguration extends React.Component {
                     <td>{d.condition}</td>
                     <td>{d.value}</td>
                     <td>{d.severity}</td>
-                    <td className="list-item-style"><input type="checkbox" onChange={(e) => {this.changeCheckbox(e)}} value={d.seqid} /></td>
+                    <td className="list-item-style"><input type="checkbox" onChange={(e) => { this.changeCheckbox(e) }} value={d.seqid} /></td>
                 </tr>
             )
         });
 
         return (
             <div>
-                
-                        <table className="table table-bordered claim-list" align="center" style={{ width: '95%' }}>
-                                {/* {this.state.customList && this.state.customList.length > 0 ? this.renderTableHeader() : null} */}
-                                <tbody>
-                                    {row}
-                                </tbody>
-                            </table>
-                        </div>
-                  
+
+                <table className="table table-bordered claim-list" align="center" style={{ width: '95%' }}>
+                    {/* {this.state.customList && this.state.customList.length > 0 ? this.renderTableHeader() : null} */}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+            </div>
+
         );
     }
 
@@ -785,9 +787,9 @@ export class EditConfiguration extends React.Component {
                     <label style={{ color: "#139DC9", fontWeight: "500", marginLeft: "2px", marginTop: "10px", fontSize: '20px' }}>Configure Custom Edits</label>
                     {this.renderTopbar()}
                     {this.renderView()}
-                 
+
                 </div>
-               
+
             </div>
         );
     }
