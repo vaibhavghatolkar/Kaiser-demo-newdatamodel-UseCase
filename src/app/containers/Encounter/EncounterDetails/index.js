@@ -9,15 +9,15 @@ import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 
 var val = ''
-export class EncounterDetails extends React.Component{
-    
-    constructor(props){
+export class EncounterDetails extends React.Component {
+
+    constructor(props) {
         super(props);
         console.log('hello these are the props', props)
-        let flag =props.location.state.data[0].flag
-        if(flag == 'accept'){
+        let flag = props.location.state.data[0].flag
+        if (flag == 'accept') {
             flag = 'Accepted Claims'
-        } else if(flag == 'reject'){
+        } else if (flag == 'reject') {
             flag = 'Rejected Claims'
         } else {
             flag = 'Other'
@@ -30,20 +30,20 @@ export class EncounterDetails extends React.Component{
             lineData: [],
             file: [],
             memberInfo: {},
-            subscriberNo : '',
+            subscriberNo: '',
             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
-            selectedTradingPartner:props.location.state.data[0] &&props.location.state.data[0].selectedTradingPartner != 'n'?props.location.state.data[0].selectedTradingPartner : '',
-            enrollment_type : '',
-            plan_code : '',
-            startDate:props.location.state.data[0] &&props.location.state.data[0].startDate != 'n' ?props.location.state.data[0].startDate : '',
-            endDate:props.location.state.data[0] &&props.location.state.data[0].endDate != 'n' ?props.location.state.data[0].endDate : '',
+            selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            enrollment_type: '',
+            plan_code: '',
+            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
-            claimsList : [],
-            summaryList : [],
+            claimsList: [],
+            summaryList: [],
             showDetails: false,
-            files_list : [],
+            files_list: [],
             errorList: [],
             eventLog: [],
             claimDetails: [],
@@ -53,31 +53,36 @@ export class EncounterDetails extends React.Component{
 
             State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            transactionId:props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
 
             page: 1,
-            count : 0,
-            recount:0,
-            Firstgridpage:1,
+            count: 0,
+            recount: 0,
+            Firstgridpage: 1,
             apiflag: props.location.state.data[0].apiflag,
 
-            pieArray : [],
-            labelArray : [],
+            pieArray: [],
+            labelArray: [],
             orderby: '',
+
+            nameRotation : 180,
+            dateRotation : 180,
+            statusRotation : 180,
+            submitterRotation : 180,
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getCommonData()
         this.getData()
     }
 
-    getCommonData(){
+    getCommonData() {
         let query = `{
             Trading_PartnerList(Transaction:"Encounter") {
                 Trading_Partner_Name 
@@ -88,22 +93,22 @@ export class EncounterDetails extends React.Component{
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     getData = () => {
@@ -111,12 +116,12 @@ export class EncounterDetails extends React.Component{
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
-        if(!providerName){
+        if (!providerName) {
             providerName = ''
         }
 
         let query = `{            
-            EncounterFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "`+this.state.type+`" , page: `+ this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `"  ) {
+            EncounterFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `"  ) {
                 RecCount
                 FileID
                 FileName
@@ -137,28 +142,28 @@ export class EncounterDetails extends React.Component{
         })
             .then(res => res.json())
             .then(res => {
-                if(res && res.data && res.data.EncounterFileDetails){
-                  
+                if (res && res.data && res.data.EncounterFileDetails) {
+
                     if (res.data.EncounterFileDetails.length > 0) {
-                      
+
                         count = Math.floor(res.data.EncounterFileDetails[0].RecCount / 10)
                         if (res.data.EncounterFileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
-                        this.setState.recount=count;
+                        this.setState.recount = count;
 
                     }
 
                     this.setState({
                         intakeClaims: res.data.EncounterFileDetails,
-                     
-                       
-                        
+
+
+
                     }, () => {
                         this.sortData()
                     })
 
-                  
+
                 }
 
 
@@ -172,7 +177,7 @@ export class EncounterDetails extends React.Component{
         let files = {}
         let intakeClaims = this.state.intakeClaims
 
-        if(fileId && data){
+        if (fileId && data) {
             files = this.state.claimsObj
             if (fileId in files) {
                 files[fileId].array = []
@@ -195,16 +200,16 @@ export class EncounterDetails extends React.Component{
     }
 
     getTransactions = (fileId) => {
-       
+
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
-        if(!providerName){
+        if (!providerName) {
             providerName = ''
         }
 
         let query = `{            
-            EncounterProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "`+fileId+`", Type : "`+this.state.type+`" , OrderBy:"` + this.state.orderby + `") {
+            EncounterProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"` + this.state.orderby + `") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -233,7 +238,7 @@ export class EncounterDetails extends React.Component{
             .then(res => res.json())
             .then(res => {
                 var data = res.data.EncounterProcessingSummary
-                if(data && data.length > 0){
+                if (data && data.length > 0) {
                     this.sortData(fileId, data)
                 }
             })
@@ -242,35 +247,35 @@ export class EncounterDetails extends React.Component{
             });
     }
 
-    renderSearchBar(){
-        return(
+    renderSearchBar() {
+        return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim"/>
+                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
             </div>
         )
     }
 
-    showDetails(){
+    showDetails() {
         this.setState({
             showDetails: true
         })
     }
 
     handlePageClick = (data, fileId) => {
-    
+
         let page = data.selected + 1
         this.setState({
-            page : page
+            page: page
         }, () => {
             this.getTransactions(fileId)
         })
     }
 
-    getDetails(claimId, fileId){
-     
+    getDetails(claimId, fileId) {
+
         let url = Urls.real_time_claim_details
         let query = `{
-            EncounterDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
+            EncounterDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
               ClaimID
               ClaimDate
               ClaimTMTrackingID
@@ -289,7 +294,7 @@ export class EncounterDetails extends React.Component{
               ICDCode
               AccidentDate
             }
-            EncounterLineDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
+            EncounterLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
               ClaimID
               ServiceLineCount
               ProviderPaidAmount
@@ -305,39 +310,39 @@ export class EncounterDetails extends React.Component{
         fetch(url, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data.EncounterDetails && res.data.EncounterDetails.length > 0){
-                let data = res.data.EncounterDetails[0]
-                let claimDetails = 
-                [
-                    { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
-                    { key: 'Encounter Date', value: data.ClaimDate },
-                    { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                    { key: 'Subscriber last name', value: data.SubscriberLastName },
-                    { key: 'Admission date', value: data.AdmissionDate },
-                    // { key: 'Claim amount', value: data.Claim_Amount },
-                    { key: 'Provider address', value: data.BillingProviderAddress },
-                    { key: 'Encounter Status', value: data.ClaimStatus },
-                    { key: 'ICD Code', value: data.ICDCode },
-                    { key: 'Accident Date', value: data.AccidentDate }
-                ]
-                this.setState({
-                    showDetails: true,
-                    claimDetails : claimDetails,
-                    claimLineDetails : res.data.EncounterLineDetails,
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
-    } 
+            .then(res => res.json())
+            .then(res => {
+                if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
+                    let data = res.data.EncounterDetails[0]
+                    let claimDetails =
+                        [
+                            { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
+                            { key: 'Encounter Date', value: data.ClaimDate },
+                            { key: 'Subscriber first name', value: data.SubscriberFirstName },
+                            { key: 'Subscriber last name', value: data.SubscriberLastName },
+                            { key: 'Admission date', value: data.AdmissionDate },
+                            // { key: 'Claim amount', value: data.Claim_Amount },
+                            { key: 'Provider address', value: data.BillingProviderAddress },
+                            { key: 'Encounter Status', value: data.ClaimStatus },
+                            { key: 'ICD Code', value: data.ICDCode },
+                            { key: 'Accident Date', value: data.AccidentDate }
+                        ]
+                    this.setState({
+                        showDetails: true,
+                        claimDetails: claimDetails,
+                        claimLineDetails: res.data.EncounterLineDetails,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
 
     renderRows(dictionary) {
         let row = []
@@ -347,7 +352,7 @@ export class EncounterDetails extends React.Component{
         dictionary.forEach(item => {
             col.push(
                 <div className="col">
-                    <div className="header">{item.key}</div>
+                    <div className="header">{item.key} : </div>
                     <div>{(moment(item.value).format('MMM D YYYY hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MMM D YYYY hh:mm a') : item.value}</div>
                 </div>
             )
@@ -412,8 +417,8 @@ export class EncounterDetails extends React.Component{
     //     )
     // }
 
-    renderDetails(flag){
-        return(
+    renderDetails(flag) {
+        return (
             <div className="row">
                 {this.state.status != 'n' ? <div className="col-1"></div> : null}
                 <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
@@ -427,7 +432,7 @@ export class EncounterDetails extends React.Component{
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
-            if(!element){
+            if (!element) {
                 return
             }
             row.push(<option value="" selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""}>{element.Trading_Partner_Name}</option>)
@@ -435,24 +440,24 @@ export class EncounterDetails extends React.Component{
         return row
     }
 
-    getErrorOptions(){
+    getErrorOptions() {
         let row = []
         this.state.errorList.forEach(element => {
             row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
         })
         return row
     }
-    
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
+
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
             this.setState({
-                [key] : '',
-                showDetails : false
+                [key]: '',
+                showDetails: false
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text,
-                showDetails : false
+                [key]: event.target.options[event.target.selectedIndex].text,
+                showDetails: false
             })
         }
 
@@ -464,7 +469,7 @@ export class EncounterDetails extends React.Component{
     handleStartChange(date) {
         this.setState({
             startDate: date,
-            showDetails : false
+            showDetails: false
         });
 
         setTimeout(() => {
@@ -475,7 +480,7 @@ export class EncounterDetails extends React.Component{
     handleEndChange(date) {
         this.setState({
             endDate: date,
-            showDetails : false
+            showDetails: false
         });
 
         setTimeout(() => {
@@ -483,7 +488,7 @@ export class EncounterDetails extends React.Component{
         }, 50);
     }
 
-    renderPieChart(){
+    renderPieChart() {
         const data = {
             labels: this.state.labelArray,
             datasets: [{
@@ -503,7 +508,7 @@ export class EncounterDetails extends React.Component{
             }],
             flag: ''
         };
-        return(
+        return (
             <div>
                 <Pie data={data}
                     options={{
@@ -522,7 +527,7 @@ export class EncounterDetails extends React.Component{
         )
     }
 
-    onHandleChange(e){
+    onHandleChange(e) {
         let providerName = e.target.value
         clearTimeout(val)
         val = setTimeout(() => {
@@ -533,77 +538,77 @@ export class EncounterDetails extends React.Component{
         }, 300);
     }
 
-    renderFilters(){
-        return(
+    renderFilters() {
+        return (
             <div className="form-style" id='filters'>
-            <div className="form-row">
-                <div className="form-group col-2">
-                    <div className="list-dashboard">State</div>
-                    <select className="form-control list-dashboard" id="state"
-                        onChange={(event) => {
-                            this.setState({
-                                State: event.target.options[event.target.selectedIndex].text,
-                                showDetails: false
-                            }, () => {
-                                this.getData()
-                            })
-                        }}>
-                        <option selected={this.state.State == ''  ? "selected" : "" }value=""></option>
-                        <option selected={this.state.State == 'California'  ? "selected" : "" } value="1">California</option>
-                        <option selected={this.state.State == 'Michigan'  ? "selected" : "" } value="2">Michigan</option>
-                        <option selected={this.state.State == 'Florida'  ? "selected" : "" } value="3">Florida</option>
-                        <option selected={this.state.State == 'New York'  ? "selected" : "" } value="4">New York</option>
-                        <option selected={this.state.State == 'Idaho'  ? "selected" : "" } value="5">Idaho</option>
-                        <option selected={this.state.State == 'Ohio'  ? "selected" : "" } value="6">Ohio</option>
-                        <option selected={this.state.State == 'Illinois'  ? "selected" : "" } value="7">Illinois</option>
-                        <option selected={this.state.State == 'Texas'  ? "selected" : "" } value="8">Texas</option>
-                        <option selected={this.state.State == 'Mississippi'  ? "selected" : "" } value="9">Mississippi</option>
-                        <option selected={this.state.State == 'South Carolina'  ? "selected" : "" } value="10">South Carolina</option>
-                        <option selected={this.state.State == 'New Mexico'  ? "selected" : "" } value="11">New Mexico</option>
-                        <option selected={this.state.State == 'Puerto Rico'  ? "selected" : "" } value="12">Puerto Rico</option>
-                        <option selected={this.state.State == 'Washington'  ? "selected" : "" } value="13">Washington</option>
-                        <option selected={this.state.State == 'Utah'  ? "selected" : "" } value="14">Utah</option>
-                        <option selected={this.state.State == 'Wisconsin'  ? "selected" : "" } value="15">Wisconsin</option>
-                    </select>
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-dashboard">Provider</div>
-                    <input
-                        onChange={(e) => this.onHandleChange(e)}
-                        className="form-control" type="text" />
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-dashboard">Start Date</div>
-                    <DatePicker
-                        className="form-control list-header-dashboard"
-                        selected={this.state.startDate ? new Date(this.state.startDate) : ''}
-                        onChange={this.handleStartChange}
-                    />
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-dashboard">End Date</div>
-                    <DatePicker
-                        className="form-control list-header-dashboard"
-                        selected={this.state.endDate ? new Date(this.state.endDate) : ''}
-                        onChange={this.handleEndChange}
-                    />
-                </div>
-                <div className="form-group col-2">
-                    <div className="list-dashboard">Submitter</div>
-                    <select className="form-control list-dashboard" id="TradingPartner"
-                        onChange={(event) => {
-                            this.onSelect(event, 'selectedTradingPartner')
-                        }}>
-                        <option value="select"></option>
-                        {this.getoptions()}
-                    </select>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.setState({
+                                    State: event.target.options[event.target.selectedIndex].text,
+                                    showDetails: false
+                                }, () => {
+                                    this.getData()
+                                })
+                            }}>
+                            <option selected={this.state.State == '' ? "selected" : ""} value=""></option>
+                            <option selected={this.state.State == 'California' ? "selected" : ""} value="1">California</option>
+                            <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
+                            <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
+                            <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>
+                            <option selected={this.state.State == 'Idaho' ? "selected" : ""} value="5">Idaho</option>
+                            <option selected={this.state.State == 'Ohio' ? "selected" : ""} value="6">Ohio</option>
+                            <option selected={this.state.State == 'Illinois' ? "selected" : ""} value="7">Illinois</option>
+                            <option selected={this.state.State == 'Texas' ? "selected" : ""} value="8">Texas</option>
+                            <option selected={this.state.State == 'Mississippi' ? "selected" : ""} value="9">Mississippi</option>
+                            <option selected={this.state.State == 'South Carolina' ? "selected" : ""} value="10">South Carolina</option>
+                            <option selected={this.state.State == 'New Mexico' ? "selected" : ""} value="11">New Mexico</option>
+                            <option selected={this.state.State == 'Puerto Rico' ? "selected" : ""} value="12">Puerto Rico</option>
+                            <option selected={this.state.State == 'Washington' ? "selected" : ""} value="13">Washington</option>
+                            <option selected={this.state.State == 'Utah' ? "selected" : ""} value="14">Utah</option>
+                            <option selected={this.state.State == 'Wisconsin' ? "selected" : ""} value="15">Wisconsin</option>
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input
+                            onChange={(e) => this.onHandleChange(e)}
+                            className="form-control" type="text" />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            onChange={this.handleStartChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
         )
     }
 
-    renderClaimDetails(){
+    renderClaimDetails() {
         let row = []
         const data = this.state.claimLineDetails ? this.state.claimLineDetails : []
 
@@ -619,19 +624,19 @@ export class EncounterDetails extends React.Component{
                 </tr>
             )
         })
-        return(
+        return (
             <div className="row">
                 <div className="col-12">
                     <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Encounter line data</a></div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
-                                <tr className="table-head" style={{fontSize:"9px"}}>
+                                <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Encounter Id</td>
                                     <td className="table-head-text list-item-style">Service line count</td>
                                     <td className="table-head-text list-item-style">Provider paid amount</td>
                                     <td className="table-head-text list-item-style">Service date</td>
-                                    <td className="table-head-text list-item-style">Procedure date</td>
+                                    <td className="table-head-text list-item-style">Procedure code</td>
                                     <td className="table-head-text list-item-style">Paid service unit count</td>
                                 </tr>
                             </thead>
@@ -655,21 +660,26 @@ export class EncounterDetails extends React.Component{
 
     renderClaimsHeader() {
         return (
-            <tr className="table-head" style={{fontSize:"9px"}}>
+            <tr className="table-head" style={{ fontSize: "9px" }}>
                 <td className="table-head-text">Encounter Id</td>
                 <td className="table-head-text list-item-style">Encounter Date</td>
                 {/* <td className="table-head-text list-item-style">Encounter Amount</td> */}
                 <td className="table-head-text list-item-style">Encounter Status</td>
-                <td className="table-head-text list-item-style">Current State</td>
+                <td className="table-head-text list-item-style">Adjudication Status</td>
                 <td className="table-head-text list-item-style">Error Code</td>
             </tr>
         )
     }
-    handleSort(e) {
-      
-        this.setState({
-            orderby: e
+    handleSort(e, rotation, key) {
+        let addOn = " asc"
+        if (rotation == 0) {
+            addOn = " desc"
+        }
 
+        e = e + addOn
+        this.setState({
+            orderby: e,
+            [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
             this.getData()
@@ -678,21 +688,17 @@ export class EncounterDetails extends React.Component{
     renderTableHeader() {
         return (
             <div className="row">
-                <div className="col-4 col-header">File Name
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName asc" : "Order By EncounterFileDetails.FileName asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName desc" : "Order By EncounterFileDetails.FileName desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>    
+                <div className="col-4 col-header justify-align">
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name
                 </div>
-                <div className="col-2 col-header">File Date
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate asc" : "Order by EncounterFileDetails.FileDate asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate desc" : "Order by EncounterFileDetails.FileDate desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
-               </div>
-                <div className="col-3 col-header">File Status
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 asc" : "Order By EncounterFileDetails.FileStatus asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2 desc" : "Order By EncounterFileDetails.FileStatus desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                <div className="col-2 col-header justify-align">
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by EncounterFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date
                 </div>
-                <div className="col-3 col-header">Submitter
-                <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 asc" : "Order By EncounterFileDetails.Sender asc")} src={require('../../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '13px'  }}></img>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06 desc" : "Order By EncounterFileDetails.Sender desc")} src={require('../../../components/Images/icons8-down-arrow-24.png')} style={{ width: '15px'}}></img>  
+                <div className="col-3 col-header justify-align">
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By EncounterFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status
+                </div>
+                <div className="col-3 col-header justify-align">
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter
                 </div>
                 {/* <div className="col-2 col-header">Status</div> */}
             </div>
@@ -704,28 +710,28 @@ export class EncounterDetails extends React.Component{
         let col = []
         let data = this.state.claimsObj;
         let count = 0
-       
+
         console.log(data)
-        try {         
+        try {
             count = data[Object.keys(data)[0]].value.Claimcount / 10
-            if(data[Object.keys(data)[0]].value.Claimcount % 10 > 0){
+            if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
                 count = count + 1
             }
         } catch (error) {
-            
+
         }
-        
-        
+
+
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 left-align"><a href={"#" + data[keys].value.FileID} 
+                    <div className="col-4 left-align col-small-style"><a href={"#" + data[keys].value.FileID}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
-                    <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
-                    <div className="col-3 col-style">{data[keys].value.Sender}</div>
+                    <div className="col-2 col-small-style">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-3 col-small-style">{data[keys].value.FileStatus}</div>
+                    <div className="col-3 col-small-style">{data[keys].value.Sender}</div>
                 </div>
             )
 
@@ -736,12 +742,12 @@ export class EncounterDetails extends React.Component{
                         <tr>
                             <td className="list-item-style"><a href="#" onClick={() => {
                                 this.setState({
-                                    claimId : d.ClaimID
+                                    claimId: d.ClaimID
                                 }, () => {
                                     this.getDetails(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-                            <td className="list-item-style">{moment(d.ClaimDate).format('MMM D YYYY hh:mm a') != "Invalid date" ? moment(d.ClaimDate).format('MMM D YYYY hh:mm a') : d.ClaimDate}</td>
+                            <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td>
                             {/* <td className="list-item-style">{d.Claim_Amount}</td> */}
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.adjudication_status}</td>
@@ -757,7 +763,7 @@ export class EncounterDetails extends React.Component{
                         {this.renderClaimsHeader()}
                         {col}
                     </table>
-                    
+
                     <ReactPaginate
                         previousLabel={'previous'}
                         nextLabel={'next'}
@@ -767,7 +773,7 @@ export class EncounterDetails extends React.Component{
                         pageCount={Math.floor((data[keys].value.Claimcount / 10) + (data[keys].value.Claimcount % 10 > 0 ? 1 : 0))}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}
-                        onPageChange={(page) => {this.handlePageClick(page, keys)}}
+                        onPageChange={(page) => { this.handlePageClick(page, keys) }}
                         containerClassName={'pagination'}
                         pageClassName={'page-item'}
                         previousClassName={'page-link'}
@@ -775,15 +781,15 @@ export class EncounterDetails extends React.Component{
                         pageLinkClassName={'page-link'}
                         subContainerClassName={'pages pagination'}
                         activeClassName={'active'}
-                        />
-                    
+                    />
+
                 </div>
-            ) 
+            )
         });
 
         return (
             <div>
-                
+
                 {this.renderTableHeader()}
                 {row}
                 <ReactPaginate
@@ -808,7 +814,7 @@ export class EncounterDetails extends React.Component{
         );
     }
     handlePageClick1(data) {
-     
+
         let page = data.selected + 1
         this.setState({
             Firstgridpage: page
@@ -821,22 +827,22 @@ export class EncounterDetails extends React.Component{
     render() {
         return (
             <div>
-                <label style={{color:"#139DC9" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>Encounter Details</label>
+                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>Encounter Details</label>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">
                         {this.state.claimsObj ? this.renderList() : null}
                     </div>
-                    
+
                     <div className="col-6">
                         {
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ? 
+                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details">
-                                    {this.renderHeader('Encounter #'+ this.state.claimId)}
-                                    {this.renderRows(this.state.claimDetails) }
+                                    {this.renderHeader('Encounter #' + this.state.claimId)}
+                                    {this.renderRows(this.state.claimDetails)}
                                 </table>
-                            : null
-                            }
+                                : null
+                        }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
                     </div>
                 </div>

@@ -52,6 +52,7 @@ export class MenuCreate extends React.Component {
            is_active
          }
        }`
+       console.log('Query ', query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -156,7 +157,7 @@ export class MenuCreate extends React.Component {
             }
            
         }`
-        
+        console.log('Query ', query)
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -440,7 +441,7 @@ export class MenuCreate extends React.Component {
                 'chkeditor :"' + access_Val_str1 + '"' +
                 ')' +
                 '}'
-            console.log(query)
+                console.log('Query ', query)
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {

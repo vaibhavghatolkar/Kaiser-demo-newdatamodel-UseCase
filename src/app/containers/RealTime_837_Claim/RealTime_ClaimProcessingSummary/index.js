@@ -345,7 +345,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value : 'SubscriberFirstName'},
             { value : 'ProviderLastName'},
             { value : 'ProviderFirstName'},
-            { value : 'Claim_Amount'}
+            { value : 'Claim_Amount', isAmount: 1}
         )
 
         return(

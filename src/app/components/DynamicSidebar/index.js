@@ -10,28 +10,28 @@ export class DynamicSidebar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            menuList : [],
-            menuOptions : {}
+            menuList: [],
+            menuOptions: {}
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getData()
     }
 
-    getData(){
+    getData() {
         let menuType = "I"
         try {
-            if(isOutbound){
+            if (isOutbound) {
                 menuType = "O"
             }
         } catch (error) {
-            
+
         }
-        
+
         let role_id = JSON.parse(localStorage.getItem('role_id'))
         let query = `{
-            UserwiseMenu(role_id:`+role_id+` menutype:"`+menuType+`" For:"S"){
+            UserwiseMenu(role_id:`+ role_id + ` menutype:"` + menuType + `" For:"S"){
               role_id
               menu_id
               menu_description
@@ -44,96 +44,97 @@ export class DynamicSidebar extends React.Component {
               menutype
             }
         }`
+
         console.log(query)
         fetch(Urls.users, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    menuList: res.data.UserwiseMenu
-                }, () => {
-                    this.sortData()
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        menuList: res.data.UserwiseMenu
+                    }, () => {
+                        this.sortData()
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-    getkeys(key){
+    getkeys(key) {
         let name = ''
-        if(key == 2){ name = Strings.claimsDashboard_834 } 
-        else if (key == 3){ name = Strings.claimsDashboard_834_details } 
-        else if (key == 4){ name = Strings.EnrollmentError } 
-        
-        else if (key == 6){ name = Strings.FullComparsion_dashboard } 
-        else if (key == 7){ name = Strings.EnrollmentDetails } 
-        else if (key == 8){ name = Strings.EnrollmentErrors } 
-        else if (key == 9){ name = Strings.HistoryEligibilityErrorsDelta } 
-        else if (key == 10){ name = Strings.CustomDBDetails } 
-        else if (key == 11){ name = Strings.EligibilityErrorsDuplicate } 
-        else if (key == 12){ name = Strings.OutboundDetails } 
-        else if (key == 13){ name = Strings.RateCodeDelta } 
-        else if (key == 14){ name = Strings.Eligibility_Errors } 
-        else if (key == 15){ name = Strings.HistoryEligibilityErrorsDelta } 
-        else if (key == 16){ name = Strings.PlanIntegrationEligibilityErrors } 
-        else if (key == 17){ name = '' } 
-        else if (key == 18){ name = Strings.MedicalMonthly_Metrics } 
-        else if (key == 19){ name = Strings.Eligibility_Reconcile_Search } 
-        else if (key == 20){ name = Strings.Outbound_dashboard } 
-        
-        else if (key == 22){ name = Strings.RealTime270 } 
-        else if (key == 23){ name = Strings.ElilgibilityDetails270 } 
-        else if (key == 24){ name = Strings.AuditSummary270 } 
-        
-        else if (key == 26){ name = Strings.RealTime276 } 
-        else if (key == 27){ name = Strings.ElilgibilityDetails276 } 
-        
-        else if (key == 29){ name = Strings.RealTimeDashboard } 
-        else if (key == 30){ name = Strings.ClaimProcessingSummary } 
-        else if (key == 31){ name = Strings.ClaimDetails837 } 
-        else if (key == 32){ name = Strings.claimsError } 
-        else if (key == 33){ name = Strings.researchQueue } 
-        else if (key == 34){ name = Strings.matchClaims } 
-        else if (key == 35){ name = Strings.submitClaims } 
-       
-        else if (key == 37){ name = Strings.tradingPartnerConfiguration } 
-        else if (key == 38){ name = Strings.transactionSetup } 
-        else if (key == 39){ name = Strings.editConfiguration } 
-        else if (key == 40){ name = Strings.ViewCustomEdits } 
-        else if (key == 41){ name = Strings.covered } 
-        else if (key == 42){ name = Strings.noncovered } 
-        else if (key == 43){ name = Strings.companionGuide } 
-        
-        else if (key == 45){ name = Strings.UserList } 
-        else if (key == 46){ name = Strings.MenuCreate } 
-        else if (key == 47){ name = Strings.ChangePassword } 
-        else if (key == 48){ name = Strings.MenuManagement } 
-        else if (key == 53){ name = Strings.EncounterDashboard } 
-        else if (key == 54){ name = Strings.EncounterDetails } 
+        if (key == 2) { name = Strings.claimsDashboard_834 }
+        else if (key == 3) { name = Strings.claimsDashboard_834_details }
+        else if (key == 4) { name = Strings.EnrollmentError }
 
-        else if (key == 50){ name = Strings.claimPayment_835 } 
-        else if (key == 51){ name = Strings.MenuManagement } 
-        
-        return name 
+        else if (key == 6) { name = Strings.FullComparsion_dashboard }
+        else if (key == 7) { name = Strings.EnrollmentDetails }
+        else if (key == 8) { name = Strings.EnrollmentErrors }
+        else if (key == 9) { name = Strings.HistoryEligibilityErrorsDelta }
+        else if (key == 10) { name = Strings.CustomDBDetails }
+        else if (key == 11) { name = Strings.EligibilityErrorsDuplicate }
+        else if (key == 12) { name = Strings.OutboundDetails }
+        else if (key == 13) { name = Strings.RateCodeDelta }
+        else if (key == 14) { name = Strings.Eligibility_Errors }
+        else if (key == 15) { name = Strings.HistoryEligibilityErrorsDelta }
+        else if (key == 16) { name = Strings.PlanIntegrationEligibilityErrors }
+        else if (key == 17) { name = '' }
+        else if (key == 18) { name = Strings.MedicalMonthly_Metrics }
+        else if (key == 19) { name = Strings.Eligibility_Reconcile_Search }
+        else if (key == 20) { name = Strings.Outbound_dashboard }
+
+        else if (key == 22) { name = Strings.RealTime270 }
+        else if (key == 23) { name = Strings.ElilgibilityDetails270 }
+        else if (key == 24) { name = Strings.AuditSummary270 }
+
+        else if (key == 26) { name = Strings.RealTime276 }
+        else if (key == 27) { name = Strings.ElilgibilityDetails276 }
+
+        else if (key == 29) { name = Strings.RealTimeDashboard }
+        else if (key == 30) { name = Strings.ClaimProcessingSummary }
+        else if (key == 31) { name = Strings.ClaimDetails837 }
+        else if (key == 32) { name = Strings.claimsError }
+        else if (key == 33) { name = Strings.researchQueue }
+        else if (key == 34) { name = Strings.matchClaims }
+        else if (key == 35) { name = Strings.submitClaims }
+
+        else if (key == 37) { name = Strings.tradingPartnerConfiguration }
+        else if (key == 38) { name = Strings.transactionSetup }
+        else if (key == 39) { name = Strings.editConfiguration }
+        else if (key == 40) { name = Strings.ViewCustomEdits }
+        else if (key == 41) { name = Strings.covered }
+        else if (key == 42) { name = Strings.noncovered }
+        else if (key == 43) { name = Strings.companionGuide }
+
+        else if (key == 45) { name = Strings.UserList }
+        else if (key == 46) { name = Strings.MenuCreate }
+        else if (key == 47) { name = Strings.ChangePassword }
+        else if (key == 48) { name = Strings.MenuManagement }
+        else if (key == 53) { name = Strings.EncounterDashboard }
+        else if (key == 54) { name = Strings.EncounterDetails }
+
+        else if (key == 50) { name = Strings.claimPayment_835 }
+        else if (key == 51) { name = Strings.MenuManagement }
+
+        return name
     }
 
-    sortData(){
+    sortData() {
         let data = this.state.menuList
         let menuOptions = {}
         data.forEach(item => {
-            if(item.parent_node == 0){
+            if (item.parent_node == 0) {
                 menuOptions[item.menu_id] = {
                     'name': '',
-                    'array' : []
+                    'array': []
                 }
                 menuOptions[item.menu_id].name = item.menu_description
             } else {
@@ -145,7 +146,7 @@ export class DynamicSidebar extends React.Component {
         console.log('Menu options ', menuOptions)
 
         this.setState({
-            menuOptions : menuOptions
+            menuOptions: menuOptions
         })
     }
 
@@ -192,12 +193,12 @@ export class DynamicSidebar extends React.Component {
                 addon = '/total'
             } else if (element.key == Strings.EnrollmentError) {
                 addon = '/error'
-            } 
+            }
             else if (element.key == Strings.EncounterDetails) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
-            } 
+            }
             else {
                 addon = ''
             }
@@ -221,8 +222,12 @@ export class DynamicSidebar extends React.Component {
     renderSidebarItems() {
         let menuOptions = this.state.menuOptions
         let row = []
-        for(let keys in menuOptions){
+        for (let keys in menuOptions) {
             row.push(this.renderItems(keys, menuOptions[keys].name, menuOptions[keys].array))
+        }
+
+        if (isOutbound) {
+            row.reverse()
         }
 
         return (
@@ -237,7 +242,7 @@ export class DynamicSidebar extends React.Component {
             <div id="tabs">
                 <div className="row p">
                     <div className="col-6 p nopadding">
-                        <a href="" 
+                        <a href=""
                             onClick={() => {
                                 isOutbound = false
                                 sessionStorage.setItem('isOutbound', false)
@@ -251,7 +256,7 @@ export class DynamicSidebar extends React.Component {
                     </div>
 
                     <div className="col-6 p nopadding">
-                        <a href="" 
+                        <a href=""
                             onClick={() => {
                                 isOutbound = true
                                 sessionStorage.setItem('isOutbound', true)
