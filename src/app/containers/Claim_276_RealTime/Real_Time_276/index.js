@@ -708,13 +708,13 @@ export class RealTime276 extends React.Component {
                 <Link to={{ pathname: '/'+ url , state: {data}}} className="col-2 summary-container"> 
                     <div>
                         <div className="summary-header">{item.name}</div>
-                        <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                 </Link>
                 :
                 <div className="col-2 summary-container">
                     <div className="summary-header">{item.name}</div>
-                    <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 </div>
                 // <Link
                 //     to={
