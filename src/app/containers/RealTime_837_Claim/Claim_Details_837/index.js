@@ -350,7 +350,7 @@ export class ClaimDetails837 extends React.Component{
             col.push(
                 <div className="col">
                     <div className="header">{item.key}</div>
-                    <div>{(moment(item.value).format('MMM D YYYY hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MMM D YYYY hh:mm a') : item.value}</div>
+                    <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
                 </div>
             )
 
@@ -633,7 +633,7 @@ export class ClaimDetails837 extends React.Component{
                                     <td className="table-head-text list-item-style">Service line count</td>
                                     <td className="table-head-text list-item-style">Provider paid amount</td>
                                     <td className="table-head-text list-item-style">Service date</td>
-                                    <td className="table-head-text list-item-style">Procedure date</td>
+                                    <td className="table-head-text list-item-style">Procedure code</td>
                                     <td className="table-head-text list-item-style">Paid service unit count</td>
                                 </tr>
                             </thead>
@@ -725,7 +725,7 @@ export class ClaimDetails837 extends React.Component{
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MMM D YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-2 col-style">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br/>{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-3 col-style">{data[keys].value.FileStatus}</div>
                     <div className="col-3 col-style">{data[keys].value.Sender}</div>
                 </div>
@@ -743,7 +743,7 @@ export class ClaimDetails837 extends React.Component{
                                     this.getDetails(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
-                            <td className="list-item-style">{moment(d.ClaimDate).format('MMM D YYYY hh:mm a') != "Invalid date" ? moment(d.ClaimDate).format('MMM D YYYY hh:mm a') : d.ClaimDate}</td>
+                            <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td>
                             <td className="list-item-style">{d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.adjudication_status}</td>

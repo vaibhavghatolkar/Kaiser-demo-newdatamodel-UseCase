@@ -642,7 +642,7 @@ export class EligibilityDetails extends React.Component {
             row.push(
                 <tr>
                     <td>{d.EventName}</td>
-                    <td>{moment(Number(d.EventCreationDateTime) ? Number(d.EventCreationDateTime) : d.EventCreationDateTime).format('MMM DD YYYY hh:mm:ss:SSS')}</td>
+                    <td>{moment(Number(d.EventCreationDateTime) ? Number(d.EventCreationDateTime) : d.EventCreationDateTime).format('MM/DD/YYYY, hh:mm:ss:SSS')}</td>
                     <td>{d.Exception}</td>
                 </tr>
             )
@@ -717,7 +717,7 @@ export class EligibilityDetails extends React.Component {
 
         rowArray.push(
             { value : 'Trans_ID', upScale : 1},
-            { value : 'Date', isDate: 1},
+            { value : 'Date', isDate: 1, isNottime : 1},
             { value : 'Trans_type'},
             { value : 'Submiter'},
             { value : 'Error_Type'},

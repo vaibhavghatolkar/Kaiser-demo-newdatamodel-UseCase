@@ -44,7 +44,7 @@ export class DynamicSidebar extends React.Component {
               menutype
             }
         }`
-
+        console.log(query)
         fetch(Urls.users, {
             method: 'POST',
             headers: {

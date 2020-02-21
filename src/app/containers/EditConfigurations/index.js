@@ -365,7 +365,7 @@ export class EditConfiguration extends React.Component {
                                             <label className="list-header">
                                                 Min/Max length
                                             </label>
-                                            <div className="row" style={{marginLeft: "12px"}}>
+                                            <div className="row" style={{ marginLeft: "12px" }}>
                                                 <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{ width: "100px" }} />
                                                 <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{ width: "100px" }} />
                                             </div>
@@ -543,9 +543,10 @@ export class EditConfiguration extends React.Component {
         }, 50);
     }
 
+
     clicked() {
-       let OperatorId= this.state.OperatorId != '' ? this.state.OperatorId : 0;
-     
+        let OperatorId = this.state.OperatorId != '' ? this.state.OperatorId : 0;
+
         var query = 'mutation{' +
             'SP_ConfigureCustomEdits(ID : 0 ' +
             'State  :"' + this.state.state + '" ' +
@@ -588,13 +589,12 @@ export class EditConfiguration extends React.Component {
                 query
             })
         })
-
             .then(r => r.json())
             .then(data =>
-
                 alert(data.data.SP_ConfigureCustomEdits)
-
-            )
+            ).catch(error => {
+                console.log(error)
+            })
 
         // setTimeout(() => {
         //     window.location.reload()

@@ -469,13 +469,13 @@ export class RealTimeDashboard extends React.Component {
                 ?
                 <div className="col summary-container">
                     <div className="summary-header">{item.name}</div>
-                    <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 </div>
                 :
                 <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col-2 summary-container">
                     <div>
                         <div className="summary-header">{item.name}</div>
-                        <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                 </Link>
             )
