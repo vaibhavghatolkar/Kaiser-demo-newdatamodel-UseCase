@@ -157,7 +157,6 @@ export class CoveredICDCode extends React.Component {
                 <div className="row">
                     <div className="col-9">
                         {this.renderList()}
-                        
                     </div>
                 </div>
             </div>

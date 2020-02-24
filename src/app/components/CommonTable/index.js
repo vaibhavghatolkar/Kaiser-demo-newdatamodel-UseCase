@@ -12,9 +12,9 @@ export class CommonTable extends React.Component {
 
         }
     }
-    
-    renderPagination(){
-        return(
+
+    renderPagination() {
+        return (
             <ReactPaginate
                 previousLabel={'previous'}
                 nextLabel={'next'}
@@ -44,9 +44,9 @@ export class CommonTable extends React.Component {
         let headerArray = this.props.headerArray
         headerArray.forEach(item => {
             header_row.push(
-                    item.method ?
+                item.method ?
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
-                        <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft : '-2px' }}></img> {item.value}
+                        <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft: '-2px' }}></img> {item.value}
                     </div>
                     :
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
@@ -64,17 +64,25 @@ export class CommonTable extends React.Component {
         data.forEach(data_item => {
             let col = []
             let count = 0
+            let timeformat = "MM/DD/YYYY, hh:mm a"
+
             rowArray.forEach(row_item => {
+                if (row_item.isNottime) {
+                    timeformat = "MM/DD/YYYY"
+                }
+
                 col.push(
                     <div className={headerArray.length > 10 ? "col-1 col-small-style small-font word-wrap" : row_item.upScale == 1 ? "col-2 col-small-style small-font" : "col col-small-style small-font"}>
                         {
-                            this.props.onClick && count == 0 ? 
-                            <a style={{ color: "#6AA2B8", cursor: "pointer" }}
-                                onClick={() => {this.props.onClick(data_item[this.props.onClickKey])}}
-                            >
-                                {row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") : data_item[row_item.value] : data_item[row_item.value]}
-                            </a> :
-                            row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format("MMM DD YYYY hh:mm a") : data_item[row_item.value] : data_item[row_item.value]
+                            this.props.onClick && count == 0 ?
+                                <a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                                    onClick={() => { this.props.onClick(data_item[this.props.onClickKey]) }}
+                                >
+                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]}
+                                </a> :
+                                <a>
+                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]}
+                                </a>
                         }
                     </div>)
                 count++
@@ -82,7 +90,7 @@ export class CommonTable extends React.Component {
 
             count = 0
 
-            return(
+            return (
                 row.push(
                     <div className="row">
                         {col}

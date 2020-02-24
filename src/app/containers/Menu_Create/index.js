@@ -52,6 +52,7 @@ export class MenuCreate extends React.Component {
            is_active
          }
        }`
+       console.log('Query ', query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -156,7 +157,7 @@ export class MenuCreate extends React.Component {
             }
            
         }`
-        
+        console.log('Query ', query)
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -296,7 +297,41 @@ export class MenuCreate extends React.Component {
                     </td>
 
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
-                        d.isChecked = e.target.checked
+                       d.isChecked = e.target.checked
+                       let parent = d.parent_node
+                       let menuId = d.menu_id
+                       let data2 = [...data]
+                       let count=0;
+                       // alert(parent)true
+                       data2.forEach((item) => {
+                            
+                            if(item.parent_node == parent || item.menu_id == parent){
+                               // if(item.parent_node==1)
+                               // {
+                                                              
+                               //        count++;
+                               //        alert(count);
+                                                                     
+                               // }
+                               
+                               if(item.menu_id == parent){ 
+                                   if(item.isChecked == false) 
+                                   {
+                                       item.isChecked = true 
+                                   } 
+                                   // if(item.isChecked == false){
+                                   //     item.isChecked = true 
+                                   // }  
+                                  
+                               }
+                              
+
+                           }
+                           else if(menuId == item.parent_node){
+                               item.isChecked = e.target.checked
+                           }
+  
+                       })
                         this.setState({
                             customList: [...data]
                         })
@@ -406,7 +441,7 @@ export class MenuCreate extends React.Component {
                 'chkeditor :"' + access_Val_str1 + '"' +
                 ')' +
                 '}'
-
+                console.log('Query ', query)
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {

@@ -106,6 +106,7 @@
     margin-right : 16px;
     margin-top : 16px;
     margin-bottom : 16px;
+    border-radius: 8px;
 }
 .summary-header{
     font-size: 10px;
@@ -114,7 +115,7 @@
     padding-bottom: 2px;
 }
 .summary-title{
-    font-size: 20px;
+    font-size: 20px !important;
     color: var(--grayBlack);
     padding-left: 8px;
     padding-bottom: 12px;
