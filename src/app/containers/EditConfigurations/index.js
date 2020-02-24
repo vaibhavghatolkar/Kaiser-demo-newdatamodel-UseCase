@@ -29,6 +29,8 @@ export class EditConfiguration extends React.Component {
             OperatorId: '',
             LoopID: '',
             LoopID1: '',
+            LoopID2:'',
+            LoopID3:'',
             SegmentId: '',
             SegmentId1: '',
             FieldId: '',
@@ -54,7 +56,7 @@ export class EditConfiguration extends React.Component {
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
-            transactionSelect:'837P',
+            transactionSelect:'270',
             GetCustomEdits:[]
 
         };
@@ -83,7 +85,8 @@ export class EditConfiguration extends React.Component {
         this.getTransdata()
         this.getTableCustomEdits()
         this.operator()
-        this.getData('{loopid(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ') { loopid }}', 1, 0)
+        // this.getData('{loopid(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ') { loopid }}', 1, 0)
+        this.getData( `{SP_GetMainloop(TransactionType:"${this.state.transactionSelect}"){Mainloop}}`, 0, 0)
     }
 
     operator() {
@@ -181,7 +184,8 @@ export class EditConfiguration extends React.Component {
 
     getData(query, flag, iter) {
 
-        fetch(Urls.tradingPartner, {
+        console.log(query)
+        fetch(Urls.customEdits, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -192,23 +196,33 @@ export class EditConfiguration extends React.Component {
             .then(res => res.json())
             .then(r => {
                 let options = this.state.options
-                if (flag == 1) {
+                if(flag==0){
                     options[iter] = {
-                        loopidArray: r.data.loopid,
-                        loopidArray1: r.data.loopid
-                    }
+                        loopidArray: r.data.SP_GetMainloop,
+                        loopidArray1: r.data.SP_GetMainloop
+                    }  
+                }
+                else if (flag == 1) {
+                    // options[iter] = {
+                    //     loopidArray: r.data.SP_GetMainloop,
+                    //     loopidArray1: r.data.SP_GetMainloop
+                    // }
+                    options[iter]["subLoopidArray"] = r.data.SP_GetSubloop
                 } else if (flag == 2) {
-                    options[iter]["segmentArray"] = r.data.segment
+                    options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 3) {
-                    options[iter]["elementArray"] = r.data.element
+                    options[iter]["elementArray"] = r.data.SP_GetElement
                 }
                 else if (flag == 4) {
-                    options[iter]["segmentArray1"] = r.data.segment
+                    options[iter]["segmentArray1"] = r.data.SP_GetSegment
                 }
                 else if (flag == 5) {
-                    options[iter]["elementArray1"] = r.data.element
+                    options[iter]["elementArray1"] = r.data.SP_GetElement
                 }
-
+                else if(flag==6){
+                    options[iter]["subLoopidArray1"]  = r.data.SP_GetSubloop
+                }
+                console.log(options)
                 this.setState({
                     options: options
                 })
@@ -237,29 +251,43 @@ export class EditConfiguration extends React.Component {
 
     }
 
-    onOptionSelect(value, iter, flag, loopid) {
+    onOptionSelect(value, iter, flag, loopid, LoopID2) {
+       
         if (!value) {
             return
         }
-
         let query = ''
-        let inner_flag = 1
+        let inner_flag = 0
 
-        if (flag == 1) {
-
-            query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
+        if(flag==0){
+            // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
+            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
             let options = this.state.options
-            options[iter]["selected_loopid"] = value
+            options[iter]["selected_mainloopid"] = value
 
             this.setState({
                 options: options,
                 LoopID: value
             })
+            inner_flag = 1  
+        }
+        else if (flag == 1) {
+
+            // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
+            query = `{SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${loopid}",SubLoop:"${value}"){Segment}}`
+            let options = this.state.options
+            options[iter]["selected_loopid"] = value
+
+            this.setState({
+                options: options,
+                LoopID2: value,
+            })
             inner_flag = 2
         }
         else if (flag == 2) {
-            query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
-            inner_flag = 3
+           // query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
+           query = ` { SP_GetElement(TransactionType:"${this.state.transactionSelect}",Mainloop:"${LoopID2}",SubLoop:"${loopid}",Segment:"${value}"){Field}}` 
+           inner_flag = 3
             this.setState({
                 SegmentId: value
             })
@@ -271,7 +299,10 @@ export class EditConfiguration extends React.Component {
         }
         else if (flag == 4) {
 
-            query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
+            // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
+            // let options = this.state.options
+            // options[iter]["selected_loopid"] = value
+            query = `{SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${loopid}",SubLoop:"${value}"){Segment}}`
             let options = this.state.options
             options[iter]["selected_loopid"] = value
 
@@ -283,16 +314,25 @@ export class EditConfiguration extends React.Component {
         }
 
         else if (flag == 5) {
-            query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
+            query = ` { SP_GetElement(TransactionType:"${this.state.transactionSelect}",Mainloop:"${LoopID2}",SubLoop:"${loopid}",Segment:"${value}"){Field}}` 
+            // query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
             inner_flag = 5
             this.setState({
                 SegmentId1: value
             })
 
+        }
+        else if(flag==6){
+            // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
+            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            let options = this.state.options
+            options[iter]["selected_mainloopid"] = value
 
-
-
-
+            this.setState({
+                options: options,
+                LoopID3: value
+            })
+            inner_flag = 6  
         }
         setTimeout(() => {
             this.getData(query, inner_flag, iter)
@@ -302,7 +342,7 @@ export class EditConfiguration extends React.Component {
     renderOptions(array, flag) {
         let row = []
         array.forEach(element => {
-            row.push(<option value={flag == 1 ? element.loopid : flag == 2 ? element.segment : element.element}>{flag == 1 ? element.loopid : flag == 2 ? element.segment : element.element}</option>)
+            row.push(<option value={flag == 0 ? element.Mainloop :flag == 1 ? element.SubLoop : flag == 2 ? element.Segment : element.Field}>{flag == 0 ? element.Mainloop :flag == 1 ? element.SubLoop : flag == 2 ? element.Segment : element.Field}</option>)
         });
 
         return row
@@ -435,9 +475,9 @@ export class EditConfiguration extends React.Component {
                                             <label className="list-header">
                                                 Main Loop Id
                                         </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'mainLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop').value, item, 1) }}>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'mainLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop').value, item, 0) }}>
                                                 <option value=""></option>
-                                                {/* {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 1) : null} */}
+                                                {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                             </select>
                                         </div>
 
@@ -445,9 +485,9 @@ export class EditConfiguration extends React.Component {
                                             <label className="list-header">
                                                 Sub Loop Id
                                         </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop').value, item, 1) }}>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'subLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop').value, item, 1, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
-                                                {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 1) : null}
+                                                {options[item].subLoopidArray ? this.renderOptions(options[item].subLoopidArray, 1) : null}
                                             </select>
                                         </div>
 
@@ -455,7 +495,7 @@ export class EditConfiguration extends React.Component {
                                             <label className="list-header">
                                                 Segment
                                         </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid) }}>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].segmentArray ? this.renderOptions(options[item].segmentArray, 2) : null}
                                             </select>
@@ -580,9 +620,9 @@ export class EditConfiguration extends React.Component {
                                                 <label className="list-header">
                                                     Main Loop Id
                                  </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop2').value, item, 1) }}>
+                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'mainLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop2').value, item, 6) }}>
                                                     <option value=""></option>
-                                                    {/* {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 1) : null} */}
+                                                    {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                                 </select>
                                             </div>
 
@@ -590,9 +630,10 @@ export class EditConfiguration extends React.Component {
                                                 <label className="list-header">
                                                     Sub Loop Id
                                  </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop1').value, item, 4) }}>
+                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'subLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop2').value, item, 4,options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
-                                                    {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null}
+                                                    {options[item].subLoopidArray1 ? this.renderOptions(options[item].subLoopidArray1, 1) : null}
+                                                    {/* {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null} */}
                                                 </select>
                                             </div>
 
@@ -600,7 +641,7 @@ export class EditConfiguration extends React.Component {
                                                 <label className="list-header">
                                                     Segment
                                  </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid) }}>
+                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
                                                 </select>
@@ -738,7 +779,7 @@ export class EditConfiguration extends React.Component {
             'RuleName  : "' + this.state.RuleName + '" ' +
             'Rule_Desc  :"' + this.state.Rule_Desc + '" ' +
             'Validation_Level  : "' + this.state.Validationlevel + '" ' +
-            'Loop_ID  :"' + this.state.LoopID + '" ' +
+            'Loop_ID  :"' + this.state.LoopID2 + '" ' +
             'Segment :"' + this.state.SegmentId + '" ' +
             'Field : "' + this.state.FieldId + '" ' +
             'is_mandatory : true   ' +
@@ -764,8 +805,8 @@ export class EditConfiguration extends React.Component {
              is_mandatory2:${is_mandatory2}
              max_length2: "${this.state.max_length2}"
              Min_Length2: "${this.state.Min_Length2}"
-             mainloop: "${this.state.mainloop}"
-             mainloop2: "${this.state.mainloop2}"` +
+             mainloop: "${this.state.LoopID}"
+             mainloop2: "${this.state.LoopID3}"` +
 
             'Condition : "")' +
 
@@ -786,7 +827,7 @@ export class EditConfiguration extends React.Component {
                 alert(data.data.SP_ConfigureCustomEdits),
                 setTimeout(() => {
                     window.location.reload();
-                }, 500)
+                }, 2000)
 
             ).catch(error => {
                 console.log(error)
@@ -903,13 +944,8 @@ export class EditConfiguration extends React.Component {
         this.setState({
             [key]: event.target.options[event.target.selectedIndex].text,
         })
-        if (key == "OperatorId" || key == "FieldId" || key == "FieldId1") {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].value,
-            })
-        }
         setTimeout(() => {
-            this.getData('{loopid(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ') { loopid }}', 1, 0)
+            this.getData( `{SP_GetMainloop(TransactionType:"${this.state.transactionSelect}"){Mainloop}}`, 0, 0)
         }, 50);
     }
     ChangeVal(event, key) {
@@ -1042,7 +1078,7 @@ export class EditConfiguration extends React.Component {
                 {/* <div className="panel-collapse content">
                 <div className="panel-body">
             <div> */}
-                <table className="table table-bordered claim-list" align="center" style={{ width: '95%' }}>
+                <table className="table table-bordered claim-list" style={{ width: '100%' }}>
                     {this.state.GetCustomEdits && this.state.GetCustomEdits.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
