@@ -2,15 +2,18 @@ import React from 'react';
 import { MDBDataTable } from 'mdbreact';
 import './style.css';
 import Urls from '../../../helpers/Urls'
+import ReactPaginate from 'react-paginate';
 
 export class CoveredICDCode extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            claimsList: [],
+            CoveredList: [],
             files: [],
-            allData: []
+            allData: [],
+            page: 1,
+            count:1
         }
         this.onChange = this.onChange.bind(this);
         this.getData = this.getData.bind(this);
@@ -22,7 +25,7 @@ export class CoveredICDCode extends React.Component {
 
     getData() {
         let query = `{
-            CoveredList {
+            CoveredList(page:${this.state.page}) {
                 SeqId
                 CPT
                 ICDCode
@@ -30,6 +33,7 @@ export class CoveredICDCode extends React.Component {
                 C_eff_date
                 policyrulekey
                 policyDesc
+    			RecCount
               }
         }`
 
@@ -43,28 +47,19 @@ export class CoveredICDCode extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                let array = []
-                let summary = []
                 let data = res.data
-                let iterator = data.CoveredList
-                let pagecount_length = res.data.CoveredList.length
-            
-                iterator.forEach(item => {
-                    array.push({
-                        cpt: item.CPT,
-                        ICDCode: item.ICDCode,
-                        C_eff_date: item.C_eff_date,
-                        policyrulekey: item.policyrulekey,
-                        policyDesc: item.policyDesc
-                    })
-                })
+                let count = 1
+                if (data && data.CoveredList.length > 0) {
+
+                    count = Math.floor(data.CoveredList[0].RecCount / 10)
+                    if (data.CoveredList[0].RecCount % 10 > 0) {
+                        count = count + 1
+                    }
+                }
 
                 this.setState({
-                    claimsList: array,
-                    summaryList: summary,
-                    pageCount: Math.ceil(pagecount_length / 10),
-                    initialPage: 1,
-                    allData: res.data.CoveredList
+                    CoveredList: data.CoveredList,
+                    count: count
                 })
             })
             .catch(err => {
@@ -84,66 +79,87 @@ export class CoveredICDCode extends React.Component {
         this.setState({ files: this.state.files });
     }
 
-    renderList ()  {
-       
-        const claimsList = this.state.claimsList
-        const data = {
-          columns: [
-            {
-              label: 'CPT',
-              field: 'cpt',
-              sort: 'asc',
-              width: 150
-            },
-            {
-              label: 'ICDCode',
-              field: 'ICDCode',
-              sort: 'asc',
-              width: 270
-            },
-            {
-              label: 'C_eff_date',
-              field: 'C_eff_date',
-              sort: 'asc',
-              width: 200
-            },
-            {
-                label: 'policy rule key',
-                field: 'policyrulekey',
-                sort: 'asc',
-                width: 100
-            },
-            {
-              label: 'policy Description',
-              field: 'policyDesc',
-              sort: 'asc',
-              width: 150
-            },
-            
-          ],
-          rows: claimsList
-          
-
-        };
-      
+      renderTableHeader() {
         return (
-          <MDBDataTable
-            striped
-            bordered
-            hover
-            data={data}
-          />
-        );
-      }
+            <tr className="table-head">
+                <td className="table-head-text">CPT</td>
+                <td className="table-head-text">ICDCode</td>
+                <td className="table-head-text">C_eff_date</td>
+                <td className="table-head-text">policy rule key</td>
+                <td className="table-head-text">policy Description</td>
+            </tr>
+        )
+    }
 
+      renderRows() {
+
+
+        let row = []
+        let array = this.state.CoveredList
+
+
+        array.forEach(item => {
+            row.push(
+                <tr>
+                    <td>{item.CPT}</td>
+                    <td>{item.ICDCode}</td>
+                    <td>{item.C_eff_date}</td>
+                    <td>{item.policyrulekey}</td>
+                    <td>{item.policyDesc}</td>
+                </tr>
+            )
+
+        });
+        return (
+            <div>
+                <table className="table table-bordered claim-list" style={{ width: '100%' }}>
+                    {this.state.CoveredList && this.state.CoveredList.length > 0 ? this.renderTableHeader() : null}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.count}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
+            </div>
+
+        )
+
+    }
+    handlePageClick(data) {
+        let page = data.selected + 1
+        this.setState({
+            page: page,
+
+        })
+
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
 
 
     render() {
         return (
             <div>
+                <br/>
                 <div>
-                    <h5 style={{ color: "#139DC9" }}>Covered ICD Code</h5>
-                    <hr></hr>
+                    <h5 style={{ color: "#139DC9", fontSize:"20px" }}>Covered ICD Code</h5>
                 </div>
                 <div className="row">
                     <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File
@@ -155,8 +171,8 @@ export class CoveredICDCode extends React.Component {
                 </div>
                 <br/>
                 <div className="row">
-                    <div className="col-9">
-                        {this.renderList()}
+                    <div className="col-12">
+                        {this.renderRows()}
                         
                     </div>
                 </div>

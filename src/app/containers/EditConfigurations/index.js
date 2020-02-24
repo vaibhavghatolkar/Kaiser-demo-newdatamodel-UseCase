@@ -369,14 +369,13 @@ export class EditConfiguration extends React.Component {
 
             row.push(
 
-                <div className="panel-group"   >
-                    <div className="panel-heading collapsible" style={{ background: "#139DC9" }}>
-                        <span className="panel-title" style={{ color: "white" }}>Custom Details </span>
+                <div className="panel-group">
+                <div className="panel panel-default">
+                    <div className="panel-heading collapsible" data-toggle="collapse" href="#BasicX12Options" style={{ background: "#139DC9" }}>
+                        <span className="panel-title" style={{ color: "white" }}>Add Custom Edits </span>
                     </div>
-                    <div id="CustomDetails" className="panel-collapse content">
+                    <div id="BasicX12Options" className="panel-collapse content collapse">
                         <br></br>
-                        <div className="panel panel-default">
-                            <div id="ISAIdentificationOptions">
                                 <div className="panel-body">
                                     <div className="row">
                                         <div className="form-group col-3">
@@ -419,7 +418,7 @@ export class EditConfiguration extends React.Component {
                                         </div>
                                         <div className="form-group col-sm-3">
                                             <label className="list-header">
-                                                Description
+                                            Rule Description
                                         </label>
                                             <textarea type="text" className="list-header form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(e) => this.onChangeName(e, 'Rule_Desc')} />
                                         </div>
@@ -716,7 +715,7 @@ export class EditConfiguration extends React.Component {
                         </div>
                         {/* {this.renderList()} */}
                     </div>
-                </div >
+               
             )
         })
 
