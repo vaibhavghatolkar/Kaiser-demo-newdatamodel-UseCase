@@ -54,7 +54,7 @@ export class EditConfiguration extends React.Component {
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
-            transactionSelect:'837P',
+            transactionSelect:'270',
             GetCustomEdits:[]
 
         };

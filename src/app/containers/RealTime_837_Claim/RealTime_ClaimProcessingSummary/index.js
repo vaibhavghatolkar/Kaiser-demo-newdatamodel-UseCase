@@ -517,21 +517,21 @@ export class ClaimProcessingSummary extends React.Component {
                 {
                     this.state.Accepted ?
                         <div className="col-2 summary-container">
-                            <div className="summary-header">Accepted</div>
+                            <div className="summary-header">Accepted Claims</div>
                             <div className="summary-title">{this.state.Accepted}</div>
                         </div> : null
                 }
                 {
                     this.state.Rejected ?
                         <div className="col-2 summary-container">
-                            <div className="summary-header">Rejected</div>
+                            <div className="summary-header">Rejected Claims</div>
                             <div className="summary-title">{this.state.Rejected}</div>
                         </div> : null
                 }
                 {
                     this.state.TotalSentToQNXT ?
                         <div className="col-2 summary-container">
-                            <div className="summary-header">Sent to QNXT</div>
+                            <div className="summary-header">Claims sent to QNXT</div>
                             <div className="summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> : null
                 }

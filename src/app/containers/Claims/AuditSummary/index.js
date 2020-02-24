@@ -7,45 +7,45 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
 
-export class AuditSummary extends React.Component{
-    
-    constructor(props){
+export class AuditSummary extends React.Component {
+
+    constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             claimsAudit: [],
             tradingpartner: [],
-            SubTotal : 0,
-            VeriTotal : 0,
-            InBizstockTotal : 0,
+            SubTotal: 0,
+            VeriTotal: 0,
+            InBizstockTotal: 0,
             selectedTradingPartner: '',
-            PenTotal : 0,
-            RejTotal : 0,
-            errTotal : 0
+            PenTotal: 0,
+            RejTotal: 0,
+            errTotal: 0
         }
 
         this.getData = this.getData.bind(this)
         this.onSelect = this.onSelect.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getTradingPartnerDetails()
         this.getData()
     }
 
-    getTradingPartnerDetails = async() => {
+    getTradingPartnerDetails = async () => {
         getDetails("Claim837")
-        .then((tradingpartner) => {
-            if(tradingpartner && tradingpartner.length > 0){
-                this.setState({
-                    tradingpartner: tradingpartner
-                })
-            }
-        })
+            .then((tradingpartner) => {
+                if (tradingpartner && tradingpartner.length > 0) {
+                    this.setState({
+                        tradingpartner: tradingpartner
+                    })
+                }
+            })
     }
 
-    getData(){
+    getData() {
         let query = `{
-            ClaimsDailyAudit(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
               FileID
               filename
               Submitted
@@ -55,7 +55,7 @@ export class AuditSummary extends React.Component{
               Error
               InBizstock
             }
-            ClaimsDailyAuditCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
+            ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
                 VeriTotal
                 InBizstockTotal
@@ -63,7 +63,7 @@ export class AuditSummary extends React.Component{
                 RejTotal
                 errTotal
             }
-            FileInCount(submitter:"`+this.state.selectedTradingPartner+`",fromDt:"",ToDt:""){
+            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 totalFile
             }
         }`
@@ -71,49 +71,49 @@ export class AuditSummary extends React.Component{
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            if(res.data){
-                let totalFile = 0
-                try {
-                    totalFile = res.data.FileInCount[0].totalFile
-                } catch (error) {
-                    
-                }
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                if (res.data) {
+                    let totalFile = 0
+                    try {
+                        totalFile = res.data.FileInCount[0].totalFile
+                    } catch (error) {
 
-                this.setState({
-                    claimsAudit: res.data.ClaimsDailyAudit,
-                    SubTotal : res.data.ClaimsDailyAuditCount[0].SubTotal,
-                    VeriTotal : res.data.ClaimsDailyAuditCount[0].VeriTotal,
-                    InBizstockTotal : res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
-                    PenTotal : res.data.ClaimsDailyAuditCount[0].PenTotal,
-                    RejTotal : res.data.ClaimsDailyAuditCount[0].RejTotal,
-                    errTotal : res.data.ClaimsDailyAuditCount[0].errTotal,
-                    tradingpartner: res.data.Trading_PartnerList,
-                    totalFile : totalFile
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+                    }
+
+                    this.setState({
+                        claimsAudit: res.data.ClaimsDailyAudit,
+                        SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
+                        VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
+                        InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
+                        PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
+                        RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
+                        errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
+                        tradingpartner: res.data.Trading_PartnerList,
+                        totalFile: totalFile
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-    renderSearchBar(){
-        return(
+    renderSearchBar() {
+        return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search"/>
+                <input type="text" name="name" className="input-style" placeholder="Search" />
             </div>
         )
     }
 
-    renderTransactions(){
+    renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
         console.log(data)
@@ -121,38 +121,36 @@ export class AuditSummary extends React.Component{
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{color:"#6AA2B8"}}>{d.filename}</td>
-                    <td>{d.Submitted}</td>
-                    <td>{d.InBizstock}</td>
-                    <td>{d.Rejected}</td>
-                    <td>{d.Error}</td>
-                    <td>{d.Pending}</td>
-                    <td>{d.Verified}</td>
+                    <td style={{ color: "#6AA2B8" }}>{d.filename}</td>
+                    <td className="list-item-style">{d.Submitted}</td>
+                    <td className="list-item-style">{d.InBizstock}</td>
+                    <td className="list-item-style">{d.Rejected}</td>
+                    <td className="list-item-style">{d.Error}</td>
+                    <td className="list-item-style">{d.Pending}</td>
+                    <td className="list-item-style">{d.Verified}</td>
                 </tr>
             )
         });
-        return(
+        return (
             <table className="table table-bordered claim-list summary-list">
-                <thead>
-                    <tr className="table-head">
-                        <td className="table-head-text">File Name</td>
-                        <td className="table-head-text list-item-style">Submitted</td>
-                        <td className="table-head-text list-item-style">InBiztalk</td>
-                        <td className="table-head-text list-item-style">Rejected PreProcess</td>
-                        <td className="table-head-text list-item-style">Error in PreProcess</td>
-                        <td className="table-head-text list-item-style">Pending in Preprocess</td>
-                        <td className="table-head-text list-item-style">In Facets</td>
-                    </tr>
-                </thead>
+                <tr className="table-head">
+                    <td className="table-head-text">File Name</td>
+                    <td className="table-head-text list-item-style">Submitted</td>
+                    <td className="table-head-text list-item-style">In HiPaaS</td>
+                    <td className="table-head-text list-item-style">Rejected PreProcess</td>
+                    <td className="table-head-text list-item-style">Error in PreProcess</td>
+                    <td className="table-head-text list-item-style">Accepted in Preprocess</td>
+                    <td className="table-head-text list-item-style">In Qnxt</td>
+                </tr>
                 <tbody>
                     <tr>
                         <td>Totals</td>
-                        <td>{this.state.SubTotal}</td>
-                        <td>{this.state.VeriTotal}</td>
-                        <td>{this.state.InBizstockTotal}</td>
-                        <td>{this.state.PenTotal}</td>
-                        <td>{this.state.RejTotal}</td>
-                        <td>{this.state.errTotal}</td>
+                        <td className="list-item-style">{this.state.SubTotal}</td>
+                        <td className="list-item-style">{this.state.VeriTotal}</td>
+                        <td className="list-item-style">{this.state.InBizstockTotal}</td>
+                        <td className="list-item-style">{this.state.PenTotal}</td>
+                        <td className="list-item-style">{this.state.RejTotal}</td>
+                        <td className="list-item-style">{this.state.errTotal}</td>
                     </tr>
                     {row}
                 </tbody>
@@ -160,14 +158,14 @@ export class AuditSummary extends React.Component{
         )
     }
 
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.setState({
-                [key] : ''
+                [key]: ''
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key]: event.target.options[event.target.selectedIndex].text
             })
         }
 
@@ -176,28 +174,28 @@ export class AuditSummary extends React.Component{
         }, 50);
     }
 
-    
 
-    renderStats(){
-        let data=[]
+
+    renderStats() {
+        let data = []
         data = [
-            {flag:'n', selectedTradingPartner:'n', startDate:'n' ,endDate:'n'},
-           ]
-           
+            { flag: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n' },
+        ]
+
         return (
-            
+
             <div className="row">
                 <div className="col-2">
                     <div className="center-align">Total Files</div>
-                    <div className="center-align"><a href="#" className="blue bold-text summary-values" 
-                        // onClick={() => {this.props.handleFlag(Strings.claimDetails)}}
-                    
-                    >   
-           <Link to={{pathname: '/Files_837' , state: {data}}}> {this.state.totalFile} </Link>                                
+                    <div className="center-align"><a href="#" className="blue bold-text summary-values"
+                    // onClick={() => {this.props.handleFlag(Strings.claimDetails)}}
+
+                    >
+                        <Link to={{ pathname: '/Files_837', state: { data } }}> {this.state.totalFile} </Link>
                         {/* <Link to={'/' + Strings.claimDetails , '/n/n/n/n'}>{this.state.totalFile}</Link> */}
-                        
-                        </a>
-                        </div>
+
+                    </a>
+                    </div>
                 </div>
                 <div className="col-2">
                     <div className="center-align">Dup Files</div>
@@ -220,11 +218,11 @@ export class AuditSummary extends React.Component{
             <div>
                 {/* {this.renderSearchBar()} */}
                 <br></br>
-                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Audit</h5><br></br>
-                <Topbar 
-                    tradingpartner={this.state.tradingpartner} 
+                <h5 style={{ color: '#139DC9', fontsize: "20px" }}>Claims Audit</h5><br></br>
+                <Topbar
+                    tradingpartner={this.state.tradingpartner}
                     onSelect={this.onSelect}
-                    />
+                />
                 {this.renderStats()}
                 {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
             </div>

@@ -279,7 +279,7 @@ export class RealTime276 extends React.Component {
 
         let summary = [
             { name: 'OVERALL VOLUME (DAILY)', value: data.Daily_Volume },
-            { name: 'TOTAL TRANSACTION VOLUME', value: data.TotalNumOfReq },
+            { name: 'TOTAL TRANSACTION VOL', value: data.TotalNumOfReq },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
             { name: 'AVG RESPONSE TIME', value: data.AvgResTime + ' sec' },
@@ -682,7 +682,7 @@ export class RealTime276 extends React.Component {
        
         array.forEach(item => {
             data = [
-                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n' , selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION VOLUME' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
+                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n' , selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION VOL' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
                ]
             row.push(
 
@@ -695,7 +695,7 @@ export class RealTime276 extends React.Component {
                 //         '/' + startDate + 
                 //         '/' + endDate + 
                 //         '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
-                //         '/' + (item.name == 'TOTAL TRANSACTION VOLUME' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
+                //         '/' + (item.name == 'TOTAL TRANSACTION VOL' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
                 //         '/' + item.value
                 //     } className="col-2 summary-container">
                 //     <div>
@@ -703,16 +703,16 @@ export class RealTime276 extends React.Component {
                 //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 //     </div>
                 // </Link>
-                item.name == 'TOTAL TRANSACTION VOLUME' || item.name == 'ERROR PERCENTAGE'
+                item.name == 'TOTAL TRANSACTION VOL' || item.name == 'ERROR PERCENTAGE'
                 ?
-                <Link to={{ pathname: '/'+ url , state: {data}}} className="col-2 summary-container"> 
+                <Link to={{ pathname: '/'+ url , state: {data}}} className="col summary-container"> 
                     <div>
                         <div className="summary-header">{item.name}</div>
                         <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                 </Link>
                 :
-                <div className="col-2 summary-container">
+                <div className="col summary-container">
                     <div className="summary-header">{item.name}</div>
                     <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 </div>

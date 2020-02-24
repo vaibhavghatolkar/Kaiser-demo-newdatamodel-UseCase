@@ -665,9 +665,9 @@ export class ClaimDetails837 extends React.Component {
                 <td className="table-head-text">Claim Id</td>
                 <td className="table-head-text list-item-style">Claim Date</td>
                 <td className="table-head-text list-item-style">Claim Amount</td>
-                <td className="table-head-text list-item-style">Claim Status</td>
+                <td className="table-head-text list-item-style">999 Response</td>
+                <td className="table-head-text list-item-style">277 CA Response</td>
                 <td className="table-head-text list-item-style">Adjudication Status</td>
-                <td className="table-head-text list-item-style">Error Code</td>
             </tr>
         )
     }
@@ -750,8 +750,8 @@ export class ClaimDetails837 extends React.Component {
                             <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td>
                             <td className="style-left"> ${d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
+                            <td className="list-item-style"></td>
                             <td className="list-item-style">{d.adjudication_status}</td>
-                            <td className="list-item-style">{d.ClaimLevelErrors}</td>
                         </tr>
                     )
                 })
