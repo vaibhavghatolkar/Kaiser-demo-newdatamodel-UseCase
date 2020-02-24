@@ -68,15 +68,22 @@ export class ClaimDetails837 extends React.Component{
             pieArray : [],
             labelArray : [],
             orderby: '',
+            Icdcode: [],
+            fileid:'',
+            selectedICdCode:'',
+            claimid:'',
+            Icdcodepresent:'',
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
+        this.Saved = this.Saved.bind(this)
     }
 
     componentDidMount(){
         this.getCommonData()
         this.getData()
+        this.getIcdCode()
     }
 
     getCommonData(){
@@ -107,7 +114,38 @@ export class ClaimDetails837 extends React.Component{
             console.log(err)
         });
     }
+    getIcdCode(){
+        let query = `{
+            ClaimsICDCODE  {
+                SeqId
+                ICD_CODE
+                Year
+                ExtraField1
+            }
+        }`
 
+     
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+         
+            if(res.data){
+                this.setState({
+                    Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
     getData = () => {
         let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -169,7 +207,10 @@ export class ClaimDetails837 extends React.Component{
                 console.log(err)
             });
     }
-
+    ChangeVal(event, key){
+        this.state.selectedICdCode=  event.target.options[event.target.selectedIndex].text;
+   
+     }
     sortData(fileId, data) {
         let files = {}
         let intakeClaims = this.state.intakeClaims
@@ -243,7 +284,53 @@ export class ClaimDetails837 extends React.Component{
                 console.log(err)
             });
     }
+    renderButton() {
+        
+        return (
 
+            <div>
+
+                <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
+
+            </div>
+        )
+    }
+
+    Saved() {              
+        if(this.state.selectedICdCode!="")
+          {
+                   let query = `mutation{updateICDCode(
+                    ClaimID:"`+ this.state.claimid + `" 
+                    FileID:"`+ this.state.fileid + `"  
+                    ICDCode:"`+ this.state.selectedICdCode + `"     
+                    )
+                  }`
+
+                  console.log("asfsadds" , query)
+            fetch(Urls.base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    query
+
+                })
+            })
+                .then(r => r.json())
+                .then(data =>
+                    alert(data.data.updateICDCode),
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+
+                );
+
+        }
+    
+
+    }
     renderSearchBar(){
         return(
             <div className="row">
@@ -268,8 +355,17 @@ export class ClaimDetails837 extends React.Component{
         })
     }
 
+    getIcdcodeoptions() {
+        let row = []
+        this.state.Icdcode.forEach(element => {
+             
+            row.push(<option value="">{element.ICD_CODE}</option>)
+        })
+        return row
+    }
+
     getDetails(claimId, fileId){
-     
+        let Claim_Icdcode=""
         let url = Urls.real_time_claim_details
         let query = `{
             Claim837RTDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
@@ -290,6 +386,8 @@ export class ClaimDetails837 extends React.Component{
               BillingProviderCity_State_Zip
               ICDCode
               AccidentDate
+              FileID
+              FieldToUpdate
             }
             Claim837RTLineDetails(ClaimID:"`+claimId+`", FileID: "`+fileId+`") {
               ClaimID
@@ -315,7 +413,17 @@ export class ClaimDetails837 extends React.Component{
         .then(res => res.json())
         .then(res => {
             if(res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0){
+                if (res.data.Claim837RTDetails[0].FieldToUpdate == "ICDCode") {                    
+                    Claim_Icdcode = <select id="fao1" className="form-control" style={{width:"100px"}} onChange={(e) => this.ChangeVal(e)}>
+                        <option value="0" ></option>
+                        {this.getIcdcodeoptions()}
+                    </select>
+                }
+                else {
+                    Claim_Icdcode =res.data.Claim837RTDetails[0].ICDCode;
+                }
                 let data = res.data.Claim837RTDetails[0]
+                
                 let claimDetails = 
                 [
                     { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
@@ -326,13 +434,18 @@ export class ClaimDetails837 extends React.Component{
                     { key: 'Claim amount', value: data.Claim_Amount },
                     { key: 'Provider address', value: data.BillingProviderAddress },
                     { key: 'Claim Status', value: data.ClaimStatus },
-                    { key: 'ICD Code', value: data.ICDCode },
-                    { key: 'Accident Date', value: data.AccidentDate }
+                    { key: 'ICD Code', value: Claim_Icdcode },
+                    { key: 'Accident Date', value: data.AccidentDate },
+                    { key: '',  },
+                    { key: '',  },
                 ]
                 this.setState({
                     showDetails: true,
                     claimDetails : claimDetails,
                     claimLineDetails : res.data.Claim837RTLineDetails,
+                    fileid:data.FileID,
+                    claimid:data.ClaimID,
+                    Icdcodepresent:data.FieldToUpdate
                 })
             }
         })
@@ -736,7 +849,7 @@ export class ClaimDetails837 extends React.Component{
                 data[keys].array.forEach((d) => {
                     col.push(
                         <tr>
-                            <td className="list-item-style"><a href="#" onClick={() => {
+                            <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
                                     claimId : d.ClaimID
                                 }, () => {
@@ -849,6 +962,7 @@ export class ClaimDetails837 extends React.Component{
     }
 
     render() {
+        
         return (
             <div>
                 <label style={{color:"var(--main-bg-color)" , fontWeight:"500" , marginTop:"10px", fontSize: '24px'}}>Claim Details</label>
@@ -865,6 +979,8 @@ export class ClaimDetails837 extends React.Component{
                                 <table className="table claim-Details">
                                     {this.renderHeader('Claim #'+ this.state.claimId)}
                                     {this.renderRows(this.state.claimDetails) }
+                                    <br></br>                                    
+                                       {this.state.Icdcodepresent=="ICDCode" ? this.renderButton() : "" }  
                                 </table>
                             : null
                             }
