@@ -3,7 +3,7 @@
 .header_container{
     /* background: linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%); */
     background-color: var(--main-bg-color);
-    padding: 16px;
+    padding: 11px;
     position: fixed;
     width: 100%;
     z-index: 1;
@@ -14,6 +14,8 @@
     color: var(--white-color);
     margin:0px;
     font-size: 20px;
+    font-weight: bold;
+    margin-left: 20px;
     
 }
 .dropdown {
@@ -42,4 +44,4 @@
 }
   
 .dropdown:hover .dropdown-content {display: block; }
-  
+
