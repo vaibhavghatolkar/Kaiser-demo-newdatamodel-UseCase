@@ -13,9 +13,9 @@ export class EncounterDetails extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
-        let flag = props.location.state.data[0].flag
-        if (flag == 'accept') {
+ 
+        let flag =props.location.state.data[0].flag
+        if(flag == 'accept'){
             flag = 'Accepted Claims'
         } else if (flag == 'reject') {
             flag = 'Rejected Claims'
@@ -66,6 +66,11 @@ export class EncounterDetails extends React.Component {
             pieArray: [],
             labelArray: [],
             orderby: '',
+            Icdcode: [],
+            fileid:'',
+            selectedICdCode:'',
+            claimid:'',
+            Icdcodepresent:'',
 
             nameRotation : 180,
             dateRotation : 180,
@@ -75,11 +80,13 @@ export class EncounterDetails extends React.Component {
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
+        this.Saved = this.Saved.bind(this)
     }
 
     componentDidMount() {
         this.getCommonData()
         this.getData()
+        this.getIcdCode()
     }
 
     getCommonData() {
@@ -89,7 +96,7 @@ export class EncounterDetails extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+      
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -109,6 +116,38 @@ export class EncounterDetails extends React.Component {
             .catch(err => {
                 console.log(err)
             });
+    }
+    getIcdCode(){
+        let query = `{
+            ClaimsICDCODE  {
+                SeqId
+                ICD_CODE
+                Year
+                ExtraField1
+            }
+        }`
+
+     
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({query: query})
+        })
+        .then(res => res.json())
+        .then(res => {
+         
+            if(res.data){
+                this.setState({
+                    Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
     }
 
     getData = () => {
@@ -271,8 +310,17 @@ export class EncounterDetails extends React.Component {
         })
     }
 
-    getDetails(claimId, fileId) {
+    getIcdcodeoptions() {
+        let row = []
+        this.state.Icdcode.forEach(element => {
+             
+            row.push(<option value="">{element.ICD_CODE}</option>)
+        })
+        return row
+    }
 
+    getDetails(claimId, fileId){
+        var Claim_Icdcode = '';
         let url = Urls.real_time_claim_details
         let query = `{
             EncounterDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
@@ -293,6 +341,8 @@ export class EncounterDetails extends React.Component {
               BillingProviderCity_State_Zip
               ICDCode
               AccidentDate
+              FileID 
+              FieldToUpdate
             }
             EncounterLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
               ClaimID
@@ -313,37 +363,55 @@ export class EncounterDetails extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({ query: query })
+            body: JSON.stringify({query: query})
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
-                    let data = res.data.EncounterDetails[0]
-                    let claimDetails =
-                        [
-                            { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
-                            { key: 'Encounter Date', value: data.ClaimDate },
-                            { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                            { key: 'Subscriber last name', value: data.SubscriberLastName },
-                            { key: 'Admission date', value: data.AdmissionDate },
-                            // { key: 'Claim amount', value: data.Claim_Amount },
-                            { key: 'Provider address', value: data.BillingProviderAddress },
-                            { key: 'Encounter Status', value: data.ClaimStatus },
-                            { key: 'ICD Code', value: data.ICDCode },
-                            { key: 'Accident Date', value: data.AccidentDate }
-                        ]
-                    this.setState({
-                        showDetails: true,
-                        claimDetails: claimDetails,
-                        claimLineDetails: res.data.EncounterLineDetails,
-                    })
+        .then(res => res.json())
+        .then(res => {
+            if(res.data.EncounterDetails && res.data.EncounterDetails.length > 0){
+                if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {                    
+                    Claim_Icdcode = <select id="fao1" className="form-control" style={{width:"100px"}}  onChange={(e) => this.ChangeVal(e)}>
+                        <option value="0" ></option>
+                        {this.getIcdcodeoptions()}
+                    </select>
                 }
-            })
-            .catch(err => {
-                console.log(err)
-            });
-    }
-
+                else {
+                    Claim_Icdcode =res.data.EncounterDetails[0].ICDCode;
+                }
+                let data = res.data.EncounterDetails[0]
+                
+                let claimDetails = 
+                [
+                    { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
+                    { key: 'Encounter Date', value: data.ClaimDate },
+                    { key: 'Subscriber first name', value: data.SubscriberFirstName },
+                    { key: 'Subscriber last name', value: data.SubscriberLastName },
+                    { key: 'Admission date', value: data.AdmissionDate },
+                    // { key: 'Claim amount', value: data.Claim_Amount },
+                    { key: 'Provider address', value: data.BillingProviderAddress },
+                    { key: 'Encounter Status', value: data.ClaimStatus },
+                    { key: 'ICD Code', value: Claim_Icdcode },
+                    { key: 'Accident Date', value: data.AccidentDate },
+                    { key: '',  },
+                    { key: '',  },
+                ]
+                this.setState({
+                    showDetails: true,
+                    claimDetails : claimDetails,
+                    claimLineDetails : res.data.EncounterLineDetails,
+                    fileid:data.FileID,
+                    claimid:data.ClaimID,
+                    Icdcodepresent:data.FieldToUpdate
+                })
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    } 
+    ChangeVal(event, key){
+        this.state.selectedICdCode=  event.target.options[event.target.selectedIndex].text;
+   
+     }
     renderRows(dictionary) {
         let row = []
         let col = []
@@ -740,7 +808,7 @@ export class EncounterDetails extends React.Component {
                 data[keys].array.forEach((d) => {
                     col.push(
                         <tr>
-                            <td className="list-item-style"><a href="#" onClick={() => {
+                            <td className="list-item-style"><a  className="clickable" onClick={() => {
                                 this.setState({
                                     claimId: d.ClaimID
                                 }, () => {
@@ -824,7 +892,56 @@ export class EncounterDetails extends React.Component {
             this.getData()
         }, 50);
     }
+
+    renderButton() {
+            return (
+
+                <div>
+
+                    <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
+
+                </div>
+            )
+        }
+
+        Saved() {                 
+          
+              if(this.state.selectedICdCode!="")
+              {
+                       let query = `mutation{updateEncounterICDCode(
+                        ClaimID:"`+ this.state.claimid + `" 
+                        FileID:"`+ this.state.fileid + `"  
+                        ICDCode:"`+ this.state.selectedICdCode + `" 
+                       
+                        )
+                      }`
+                console.log(" gsdg"  ,query);
+                fetch(Urls.base_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query
+    
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data =>
+                        alert(data.data.updateEncounterICDCode),
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
+    
+                    );
+    
+            }
+        
+    
+        }
     render() {
+      
         return (
             <div>
                 <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>Encounter Details</label>
@@ -838,11 +955,13 @@ export class EncounterDetails extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details">
-                                    {this.renderHeader('Encounter #' + this.state.claimId)}
-                                    {this.renderRows(this.state.claimDetails)}
-                                </table>
-                                : null
-                        }
+                                    {this.renderHeader('Encounter #'+ this.state.claimId)}
+                                    {this.renderRows(this.state.claimDetails) }
+                                    <br></br>                                    
+                                    {this.state.Icdcodepresent=="ICDCode" ? this.renderButton() : "" }                                     
+                                    </table>
+                            : null
+                            }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
                     </div>
                 </div>

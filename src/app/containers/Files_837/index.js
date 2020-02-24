@@ -813,10 +813,7 @@ export class Files_837 extends React.Component {
     render() {
         return (
             <div>
-                {/* {this.renderSearch()} */}
                 <br></br>
-                {/* <h5 style="color: rgb(19, 157, 201); font-size: 20px;">Claim Details</h5> */}
-                { <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claim Details </h5> }  <br></br>
                 {this.renderTopbar()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">
