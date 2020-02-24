@@ -132,14 +132,14 @@ export class DynamicSidebar extends React.Component {
         let menuOptions = {}
         data.forEach(item => {
             if (item.parent_node == 0) {
-                menuOptions[item.menu_id] = {
+                menuOptions['Sb' + item.menu_id] = {
                     'name': '',
                     'array': []
                 }
-                menuOptions[item.menu_id].name = item.menu_description
+                menuOptions['Sb' + item.menu_id].name = item.menu_description
             } else {
                 item['key'] = this.getkeys(item.menu_id)
-                menuOptions[item.parent_node].array.push(item)
+                menuOptions['Sb' + item.parent_node].array.push(item)
             }
         })
 
@@ -224,10 +224,6 @@ export class DynamicSidebar extends React.Component {
         let row = []
         for (let keys in menuOptions) {
             row.push(this.renderItems(keys, menuOptions[keys].name, menuOptions[keys].array))
-        }
-
-        if (isOutbound) {
-            row.reverse()
         }
 
         return (
