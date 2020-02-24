@@ -153,7 +153,7 @@ class PrivateRoute extends React.Component {
                        <div className="container-fluid background">
                        <Header/> <br /><br /><br /><br />
                 <div className="row">
-                <div className="col-2 nopadding white-background">
+                <div className="col nopadding white-background">
                     <DynamicSidebar
                         handleFlag={this.handleFlag}
                         />

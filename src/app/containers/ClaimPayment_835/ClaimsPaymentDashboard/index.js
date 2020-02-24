@@ -564,7 +564,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Claim's Payment Dashboard</h5><br></br>
+                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Electronic Remittance Advice</h5><br></br>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}

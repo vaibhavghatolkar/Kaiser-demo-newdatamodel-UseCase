@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles.css';
+import '../../Files/files-styles.css';
 import { Pie, Bar } from 'react-chartjs-2';
 import '../../color.css'
 import moment from 'moment';
@@ -7,6 +8,7 @@ import { Files } from '../../Files';
 import { Topbar } from '../../../components/Topbar';
 import { Files_837 } from '../../Files_837';
 import DatePicker from "react-datepicker";
+import ReactPaginate from 'react-paginate';
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
@@ -56,8 +58,8 @@ export class RealTimeDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
-            endDate : moment().format('YYYY-MM-DD'),
+            startDate: moment().subtract(7, 'd').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Datewise',
             selectedTradingPartner: '',
@@ -68,8 +70,10 @@ export class RealTimeDashboard extends React.Component {
             inProgress: 0,
             Accepted_per: 0,
             rejected_per: 0,
+            page: 1,
             ClaimBarChart: [],
             claimLabels: [],
+            claimsList: []
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -87,9 +91,10 @@ export class RealTimeDashboard extends React.Component {
     componentDidMount() {
         this.getCommonData()
         this.getData()
+        this.getListData()
     }
 
-    getCommonData(){
+    getCommonData() {
         let query = `{
             Trading_PartnerList(Transaction:"Claim837RT") {
                 Trading_Partner_Name 
@@ -100,32 +105,32 @@ export class RealTimeDashboard extends React.Component {
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.setState({
-                    tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     getData() {
         let chartType = this.state.chartType
-        if(!chartType){
+        if (!chartType) {
             chartType = "Monthwise"
         }
-        
+
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", Type : "` + this.state.type + `") {
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `") {
                 TotalFiles
                 TotalClaims
                 Accepted
@@ -137,7 +142,7 @@ export class RealTimeDashboard extends React.Component {
                 TotalSentToQNXT
                 InProgress
             }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"`+this.state.startDate+`", EndDt : "`+this.state.endDate+`", ChartType: "`+chartType+`", Type : "` + this.state.type + `") {
+            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `") {
                 From
                 MonthNo
                 Year
@@ -149,7 +154,7 @@ export class RealTimeDashboard extends React.Component {
             }
         }`
         console.log(query)
-        fetch(Urls.real_time_claim , {
+        fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -169,15 +174,16 @@ export class RealTimeDashboard extends React.Component {
                 let inProgress = 0
                 let ClaimBarChart = res.data.Claim837RTClaimBarchart
                 let claimLabels = []
-                
-                if(data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0){
+
+                if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
                     summary = [
                         { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : ''   },
-                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : ''},
-                        { name: 'Accepted Percentage', value: data.Claim837RTDashboardCount[0].Accepted_Per  ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : ''},
-                        { name: 'Rejected Percentage', value: data.Claim837RTDashboardCount[0].Rejected_Per  ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : ''},
+                        { name: 'Failed File Load', value: 0 },
+                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
+                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
+                        { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
+                        { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
                     rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
@@ -185,29 +191,29 @@ export class RealTimeDashboard extends React.Component {
                     rejected = data.Claim837RTDashboardCount[0].Rejected
                     inProgress = data.Claim837RTDashboardCount[0].InProgress
                 }
-                
+
                 let count = 0
-                ClaimBarChart.forEach((d)=> {
+                ClaimBarChart.forEach((d) => {
                     count++;
                     array.push(
                         d.Y_axis ? parseFloat(d.Y_axis) : 0
                     )
-                    if(chartType == 'Weekwise'){
+                    if (chartType == 'Weekwise') {
                         claimLabels.push('week' + count)
                     } else {
                         claimLabels.push(d.X_axis)
                     }
                 })
-        
+
                 this.setState({
                     summaryList: summary,
                     Accepted_per: Accepted_per1,
                     rejected_per: rejected_per1,
-                    ClaimBarChart:array,
-                    claimLabels : claimLabels,
-                    accepted : accepted,
-                    rejected : rejected,
-                    inProgress : inProgress
+                    ClaimBarChart: array,
+                    claimLabels: claimLabels,
+                    accepted: accepted,
+                    rejected: rejected,
+                    inProgress: inProgress
                 })
             })
             .catch(err => {
@@ -236,7 +242,7 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
-    getBarData(labelArray, dataArray, color){
+    getBarData(labelArray, dataArray, color) {
         let bardata = {
             labels: labelArray,
             showFile: false,
@@ -283,7 +289,7 @@ export class RealTimeDashboard extends React.Component {
         };
 
         console.log(this.state.ClaimBarChart)
-        
+
         return (
             <div className="row chart-div">
                 <div className="chart-container chart">
@@ -298,14 +304,14 @@ export class RealTimeDashboard extends React.Component {
                                 position: 'bottom'
                             }
                         }}
-                        width={100}
-                        height={60} />
+                        width={80}
+                        height={40} />
                 </div>
                 <div className="chart-container chart">
                     <Bar
-                        data={this.getBarData(this.state.claimLabels,this.state.ClaimBarChart, "#83D2B4")}
-                        width={100}
-                        height={60}
+                        data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
+                        width={80}
+                        height={40}
                         options={{
                             legend: {
                                 position: 'bottom'
@@ -329,6 +335,7 @@ export class RealTimeDashboard extends React.Component {
         })
         setTimeout(() => {
             this.getData()
+            this.getListData()
         }, 50);
     }
 
@@ -351,29 +358,110 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
+    handlePageClick = (data) => {
+        let page = data.selected + 1
+        this.setState({
+            page: page
+        }, () => {
+            this.getListData()
+        })
+    }
+
     renderList() {
         let row = []
         const data = this.state.claimsList;
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td>{d.name}</td>
-                    <td className="list-item-style">{moment(d.date).format('DD/MM/YYYY')}<br />{moment(d.date).format('h:m a')}</td>
-                    <td className={"list-item-style " + (d.status == 'SentToQnxt' || d.status == 'Accepted' ? 'green ' : (d.status == 'Rejected' ? 'red ' : ''))}>{d.status}</td>
-                    <td className="list-item-style">{d.submitter}</td>
-                    <td className="list-item-style">{d.dCount}</td>
+                    <td>{d.FileName}</td>
+                    <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className={"list-item-style " + (d.FileStatus == 'SentToQnxt' || d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'Rejected' ? 'red ' : ''))}>{d.FileStatus}</td>
+                    <td className="list-item-style">{d.Sender}</td>
+                    <td className="list-item-style">{d.Claimcount}</td>
                 </tr>
             )
         });
 
         return (
-            <table className="table table-bordered claim-list">
-                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
+            <div>
+                <table className="table table-bordered claim-list">
+                    {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0)}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
+            </div>
         );
+    }
+
+    getListData = () => {
+        let count = 1
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let providerName = this.state.providerName
+        if (!providerName) {
+            providerName = ''
+        }
+
+        let query = `{            
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:""  ) {
+                RecCount
+                FileID
+                FileName
+                Sender
+                FileDate
+                Claimcount
+                FileStatus
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.Claim837RTFileDetails) {
+
+                    if (res.data.Claim837RTFileDetails.length > 0) {
+
+                        count = Math.floor(res.data.Claim837RTFileDetails[0].RecCount / 10)
+                        if (res.data.Claim837RTFileDetails[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                        this.setState.recount = count;
+                    }
+
+                    this.setState({
+                        claimsList: res.data.Claim837RTFileDetails,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     showFile(name) {
@@ -386,7 +474,7 @@ export class RealTimeDashboard extends React.Component {
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
-            if(!element){
+            if (!element) {
                 return
             }
             row.push(<option value="">{element.Trading_Partner_Name}</option>)
@@ -412,32 +500,33 @@ export class RealTimeDashboard extends React.Component {
         }, 50);
     }
 
-    onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
+    onSelect(event, key) {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.setState({
-                [key] : ''
+                [key]: ''
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key]: event.target.options[event.target.selectedIndex].text
             })
         }
 
         setTimeout(() => {
             this.getData()
+            this.getListData()
         }, 50);
     }
 
-    MonthsEvent(event, key){
+    MonthsEvent(event, key) {
         this.setState({
-            [key] : event.target.options[event.target.selectedIndex].value
+            [key]: event.target.options[event.target.selectedIndex].value
         })
         setTimeout(() => {
             this.getData()
         }, 50);
     }
 
-    renderSummaryDetails(){
+    renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag
@@ -447,55 +536,62 @@ export class RealTimeDashboard extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-        
+
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
             let data = []
-            if(item.name == 'Accepted Claims'){
+            if (item.name == 'Accepted Claims') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if(item.name == 'Rejected Claims'){
+            } else if (item.name == 'Rejected Claims') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
             } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type : type },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
                 (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
-                ?
-                <div className="col summary-container">
-                    <div className="summary-header">{item.name}</div>
-                    <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                </div>
-                :
-                <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col-2 summary-container">
-                    <div>
+                    ?
+                    <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
-                        <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        <div className={
+                            (item.name == 'Total Files' || item.name == 'Total Claims') ? 'blue summary-title' :
+                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims') ? 'red summary-title' : ''
+                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
-                </Link>
+                    :
+                    <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
+                        <div className="summary-header">{item.name}</div>
+                        <div className={
+                            (item.name == 'Total Files' || item.name == 'Total Claims') ? 'blue summary-title' :
+                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims') ? 'red summary-title' : ''
+                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    </Link>
             )
         });
 
-        return(
+        return (
             <div className="row padding-left">
                 {row}
             </div>
         )
     }
 
-    onHandleChange(e){
+    onHandleChange(e) {
         clearTimeout(val)
         let providerName = e.target.value
         val = setTimeout(() => {
             this.setState({
-                providerName : providerName
+                providerName: providerName
             }, () => {
                 this.getData()
+                this.getListData()
             })
         }, 300);
     }
@@ -506,47 +602,48 @@ export class RealTimeDashboard extends React.Component {
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
-                        <select 
+                        <select
                             className="form-control list-dashboard" id="state"
                             onChange={(event) => {
                                 let day = 0
                                 let chartType = ''
                                 let selected_val = event.target.options[event.target.selectedIndex].text
 
-                                if(selected_val == 'Last week'){
+                                if (selected_val == 'Last week') {
                                     day = 7
                                     chartType = 'Datewise'
-                                } else if(selected_val == 'Last 30 days'){
+                                } else if (selected_val == 'Last 30 days') {
                                     day = 30
                                     chartType = 'Weekwise'
-                                } else if(selected_val == 'Last 90 days'){
+                                } else if (selected_val == 'Last 90 days') {
                                     day = 90
-                                } else if(selected_val == 'Last 180 days'){
+                                } else if (selected_val == 'Last 180 days') {
                                     day = 180
-                                } else if(selected_val == 'Last year'){
+                                } else if (selected_val == 'Last year') {
                                     day = 365
                                 }
 
-                                let startDate = moment().subtract(day,'d').format('YYYY-MM-DD')
+                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
                                 let endDate = moment().format('YYYY-MM-DD')
 
-                                if(!selected_val){
+                                if (!selected_val) {
                                     startDate = ''
                                     endDate = ''
                                 }
 
                                 this.setState({
-                                    startDate : startDate,
+                                    startDate: startDate,
                                     endDate: endDate,
                                     selected_val: selected_val,
-                                    chartType : chartType
+                                    chartType: chartType
                                 })
 
                                 setTimeout(() => {
                                     this.getData()
+                                    this.getListData()
                                 }, 50);
                             }}
-                            >
+                        >
                             <option selected="selected" value="1">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
@@ -562,6 +659,7 @@ export class RealTimeDashboard extends React.Component {
                                     State: event.target.options[event.target.selectedIndex].text
                                 }, () => {
                                     this.getData()
+                                    this.getListData()
                                 })
                             }}
                         >
@@ -585,13 +683,13 @@ export class RealTimeDashboard extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text" 
+                        <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner" 
+                        <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
                             }}>
@@ -616,11 +714,12 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div>
                 <br></br>
-                <h5 style={{ color: 'var(--main-bg-color)',fontsize: "20px" }}>Claim's Dashboard</h5><br></br>
+                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Claim's Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}
+                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
             </div>
         );
     }
