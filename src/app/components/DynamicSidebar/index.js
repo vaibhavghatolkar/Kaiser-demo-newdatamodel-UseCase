@@ -205,7 +205,7 @@ export class DynamicSidebar extends React.Component {
 
             row.push(
                 <li>
-                    <Link to={{ pathname: '/' + element.key + addon, state: { data } }}>{element.menu_description}</Link>
+                    <Link to={{ pathname: '/' + element.key ? element.key : '' + addon, state: { data } }}>{element.menu_description}</Link>
                 </li>
             )
         });
@@ -269,12 +269,21 @@ export class DynamicSidebar extends React.Component {
         )
     }
 
+    renderCopyright = () => {
+        return(
+            <div className="copyright"><br/>
+                © 2019 Powered by HiPaaS,<br/> All rights reserved.
+            </div>
+        )
+    }
+
     render() {
         return (
             <nav id="sidebar">
                 <ul className="list-unstyled components">
                     {this.renderTabs()}
                     {this.renderSidebarItems()}
+                    {this.renderCopyright()}
                 </ul>
             </nav>
         );
