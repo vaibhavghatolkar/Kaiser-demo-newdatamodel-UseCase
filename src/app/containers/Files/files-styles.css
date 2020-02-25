@@ -49,6 +49,9 @@
     text-align: center;
     padding: 12px;
 }
+.border-left{
+    border-left: 1px solid #dfdfdf;
+}
 .col-small-style{
     background-color: #ffffff; 
     border-right: 1px solid #dfdfdf;
@@ -169,4 +172,19 @@
 .copyright{
     color: darkslategrey;
     padding-left: 12px
+}
+.border-bottom{
+    border-bottom: 1.5px solid #139DC9 !important;
+}
+.search-input-style{
+    font-weight: 400;
+    font-size: 16px;
+    padding: 0px;
+    margin-top: 8px;
+    border: none;
+}
+.padding-view{    
+    margin-top: 12px;
+    padding-left: 0px;
+    margin-bottom: 12px
 }

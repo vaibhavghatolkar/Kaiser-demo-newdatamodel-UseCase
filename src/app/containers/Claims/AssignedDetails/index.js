@@ -14,7 +14,7 @@ export class AssignedDetails extends React.Component {
                 {
                     <div>
                         <div style={{ width: '95%', height: '28px' }}>
-                            <p>Assigned Claim's Summary Details - John Smith</p>
+                            <p>Assigned Claims Summary Details - John Smith</p>
                         </div>
                         <div class="table-responsive list-header">
                             <table class="table table-striped">

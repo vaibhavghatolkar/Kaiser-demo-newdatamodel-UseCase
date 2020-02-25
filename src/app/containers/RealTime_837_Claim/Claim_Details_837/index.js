@@ -31,6 +31,7 @@ export class ClaimDetails837 extends React.Component {
             initialPage: 0,
             lineData: [],
             file: [],
+            fileDetails: [],
             memberInfo: {},
             subscriberNo: '',
             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
@@ -69,14 +70,14 @@ export class ClaimDetails837 extends React.Component {
             labelArray: [],
             orderby: '',
             Icdcode: [],
-            fileid:'',
-            selectedICdCode:'',
-            claimid:'',
-            Icdcodepresent:'',
-            nameRotation : 180,
-            dateRotation : 180,
-            statusRotation : 180,
-            submitterRotation : 180,
+            fileid: '',
+            selectedICdCode: '',
+            claimid: '',
+            Icdcodepresent: '',
+            nameRotation: 180,
+            dateRotation: 180,
+            statusRotation: 180,
+            submitterRotation: 180,
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -118,7 +119,7 @@ export class ClaimDetails837 extends React.Component {
                 console.log(err)
             });
     }
-    getIcdCode(){
+    getIcdCode() {
         let query = `{
             ClaimsICDCODE  {
                 SeqId
@@ -128,27 +129,27 @@ export class ClaimDetails837 extends React.Component {
             }
         }`
 
-     
+
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-         
-            if(res.data){
-                this.setState({
-                    Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.data) {
+                    this.setState({
+                        Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
     getData = () => {
         let count = 1
@@ -168,6 +169,7 @@ export class ClaimDetails837 extends React.Component {
                 FileDate
                 Claimcount
                 FileStatus
+                Receiver
             }
         }`
         console.log(query)
@@ -211,10 +213,10 @@ export class ClaimDetails837 extends React.Component {
                 console.log(err)
             });
     }
-    ChangeVal(event, key){
-        this.state.selectedICdCode=  event.target.options[event.target.selectedIndex].text;
-   
-     }
+    ChangeVal(event, key) {
+        this.state.selectedICdCode = event.target.options[event.target.selectedIndex].text;
+
+    }
     sortData(fileId, data) {
         let files = {}
         let intakeClaims = this.state.intakeClaims
@@ -289,7 +291,7 @@ export class ClaimDetails837 extends React.Component {
             });
     }
     renderButton() {
-        
+
         return (
 
             <div>
@@ -300,17 +302,16 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
-    Saved() {              
-        if(this.state.selectedICdCode!="")
-          {
-                   let query = `mutation{updateICDCode(
+    Saved() {
+        if (this.state.selectedICdCode != "") {
+            let query = `mutation{updateICDCode(
                     ClaimID:"`+ this.state.claimid + `" 
                     FileID:"`+ this.state.fileid + `"  
                     ICDCode:"`+ this.state.selectedICdCode + `"     
                     )
                   }`
 
-                  console.log("asfsadds" , query)
+            console.log("asfsadds", query)
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -332,11 +333,11 @@ export class ClaimDetails837 extends React.Component {
                 );
 
         }
-    
+
 
     }
-    renderSearchBar(){
-        return(
+    renderSearchBar() {
+        return (
             <div className="row">
                 <input type="text" name="name" className="input-style" placeholder="Search Claim" />
             </div>
@@ -362,14 +363,14 @@ export class ClaimDetails837 extends React.Component {
     getIcdcodeoptions() {
         let row = []
         this.state.Icdcode.forEach(element => {
-             
+
             row.push(<option value="">{element.ICD_CODE}</option>)
         })
         return row
     }
 
-    getDetails(claimId, fileId){
-        let Claim_Icdcode=""
+    getDetails(claimId, fileId, fileData) {
+        let Claim_Icdcode = ""
         let url = Urls.real_time_claim_details
         let query = `{
             Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
@@ -412,51 +413,28 @@ export class ClaimDetails837 extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
-        })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0){
-                if (res.data.Claim837RTDetails[0].FieldToUpdate == "ICDCode") {                    
-                    Claim_Icdcode = <select id="fao1" className="form-control" style={{width:"100px"}} onChange={(e) => this.ChangeVal(e)}>
-                        <option value="0" ></option>
-                        {this.getIcdcodeoptions()}
-                    </select>
-                }
-                else {
-                    Claim_Icdcode =res.data.Claim837RTDetails[0].ICDCode;
-                }
-                let data = res.data.Claim837RTDetails[0]
-                
-                let claimDetails = 
-                [
-                    { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
-                    { key: 'Claim Date', value: data.ClaimDate },
-                    { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                    { key: 'Subscriber last name', value: data.SubscriberLastName },
-                    { key: 'Admission date', value: data.AdmissionDate },
-                    { key: 'Claim amount', value: data.Claim_Amount },
-                    { key: 'Provider address', value: data.BillingProviderAddress },
-                    { key: 'Claim Status', value: data.ClaimStatus },
-                    { key: 'ICD Code', value: Claim_Icdcode },
-                    { key: 'Accident Date', value: data.AccidentDate },
-                    { key: '',  },
-                    { key: '',  },
-                ]
-                this.setState({
-                    showDetails: true,
-                    claimDetails : claimDetails,
-                    claimLineDetails : res.data.Claim837RTLineDetails,
-                    fileid:data.FileID,
-                    claimid:data.ClaimID,
-                    Icdcodepresent:data.FieldToUpdate
-                })
-            }
+            body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
             .then(res => {
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
+                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "ICDCode") {
+                        Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
+                            <option value="0" ></option>
+                            {this.getIcdcodeoptions()}
+                        </select>
+                    }
+                    else {
+                        Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
+                    }
                     let data = res.data.Claim837RTDetails[0]
+
+                    let fileDetails = [
+                        { key: 'File Name', value: fileData.FileName },
+                        { key: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
+                        { key: 'Receiver', value: fileData.Receiver }
+                    ]
+
                     let claimDetails =
                         [
                             { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
@@ -464,16 +442,22 @@ export class ClaimDetails837 extends React.Component {
                             { key: 'Subscriber first name', value: data.SubscriberFirstName },
                             { key: 'Subscriber last name', value: data.SubscriberLastName },
                             { key: 'Admission date', value: data.AdmissionDate },
-                            { key: 'Claim amount', value: "$" + data.Claim_Amount },
+                            { key: 'Claim amount', value: data.Claim_Amount },
                             { key: 'Provider address', value: data.BillingProviderAddress },
                             { key: 'Claim Status', value: data.ClaimStatus },
-                            { key: 'ICD Code', value: data.ICDCode },
-                            { key: 'Accident Date', value: data.AccidentDate }
+                            { key: 'ICD Code', value: Claim_Icdcode },
+                            { key: 'Accident Date', value: data.AccidentDate },
+                            { key: '', },
+                            { key: '', },
                         ]
                     this.setState({
                         showDetails: true,
                         claimDetails: claimDetails,
                         claimLineDetails: res.data.Claim837RTLineDetails,
+                        fileDetails: fileDetails,
+                        fileid: data.FileID,
+                        claimid: data.ClaimID,
+                        Icdcodepresent: data.FieldToUpdate
                     })
                 }
             })
@@ -490,7 +474,7 @@ export class ClaimDetails837 extends React.Component {
         dictionary.forEach(item => {
             col.push(
                 <div className="col">
-                    <div className="header">{item.key} : </div>
+                    <div className="header">{item.key}</div>
                     <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
                 </div>
             )
@@ -765,7 +749,7 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-12">
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim line data</a></div>
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim Line Data</a></div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
@@ -799,12 +783,12 @@ export class ClaimDetails837 extends React.Component {
     renderClaimsHeader() {
         return (
             <tr className="table-head" style={{ fontSize: "9px" }}>
-                <td className="table-head-text">Claim Id</td>
-                <td className="table-head-text list-item-style">Claim Date</td>
-                <td className="table-head-text list-item-style">Claim Amount</td>
-                <td className="table-head-text list-item-style">Claim Status</td>
-                <td className="table-head-text list-item-style">Adjudication Status</td>
-                <td className="table-head-text list-item-style">Error</td>
+                <td className="table-head-text">Claim Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -827,16 +811,20 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-4 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
+                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
+                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
+                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
+                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
             </div>
         )
@@ -862,7 +850,7 @@ export class ClaimDetails837 extends React.Component {
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 col-small-style small-font left-align"><a href={"#" + data[keys].value.FileID}
+                    <div className="col-4 col-small-style border-left small-font left-align"><a href={"#" + data[keys].value.FileID}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
@@ -881,7 +869,7 @@ export class ClaimDetails837 extends React.Component {
                                 this.setState({
                                     claimId: d.ClaimID
                                 }, () => {
-                                    this.getDetails(d.ClaimID, d.FileID)
+                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td>
@@ -926,7 +914,6 @@ export class ClaimDetails837 extends React.Component {
 
         return (
             <div>
-
                 {this.renderTableHeader()}
                 {row}
                 <ReactPaginate
@@ -990,7 +977,7 @@ export class ClaimDetails837 extends React.Component {
     }
 
     render() {
-        
+
         return (
             <div>
                 <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>Claim Details</label>
@@ -1004,11 +991,26 @@ export class ClaimDetails837 extends React.Component {
                     <div className="col-6">
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                <table className="table claim-Details">
-                                    {this.renderHeader('Claim #'+ this.state.claimId)}
-                                    {this.renderRows(this.state.claimDetails) }
-                                    <br></br>                                    
-                                       {this.state.Icdcodepresent=="ICDCode" ? this.renderButton() : "" }  
+                                <div>
+                                    <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
+                                    <hr />
+                                </div> : null
+                        }
+                        {
+                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                <table className="table claim-Details border">
+                                    {this.renderHeader('File #' + this.state.fileid)}
+                                    {this.renderRows(this.state.fileDetails)}
+                                </table>
+                                : null
+                        }
+                        {
+                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                <table className="table claim-Details border">
+                                    {this.renderHeader('Claim #' + this.state.claimId)}
+                                    {this.renderRows(this.state.claimDetails)}
+                                    <br></br>
+                                    {this.state.Icdcodepresent == "ICDCode" ? this.renderButton() : ""}
                                 </table>
                                 : null
                         }

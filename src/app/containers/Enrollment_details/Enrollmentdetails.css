@@ -14,7 +14,7 @@
     font-size: 11px;
 }
 .table td, .table th {
-    padding: 7px;
+    padding: 12px;
 }
 .col-pixel-width-100 { flex: 0 0 200px; }
 .table-header-text {

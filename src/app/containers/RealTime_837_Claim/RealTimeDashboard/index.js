@@ -15,36 +15,36 @@ import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
 
 let val = ''
-// const second_data = {
-//     labels: [
-//         'ICD Code not found',
-//         'Accident Date not present',
-//         'Member Not Found',
-//         'Newborn Setup Pending',
-//         'Provider Setup Pending',
-//         'Misdirected Claims'
-//     ],
-//     datasets: [{
-//         data: [100, 100, 70, 20, 50, 20],
-//         backgroundColor: [
-//             '#139DC9',
-//             '#83D2B4',
-//             '#9DC913',
-//             '#EC6236',
-//             '#C9139D',
-//             'blue',
-//         ],
-//         hoverBackgroundColor: [
-//             '#139DC9',
-//             '#83D2B4',
-//             '#9DC913',
-//             '#EC6236',
-//             '#C9139D',
-//             'blue',
-//         ]
-//     }],
-//     flag: ''
-// };
+const second_data = {
+    labels: [
+        'ICD Code not found',
+        'Accident Date not present',
+        'Member Not Found',
+        'Newborn Setup Pending',
+        'Provider Setup Pending',
+        'Misdirected Claims'
+    ],
+    datasets: [{
+        data: [100, 100, 70, 20, 50, 20],
+        backgroundColor: [
+            '#139DC9',
+            '#83D2B4',
+            '#9DC913',
+            '#EC6236',
+            '#C9139D',
+            'blue',
+        ],
+        hoverBackgroundColor: [
+            '#139DC9',
+            '#83D2B4',
+            '#9DC913',
+            '#EC6236',
+            '#C9139D',
+            'blue',
+        ]
+    }],
+    flag: ''
+};
 
 
 
@@ -58,10 +58,10 @@ export class RealTimeDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            startDate: moment().subtract(7, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
-            chartType: 'Datewise',
+            chartType: 'Monthwise',
             selectedTradingPartner: '',
             State: '',
             Months: 0,
@@ -73,7 +73,6 @@ export class RealTimeDashboard extends React.Component {
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
-            claimsList: []
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -233,11 +232,11 @@ export class RealTimeDashboard extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">File Name</td>
-                <td className="table-head-text list-item-style">File Date</td>
-                <td className="table-head-text list-item-style">File Status</td>
-                <td className="table-head-text list-item-style">Submitter</td>
-                <td className="table-head-text list-item-style">Claim Count</td>
+                <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -270,19 +269,16 @@ export class RealTimeDashboard extends React.Component {
             labels: [
                 'Accepted',
                 'Rejected',
-                'Validated',
             ],
             datasets: [{
-                data: [this.state.accepted, this.state.rejected, this.state.inProgress],
+                data: [this.state.Accepted_per, this.state.rejected_per],
                 backgroundColor: [
                     '#139DC9',
                     '#daea00',
-                    '#83D2B4',
                 ],
                 hoverBackgroundColor: [
                     '#139DC9',
                     '#daea00',
-                    '#83D2B4',
                 ]
             }],
             flag: ''
@@ -374,7 +370,7 @@ export class RealTimeDashboard extends React.Component {
             row.push(
                 <tr>
                     <td>{d.FileName}</td>
-                    <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'SentToQnxt' || d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'Rejected' ? 'red ' : ''))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount}</td>
@@ -644,11 +640,11 @@ export class RealTimeDashboard extends React.Component {
                                 }, 50);
                             }}
                         >
-                            <option selected="selected" value="1">Last week</option>
+                            <option value="1">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option value="2">Last year</option>
+                            <option selected="selected" value="2">Last year</option>
                         </select>
                     </div>
                     <div className="form-group col-2">
@@ -710,16 +706,41 @@ export class RealTimeDashboard extends React.Component {
         })
     }
 
+    renderChart() {
+        return (
+            <Pie data={second_data}
+                options={{
+                    elements: {
+                        arc: {
+                            borderWidth: 0
+                        }
+                    },
+                    legend: {
+                        display: false
+                        // position: 'bottom'
+                    }
+                }}
+                width={100}
+                height={80} />
+        )
+    }
+
     render() {
         return (
             <div>
-                <br></br>
-                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Claim's Dashboard</h5>
+                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "18px", marginTop : '18px' }}>Claims Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}
-                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
+                <div className="row">
+                    <div className="col-9">
+                        {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
+                    </div>
+                    <div className="col-3 form-style">
+                        {this.renderChart()}
+                    </div>
+                </div>
             </div>
         );
     }

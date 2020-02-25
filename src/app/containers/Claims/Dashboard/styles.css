@@ -21,6 +21,7 @@
 .table-head-text{
     color: white;
     font-size: 1.2em;
+    padding: 12px !important;
 }
 .summary-list{
     line-height: 2.5em;

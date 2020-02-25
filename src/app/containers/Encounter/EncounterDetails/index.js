@@ -13,9 +13,9 @@ export class EncounterDetails extends React.Component {
 
     constructor(props) {
         super(props);
- 
-        let flag =props.location.state.data[0].flag
-        if(flag == 'accept'){
+
+        let flag = props.location.state.data[0].flag
+        if (flag == 'accept') {
             flag = 'Accepted Claims'
         } else if (flag == 'reject') {
             flag = 'Rejected Claims'
@@ -29,6 +29,7 @@ export class EncounterDetails extends React.Component {
             initialPage: 0,
             lineData: [],
             file: [],
+            fileDetails: [],
             memberInfo: {},
             subscriberNo: '',
             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
@@ -67,15 +68,15 @@ export class EncounterDetails extends React.Component {
             labelArray: [],
             orderby: '',
             Icdcode: [],
-            fileid:'',
-            selectedICdCode:'',
-            claimid:'',
-            Icdcodepresent:'',
+            fileid: '',
+            selectedICdCode: '',
+            claimid: '',
+            Icdcodepresent: '',
 
-            nameRotation : 180,
-            dateRotation : 180,
-            statusRotation : 180,
-            submitterRotation : 180,
+            nameRotation: 180,
+            dateRotation: 180,
+            statusRotation: 180,
+            submitterRotation: 180,
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -96,7 +97,7 @@ export class EncounterDetails extends React.Component {
             }
         }`
 
-      
+
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -117,7 +118,7 @@ export class EncounterDetails extends React.Component {
                 console.log(err)
             });
     }
-    getIcdCode(){
+    getIcdCode() {
         let query = `{
             ClaimsICDCODE  {
                 SeqId
@@ -127,27 +128,27 @@ export class EncounterDetails extends React.Component {
             }
         }`
 
-     
+
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-         
-            if(res.data){
-                this.setState({
-                    Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.data) {
+                    this.setState({
+                        Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     getData = () => {
@@ -168,6 +169,7 @@ export class EncounterDetails extends React.Component {
                 FileDate
                 Claimcount
                 FileStatus
+                Receiver
             }
         }`
         console.log(query)
@@ -313,13 +315,13 @@ export class EncounterDetails extends React.Component {
     getIcdcodeoptions() {
         let row = []
         this.state.Icdcode.forEach(element => {
-             
+
             row.push(<option value="">{element.ICD_CODE}</option>)
         })
         return row
     }
 
-    getDetails(claimId, fileId){
+    getDetails(claimId, fileId, fileData) {
         var Claim_Icdcode = '';
         let url = Urls.real_time_claim_details
         let query = `{
@@ -363,55 +365,62 @@ export class EncounterDetails extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data.EncounterDetails && res.data.EncounterDetails.length > 0){
-                if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {                    
-                    Claim_Icdcode = <select id="fao1" className="form-control" style={{width:"100px"}}  onChange={(e) => this.ChangeVal(e)}>
-                        <option value="0" ></option>
-                        {this.getIcdcodeoptions()}
-                    </select>
+            .then(res => res.json())
+            .then(res => {
+                if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
+                    if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {
+                        Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
+                            <option value="0" ></option>
+                            {this.getIcdcodeoptions()}
+                        </select>
+                    }
+                    else {
+                        Claim_Icdcode = res.data.EncounterDetails[0].ICDCode;
+                    }
+                    let data = res.data.EncounterDetails[0]
+
+                    let fileDetails = [
+                        { key: 'File Name', value: fileData.FileName },
+                        { key: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
+                        { key: 'Receiver', value: fileData.Receiver }
+                    ]
+
+                    let claimDetails =
+                        [
+                            { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
+                            { key: 'Encounter Date', value: data.ClaimDate },
+                            { key: 'Subscriber first name', value: data.SubscriberFirstName },
+                            { key: 'Subscriber last name', value: data.SubscriberLastName },
+                            { key: 'Admission date', value: data.AdmissionDate },
+                            // { key: 'Claim amount', value: data.Claim_Amount },
+                            { key: 'Provider address', value: data.BillingProviderAddress },
+                            { key: 'Encounter Status', value: data.ClaimStatus },
+                            { key: 'ICD Code', value: Claim_Icdcode },
+                            { key: 'Accident Date', value: data.AccidentDate },
+                            { key: '', },
+                            { key: '', },
+                        ]
+                    this.setState({
+                        showDetails: true,
+                        claimDetails: claimDetails,
+                        claimLineDetails: res.data.EncounterLineDetails,
+                        fileDetails: fileDetails,
+                        fileid: data.FileID,
+                        claimid: data.ClaimID,
+                        Icdcodepresent: data.FieldToUpdate
+                    })
                 }
-                else {
-                    Claim_Icdcode =res.data.EncounterDetails[0].ICDCode;
-                }
-                let data = res.data.EncounterDetails[0]
-                
-                let claimDetails = 
-                [
-                    { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
-                    { key: 'Encounter Date', value: data.ClaimDate },
-                    { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                    { key: 'Subscriber last name', value: data.SubscriberLastName },
-                    { key: 'Admission date', value: data.AdmissionDate },
-                    // { key: 'Claim amount', value: data.Claim_Amount },
-                    { key: 'Provider address', value: data.BillingProviderAddress },
-                    { key: 'Encounter Status', value: data.ClaimStatus },
-                    { key: 'ICD Code', value: Claim_Icdcode },
-                    { key: 'Accident Date', value: data.AccidentDate },
-                    { key: '',  },
-                    { key: '',  },
-                ]
-                this.setState({
-                    showDetails: true,
-                    claimDetails : claimDetails,
-                    claimLineDetails : res.data.EncounterLineDetails,
-                    fileid:data.FileID,
-                    claimid:data.ClaimID,
-                    Icdcodepresent:data.FieldToUpdate
-                })
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
-    } 
-    ChangeVal(event, key){
-        this.state.selectedICdCode=  event.target.options[event.target.selectedIndex].text;
-   
-     }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+    ChangeVal(event, key) {
+        this.state.selectedICdCode = event.target.options[event.target.selectedIndex].text;
+
+    }
     renderRows(dictionary) {
         let row = []
         let col = []
@@ -420,7 +429,7 @@ export class EncounterDetails extends React.Component {
         dictionary.forEach(item => {
             col.push(
                 <div className="col">
-                    <div className="header">{item.key} : </div>
+                    <div className="header">{item.key}</div>
                     <div>{(moment(item.value).format('MMM D YYYY hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MMM D YYYY hh:mm a') : item.value}</div>
                 </div>
             )
@@ -729,12 +738,12 @@ export class EncounterDetails extends React.Component {
     renderClaimsHeader() {
         return (
             <tr className="table-head" style={{ fontSize: "9px" }}>
-                <td className="table-head-text">Encounter Id</td>
-                <td className="table-head-text list-item-style">Encounter Date</td>
-                {/* <td className="table-head-text list-item-style">Encounter Amount</td> */}
-                <td className="table-head-text list-item-style">Encounter Status</td>
-                <td className="table-head-text list-item-style">Adjudication Status</td>
-                <td className="table-head-text list-item-style">Error Code</td>
+                <td className="table-head-text">Encounter Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Encounter Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                {/* <td className="table-head-text list-item-style">Encounter Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td> */}
+                <td className="table-head-text list-item-style">Encounter Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Error Code<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -757,16 +766,20 @@ export class EncounterDetails extends React.Component {
         return (
             <div className="row">
                 <div className="col-4 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
+                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by EncounterFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by EncounterFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
+                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By EncounterFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By EncounterFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
+                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img */}
+                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
                 </div>
                 {/* <div className="col-2 col-header">Status</div> */}
             </div>
@@ -793,7 +806,7 @@ export class EncounterDetails extends React.Component {
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 left-align col-small-style"><a href={"#" + data[keys].value.FileID}
+                    <div className="col-4 left-align border-left col-small-style"><a href={"#" + data[keys].value.FileID}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
@@ -808,11 +821,11 @@ export class EncounterDetails extends React.Component {
                 data[keys].array.forEach((d) => {
                     col.push(
                         <tr>
-                            <td className="list-item-style"><a  className="clickable" onClick={() => {
+                            <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
                                     claimId: d.ClaimID
                                 }, () => {
-                                    this.getDetails(d.ClaimID, d.FileID)
+                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value)
                                 })
                             }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
                             <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td>
@@ -894,54 +907,53 @@ export class EncounterDetails extends React.Component {
     }
 
     renderButton() {
-            return (
+        return (
 
-                <div>
+            <div>
 
-                    <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
+                <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
 
-                </div>
-            )
-        }
+            </div>
+        )
+    }
 
-        Saved() {                 
-          
-              if(this.state.selectedICdCode!="")
-              {
-                       let query = `mutation{updateEncounterICDCode(
+    Saved() {
+
+        if (this.state.selectedICdCode != "") {
+            let query = `mutation{updateEncounterICDCode(
                         ClaimID:"`+ this.state.claimid + `" 
                         FileID:"`+ this.state.fileid + `"  
                         ICDCode:"`+ this.state.selectedICdCode + `" 
                        
                         )
                       }`
-                console.log(" gsdg"  ,query);
-                fetch(Urls.base_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query
-    
-                    })
+            console.log(" gsdg", query);
+            fetch(Urls.base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    query
+
                 })
-                    .then(r => r.json())
-                    .then(data =>
-                        alert(data.data.updateEncounterICDCode),
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1000)
-    
-                    );
-    
-            }
-        
-    
+            })
+                .then(r => r.json())
+                .then(data =>
+                    alert(data.data.updateEncounterICDCode),
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+
+                );
+
         }
+
+
+    }
     render() {
-      
+
         return (
             <div>
                 <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>Encounter Details</label>
@@ -954,14 +966,29 @@ export class EncounterDetails extends React.Component {
                     <div className="col-6">
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                <table className="table claim-Details">
-                                    {this.renderHeader('Encounter #'+ this.state.claimId)}
-                                    {this.renderRows(this.state.claimDetails) }
-                                    <br></br>                                    
-                                    {this.state.Icdcodepresent=="ICDCode" ? this.renderButton() : "" }                                     
-                                    </table>
-                            : null
-                            }
+                                <div>
+                                    <h6 style={{ marginTop: '20px', color: "#424242" }}>Encounter Data</h6>
+                                    <hr />
+                                </div> : null
+                        }
+                        {
+                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                <table className="table claim-Details border">
+                                    {this.renderHeader('File #' + this.state.fileid)}
+                                    {this.renderRows(this.state.fileDetails)}
+                                </table>
+                                : null
+                        }
+                        {
+                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                <table className="table claim-Details border">
+                                    {this.renderHeader('Encounter #' + this.state.claimId)}
+                                    {this.renderRows(this.state.claimDetails)}
+                                    <br></br>
+                                    {this.state.Icdcodepresent == "ICDCode" ? this.renderButton() : ""}
+                                </table>
+                                : null
+                        }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
                     </div>
                 </div>

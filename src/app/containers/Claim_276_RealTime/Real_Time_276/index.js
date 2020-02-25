@@ -682,7 +682,7 @@ export class RealTime276 extends React.Component {
        
         array.forEach(item => {
             data = [
-                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n' , selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION VOL' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
+                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n', selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION VOL' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
                ]
             row.push(
 

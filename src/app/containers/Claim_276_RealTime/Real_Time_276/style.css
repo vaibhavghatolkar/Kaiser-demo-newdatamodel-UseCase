@@ -83,14 +83,14 @@
 .chart-container{
     border-radius: 8px;
     margin: 12px;
-    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
+    box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);
     width : 46%;
     padding-left : 24px;
     padding-right : 24px;
 }
 .volume-summary{
     padding : 16px;
-    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
+    box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);
     border-radius: 8px;
     margin: 12px;
 }
@@ -101,8 +101,8 @@
     background-color: var(--white-color)
 }
 .summary-container{
-    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);
-    background-color: var(--white-color);
+    box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);
+    background-color: var(--light-grey);
     margin-right : 16px;
     margin-top : 16px;
     margin-bottom : 16px;
@@ -151,7 +151,7 @@
     padding-bottom: 12px;
 }
 .chart{
-    background-color: var(--white-color);
+    background-color: var(--light-grey);
     margin-top : 16px;
     padding: 24px;
 }
@@ -172,7 +172,7 @@
 .lower-chart-container{
     border-radius: 8px;
     margin: 12px;
-    box-shadow: 1px 2px 4px rgba(165, 165, 165, 0.5);   
+    box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);   
     padding-left : 16px;
     padding-right : 16px;
 }

@@ -29,7 +29,7 @@ export class ResearchQueue extends React.Component {
                     <div>
                         <div>
                         <br></br>
-                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Assigned Claim's Summary - John Smith</h5><br></br>
+                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Assigned Claims Summary - John Smith</h5><br></br>
                         </div>
                         <div className="row">
                             <div className="form-group col-sm-3">

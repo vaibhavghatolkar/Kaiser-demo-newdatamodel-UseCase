@@ -22,7 +22,7 @@
     --orange: #FA731A;
     --dark_gray: #404040;
     --white_back: #E8E8E8;
-    --background-color: #F4F5F4;
+    --background-color: #fcfcfc;
     --white-gray-color: #EEEEEE;
     --gray-dark-color: #6C6969;
     --login-color: #05274D;
@@ -30,5 +30,6 @@
     --button-login-color: #4A80EC;
     --navy-blue-color: #33aff6;
     --light-green-color: #4CAF50;
+    --light-grey: #ffffff;
 
   }
