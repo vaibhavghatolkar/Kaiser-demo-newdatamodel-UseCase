@@ -26,8 +26,8 @@ export class RealTime276 extends React.Component {
             pieLabels: [],
             tradingChartLabel: [],
             tradingChartData: [],
-            providerChartLabel: ['provider 1','provider 2','provider 3','provider 4','provider 5'],
-            providerChartData: [4,5,1,2,3],
+            providerChartLabel: ['provider 1', 'provider 2', 'provider 3', 'provider 4', 'provider 5'],
+            providerChartData: [4, 5, 1, 2, 3],
             dateChartLabel: [],
             dateChartData: [],
             errorPieArray: [],
@@ -39,15 +39,15 @@ export class RealTime276 extends React.Component {
             lastMonth: '',
             State: '',
             realTimePercent: '',
-            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
-            endDate : moment().format('YYYY-MM-DD'),
+            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
             transactionId: '',
             selected_val: '',
             averageResponseTime: '',
             selectedTradingPartner: '',
             noResponsePercent: '',
-            chartType: this.props.location.state.data[0].apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise',
-            colorArray : [
+            chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
+            colorArray: [
                 'var(--main-bg-color)',
                 'var(--cyan-color)'
             ],
@@ -73,47 +73,47 @@ export class RealTime276 extends React.Component {
         }, 50);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getCommonData()
         this.getData()
     }
 
-    getCommonData(chartType){
+    getCommonData(chartType) {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''  
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         chartType = this.state.chartType
-        if(!this.state.chartType && this.state.apiflag == 1){
+        if (!this.state.chartType && this.state.apiflag == 1) {
             chartType = "Eligibilitymonthwise"
-        } else if (!this.state.chartType && this.state.apiflag == 0){
+        } else if (!this.state.chartType && this.state.apiflag == 0) {
             chartType = "ClaimRequestMonthwise"
         }
-        console.log('I am here check me out ' +  this.state.chartType)
-        
+        console.log('I am here check me out ' + this.state.chartType)
+
         let query = `{
             Trading_PartnerList(Transaction:"ClaimRequest") {
                 Trading_Partner_Name 
             }
-            tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "ClaimRequestTradingPartner") {
+            tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "ClaimRequestTradingPartner") {
                 X_axis
                 Y_axis
             }
-            datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+            datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
                 X_axis
                 Y_axis
             }
         }`
 
 
-        if(this.state.apiflag == 1){
+        if (this.state.apiflag == 1) {
             query = `{
                 Trading_PartnerList(Transaction:"EligibilityStatus") {
                     Trading_Partner_Name 
                 }
-                tradingPartnerwise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "EligibilityTradingPartner") {
+                tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "EligibilityTradingPartner") {
                     X_axis
                     Y_axis
                 }
-                datewise : DashboardBarChartData(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`", ChartType: "`+ chartType + `") {
+                datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
                     X_axis
                     Y_axis
                 }
@@ -125,23 +125,23 @@ export class RealTime276 extends React.Component {
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            body: JSON.stringify({query: query})
+            body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
-        .then(res => {
-            if(res.data){
-                this.performCommonOperations(res, chartType)
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        });
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.performCommonOperations(res, chartType)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
-    getData(chartType){
+    getData(chartType) {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.claimstatus
@@ -151,7 +151,7 @@ export class RealTime276 extends React.Component {
         // } else if (!this.state.chartType && this.state.apiflag == 0){
         //     chartType = "ClaimRequestMonthwise"
         // }
-        
+
         let query = `{
             ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 AvgResTime
@@ -171,14 +171,14 @@ export class RealTime276 extends React.Component {
                 Invalid_Trans
                 Total_Paid
             }
-            ClaimStatuswiseCount(State:"`+this.state.State+`" Sender:"`+this.state.selectedTradingPartner+`" StartDt:"`+startDate+`" EndDt:"`+endDate+`" TransactionID:"`+this.state.transactionId+`") {
+            ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 ClaimStatus
                 Total
             }
         }`
 
 
-        if(this.state.apiflag == 1){
+        if (this.state.apiflag == 1) {
             url = Urls.eligibility_url
             query = `{
                 Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
@@ -227,32 +227,32 @@ export class RealTime276 extends React.Component {
             });
     }
 
-    async performCommonOperations(res, flag){
+    async performCommonOperations(res, flag) {
         let tradingChartData = []
         let tradingChartLabel = []
         let dateChartData = []
         let dateChartLabel = []
 
-        if(res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0){
+        if (res.data.tradingPartnerwise && res.data.tradingPartnerwise.length > 0) {
             res.data.tradingPartnerwise.forEach(item => {
                 tradingChartLabel.push(item.X_axis)
                 tradingChartData.push(item.Y_axis)
             })
         }
 
-        if(res.data.datewise && res.data.datewise.length > 0){
+        if (res.data.datewise && res.data.datewise.length > 0) {
             let count = 1
             res.data.datewise.forEach(item => {
                 try {
-                    if(flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise'){
+                    if (flag == 'Eligibilityweekwise' || flag == 'ClaimRequestweekwise') {
                         dateChartLabel.push('week ' + count)
-                    } else if(flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise'){
+                    } else if (flag == 'EligibilityDatewise' || flag == 'ClaimRequestDatewise') {
                         dateChartLabel.push(item.X_axis)
                     } else {
                         dateChartLabel.push(item.X_axis)
                     }
                     dateChartData.push(item.Y_axis)
-                } catch (error) {}
+                } catch (error) { }
                 count++
             })
         }
@@ -266,7 +266,7 @@ export class RealTime276 extends React.Component {
         })
     }
 
-    async performOperations(res, flag){
+    async performOperations(res, flag) {
         let data = []
         let errorPieArray = []
         let errorLabelArray = []
@@ -276,13 +276,13 @@ export class RealTime276 extends React.Component {
         } else {
             data = res.data.ClaimRequest276[0]
         }
-
+console.log("asdad", data)
         let summary = [
-            { name: 'OVERALL VOLUME (DAILY)', value: data.Daily_Volume },
-            { name: 'TOTAL TRANSACTION VOL', value: data.TotalNumOfReq },
+            // { name: 'OVERALL VOLUME (DAILY)', value: data.Daily_Volume },
+            { name: 'TOTAL TRANSACTION VOL', value: data.TotalNumOfReq  },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
-            { name: 'AVG RESPONSE TIME', value: data.AvgResTime + ' sec' },
+            { name: 'AVG RESPONSE TIME', value: data.AvgResTime},
         ]
 
         if (this.state.apiflag == 0) {
@@ -317,14 +317,14 @@ export class RealTime276 extends React.Component {
             summaryList: summary,
             pieArray: pieArray,
             pieLabels: pieLabels,
-            errorPieArray : errorPieArray,
-            errorLabelArray : errorLabelArray,
-            inComplaince : data.In_Compliance_Per,
-            outComplaince : data.out_of_Compliance_per,
+            errorPieArray: errorPieArray,
+            errorLabelArray: errorLabelArray,
+            inComplaince: data.In_Compliance_Per,
+            outComplaince: data.out_of_Compliance_per,
             thisMonth: data.ThisMonth_Volume,
-            lastMonth : data.LastMonth_Volume,
-            averageResponseTime : data.AvgResTime,
-            noResponsePercent : data.NoResponse_Per,
+            lastMonth: data.LastMonth_Volume,
+            averageResponseTime: data.AvgResTime,
+            noResponsePercent: data.NoResponse_Per,
             errorCount: data.Error,
             errorArray: errorArray,
             realTimePercent: data.RealTime_Per
@@ -381,98 +381,568 @@ export class RealTime276 extends React.Component {
         })
     }
 
-    renderTabs(flag){
-        return(
+    renderTabs(flag) {
+        return (
             <nav>
                 {
                     flag ?
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Real time volume</a>
-                    </div>
-                    :
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('Submitter')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submitter (top 5)</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('Provider')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Provider (top 5)</a>
-                    </div>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Real time volume</a>
+                        </div>
+                        :
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('Submitter')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submitter (top 5)</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('Provider')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Provider (top 5)</a>
+                        </div>
                 }
             </nav>
         )
     }
 
-    renderCharts(){
-       let minimumValue = Math.min(...this.state.dateChartData)
-        minimumValue = (minimumValue==0 ? 0 : (minimumValue-(minimumValue*10/100)))
+    dateviewtabledata() {
+        return (
+            <div className="container">
+                <div className="panel-group">
+                    <div className="panel panel-default">
+                        <div className="panel-heading collapsible" style={{ background: "#139DC9", }} href="#BasicX12Options">
+                            <span className="panel-title" style={{ color: "white", fontSize: "15px" }}>
+                                2020
+       </span>
+                        </div>
+                        <div id="BasicX12Options"   > <div className=" content">
+                            <div className="panel-heading collapsible" data-toggle="collapse" href="#ISAIdentificationOptions">
+                                <span className="panel-title">
+                                    January
+                       </span>
+                            </div>
+                            <div id="ISAIdentificationOptions" className="panel-collapse content collapse">
+                                <div className="panel-body">
+                                    <br />
+                                    <table id="datewise_data" >
+                                        <tr>
+                                            <td >1 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >2 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >3 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >4 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >5 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >6 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >7 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >8 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >9 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >10 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        
+										 <tr>
+                                            <td >11 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >12 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >13 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >14 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >15 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >16 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >17 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >18 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >19 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >20 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >21 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >22 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >23 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >24 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >25 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >26 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >27 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >28 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >29 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >30 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >31 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										
+                                    </table>
+                                </div>
+                            </div>
+                            <div className="panel-heading collapsible" data-toggle="collapse" href="#ISAIdentificationOptions1">
+                                <span className="panel-title">
+                                    February
+                       </span>
+                            </div>
+                            <div id="ISAIdentificationOptions1" className="panel-collapse content collapse">
+                                <div className="panel-body">
+                                    <br />
+                                    <table id="datewise_data">
+                                        <tr>
+                                            <td >1 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                       <tr>
+                                            <td >2 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >3 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >4 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >5 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >6 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >7 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >8 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >9 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >10 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >11 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >12 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >13 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >14 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >15 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >16 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >17 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >18 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >19 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >20 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >21 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >22 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >23 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >24 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >25 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >26 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >27 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >28 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+										 <tr>
+                                            <td >29 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>                           
+                           
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           )
+
+    }
+
+    renderCharts() {
+        let minimumValue = Math.min(...this.state.dateChartData)
+        minimumValue = (minimumValue == 0 ? 0 : (minimumValue - (minimumValue * 10 / 100)))
         minimumValue = Math.ceil(minimumValue)
-        return(
+        return (
             <div>
                 <div className="row chart-div">
-                {
-                    this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
-                    ?
-                    <div className="chart-container chart">
-                        {this.renderTabs()}
-                        {/* <label className="chart-header">{this.state.type == 'Providerwise' ? 'Provider (Top 5)' : 'Submitter volume (Top 5)'}</label> */}
-                        <Bar
-                            data={this.getBarData(this.state.type == 'Provider' ? this.state.providerChartLabel : this.state.tradingChartLabel, this.state.type == 'Provider' ? this.state.providerChartData : this.state.tradingChartData, '#139DC9')}
-                            width={100}
-                            height={60}
-                            options={{
-                                legend: {
-                                    display: false,
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true,
-                                            userCallback: function(label, index, labels) {
-                                                // when the floored value is the same as the value we have a whole number
-                                                if (Math.floor(label) === label) {
-                                                    return label;
+                    {
+                        this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
+                            ?
+                            <div className="chart-container chart">
+                                {this.renderTabs()}
+                                {/* <label className="chart-header">{this.state.type == 'Providerwise' ? 'Provider (Top 5)' : 'Submitter volume (Top 5)'}</label> */}
+                                <Bar
+                                    data={this.getBarData(this.state.type == 'Provider' ? this.state.providerChartLabel : this.state.tradingChartLabel, this.state.type == 'Provider' ? this.state.providerChartData : this.state.tradingChartData, '#139DC9')}
+                                    width={100}
+                                    height={60}
+                                    options={{
+                                        legend: {
+                                            display: false,
+                                        },
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true,
+                                                    userCallback: function (label, index, labels) {
+                                                        // when the floored value is the same as the value we have a whole number
+                                                        if (Math.floor(label) === label) {
+                                                            return label;
+                                                        }
+
+                                                    },
                                                 }
-                           
-                                            },
-                                        }
-                                    }],
-                                },
-                            }}/>
-                    </div> : null
-                }
-                {
-                    this.state.dateChartLabel && this.state.dateChartLabel.length > 0
-                    ?
-                    <div className="chart-container chart">
-                        {this.renderTabs(1)}
-                        {/* <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label> */}
-                        <Bar
-                            data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
-                            width={100}
-                            height={60}
-                            options={{
-                                legend: {
-                                    display: false,
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            min: minimumValue,
-                                            userCallback: function(label, index, labels) {
-                                                // when the floored value is the same as the value we have a whole number
-                                                if (Math.floor(label) === label) {
-                                                    return label;
+                                            }],
+                                        },
+                                    }} />
+                            </div> : null
+                    }
+                    {
+                        this.state.dateChartLabel && this.state.dateChartLabel.length > 0
+                            ?
+                            <div className="chart-container chart">
+                                {this.renderTabs(1)}
+                                {/* <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label> */}
+                                <Bar
+                                    data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
+                                    width={100}
+                                    height={60}
+                                    options={{
+                                        legend: {
+                                            display: false,
+                                        },
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    min: minimumValue,
+                                                    userCallback: function (label, index, labels) {
+                                                        // when the floored value is the same as the value we have a whole number
+                                                        if (Math.floor(label) === label) {
+                                                            return label;
+                                                        }
+
+                                                    }
                                                 }
-                           
-                                            }
+                                            }]
                                         }
-                                    }]
-                                }
-                            }}/>
-                    </div> : null
-                }
+                                    }} />
+                            </div> : null
+                    }
                 </div>
                 <div className="row chart-div">
                     {
-                        this.state.errorArray && this.state.errorArray.length > 0 ?
-                            this.renderSummary() : null
+                        this.dateviewtabledata()
+                        // this.state.errorArray && this.state.errorArray.length > 0 ?
+                        //     // this.renderSummary() 
+                        //     ""
+                        //     : null
                     }
                 </div>
             </div>
@@ -536,20 +1006,20 @@ export class RealTime276 extends React.Component {
         }, 50);
     }
 
-    onHandleChange(e, flag){
+    onHandleChange(e, flag) {
         clearTimeout(val)
         let providerName = e.target.value
         val = setTimeout(() => {
-            if(flag){
+            if (flag) {
                 this.setState({
-                    selectedTradingPartner : providerName
+                    selectedTradingPartner: providerName
                 }, () => {
                     this.getCommonData()
                     this.getData()
                 })
             } else {
                 this.setState({
-                    providerName : providerName
+                    providerName: providerName
                 }, () => {
                     this.getCommonData()
                     this.getData()
@@ -574,12 +1044,12 @@ export class RealTime276 extends React.Component {
                                 if (selected_val == 'Last week') {
                                     day = 7
                                     chartType = this.state.apiflag == 1 ? 'EligibilityDatewise' : 'ClaimRequestDatewise'
-                                } else if(selected_val == 'Last 30 days'){
+                                } else if (selected_val == 'Last 30 days') {
                                     day = 30
                                     chartType = this.state.apiflag == 1 ? 'Eligibilityweekwise' : 'ClaimRequestweekwise'
-                                } else if(selected_val == 'Last 90 days'){
+                                } else if (selected_val == 'Last 90 days') {
                                     day = 90
-                                } else if(selected_val == 'Last 180 days'){
+                                } else if (selected_val == 'Last 180 days') {
                                     day = 180
                                 } else if (selected_val == 'Last year') {
                                     day = 365
@@ -605,12 +1075,12 @@ export class RealTime276 extends React.Component {
                                     this.getData(chartType)
                                 }, 50);
                             }}
-                            >
-                            <option selected="selected" value="1">Last week</option>
+                        >
+                            <option  value="2">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option value="2">Last year</option>
+                            <option selected="selected" value="1">Last year</option>
                         </select>
                     </div>
                     <div className="form-group col-2">
@@ -652,7 +1122,15 @@ export class RealTime276 extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">
+                         Provider Name
 
+                        </div>
+                        <input className="form-control" type="text" 
+                           
+                        />
+                    </div>
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <input className="form-control" type="text" 
@@ -679,11 +1157,11 @@ export class RealTime276 extends React.Component {
         let url = Strings.ElilgibilityDetails270
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-       
+
         array.forEach(item => {
             data = [
-                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n' , selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION VOL' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
-               ]
+                { apiflag: apiflag, State: this.state.State ? this.state.State : 'n', selectedTradingPartner: this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate: startDate, endDate: endDate, transactionId: this.state.transactionId ? this.state.transactionId : 'n', status: item.name == 'TOTAL TRANSACTION VOL' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail', count: item.value },
+            ]
             row.push(
 
 
@@ -704,22 +1182,33 @@ export class RealTime276 extends React.Component {
                 //     </div>
                 // </Link>
                 item.name == 'TOTAL TRANSACTION VOL' || item.name == 'ERROR PERCENTAGE'
-                ?
-                <Link to={{ pathname: '/'+ url , state: {data}}} className="col summary-container"> 
-                    <div>
+                    ?
+                    <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
+                        <div>
+                            <div className="summary-header">
+                                {item.name}
+                                </div>
+
+                                
+                         
+                            <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange bold-text summary-values' : (item.name == 'TOTAL TRANSACTION VOL') ? 'blue bold-text summary-values' : (item.name =='INVALID TRANSACTIONS') ? 'orange bold-text summary-values'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red bold-text summary-values' : (item.name =='TOTAL PAID') ? 'dark_red bold-text summary-values' :'' }  >
+                                {Number(item.value) ? item.value : 0   }{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
+                                
+                                </div>
+                        </div>
+                    </Link>
+                    :
+                    <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
-                        <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange bold-text summary-values' : (item.name == 'TOTAL TRANSACTION VOL') ? 'blue bold-text summary-values' : (item.name =='INVALID TRANSACTIONS') ? 'orange bold-text summary-values'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red bold-text summary-values' : (item.name =='TOTAL PAID') ? 'dark_red bold-text summary-values' :''}  >
+                            
+                            {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
+                            </div>
                     </div>
-                </Link>
-                :
-                <div className="col summary-container">
-                    <div className="summary-header">{item.name}</div>
-                    <div className="summary-title">{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                </div>
                 // <Link
                 //     to={
                 //         '/' + url, 
-                       
+
                 //     } className="col-2 summary-container">
                 //     <div>
                 //         <div className="summary-header">{item.name}</div>
@@ -764,8 +1253,8 @@ export class RealTime276 extends React.Component {
         )
     }
 
-    renderAvgSummaryDetails(){
-        return(
+    renderAvgSummaryDetails() {
+        return (
             <div className="col-5 summary-container">
                 <div className="summary-header">Average Response Times</div>
                 <div className="row">
@@ -791,7 +1280,7 @@ export class RealTime276 extends React.Component {
             row.push(
 
                 <tr>
-                    <td style={{ fontSize: "11px" }}><a style={{cursor:"pointer"}} >{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
+                    <td style={{ fontSize: "11px" }}><a style={{ cursor: "pointer" }} >{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
                     <td >{this.state.apiflag == 1 ? d.RecCount : d.Total}</td>
                     {this.state.apiflag == 1 ? <td >{this.state.apiflag == 1 ? d.Percentage : ''}</td> : ""}
 
@@ -817,6 +1306,7 @@ export class RealTime276 extends React.Component {
     render() {
         return (
             <div>
+               
                 <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</label>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
