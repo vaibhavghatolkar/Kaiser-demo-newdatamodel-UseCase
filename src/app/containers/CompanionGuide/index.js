@@ -180,13 +180,14 @@ export class CompanionGuide extends React.Component {
 
         return (
 
-            <div><br />
+            <div>
                 {
                     <div>
                         <div>
                             {/* <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Companion Guide</p> */}
-                            <h5 style={{ color: "#139DC9", fontSize: "20px" }}>Companion Guide</h5>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Companion Guide</h5>
                         </div>
+                        <br/>
                         <div className="row">
 
                             <div className="form-group col-sm-3">

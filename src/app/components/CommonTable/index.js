@@ -46,11 +46,12 @@ export class CommonTable extends React.Component {
             header_row.push(
                 item.method ?
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
-                        <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft: '-2px' }}></img> {item.value}
+                        {/* <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft: '-2px' }}></img> {item.value}                        */}
+                        {item.value} <img src={require('../../components/Images/search_table.png')} style={{ width: '14px', marginLeft: '-2px' }}></img>
                     </div>
                     :
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
-                        {item.value}
+                        {item.value} <img src={require('../../components/Images/search_table.png')} style={{ width: '14px', marginLeft: '-2px' }}></img>
                     </div>
             )
         })

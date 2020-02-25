@@ -2,7 +2,7 @@
 @import "../../containers/color.css"; 
 
 body {
-    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Poppins', sans-serif; */
     background: var(--white-background);
 }
 

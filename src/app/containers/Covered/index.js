@@ -20,7 +20,7 @@ export class CoveredICDCode extends React.Component {
     }
 
     componentDidMount() {
-        this.getData()
+        // this.getData()
     }
 
     getData() {
@@ -157,10 +157,10 @@ export class CoveredICDCode extends React.Component {
     render() {
         return (
             <div>
-                <br/>
                 <div>
-                    <h5 style={{ color: "#139DC9", fontSize:"20px" }}>Covered ICD Code</h5>
+                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Covered ICD Code</h5>
                 </div>
+                <br/>
                 <div className="row">
                     <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File
                     <input type="file" name="filename" onChange={this.onChange} style={{ display: "none"  }} />

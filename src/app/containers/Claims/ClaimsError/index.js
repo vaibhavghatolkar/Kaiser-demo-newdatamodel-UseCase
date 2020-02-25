@@ -94,7 +94,6 @@ export class ClaimsError extends React.Component{
     renderClaimsError(){
         let row = []
         const data = this.state.claimsError;
-console.log(data);
         data.forEach((d) => {
             row.push(
                 <tr>
@@ -117,21 +116,19 @@ console.log(data);
             )
         });
         return(
-            <table className="table table-bordered claim-list summary-list">
-                <thead>
+            <table className="table table-bordered claim-list">
                     <tr className="table-head">
-                        <td className="table-head-text">Reason</td>
-                        <td className="table-head-text list-item-style">BillingProLastName</td>
-                        <td className="table-head-text list-item-style">FileName</td>
-                        <td className="table-head-text list-item-style">Member_Acc_No</td>
-                        <td className="table-head-text list-item-style">SubscriberLName</td>
-                        <td className="table-head-text list-item-style">Subscriber FName</td>
-                        <td className="table-head-text list-item-style">Assign</td>
+                        <td className="table-head-text">Reason<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                        <td className="table-head-text">BillingProLastName <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                        <td className="table-head-text">FileName <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                        <td className="table-head-text">Member Acc No <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                        <td className="table-head-text">Subscriber LName <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                        <td className="table-head-text">Subscriber FName <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                        <td className="table-head-text">Assign <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     </tr>
-                </thead>
-                <tbody>
+               
                     {row}
-                </tbody>
+               
             </table>
         )
     }
@@ -199,9 +196,7 @@ console.log(data);
     render() {
         return (
             <div>
-                {/* {this.renderSearchBar()} */}
-                <br></br>
-                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Claims Error</h5><br></br>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Claims Error</h5>
                 <Topbar 
                     tradingpartner={this.state.tradingpartner} 
                     onSelect={this.onSelect}

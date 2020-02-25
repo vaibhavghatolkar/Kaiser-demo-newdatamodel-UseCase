@@ -956,7 +956,7 @@ export class EncounterDetails extends React.Component {
 
         return (
             <div>
-                <label style={{ color: "#139DC9", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>Encounter Details</label>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Encounter Details</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

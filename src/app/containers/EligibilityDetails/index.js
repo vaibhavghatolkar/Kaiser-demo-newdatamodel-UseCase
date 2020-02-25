@@ -312,8 +312,8 @@ export class EligibilityDetails extends React.Component {
                 if (res.data) {
                     this.setState({
                         showDetails: true,
-                        message_270: this.state.apiflag == 1 ? res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
-                        message_271: this.state.apiflag == 1 ? res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
+                        message_270: this.state.apiflag == 1 ? res.data.Eligibilty270Request && res.data.Eligibilty270Request.length > 0 && res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
+                        message_271: this.state.apiflag == 1 ? res.data.Eligibilty271Response && res.data.Eligibilty271Response.length > 0 && res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
                     })
                 }
             })
@@ -537,7 +537,7 @@ export class EligibilityDetails extends React.Component {
         return (
             <form className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col-md-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Transaction Id</div>
                         <input className="form-control list-dashboard"
                             id="state"
@@ -553,7 +553,7 @@ export class EligibilityDetails extends React.Component {
                             }}
                         />
                     </div>
-                    <div className="form-group col-md-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
                             onChange={(event) => {
@@ -579,7 +579,7 @@ export class EligibilityDetails extends React.Component {
                         </select>
                     </div>
 
-                    <div className="form-group col-md-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Submitter </div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -597,7 +597,7 @@ export class EligibilityDetails extends React.Component {
                     {
                         this.state.status != 'Pass'
                             ?
-                            <div className="form-group col-md-2">
+                            <div className="form-group col">
                                 <div className="list-dashboard">Error Type</div>
                                 <select className="form-control list-dashboard" id="TradingPartner"
                                     onChange={(event) => {
@@ -613,7 +613,17 @@ export class EligibilityDetails extends React.Component {
                             </div>
                             : null
                     }
-                    <div className="form-group col-md-2">
+                        <div className="form-group col">
+                        <div className="list-dashboard">
+                         Provider Name
+
+                        </div>
+                        <input className="form-control" type="text" 
+                           
+                        />
+                    </div>
+               
+                    <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-dashboard"
@@ -621,7 +631,7 @@ export class EligibilityDetails extends React.Component {
                             onChange={this.handleStartChange}
                         />
                     </div>
-                    <div className="form-group col-md-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-dashboard"
@@ -629,7 +639,7 @@ export class EligibilityDetails extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
-                </div>
+                 </div>
             </form>
         )
     }
@@ -811,7 +821,7 @@ export class EligibilityDetails extends React.Component {
     render() {
         return (
             <div>
-                <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</label>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</h5>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-7">

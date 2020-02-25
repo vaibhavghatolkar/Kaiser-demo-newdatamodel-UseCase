@@ -157,9 +157,8 @@ export class NonCovered extends React.Component {
     render() {
         return (
             <div>
-                <br />
                 <div>
-                    <h5 style={{ color: "#139DC9", fontSize: "20px" }}>NonCovered</h5>
+                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>NonCovered</h5><br/>
                 </div>
                 <div className="row">
                     <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File

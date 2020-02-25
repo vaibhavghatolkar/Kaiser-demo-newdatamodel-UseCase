@@ -61,8 +61,8 @@ export class ChangePassword extends React.Component {
                     </div>
 
                     <div class=" col-4" >
-                        <div style={{ paddingTop: "40px" }}>
-                            <h5 style={{ color: 'var(--navy-blue-color)', fontSize:"20px" }}>Change Password</h5>
+                        <div style={{ paddingTop: "150px" }}>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Change Password</h5>
                         </div>
                         <div class="form-group" style={{marginTop:"20px"}}>
                             <label>Old Password</label>

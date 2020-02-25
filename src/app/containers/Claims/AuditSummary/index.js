@@ -123,11 +123,11 @@ export class AuditSummary extends React.Component {
                 <tr>
                     <td style={{ color: "#6AA2B8" }}>{d.filename}</td>
                     <td className="list-item-style">{d.Submitted}</td>
-                    <td className="list-item-style">{d.InBizstock}</td>
+                    <td colSpan={2} className="list-item-style">{d.InBizstock}</td>
                     <td className="list-item-style">{d.Rejected}</td>
-                    <td className="list-item-style">{d.Error}</td>
-                    <td className="list-item-style">{d.Pending}</td>
-                    <td className="list-item-style">{d.Verified}</td>
+                    <td className="list-item-style">0</td>
+                    {/* <td className="list-item-style">{d.Pending}</td> */}
+                    <td colSpan={2} className="list-item-style">{d.Verified}</td>
                 </tr>
             )
         });
@@ -136,21 +136,22 @@ export class AuditSummary extends React.Component {
                 <tr className="table-head">
                     <td className="table-head-text">File Name</td>
                     <td className="table-head-text list-item-style">Submitted</td>
-                    <td className="table-head-text list-item-style">In HiPaaS</td>
+                    <td colSpan={2} className="table-head-text list-item-style">In HiPaaS</td>
                     <td className="table-head-text list-item-style">Rejected PreProcess</td>
                     <td className="table-head-text list-item-style">Error in PreProcess</td>
-                    <td className="table-head-text list-item-style">Accepted in Preprocess</td>
-                    <td className="table-head-text list-item-style">In Qnxt</td>
+                    {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
+                    <td colSpan={2} className="table-head-text list-item-style">In Qnxt</td>
                 </tr>
                 <tbody>
                     <tr>
                         <td>Totals</td>
                         <td className="list-item-style">{this.state.SubTotal}</td>
-                        <td className="list-item-style">{this.state.VeriTotal}</td>
-                        <td className="list-item-style">{this.state.InBizstockTotal}</td>
-                        <td className="list-item-style">{this.state.PenTotal}</td>
+                        <td colSpan={2} className="list-item-style">{this.state.InBizstockTotal}</td>
                         <td className="list-item-style">{this.state.RejTotal}</td>
-                        <td className="list-item-style">{this.state.errTotal}</td>
+                        <td className="list-item-style">0</td>
+                        <td colSpan={2} className="list-item-style">{this.state.VeriTotal}</td>
+                        {/* <td className="list-item-style">{this.state.PenTotal}</td>
+                        <td className="list-item-style">{this.state.errTotal}</td> */}
                     </tr>
                     {row}
                 </tbody>
@@ -216,15 +217,15 @@ export class AuditSummary extends React.Component {
     render() {
         return (
             <div>
-                {/* {this.renderSearchBar()} */}
-                <br></br>
-                <h5 style={{ color: '#139DC9', fontsize: "20px" }}>Claims Audit</h5><br></br>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Claims Audit</h5>
                 <Topbar
                     tradingpartner={this.state.tradingpartner}
                     onSelect={this.onSelect}
                 />
                 {this.renderStats()}
-                {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
+                <div className="col-10">
+                    {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
+                </div>
             </div>
         );
     }

@@ -11,12 +11,13 @@ export class TransactionSetup extends React.Component {
             files: [],
             tradingpartner: [],
             Transaction_Type: '',
-            Companion_Guide:'',
-            Acceptance_Criteria:'',
-            Communication_Type:'',
-            
+            Companion_Guide: '',
+            Acceptance_Criteria: '',
+            Communication_Type: 'SFTP',
+            file_naming_option:'Error if file exists'
+
         };
-       
+
         this.ChangeTradingPartner = this.ChangeTradingPartner.bind(this)
         this.ChangeVal = this.ChangeVal.bind(this)
         this.handleClick = this.handleClick.bind(this)
@@ -57,9 +58,9 @@ export class TransactionSetup extends React.Component {
             body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
-            .then(res => {             
+            .then(res => {
                 this.setState({
-                     tradingpartner: res.data.Trading_PartnerList
+                    tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
@@ -67,10 +68,10 @@ export class TransactionSetup extends React.Component {
             })
     }
 
-    ChangeVal(event, key){
+    ChangeVal(event, key) {
         console.log(event.target.options[event.target.selectedIndex].text)
         this.setState({
-            [key] : event.target.options[event.target.selectedIndex].text,
+            [key]: event.target.options[event.target.selectedIndex].text,
         })
     }
     getoptions() {
@@ -81,44 +82,44 @@ export class TransactionSetup extends React.Component {
         return row
     }
     handleClick(event) {
-       var query = 'mutation{ SP_Save_TransactionSetup(ID : 0 '+ 
-            'Trading_Partner :"'+ this.state.Change_Trading_Partner +'"'+
-            'Transaction_Type :"'+this.state.Transaction_Type+'"'+
-            'Acceptance_Criteria :"'+this.state.Acceptance_Criteria+'"'+
-            'Campanion_Guide :"'+this.state.Companion_Guide+'"'+
-            'Communication_Type :"'+this.state.Communication_Type+'"'+
-            
-             ')'+
-'}'
+        var query = 'mutation{ SP_Save_TransactionSetup(ID : 0 ' +
+            'Trading_Partner :"' + this.state.Change_Trading_Partner + '"' +
+            'Transaction_Type :"' + this.state.Transaction_Type + '"' +
+            'Acceptance_Criteria :"' + this.state.Acceptance_Criteria + '"' +
+            'Campanion_Guide :"' + this.state.Companion_Guide + '"' +
+            'Communication_Type :"' + this.state.Communication_Type + '"' +
 
-         console.log(query)
+            ')' +
+            '}'
+
+        console.log(query)
         fetch(Urls.base_url, {
-       method: 'POST',
-       headers: {
-         'Content-Type': 'application/json',
-         'Accept': 'application/json',
-       },
-       body: JSON.stringify({
-         query
-         
-       })
-     })
-     .then(r => r.json())
-     .then(data => alert(data.data.SP_Save_TransactionSetup))
-     setTimeout(() => {
-        window.location.reload()
-    }, 1000)
-      }
-    ChangeTradingPartner(event){
-        
-        if(!event){
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                query
+
+            })
+        })
+            .then(r => r.json())
+            .then(data => alert(data.data.SP_Save_TransactionSetup))
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000)
+    }
+    ChangeTradingPartner(event) {
+
+        if (!event) {
 
             return
         }
         this.setState({
             Change_Trading_Partner: event.target.options[event.target.selectedIndex].text,
         })
-        let query1 = '{TransactionSetup (TPName:"' + event.target.options[event.target.selectedIndex].text +`") {
+        let query1 = '{TransactionSetup (TPName:"' + event.target.options[event.target.selectedIndex].text + `") {
             Transaction_Type 
             Companion_Guide
             Acceptance_Criteria
@@ -126,7 +127,7 @@ export class TransactionSetup extends React.Component {
             Communication_Type
            
           }}`
-          fetch(Urls.tradingPartner, {
+        fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -136,8 +137,8 @@ export class TransactionSetup extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-               // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
-               console.log(r.data.TransactionSetup[0])
+                // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
+                console.log(r.data.TransactionSetup[0])
                 this.setState({
                     Transaction_Type: r.data.TransactionSetup[0].Transaction_Type,
                     Companion_Guide: r.data.TransactionSetup[0].Companion_Guide,
@@ -150,7 +151,14 @@ export class TransactionSetup extends React.Component {
             })
         // console.log(event.target.options[event.target.selectedIndex].text)
 
-        
+
+    }
+
+    changeCheckbox(event, key){
+        alert(event.target.checked)
+        this.setState({
+            [key] : event.target.checked
+        })
     }
 
     render() {
@@ -158,8 +166,8 @@ export class TransactionSetup extends React.Component {
             <div>
                 {
                     <div>
-                           <div>
-                        <label style={{color:"#139DC9" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Transaction Setup</label>
+                        <div>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Transaction Setup</h5>
                         </div><br></br>
                         {/* <div>
                             <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Transaction Setup</p>
@@ -183,7 +191,7 @@ export class TransactionSetup extends React.Component {
                             <div className="panel-group">
                                 <div className="panel panel-default" style={{ border: "1px" }}>
                                     <div className="panel-heading collapsible" style={{ background: "#139DC9", }} data-toggle="collapse" href="#BasicX12Options">
-                                        <span className="panel-title" style={{color: "white", fontSize: "12px"}}>
+                                        <span className="panel-title" style={{ color: "white", fontSize: "12px" }}>
                                             Transaction Setup
                        </span>
                                     </div>
@@ -194,7 +202,7 @@ export class TransactionSetup extends React.Component {
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">Transaction</label>
                                                 <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Transaction_Type')}>
-                                                <option value="0" >Select Transaction</option>
+                                                    <option value="0" >Select Transaction</option>
                                                     <option selected={this.state.Transaction_Type == 'Claims 837P Medicaid' ? 'selected' : ''} value="Claims 837P Medicaid">Claims 837P Medicaid</option>
                                                     <option selected={this.state.Transaction_Type == 'Claims 837I Medicaid' ? 'selected' : ''} value="Claims 837I Medicaid">Claims 837I Medicaid</option>
                                                     <option selected={this.state.Transaction_Type == 'Enrollments 834 Medicare' ? 'selected' : ''} value="Enrollments 834 Medicare">Enrollments 834 Medicare</option>
@@ -206,26 +214,83 @@ export class TransactionSetup extends React.Component {
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">File Acceptance Criteria</label>
                                                 <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Acceptance_Criteria')}>
-                                                <option value="0">Select File Criteria</option>
+                                                    <option value="0">Select File Criteria</option>
                                                     <option selected={this.state.Acceptance_Criteria == 'Partially Accept' ? 'selected' : ''} value="Partially Accept">Partially Accept</option>
                                                     <option selected={this.state.Acceptance_Criteria == 'Full Reject' ? 'selected' : ''} value="Full Reject">Full Reject</option>
                                                 </select>
                                             </div>
                                             <div className="form-group col-sm-3">
-                                                    <label className="list-header1">Communication Type</label>
-                                                    <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
-                                                        <option value="0">Select Communication</option>
-                                                        <option selected={this.state.Communication_Type == "SFTP" ? "selected" : ''} value="SFTP">SFTP</option>
-                                                        <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
-                                                    </select>
-                                                </div>
+                                                <label className="list-header1">Communication Type</label>
+                                                <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
+                                                    <option selected={this.state.Communication_Type == "SFTP" ? "selected" : ''} value="SFTP">SFTP</option>
+                                                    <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
+                                                </select>
+                                            </div>
+                                          {
+                                              this.state.Communication_Type=="SFTP" ?
+                                              <div className="form-group col-sm-3" style={{ marginTop: "4px" }}>
+                                                <label className="list-header1">
+                                                    Use Default Settings<br></br>
+                                                    <input type="checkbox" checked={this.state.Use_Default_Settings == true ? "checked" : ''}
+                                                        onChange={(e) => { this.changeCheckbox(e, 'Use_Default_Settings') }}
+                                                        className="checkbox-margin" name="defaultSettings" value="" style={{ marginLeft: "50px" }} />
+                                                </label>
+                                            </div> : ''
+                                          }  
                                         </div>
+                                       
+                                       {
+                                       this.state.Communication_Type=="SFTP" ? <div className="row">
+                                            <div className="form-group col-sm-3">
+                                               <label className="list-header1">Host</label>
+                                                <input type="text" className="form-control list-header1" value={this.state.Host} onChange={(e) => this.onChangeName(e, 'Host')} />
+                                            </div>
+
+                                            <div className="form-group col-sm-3">
+                                                <label className="list-header1">Port</label>
+                                                <input type="text" className="form-control list-header1" value={this.state.Port} onChange={(e) => this.onChangeName(e, 'Port')} />
+                                            </div>
+
+
+                                            <div className="form-group col-sm-3">
+                                                <label className="list-header1">User Name</label>
+                                                <input type="text" className="form-control list-header1" value={this.state.UserName} onChange={(e) => this.onChangeName(e, 'UserName')} />
+                                            </div>
+                                            <div className="form-group col-sm-3">
+                                                <label className="list-header1">Password</label>
+                                                <input type="password" className="form-control list-header1" value={this.state.Password} onChange={(e) => this.onChangeName(e, 'Password')} />
+                                            </div>
+                                        </div> : 
+                                    <div className="row">
+                                         <div className="form-group col-sm-3">
+                                            <label className="list-header1">Directory</label>
+                                             <input type="text" className="form-control list-header1" value={this.state.Directory} onChange={(e) => this.onChangeName(e, 'Directory')} />
+                                         </div>
+                                         <div className="form-group col-sm-3" style={{ marginTop: "4px" }}>
+                                                <label className="list-header1">Create Directory<br></br>
+                                                    <input type="checkbox" checked={this.state.create_directory == true ? "checked" : ''}
+                                                        onChange={(e) => { this.changeCheckbox(e, 'create_directory') }}
+                                                        className="checkbox-margin" name="defaultSettings" value="" style={{ marginLeft: "50px" }} />
+                                                </label>
+                                        </div>
+                                        <div className="form-group col-sm-3">
+                                                <label className="list-header1">File Naming Options</label>
+                                                <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'file_naming_option')}>
+                                                    <option selected={this.state.file_naming_option == "Error if file exists" ? "selected" : ''} value="Error if file exists">Error if file exists</option>
+                                                    <option selected={this.state.file_naming_option == "Disk" ? "selected" : ''} value="Disk">Append if file exists</option>
+                                                    <option selected={this.state.file_naming_option == "Disk" ? "selected" : ''} value="Disk">Overwrite if file exists</option>
+                                                    <option selected={this.state.file_naming_option == "Disk" ? "selected" : ''} value="Disk">Create unique name if file exists</option>
+                                                </select>
+                                        </div>
+                                    </div>
+                                        }
+
 
                                         <div className="row">
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">Companion Guide</label>
                                                 <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Companion_Guide')}>
-                                                <option value="0">Select Companion Guide</option>
+                                                    <option value="0">Select Companion Guide</option>
                                                     <option selected={this.state.Companion_Guide == '834 Medicare' ? 'selected' : ''}>834 Medicare</option>
                                                     <option selected={this.state.Companion_Guide == '837I Medicaid CA' ? 'selected' : ''}>837I Medicaid CA</option>
                                                     <option selected={this.state.Companion_Guide == '837P Medicaid CA' ? 'selected' : ''}>837P Medicaid CA</option>
@@ -237,12 +302,12 @@ export class TransactionSetup extends React.Component {
                                                     <option selected={this.state.Companion_Guide == '276 Medicaid CA' ? 'selected' : ''}>276 Medicaid CA</option>
                                                 </select>
                                             </div>
-                                            <div className="pull-right col-sm-2">
-                                            <p class="form">
-   
-   <label class="add-photo-btn">Add New<span><input type="file" id="myfile" name="myfile" /></span>
-</label>
-</p>
+                                            <div className="pull-right col-sm-1">
+                                                <p class="form">
+
+                                                    <label class="add-photo-btn">Add New<span><input type="file" id="myfile" name="myfile" /></span>
+                                                    </label>
+                                                </p>
                                             </div>
                                             <div className="pull-right col-sm-1">
                                                 <button type="submit" className="btn light_blue1 btn-xs">Upload</button>

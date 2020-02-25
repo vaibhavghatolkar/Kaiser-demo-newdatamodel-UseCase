@@ -784,11 +784,11 @@ export class ClaimDetails837 extends React.Component {
         return (
             <tr className="table-head" style={{ fontSize: "9px" }}>
                 <td className="table-head-text">Claim Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -980,7 +980,7 @@ export class ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <label style={{ color: "var(--main-bg-color)", fontWeight: "500", marginTop: "10px", fontSize: '24px' }}>Claim Details</label>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Claim Details</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

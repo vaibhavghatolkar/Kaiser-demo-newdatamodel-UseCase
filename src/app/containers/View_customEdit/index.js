@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import moment from 'moment';
+import '../color.css'
 import Urls from '../../../helpers/Urls';
 
 export class ViewCustomEdits extends React.Component {
@@ -138,7 +139,7 @@ gettranaction(){
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">Loop Id</td>
+                <td className="table-head-text list-item-style">Loop Id</td>
                 <td className="table-head-text list-item-style">Segment</td>
                 <td className="table-head-text list-item-style">Element</td>
                 <td className="table-head-text list-item-style">Rules</td>
@@ -155,12 +156,12 @@ gettranaction(){
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td>{d.loopid}</td>
-                    <td>{d.segment}</td>
-                    <td>{d.element}</td>
-                    <td>{d.condition}</td>
-                    <td>{d.value}</td>
-                    <td>{d.severity}</td>
+                    <td className="list-item-style">{d.loopid}</td>
+                    <td className="list-item-style">{d.segment}</td>
+                    <td className="list-item-style">{d.element}</td>
+                    <td className="list-item-style">{d.condition}</td>
+                    <td className="list-item-style">{d.value}</td>
+                    <td className="list-item-style">{d.severity}</td>
                     <td className="list-item-style"><input type="checkbox" onChange={(e) => {this.changeCheckbox(e)}} value={d.seqid} /></td>
                 </tr>
             )
@@ -168,10 +169,10 @@ gettranaction(){
 
         return (
             <div>
-            <div className="panel-heading collapsible" data-toggle="collapse" href="#customEdits">
+            <div className="panel-heading collapsible" style={{ background: "var(--main-bg-color)" }}>
                 <span className="panel-title" style={{color:"white"}}>Custom Edits </span>
             </div>
-            <div id="customEdits" className="panel-collapse content collapse">
+            <div className="panel-collapse content">
                 <div className="panel-body">
             <div>
             <table className="table table-bordered claim-list" align="center" style={{width: '95%'}}>
@@ -331,7 +332,7 @@ gettranaction(){
                 {
                 
                         <div>
-                              <label style={{color:"rgb(19, 157, 201)" , fontWeight:"500" , marginTop:"10px", fontSize: '20px'}}>View Custom Edits</label>
+                              <h5  style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>View Custom Edits</h5>
                         <br></br>
                             {this.renderTopbar()}
                             <div className="row">

@@ -28,8 +28,7 @@ export class ResearchQueue extends React.Component {
                     :
                     <div>
                         <div>
-                        <br></br>
-                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Assigned Claims Summary - John Smith</h5><br></br>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Assigned Claims Summary - John Smith</h5>
                         </div>
                         <div className="row">
                             <div className="form-group col-sm-3">
@@ -69,84 +68,84 @@ export class ResearchQueue extends React.Component {
                                 </select>
                             </div>
                         </div>
-                        <div className="table-responsive list-header">
+                        <div className="table table-bordered claim-list">
                             <table className="table table-striped">
-                                <thead>
-                                    <tr style={{ background: "#139DC9", color: "white" }}>
-                                        <th>Assign</th>
-                                        <th>Claim Status</th>
-                                        <th>Days Old</th>
-                                        <th>Pateint ID</th>
-                                        <th>Payer</th>
-                                        <th>Seq ID</th>
-                                        <th>Claim Amt</th>
-                                        <th>Batch ID</th>
-                                        <th>Batch Date</th>
-                                        <th>Status</th>
+        
+                                    <tr className="table-head">
+                                        <td className="table-head-text list-item-style">Assign <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Claim Status <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Days Old <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Pateint ID <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Payer <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Seq ID <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Claim Amt <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Batch ID <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Batch Date <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Status <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
                                     </tr>
-                                </thead>
-                                <tbody>
+            
+                              
                                     <tr>
-                                        <td> John Smith</td>
-                                        <td><a href="#" onClick={() => {this.gotoAssigned()}} style={{color:"#6AA2B8"}}>Rejected</a></td>
-                                        <td>5</td>
-                                        <td>P0005915</td>
-                                        <td>CPSI</td>
-                                        <td>10001</td>
-                                        <td>$147.00</td>
-                                        <td>1734112</td>
-                                        <td>4/24/2014 1:16:18 PM</td>
-                                        <td>TP Notified </td>
-                                    </tr>
-                                    <tr>
-                                        <td> John Smith</td>
-                                        <td><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>Rejected</a></td>
-                                        <td>10</td>
-                                        <td>P0003568</td>
-                                        <td>BCBS</td>
-                                        <td>10002</td>
-                                        <td>$6,431.00</td>
-                                        <td>1734113</td>
-                                        <td>4/24/2014 1:16:18 PM</td>
-                                        <td>Assigned</td>
+                                        <td className="list-item-style"> John Smith</td>
+                                        <td className="list-item-style"><a href="#" onClick={() => {this.gotoAssigned()}} style={{color:"#6AA2B8"}}>Rejected</a></td>
+                                        <td className="list-item-style">5</td>
+                                        <td className="list-item-style">P0005915</td>
+                                        <td className="list-item-style">CPSI</td>
+                                        <td className="list-item-style">10001</td>
+                                        <td className="list-item-style">$147.00</td>
+                                        <td className="list-item-style">1734112</td>
+                                        <td className="list-item-style">4/24/2014 1:16:18 PM</td>
+                                        <td className="list-item-style">TP Notified </td>
                                     </tr>
                                     <tr>
-                                        <td> John Smith</td>
-                                        <td><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>Denied</a></td>
-                                        <td>12</td>
-                                        <td>P0006309</td>
-                                        <td>HEALTH CO</td>
-                                        <td>10003</td>
-                                        <td>$411.00</td>
-                                        <td>1734089</td>
-                                        <td>4/24/2014 1:15:20 PM</td>
-                                        <td>TP Notified</td>
+                                        <td className="list-item-style"> John Smith</td>
+                                        <td className="list-item-style"><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>Rejected</a></td>
+                                        <td className="list-item-style">10</td>
+                                        <td className="list-item-style">P0003568</td>
+                                        <td className="list-item-style">BCBS</td>
+                                        <td className="list-item-style">10002</td>
+                                        <td className="list-item-style">$6,431.00</td>
+                                        <td className="list-item-style">1734113</td>
+                                        <td className="list-item-style">4/24/2014 1:16:18 PM</td>
+                                        <td className="list-item-style">Assigned</td>
                                     </tr>
                                     <tr>
-                                        <td> John Smith</td>
-                                        <td><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>Denied</a></td>
-                                        <td>12</td>
-                                        <td>P0006309</td>
-                                        <td>HEALTH CO</td>
-                                        <td>10004</td>
-                                        <td>$3,042.05</td>
-                                        <td>1734089</td>
-                                        <td>4/24/2014 1:15:20 PM</td>
-                                        <td>Waiting Approval</td>
+                                        <td className="list-item-style"> John Smith</td>
+                                        <td className="list-item-style"><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>Denied</a></td>
+                                        <td className="list-item-style">12</td>
+                                        <td className="list-item-style">P0006309</td>
+                                        <td className="list-item-style">HEALTH CO</td>
+                                        <td className="list-item-style">10003</td>
+                                        <td className="list-item-style">$411.00</td>
+                                        <td className="list-item-style">1734089</td>
+                                        <td className="list-item-style">4/24/2014 1:15:20 PM</td>
+                                        <td className="list-item-style">TP Notified</td>
                                     </tr>
                                     <tr>
-                                        <td> John Smith</td>
-                                        <td><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>A/R Past 60</a></td>
-                                        <td>62</td>
-                                        <td>P0006309</td>
-                                        <td>HEALTH CO</td>
-                                        <td>10005</td>
-                                        <td>$349.63</td>
-                                        <td>1734089</td>
-                                        <td>4/24/2014 1:15:20 PM</td>
-                                        <td>Waiting Approval</td>
+                                        <td className="list-item-style"> John Smith</td>
+                                        <td className="list-item-style"><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>Denied</a></td>
+                                        <td className="list-item-style">12</td>
+                                        <td className="list-item-style">P0006309</td>
+                                        <td className="list-item-style">HEALTH CO</td>
+                                        <td className="list-item-style">10004</td>
+                                        <td className="list-item-style">$3,042.05</td>
+                                        <td className="list-item-style">1734089</td>
+                                        <td className="list-item-style">4/24/2014 1:15:20 PM</td>
+                                        <td className="list-item-style">Waiting Approval</td>
                                     </tr>
-                                </tbody>
+                                    <tr>
+                                        <td className="list-item-style"> John Smith</td>
+                                        <td className="list-item-style"><a href="#" onClick={() => {this.gotoAssigned()}} style={{color: "#6AA2B8"}}>A/R Past 60</a></td>
+                                        <td className="list-item-style">62</td>
+                                        <td className="list-item-style">P0006309</td>
+                                        <td className="list-item-style">HEALTH CO</td>
+                                        <td className="list-item-style">10005</td>
+                                        <td className="list-item-style">$349.63</td>
+                                        <td className="list-item-style">1734089</td>
+                                        <td className="list-item-style">4/24/2014 1:15:20 PM</td>
+                                        <td className="list-item-style">Waiting Approval</td>
+                                    </tr>
+                                
                             </table>
                         </div>
                     </div>

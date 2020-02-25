@@ -201,3 +201,24 @@
 .error-chart{
     padding-bottom: 0px   
 }
+
+#datewise_data {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    
+  }
+  
+  #datewise_data  td, th {
+    
+    text-align: left;
+    padding: 9px;
+    background-color: #E8E8E8;
+    padding: 7px;
+    height: 40px;
+    width: 50px;
+
+    font-size: larger;
+   
+  }
+  

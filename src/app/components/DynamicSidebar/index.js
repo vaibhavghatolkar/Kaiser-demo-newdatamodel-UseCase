@@ -106,13 +106,13 @@ export class DynamicSidebar extends React.Component {
         else if (key == 34) { name = Strings.matchClaims }
         else if (key == 35) { name = Strings.submitClaims }
 
-        else if (key == 37) { name = Strings.tradingPartnerConfiguration }
-        else if (key == 38) { name = Strings.transactionSetup }
-        else if (key == 39) { name = Strings.editConfiguration }
-        else if (key == 40) { name = Strings.ViewCustomEdits }
-        else if (key == 41) { name = Strings.covered }
-        else if (key == 42) { name = Strings.noncovered }
-        else if (key == 43) { name = Strings.companionGuide }
+        else if (key == 37 || key == 109) { name = Strings.tradingPartnerConfiguration }
+        else if (key == 38 || key == 110) { name = Strings.transactionSetup }
+        else if (key == 39 || key == 111) { name = Strings.editConfiguration }
+        else if (key == 40 || key == 112) { name = Strings.ViewCustomEdits }
+        else if (key == 41 || key == 113) { name = Strings.covered }
+        else if (key == 42 || key == 114) { name = Strings.noncovered }
+        else if (key == 43 || key == 115) { name = Strings.companionGuide }
 
         else if (key == 45) { name = Strings.UserList }
         else if (key == 46) { name = Strings.MenuCreate }
@@ -123,6 +123,7 @@ export class DynamicSidebar extends React.Component {
 
         else if (key == 50) { name = Strings.claimPayment_835 }
         else if (key == 51) { name = Strings.MenuManagement }
+        else if(key == 120 || key == 121) { name = Strings.tradingPartnerDetails}
 
         return name
     }

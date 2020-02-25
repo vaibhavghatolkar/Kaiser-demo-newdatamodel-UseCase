@@ -184,7 +184,9 @@
     border: none;
 }
 .padding-view{    
-    margin-top: 12px;
     padding-left: 0px;
     margin-bottom: 12px
+}
+.small-padding{
+    padding : 3px !important;
 }

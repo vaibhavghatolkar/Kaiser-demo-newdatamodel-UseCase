@@ -390,7 +390,7 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
 
                         <div>
-                        <label style={{color:"var(--main-bg-color)" , fontWeight:"500" , marginLeft:"15px" , marginTop:"10px", fontSize: '20px'}}>Trading Partner Configuration</label>
+                        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Trading Partner Configuration</h5>
                         </div><br></br>
                         <div className="row">
 
@@ -673,7 +673,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="panel-heading collapsible" data-toggle="collapse" href="#CommunicationMethods">
+                                    {/* <div className="panel-heading collapsible" data-toggle="collapse" href="#CommunicationMethods">
                                         <span className="panel-title">
                                             Communication Methods
                        </span>
@@ -727,7 +727,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* <div className="panel-heading collapsible" data-toggle="collapse" href="#CompanionGuide">
                                         <span className="panel-title">
                                             837 Companion Guide

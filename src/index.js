@@ -160,9 +160,9 @@ class PrivateRoute extends React.Component {
                                 />
                             </div>
                             <div className="col-10 container-fluid" style={{ minHeight: '100vh' }}>
-                                <div className="row border-bottom" style={{margin: '12px'}}>
+                                <div className="row border-bottom" style={{marginTop: '12px', marginBottom: '12px'}}>
                                     <div className="padding-view">
-                                        <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '12px'}}></img>
+                                        <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
                                     </div>
                                     <div className="col-11 padding-view">
                                         <input type="text" name="name" className="search-input-style col-12" placeholder="Search" />
@@ -177,7 +177,6 @@ class PrivateRoute extends React.Component {
                                 </Route>
                                 {/* <Route exact path="/" component={RealTime276} /> */}
                                 {/* <Route path={'/' + Strings.claimsDashboard} component={Claims} /> */}
-                                <Route path={'/' + Strings.tradingPartnerConfiguration} component={StatewiseTradingPartner} />
                                 <Route path={'/' + Strings.submitClaims} component={SubmitClaim} />
                                 {/* <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
                     <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} /> */}
@@ -191,6 +190,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
                                 <Route path={'/' + Strings.claimsDashboard_834} component={EnrollmentInbound} />
                                 <Route path={'/' + Strings.editConfiguration} component={EditConfiguration} />
+                                <Route path={'/'+ Strings.tradingPartnerDetails} component={StatewiseTradingPartner} />
                                 <Route path={'/' + Strings.viewEdit} component={ViewEdit} />
                                 <Route path={'/' + Strings.fullFile834} component={FullFileCompare} />
                                 <Route path={'/' + Strings.transactionSetup} component={TransactionSetup} />
@@ -198,6 +198,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.covered} component={CoveredICDCode} />
                                 <Route path={'/' + Strings.noncovered} component={NonCovered} />
                                 <Route path={'/' + Strings.validation} component={Claims} />
+                                <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
                                 <Route path={'/' + Strings.ViewCustomEdits} component={ViewCustomEdits} />
                                 <Route path={'/' + Strings.files_834 + '/:flag'} component={Files_834} />
                                 {/* <Route path={'/'+ Strings.ElilgibilityDetails270 + '/:apiflag/:State/:selectedTradingPartner/:startDate/:endDate/:transactionId/:status/:count'} component={EligibilityDetails} />

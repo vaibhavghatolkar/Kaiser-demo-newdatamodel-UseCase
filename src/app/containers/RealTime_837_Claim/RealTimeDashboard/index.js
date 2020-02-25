@@ -728,7 +728,7 @@ export class RealTimeDashboard extends React.Component {
     render() {
         return (
             <div>
-                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "18px", marginTop : '18px' }}>Claims Dashboard</h5>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Claims Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}

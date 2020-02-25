@@ -29,13 +29,13 @@ export class SubmitClaim extends React.Component {
             <div>
                 {
                     <div>
-                        <div style={{borderBottom: "1.5px solid #139DC9"}}>
+                        <div>
+                            {/* style={{borderBottom: "1.5px solid #139DC9"}} */}
                             {/* <img src="/home/amol/hipaas/hipass-edival/client/src/app/components/Images/Search.png" style={{width:"14px", height:"14px"}} /> */}
                             {/* <input type="text" name="name" style={{padding:"10px", width:"100%" , border:"none" , lineHeight: "25px"}} placeholder="Search"/> */}
                         </div>
                         <div>
-                        <br></br>
-                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>Submit Claim</h5><br></br>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Submit Claim</h5><br></br>
                         </div>
                         <div className="row">
 
@@ -81,7 +81,7 @@ export class SubmitClaim extends React.Component {
                         </div>
 
 
-                        <div  style={{marginleft: "20px"}}>
+                        <div style={{ marginleft: "20px" }}>
                             <div className="panel-group">
                                 <div className="panel panel-default">
                                     <div className="panel-heading collapsible" data-toggle="collapse" href="#SubmitterInfo">
@@ -140,47 +140,32 @@ export class SubmitClaim extends React.Component {
                                     <div id="BillingProvider_Info" className="panel-collapse content collapse">
                                         <div className="panel-body">
                                             <div className="row">
-                                                <div className="form-group col list-header">
-                                                    <label>
-                                                        Name
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Name </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Address </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">City </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">State </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
 
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        Address
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
-
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        City
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
-
-                                                <div className="form-group list-header col" style={{ marginRight: '10px' }}>
-                                                    <label>
-                                                        State
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
                                             </div>
                                             <div className="row">
-                                                <div className="form-group list-header col-sm-3">
-                                                    <label>
-                                                        Zip
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Zip </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
-
-                                                <div className="form-group list-header col-sm-3">
-                                                    <label>
-                                                        Tax Id
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Tax Id </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -193,40 +178,28 @@ export class SubmitClaim extends React.Component {
                                     <div id="PayToAddress_Info" className="panel-collapse content collapse">
                                         <div className="panel-body">
                                             <div className="row">
-                                                <div className="form-group col list-header">
-                                                    <label>
-                                                        Name
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Name </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Address </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">City </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">State </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
 
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        Address
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
-
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        City
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
-
-                                                <div className="form-group list-header col" style={{ marginRight: '10px' }}>
-                                                    <label>
-                                                        State
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
                                             </div>
                                             <div className="row">
-                                                <div className="form-group list-header col-sm-3">
-                                                    <label>
-                                                        Zip
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Zip </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -322,31 +295,25 @@ export class SubmitClaim extends React.Component {
                                                     <input type="text" className="form-control" />
                                                 </div>
                                             </div>
+
                                             <div className="row">
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        Address
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Address </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        City
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">City </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        State
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">State </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
-                                                <div className="form-group list-header col" style={{ marginRight: '10px' }}>
-                                                    <label>
-                                                        Zip
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Zip </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -416,33 +383,23 @@ export class SubmitClaim extends React.Component {
                                     <div id="ServiceLine_Info" className="panel-collapse content collapse">
                                         <div className="panel-body">
                                             <div className="row">
-                                                <div className="form-group col list-header">
-                                                    <label>
-                                                        Identification Code
-                                                    </label>
-                                                    <input type="text" className="form-control" />
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Identification Code </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header"> Paid Amount </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header"> Product Id Qualifier </label>
+                                                    <input type="text" className="list-header form-control" />
+                                                </div>
+                                                <div className="form-group col-sm-3">
+                                                    <label className="list-header">Qty </label>
+                                                    <input type="text" className="list-header form-control" />
                                                 </div>
 
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        Paid Amount
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
-
-                                                <div className="form-group list-header col">
-                                                    <label>
-                                                        Product Id Qualifier
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
-
-                                                <div className="form-group list-header col" style={{ marginRight: '10px' }}>
-                                                    <label>
-                                                        Qty
-                                                    </label>
-                                                    <input type="text" className="form-control" />
-                                                </div>
                                             </div>
                                             <div className="row">
                                                 <div className="form-group list-header col-sm-3">
