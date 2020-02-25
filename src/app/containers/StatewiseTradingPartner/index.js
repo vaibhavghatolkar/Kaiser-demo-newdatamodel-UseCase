@@ -432,7 +432,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div>
                 <div>
-                    <label style={{ color: "#139DC9", fontWeight: "500", marginLeft: "15px", marginTop: "10px", fontSize: '20px' }}>Trading Partner</label>
+                    <label style={{ color: "#139DC9", fontWeight: "500", marginLeft: "15px", marginTop: "10px", fontSize: '20px' }}>Trading Partner Details</label>
                 </div>
                 <div className="container">
                     <div className="panel-group">

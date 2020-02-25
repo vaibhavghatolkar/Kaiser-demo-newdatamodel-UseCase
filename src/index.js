@@ -184,6 +184,7 @@ class PrivateRoute extends React.Component {
                     <Route path={'/'+ Strings.viewEdit} component={ViewEdit} />
                     <Route path={'/'+ Strings.fullFile834} component={FullFileCompare} />
                     <Route path={'/'+ Strings.transactionSetup} component={TransactionSetup} />
+                    <Route path={'/'+ Strings.tradingPartnerDetails} component={StatewiseTradingPartner} />
                     <Route path={'/'+ Strings.companionGuide} component={CompanionGuide} />
                     <Route path={'/'+ Strings.covered} component={CoveredICDCode} />
                     <Route path={'/'+ Strings.noncovered} component={NonCovered} />

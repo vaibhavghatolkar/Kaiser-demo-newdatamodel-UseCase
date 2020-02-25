@@ -13,7 +13,7 @@ const Strings = {
     ACK_MANAGEMENT : 'ackMng',
 
     claimsDashboard: 'claimsDashboard',
-    // tradingPartnerConfiguration : 'TradingPartner',
+    tradingPartnerDetails : 'tradingPartnerDetails',
     tradingPartnerConfiguration : 'tradingPartnerConfiguration',
     claimsDashboard_835 : 'claimsDashboard_835',
     claimsDashboard_834 : 'claimsDashboard_834',
