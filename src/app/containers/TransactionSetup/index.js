@@ -13,8 +13,16 @@ export class TransactionSetup extends React.Component {
             Transaction_Type: '',
             Companion_Guide: '',
             Acceptance_Criteria: '',
-            Communication_Type: 'SFTP',
-            file_naming_option:'Error if file exists'
+            Communication_Type: '1',
+            Change_Trading_Partner: '',
+            file_naming_option:'',
+            Use_Default_Settings: false,
+            Host:'',
+            Port:'',
+            UserName:'',
+            Password:'',
+            Directory:'',
+            create_directory: false,
 
         };
 
@@ -69,11 +77,27 @@ export class TransactionSetup extends React.Component {
     }
 
     ChangeVal(event, key) {
-        console.log(event.target.options[event.target.selectedIndex].text)
+
         this.setState({
-            [key]: event.target.options[event.target.selectedIndex].text,
+            [key]: event.target.options[event.target.selectedIndex].value,
+        })
+        if(event.target.options[event.target.selectedIndex].value == "1"){
+            this.setState({
+                file_naming_option: "",
+            })  
+        }else{
+            this.setState({
+                file_naming_option: 'Error if file exists',
+            })  
+        }
+    }
+    ChangeVal1(event, key) {
+
+        this.setState({
+            [key]: event.target.options[event.target.selectedIndex].value,
         })
     }
+
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
@@ -82,15 +106,26 @@ export class TransactionSetup extends React.Component {
         return row
     }
     handleClick(event) {
-        var query = 'mutation{ SP_Save_TransactionSetup(ID : 0 ' +
-            'Trading_Partner :"' + this.state.Change_Trading_Partner + '"' +
-            'Transaction_Type :"' + this.state.Transaction_Type + '"' +
-            'Acceptance_Criteria :"' + this.state.Acceptance_Criteria + '"' +
-            'Campanion_Guide :"' + this.state.Companion_Guide + '"' +
-            'Communication_Type :"' + this.state.Communication_Type + '"' +
+        // https://sftp.CADHCS_5010_834.com
 
-            ')' +
-            '}'
+        var query =  ` mutation{
+            SP_Save_TransactionSetup(
+                ID:0,
+                Trading_Partner:"${this.state.Change_Trading_Partner}" 	
+                Transaction_Type:"${this.state.Transaction_Type}" 
+                Acceptance_Criteria:"${this.state.Acceptance_Criteria}"
+                Campanion_Guide:"${this.state.Companion_Guide}" 
+                Communication_Type:"${this.state.Communication_Type}" 
+                Use_Default_Settings:${this.state.Use_Default_Settings} 
+                Host:"${this.state.Host}" 
+                Port:"${this.state.Port}"
+                UserName:"${this.state.UserName}" 
+                Password:"${this.state.Password}" 
+                Directory:"${this.state.Directory}" 
+                Create_Directory:${this.state.create_directory} 
+                File_Naming_Options:"${this.state.file_naming_option}" 
+                )
+          }`
 
         console.log(query)
         fetch(Urls.base_url, {
@@ -105,10 +140,11 @@ export class TransactionSetup extends React.Component {
             })
         })
             .then(r => r.json())
-            .then(data => alert(data.data.SP_Save_TransactionSetup))
-        setTimeout(() => {
-            window.location.reload()
-        }, 1000)
+            .then(res => 
+                alert(res.data.SP_Save_TransactionSetup))
+            setTimeout(() => {
+                window.location.reload()
+            }, 3000)
     }
     ChangeTradingPartner(event) {
 
@@ -119,46 +155,50 @@ export class TransactionSetup extends React.Component {
         this.setState({
             Change_Trading_Partner: event.target.options[event.target.selectedIndex].text,
         })
-        let query1 = '{TransactionSetup (TPName:"' + event.target.options[event.target.selectedIndex].text + `") {
-            Transaction_Type 
-            Companion_Guide
-            Acceptance_Criteria
-            Trading_Partner         
-            Communication_Type
+        // let query1 = '{TransactionSetup (TPName:"' + event.target.options[event.target.selectedIndex].text + `") {
+        //     Transaction_Type 
+        //     Companion_Guide
+        //     Acceptance_Criteria
+        //     Trading_Partner         
+        //     Communication_Type
            
-          }}`
-        fetch(Urls.tradingPartner, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query1 })
-        })
-            .then(res => res.json())
-            .then(r => {
-                // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
-                console.log(r.data.TransactionSetup[0])
-                this.setState({
-                    Transaction_Type: r.data.TransactionSetup[0].Transaction_Type,
-                    Companion_Guide: r.data.TransactionSetup[0].Companion_Guide,
-                    Acceptance_Criteria: r.data.TransactionSetup[0].Acceptance_Criteria,
-                    Communication_Type: r.data.TransactionSetup[0].Communication_Type,
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        //   }}`
+        // fetch(Urls.tradingPartner, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json',
+        //     },
+        //     body: JSON.stringify({ query: query1 })
+        // })
+        //     .then(res => res.json())
+        //     .then(r => {
+        //         // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
+        //         console.log(r.data.TransactionSetup[0])
+        //         this.setState({
+        //             Transaction_Type: r.data.TransactionSetup[0].Transaction_Type,
+        //             Companion_Guide: r.data.TransactionSetup[0].Companion_Guide,
+        //             Acceptance_Criteria: r.data.TransactionSetup[0].Acceptance_Criteria,
+        //             Communication_Type: r.data.TransactionSetup[0].Communication_Type,
+        //         })
+        //     })
+        //     .catch(err => {
+        //         console.log(err)
+        //     })
         // console.log(event.target.options[event.target.selectedIndex].text)
 
 
     }
 
     changeCheckbox(event, key){
-        alert(event.target.checked)
         this.setState({
             [key] : event.target.checked
         })
+    }
+    onChangeName(event, key) {
+        this.setState({
+            [key]: event.target.value
+        });
     }
 
     render() {
@@ -222,12 +262,12 @@ export class TransactionSetup extends React.Component {
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">Communication Type</label>
                                                 <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
-                                                    <option selected={this.state.Communication_Type == "SFTP" ? "selected" : ''} value="SFTP">SFTP</option>
-                                                    <option selected={this.state.Communication_Type == "Disk" ? "selected" : ''} value="Disk">Disk</option>
+                                                    <option selected={this.state.Communication_Type == "1" ? "selected" : ''} value="1">SFTP</option>
+                                                    <option selected={this.state.Communication_Type == "2" ? "selected" : ''} value="2">Disk</option>
                                                 </select>
                                             </div>
                                           {
-                                              this.state.Communication_Type=="SFTP" ?
+                                              this.state.Communication_Type=="1" ?
                                               <div className="form-group col-sm-3" style={{ marginTop: "4px" }}>
                                                 <label className="list-header1">
                                                     Use Default Settings<br></br>
@@ -240,7 +280,7 @@ export class TransactionSetup extends React.Component {
                                         </div>
                                        
                                        {
-                                       this.state.Communication_Type=="SFTP" ? <div className="row">
+                                       this.state.Communication_Type=="1" ? <div className="row">
                                             <div className="form-group col-sm-3">
                                                <label className="list-header1">Host</label>
                                                 <input type="text" className="form-control list-header1" value={this.state.Host} onChange={(e) => this.onChangeName(e, 'Host')} />
@@ -275,11 +315,11 @@ export class TransactionSetup extends React.Component {
                                         </div>
                                         <div className="form-group col-sm-3">
                                                 <label className="list-header1">File Naming Options</label>
-                                                <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'file_naming_option')}>
+                                                <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal1(e, 'file_naming_option')}>
                                                     <option selected={this.state.file_naming_option == "Error if file exists" ? "selected" : ''} value="Error if file exists">Error if file exists</option>
-                                                    <option selected={this.state.file_naming_option == "Disk" ? "selected" : ''} value="Disk">Append if file exists</option>
-                                                    <option selected={this.state.file_naming_option == "Disk" ? "selected" : ''} value="Disk">Overwrite if file exists</option>
-                                                    <option selected={this.state.file_naming_option == "Disk" ? "selected" : ''} value="Disk">Create unique name if file exists</option>
+                                                    <option selected={this.state.file_naming_option == "Append if file exists" ? "selected" : ''} value="Append if file exists">Append if file exists</option>
+                                                    <option selected={this.state.file_naming_option == "Overwrite if file exists" ? "selected" : ''} value="Overwrite if file exists">Overwrite if file exists</option>
+                                                    <option selected={this.state.file_naming_option == "Create unique name if file exists" ? "selected" : ''} value="Create unique name if file exists">Create unique name if file exists</option>
                                                 </select>
                                         </div>
                                     </div>
