@@ -79,44 +79,44 @@ export class MatchClaims extends React.Component{
         array.forEach(item => {
             row.push(
                 <tr>
-                    <td>{item.Match_ID}</td>
-                    <td>{item.SeqID}</td>
-                    <td>{item.Billing_Provider_ID}</td>
-                    <td>{item.Subscriber_ID}</td>
-                    <td>{item.Last}</td>
-                    <td>{item.FirstName}</td>
-                    <td>{item.amount}</td>
-                    <td>{item.StmtBegin}</td>
-                    <td>{item.StmtEnd}</td>
-                    <td>{item.ExtClaimID}</td>
-                    <td>{item.Status}</td>
-                    <td><button class="btn btn-sm btn-primary btn-block" type="resend">Match</button></td>
+                    <td className="list-item-style">{item.Match_ID}</td>
+                    <td className="list-item-style">{item.SeqID}</td>
+                    <td className="list-item-style">{item.Billing_Provider_ID}</td>
+                    <td className="list-item-style">{item.Subscriber_ID}</td>
+                    <td className="list-item-style">{item.Last}</td>
+                    <td className="list-item-style">{item.FirstName}</td>
+                    <td className="list-item-style">{item.amount}</td>
+                    <td className="list-item-style">{item.StmtBegin}</td>
+                    <td className="list-item-style">{item.StmtEnd}</td>
+                    <td className="list-item-style">{item.ExtClaimID}</td>
+                    <td className="list-item-style">{item.Status}</td>
+                    <td className="list-item-style"><button class="btnDesign" type="resend">Match</button></td>
                 </tr>
             )
         });
         return row
+    //     border: 1px solid transparent;
+    // padding: .375rem .75rem;
     }
 
     renderClaimsError(){
         return(
             <div class="table-responsive">
                 <table className="table table-bordered claim-list">
-                    <thead>
                         <tr className="table-head">
-                            <td className="table-head-text">Match ID</td>
-                            <td className="table-head-text">Seq ID</td>
-                            <td className="table-head-text">Provider ID</td>
-                            <td className="table-head-text">Subscriber ID</td>
-                            <td className="table-head-text">Last Name</td>
-                            <td className="table-head-text">First Name</td>
-                            <td className="table-head-text">Amount</td>
-                            <td className="table-head-text">Stmt Begin</td>
-                            <td className="table-head-text">Stmt End</td>
-                            <td className="table-head-text">Ext Claim ID</td>
-                            <td className="table-head-text">Status</td>
-                            <td className="table-head-text">Mark Resend</td>
+                            <td className="table-head-text list-item-style">Match ID <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Seq ID <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Provider ID <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Subscriber ID <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Last Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">First Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Amount <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Stmt Begin <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Stmt End <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Ext Claim ID <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Status <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                            <td className="table-head-text list-item-style">Mark Resend <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                         </tr>
-                    </thead>
                     <tbody>
                         {this.renderRows()}
                     </tbody>
@@ -128,7 +128,7 @@ export class MatchClaims extends React.Component{
     render() {
         return (
             <div>
-                {this.renderSearchBar()}
+                {this.renderSearchBar()}<br/>
                 <Topbar/>
                 {this.renderClaimsError()}
             </div>

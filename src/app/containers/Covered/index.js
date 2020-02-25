@@ -20,7 +20,7 @@ export class CoveredICDCode extends React.Component {
     }
 
     componentDidMount() {
-        this.getData()
+        // this.getData()
     }
 
     getData() {

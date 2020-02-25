@@ -142,7 +142,7 @@ class PrivateRoute extends React.Component {
             element={document}
             onActive={this.onActive}
             onIdle={this.onIdle}
-            // onAction={this.onAction}
+            onAction={this.onAction}
             debounce={250}
             timeout={this.state.timeout} />
        
@@ -167,7 +167,7 @@ class PrivateRoute extends React.Component {
                     </Route> 
                     {/* <Route exact path="/" component={RealTime276} /> */}
                     {/* <Route path={'/' + Strings.claimsDashboard} component={Claims} /> */}
-                    <Route path={'/'+ Strings.tradingPartnerConfiguration} component={StatewiseTradingPartner} />
+                    <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
                     <Route path={'/'+ Strings.submitClaims} component={SubmitClaim} />
                     {/* <Route path={'/'+ Strings.RealTime276 + '/:apiflag'} component={RealTime276}/>
                     <Route path={'/'+ Strings.RealTime270  + '/:apiflag'} component={RealTime276} /> */}
