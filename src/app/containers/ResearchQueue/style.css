@@ -1,3 +1,5 @@
+@import "../color.css";
+
 * {
     box-sizing: border-box;
 }
@@ -5,4 +7,13 @@
 .list-header{
     margin-left: 15px;
     font-size: 12px;
+}
+.btnDesign{
+    background-color: var(--main-bg-color);
+    color : var(--white-color);
+    font-size: 10px;
+    line-height: 1.5;
+    border-radius: .2rem;
+    border: 1px solid transparent;
+    padding: .275rem .75rem;
 }

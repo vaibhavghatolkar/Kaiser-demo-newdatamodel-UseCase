@@ -371,10 +371,10 @@ export class EditConfiguration extends React.Component {
 
                 <div className="panel-group">
                 <div className="panel panel-default">
-                    <div className="panel-heading collapsible" data-toggle="collapse" href="#BasicX12Options" style={{ background: "#139DC9" }}>
+                    <div className="panel-heading collapsible" style={{ background: "#139DC9" }}>
                         <span className="panel-title" style={{ color: "white" }}>Add Custom Edits </span>
                     </div>
-                    <div id="BasicX12Options" className="panel-collapse content collapse">
+                    <div className="panel-collapse content">
                         <br></br>
                                 <div className="panel-body">
                                     <div className="row">
@@ -410,7 +410,7 @@ export class EditConfiguration extends React.Component {
                                         </div>
 
                                         <div className="form-group col-3">
-                                            <div className="list-header">Trading partner </div>
+                                            <div className="list-header">Trading Partner </div>
                                             <select className="form-control list-header" id="TradingPartner" onChange={(e) => this.ChangeVal(e, 'TradingPartner')} >
                                                 <option value="select">Trading partner</option>
                                                 <option selected="selected">AVAILITY</option>
@@ -558,7 +558,7 @@ export class EditConfiguration extends React.Component {
                                 </div>
 
                                 <div className="form-group col-sm-3" style={{ padding: '0' }}>
-                                    <label className="list-header clickable" onClick={() => this.setState({ compareDetailsFlag: !this.state.compareDetailsFlag })} style={{ color: '#139DC9', fontWeight: '700' }}>Segment Compare</label>
+                                    <label className="list-header clickable" onClick={() => this.setState({ compareDetailsFlag: !this.state.compareDetailsFlag })} style={{ color: '#139DC9', fontWeight: '700' }}>AND / OR</label>
                                     {/* <select className="form-control list-header" onChange={this.SegmentCompYesno} style={{ marginLeft: "10px" }} >
                                                     <option value=""></option>
 
@@ -984,6 +984,9 @@ export class EditConfiguration extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
+                {/* <td className="table-head-text">State</td>
+                <td className="table-head-text">Transaction</td>
+                <td className="table-head-text">Trading Partner</td> */}
                 <td className="table-head-text">Rule Description</td>
                 <td className="table-head-text">Validation</td>
                 <td className="table-head-text">Error Type</td>
@@ -1164,7 +1167,7 @@ export class EditConfiguration extends React.Component {
                     {/* {this.renderTopbar()} */}
                     {this.renderView()}
                    
-                        {this.renderTableList()}
+                        {/* {this.renderTableList()} */}
                     
                 </div>
 

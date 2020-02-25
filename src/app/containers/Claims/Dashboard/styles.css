@@ -156,3 +156,7 @@ td a {
     border: 0.2px solid #d8d8d8;
     margin-bottom: 24px;
 }
+.SearchBarImage{
+    height: 14px;
+     float: right;
+}

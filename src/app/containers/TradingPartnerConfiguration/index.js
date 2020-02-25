@@ -673,7 +673,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="panel-heading collapsible" data-toggle="collapse" href="#CommunicationMethods">
+                                    {/* <div className="panel-heading collapsible" data-toggle="collapse" href="#CommunicationMethods">
                                         <span className="panel-title">
                                             Communication Methods
                        </span>
@@ -727,7 +727,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* <div className="panel-heading collapsible" data-toggle="collapse" href="#CompanionGuide">
                                         <span className="panel-title">
                                             837 Companion Guide
