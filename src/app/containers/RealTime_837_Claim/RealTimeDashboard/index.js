@@ -658,7 +658,7 @@ export class RealTimeDashboard extends React.Component {
                             }}
                         >
                             <option value=""></option>
-                            <option value="1">California</option>
+                            <option selected value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
                             <option value="4">New York</option>

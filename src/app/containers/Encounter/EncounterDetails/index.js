@@ -630,8 +630,8 @@ export class EncounterDetails extends React.Component {
                                     this.getData()
                                 })
                             }}>
-                            <option selected={this.state.State == '' ? "selected" : ""} value=""></option>
-                            <option selected={this.state.State == 'California' ? "selected" : ""} value="1">California</option>
+                            <option selected={this.state.State == '' ? "" : ""} value=""></option>
+                            <option  selected={this.state.State == 'California' ? "selected" : "California"} value="1">California</option>
                             <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
                             <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
                             <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>
@@ -653,7 +653,7 @@ export class EncounterDetails extends React.Component {
                         {/* <input
                             onChange={(e) => this.onHandleChange(e)}
                             className="form-control" type="text" /> */}
-                               <select class="form-control list-dashboard"><option value=""></option><option sele value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                               <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>

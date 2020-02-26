@@ -22,7 +22,7 @@ export class RealTime276 extends React.Component {
                 { name: 'TOTAL TRANSACTION', value: 0 },
                 { name: 'INVALID TRANSACTIONS', value: 0 },
                 { name: 'ERROR PERCENTAGE', value: 0 },
-                { name: 'AVG RESPONSE TIME (milliseconds)', value: 0 },
+                { name: 'AVG RESPONSE TIME', value: 0 },
             ],
             showDetails: false,
             files_list: [],
@@ -277,7 +277,7 @@ export class RealTime276 extends React.Component {
             { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
-            { name: 'AVG RESPONSE TIME (milliseconds)', value: data.AvgResTime },
+            { name: 'AVG RESPONSE TIME', value: data.AvgResTime },
         ]
 
         if (this.state.apiflag == 0) {
@@ -1164,8 +1164,8 @@ export class RealTime276 extends React.Component {
                                 this.onSelect(event, 'State')
                             }}
                         >
-                            <option selected="selected" value=""></option>
-                            <option value="1">California</option>
+                            <option  value=""></option>
+                            <option selected value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
                             <option value="4">New York</option>
