@@ -13,7 +13,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
-import ReactSearchBox from 'react-search-box'
 
 
 let val = ''
@@ -76,7 +75,7 @@ export class RealTimeDashboard extends React.Component {
             ClaimBarChart: [],
             claimLabels: [],
             search: ''
-            
+
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -224,32 +223,18 @@ export class RealTimeDashboard extends React.Component {
             })
     }
 
-
-    renderSearchBar(e) {
-        console.log("hello");
-        return (
-            <div className="row">
-            <ReactSearchBox
-            placeholder="File Name"
-            onChangeText={this.updateSearch}
-            value={this.state.search}
-          />
-            </div>
-        )
-    }
-
     updateSearch = search => {
         this.setState({ search });
-      };
+    };
 
     renderTableHeader() {
         return (
             <tr className="table-head">
-              <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')}  style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')}  style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -384,7 +369,7 @@ export class RealTimeDashboard extends React.Component {
                 <tr>
                     <td>{d.FileName}</td>
                     <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
-                    <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus ==  'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
+                    <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount}</td>
                 </tr>
