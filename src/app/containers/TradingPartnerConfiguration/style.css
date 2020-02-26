@@ -20,7 +20,7 @@
 }
 .table-head-text{
     color: var(--white-color);
-    font-size: 1.2em;
+    font-size: 12px;
 }
 .summary-list{
     line-height: 2.5em;

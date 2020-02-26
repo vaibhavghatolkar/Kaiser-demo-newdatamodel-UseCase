@@ -8,7 +8,7 @@
 .claim-list{
     background-color: var(--white-color);
     margin-top: 16px;
-    font-size: 0.7em;
+    font-size: 12px;
 }
 .list-item-style{
     text-align: center;
@@ -21,7 +21,7 @@
 }
 .table-head-text{
     color: var(--white-color);
-    font-size: 1.2em;
+    font-size: 12px;
 }
 .summary-list{
     line-height: 2.5em;
@@ -162,7 +162,7 @@ td a {
     margin-bottom: 16px;   
 }
 .justify-align{
-    font-size: 10px;
+    font-size: 12px;
     padding: 0px;
     padding-top: 12px;
     padding-bottom: 12px;
