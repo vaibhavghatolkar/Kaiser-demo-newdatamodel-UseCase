@@ -1094,7 +1094,7 @@ console.log("asdad", data)
         return (
             <form className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col">
+                    <div className="form-group col-3">
                         <div className="list-dashboard">Time Range</div>
                         <select
                             className="form-control list-dashboard" id="state"
@@ -1148,7 +1148,7 @@ console.log("asdad", data)
                             <option  selected="selected" value="2">All</option>
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col-3">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
                             onChange={(event) => {
@@ -1174,7 +1174,7 @@ console.log("asdad", data)
                         </select>
                     </div>
 
-                    <div className="form-group col-2">
+                    <div className="form-group col-3">
                         <div className="list-dashboard">
                             Submitter
                         </div>
@@ -1187,7 +1187,7 @@ console.log("asdad", data)
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col-3">
                         <div className="list-dashboard">
                          Provider Name
 
@@ -1265,7 +1265,7 @@ console.log("asdad", data)
              
                 item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
                     ?
-                    <Link to={{ pathname: '/' + url, state: { data } }} className="col-2 summary-container">
+                    <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
                         <div>
                             <div className="summary-header">
                                 {item.name}
@@ -1280,7 +1280,7 @@ console.log("asdad", data)
                         </div>
                     </Link>
                     :
-                    <div className="col-2 summary-container">
+                    <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
                             
