@@ -432,7 +432,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Trading Partner Details</h5><br/>
+                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Trading Partner Details</h5><br/>
                 </div>
                 <div className="container">
                     <div className="panel-group">
@@ -500,7 +500,7 @@ export class StatewiseTradingPartner extends React.Component {
                                 </div>
 
                                 <div className="clickable" data-toggle="collapse" href="#BasicX12Options1">
-                                    <span style={{ fontSize: "15px", color: "#139DC9", fontWeight: "400", marginLeft: "30px" }}>
+                                    <span style={{ fontSize: "15px", color: "#139DC9", fontWeight: "700", marginLeft: "30px" }}>
                                         Search
        </span>
                                 </div>

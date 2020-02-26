@@ -650,9 +650,10 @@ export class EncounterDetails extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input
+                        {/* <input
                             onChange={(e) => this.onHandleChange(e)}
-                            className="form-control" type="text" />
+                            className="form-control" type="text" /> */}
+                               <select class="form-control list-dashboard"><option value=""></option><option sele value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -956,7 +957,7 @@ export class EncounterDetails extends React.Component {
 
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Encounter Details</h5>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Encounter Details</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

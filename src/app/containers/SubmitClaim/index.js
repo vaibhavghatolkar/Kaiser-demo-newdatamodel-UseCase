@@ -35,7 +35,7 @@ export class SubmitClaim extends React.Component {
                             {/* <input type="text" name="name" style={{padding:"10px", width:"100%" , border:"none" , lineHeight: "25px"}} placeholder="Search"/> */}
                         </div>
                         <div>
-                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Submit Claim</h5><br></br>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Submit Claims</h5><br></br>
                         </div>
                         <div className="row">
 

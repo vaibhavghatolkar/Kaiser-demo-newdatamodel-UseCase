@@ -568,7 +568,7 @@ export class MenuCreate extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>User Role Management</h5>
+                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>User Role Management</h5>
                 </div>
                 
                 {
