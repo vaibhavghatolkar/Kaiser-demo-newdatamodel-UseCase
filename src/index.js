@@ -57,7 +57,9 @@ import { EncounterDashboard } from './app/containers/Encounter/EncounterDashboar
 import { EncounterDetails } from './app/containers/Encounter/EncounterDetails'
 import styles from './app/containers/Files/files-styles.css'
 
-import { DynamicSidebar } from './app/components/DynamicSidebar';
+import { DynamicSidebar } from './app/components/DynamicSidebar'
+import{ HealthCare278 } from './app/containers/Health_care_278_dashboard'
+import { ServiceDetails278 } from './app/containers/Service_details278'
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -242,7 +244,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.EncounterDetails} component={EncounterDetails} />
 
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
-
+                                <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
+                                <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
+                                
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
 

@@ -72,6 +72,8 @@ const Strings = {
     EncounterDashboard:'EncounterDashboard',
     EncounterDetails:'EncounterDetails',
     claimPayment_835: 'claimPaymentDashboard835',
+    healthCare278: 'healthCare278Dashboard',
+    serviceDetails278: 'serviceDetails278'
 }
 
 export default Strings;
