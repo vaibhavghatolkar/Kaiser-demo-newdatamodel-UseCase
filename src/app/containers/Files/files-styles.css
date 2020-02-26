@@ -17,8 +17,11 @@
 }
 .table-head-text{
     color: white;
-    font-size: 1em;
-    padding: 4px;
+    font-size: 12px;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
 }
 .summary-list{
     line-height: 2.5em;
@@ -102,7 +105,7 @@
   margin: 0px;
 }
 .small-font{
-    font-size: 10px !important
+    font-size: 12px !important
 }
 .claim-line-data{
     padding: 12px;
@@ -139,7 +142,7 @@
 .claim-Details{
     background-color: white;
     margin-top: 16px;
-    font-size: 10px;
+    font-size: 12px;
 }
 .page-item.active .page-link {
     z-index: 1;
@@ -182,6 +185,10 @@
     padding: 0px;
     margin-top: 8px;
     border: none;
+    color: #139DC9;
+    font-size: 20px;
+    font-weight: 600;
+    outline: none;
 }
 .padding-view{    
     padding-left: 0px;
@@ -189,4 +196,10 @@
 }
 .small-padding{
     padding : 3px !important;
+}
+.margin-top{
+    padding-top: 16px;
+}
+.top-bar-margin{
+    margin-left: -12px !important;
 }

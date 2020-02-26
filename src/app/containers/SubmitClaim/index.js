@@ -35,7 +35,7 @@ export class SubmitClaim extends React.Component {
                             {/* <input type="text" name="name" style={{padding:"10px", width:"100%" , border:"none" , lineHeight: "25px"}} placeholder="Search"/> */}
                         </div>
                         <div>
-                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Submit Claim</h5><br></br>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Submit Claims</h5><br></br>
                         </div>
                         <div className="row">
 
@@ -60,11 +60,11 @@ export class SubmitClaim extends React.Component {
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Trading partner</label>
+                                <label className="list-header">Submitter</label>
                                 <select className="form-control list-header" id="tradingPartner">
-                                    <option value="">Trading partner</option>
-                                    <option selected="selected" value="1">Trading Partner 1</option>
-                                    <option value="2">Trading Partner 2</option>
+                                    <option value="">Submitter</option>
+                                    <option selected="selected" value="1">Submitter 1</option>
+                                    <option value="2">Submitter 2</option>
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">

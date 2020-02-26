@@ -154,7 +154,7 @@ class PrivateRoute extends React.Component {
                         <Route render={() => <Redirect to={{ pathname: "/" }} />} />
                     </div> :
                     <div className="container-fluid white-background">
-                        <Header /> <br /><br /><br /><br />
+                        <Header /> <br /><br /><br /><br /><br />
                         <div className="row">
                             <div className="col nopadding white-background">
                                 <DynamicSidebar

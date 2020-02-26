@@ -18,13 +18,11 @@ export class Header extends React.Component {
         return (
            
             <div className="header_container">
-                <h2 className="header_text" style={{marginLeft:"45px"}}>Molina</h2>
-                <label style={{color:"white" , marginLeft:"45px" , fontSize:"11px" }}>Powered by HiPaaS
-</label>
-                
+                <h2 className="header_text" style={{marginLeft:"24px"}}>Molina</h2>
+                <label style={{color:"white" , marginLeft:"24px" , fontSize:"11px" }}>Powered by HiPaaS</label>
                 {
                     localStorage.getItem('UserId') ?
-                        <div class="dropdown" style={{ float: 'right', marginTop: '-10px' }}>
+                        <div class="dropdown" style={{ float: 'right', marginTop: '-18px' }}>
                             <img src={require('../Images/user.png')} style={{ width: '25px' }} />
                             <div class="dropdown-content">
                                 <a onClick={this.changePassword}>Change Password</a>

@@ -355,11 +355,11 @@ export class EncounterDashboard extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -507,7 +507,7 @@ export class EncounterDashboard extends React.Component {
     }
 
     onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
             this.setState({
                 [key]: ''
             })
@@ -672,7 +672,7 @@ export class EncounterDashboard extends React.Component {
                             }}
                         >
                             <option value=""></option>
-                            <option value="1">California</option>
+                            <option selected value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
                             <option value="4">New York</option>
@@ -691,9 +691,10 @@ export class EncounterDashboard extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text"
+                        {/* <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
-                        />
+                        /> */}
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
@@ -740,7 +741,7 @@ export class EncounterDashboard extends React.Component {
     render() {
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Encounter Dashboard</h5>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Encounter Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}

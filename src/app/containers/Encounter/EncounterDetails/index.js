@@ -630,8 +630,8 @@ export class EncounterDetails extends React.Component {
                                     this.getData()
                                 })
                             }}>
-                            <option selected={this.state.State == '' ? "selected" : ""} value=""></option>
-                            <option selected={this.state.State == 'California' ? "selected" : ""} value="1">California</option>
+                            <option selected={this.state.State == '' ? "" : ""} value=""></option>
+                            <option  selected={this.state.State == '' ? "selected" : ""} value="1">California</option>
                             <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
                             <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
                             <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>
@@ -650,9 +650,10 @@ export class EncounterDetails extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input
+                        {/* <input
                             onChange={(e) => this.onHandleChange(e)}
-                            className="form-control" type="text" />
+                            className="form-control" type="text" /> */}
+                               <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -737,13 +738,13 @@ export class EncounterDetails extends React.Component {
 
     renderClaimsHeader() {
         return (
-            <tr className="table-head" style={{ fontSize: "9px" }}>
-                <td className="table-head-text">Encounter Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Encounter Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                {/* <td className="table-head-text list-item-style">Encounter Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td> */}
-                <td className="table-head-text list-item-style">Encounter Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Error Code<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right' }}></img></td>
+            <tr className="table-head">
+                <td className="table-head-text">Encounter Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                {/* <td className="table-head-text list-item-style">Encounter Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
+                {/* <td className="table-head-text list-item-style">Encounter Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
+                <td className="table-head-text list-item-style">Encounter Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Error Code<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -767,19 +768,19 @@ export class EncounterDetails extends React.Component {
             <div className="row">
                 <div className="col-4 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
+                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by EncounterFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
+                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By EncounterFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
+                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img */}
-                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft: '12px', float: 'right', marginRight: '12px' }}></img>
+                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 {/* <div className="col-2 col-header">Status</div> */}
             </div>
@@ -828,7 +829,7 @@ export class EncounterDetails extends React.Component {
                                     this.getDetails(d.ClaimID, d.FileID, data[keys].value)
                                 })
                             }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-                            <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td>
+                            {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
                             {/* <td className="list-item-style">{d.Claim_Amount}</td> */}
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.adjudication_status}</td>
@@ -956,14 +957,14 @@ export class EncounterDetails extends React.Component {
 
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Encounter Details</h5>
+                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Encounter Details</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
-                    <div className="col-6 claim-list file-table">
+                    <div className="col-7 claim-list file-table">
                         {this.state.claimsObj ? this.renderList() : null}
                     </div>
 
-                    <div className="col-6">
+                    <div className="col-5">
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <div>

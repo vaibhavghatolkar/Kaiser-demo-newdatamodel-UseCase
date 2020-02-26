@@ -13,9 +13,9 @@ export class ViewCustomEdits extends React.Component {
             apiflag: this.props.apiflag,
             tradingpartner: [],
             selectedTradingPartner: '',
-            transaction:'Claims 837P Medicaid',
-            UpdateCheckBox:'',
-            checked : [],
+            transaction: 'Claims 837P Medicaid',
+            UpdateCheckBox: '',
+            checked: [],
             unchecked: []
         }
 
@@ -37,11 +37,11 @@ export class ViewCustomEdits extends React.Component {
         this.gettranaction();
     }
 
-gettranaction(){
+    gettranaction() {
 
-     let query = `{
+        let query = `{
            
-                Rules(transaction:"`+this.state.transaction+`") {
+                Rules(transaction:"`+ this.state.transaction + `") {
                     seqid
                     loopid
                     segment
@@ -55,48 +55,48 @@ gettranaction(){
                   }
                 
             }`
-    
-            console.log('Query ', query)
-    
-            fetch(Urls.tradingPartner , {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({ query: query })
+
+        console.log('Query ', query)
+
+        fetch(Urls.tradingPartner, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let array = []
+                let summary = []
+                let data = res.data
+                let iterator = data.Rules
+                iterator.forEach(item => {
+                    array.push({
+                        loopid: item.loopid,
+                        segment: item.segment,
+                        element: item.element,
+                        condition: item.condition,
+                        value: item.value,
+                        severity: item.severity,
+                        Ignore: item.Ignore,
+                        seqid: item.seqid
+                    })
+                })
+
+                this.setState({
+                    customList: array,
+                    // tradingpartner: res.data.Trading_PartnerList
+                })
             })
-                .then(res => res.json())
-                .then(res => {
-                    let array = []
-                    let summary = []
-                    let data = res.data
-                    let iterator = data.Rules
-                    iterator.forEach(item => {
-                        array.push({
-                            loopid: item.loopid,
-                            segment: item.segment,
-                            element: item.element,
-                            condition: item.condition,
-                            value: item.value,
-                            severity: item.severity,
-                            Ignore: item.Ignore,
-                            seqid: item.seqid
-                        })
-                    })
-    
-                    this.setState({
-                        customList: array,
-                        // tradingpartner: res.data.Trading_PartnerList
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-}
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
     getData() {
-        
+
         let query = `{
             Trading_PartnerList (Transaction:"TradingPartner") { 
                  
@@ -112,9 +112,9 @@ gettranaction(){
             },
             body: JSON.stringify({ query: query })
         })
-        .then(res => res.json())
+            .then(res => res.json())
             .then(res => {
-                 console.log('Data : ',res)
+                console.log('Data : ', res)
                 this.setState({
                     tradingpartner: res.data.Trading_PartnerList
                 })
@@ -123,9 +123,9 @@ gettranaction(){
                 console.log(err)
             })
 
-           
 
-      
+
+
     }
 
     renderSearchBar() {
@@ -162,42 +162,42 @@ gettranaction(){
                     <td className="list-item-style">{d.condition}</td>
                     <td className="list-item-style">{d.value}</td>
                     <td className="list-item-style">{d.severity}</td>
-                    <td className="list-item-style"><input type="checkbox" onChange={(e) => {this.changeCheckbox(e)}} value={d.seqid} /></td>
+                    <td className="list-item-style"><input type="checkbox" onChange={(e) => { this.changeCheckbox(e) }} value={d.seqid} /></td>
                 </tr>
             )
         });
 
         return (
             <div>
-            <div className="panel-heading collapsible" style={{ background: "var(--main-bg-color)" }}>
-                <span className="panel-title" style={{color:"white"}}>Custom Edits </span>
-            </div>
-            <div className="panel-collapse content">
-                <div className="panel-body">
-            <div>
-            <table className="table table-bordered claim-list" align="center" style={{width: '95%'}}>
-                {this.state.customList && this.state.customList.length > 0 ? this.renderTableHeader() : null}
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
-            </div>
-            </div>
-            </div>
+                <div className="panel-heading collapsible" style={{ background: "var(--main-bg-color)" }}>
+                    <span className="panel-title" style={{ color: "white" }}>Custom Edits </span>
+                </div>
+                <div className="panel-collapse content">
+                    <div className="panel-body">
+                        <div>
+                            <table className="table table-bordered claim-list" align="center" style={{ width: '95%' }}>
+                                {this.state.customList && this.state.customList.length > 0 ? this.renderTableHeader() : null}
+                                <tbody>
+                                    {row}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 
-    changeCheckbox(event, key){
+    changeCheckbox(event, key) {
         let checkboxValue = event.target.checked;
-        if(checkboxValue == true){
+        if (checkboxValue == true) {
             this.state.checked.push(event.target.value)
-        }else{
+        } else {
             this.state.unchecked.push(event.target.value)
         }
         this.setState({
-           checkedCheckbox : this.state.checked,
-           uncheckCheckbox: this.state.unchecked
+            checkedCheckbox: this.state.checked,
+            uncheckCheckbox: this.state.unchecked
         })
         // console.log(this.state.UpdateCheckBox)
     }
@@ -208,10 +208,10 @@ gettranaction(){
         })
     }
 
-    ChangeTradingPartner(event){
+    ChangeTradingPartner(event) {
         alert(event)
     }
-    
+
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
@@ -220,15 +220,15 @@ gettranaction(){
         return row
     }
 
-    onSelect(event, key){
-       
-        if(event.target.options[event.target.selectedIndex].text == 'Select Transaction Name'){
+    onSelect(event, key) {
+
+        if (event.target.options[event.target.selectedIndex].text == 'Transaction Name') {
             this.setState({
-                [key] : ''
+                [key]: ''
             })
         } else {
             this.setState({
-                [key] : event.target.options[event.target.selectedIndex].text
+                [key]: event.target.options[event.target.selectedIndex].text
             })
         }
 
@@ -237,12 +237,12 @@ gettranaction(){
         }, 50);
     }
 
-    Update(){
+    Update() {
         let data = this.state.customList
         let true_val = ''
         let false_val = ''
         data.forEach(element => {
-            if(element.isChecked){
+            if (element.isChecked) {
                 true_val = true_val + element.seqid + ','
             } else {
                 false_val = false_val + element.seqid + ','
@@ -250,10 +250,10 @@ gettranaction(){
         });
         let query = `
             mutation{
-                updateIgnoreCode(uncheck:"`+ false_val +`" check:"`+ true_val +`")
+                updateIgnoreCode(uncheck:"`+ false_val + `" check:"` + true_val + `")
               }
         `
-        fetch(Urls.base_url , {
+        fetch(Urls.base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -271,77 +271,79 @@ gettranaction(){
     }
     renderTopbar() {
         return (
-            <div className="row">
-                <div className="form-group col-3">
-                    <div className="list-header-dashboard">State</div>
-                    <select className="form-control list-header-dashboard" id="state">
-                        <option value="">State</option>
-                        <option selected="selected" value="1">California</option>
-                        <option value="2">Michigan</option>
-                        <option value="3">Florida</option>
-                        <option value="4">New York</option>
-                        <option value="5">Idaho</option>
-                        <option value="6">Ohio</option>
-                        <option value="7">Illinois</option>
-                        <option value="8">Texas</option>
-                        <option value="9">Mississippi</option>
-                        <option value="10">South Carolina</option>
-                        <option value="11">New Mexico</option>
-                        <option value="12">Puerto Rico</option>
-                        <option value="13">Washington</option>
-                        <option value="14">Utah</option>
-                        <option value="15">Wisconsin</option>
-                    </select>
-                </div>
+            <form className="form-style" id='filters'>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state">
+                            <option value="">State</option>
+                            <option selected="selected" value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
+                    </div>
 
-                <div className="form-group col-3">
-                    <div className="list-header-dashboard">Select Transaction</div>
-                        <select className="form-control list-header-dashboard" id="option" 
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Transaction</div>
+                        <select className="form-control list-dashboard" id="option"
                             onChange={(event) => {
-                            this.onSelect(event, 'transaction')
-                        }}
-                    >
-                        <option value="0">Select Transaction Name</option>
-                        <option value="1" selected>Claims 837P Medicaid</option>
-                        <option value="2">Claims 837I Medicaid</option>
-                        <option value="3">Enrollments 834 Medicare</option>
-                        <option value="4">Encounter 837I</option>
-                        <option value="5">Encounter 837P</option>
-                    </select>
-                </div>
+                                this.onSelect(event, 'transaction')
+                            }}
+                        >
+                            <option value="0">Select Transaction Name</option>
+                            <option value="1" selected>Claims 837P Medicaid</option>
+                            <option value="2">Claims 837I Medicaid</option>
+                            <option value="3">Enrollments 834 Medicare</option>
+                            <option value="4">Encounter 837I</option>
+                            <option value="5">Encounter 837P</option>
+                        </select>
+                    </div>
 
-                <div className="form-group col-3">
-                    <div className="list-header-dashboard">Trading partner </div>
-                    <select className="form-control list-header-dashboard" id="TradingPartner" >
-                        <option value="select">Trading partner</option>
-                        {this.getoptions()}
-                    </select>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter </div>
+                        <select className="form-control list-dashboard" id="TradingPartner" >
+                            <option value="select">Trading partner</option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <button type="submit" className="button" onClick={this.Update}>Save</button>
+                    </div>
+
                 </div>
-                <div className="form-group col-sm-1">
-                    <button type="submit" className="btn light_blue" onClick={this.Update}>Save</button>
-                </div>
-                 
-            </div>
+            </form>
         )
     }
 
     render() {
         return (
             <div>
-                
+
                 {
-                
-                        <div>
-                              <h5  style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>View Custom Edits</h5>
+
+                    <div>
+                        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>View Custom Edits</h5>
                         <br></br>
-                            {this.renderTopbar()}
-                            <div className="row">
-                                <div className="col-12">
-                                    {this.renderList()}
-                                </div>
-                                
+                        {this.renderTopbar()}
+                        <div className="row">
+                            <div className="col-12">
+                                {this.renderList()}
                             </div>
+
                         </div>
+                    </div>
                 }
             </div>
         );

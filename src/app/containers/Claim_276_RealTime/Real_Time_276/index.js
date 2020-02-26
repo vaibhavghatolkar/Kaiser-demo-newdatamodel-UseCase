@@ -19,10 +19,10 @@ export class RealTime276 extends React.Component {
         this.state = {
             claimsList: [],
             summaryList: [
-                { name: 'TOTAL TRANSACTION', value: 0},
-                { name: 'INVALID TRANSACTIONS', value: 0},
-                { name: 'ERROR PERCENTAGE', value: 0},
-                { name: 'AVG RESPONSE TIME', value: 0},
+                { name: 'TOTAL TRANSACTION', value: 0 },
+                { name: 'INVALID TRANSACTIONS', value: 0 },
+                { name: 'ERROR PERCENTAGE', value: 0 },
+                { name: 'AVG RESPONSE TIME', value: 0 },
             ],
             showDetails: false,
             files_list: [],
@@ -145,7 +145,7 @@ export class RealTime276 extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.claimstatus
-        
+
         let query = `{
             ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 AvgResTime
@@ -270,14 +270,14 @@ export class RealTime276 extends React.Component {
         } else {
             data = res.data.ClaimRequest276[0]
         }
-console.log("asdad", data)
+        console.log("asdad", data)
         let summary = [
             // { name: 'OVERALL VOLUME(DAILY)', value: data.Daily_Volume },
             // { name: 'OVERALL VOLUME(DAILY)', value: 1 },
-            { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq  },
+            { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
-            { name: 'AVG RESPONSE TIME', value: data.AvgResTime},
+            { name: 'AVG RESPONSE TIME', value: data.AvgResTime },
         ]
 
         if (this.state.apiflag == 0) {
@@ -416,7 +416,7 @@ console.log("asdad", data)
     renderPieChart() {
         return (
             <div className="row chart">
-                <div className="col-12" style = {{ paddingTop : "0px"}}>
+                <div className="col-12" style={{ paddingTop: "0px" }}>
                     <Pie data={this.getPieData}
                         options={{
                             elements: {
@@ -447,9 +447,9 @@ console.log("asdad", data)
                         width={800}
                         height={800} />
                 </div>
-                </div>
+            </div>
         );
-      }
+    }
 
     dateviewtabledata() {
         return (
@@ -462,6 +462,230 @@ console.log("asdad", data)
        </span>
                         </div>
                         <div id="BasicX12Options small-padding"   > <div className=" content">
+                            <div className="panel-heading collapsible small-padding" data-toggle="collapse" href="#ISAIdentificationOptions1">
+                                <span className="panel-title" style={{ fontSize: "14px" }}>
+                                    February
+                       </span>
+                            </div>
+                            <div id="ISAIdentificationOptions1" className="panel-collapse content collapse">
+                                <div className="panel-body">
+                                    <br />
+                                    <table id="datewise_data">
+                                        <thead class="thead-dark" style={{ color: "black" }}>
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Avg response time</th>
+                                                <th scope="col">Total request count</th>
+                                                <th scope="col">Total success rate</th>
+                                                <th scope="col">Total error rate</th>
+                                            </tr>
+                                        </thead>
+                                        <tr>
+                                            <td >1 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >2 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >3 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >4 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >5 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >6 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >7 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >8 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >9 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >10 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >11 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >12 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >13 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >14 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >15 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >16 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >17 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >18 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >19 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >20 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >21 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >22 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >23 Sun 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >24 Mon 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >25 Tue 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >26 Wed 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >27 Thu 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >28 Fri 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                        <tr>
+                                            <td >29 Sat 2020</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                            <td>0</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                             <div className="panel-heading collapsible" data-toggle="collapse" href="#ISAIdentificationOptions">
                                 <span className="panel-title" style={{ fontSize: "14px" }}>
                                     January
@@ -472,15 +696,15 @@ console.log("asdad", data)
                                     <br />
                                     <table id="datewise_data" >
 
-                                    <thead class="thead-dark" style={{ color : "black" }}>
-    <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Avg response time</th>
-      <th scope="col">Total request count</th>
-      <th scope="col">Total success rate</th>
-      <th scope="col">Total error rate</th>
-    </tr>
-  </thead>
+                                        <thead class="thead-dark" style={{ color: "black" }}>
+                                            <tr>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Avg response time</th>
+                                                <th scope="col">Total request count</th>
+                                                <th scope="col">Total success rate</th>
+                                                <th scope="col">Total error rate</th>
+                                            </tr>
+                                        </thead>
                                         <tr>
                                             <td >1 Wed 2020</td>
                                             <td>0</td>
@@ -516,415 +740,200 @@ console.log("asdad", data)
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >6 Mon 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >7 Tue 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >8 Wed 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >9 Thu 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >10 Fri 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-                                        
-										 <tr>
+
+                                        <tr>
                                             <td >11 Sat 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >12 Sun 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >13 Mon 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >14 Tue 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >15 Wed 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >16 Thu 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >17 Fri 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >18 Sat 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >19 Sun 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >20 Mon 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >21 Tue 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >22 Wed 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >23 Thu 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >24 Fri 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >25 Sat 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >26 Sun 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >27 Mon 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >28 Tue 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >29 Wed 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >30 Thu 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										 <tr>
+                                        <tr>
                                             <td >31 Fri 2020</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                             <td>0</td>
                                         </tr>
-										
+
                                     </table>
                                 </div>
                             </div>
-                            <div className="panel-heading collapsible small-padding" data-toggle="collapse" href="#ISAIdentificationOptions1">
-                                <span className="panel-title" style={{ fontSize: "14px" }}>
-                                    February
-                       </span>
-                            </div>
-                            <div id="ISAIdentificationOptions1" className="panel-collapse content collapse">
-                                <div className="panel-body">
-                                    <br />
-                                    <table id="datewise_data">
-                                        <tr>
-                                            <td >1 Sat 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-                                       <tr>
-                                            <td >2 Sun 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td >3 Mon 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td >4 Tue 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-                                        <tr>
-                                            <td >5 Wed 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >6 Thu 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >7 Fri 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >8 Sat 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >9 Sun 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >10 Mon 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >11 Tue 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >12 Wed 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >13 Thu 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >14 Fri 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >15 Sat 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >16 Sun 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >17 Mon 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >18 Tue 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >19 Wed 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >20 Thu 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >21 Fri 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >22 Sat 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >23 Sun 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >24 Mon 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >25 Tue 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >26 Wed 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >27 Thu 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >28 Fri 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-										 <tr>
-                                            <td >29 Sat 2020</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>                           
-                           
+
                         </div>
                         </div>
                     </div>
                 </div>
             </div>
-           )
+        )
 
     }
 
@@ -1138,14 +1147,14 @@ console.log("asdad", data)
                                 }, 50);
                             }}
                         >
-                            <option  value="2">Last week</option>
+                            <option value="2">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option value="1">Last year</option>
                             <option value="2">Last 2 years</option>
                             <option value="2">Last 3 years</option>
-                            <option  selected="selected" value="2">All</option>
+                            <option selected="selected" value="2">All</option>
                         </select>
                     </div>
                     <div className="form-group col-3">
@@ -1155,8 +1164,8 @@ console.log("asdad", data)
                                 this.onSelect(event, 'State')
                             }}
                         >
-                            <option selected="selected" value=""></option>
-                            <option value="1">California</option>
+                            <option  value=""></option>
+                            <option selected value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
                             <option value="4">New York</option>
@@ -1189,15 +1198,16 @@ console.log("asdad", data)
                     </div>
                     <div className="form-group col-3">
                         <div className="list-dashboard">
-                         Provider Name
-
+                            Provider Name
+   
                         </div>
-                        <input className="form-control" type="text" 
-                           
-                        />
+                        <select className="form-control list-dashboard"><option value=""></option>
+                            <option selected="selected" value="1">Provider Name 1</option>
+                            <option value="2">Provider Name 2</option>
+                        </select>
                     </div>
 
-               {/*  <div className="form-group col-2">
+                    {/*  <div className="form-group col-2">
                 
                  <div className="list-dashboard">
                       {this.renderPieChart()}
@@ -1235,70 +1245,75 @@ console.log("asdad", data)
         let url = Strings.ElilgibilityDetails270
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let errorcode = ""
 
         array.forEach(item => {
+            if(item.name == 'INVALID TRANSACTIONS'){
+                errorcode = '999'
+            }
+
             data = [
-                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n', selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
-               ]
+                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n', selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value, errorcode : errorcode},
+            ]
 
-              if(item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {
-            row.push(
+            if (item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {
+                row.push(
 
 
-                // <Link 
-                //     to={
-                //         '/' + url + 
-                //         '/' + (this.state.State ? this.state.State : 'n') + 
-                //         '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
-                //         '/' + startDate + 
-                //         '/' + endDate + 
-                //         '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
-                //         '/' + (item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
-                //         '/' + item.value
-                //     } className="col-2 summary-container">
-                //     <div>
-                //         <div className="summary-header">{item.name}</div>
-                //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                //     </div>
-                // </Link>
+                    // <Link 
+                    //     to={
+                    //         '/' + url + 
+                    //         '/' + (this.state.State ? this.state.State : 'n') + 
+                    //         '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
+                    //         '/' + startDate + 
+                    //         '/' + endDate + 
+                    //         '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
+                    //         '/' + (item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
+                    //         '/' + item.value
+                    //     } className="col-2 summary-container">
+                    //     <div>
+                    //         <div className="summary-header">{item.name}</div>
+                    //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    //     </div>
+                    // </Link>
 
-             
-                item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
-                    ?
-                    <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
-                        <div>
-                            <div className="summary-header">
-                                {item.name}
+
+                    item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
+                        ?
+                        <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
+                            <div>
+                                <div className="summary-header">
+                                    {item.name}
                                 </div>
 
-                                
-                         
-                            <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '' ) }  >
-                                {Number(item.value) ? item.value : 0   }{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
-                                
+
+
+                                <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
+                                    {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
+
                                 </div>
-                        </div>
-                    </Link>
-                    :
-                    <div className="col summary-container">
-                        <div className="summary-header">{item.name}</div>
-                        <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
-                            
-                            {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
                             </div>
-                    </div>
-                // <Link
-                //     to={
-                //         '/' + url, 
+                        </Link>
+                        :
+                        <div className="col summary-container">
+                            <div className="summary-header">{item.name}</div>
+                            <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
 
-                //     } className="col-2 summary-container">
-                //     <div>
-                //         <div className="summary-header">{item.name}</div>
-                //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                //     </div>
-                // </Link>
-            )
-        }
+                                {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
+                            </div>
+                        </div>
+                    // <Link
+                    //     to={
+                    //         '/' + url, 
+
+                    //     } className="col-2 summary-container">
+                    //     <div>
+                    //         <div className="summary-header">{item.name}</div>
+                    //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                    //     </div>
+                    // </Link>
+                )
+            }
         });
 
         return (
@@ -1389,15 +1404,15 @@ console.log("asdad", data)
     render() {
         return (
             <div>
-            <div className="row">
+                <div className="row">
                     <div className="col-9">
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</h5>
-                {this.renderTopbar()}
-                {this.renderSummaryDetails()}
-                </div>
-                <div className="col-3 nopadding">
-                {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
-                </div>
+                        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? '276 Real Time' : 'Eligibility Real Time'}</h5>
+                        {this.renderTopbar()}
+                        {this.renderSummaryDetails()}
+                    </div>
+                    <div className="col-3 nopadding">
+                        {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col-9">
