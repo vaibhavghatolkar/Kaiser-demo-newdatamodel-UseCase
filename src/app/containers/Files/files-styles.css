@@ -185,6 +185,9 @@
     padding: 0px;
     margin-top: 8px;
     border: none;
+    color: #139DC9;
+    font-size: 20px;
+    font-weight: 600;
     outline: none;
 }
 .padding-view{    

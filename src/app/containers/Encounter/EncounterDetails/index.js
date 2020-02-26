@@ -653,7 +653,7 @@ export class EncounterDetails extends React.Component {
                         {/* <input
                             onChange={(e) => this.onHandleChange(e)}
                             className="form-control" type="text" /> */}
-                               <select class="form-control list-dashboard"><option value=""></option><option sele value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                               <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
