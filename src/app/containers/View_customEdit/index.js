@@ -332,7 +332,7 @@ gettranaction(){
                 {
                 
                         <div>
-                              <h5  style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>View Custom Edits</h5>
+                              <h5  style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>View Custom Edits</h5>
                         <br></br>
                             {this.renderTopbar()}
                             <div className="row">

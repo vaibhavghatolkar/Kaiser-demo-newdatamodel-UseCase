@@ -1163,7 +1163,7 @@ export class EditConfiguration extends React.Component {
         return (
             <div>
                 <div className="container">
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Configure Custom Edits</h5>
+                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Configure Custom Edits</h5>
                     {/* {this.renderTopbar()} */}
                     {this.renderView()}
                    

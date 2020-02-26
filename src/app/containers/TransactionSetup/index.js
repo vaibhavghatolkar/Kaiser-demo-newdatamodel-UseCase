@@ -207,7 +207,7 @@ export class TransactionSetup extends React.Component {
                 {
                     <div>
                         <div>
-                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>Transaction Setup</h5>
+                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Transaction Setup</h5>
                         </div><br></br>
                         {/* <div>
                             <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Transaction Setup</p>
