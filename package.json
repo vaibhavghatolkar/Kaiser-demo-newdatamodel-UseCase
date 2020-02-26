@@ -14,9 +14,10 @@
     "react-datepicker": "^2.9.6",
     "react-dom": "^16.10.2",
     "react-idle-timer": "^4.2.12",
+    "react-native-elements": "^1.2.7",
     "react-paginate": "^6.3.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
   },
   "scripts": {
     "start": "react-scripts start",

@@ -162,7 +162,7 @@ class PrivateRoute extends React.Component {
                             <div className="col-10 container-fluid" style={{ minHeight: '100vh' }}>
                                 <div className="row border-bottom" style={{marginTop: '12px', marginBottom: '12px'}}>
                                     <div className="padding-view">
-                                        <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
+                                        <img src={require('./app/components/Images/Search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
                                     </div>
                                     <div className="col-11 padding-view">
                                         <input type="text" name="name" className="search-input-style col-12" placeholder="Search" />

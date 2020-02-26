@@ -211,7 +211,7 @@ export class DynamicSidebar extends React.Component {
             )
         });
         return (
-            <li className="active padding">
+            <li className="active">
                 <a href={'#' + key} data-toggle="collapse" aria-expanded="false" className="dropdown-toggle">{value}</a>
                 <ul className="collapse list-unstyled" id={key}>
                     {row}
