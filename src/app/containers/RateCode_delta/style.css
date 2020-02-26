@@ -20,5 +20,6 @@
     font-size: 9px !important;
 }
 .table td, .table th {
-    padding: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
 }

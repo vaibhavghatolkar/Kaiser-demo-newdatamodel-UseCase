@@ -1245,10 +1245,15 @@ export class RealTime276 extends React.Component {
         let url = Strings.ElilgibilityDetails270
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let errorcode = ""
 
         array.forEach(item => {
+            if(item.name == 'INVALID TRANSACTIONS'){
+                errorcode = '999'
+            }
+
             data = [
-                { apiflag: apiflag, State: this.state.State ? this.state.State : 'n', selectedTradingPartner: this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate: startDate, endDate: endDate, transactionId: this.state.transactionId ? this.state.transactionId : 'n', status: item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail', count: item.value },
+                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n', selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value, errorcode : errorcode},
             ]
 
             if (item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {

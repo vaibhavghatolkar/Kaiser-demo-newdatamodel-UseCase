@@ -40,7 +40,7 @@ export class EligibilityDetails extends React.Component {
             startDate: props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
-            errorcode: '',
+            errorcode: props.location.state && props.location.state.data && props.location.state.data[0].errorcode ? props.location.state.data[0].errorcode : '',
 
             selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
@@ -55,13 +55,6 @@ export class EligibilityDetails extends React.Component {
         this.getData = this.getData.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
-    }
-
-    componentWillReceiveProps() {
-        setTimeout(() => {
-            this.getData()
-            this.getTransactions()
-        }, 50);
     }
 
     componentDidMount() {
@@ -166,7 +159,6 @@ export class EligibilityDetails extends React.Component {
         }
 
         query = `{
-            
             ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
                 RecCount
                 HiPaaSUniqueID
@@ -179,7 +171,7 @@ export class EligibilityDetails extends React.Component {
                 ErrorDescription
             }`+ chartQuery + `
         }`
-        console.log(query);
+
         if (this.state.apiflag == 1) {
             url = Urls.eligibility_url
             query = `{
@@ -264,13 +256,20 @@ export class EligibilityDetails extends React.Component {
 
     handlePageClick = (data) => {
         let page = data.selected + 1
+        let flag = false
+        if(page != this.state.page){
+            flag = true
+        }
+
         this.setState({
             page: page
         })
 
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
+        if(flag){
+            setTimeout(() => {
+                this.getTransactions()
+            }, 50)
+        }
     }
 
     getDetails(uuid) {
@@ -825,7 +824,7 @@ export class EligibilityDetails extends React.Component {
                 <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</h5>
                 {this.renderFilters()}
                 <div className="row">
-                    <div className="col-7">
+                    <div className="col-7 margin-top">
                         {/* {this.renderMaterialTable()} */}
                         {/* {this.renderEnhancedTable()} */}
                         {this.renderTransactionsNew()}
