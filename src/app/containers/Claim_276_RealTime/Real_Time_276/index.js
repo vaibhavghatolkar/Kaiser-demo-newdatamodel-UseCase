@@ -19,7 +19,6 @@ export class RealTime276 extends React.Component {
         this.state = {
             claimsList: [],
             summaryList: [
-                { name: 'OVERALL VOLUME', value: 1},
                 { name: 'TOTAL TRANSACTION', value: 0},
                 { name: 'INVALID TRANSACTIONS', value: 0},
                 { name: 'ERROR PERCENTAGE', value: 0},
@@ -271,8 +270,8 @@ export class RealTime276 extends React.Component {
         }
 console.log("asdad", data)
         let summary = [
-            // { name: 'OVERALL VOLUME', value: data.Daily_Volume },
-            { name: 'OVERALL VOLUME', value: 1 },
+            // { name: 'OVERALL VOLUME(DAILY)', value: data.Daily_Volume },
+            // { name: 'OVERALL VOLUME(DAILY)', value: 1 },
             { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq  },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
@@ -1177,7 +1176,7 @@ console.log("asdad", data)
                 // </Link>
                 item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
                     ?
-                    <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
+                    <Link to={{ pathname: '/' + url, state: { data } }} className="col-2 summary-container">
                         <div>
                             <div className="summary-header">
                                 {item.name}
@@ -1185,16 +1184,16 @@ console.log("asdad", data)
 
                                 
                          
-                            <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '' ) }  >
+                            <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '' ) }  >
                                 {Number(item.value) ? item.value : 0   }{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
                                 
                                 </div>
                         </div>
                     </Link>
                     :
-                    <div className="col summary-container">
+                    <div className="col-2 summary-container">
                         <div className="summary-header">{item.name}</div>
-                        <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
+                        <div className={ (item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name =='INVALID TRANSACTIONS') ? 'orange summary-title'  : (item.name =='AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name =='TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
                             
                             {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
                             </div>
