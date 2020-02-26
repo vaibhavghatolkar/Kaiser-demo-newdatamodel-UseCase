@@ -107,3 +107,6 @@ ul ul a {
 .white-background{
     background-color: var(--white-color);
 }
+td{
+    font-size: 11px;
+}

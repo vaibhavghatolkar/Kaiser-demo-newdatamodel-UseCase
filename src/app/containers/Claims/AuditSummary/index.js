@@ -134,13 +134,13 @@ export class AuditSummary extends React.Component {
         return (
             <table className="table table-bordered claim-list summary-list">
                 <tr className="table-head">
-                    <td className="table-head-text">File Name</td>
-                    <td className="table-head-text list-item-style">Submitted</td>
-                    <td colSpan={2} className="table-head-text list-item-style">In HiPaaS</td>
-                    <td className="table-head-text list-item-style">Rejected PreProcess</td>
-                    <td className="table-head-text list-item-style">Error in PreProcess</td>
+                    <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                    <td colSpan={2} className="table-head-text list-item-style">In Qnxt</td>
+                    <td colSpan={2} className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                 </tr>
                 <tbody>
                     <tr>
@@ -223,7 +223,7 @@ export class AuditSummary extends React.Component {
                     onSelect={this.onSelect}
                 />
                 {this.renderStats()}
-                <div className="col-10">
+                <div className="col-12">
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
                 </div>
             </div>
