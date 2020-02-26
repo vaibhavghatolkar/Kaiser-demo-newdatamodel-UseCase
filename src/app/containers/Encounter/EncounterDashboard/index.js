@@ -507,7 +507,7 @@ export class EncounterDashboard extends React.Component {
     }
 
     onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
+        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
             this.setState({
                 [key]: ''
             })
@@ -672,7 +672,7 @@ export class EncounterDashboard extends React.Component {
                             }}
                         >
                             <option value=""></option>
-                            <option value="1">California</option>
+                            <option selected value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
                             <option value="4">New York</option>

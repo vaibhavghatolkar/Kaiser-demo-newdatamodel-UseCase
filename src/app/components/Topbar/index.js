@@ -71,7 +71,7 @@ export class Topbar extends React.Component {
     render(){
         return(
             <div className="row">
-                <div className="form-group col-sm-3">
+                <div className="form-group col-3">
                     <label className="list-header">State</label>
                     <select className="form-control list-header" id="state">
                         <option value="">State</option>
@@ -96,8 +96,8 @@ export class Topbar extends React.Component {
                     this.props.flag == 1
                     ?
                     ""
-                // <div className="form-group col-sm-3">
-                //     <label className="list-header">Trading partner </label>
+                // <div className="form-group col-3">
+                //     <label className="list-header">Submitter</label>
                 //     <select className="form-control list-header" id="TradingPartner" 
                 //         onChange={(event) => {
                 //             this.props.onSelect(event, 'selectedTradingPartner')
@@ -109,8 +109,8 @@ export class Topbar extends React.Component {
                 //     </select>
                 // </div>
                 :
-                <div className="form-group col-sm-3">
-                <label className="list-header">Trading Partner </label>
+                <div className="form-group col-3">
+                <label className="list-header">Submitter</label>
                 <select className="form-control list-header" id="TradingPartner" 
                     // onChange={(event) => {
                     //     this.props.onSelect(event, 'selectedTradingPartner')
@@ -127,7 +127,7 @@ export class Topbar extends React.Component {
                 {
                     this.props.flag == 1
                     ?
-                    <div className="form-group col-sm-3">
+                    <div className="form-group col-3">
                         <label className="list-header">Transaction</label>
                         <select className="form-control list-header" id="option" onChange={this.props.onSelect}>
                             <option value="">Select Transaction</option>
@@ -137,7 +137,7 @@ export class Topbar extends React.Component {
                         </select>
                     </div>
                     : 
-                    <div className="form-group col-sm-3">
+                    <div className="form-group col-3">
                         <label className="list-header">Provider Name</label>
                         <select className="form-control list-header" id="ProviderName">
                             <option value="">Provider Name</option>
@@ -149,7 +149,7 @@ export class Topbar extends React.Component {
                 {
                     this.props.flag == 3
                     ?
-                    <div className="form-group col-sm-3">
+                    <div className="form-group col-3">
                         <label className="list-header">Provider Name</label>
                         <select className="form-control list-header" id="ProviderName">
                             <option value="">Provider Name</option>
@@ -163,7 +163,7 @@ export class Topbar extends React.Component {
                 {
                     this.props.flag == 3
                     ?
-                    <div className="form-group col-sm-3">
+                    <div className="form-group col-3">
                         <label className="list-header">Provider Name</label>
                         <select className="form-control list-header" id="ProviderName">
                             <option value="">Provider Name</option>

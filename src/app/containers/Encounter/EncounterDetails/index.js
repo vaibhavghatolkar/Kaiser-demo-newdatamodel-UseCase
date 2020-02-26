@@ -631,7 +631,7 @@ export class EncounterDetails extends React.Component {
                                 })
                             }}>
                             <option selected={this.state.State == '' ? "" : ""} value=""></option>
-                            <option  selected={this.state.State == 'California' ? "selected" : "California"} value="1">California</option>
+                            <option  selected={this.state.State == '' ? "selected" : ""} value="1">California</option>
                             <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
                             <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
                             <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>

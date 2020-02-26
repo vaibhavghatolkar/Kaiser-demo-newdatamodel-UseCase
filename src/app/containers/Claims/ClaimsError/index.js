@@ -178,7 +178,7 @@ export class ClaimsError extends React.Component{
     }
 
     onSelect(event, key){
-        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner'){
+        if(event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter'){
             this.setState({
                 [key] : ''
             })

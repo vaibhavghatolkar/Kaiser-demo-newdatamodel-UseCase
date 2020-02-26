@@ -52,11 +52,11 @@ export class ResearchQueue extends React.Component {
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Trading partner</label>
+                                <label className="list-header">Submitter</label>
                                 <select className="form-control list-header" id="selTradingPartner">
-                                    <option value="">Trading partner</option>
-                                    <option selected="selected" value="1">Trading Partner 1</option>
-                                    <option value="2">Trading Partner 2</option>
+                                    <option value="">Submitter</option>
+                                    <option selected="selected" value="1">Submitter 1</option>
+                                    <option value="2">Submitter 2</option>
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">

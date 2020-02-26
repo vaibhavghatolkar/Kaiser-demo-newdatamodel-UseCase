@@ -200,3 +200,6 @@
 .margin-top{
     padding-top: 16px;
 }
+.top-bar-margin{
+    margin-left: -12px !important;
+}
