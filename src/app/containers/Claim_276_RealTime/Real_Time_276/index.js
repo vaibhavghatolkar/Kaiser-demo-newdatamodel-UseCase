@@ -72,6 +72,8 @@ export class RealTime276 extends React.Component {
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
+
+
     componentDidMount() {
         this.getData()
         this.getCommonData()
@@ -357,14 +359,33 @@ console.log("asdad", data)
     }
 
     getPieData(array, labels, colorArray) {
-        let data = {
-            labels: labels,
+        // let data = {
+        //     labels: labels,
+        //     datasets: [{
+        //         data: array,
+        //         backgroundColor: colorArray,
+        //         hoverBackgroundColor: colorArray
+        //     }]
+        // }
+
+        const data = {
+            labels: [
+                'Completed',
+                'Errored'
+            ],
             datasets: [{
-                data: array,
-                backgroundColor: colorArray,
-                hoverBackgroundColor: colorArray
-            }]
-        }
+                data: [95, 5],
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4'
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4'
+                ]
+            }],
+            flag: ''
+        };
 
         return data
     }
@@ -393,6 +414,44 @@ console.log("asdad", data)
         )
     }
 
+    renderPieChart() {
+        return (
+            <div className="row chart">
+                <div className="col-12" style = {{ paddingTop : "0px"}}>
+                    <Pie data={this.getPieData}
+                        options={{
+                            elements: {
+                                arc: {
+                                    borderWidth: 0
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltips: {
+                                enabled: false
+                            },
+                            pieceLabel: {
+                                render: 'label',
+                                position: 'outside'
+                            },
+                            responsive: true,
+                            legend: {
+                                position: 'bottom',
+                                display: 'false'
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        }}
+                        width={800}
+                        height={800} />
+                </div>
+                </div>
+        );
+      }
+
     dateviewtabledata() {
         return (
             <div className="container">
@@ -413,6 +472,16 @@ console.log("asdad", data)
                                 <div className="panel-body">
                                     <br />
                                     <table id="datewise_data" >
+
+                                    <thead class="thead-dark" style={{ color : "black" }}>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Avg response time</th>
+      <th scope="col">Total request count</th>
+      <th scope="col">Total success rate</th>
+      <th scope="col">Total error rate</th>
+    </tr>
+  </thead>
                                         <tr>
                                             <td >1 Wed 2020</td>
                                             <td>0</td>
@@ -1026,7 +1095,7 @@ console.log("asdad", data)
         return (
             <form className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Time Range</div>
                         <select
                             className="form-control list-dashboard" id="state"
@@ -1074,7 +1143,10 @@ console.log("asdad", data)
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option selected="selected" value="1">Last year</option>
+                            <option value="1">Last year</option>
+                            <option value="2">Last 2 years</option>
+                            <option value="2">Last 3 years</option>
+                            <option  selected="selected" value="2">All</option>
                         </select>
                     </div>
                     <div className="form-group col-2">
@@ -1125,6 +1197,19 @@ console.log("asdad", data)
                            
                         />
                     </div>
+
+               {/*  <div className="form-group col-2">
+                
+                 <div className="list-dashboard">
+                      {this.renderPieChart()}
+                     </div>
+
+                 
+
+                   
+                        </div> */}
+
+
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <input className="form-control" type="text" 
@@ -1156,6 +1241,8 @@ console.log("asdad", data)
             data = [
                 {apiflag:apiflag,State:this.state.State ? this.state.State : 'n', selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value},
                ]
+
+              if(item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {
             row.push(
 
 
@@ -1175,6 +1262,8 @@ console.log("asdad", data)
                 //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                 //     </div>
                 // </Link>
+
+             
                 item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
                     ?
                     <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
@@ -1210,6 +1299,7 @@ console.log("asdad", data)
                 //     </div>
                 // </Link>
             )
+        }
         });
 
         return (
@@ -1300,16 +1390,24 @@ console.log("asdad", data)
     render() {
         return (
             <div>
+            <div className="row">
+                    <div className="col-9">
                 <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? 'Real Time 276' : 'Eligibility Real Time'}</h5>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
+                </div>
+                <div className="col-3 nopadding">
+                {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
+                </div>
+                </div>
                 <div className="row">
                     <div className="col-9">
                         {this.renderCharts()}
                     </div>
                     <div className="col-3 nopadding">
-                        {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
+
                         {this.renderVolumeSummary('Compliance Ratio', 'In Compliance', this.state.inComplaince + ' %', 'Out of Compliance', this.state.outComplaince + ' %')}
+                        {this.renderPieChart()}
                     </div>
                 </div>
             </div>

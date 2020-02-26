@@ -13,6 +13,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
+import ReactSearchBox from 'react-search-box'
+
 
 let val = ''
 const second_data = {
@@ -73,6 +75,8 @@ export class RealTimeDashboard extends React.Component {
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
+            search: ''
+            
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -221,19 +225,28 @@ export class RealTimeDashboard extends React.Component {
     }
 
 
-    renderSearchBar() {
+    renderSearchBar(e) {
+        console.log("hello");
         return (
             <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search" />
+            <ReactSearchBox
+            placeholder="File Name"
+            onChangeText={this.updateSearch}
+            value={this.state.search}
+          />
             </div>
         )
     }
 
+    updateSearch = search => {
+        this.setState({ search });
+      };
+
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+              <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')}  style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')}  style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginLeft : '12px', float: 'right' }}></img></td>
@@ -371,7 +384,7 @@ export class RealTimeDashboard extends React.Component {
                 <tr>
                     <td>{d.FileName}</td>
                     <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
-                    <td className={"list-item-style " + (d.FileStatus == 'SentToQnxt' || d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'Rejected' ? 'red ' : ''))}>{d.FileStatus}</td>
+                    <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus ==  'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount}</td>
                 </tr>
