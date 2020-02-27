@@ -9,7 +9,7 @@ export class ServiceDetails278 extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("abx ",props)
+
         this.state = {
             files_list: [],
             count: 1,

@@ -72,3 +72,11 @@ font-size: 12px;
 .btn-demo:hover {
     color: var(--white-color);
   }
+.btn-design{
+    margin-left: 15px;
+    padding: 10px 15px;
+    border-radius: 150;
+    font-size: 12px;
+    background-color: var(--main-bg-color);
+    color: var(--white-color);
+}
