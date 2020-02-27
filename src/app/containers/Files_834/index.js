@@ -1,11 +1,11 @@
 import React from 'react';
+import './style.css'
 import '../Files/files-styles.css';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import ReactPaginate from 'react-paginate';
 import Urls from '../../../helpers/Urls';
-import './style.css'
 
 const $ = window.$;
 export class Files_834 extends React.Component {
@@ -419,11 +419,10 @@ rendersearchbar()
              return (
          
             <div className="row">
-                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Name <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
-                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
-                <div className="col-3 col-header" style={{fontWeight:"bold"}}>Submitter <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
-  
-                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
+                <div className="col-5 col-header justify-align" style={{fontWeight:"bold"}}>File Name <img src={require('../../components/Images/search_table.png')} style={{marginRight : '4px'}} className="SearchBarImage"></img></div>
+                <div className="col-3 col-header justify-align" style={{fontWeight:"bold"}}>File Date <img src={require('../../components/Images/search_table.png')} style={{marginRight : '4px'}} className="SearchBarImage"></img></div>
+                <div className="col-2 col-header justify-align" style={{fontWeight:"bold"}}>Submitter <img src={require('../../components/Images/search_table.png')} style={{marginRight : '4px'}} className="SearchBarImage"></img></div>
+                <div className="col-2 col-header justify-align" style={{fontWeight:"bold"}}>File Status <img src={require('../../components/Images/search_table.png')} style={{marginRight : '4px'}} className="SearchBarImage"></img></div>
             </div>
         )
     }
@@ -431,11 +430,11 @@ rendersearchbar()
     renderClaimsHeader() {
         return (
             <tr className="table-head claims-text">				
-                <td className="table-head-text">Subscriber No <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text">Enrollment Type <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Insurer Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Error Code<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text">Subscriber No <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text">Enrollment Type <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text list-item-style">Insurer Status <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text list-item-style">Status <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text list-item-style">Error Code<img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
             </tr>
         )
     }
@@ -444,10 +443,10 @@ rendersearchbar()
         return (
             <tr className="table-head">
               {/* <td className="table-head-text small-font">Subscriber No</td>*/} 
-                <td className="table-head-text small-font">Enrollment Type <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text  small-font list-item-style">Plan Code <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text  small-font list-item-style">Coverage Start Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text  small-font list-item-style">Coverage End Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text small-font">Enrollment Type <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text  small-font list-item-style">Plan Code <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text  small-font list-item-style">Coverage Start Date <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
+                <td className="table-head-text  small-font list-item-style">Coverage End Date <img src={require('../../components/Images/search_table.png')} className="SearchBarImage"></img></td>
             </tr>
         )
     }
@@ -471,13 +470,13 @@ rendersearchbar()
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-3 col-style"><a href={"#" + data[keys].value.FileID} 
+                    <div className="col-5 col-style border-left"><a href={"#" + data[keys].value.FileID} 
                         onClick={() => {
                             this.onClick(data[keys].value.FileID)
                         }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-3 col-style">{moment(data[keys].value.CreateDateTime).format('DD/MM/YYYY')}{moment(data[keys].value.CreateDateTime).format('h:m a')}</div>
-                    <div className="col-3 col-style">{data[keys].value.sender}</div>
-                    <div className={"col-3 col-style"}>{data[keys].value.FileStatus}</div>
+                    <div className="col-3 col-style">{moment(data[keys].value.CreateDateTime).format('DD/MM/YYYY, ')}<br/>{moment(data[keys].value.CreateDateTime).format('hh:mm a')}</div>
+                    <div className="col-2 col-style">{data[keys].value.sender}</div>
+                    <div className={"col-2 col-style"}>{data[keys].value.FileStatus}</div>
                 </div>
             )
 
