@@ -122,3 +122,7 @@ td{
     margin-top: 10px;
     font-size: 18px;
 }
+.button-table{
+    padding-top: 7px !important;
+    padding-bottom: 0px !important;
+}

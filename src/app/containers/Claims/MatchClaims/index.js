@@ -89,7 +89,7 @@ export class MatchClaims extends React.Component {
                     <td className="list-item-style">{item.StmtEnd}</td>
                     <td className="list-item-style">{item.ExtClaimID}</td>
                     <td className="list-item-style">{item.Status}</td>
-                    <td className="list-item-style"><button class="btnDesign" type="resend">Match</button></td>
+                    <td className="list-item-style button-table"><button class="btnDesign" type="resend">Match</button></td>
                 </tr>
             )
         });
