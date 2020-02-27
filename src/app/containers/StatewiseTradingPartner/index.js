@@ -432,7 +432,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Trading Partner Details</h5><br/>
+                    <h5 className="headerText">Trading Partner Details</h5><br/>
                 </div>
                 <div className="container">
                     <div className="panel-group">

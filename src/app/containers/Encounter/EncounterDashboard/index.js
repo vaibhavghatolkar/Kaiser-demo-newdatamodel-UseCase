@@ -741,7 +741,7 @@ export class EncounterDashboard extends React.Component {
     render() {
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Encounter Dashboard</h5>
+                <h5 className="headerText">Encounter Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}

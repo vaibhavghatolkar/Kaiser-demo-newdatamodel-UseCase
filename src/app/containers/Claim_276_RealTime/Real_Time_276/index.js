@@ -1406,7 +1406,7 @@ export class RealTime276 extends React.Component {
             <div>
                 <div className="row">
                     <div className="col-9">
-                        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? '276 Real Time' : 'Eligibility Real Time'}</h5>
+                        <h5 className="headerText">{this.state.apiflag == 0 ? '276 Real Time' : 'Eligibility Real Time'}</h5>
                         {this.renderTopbar()}
                         {this.renderSummaryDetails()}
                     </div>

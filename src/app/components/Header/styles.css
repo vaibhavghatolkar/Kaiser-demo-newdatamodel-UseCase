@@ -12,10 +12,11 @@
 }
 .header_text{
     color: var(--white-color);
-    margin:0px;
-    font-size: 30px;
+    margin:-5px;
+    font-size: 26px;
     font-weight: bold;
     margin-left: 20px;
+    margin-top: 5px
     
 }
 .dropdown {

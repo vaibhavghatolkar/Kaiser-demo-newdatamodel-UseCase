@@ -78,7 +78,7 @@ class PrivateRoute extends React.Component {
         this.state = {
 
             loggedIn,
-            timeout: 900000,
+            timeout: 1800000,
             //  timeOut: 10000,
             isTimedOut: false
             // timeOut,
@@ -162,7 +162,7 @@ class PrivateRoute extends React.Component {
                                 />
                             </div>
                             <div className="col-10 container-fluid" style={{ minHeight: '100vh' }}>
-                                <div className="row border-bottom" style={{marginTop: '12px', marginBottom: '12px'}}>
+                                <div className="row border-bottom" style={{marginTop: '-5px', marginBottom: '12px'}}>
                                     <div className="padding-view">
                                         <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
                                     </div>

@@ -110,3 +110,9 @@ ul ul a {
 td{
     font-size: 12px;
 }
+.headerText{
+    color: var(--main-bg-color); 
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 18px;
+}
