@@ -282,27 +282,14 @@ export class EnrollmentInbound extends React.Component {
                                 arc: {
                                     borderWidth: 0
                                 }
-                            },
-                            tooltips: {
-                                enabled: false
-                            },
-                            pieceLabel: {
-                                render: 'label',
-                                position: 'outside'
-                            },
+                            },                       
                            
-                            responsive: true,
+                          
                             legend: {
-                                position: 'bottom',
+                                // position: 'bottom',
                                 display: 'false'
                             },
-                            animation: {
-                                animateScale: true,
-                                animateRotate: true
-                            },
-                            label: {
-                                display: false
-                            },
+                                                        
                         }}
                         width={100}
                         height={90} />

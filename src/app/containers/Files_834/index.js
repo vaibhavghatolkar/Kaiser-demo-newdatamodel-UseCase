@@ -419,8 +419,8 @@ rendersearchbar()
              return (
          
             <div className="row">
-                <div className="col-4 col-header" style={{fontWeight:"bold"}}>File Name <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
-                <div className="col-2 col-header" style={{fontWeight:"bold"}}>File Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
+                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Name <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
+                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
                 <div className="col-3 col-header" style={{fontWeight:"bold"}}>Submitter <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
   
                 <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
@@ -471,11 +471,11 @@ rendersearchbar()
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 col-style"><a href={"#" + data[keys].value.FileID} 
+                    <div className="col-3 col-style"><a href={"#" + data[keys].value.FileID} 
                         onClick={() => {
                             this.onClick(data[keys].value.FileID)
                         }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-style">{moment(data[keys].value.CreateDateTime).format('DD/MM/YYYY')}<br />{moment(data[keys].value.CreateDateTime).format('h:m a')}</div>
+                    <div className="col-3 col-style">{moment(data[keys].value.CreateDateTime).format('DD/MM/YYYY')}{moment(data[keys].value.CreateDateTime).format('h:m a')}</div>
                     <div className="col-3 col-style">{data[keys].value.sender}</div>
                     <div className={"col-3 col-style"}>{data[keys].value.FileStatus}</div>
                 </div>
