@@ -103,6 +103,7 @@ export class EnrollmentInbound extends React.Component {
 
     componentDidMount() {
         this.getData()
+      
         setTimeout(() => {
             this.getErrorCount()
         }, 50);
@@ -212,11 +213,11 @@ export class EnrollmentInbound extends React.Component {
         return (
             <tr className="table-head">
                 <td className="table-head-text"></td>
-                <td className="table-head-text">File Name</td>
-                <td className="table-head-text list-item-style">File Date</td>
-                <td className="table-head-text list-item-style">Submitter</td>
-                <td className="table-head-text list-item-style">Enrollments | Errors</td>
-                <td className="table-head-text list-item-style">File Status</td>
+                <td className="table-head-text">File Name <img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img> </td>
+                <td className="table-head-text list-item-style">File Date <img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img></td>
+                <td className="table-head-text list-item-style">Submitter <img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img></td>
+                <td className="table-head-text list-item-style">Enrollments | Errors <img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img></td>
+                <td className="table-head-text list-item-style">File Status <img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img></td>
             </tr>
         )
     }
@@ -224,7 +225,7 @@ export class EnrollmentInbound extends React.Component {
     renderCharts() {
         return (
             <div className="row chart">
-                <div className="col-7 barchartcss">
+                <div className="col-6 barchartcss">
                     <Pie data={data}
                         options={{
                             elements: {
@@ -256,7 +257,7 @@ export class EnrollmentInbound extends React.Component {
                     <Bar
                         data={bardata}
                         width={100}
-                        height={100}
+                        height={90}
                         options={{
                             legend: {
                                 position: 'bottom',
@@ -289,6 +290,7 @@ export class EnrollmentInbound extends React.Component {
                                 render: 'label',
                                 position: 'outside'
                             },
+                           
                             responsive: true,
                             legend: {
                                 position: 'bottom',
@@ -297,14 +299,38 @@ export class EnrollmentInbound extends React.Component {
                             animation: {
                                 animateScale: true,
                                 animateRotate: true
-                            }
+                            },
+                            label: {
+                                display: false
+                            },
                         }}
                         width={100}
-                        height={100} />
+                        height={90} />
                 </div>
             </div>
         )
     }
+    renderValues() {
+        let row = []
+        let data = pieErrorData.labels
+        let colors = pieErrorData.datasets[0].backgroundColor
+        
+        let count = 0
+        data.forEach(item => {
+            row.push(
+                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', color: 'slategrey', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div>{item}
+                </div>
+            )
+            count++
+        })
+        return (
+            <div style={{ marginTop: '20px', marginLeft: '24%' }}>
+                {row}
+            </div>
+        )
+    }
+    
     renderList() {
         let row = []
         const data = this.state.claimsList;
@@ -312,7 +338,7 @@ export class EnrollmentInbound extends React.Component {
             row.push(
                 <tr>
                     <td><input type="checkbox" /></td>
-                    <td className="bold-text">{d.name}</td>
+                    <td className="bold-text" >{d.name} </td>
                     <td className="list-item-style bold-text">{moment(d.date).format('YYYY/MM/DD')}</td>
                     <td className="list-item-style bold-text">{d.submitter}</td>
                     <td className="list-item-style bold-text">{d.receiver}</td>
@@ -360,12 +386,23 @@ export class EnrollmentInbound extends React.Component {
 
         data.forEach((d) => {
             let url = ''
+            let data = []
             if(d.name == 'Total Files'){
-                url = Strings.claimsDashboard_834_details + '/total'
+                url = Strings.claimsDashboard_834_details
+                data = [
+                    { Total: 'total' },
+                ]
+
             } else if(d.name == 'Total Errors'){
-                url = Strings.EnrollmentError + '/error'
+                url = Strings.EnrollmentError
+                data = [
+                    { Total: 'error' },
+                ]
             } else if(d.name == 'Resubmit'){
-                url = Strings.claimsDashboard_834_details + '/Resubmit'
+                url = Strings.claimsDashboard_834_details
+                data = [
+                    { Total: 'Resubmit' },
+                ]
             }
 
             row.push(
@@ -383,7 +420,9 @@ export class EnrollmentInbound extends React.Component {
                                 (d.name == 'Changes' || d.name == 'Termination') ? 'purple bold-text summary-values' :
                                 (d.name == 'Total Errors' || d.name == 'Resubmit') ? 'red bold-text summary-values' : ''
                                 
-                            }><Link to={url}>{d.value}</Link></a>
+                            }>  <Link to={{ pathname: '/'+url +'', state: { data } }}>{d.value}</Link></a>
+                                
+                               
                         </td>
                     }
                 </tr>
@@ -415,26 +454,24 @@ export class EnrollmentInbound extends React.Component {
 
         return (row)
     }
+   
+
+    getOptions() {
+        let row = []
+       
+        this.state.tradingpartner.forEach(element => {
+            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
 
     render() {
         return (
             <div>
-
-                {
-                    // this.state.showFile
-                    //     ?
-                    //     <Files_834
-                    //         flag={this.state.flag}
-                    //     />
-                    //     :
-                  
-                        <div>
-                            {/* {this.renderSearchBar()} */}
-                            <hr className="colorhr"></hr>
-                            <br></br>
-                            <h5 style={{ color: '#139DC9',fontsize: "20px" }}>834 Enrollment Dashboard</h5><br></br>
+                {                            
+                        <div>    
+                             <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>834 Enrollment Dashboard</h5>       
                             <Topbar flag={2} />
-
                             <div className="row">
                                 <div className="col-8">
                                     {this.renderCharts()}
@@ -443,7 +480,7 @@ export class EnrollmentInbound extends React.Component {
                                 <div className="col-4">
                                     {this.renderSummary()}
                                     {this.renderPieChart()}
-
+                                    {this.renderValues()}
                                 </div>
                             </div>
                         </div>
