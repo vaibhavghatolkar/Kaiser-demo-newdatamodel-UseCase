@@ -517,22 +517,22 @@ export class ClaimProcessingSummary extends React.Component {
                 {
                     this.state.Accepted ?
                         <div className="col-2 summary-container">
-                            <div className="summary-header">Accepted Claims</div>
-                            <div className="summary-title">{this.state.Accepted}</div>
+                            <div className="summary-header">ACCEPTED CLAIMS</div>
+                            <div className="green summary-title">{this.state.Accepted}</div>
                         </div> : null
                 }
                 {
                     this.state.Rejected ?
                         <div className="col-2 summary-container">
-                            <div className="summary-header">Rejected Claims</div>
-                            <div className="summary-title">{this.state.Rejected}</div>
+                            <div className="summary-header">REJECTED CLAIMS</div>
+                            <div className="red summary-title">{this.state.Rejected}</div>
                         </div> : null
                 }
                 {
                     this.state.TotalSentToQNXT ?
                         <div className="col-2 summary-container">
-                            <div className="summary-header">Claims sent to QNXT</div>
-                            <div className="summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="summary-header">CLAIMS SENT TO QNXT</div>
+                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> : null
                 }
 
@@ -540,14 +540,14 @@ export class ClaimProcessingSummary extends React.Component {
                     this.state.Total999 ?
                         <div className="col-2 summary-container">
                             <div className="summary-header">999</div>
-                            <div className="summary-title">{this.state.Total999}</div>
+                            <div className="red summary-title">{this.state.Total999}</div>
                         </div> : null
                 }
                 {
                     this.state.Total277CA ?
                         <div className="col-2 summary-container">
                             <div className="summary-header">277 CA</div>
-                            <div className="summary-title">{this.state.Total277CA}</div>
+                            <div className="red summary-title">{this.state.Total277CA}</div>
                         </div> : null
                 }
             </div>
@@ -557,8 +557,7 @@ export class ClaimProcessingSummary extends React.Component {
     render() {
         return (
             <div>
-                <br />
-                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}>Claim Processing Summary</h5> <br />
+                <h5 className="headerText">Claim Processing Summary</h5>
                 {this.renderTopBar()}
                 {this.renderStats()}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 ? this.renderTransactionsNew() : null}

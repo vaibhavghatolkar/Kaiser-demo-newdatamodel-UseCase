@@ -61,6 +61,7 @@ export class ClaimsError extends React.Component{
             }
         }`
 
+        console.log(query)
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {

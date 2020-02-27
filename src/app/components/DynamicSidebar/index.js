@@ -99,7 +99,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 27) { name = Strings.ElilgibilityDetails276 }
 
         else if (key == 29) { name = Strings.RealTimeDashboard }
-        else if (key == 30) { name = Strings.ClaimProcessingSummary }
+        else if (key == 30) { name = Strings.claimsAudit }
         else if (key == 31) { name = Strings.ClaimDetails837 }
         else if (key == 32) { name = Strings.claimsError }
         else if (key == 33) { name = Strings.researchQueue }
@@ -126,6 +126,7 @@ export class DynamicSidebar extends React.Component {
         else if(key == 120 || key == 121) { name = Strings.tradingPartnerDetails}
         else if(key ==116){name = Strings.healthCare278}
         else if(key ==117){name = Strings.serviceDetails278}
+        else if(key ==122){name = Strings.ClaimProcessingSummary}
 
         return name
     }
