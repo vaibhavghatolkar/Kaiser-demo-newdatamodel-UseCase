@@ -3,6 +3,7 @@ import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
 import { Topbar } from '../../../components/Topbar';
 import Urls from '../../../../helpers/Urls';
+import { CommonTable } from '../../../components/CommonTable';
 
 export class MatchClaims extends React.Component {
 
@@ -65,7 +66,7 @@ export class MatchClaims extends React.Component {
         return (
             <div className="row">
                 <div style={{ width: '95%', height: '45px', marginLeft: '20px' }}>
-                    <h5  style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Claim Match & Resend</h5>
+                    <h5  className="headerText">Claim Match & Resend</h5>
                 </div>
             </div>
         )
@@ -88,13 +89,11 @@ export class MatchClaims extends React.Component {
                     <td className="list-item-style">{item.StmtEnd}</td>
                     <td className="list-item-style">{item.ExtClaimID}</td>
                     <td className="list-item-style">{item.Status}</td>
-                    <td className="list-item-style"><button class="btnDesign" type="resend">Match</button></td>
+                    <td className="list-item-style button-table"><button class="btnDesign" type="resend">Match</button></td>
                 </tr>
             )
         });
         return row
-        //     border: 1px solid transparent;
-        // padding: .375rem .75rem;
     }
 
     renderClaimsError() {

@@ -24,7 +24,7 @@ export class CommonTable extends React.Component {
                 pageCount={this.props.count}
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
-                onPageChange={(page) => { this.props.handlePageClick(page) }}
+                onPageChange={(page) => { this.props.handlePageClick && this.props.handlePageClick(page)}}
                 containerClassName={'pagination'}
                 pageClassName={'page-item'}
                 previousClassName={'page-link'}
@@ -73,7 +73,7 @@ export class CommonTable extends React.Component {
                 }
 
                 col.push(
-                    <div className={headerArray.length > 10 ? "col-1 col-small-style small-font word-wrap" : row_item.upScale == 1 ? "col-2 col-small-style small-font" : "col col-small-style small-font"}>
+                    <div className={headerArray.length > 10 ? ("col-1 col-small-style small-font word-wrap" + (count == 0 ? " border-left" : "")) : row_item.upScale == 1 ? "col-2 col-small-style small-font" + (count == 0 ? " border-left" : "") : "col col-small-style small-font" + (count == 0 ? " border-left" : "")}>
                         {
                             this.props.onClick && count == 0 ?
                                 <a style={{ color: "#6AA2B8", cursor: "pointer" }}

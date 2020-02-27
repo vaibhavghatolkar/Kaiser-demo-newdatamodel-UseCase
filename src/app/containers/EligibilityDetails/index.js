@@ -328,7 +328,7 @@ export class EligibilityDetails extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a onClick={() => {
+                    <td className="border-left"><a onClick={() => {
                         this.getData(d.HiPaaSUniqueID)
                         this.getDetails(d.HiPaaSUniqueID)
                     }} style={{ color: "var(--light-blue)", cursor: "pointer" }}>{d.Trans_ID}</a></td>
@@ -821,7 +821,7 @@ export class EligibilityDetails extends React.Component {
     render() {
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</h5>
+                <h5 className="headerText">{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</h5>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-7 margin-top">

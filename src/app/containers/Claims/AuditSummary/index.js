@@ -121,7 +121,7 @@ export class AuditSummary extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "#6AA2B8" }}>{d.filename}</td>
+                    <td>{d.filename}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td colSpan={2} className="list-item-style">{d.InBizstock}</td>
                     <td className="list-item-style">{d.Rejected}</td>
@@ -132,7 +132,7 @@ export class AuditSummary extends React.Component {
             )
         });
         return (
-            <table className="table table-bordered claim-list summary-list">
+            <table className="table table-bordered claim-list">
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
@@ -217,13 +217,13 @@ export class AuditSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Claims Audit Summary</h5>
+                <h5 className="headerText">Claims Audit Summary</h5>
                 <Topbar
                     tradingpartner={this.state.tradingpartner}
                     onSelect={this.onSelect}
                 />
                 {this.renderStats()}
-                <div className="col-12">
+                <div className="col-10">
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
                 </div>
             </div>

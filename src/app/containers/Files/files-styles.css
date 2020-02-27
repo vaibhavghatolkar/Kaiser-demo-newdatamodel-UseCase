@@ -34,7 +34,6 @@
 }
 .header{
     color: darkslategrey;
-    font-weight: 800;
     padding-bottom: 4px;
     margin-top: 12px;
 }
@@ -202,4 +201,7 @@
 }
 .top-bar-margin{
     margin-left: -12px !important;
+}
+.sidebar-margin{
+    margin-left: 210px;
 }

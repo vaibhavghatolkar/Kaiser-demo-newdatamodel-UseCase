@@ -70,70 +70,6 @@ export class HealthCare278 extends React.Component {
         )
     }
 
-    // renderTransactions() {
-    //     let row = []
-    //     const data = this.state.claimsAudit;
-    //     console.log(data)
-
-    //     data.forEach((d) => {
-    //         row.push(
-    //             <tr>
-    //                 <td style={{ color: "#6AA2B8" }}>{d.filename}</td>
-    //                 <td className="list-item-style">{d.Submitted}</td>
-    //                 <td colSpan={2} className="list-item-style">{d.InBizstock}</td>
-    //                 <td className="list-item-style">{d.Rejected}</td>
-    //                 <td className="list-item-style">0</td>
-    //                 {/* <td className="list-item-style">{d.Pending}</td> */}
-    //                 <td colSpan={2} className="list-item-style">{d.Verified}</td>
-    //             </tr>
-    //         )
-    //     });
-    //     return (
-    //         <table className="table table-bordered claim-list summary-list">
-    //             <tr className="table-head">
-    //                 <td className="table-head-text list-item-style">File Name </td>
-    //                 <td className="table-head-text list-item-style">Submitted </td>
-    //                 <td colSpan={2} className="table-head-text list-item-style">In HiPaaS </td>
-    //                 <td className="table-head-text list-item-style">Rejected PreProcess </td>
-    //                 <td className="table-head-text list-item-style">Error in PreProcess </td>
-    //                 {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-    //                 <td colSpan={2} className="table-head-text list-item-style">In Qnxt </td>
-    //             </tr>
-    //             <tbody>
-    //                 <tr>
-    //                     <td>Totals</td>
-    //                     <td className="list-item-style">{this.state.SubTotal}</td>
-    //                     <td colSpan={2} className="list-item-style">{this.state.InBizstockTotal}</td>
-    //                     <td className="list-item-style">{this.state.RejTotal}</td>
-    //                     <td className="list-item-style">0</td>
-    //                     <td colSpan={2} className="list-item-style">{this.state.VeriTotal}</td>
-    //                     {/* <td className="list-item-style">{this.state.PenTotal}</td>
-    //                     <td className="list-item-style">{this.state.errTotal}</td> */}
-    //                 </tr>
-    //                 {row}
-    //             </tbody>
-    //         </table>
-    //     )
-    // }
-
-    // onSelect(event, key) {
-    //     if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-    //         this.setState({
-    //             [key]: ''
-    //         })
-    //     } else {
-    //         this.setState({
-    //             [key]: event.target.options[event.target.selectedIndex].text
-    //         })
-    //     }
-
-    //     setTimeout(() => {
-    //         this.getData()
-    //     }, 50);
-    // }
-
-
-
     renderStats() {
         let data = []
         data = [
@@ -686,9 +622,9 @@ export class HealthCare278 extends React.Component {
                 <div className="form-group col-3">
                     <div className="list-dashboard">State</div>
                     <select className="form-control list-dashboard" id="state"
-                        onChange={(event) => {
-                            this.onSelect(event, 'State')
-                        }}
+                        // onChange={(event) => {
+                        //     this.onSelect(event, 'State')
+                        // }}
                     >
                         <option value=""></option>
                         <option selected="selected" value="1">California</option>
@@ -739,7 +675,7 @@ export class HealthCare278 extends React.Component {
     render() {
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "400", marginTop: "10px", fontSize: '18px' }}>278 Health Care Service Request Dashboard</h5>
+                <h5 className="headerText">278 Health Care Service Request Dashboard</h5>
                 {this.renderTopbar()}
                 {this.renderStats()}
                 {this.dateviewtabledata()}

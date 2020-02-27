@@ -79,12 +79,12 @@ export class AssignedDetails extends React.Component {
                             <table className="table table-bordered claim-list">
                                 
                                     <tr className="table-head">
-                                        <td className="table-head-text list-item-style">Rev Code</td>
-                                        <td className="table-head-text list-item-style">HCPCS Code</td>
-                                        <td className="table-head-text list-item-style">Place of Service</td>
-                                        <td className="table-head-text list-item-style">Units</td>
-                                        <td className="table-head-text list-item-style">Date Of Service</td>
-                                        <td className="table-head-text list-item-style"> Amount</td>
+                                        <td className="table-head-text list-item-style">Rev Code <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">HCPCS Code <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Place of Service <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Units <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style">Date Of Service <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                                        <td className="table-head-text list-item-style"> Amount <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                                     </tr>
 
                                     <tr>

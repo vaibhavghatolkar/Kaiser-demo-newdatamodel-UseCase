@@ -292,7 +292,7 @@ export class DynamicSidebar extends React.Component {
 
     render() {
         return (
-            <nav id="sidebar">
+            <nav id="sidebar" style={{marginTop: '-17px'}}>
                 <ul className="list-unstyled components">
                     {this.renderTabs()}
                     {this.renderSidebarItems()}

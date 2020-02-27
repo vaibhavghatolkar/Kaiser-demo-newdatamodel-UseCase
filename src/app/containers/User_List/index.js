@@ -260,8 +260,8 @@ export class UserList extends React.Component {
             <div>
 
                 <div className="row">
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>HiPaaS User List</h5>
-                    <button type="button" class="btn btn-display" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
+                    <h5 className="headerText">HiPaaS User List</h5>
+                    <button type="button" class="btn btn-design" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
                         Add New
                     </button>
                 </div>

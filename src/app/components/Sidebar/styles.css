@@ -110,3 +110,19 @@ ul ul a {
 td{
     font-size: 12px;
 }
+.sidebar-width{
+    width : 204px;
+}
+.menu_option{
+    word-break: break-all;
+}
+.headerText{
+    color: var(--main-bg-color); 
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 18px;
+}
+.button-table{
+    padding-top: 7px !important;
+    padding-bottom: 0px !important;
+}
