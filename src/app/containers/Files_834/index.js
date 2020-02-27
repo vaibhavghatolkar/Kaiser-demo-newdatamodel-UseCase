@@ -12,7 +12,7 @@ export class Files_834 extends React.Component {
 
     constructor(props) {
         super(props);
-    
+    console.log("sdfhdshv" ,props)
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -27,7 +27,9 @@ export class Files_834 extends React.Component {
             coverage_data: [],
             error_status: '',
             Error_Field:'',
-            isInitial: true
+            isInitial: true,
+            Total:props.location.state.data[0] &&props.location.state.data[0].Total != 'Total' || props.location.state.data[0].Total != 'error'   ?props.location.state.data[0].Total : '',
+            
         }
 
         this.getData = this.getData.bind(this)
@@ -129,7 +131,7 @@ export class Files_834 extends React.Component {
   
   
     getData() {
-        let query = '{SP_834FilecountwisedetailsGQL(Type:'+'"'+this.props.match.params.new_path+'"'+'){ FileName FileID  sender receiver FileStatus CreateDateTime dcount  }}'
+        let query = '{SP_834FilecountwisedetailsGQL(Type:'+'"'+this.state.Total +'"'+'){ FileName FileID  sender receiver FileStatus CreateDateTime dcount  }}'
         console.log('query : ' + query)
         fetch(Urls.enrollment_details, {
             method: 'POST',
@@ -180,7 +182,7 @@ export class Files_834 extends React.Component {
         if(this.state.isInitial){
             return
         }
-        let query = '{ SP_834FileDetailsPagingGQL(Type :'+'"'+this.props.match.params.new_path+'"'+', PageIndex:'+this.state.page+', FileID: '+fileId+') { SubscriberNo fileid Enrollment_type InsLineCode Insurer_Status TransCode MemberAmount Error CreateDateTime status1 } }'
+        let query = '{ SP_834FileDetailsPagingGQL(Type :'+'"'+this.state.Total +'"'+', PageIndex:'+this.state.page+', FileID: '+fileId+') { SubscriberNo fileid Enrollment_type InsLineCode Insurer_Status TransCode MemberAmount Error CreateDateTime status1 } }'
         console.log(query)
         fetch(Urls.enrollment_details, {
             method: 'POST',
@@ -417,11 +419,11 @@ rendersearchbar()
              return (
          
             <div className="row">
-                <div className="col-4 col-header" style={{fontWeight:"bold"}}>File Name</div>
-                <div className="col-2 col-header" style={{fontWeight:"bold"}}>File Date</div>
-                <div className="col-3 col-header" style={{fontWeight:"bold"}}>Submitter</div>
+                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Name <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
+                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
+                <div className="col-3 col-header" style={{fontWeight:"bold"}}>Submitter <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
   
-                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Status</div>
+                <div className="col-3 col-header" style={{fontWeight:"bold"}}>File Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></div>
             </div>
         )
     }
@@ -429,11 +431,11 @@ rendersearchbar()
     renderClaimsHeader() {
         return (
             <tr className="table-head claims-text">				
-                <td className="table-head-text">Subscriber No</td>
-                <td className="table-head-text">Enrollment Type</td>
-                <td className="table-head-text list-item-style">Insurer Status</td>
-                <td className="table-head-text list-item-style">Status</td>
-                <td className="table-head-text list-item-style">Error Code</td>
+                <td className="table-head-text">Subscriber No <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text">Enrollment Type <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Insurer Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Status <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Error Code<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -442,10 +444,10 @@ rendersearchbar()
         return (
             <tr className="table-head">
               {/* <td className="table-head-text small-font">Subscriber No</td>*/} 
-                <td className="table-head-text small-font">Enrollment Type</td>
-                <td className="table-head-text  small-font list-item-style">Plan Code</td>
-                <td className="table-head-text  small-font list-item-style">Coverage Start Date</td>
-                <td className="table-head-text  small-font list-item-style">Coverage End Date</td>
+                <td className="table-head-text small-font">Enrollment Type <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text  small-font list-item-style">Plan Code <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text  small-font list-item-style">Coverage Start Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text  small-font list-item-style">Coverage End Date <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -469,11 +471,11 @@ rendersearchbar()
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-4 col-style"><a href={"#" + data[keys].value.FileID} 
+                    <div className="col-3 col-style"><a href={"#" + data[keys].value.FileID} 
                         onClick={() => {
                             this.onClick(data[keys].value.FileID)
                         }} style={{ color: "#6AA2B8" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-style">{moment(data[keys].value.CreateDateTime).format('DD/MM/YYYY')}<br />{moment(data[keys].value.CreateDateTime).format('h:m a')}</div>
+                    <div className="col-3 col-style">{moment(data[keys].value.CreateDateTime).format('DD/MM/YYYY')}{moment(data[keys].value.CreateDateTime).format('h:m a')}</div>
                     <div className="col-3 col-style">{data[keys].value.sender}</div>
                     <div className={"col-3 col-style"}>{data[keys].value.FileStatus}</div>
                 </div>
@@ -486,7 +488,7 @@ rendersearchbar()
                     col.push(
                         <tr>
                           
-                            <td className="list-item-style claims"><a href="#" style={{ color: "#6AA2B8" }} 
+                            <td className="list-item-style claims"><a className="clickable" style={{ color: "#6AA2B8" }} 
                                 onClick={() => { 
                                     this.setState({
                                         subscriberNo: item.SubscriberNo,
@@ -657,7 +659,7 @@ rendersearchbar()
 
     render() {
         var title=""
-        if(this.props.match.params.new_path=="error")
+        if(this.props.location.state.data[0].Total=="error")
         {
             title="Enrollment Errors";
         }
@@ -668,14 +670,14 @@ rendersearchbar()
         return (
           
             <div>
-                  <br></br>
+                
                 {/* {this.rendersearchbar()} */}
-        <h5 style={{ color: '#139DC9',fontsize: "20px" }}>{title}</h5><br></br>
+        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>{title}</h5>
             <div className="row padding-left">
-                <div className="col-7 claim-list file-table">
+                <div className="col-6 claim-list file-table">
                     {this.state.claimsObj ? this.renderList() : null}
                 </div>
-                <div className="col-5">
+                <div className="col-6">
                     {this.renderSummary()}
                 </div>
                 </div>

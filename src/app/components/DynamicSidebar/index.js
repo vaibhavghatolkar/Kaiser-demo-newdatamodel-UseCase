@@ -194,9 +194,14 @@ export class DynamicSidebar extends React.Component {
                 ]
 
             } else if (element.key == Strings.claimsDashboard_834_details) {
-                addon = '/total'
+                data = [
+                    { Total: 'total' },
+                ]
+               
             } else if (element.key == Strings.EnrollmentError) {
-                addon = '/error'
+                data = [
+                    { Total: 'error' },
+                ]
             }
             else if (element.key == Strings.EncounterDetails) {
                 data = [
