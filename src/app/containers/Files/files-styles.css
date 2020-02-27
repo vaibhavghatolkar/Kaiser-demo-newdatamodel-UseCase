@@ -18,8 +18,8 @@
 .table-head-text{
     color: white;
     font-size: 12px;
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
     padding-left: 4px !important;
     padding-right: 4px !important;
 }
@@ -34,7 +34,6 @@
 }
 .header{
     color: darkslategrey;
-    font-weight: 800;
     padding-bottom: 4px;
     margin-top: 12px;
 }
@@ -202,4 +201,7 @@
 }
 .top-bar-margin{
     margin-left: -12px !important;
+}
+.sidebar-margin{
+    margin-left: 210px;
 }

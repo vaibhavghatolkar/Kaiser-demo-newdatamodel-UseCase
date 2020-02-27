@@ -3,6 +3,7 @@ import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
 import { Topbar } from '../../../components/Topbar';
 import Urls from '../../../../helpers/Urls';
+import { CommonTable } from '../../../components/CommonTable';
 
 export class MatchClaims extends React.Component {
 
@@ -93,8 +94,6 @@ export class MatchClaims extends React.Component {
             )
         });
         return row
-        //     border: 1px solid transparent;
-        // padding: .375rem .75rem;
     }
 
     renderClaimsError() {

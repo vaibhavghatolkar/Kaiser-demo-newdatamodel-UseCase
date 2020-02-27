@@ -31,7 +31,7 @@ export class RealTime276 extends React.Component {
             pieLabels: [],
             tradingChartLabel: [],
             tradingChartData: [],
-            providerChartLabel: ['provider 1', 'provider 2', 'provider 3', 'provider 4', 'provider 5'],
+            providerChartLabel: ['Provider Name 1', 'Provider Name 2', 'Provider Name 3', 'Provider Name 4', 'Provider Name 5'],
             providerChartData: [4, 5, 1, 2, 3],
             dateChartLabel: [],
             dateChartData: [],
@@ -1201,9 +1201,13 @@ export class RealTime276 extends React.Component {
                             Provider Name
    
                         </div>
-                        <select className="form-control list-dashboard"><option value=""></option>
+                        <select className="form-control list-dashboard">
+                            <option value=""></option>
                             <option selected="selected" value="1">Provider Name 1</option>
                             <option value="2">Provider Name 2</option>
+                            <option value="2">Provider Name 3</option>
+                            <option value="2">Provider Name 4</option>
+                            <option value="2">Provider Name 5</option>
                         </select>
                     </div>
 
@@ -1250,6 +1254,8 @@ export class RealTime276 extends React.Component {
         array.forEach(item => {
             if(item.name == 'INVALID TRANSACTIONS'){
                 errorcode = '999'
+            } else {
+                errorcode = ""
             }
 
             data = [
@@ -1299,7 +1305,7 @@ export class RealTime276 extends React.Component {
                             <div className="summary-header">{item.name}</div>
                             <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
 
-                                {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
+                                {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}{item.name == 'AVG RESPONSE TIME' ? ' ms' : ''}
                             </div>
                         </div>
                     // <Link

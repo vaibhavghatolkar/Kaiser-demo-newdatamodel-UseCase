@@ -680,7 +680,7 @@ export class RealTimeDashboard extends React.Component {
                         {/* <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         /> */}
-                           <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
@@ -715,12 +715,31 @@ export class RealTimeDashboard extends React.Component {
                         }
                     },
                     legend: {
-                        display: false
-                        // position: 'bottom'
+                        display: false,
                     }
                 }}
                 width={100}
                 height={80} />
+        )
+    }
+
+    renderValues() {
+        let row = []
+        let data = second_data.labels
+        let colors = second_data.datasets[0].backgroundColor
+        let count = 0
+        data.forEach(item => {
+            row.push(
+                <div className="row" style={{textAlign: 'center', fontSize: '12px', marginTop : '4px', color: 'slategrey', alignItems: 'center'}}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div>{item}
+                </div>
+            )
+            count++
+        })
+        return (
+            <div style={{marginTop : '20px', marginLeft: '24%'}}>
+                {row}
+            </div>
         )
     }
 
@@ -738,6 +757,7 @@ export class RealTimeDashboard extends React.Component {
                     </div>
                     <div className="col-3 form-style">
                         {this.renderChart()}
+                        {this.renderValues()}
                     </div>
                 </div>
             </div>

@@ -110,3 +110,9 @@ ul ul a {
 td{
     font-size: 12px;
 }
+.sidebar-width{
+    width : 204px;
+}
+.menu_option{
+    word-break: break-all;
+}
