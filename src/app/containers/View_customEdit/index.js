@@ -334,8 +334,7 @@ export class ViewCustomEdits extends React.Component {
                 {
 
                     <div>
-                        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>View Custom Edits</h5>
-                        <br></br>
+                        <h5 className="headerText">View Custom Edits</h5>
                         {this.renderTopbar()}
                         <div className="row">
                             <div className="col-12">

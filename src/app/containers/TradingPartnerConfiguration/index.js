@@ -390,7 +390,7 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
 
                         <div>
-                        <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Trading Partner Configuration</h5>
+                        <h5 className="headerText">Trading Partner Configuration</h5>
                         </div><br></br>
                         <div className="row">
 

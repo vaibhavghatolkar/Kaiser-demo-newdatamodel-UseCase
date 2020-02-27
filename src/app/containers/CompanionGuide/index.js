@@ -185,7 +185,7 @@ export class CompanionGuide extends React.Component {
                     <div>
                         <div>
                             {/* <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Companion Guide</p> */}
-                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Companion Guide</h5>
+                            <h5 className="headerText">Companion Guide</h5>
                         </div>
                         <br/>
                         <div className="row">

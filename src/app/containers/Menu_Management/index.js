@@ -547,7 +547,7 @@ export class MenuManagement extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Menu Management</h5>
+                    <h5 className="headerText">Menu Management</h5>
                 </div>
                 {
 

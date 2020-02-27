@@ -56,7 +56,7 @@ export class EditConfiguration extends React.Component {
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
-            transactionSelect:'270',
+            transactionSelect:'837P',
             GetCustomEdits:[]
 
         };
@@ -245,7 +245,7 @@ export class EditConfiguration extends React.Component {
 
         let row = []
         this.state.TransactionMasterList.forEach(element => {
-            row.push(<option selected={this.state.Transaction_Type == element.Trans_Code ? element.Trans_Code : ''} value={element.Trans_Code}>{element.Trans_Code}</option>)
+            row.push(<option selected={this.state.transactionSelect == element.Trans_Code ? element.Trans_Code : ''} value={element.Trans_Code}>{element.Trans_Code}</option>)
         })
         return row
 
@@ -1163,7 +1163,7 @@ export class EditConfiguration extends React.Component {
         return (
             <div>
                 <div className="container">
-                    <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Configure Custom Edits</h5>
+                    <h5 className="headerText">Configure Custom Edits</h5>
                     {/* {this.renderTopbar()} */}
                     {this.renderView()}
                    

@@ -981,15 +981,15 @@ export class ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Claims Details</h5>
+                <h5 className="headerText">Claims Details</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
-                    <div className="col-7 claim-list file-table">
+                    <div className="col-6 claim-list file-table">
                         {this.state.claimsObj ? this.renderList() : null}
                         {/* {this.state.claimsObj ? this.renderTable() : null} */}
                     </div>
 
-                    <div className="col-5">
+                    <div className="col-6">
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <div>

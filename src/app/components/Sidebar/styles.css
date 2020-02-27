@@ -116,3 +116,9 @@ td{
 .menu_option{
     word-break: break-all;
 }
+.headerText{
+    color: var(--main-bg-color); 
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 18px;
+}

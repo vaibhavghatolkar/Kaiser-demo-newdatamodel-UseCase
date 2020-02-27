@@ -28,7 +28,7 @@ export class ResearchQueue extends React.Component {
                     :
                     <div>
                         <div>
-                            <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Assigned Claims Summary - John Smith</h5>
+                            <h5 className="headerText">Assigned Claims Summary - John Smith</h5>
                         </div>
                         <div className="row">
                             <div className="form-group col-sm-3">

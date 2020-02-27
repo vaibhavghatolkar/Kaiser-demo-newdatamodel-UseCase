@@ -66,7 +66,7 @@ export class MatchClaims extends React.Component {
         return (
             <div className="row">
                 <div style={{ width: '95%', height: '45px', marginLeft: '20px' }}>
-                    <h5  style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>Claim Match & Resend</h5>
+                    <h5  className="headerText">Claim Match & Resend</h5>
                 </div>
             </div>
         )
