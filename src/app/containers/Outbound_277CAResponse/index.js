@@ -687,7 +687,7 @@ export class Outbound_277CAReponse extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Outbound 277CA Claims Acknowledgement</h5>
+                <h5 className="headerText">277CA Claims Acknowledgement (Outbound)</h5>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-7 margin-top">

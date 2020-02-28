@@ -46,7 +46,7 @@ export class CommonTable extends React.Component {
             header_row.push(
                 item.method ?
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
-                        {/* <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft: '-2px' }}></img> {item.value}                        */}
+                        {/* <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft: '-2px' }}></img> {item.value}*/}
                         {item.value} <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                     </div>
                     :
@@ -77,9 +77,15 @@ export class CommonTable extends React.Component {
                 col.push(
                     <div className={headerArray.length > 10 ? ("col-1 col-small-style small-font word-wrap" + (count == 0 ? " border-left" : "")) : row_item.upScale == 1 ? "col-2 col-small-style small-font" + (count == 0 ? " border-left" : "") : "col col-small-style small-font" + (count == 0 ? " border-left" : "")}>
                         {
-                            this.props.onClick && count == 0 ?
+                            this.props.onClick && count == 0 || row_item.isClick == 1 && row_item.method ?
                                 <a style={{ color: "#6AA2B8", cursor: "pointer" }}
-                                    onClick={() => { this.props.onClick(data_item[this.props.onClickKey]) }}
+                                    onClick={() => { 
+                                        if(row_item.isClick){
+                                            row_item.method()
+                                        } else {
+                                            this.props.onClick(data_item[this.props.onClickKey]) 
+                                        }
+                                    }}
                                 >
                                     {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
                                 </a> :
