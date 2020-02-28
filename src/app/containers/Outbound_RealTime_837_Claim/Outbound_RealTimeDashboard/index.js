@@ -235,7 +235,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 <td className="table-head-text list-item-style">File Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
@@ -380,7 +380,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/Outbound_ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
@@ -577,7 +577,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
-                    <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
+                    <Link to={{ pathname: '/Outbound_ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
                             (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
