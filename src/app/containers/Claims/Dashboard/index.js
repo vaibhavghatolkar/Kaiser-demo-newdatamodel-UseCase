@@ -145,7 +145,7 @@ export class Claims extends React.Component {
             ClaimAccCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
                 AccCount
             }
-            ClaimRejCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`"){
+            ClaimRejCount (submitter:"`+this.state.selectedTradingPartner+`",fromDt:"`+ startDate+`",ToDt:"`+endDate+`", RecType: "Inbound"){
                 RejCount
             }
             ClaimPaidCount {
