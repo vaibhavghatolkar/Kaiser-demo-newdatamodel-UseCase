@@ -342,7 +342,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
 
     goto999 = () => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.response_999, {
+        this.props.history.push('/' + Strings.Outbound_response_999, {
             flag : 1
         })
         setTimeout(() => {

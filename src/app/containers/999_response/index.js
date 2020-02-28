@@ -18,7 +18,6 @@ export class response_999 extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log( props.location.state.data[0])
         this.state = {
             claimsList: [],
             summaryList: [],
@@ -40,6 +39,7 @@ export class response_999 extends React.Component {
             endDate: "",
             transactionId:"",
              errorcode:"",
+             transactionType: this.props.location.state ? (this.props.location.state.flag ? '837 Encounter' : '837') : "837",
 
             // selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
@@ -150,7 +150,7 @@ export class response_999 extends React.Component {
 
         query = `{
            
-            Data999( RecType:"Inbound", TrasactionType:"" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
+            Data999( RecType:"Inbound", TrasactionType:"`+this.state.transactionType+`" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
                 id,
             FileName,
            Date,
@@ -437,22 +437,7 @@ export class response_999 extends React.Component {
         return (
             <form className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col">
-                        <div className="list-dashboard">Transaction Id</div>
-                        <input className="form-control list-dashboard"
-                            id="state"
-                            onChange={(e) => {
-                                clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ transactionId: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.getTransactions()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                    </div>
+                    
                     <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
@@ -494,25 +479,21 @@ export class response_999 extends React.Component {
                         </select>
                     </div>
 
-                    {
-                        this.state.status != 'Pass'
-                            ?
-                            <div className="form-group col">
-                                <div className="list-dashboard">Error Type</div>
-                                <select className="form-control list-dashboard" id="TradingPartner"
-                                    onChange={(event) => {
-                                        this.onSelect(event, 'errorcode')
-                                        setTimeout(() => {
-                                            this.getTransactions()
-                                        }, 50);
-                                    }}
-                                >
-                                    <option value="select"></option>
-                                    {this.getErrorOptions()}
-                                </select>
-                            </div>
-                            : null
-                    }
+                    <div className="form-group col">
+                        <div className="list-dashboard">
+                            Transaction Type
+                        </div>
+                        <select className="form-control list-dashboard"
+                            onChange={(event) => {
+                                this.onSelect(event, 'transactionType')
+                            }}
+                        >
+                            <option value="1"></option>
+                            <option selected={this.state.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                            <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
+                        </select>
+                    </div>
+                    
                     <div className="form-group col">
                         <div className="list-dashboard">
                             Provider Name
