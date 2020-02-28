@@ -158,7 +158,8 @@ export class ClaimProcessingSummary extends React.Component {
                 FileStatus
                 F999
 				F277
-    			TotalLinewise835
+                TotalLinewise835
+                TotalLine
             }
         }`
         //  console.log(query)
