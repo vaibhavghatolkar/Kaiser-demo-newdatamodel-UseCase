@@ -175,7 +175,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { apiflag: '1', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
-            } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276) {
+            } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276 || element.key == Strings._277CAResponse) {
                 let key = 'n'
                 if (element.key == Strings.elilgibilityErrors276) {
                     key = 'Fail'

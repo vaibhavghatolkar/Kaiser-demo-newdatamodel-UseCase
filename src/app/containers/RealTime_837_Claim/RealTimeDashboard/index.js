@@ -560,6 +560,8 @@ export class RealTimeDashboard extends React.Component {
             } else if (item.name == 'Rejected Claims' || item.name == 'Rejected Files') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
+            } else if (item.name == 'Resubmit Queue') {
+                claimStatus = 'Resubmit'
             } else {
                 addon = '/other'
             }
