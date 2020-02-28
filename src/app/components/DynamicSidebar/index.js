@@ -118,7 +118,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 46) { name = Strings.MenuCreate }
         else if (key == 47) { name = Strings.ChangePassword }
         else if (key == 48) { name = Strings.MenuManagement }
-        else if (key == 53) { name = Strings.EncounterDashboard }
+        // else if (key == 53) { name = Strings.EncounterDashboard }
         else if (key == 54) { name = Strings.EncounterDetails }
         
         else if (key == 65) { name = Strings.Inbound_EncounterDashboard }
@@ -143,6 +143,7 @@ export class DynamicSidebar extends React.Component {
         else if(key ==95){name = Strings.Outbound_AuditSummary}
         else if(key ==125){name = Strings.Outbound_response_999}
         else if(key ==127){name = Strings.Outbound_277CAResponse}
+        else if(key ==53){name = Strings.Outbound_Encounter_RealTimeDashboard}      
 
         return name
     }

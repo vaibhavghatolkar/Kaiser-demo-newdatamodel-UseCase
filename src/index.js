@@ -73,6 +73,7 @@ import { Outbound_response_999 } from './app/containers/Outbound_999_response'
 import { Inbound_Encounter_RealTimeDashboard } from './app/containers/InboundEncounter/Inbound_Encounter_RealTimeDashboard';
 import { Inbound_Encounter_ClaimDetails837 } from './app/containers/InboundEncounter/Inbound_Encounter_Claim_Details_837';
 import { Inbound_Encounter_ClaimProcessingSummary } from './app/containers/InboundEncounter/Inbound_Encounter_RealTime_ClaimProcessingSummary';
+import { Outbound_Encounter_RealTimeDashboard } from './app/containers/InboundEncounter/Outbound_Encounter_RealTimeDashboard'
 
 import { Inbound_Encounter_Audit } from './app/containers/InboundEncounter/Inbound_Encounter_AuditSummary';
 const $ = window.$;
@@ -274,6 +275,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Inbound_Encounter_Audit} component={Inbound_Encounter_Audit} />
                                 <Route path={'/' + Strings.Outbound_AuditSummary} component={Outbound_AuditSummary} />
                                 <Route path={'/' + Strings.Outbound_response_999} component={Outbound_response_999} />
+                                <Route path={'/' + Strings.Outbound_Encounter_RealTimeDashboard} component={Outbound_Encounter_RealTimeDashboard} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
