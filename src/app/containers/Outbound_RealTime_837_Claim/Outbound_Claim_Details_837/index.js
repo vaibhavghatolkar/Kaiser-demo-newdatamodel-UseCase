@@ -11,7 +11,7 @@ import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
 
 var val = ''
-export class ClaimDetails837 extends React.Component {
+export class Outbound_ClaimDetails837 extends React.Component {
 
     constructor(props) {
         super(props);
@@ -816,7 +816,7 @@ export class ClaimDetails837 extends React.Component {
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    File Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
@@ -858,7 +858,7 @@ export class ClaimDetails837 extends React.Component {
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.Type}</div>
+                    <div className="col-2 col-small-style small-font"></div>
                     <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-3 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.Sender}</div>
