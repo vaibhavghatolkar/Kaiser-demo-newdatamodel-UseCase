@@ -580,7 +580,7 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                         </div>
               
                         <div className="col summary-container">
-                            <div className="summary-header">DENIDE</div>
+                            <div className="summary-header">DENIED</div>
                             <div className="red summary-title">{this.state.Denide}</div>
                         </div> 
                 

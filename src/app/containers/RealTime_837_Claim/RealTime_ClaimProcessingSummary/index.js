@@ -560,48 +560,48 @@ export class ClaimProcessingSummary extends React.Component {
     renderStats() {
         console.log(this.state.Accepted)
         return (
-
-            <div className="row padding-left" style={{ marginBottom: '10px' }}>
-
-                <div className="col summary-container">
-                    <div className="summary-header">ACCEPTED CLAIMS</div>
-                    <div className="green summary-title">{this.state.Accepted}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">REJECTED CLAIMS</div>
-                    <div className="red summary-title">{this.state.Rejected}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">999</div>
-                    <div className="red summary-title">{this.state.Total999}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">SENT TO QNXT</div>
-                    <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">277 CA</div>
-                    <div className="red summary-title">{this.state.Total277CA}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">PAID</div>
-                    <div className="green summary-title">{this.state.Paid}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">PENDING</div>
-                    <div className="orange summary-title">{this.state.Pending}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">DENIDE</div>
-                    <div className="red summary-title">{this.state.Denide}</div>
-                </div>
-
-
+           
+                <div className="row padding-left" style={{marginBottom: '10px'}}>
+ 
+                        <div className="col summary-container">
+                            <div className="summary-header">ACCEPTED CLAIMS</div>
+                            <div className="green summary-title">{this.state.Accepted}</div>
+                        </div> 
+        
+                        <div className="col summary-container">
+                            <div className="summary-header">REJECTED CLAIMS</div>
+                            <div className="red summary-title">{this.state.Rejected}</div>
+                        </div>        
+                        <div className="col summary-container">
+                            <div className="summary-header">999</div>
+                            <div className="red summary-title">{this.state.Total999}</div>
+                        </div> 
+                
+                        <div className="col summary-container">
+                            <div className="summary-header">SENT TO QNXT</div>
+                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
+                        </div> 
+                
+                        <div className="col summary-container">
+                            <div className="summary-header">277 CA</div>
+                            <div className="red summary-title">{this.state.Total277CA}</div>
+                        </div>
+                        <div className="col summary-container">
+                            <div className="summary-header">PAID</div>
+                            <div className="green summary-title">{this.state.Paid}</div>
+                        </div> 
+                
+                        <div className="col summary-container">
+                            <div className="summary-header">PENDING</div>
+                            <div className="orange summary-title">{this.state.Pending}</div>
+                        </div>
+              
+                        <div className="col summary-container">
+                            <div className="summary-header">DENIED</div>
+                            <div className="red summary-title">{this.state.Denide}</div>
+                        </div> 
+                
+               
             </div>
 
         )

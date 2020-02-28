@@ -716,7 +716,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                         />
                     </div>
                     <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
+                        <div className="list-dashboard">Sender</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
@@ -739,7 +739,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                 <tr>
                     <td>{d.ClaimID}</td>
                     <td>{d.ServiceLineCount}</td>
-                    <td>{d.ProviderPaidAmount}</td>
+                    {/* <td>{d.ProviderPaidAmount}</td> */}
                     <td>{d.ServiceDate}</td>
                     <td>{d.ProcedureDate}</td>
                     <td>{d.PaidServiceUnitCount}</td>
@@ -755,11 +755,11 @@ export class Outbound_ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Service line count</td>
-                                    <td className="table-head-text list-item-style">Provider paid amount</td>
+                                    <td className="table-head-text list-item-style">Service Line Number</td>
+                                    {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service date</td>
                                     <td className="table-head-text list-item-style">Procedure code</td>
-                                    <td className="table-head-text list-item-style">Paid service unit count</td>
+                                    <td className="table-head-text list-item-style">Paid Service Unit Number</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -786,7 +786,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                 <td className="table-head-text">Claim Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 {/* <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
                 <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Current State<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
@@ -828,7 +828,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
-                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
             </div>
         )
@@ -986,7 +986,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Claims Details</h5>
+                <h5 className="headerText">Claims Details (Outbound)</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">
