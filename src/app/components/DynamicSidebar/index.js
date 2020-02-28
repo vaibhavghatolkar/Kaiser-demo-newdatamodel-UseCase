@@ -119,7 +119,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 47) { name = Strings.ChangePassword }
         else if (key == 48) { name = Strings.MenuManagement }
         // else if (key == 53) { name = Strings.EncounterDashboard }
-        else if (key == 54) { name = Strings.EncounterDetails }
+        // else if (key == 54) { name = Strings.EncounterDetails }
         
         else if (key == 65) { name = Strings.Inbound_EncounterDashboard }
         else if (key == 66) { name = Strings.Inbound_EncounterDetails }
@@ -144,7 +144,8 @@ export class DynamicSidebar extends React.Component {
         else if(key ==130){name = Strings.Outbound_Encounter_Audit}
         else if(key ==131){name = Strings.Outbound_Encounter_ClaimProcessingSummary}
         else if(key ==127){name = Strings.Outbound_277CAResponse}
-        else if(key ==53){name = Strings.Outbound_Encounter_RealTimeDashboard}      
+        else if(key ==53){name = Strings.Outbound_Encounter_RealTimeDashboard}
+        else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}      
 
         return name
     }
@@ -222,6 +223,11 @@ export class DynamicSidebar extends React.Component {
                 ]
             }
             else if (element.key == Strings.EncounterDetails) {
+                data = [
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
+                ]
+            }
+            else if (element.key == Strings.Outbound_Encounter_ClaimDetails837) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]

@@ -11,7 +11,7 @@ import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
 
 var val = ''
-export class Inbound_Encounter_ClaimDetails837 extends React.Component {
+export class Outbound_Encounter_ClaimDetails837 extends React.Component {
 
     constructor(props) {
         super(props);
@@ -164,7 +164,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            EncounterFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Inbound") {
+            EncounterFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Outbound") {
                 RecCount
                 FileID
                 FileName
@@ -255,7 +255,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            EncounterProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"", RecType: "Inbound") {
+            EncounterProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"", RecType: "Outbound") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -523,14 +523,14 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
-                            { key: 'Claim Date', value: data.ClaimDate },
+                            { key: 'Encounter HiPaaS Id', value: data.ClaimTMTrackingID },
+                            { key: 'Encounter Date', value: data.ClaimDate },
                             { key: 'Subscriber first name', value: data.SubscriberFirstName },
                             { key: 'Subscriber last name', value: data.SubscriberLastName },
                             { key: 'Admission date', value: data.AdmissionDate },
-                            { key: 'Claim amount', value: data.Claim_Amount },
+                            { key: 'Encounter amount', value: data.Claim_Amount },
                             { key: 'Provider address', value: data.BillingProviderAddress },
-                            { key: 'Claim Status', value: data.ClaimStatus },
+                            { key: 'Encounter Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
                             { key: 'Accident Date', value:  AccidentDate},
                             { key: '', },
@@ -846,12 +846,12 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-12">
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim Line Data</a></div>
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Encounter Line Data</a></div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
-                                    <td className="table-head-text list-item-style">Claim Id</td>
+                                    <td className="table-head-text list-item-style">Encounter Id</td>
                                     <td className="table-head-text list-item-style">Service line Number</td>
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service date</td>
@@ -880,11 +880,11 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
     renderClaimsHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">Claim Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text">Encounter Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 {/* <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
-                <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Encounter Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Encounter Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
@@ -1095,7 +1095,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <div>
-                                    <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
+                                    <h6 style={{ marginTop: '20px', color: "#424242" }}>Encounter Data</h6>
                                     <hr />
                                 </div> : null
                         }
@@ -1110,7 +1110,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details border">
-                                    {this.renderHeader('Claim #' + this.state.claimId)}
+                                    {this.renderHeader('Encounter #' + this.state.claimId)}
                                     {this.renderRows(this.state.claimDetails)}
                                     <br></br>
                                     {this.state.Icdcodepresent == "ICDCode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
