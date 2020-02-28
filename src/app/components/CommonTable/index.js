@@ -24,7 +24,7 @@ export class CommonTable extends React.Component {
                 pageCount={this.props.count}
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
-                onPageChange={(page) => { this.props.handlePageClick && this.props.handlePageClick(page)}}
+                onPageChange={(page) => { this.props.handlePageClick && this.props.handlePageClick(page) }}
                 containerClassName={'pagination'}
                 pageClassName={'page-item'}
                 previousClassName={'page-link'}
@@ -47,14 +47,16 @@ export class CommonTable extends React.Component {
                 item.method ?
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
                         {/* <img onClick={() => item.method()} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${item.key}deg)`, marginLeft: '-2px' }}></img> {item.value}                        */}
-                        {item.value} <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img>
+                        {item.value} <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                     </div>
                     :
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
-                        {item.value} <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop : '3px', float: 'right', marginRight: '4px' }}></img>
+                        {item.value} <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                     </div>
             )
         })
+
+        // {item.value + item.isBar == 1 ? '| ' + item.secondVal : ''}
 
         row.push(
             <div className="row">
@@ -79,10 +81,10 @@ export class CommonTable extends React.Component {
                                 <a style={{ color: "#6AA2B8", cursor: "pointer" }}
                                     onClick={() => { this.props.onClick(data_item[this.props.onClickKey]) }}
                                 >
-                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]}
+                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
                                 </a> :
                                 <a>
-                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]}
+                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
                                 </a>
                         }
                     </div>)

@@ -86,7 +86,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     getCountData() {
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : ""   ) {
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "",RecType: "Inbound") {
                 TotalClaims
                 Accepted
                 Rejected
@@ -137,7 +137,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType: "Inbound") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -162,7 +162,7 @@ export class ClaimProcessingSummary extends React.Component {
                 TotalLine
             }
         }`
-        //  console.log(query)
+         console.log(query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -358,7 +358,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value : 'Subscriber_ID'},
             { value : 'adjudication_status'},
             { value : 'F277'},
-            { value : 'TotalLinewise835'},
+            { value : 'TotalLine', secondVal : 'TotalLinewise835', isBar : 1},
         )
 
         return(
