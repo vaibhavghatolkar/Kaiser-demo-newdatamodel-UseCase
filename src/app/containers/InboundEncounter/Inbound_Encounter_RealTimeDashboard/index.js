@@ -98,7 +98,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(Transaction:"Encounter") {
                 Trading_Partner_Name 
             }
         }`
@@ -132,7 +132,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
         }
 
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            EncounterDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 TotalFiles
                 TotalClaims
                 Accepted
@@ -145,7 +145,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                 InProgress
                 Resubmit
             }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            EncounterClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 From
                 MonthNo
                 Year
@@ -175,25 +175,25 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                 let accepted = 0
                 let rejected = 0
                 let inProgress = 0
-                let ClaimBarChart = res.data.Claim837RTClaimBarchart
+                let ClaimBarChart = res.data.EncounterClaimBarchart
                 let claimLabels = []
 
-                if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
+                if (data.EncounterDashboardCount && data.EncounterDashboardCount.length > 0) {
                     summary = [
-                        { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
-                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
+                        { name: 'Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
+                        { name: 'Total Claims', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
                         { name: 'Rejected Files', value: 0 },
-                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
-                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
-                        { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
-                        { name: 'Resubmit Queue', value: data.Claim837RTDashboardCount[0].Resubmit ? Math.round(data.Claim837RTDashboardCount[0].Resubmit * 100) / 100 : '' },
+                        { name: 'Accepted Claims', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
+                        { name: 'Rejected Claims', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
+                        { name: 'Accepted Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
+                        { name: 'Rejected Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
+                        { name: 'Resubmit Queue', value: data.EncounterDashboardCount[0].Resubmit ? Math.round(data.EncounterDashboardCount[0].Resubmit * 100) / 100 : '' },
                     ]
-                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
-                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
-                    accepted = data.Claim837RTDashboardCount[0].Accepted
-                    rejected = data.Claim837RTDashboardCount[0].Rejected
-                    inProgress = data.Claim837RTDashboardCount[0].InProgress
+                    Accepted_per1 = data.EncounterDashboardCount[0].Accepted_Per
+                    rejected_per1 = data.EncounterDashboardCount[0].Rejected_Per
+                    accepted = data.EncounterDashboardCount[0].Accepted
+                    rejected = data.EncounterDashboardCount[0].Rejected
+                    inProgress = data.EncounterDashboardCount[0].InProgress
                 }
 
                 let count = 0
@@ -381,7 +381,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: Strings.Inbound_EncounterDetails, state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
@@ -431,7 +431,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"", RecType: "Inbound") {
+            EncounterFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"", RecType: "Inbound") {
                 RecCount
                 FileID
                 FileName
@@ -454,19 +454,19 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.Claim837RTFileDetails) {
+                if (res && res.data && res.data.EncounterFileDetails) {
 
-                    if (res.data.Claim837RTFileDetails.length > 0) {
+                    if (res.data.EncounterFileDetails.length > 0) {
 
-                        count = Math.floor(res.data.Claim837RTFileDetails[0].RecCount / 10)
-                        if (res.data.Claim837RTFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.EncounterFileDetails[0].RecCount / 10)
+                        if (res.data.EncounterFileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
                         this.setState.recount = count;
                     }
 
                     this.setState({
-                        claimsList: res.data.Claim837RTFileDetails,
+                        claimsList: res.data.EncounterFileDetails,
                     })
                 }
             })
@@ -782,7 +782,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Claims Dashboard</h5>
+                <h5 className="headerText">Encounter Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}
