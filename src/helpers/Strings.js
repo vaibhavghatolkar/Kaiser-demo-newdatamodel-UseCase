@@ -75,7 +75,10 @@ const Strings = {
     claimPayment_835: 'claimPaymentDashboard835',
     healthCare278: 'healthCare278Dashboard',
     serviceDetails278: 'serviceDetails278',
-    response_999:'response_999'
+    response_999:'response_999',
+    Outbound_ClaimProcessingSummary: 'Outbound_ClaimProcessingSummary',
+    Outbound_RealTimeDashboard:'Outbound_RealTimeDashboard',
+    Outbound_ClaimDetails837:'Outbound_ClaimDetails837'
 }
 
 export default Strings;

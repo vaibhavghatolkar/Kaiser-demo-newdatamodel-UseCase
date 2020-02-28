@@ -127,6 +127,9 @@ export class DynamicSidebar extends React.Component {
         else if(key ==116){name = Strings.healthCare278}
         else if(key ==117){name = Strings.serviceDetails278}
         else if(key ==122){name = Strings.ClaimProcessingSummary}
+        else if(key ==123){name = Strings.Outbound_ClaimProcessingSummary}
+        else if(key ==94){name = Strings.Outbound_RealTimeDashboard}
+        else if(key ==96){name = Strings.Outbound_ClaimDetails837}
        
         return name
     }
@@ -222,6 +225,11 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
             }
+            else if (element.key == Strings.Outbound_ClaimDetails837) {
+                data = [
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
+                ]
+            } 
             else {
                 addon = ''
             }
