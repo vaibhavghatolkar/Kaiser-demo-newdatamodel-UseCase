@@ -7,7 +7,7 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
 import DatePicker from "react-datepicker";
-export class Inbound_Encounter_Audit extends React.Component {
+export class Outbound_Encounter_Audit extends React.Component {
 
     constructor(props) {
         super(props);
@@ -60,7 +60,7 @@ export class Inbound_Encounter_Audit extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound"){
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Outbound"){
                  FileID
                 filename
                 Submitted
@@ -82,7 +82,7 @@ export class Inbound_Encounter_Audit extends React.Component {
                 RejTotal
                 errTotal
             }
-            EncounterFileInCnt(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Inbound"){
+            EncounterFileInCnt(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Outbound"){
                 totalFile
                 TotalClaims
                 Accepted
@@ -180,7 +180,7 @@ export class Inbound_Encounter_Audit extends React.Component {
             <table className="table table-bordered claim-list">
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Sender <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
@@ -371,7 +371,7 @@ export class Inbound_Encounter_Audit extends React.Component {
                         />
                     </div>
                     <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
+                        <div className="list-dashboard">Sender</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                          onChange={(event) => {
                             this.onSelect(event, 'selectedTradingPartner')
@@ -400,7 +400,7 @@ export class Inbound_Encounter_Audit extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Encounter Audit Summary</h5>
+                <h5 className="headerText">Encounter Audit Summary(Outbound)</h5>
                 {this.renderTopBar()}
                 {this.renderStats()}
                 <div className="col-12" style={{padding:"0px"}}>
