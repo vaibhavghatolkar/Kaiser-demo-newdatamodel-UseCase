@@ -123,10 +123,12 @@ export class DynamicSidebar extends React.Component {
 
         else if (key == 50) { name = Strings.claimPayment_835 }
         else if (key == 51) { name = Strings.MenuManagement }
+      
         else if(key == 120 || key == 121) { name = Strings.tradingPartnerDetails}
         else if(key ==116){name = Strings.healthCare278}
         else if(key ==117){name = Strings.serviceDetails278}
         else if(key ==122){name = Strings.ClaimProcessingSummary}
+        else if (key == 124) { name = Strings.response_999 }
        
         return name
     }

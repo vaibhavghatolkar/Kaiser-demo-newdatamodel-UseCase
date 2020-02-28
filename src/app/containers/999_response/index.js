@@ -18,7 +18,7 @@ export class response_999 extends React.Component {
 
     constructor(props) {
         super(props);
-          alert()
+        console.log( props.location.state.data[0])
         this.state = {
             claimsList: [],
             summaryList: [],
@@ -34,15 +34,14 @@ export class response_999 extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
+             State:"",
+             status: "",
+             startDate:"",
+            endDate: "",
+            transactionId:"",
+             errorcode:"",
 
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            startDate: props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
-            endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
-            errorcode: props.location.state && props.location.state.data && props.location.state.data[0].errorcode ? props.location.state.data[0].errorcode : '',
-
-            selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            // selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
             count: 0,
             apiflag: props.location.state.data[0].apiflag,
@@ -147,51 +146,22 @@ export class response_999 extends React.Component {
         let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let chartQuery = ''
-        let url = Urls.claimstatus
-        let loginflag = localStorage.getItem("DbTech");
-
-        if (this.state.apiflag == 1 && this.state.status != 'Pass') {
-            chartQuery = `Eligibilty271ErrorwiseCount(State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `") {
-                                ErrorType
-                                RecCount
-                            }`
-        }
+         
 
         query = `{
-            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
-                RecCount
-                HiPaaSUniqueID
-                Date
-                Trans_type
-                Submiter
-                Trans_ID
-                Error_Type
-                Error_Code
-                ErrorDescription
-            }`+ chartQuery + `
-        }`
-
-        if (this.state.apiflag == 1) {
-            url = Urls.eligibility_url
-            query = `{
-                EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
-                    RecCount
-                    HiPaaSUniqueID
-                    Date
-                    Trans_type
-                    Submiter
-                    Trans_ID
-                    Error_Type
-                    Error_Code
-                    ErrorDescription
-                }`+ chartQuery + `
-            }`
-        }
-
+           
+            Data999( RecType:"Inbound", TrasactionType:"" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
+                id,
+            FileName,
+           Date,
+        Submitter,
+        Direction,
+        TrasactionType,
+        FileId
+            }
+        }`     
         console.log('query ', query)
-
-        fetch(url, {
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -202,36 +172,11 @@ export class response_999 extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data) {
-                    let count = 1
-                    let data = []
-                    let pieArray = []
-                    let labelArray = []
-
-                    if (this.state.apiflag == 1) {
-                        data = res.data.EligibilityAllDtlTypewise
-                    } else {
-                        data = res.data.ClaimRequest_Datewise
-                    }
-
-                    if (this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount) {
-                        res.data.Eligibilty271ErrorwiseCount.forEach(item => {
-                            pieArray.push(item.RecCount)
-                            labelArray.push(item.ErrorType)
-                        })
-                    }
-
-                    if (data && data.length > 0) {
-                        count = Math.floor(data[0].RecCount / 10)
-                        if (data[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                    }
-
+                 
+  console.log(".fsdjhjsdgh" , res.data.Data999)
                     this.setState({
-                        files_list: data,
-                        count: count,
-                        pieArray: pieArray,
-                        labelArray: labelArray,
+                      files_list:  res.data.Data999,
+                       
                     })
                 }
             })
@@ -272,54 +217,7 @@ export class response_999 extends React.Component {
         }
     }
 
-    getDetails(uuid) {
-        let url = Urls.claimstatus
-
-        let query = `{
-            ClaimRequest(HiPaaSUniqueID:"`+ uuid + `") {
-              Message
-            }
-            ClaimStatus277(HiPaaSUniqueID:"`+ uuid + `") {
-                Message
-            }
-        }`
-
-        if (this.state.apiflag == 1) {
-            url = Urls.eligibility_url
-            query = `{
-                Eligibilty270Request(HiPaaSUniqueID:"`+ uuid + `") {
-                  Message
-                }
-                Eligibilty271Response(HiPaaSUniqueID:"`+ uuid + `") {
-                    Message
-                }
-            }`
-        }
-
-        console.log('query ', query)
-
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    this.setState({
-                        showDetails: true,
-                        message_270: this.state.apiflag == 1 ? res.data.Eligibilty270Request && res.data.Eligibilty270Request.length > 0 && res.data.Eligibilty270Request[0].Message : res.data.ClaimRequest[0].Message,
-                        message_271: this.state.apiflag == 1 ? res.data.Eligibilty271Response && res.data.Eligibilty271Response.length > 0 && res.data.Eligibilty271Response[0].Message : res.data.ClaimStatus277[0].Message,
-                    })
-                }
-            })
-            .catch(err => {
-                console.log(err)
-            });
-    }
+   
 
     renderTransactions() {
         let row = []
@@ -331,10 +229,10 @@ export class response_999 extends React.Component {
                     <td className="border-left"><a onClick={() => {
                         this.getData(d.HiPaaSUniqueID)
                         this.getDetails(d.HiPaaSUniqueID)
-                    }} style={{ color: "var(--light-blue)", cursor: "pointer" }}>{d.Trans_ID}</a></td>
+                    }} style={{ color: "var(--light-blue)", cursor: "pointer" }}>{d.FileName}</a></td>
                     <td>{moment(d.Date).format("MMM DD YYYY hh:mm a")}</td>
-                    <td>{d.Trans_type}</td>
-                    <td>{d.Submiter}</td>
+                    <td>{d.Submitter}</td>
+                    <td>{d.Direction}</td>
                     {this.state.status != 'Pass' ? <td>{d.Error_Type}</td> : null}
                     {this.state.status != 'Pass' ? <td>{d.Error_Code}</td> : null}
                     {this.state.status != 'Pass' ? <td>{d.ErrorDescription}</td> : null}
@@ -426,16 +324,19 @@ export class response_999 extends React.Component {
             this.getTransactions()
         }, 50);
     }
+
     renderDetails(flag) {
         return (
             <div className="row">
                 <div className={"col-12"}>
-                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
+                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
+                    <div className="border-view collapse breakword" id={'hello' + flag}>  ISA*00*          *00*          *ZZ*80882          *ZZ*ENH3706        *191016*1626*^*00501*910161626*0*P*:~GS*FA*80882*ENH3706*20191016*162625*255546252*X*005010X231~ST*999*0001*005010X231~AK1*HC*1302*005010X222A1~AK2*837*0001*005010X222A1~IK5*A~AK9*A*1*1*1~SE*6*0001~GE*1*255546252~IEA*1*910161626~</div>
                 </div>
             </div>
+          
         )
     }
+    
 
     getoptions() {
         let row = []
@@ -688,18 +589,18 @@ export class response_999 extends React.Component {
         return (
             <div className="row">
                 <div className="col-header justify-align col">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.transactionRotation}deg)`, marginRight: '2px' }}></img> Transaction
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.transactionRotation}deg)`, marginRight: '2px' }}></img> FileName
                 </div>
                 <div className="col-header justify-align col" >
                     <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '2px' }}></img>Date
                 </div>
                 <div className="col-header justify-align col">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '2px' }}></img> Status
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '2px' }}></img> Submitter
                 </div>
                 <div className="col-header justify-align col">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '2px' }}></img> Submitter
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '2px' }}></img> Direction
                 </div>
-                {this.state.status != 'Pass' ? <div className="col-header justify-align col"><img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage" : "order by Error_Type", this.state.errorRotation, 'errorRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '13px', transform: `rotate(${this.state.errorRotation}deg)` }}></img> Error Type</div> : null}
+                {this.state.status != 'Pass' ? <div className="col-header justify-align col"><img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage" : "order by Error_Type", this.state.errorRotation, 'errorRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '13px', transform: `rotate(${this.state.errorRotation}deg)` }}></img> TrasactionType</div> : null}
                 {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Code</div> : null}
                 {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Description</div> : null}
             </div>
@@ -707,8 +608,10 @@ export class response_999 extends React.Component {
     }
 
     onClick = (value) => {
-        this.getData(value)
-        this.getDetails(value)
+        this.setState({
+            showDetails: true
+        })
+           this.renderDetails(value)
     }
 
     renderTransactionsNew() {
@@ -716,23 +619,20 @@ export class response_999 extends React.Component {
         let headerArray = []
         let rowArray = []
         headerArray.push(
-            { value: 'Transaction', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
+            { value: 'FileName', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
             { value: 'Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
             { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-            { value: 'Error Type' },
-            { value: 'Error Code' },
-            { value: 'Description' }
+            { value: 'Direction' },
+            { value: 'Trasaction Type' },
+  
         )
 
         rowArray.push(
-            { value: 'Trans_ID', upScale: 1 },
+            { value: 'FileName', upScale: 1 },
             { value: 'Date', isDate: 1, isNottime: 1 },
-            { value: 'Trans_type' },
-            { value: 'Submiter' },
-            { value: 'Error_Type' },
-            { value: 'Error_Code' },
-            { value: 'ErrorDescription' }
+            { value: 'Submitter' },
+            { value: 'Direction' },
+            { value: 'TrasactionType' }
         )
 
         return (
@@ -742,7 +642,7 @@ export class response_999 extends React.Component {
                 data={data}
                 count={this.state.count}
                 handlePageClick={this.handlePageClick}
-                onClickKey={'HiPaaSUniqueID'}
+                onClickKey={1}
                 onClick={this.onClick}
             />
         )
@@ -760,7 +660,7 @@ export class response_999 extends React.Component {
                             onClick={() => {
                                 this.getData(d.HiPaaSUniqueID)
                                 this.getDetails(d.HiPaaSUniqueID)
-                            }} style={{ color: "#6AA2B8" }}>{d["Trans_ID"]}</a></div>
+                            }} style={{ color: "#6AA2B8" }}>{d["FileName"]}</a></div>
                     <div className="col col-small-style small-font">{moment(d.Date).format("MMM DD YYYY hh:mm a")}</div>
                     <div className="col col-small-style small-font">{d["Trans_type"]}</div>
                     <div className="col col-small-style small-font">{d["Submiter"]}</div>
@@ -830,9 +730,7 @@ export class response_999 extends React.Component {
                         {this.renderTransactionsNew()}
                     </div>
                     <div className="col-5">
-                        {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
-                        {this.state.showDetails ? this.renderDetails() : null}
-                        {this.state.showDetails ? this.renderDetails(1) : null}
+                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
                 </div>
             </div>
