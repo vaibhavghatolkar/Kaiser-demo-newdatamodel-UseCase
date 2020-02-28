@@ -68,6 +68,7 @@ import { Outbound_RealTimeDashboard } from './app/containers/Outbound_RealTime_8
 import { Outbound_ClaimDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Claim_Details_837'
 
 import { Outbound_277CAReponse } from './app/containers/Outbound_277CAResponse';
+import { Outbound_ClaimsError } from './app/containers/Outbound_RealTime_837_Claim/Outbound_ClaimError'
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -260,7 +261,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_ClaimProcessingSummary} component={Outbound_ClaimProcessingSummary} />
                                 <Route path={'/' + Strings.Outbound_RealTimeDashboard} component={Outbound_RealTimeDashboard} />
                                 <Route path={'/' + Strings.Outbound_ClaimDetails837} component={Outbound_ClaimDetails837} />
-                                  
+                                <Route path={'/' + Strings.Outbound_ClaimsError} component={Outbound_ClaimsError} />
+                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
 
