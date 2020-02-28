@@ -7,7 +7,7 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
 
-export class ClaimsError extends React.Component{
+export class Outbound_ClaimsError extends React.Component{
     
     constructor(props){
         super(props);
@@ -47,7 +47,7 @@ export class ClaimsError extends React.Component{
         
         // let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(Transaction:"Claim837") { Trading_Partner_Name }}'
         let query = `{
-            SP_GetRejectedClaims(Date: "", RecType: "Inbound") {
+            SP_GetRejectedClaims(Date: "", RecType: "Outbound") {
               Reason
               BillingProviderLastName
               FileName
@@ -197,10 +197,11 @@ export class ClaimsError extends React.Component{
     render() {
         return (
             <div>
-                <h5 className="headerText">Claims Errors</h5>
+                <h5 className="headerText">Claims Errors (Outbound)</h5>
                 <Topbar 
                     tradingpartner={this.state.tradingpartner} 
                     onSelect={this.onSelect}
+                    isOutbound={1}
                 />
                 
                 {this.renderTopSubBar()}

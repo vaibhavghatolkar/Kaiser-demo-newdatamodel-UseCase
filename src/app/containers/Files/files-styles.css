@@ -203,5 +203,8 @@
     margin-left: -12px !important;
 }
 .sidebar-margin{
-    margin-left: 210px;
+    margin-left: 230px;
+}
+.breakword{
+    word-break: break-all;
 }

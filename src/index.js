@@ -61,7 +61,14 @@ import { DynamicSidebar } from './app/components/DynamicSidebar'
 import{ HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
+import { _277CAReponse } from './app/containers/_277CAResponse';
 import { response_999 } from './app/containers/999_response';
+import { Outbound_ClaimProcessingSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTime_ClaimProcessingSummary'
+import { Outbound_RealTimeDashboard } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTimeDashboard'
+import { Outbound_ClaimDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Claim_Details_837'
+
+import { Outbound_277CAReponse } from './app/containers/Outbound_277CAResponse';
+import { Outbound_ClaimsError } from './app/containers/Outbound_RealTime_837_Claim/Outbound_ClaimError'
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -248,8 +255,14 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
+                                <Route path={'/' + Strings._277CAResponse} component={_277CAReponse} />
+                                <Route path={'/' + Strings.Outbound_277CAResponse} component={Outbound_277CAReponse} />
                                 <Route path={'/' + Strings.response_999} component={response_999} />
-                                
+                                <Route path={'/' + Strings.Outbound_ClaimProcessingSummary} component={Outbound_ClaimProcessingSummary} />
+                                <Route path={'/' + Strings.Outbound_RealTimeDashboard} component={Outbound_RealTimeDashboard} />
+                                <Route path={'/' + Strings.Outbound_ClaimDetails837} component={Outbound_ClaimDetails837} />
+                                <Route path={'/' + Strings.Outbound_ClaimsError} component={Outbound_ClaimsError} />
+                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
 

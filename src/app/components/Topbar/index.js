@@ -110,7 +110,7 @@ export class Topbar extends React.Component {
                 // </div>
                 :
                 <div className="form-group col-3">
-                <label className="list-header">Submitter</label>
+                <label className="list-header">{this.props.isOutbound==1? 'Sender': 'Submitter'}</label>
                 <select className="form-control list-header" id="TradingPartner" 
                     // onChange={(event) => {
                     //     this.props.onSelect(event, 'selectedTradingPartner')

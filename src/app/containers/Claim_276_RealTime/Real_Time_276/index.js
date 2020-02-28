@@ -22,7 +22,7 @@ export class RealTime276 extends React.Component {
                 { name: 'TOTAL TRANSACTION', value: 0 },
                 { name: 'INVALID TRANSACTIONS', value: 0 },
                 { name: 'ERROR PERCENTAGE', value: 0 },
-                { name: 'AVG RESPONSE TIME', value: 0 },
+                { name: 'AVG RESPONSE TIME (sec)', value: 0 },
             ],
             showDetails: false,
             files_list: [],
@@ -277,7 +277,7 @@ export class RealTime276 extends React.Component {
             { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
-            { name: 'AVG RESPONSE TIME', value: data.AvgResTime },
+            { name: 'AVG RESPONSE TIME (sec)', value: data.AvgResTime },
         ]
 
         if (this.state.apiflag == 0) {
@@ -474,7 +474,7 @@ export class RealTime276 extends React.Component {
                                         <thead class="thead-dark" style={{ color: "black" }}>
                                             <tr>
                                                 <th scope="col">Date</th>
-                                                <th scope="col">Avg response time</th>
+                                                <th scope="col">AVG RESPONSE TIME (sec)</th>
                                                 <th scope="col">Total request count</th>
                                                 <th scope="col">Total success rate</th>
                                                 <th scope="col">Total error rate</th>
@@ -699,7 +699,7 @@ export class RealTime276 extends React.Component {
                                         <thead class="thead-dark" style={{ color: "black" }}>
                                             <tr>
                                                 <th scope="col">Date</th>
-                                                <th scope="col">Avg response time</th>
+                                                <th scope="col">AVG RESPONSE TIME (sec)</th>
                                                 <th scope="col">Total request count</th>
                                                 <th scope="col">Total success rate</th>
                                                 <th scope="col">Total error rate</th>
@@ -1294,7 +1294,7 @@ export class RealTime276 extends React.Component {
 
 
 
-                                <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
+                                <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME (sec)') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
                                     {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
 
                                 </div>
@@ -1303,9 +1303,9 @@ export class RealTime276 extends React.Component {
                         :
                         <div className="col summary-container">
                             <div className="summary-header">{item.name}</div>
-                            <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
+                            <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME (sec)') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
 
-                                {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}{item.name == 'AVG RESPONSE TIME' ? ' sec' : ''}
+                                {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
                             </div>
                         </div>
                     // <Link
