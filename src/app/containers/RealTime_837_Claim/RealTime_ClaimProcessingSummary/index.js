@@ -29,6 +29,10 @@ export class ClaimProcessingSummary extends React.Component {
             TotalSentToQNXT: 0,
             Total999: 0,
             Total277CA: 0,
+            Paid: 0,
+            Pending: 0,
+            Denide: 0,
+            wip90: 0,
             orderby: '',
 
             fileNameFlag : 180,
@@ -85,22 +89,25 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     getCountData() {
-        let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : ""   ) {
-                TotalClaims
-                Accepted
-                Rejected
-                Accepted_Per
-                Rejected_Per
-                Total999
-                Total277CA
-                TotalSentToQNXT
-            }
-        }`
+
+         let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound") {
+            totalFile
+            TotalClaims
+            Accepted
+            Rejected
+            InProgress
+            Total999
+            Total277CA
+            TotalSentToQNXT
+            Paid
+            denied
+            WIP
+            Pending
+          } }`
 
         console.log(query)
 
-        fetch(Urls.real_time_claim, {
+        fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,20 +117,24 @@ export class ClaimProcessingSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.Claim837RTDashboardCount
+                var data = res.data.FileInCount
                 if (data && data.length > 0) {
                     let Accepted = data[0].Accepted
                     let Rejected = data[0].Rejected
                     let TotalSentToQNXT = data[0].TotalSentToQNXT
                     let Total999 = data[0].Total999
                     let Total277CA = data[0].Total277CA
-
+                  
                     this.setState({
                         Accepted: Accepted,
                         Rejected: Rejected,
                         TotalSentToQNXT: TotalSentToQNXT,
                         Total999: Total999,
                         Total277CA: Total277CA,
+                        Paid: data[0].Paid,
+                        Pending: data[0].Pending,
+                        Denide: data[0].denied,
+                        wip90: data[0].WIP,
                     })
                 }
             })
@@ -137,7 +148,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -497,7 +508,7 @@ export class ClaimProcessingSummary extends React.Component {
                     </div>
                     <div className="col summary-container1" style={{marginTop: '-10px'}}>
                         <div className="summary-header1">WIP > 90 DAYS</div>
-                            <div className="blue summary-title1">{this.state.Total277CA}</div>
+                            <div className="blue summary-title1">{this.state.wip90}</div>
                         </div>
               
                     </div>
@@ -530,70 +541,52 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     renderStats() {
+        console.log(this.state.Accepted)
         return (
-            <div>
-            <div className="row padding-left" style={{marginBottom: '10px'}}>
-                {
-                    this.state.Accepted ?
+           
+                <div className="row padding-left" style={{marginBottom: '10px'}}>
+ 
                         <div className="col summary-container">
                             <div className="summary-header">ACCEPTED CLAIMS</div>
                             <div className="green summary-title">{this.state.Accepted}</div>
-                        </div> : null
-                }
-                {
-                    this.state.Rejected ?
+                        </div> 
+        
                         <div className="col summary-container">
                             <div className="summary-header">REJECTED CLAIMS</div>
                             <div className="red summary-title">{this.state.Rejected}</div>
-                        </div> : null
-                }
-                {
-                    this.state.Total999 ?
+                        </div>        
                         <div className="col summary-container">
                             <div className="summary-header">999</div>
                             <div className="red summary-title">{this.state.Total999}</div>
-                        </div> : null
-                }
-                {
-                    this.state.TotalSentToQNXT ?
+                        </div> 
+                
                         <div className="col summary-container">
                             <div className="summary-header">SENT TO QNXT</div>
                             <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
-                        </div> : null
-                }
-                {
-                    this.state.Total277CA ?
+                        </div> 
+                
                         <div className="col summary-container">
                             <div className="summary-header">277 CA</div>
                             <div className="red summary-title">{this.state.Total277CA}</div>
-                        </div> : null
-                }
-                
-           
-            {
-                    this.state.Total277CA ?
+                        </div>
                         <div className="col summary-container">
                             <div className="summary-header">PAID</div>
-                            <div className="green summary-title">{this.state.Total277CA}</div>
-                        </div> : null
-                }
-                {
-                    this.state.Total277CA ?
+                            <div className="green summary-title">{this.state.Paid}</div>
+                        </div> 
+                
                         <div className="col summary-container">
                             <div className="summary-header">PENDING</div>
-                            <div className="orange summary-title">{this.state.Total277CA}</div>
-                        </div> : null
-                }
-                {
-                    this.state.Total277CA ?
+                            <div className="orange summary-title">{this.state.Pending}</div>
+                        </div>
+              
                         <div className="col summary-container">
                             <div className="summary-header">DENIDE</div>
-                            <div className="red summary-title">{this.state.Total277CA}</div>
-                        </div> : null
-                }
+                            <div className="red summary-title">{this.state.Denide}</div>
+                        </div> 
+                
                
             </div>
-            </div>
+           
         )
     }
 
