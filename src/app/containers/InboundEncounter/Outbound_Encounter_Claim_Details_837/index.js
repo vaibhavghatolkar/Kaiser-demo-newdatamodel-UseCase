@@ -1083,7 +1083,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Encounter Details</h5>
+                <h5 className="headerText">Encounter Details (Outbound)</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

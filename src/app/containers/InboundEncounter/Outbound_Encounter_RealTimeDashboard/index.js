@@ -381,7 +381,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: Strings.Inbound_EncounterDetails, state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: Strings.Outbound_Encounter_ClaimDetails837, state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
@@ -580,7 +580,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
-                    <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
+                    <Link to={{ pathname: '/Outbound_Encounter_ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
                             (item.name == 'Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
