@@ -31,10 +31,13 @@ export class _277CAReponse extends React.Component {
             errorRotation: 180,
             rotation: 180,
             files_list: [],
+            startDate : '',
+            endDate : '',
             tradingpartner: [],
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
+            transactionType: '837',
             page: 1,
             count: 0,
 
@@ -135,9 +138,11 @@ export class _277CAReponse extends React.Component {
     getTransactions() {
         let query = ''
         let url = Urls.common_data
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         query = `{
-            Data277CA(RecType:"Inbound", TrasactionType :"", FileName:"", FileId:0, StartDt:"" EndDt:"") {
+            Data277CA(RecType:"Inbound", TrasactionType :"`+this.state.transactionType+`", FileName:"", FileId:0, StartDt:"${startDate}" EndDt:"${endDate}") {
                 id,
                 FileName,
                 Date,
@@ -372,7 +377,7 @@ export class _277CAReponse extends React.Component {
             <div className="row">
                 <div className={"col-12"}>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? '277CA Claims Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse breakword"id={'hello' + flag}>{flag ? Strings._277_Reponse : this.state.message_270}</div>
+                    <div className="border-view collapse breakword" id={'hello' + flag}>{flag ? Strings._277_Reponse : this.state.message_270}</div>
                 </div>
             </div>
         )
@@ -439,22 +444,6 @@ export class _277CAReponse extends React.Component {
             <form className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col">
-                        <div className="list-dashboard">Transaction Id</div>
-                        <input className="form-control list-dashboard"
-                            id="state"
-                            onChange={(e) => {
-                                clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ transactionId: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.getTransactions()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                    </div>
-                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
                             onChange={(event) => {
@@ -495,25 +484,21 @@ export class _277CAReponse extends React.Component {
                         </select>
                     </div>
 
-                    {
-                        this.state.status != 'Pass'
-                            ?
-                            <div className="form-group col">
-                                <div className="list-dashboard">Error Type</div>
-                                <select className="form-control list-dashboard" id="TradingPartner"
-                                    onChange={(event) => {
-                                        this.onSelect(event, 'errorcode')
-                                        setTimeout(() => {
-                                            this.getTransactions()
-                                        }, 50);
-                                    }}
-                                >
-                                    <option value="select"></option>
-                                    {this.getErrorOptions()}
-                                </select>
-                            </div>
-                            : null
-                    }
+                    <div className="form-group col">
+                        <div className="list-dashboard">
+                            Transaction Type
+                        </div>
+                        <select className="form-control list-dashboard"
+                            onChange={(event) => {
+                                this.onSelect(event, 'transactionType')
+                            }}
+                        >
+                            <option value="1"></option>
+                            <option selected="selected" value="837">837</option>
+                            <option value="2">837 Encounter</option>
+                        </select>
+                    </div>
+
                     <div className="form-group col">
                         <div className="list-dashboard">
                             Provider Name

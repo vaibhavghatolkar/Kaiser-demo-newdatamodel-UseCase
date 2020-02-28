@@ -340,7 +340,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     goto999 = () => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings._277CAResponse)
+        this.props.history.push('/' + Strings.response_999)
         setTimeout(() => {
             window.location.reload()
         }, 50);
@@ -363,18 +363,18 @@ export class ClaimProcessingSummary extends React.Component {
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By Claim837RTProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
-            { value: 'Claim Amount' },
-            { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
-            { value: 'Adjudication Status' },
-            { value: '277CA' },
-            { value: '835' },
+            {value : 'Claim Amount'},
+            {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
+            {value : 'Adjudication Status'},
+            {value : '277CA'},
+            {value : 'Total Line count | 835 Received'},
         )
 
         rowArray.push(
             { value: 'FileName' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999' },
+            { value: 'F999', isClick: 1, method: this.goto999 },
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
