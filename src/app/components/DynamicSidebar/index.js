@@ -120,6 +120,9 @@ export class DynamicSidebar extends React.Component {
         else if (key == 48) { name = Strings.MenuManagement }
         else if (key == 53) { name = Strings.EncounterDashboard }
         else if (key == 54) { name = Strings.EncounterDetails }
+        
+        else if (key == 65) { name = Strings.Inbound_EncounterDashboard }
+        else if (key == 66) { name = Strings.Inbound_EncounterDetails }
 
         else if (key == 50) { name = Strings.claimPayment_835 }
         else if (key == 51) { name = Strings.MenuManagement }
@@ -129,6 +132,7 @@ export class DynamicSidebar extends React.Component {
         else if(key ==117){name = Strings.serviceDetails278}
         else if(key ==122){name = Strings.ClaimProcessingSummary}
         else if (key == 124) { name = Strings.response_999 }
+        else if (key == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
         else if(key ==123){name = Strings.Outbound_ClaimProcessingSummary}
         else if(key ==94){name = Strings.Outbound_RealTimeDashboard}
         else if(key ==96){name = Strings.Outbound_ClaimDetails837}
@@ -136,6 +140,9 @@ export class DynamicSidebar extends React.Component {
         else if(key ==97){name = Strings.Outbound_ClaimsError}
         else if(key ==130){name = Strings.Inbound_Encounter_Audit}
         
+        else if(key ==95){name = Strings.Outbound_AuditSummary}
+        else if(key ==125){name = Strings.Outbound_response_999}
+
         return name
     }
 
@@ -192,7 +199,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Inbound_EncounterDetails) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
@@ -219,15 +226,6 @@ export class DynamicSidebar extends React.Component {
             else if (element.key == Strings.serviceDetails278) {
                 data = [
                     { TransStatus: '', ErrorCode: '' },
-                ]
-            }
-            else if (element.key == Strings.response_999 || element.key == Strings.response_999) {
-                let key = 'n'
-                if (element.key == Strings.response_999) {
-                    key = 'Fail'
-                }
-                data = [
-                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
             }
             else if (element.key == Strings.Outbound_ClaimDetails837) {

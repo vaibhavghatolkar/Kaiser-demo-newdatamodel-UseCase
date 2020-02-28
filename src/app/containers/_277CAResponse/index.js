@@ -37,7 +37,7 @@ export class _277CAReponse extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
-            transactionType: '837',
+            transactionType: this.props.location.state.data[0].flag ? '837 Encounter' : '837',
             page: 1,
             count: 0,
 

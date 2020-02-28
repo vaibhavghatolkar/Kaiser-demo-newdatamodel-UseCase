@@ -66,9 +66,13 @@ import { response_999 } from './app/containers/999_response';
 import { Outbound_ClaimProcessingSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTime_ClaimProcessingSummary'
 import { Outbound_RealTimeDashboard } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTimeDashboard'
 import { Outbound_ClaimDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Claim_Details_837'
-
+import { Outbound_AuditSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_AuditSummery'
 import { Outbound_277CAReponse } from './app/containers/Outbound_277CAResponse';
 import { Outbound_ClaimsError } from './app/containers/Outbound_RealTime_837_Claim/Outbound_ClaimError'
+import { Outbound_response_999 } from './app/containers/Outbound_999_response'
+import { Inbound_Encounter_RealTimeDashboard } from './app/containers/InboundEncounter/Inbound_Encounter_RealTimeDashboard';
+import { Inbound_Encounter_ClaimDetails837 } from './app/containers/InboundEncounter/Inbound_Encounter_Claim_Details_837';
+import { Inbound_Encounter_ClaimProcessingSummary } from './app/containers/InboundEncounter/Inbound_Encounter_RealTime_ClaimProcessingSummary';
 
 import { Inbound_Encounter_Audit } from './app/containers/InboundEncounter/Inbound_Encounter_AuditSummary';
 const $ = window.$;
@@ -252,6 +256,10 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.MenuManagement} component={MenuManagement} />
                                 <Route path={'/' + Strings.EncounterDashboard} component={EncounterDashboard} />
                                 <Route path={'/' + Strings.EncounterDetails} component={EncounterDetails} />
+                                
+                                <Route path={'/' + Strings.Inbound_EncounterDashboard} component={Inbound_Encounter_RealTimeDashboard} />
+                                <Route path={'/' + Strings.Inbound_EncounterDetails} component={Inbound_Encounter_ClaimDetails837} />
+                                <Route path={'/' + Strings.Inbound_Encounter_ClaimProcessingSummary} component={Inbound_Encounter_ClaimProcessingSummary} />
 
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
@@ -264,6 +272,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_ClaimDetails837} component={Outbound_ClaimDetails837} />
                                 <Route path={'/' + Strings.Outbound_ClaimsError} component={Outbound_ClaimsError} />
                                 <Route path={'/' + Strings.Inbound_Encounter_Audit} component={Inbound_Encounter_Audit} />
+                                <Route path={'/' + Strings.Outbound_AuditSummary} component={Outbound_AuditSummary} />
+                                <Route path={'/' + Strings.Outbound_response_999} component={Outbound_response_999} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
