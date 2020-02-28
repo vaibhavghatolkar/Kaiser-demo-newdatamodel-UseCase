@@ -56,7 +56,7 @@ export class Outbound_ClaimsError extends React.Component{
               SubscriberLastName
               SubscriberFirstName
             }
-            ClaimRejCount(submitter: "`+this.state.selectedTradingPartner+`", fromDt: "", ToDt: "", RecType: "Inbound") {
+            ClaimRejCount(submitter: "`+this.state.selectedTradingPartner+`", fromDt: "", ToDt: "", RecType: "Outbound") {
               RejCount
             }
         }`
