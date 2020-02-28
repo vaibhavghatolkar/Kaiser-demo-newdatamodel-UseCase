@@ -130,6 +130,8 @@ export class DynamicSidebar extends React.Component {
         else if(key ==123){name = Strings.Outbound_ClaimProcessingSummary}
         else if(key ==94){name = Strings.Outbound_RealTimeDashboard}
         else if(key ==96){name = Strings.Outbound_ClaimDetails837}
+        else if(key ==126){name = Strings._277CAResponse}
+        else if(key ==127){name = Strings.Outbound_277CAResponse}
        
         return name
     }

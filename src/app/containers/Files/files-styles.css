@@ -205,3 +205,6 @@
 .sidebar-margin{
     margin-left: 230px;
 }
+.breakword{
+    word-break: break-all;
+}

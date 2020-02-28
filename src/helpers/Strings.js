@@ -66,6 +66,7 @@ const Strings = {
     RealTimeDashboard: 'claimsDashboard',
     ClaimProcessingSummary: 'claimProcessingSummary',
     _277CAResponse: '_277CAResponse',
+    Outbound_277CAResponse: 'Outbound_277CAResponse',
     // ClaimProcessingSummary: 'claimsAudit',
     Files_837 : 'Files_837',
     MenuManagement: 'MenuManagement',
@@ -78,7 +79,8 @@ const Strings = {
     response_999:'response_999',
     Outbound_ClaimProcessingSummary: 'Outbound_ClaimProcessingSummary',
     Outbound_RealTimeDashboard:'Outbound_RealTimeDashboard',
-    Outbound_ClaimDetails837:'Outbound_ClaimDetails837'
+    Outbound_ClaimDetails837:'Outbound_ClaimDetails837',
+    _277_Reponse : `ISA*00*00*ZZ*ENH3706*ZZ*80882*190915*1156*:*00501*000006612*1*P*>~GS*439*ENH3706*80882*20190915*1156*1302*X*005010X222A1~ST*277*0001*005010X214~BHT*0019*00*3093*20190915*1156*CH~HL*1*20*1~NM1*PR*2*GH GENERATIONS*****46*95202~TRN*1*201106240006~DTP*050*D8*20110223~HL*2*5*PT~NM1*IL*1*JONES*JUDITH*N***MI*3WK9WA2MD58~TRN*2*7702284~STC*A2:20*20191016*WQ*392~REF*1K*22559~REF*D9*555510201390671~REF*BLT*131~DTP*472*RD8*20191018-20191018~HL*3*5*PT~NM1*IL*1*BEVENUE*BILLY*N***MI*6UP0JV8HY20~TRN*2*7695779~STC*A2:20*20191016*WQ*161~REF*1K*22559~REF*D9*555510201390671~REF*BLT*131~DTP*472*RD8*20191018-20191018~HL*4*5*PT~NM1*IL*1*HYAMS*PATRICIA*N***MI*2A85WN6KP70~TRN*2*7695782~STC*A2:20*20191016*WQ*161~REF*1K*22559~REF*D9*555510201390671~REF*BLT*131~DTP*472*RD8*20191018-...`
 }
 
 export default Strings;

@@ -15,7 +15,7 @@ import '../Files/files-styles.css';
 import { CommonTable } from '../../components/CommonTable';
 
 var val = ''
-export class _277CAReponse extends React.Component {
+export class Outbound_277CAReponse extends React.Component {
 
     constructor(props) {
         super(props);
@@ -37,7 +37,6 @@ export class _277CAReponse extends React.Component {
             Transaction_Compliance: '',
             page: 1,
             count: 0,
-
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -137,7 +136,7 @@ export class _277CAReponse extends React.Component {
         let url = Urls.common_data
 
         query = `{
-            Data277CA(RecType:"Inbound", TrasactionType :"", FileName:"", FileId:0, StartDt:"" EndDt:"") {
+            Data277CA(RecType:"Outbound", TrasactionType :"", FileName:"", FileId:0, StartDt:"" EndDt:"") {
                 id,
                 FileName,
                 Date,
@@ -688,7 +687,7 @@ export class _277CAReponse extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">277CA Claims Acknowledgement</h5>
+                <h5 className="headerText">Outbound 277CA Claims Acknowledgement</h5>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-7 margin-top">
