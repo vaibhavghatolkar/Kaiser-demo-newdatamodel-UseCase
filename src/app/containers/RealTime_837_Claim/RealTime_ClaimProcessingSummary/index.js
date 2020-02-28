@@ -156,9 +156,12 @@ export class ClaimProcessingSummary extends React.Component {
                 FileName
                 FileCrDate
                 FileStatus
+                F999
+				F277
+    			TotalLinewise835
             }
         }`
-        console.log(query)
+        //  console.log(query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -182,7 +185,7 @@ export class ClaimProcessingSummary extends React.Component {
                     } catch (error) {
 
                     }
-                    console.log(count)
+                    
                 }
 
                 this.setState({
@@ -234,6 +237,7 @@ export class ClaimProcessingSummary extends React.Component {
                     <td className="list-item-style">{d.ProviderLastName}</td>
                     <td className="list-item-style">{d.ProviderFirstName}</td>
                     <td className="list-item-style">{d.Claim_Amount}</td>
+                    
 
                 </tr>
             )
@@ -341,7 +345,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value : 'FileName'},
             { value : 'FileCrDate', isDate: 1},
             { value : 'FileStatus'},
-            { value : '999'},
+            { value : 'F999'},
             { value : 'ClaimID'},
             { value : 'ClaimDate', isDate: 1},
             { value : 'ClaimStatus'},
@@ -351,9 +355,9 @@ export class ClaimProcessingSummary extends React.Component {
             // { value : 'ProviderFirstName'},
             { value : 'Claim_Amount', isAmount: 1},
             { value : 'Subscriber_ID'},
-            { value : 'Adjucation_Status'},
-            { value : '277CA'},
-            { value : '835'},
+            { value : 'adjudication_status'},
+            { value : 'F277'},
+            { value : 'TotalLinewise835'},
         )
 
         return(
@@ -490,8 +494,12 @@ export class ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
+                    <div className="col summary-container1" style={{marginTop: '-10px'}}>
+                        <div className="summary-header1">WIP > 90 DAYS</div>
+                            <div className="blue summary-title1">{this.state.Total277CA}</div>
+                        </div>
               
-                </div>
+                    </div>
             </div>
         )
     }
@@ -570,25 +578,19 @@ export class ClaimProcessingSummary extends React.Component {
                 }
                 {
                     this.state.Total277CA ?
-                        <div className="col-1 summary-container">
+                        <div className="col summary-container">
                             <div className="summary-header">PENDING</div>
                             <div className="orange summary-title">{this.state.Total277CA}</div>
                         </div> : null
                 }
                 {
                     this.state.Total277CA ?
-                        <div className="col-1 summary-container">
+                        <div className="col summary-container">
                             <div className="summary-header">DENIDE</div>
                             <div className="red summary-title">{this.state.Total277CA}</div>
                         </div> : null
                 }
-                {
-                    this.state.Total277CA ?
-                        <div className="col-1 summary-container">
-                            <div className="summary-header">WIP > 90 days</div>
-                            <div className="blue summary-title">{this.state.Total277CA}</div>
-                        </div> : null
-                }
+               
             </div>
             </div>
         )
