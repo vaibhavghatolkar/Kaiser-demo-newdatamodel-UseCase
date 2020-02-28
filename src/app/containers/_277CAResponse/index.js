@@ -494,8 +494,8 @@ export class _277CAReponse extends React.Component {
                             }}
                         >
                             <option value="1"></option>
-                            <option selected="selected" value="837">837</option>
-                            <option value="2">837 Encounter</option>
+                            <option selected={this.state.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                            <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
                         </select>
                     </div>
 

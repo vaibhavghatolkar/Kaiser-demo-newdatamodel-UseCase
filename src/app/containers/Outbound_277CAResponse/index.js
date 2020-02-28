@@ -31,10 +31,13 @@ export class Outbound_277CAReponse extends React.Component {
             errorRotation: 180,
             rotation: 180,
             files_list: [],
+            startDate : '',
+            endDate : '',
             tradingpartner: [],
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
+            transactionType: this.props.location.state.data[0].flag ? '837 Encounter' : '837',
             page: 1,
             count: 0,
             pieArray: [],
@@ -134,9 +137,11 @@ export class Outbound_277CAReponse extends React.Component {
     getTransactions() {
         let query = ''
         let url = Urls.common_data
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         query = `{
-            Data277CA(RecType:"Outbound", TrasactionType :"", FileName:"", FileId:0, StartDt:"" EndDt:"") {
+            Data277CA(RecType:"Outbound", TrasactionType :"`+this.state.transactionType+`", FileName:"", FileId:0, StartDt:"${startDate}" EndDt:"${endDate}") {
                 id,
                 FileName,
                 Date,
