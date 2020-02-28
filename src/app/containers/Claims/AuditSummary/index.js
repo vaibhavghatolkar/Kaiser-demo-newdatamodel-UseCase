@@ -6,14 +6,14 @@ import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
-
+import DatePicker from "react-datepicker";
 export class AuditSummary extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             claimsAudit: [],
-            tradingpartner: [],
+            tradingpartne837: [],
             SubTotal: 0,
             VeriTotal: 0,
             InBizstockTotal: 0,
@@ -25,23 +25,17 @@ export class AuditSummary extends React.Component {
 
         this.getData = this.getData.bind(this)
         this.onSelect = this.onSelect.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
-        this.getTradingPartnerDetails()
+      
         this.getData()
+        this.getCommonData()
     }
 
-    getTradingPartnerDetails = async () => {
-        getDetails("Claim837")
-            .then((tradingpartner) => {
-                if (tradingpartner && tradingpartner.length > 0) {
-                    this.setState({
-                        tradingpartner: tradingpartner
-                    })
-                }
-            })
-    }
+   
 
     getData() {
         let query = `{
@@ -95,7 +89,7 @@ export class AuditSummary extends React.Component {
                         PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
                         RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
                         errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
-                        tradingpartner: res.data.Trading_PartnerList,
+                      
                         totalFile: totalFile
                     })
                 }
@@ -128,6 +122,8 @@ export class AuditSummary extends React.Component {
                     <td className="list-item-style">0</td>
                     {/* <td className="list-item-style">{d.Pending}</td> */}
                     <td colSpan={2} className="list-item-style">{d.Verified}</td>
+                    <td></td>
+                        <td></td>
                 </tr>
             )
         });
@@ -141,15 +137,19 @@ export class AuditSummary extends React.Component {
                     <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
                     <td colSpan={2} className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                 </tr>
-                <tbody>
+                <tbody >
                     <tr>
-                        <td>Totals</td>
+                        {/* <td>Totals</td>
                         <td className="list-item-style">{this.state.SubTotal}</td>
                         <td colSpan={2} className="list-item-style">{this.state.InBizstockTotal}</td>
                         <td className="list-item-style">{this.state.RejTotal}</td>
                         <td className="list-item-style">0</td>
                         <td colSpan={2} className="list-item-style">{this.state.VeriTotal}</td>
+                        <td></td>
+                        <td></td> */}
                         {/* <td className="list-item-style">{this.state.PenTotal}</td>
                         <td className="list-item-style">{this.state.errTotal}</td> */}
                     </tr>
@@ -175,55 +175,179 @@ export class AuditSummary extends React.Component {
         }, 50);
     }
 
+    getCommonData() {
+        let query = `{
+            Trading_PartnerList(Transaction:"Claim837RT") {
+                Trading_Partner_Name 
+            }
+        }`
 
-
+        console.log('query ', query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    console.log("as.,njkajvjkd" , res.data.Trading_PartnerList)
+                    this.setState({
+                        tradingpartne837: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
     renderStats() {
-        let data = []
-        data = [
-            { flag: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n' },
-        ]
-
         return (
+            <div className="row padding-left" >
+              
+                        <div className="col summary-container">
+                            <div className="summary-header">Total Files</div>
+                            <div className="green summary-title">{this.state.totalFile}</div>
+                        </div> 
+                        <div className="col summary-container">
+                            <div className="summary-header">In Hi Pass</div>
+                            <div className="green summary-title"></div>
+                        </div> 
+                        <div className="col summary-container">
+                            <div className="summary-header">Accepted</div>
+                            <div className="green summary-title"></div>
+                        </div> 
+                        <div className="col summary-container">
+                            <div className="summary-header">Rejected</div>
+                            <div className="green summary-title"></div>
+                        </div> 
+                                                               
+                   
+                        <div className="col summary-container">
+                            <div className="summary-header">999</div>
+                            <div className="orange summary-title">{this.state.totalFile}</div>
+                            </div> 
+                            <div className="col summary-container">
+                            <div className="summary-header">Send To Qnxt</div>
+                            <div className="red summary-title">0</div>
+                        </div>
+              
+                        <div className="col summary-container">
+                            <div className="summary-header">277 CA</div>
+                            <div className="red summary-title">0</div>
+                        </div>
+              
+                       
+                        </div>   
+            
+        )
+    }
+    handleStartChange(date) {
+        this.setState({
+            startDate: date,
+            showDetails: false
+        });
 
-            <div className="row">
-                <div className="col-2">
-                    <div className="center-align">Total Files</div>
-                    <div className="center-align"><a href="#" className="blue bold-text summary-values"
-                    // onClick={() => {this.props.handleFlag(Strings.claimDetails)}}
+        setTimeout(() => {
+            // this.getCountData()
+            this.getData()
+        }, 50);
+    }
 
-                    >
-                        <Link to={{ pathname: '/Files_837', state: { data } }}> {this.state.totalFile} </Link>
-                        {/* <Link to={'/' + Strings.claimDetails , '/n/n/n/n'}>{this.state.totalFile}</Link> */}
+    handleEndChange(date) {
+        this.setState({
+            endDate: date,
+            showDetails: false
+        });
 
-                    </a>
+        setTimeout(() => {
+            // this.getCountData()
+            this.getData()
+        }, 50);
+    }
+
+    renderTopBar() {
+        return (
+            <div className="form-style" id='filters'>
+                <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"                      
+                        >
+                            <option value=""></option>
+                            <option value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
                     </div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">Dup Files</div>
-                    <div className="blue bold-text summary-values center-align">-</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">999</div>
-                    <div className="green bold-text summary-values center-align">{this.state.totalFile}</div>
-                </div>
-                <div className="col-2">
-                    <div className="center-align">277 CA</div>
-                    <div className="red bold-text summary-values center-align">0</div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input className="form-control" type="text"
+                            
+                        />
+
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            onChange={this.handleStartChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker
+                            className="form-control list-header-dashboard"
+                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner">
+                          
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
             </div>
         )
     }
-
+    getoptions() {
+        console.log("sfsdsds" , this.state.tradingpartne837)
+        let row = []
+        this.state.tradingpartne837.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
     render() {
         return (
             <div>
                 <h5 className="headerText">Claims Audit Summary</h5>
-                <Topbar
-                    tradingpartner={this.state.tradingpartner}
-                    onSelect={this.onSelect}
-                />
+                {this.renderTopBar()}
                 {this.renderStats()}
-                <div className="col-10">
+                <div className="col-12" style={{padding:"0px"}}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
                 </div>
             </div>
