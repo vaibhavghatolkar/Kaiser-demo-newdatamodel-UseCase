@@ -362,9 +362,9 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
                 .then(r => r.json())
                 .then(data =>
                     alert(data.data.updateAccidentDate),
-                    // setTimeout(() => {
-                    //     window.location.reload()
-                    // }, 1000)
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
 
                 );
             }

@@ -7,7 +7,7 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
 import DatePicker from "react-datepicker";
-export class AuditSummary extends React.Component {
+export class Inbound_Encounter_Audit extends React.Component {
 
     constructor(props) {
         super(props);
@@ -61,20 +61,18 @@ export class AuditSummary extends React.Component {
         
         let query = `{
             ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound"){
-          
-
-              FileID
-              filename
-              Submitted
-              Accepted
-              Rejected
-              SentToQNXT
-              Paid
-              denied
-              WIP
-              Pending
-              F277
-              F999
+                 FileID
+                filename
+                Submitted
+                Accepted
+                Rejected
+                SentToQNXT
+                Paid
+                denied
+                WIP
+                Pending
+                F277
+                F999
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -84,19 +82,20 @@ export class AuditSummary extends React.Component {
                 RejTotal
                 errTotal
             }
-            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Inbound"){
+            EncounterFileInCnt(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Inbound"){
                 totalFile
-                TotalClaims 
+                TotalClaims
                 Accepted
                 Rejected
-                InProgress           
-                Total999 
-                Total277CA  
-                TotalSentToQNXT  
-                 Paid 
-                denied   
-                 WIP
+                InProgress
+                Total999
+                Total277CA
+                TotalSentToQNXT
+                Paid
+                denied
+                WIP
                 Pending
+              
             }
         }`
  console.log("sa,f.hdsfkfdhg" , query)
@@ -114,11 +113,11 @@ export class AuditSummary extends React.Component {
                 if (res.data) {
                     let totalFile = 0
                     try {
-                        totalFile = res.data.FileInCount[0].totalFile
+                        totalFile = res.data.EncounterFileInCnt[0].totalFile
                     } catch (error) {
 
                     }
-                   console.log("sdghusighsjgn", res.data.FileInCount[0])
+                   console.log("sdghusighsjgn", res.data.EncounterFileInCnt[0])
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
                         SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
@@ -128,17 +127,17 @@ export class AuditSummary extends React.Component {
                         RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
                         errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,                      
                         totalFile: totalFile,                  
-                        TotalClaims: res.data.FileInCount[0].TotalClaims,
-                        Accepted: res.data.FileInCount[0].Accepted,
-                        Rejected: res.data.FileInCount[0].Rejected,
-                        InProgress: res.data.FileInCount[0].InProgress,
-                        Total999: res.data.FileInCount[0].Total999,
-                        Total277CA: res.data.FileInCount[0].Total277CA,
-                         TotalSentToQNXT: res.data.FileInCount[0].TotalSentToQNXT,
-                        Paid: res.data.FileInCount[0].Paid,
-                        denied: res.data.FileInCount[0].denied,
-                        WIP: res.data.FileInCount[0].WIP,
-                        Pending: res.data.FileInCount[0].Pending
+                        TotalClaims: res.data.EncounterFileInCnt[0].TotalClaims,
+                        Accepted: res.data.EncounterFileInCnt[0].Accepted,
+                        Rejected: res.data.EncounterFileInCnt[0].Rejected,
+                        InProgress: res.data.EncounterFileInCnt[0].InProgress,
+                        Total999: res.data.EncounterFileInCnt[0].Total999,
+                        Total277CA: res.data.EncounterFileInCnt[0].Total277CA,
+                         TotalSentToQNXT: res.data.EncounterFileInCnt[0].TotalSentToQNXT,
+                        Paid: res.data.EncounterFileInCnt[0].Paid,
+                        denied: res.data.EncounterFileInCnt[0].denied,
+                        WIP: res.data.EncounterFileInCnt[0].WIP,
+                        Pending: res.data.EncounterFileInCnt[0].Pending
                         
                     })
                 }
@@ -264,7 +263,7 @@ export class AuditSummary extends React.Component {
                             <div className="green summary-title">{this.state.totalFile}</div>
                         </div> 
                         <div className="col summary-container">
-                            <div className="summary-header">In HiPaaS</div>
+                            <div className="summary-header">In Hi Pass</div>
         <div className="blue summary-title">{this.state.TotalClaims}</div>
                         </div> 
                         <div className="col summary-container">
@@ -401,7 +400,7 @@ export class AuditSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Claims Audit Summary</h5>
+                <h5 className="headerText">Encounter Audit Summary</h5>
                 {this.renderTopBar()}
                 {this.renderStats()}
                 <div className="col-12" style={{padding:"0px"}}>

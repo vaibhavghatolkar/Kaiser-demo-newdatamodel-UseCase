@@ -1,13 +1,11 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
-import { Topbar } from '../../../components/Topbar';
-import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
-import { getDetails } from '../../../../helpers/getDetails';
 import DatePicker from "react-datepicker";
-export class AuditSummary extends React.Component {
+
+export class Outbound_AuditSummary extends React.Component {
 
     constructor(props) {
         super(props);
@@ -181,7 +179,7 @@ export class AuditSummary extends React.Component {
             <table className="table table-bordered claim-list">
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Sender <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
@@ -265,7 +263,7 @@ export class AuditSummary extends React.Component {
                         </div> 
                         <div className="col summary-container">
                             <div className="summary-header">In HiPaaS</div>
-        <div className="blue summary-title">{this.state.TotalClaims}</div>
+                            <div className="blue summary-title">{this.state.TotalClaims}</div>
                         </div> 
                         <div className="col summary-container">
                             <div className="summary-header">Accepted</div>
@@ -372,7 +370,7 @@ export class AuditSummary extends React.Component {
                         />
                     </div>
                     <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
+                        <div className="list-dashboard">Sender</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                          onChange={(event) => {
                             this.onSelect(event, 'selectedTradingPartner')
@@ -401,7 +399,7 @@ export class AuditSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Claims Audit Summary</h5>
+                <h5 className="headerText">Claims Audit Summary (Outbound)</h5>
                 {this.renderTopBar()}
                 {this.renderStats()}
                 <div className="col-12" style={{padding:"0px"}}>
