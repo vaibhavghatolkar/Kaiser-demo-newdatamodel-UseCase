@@ -62,6 +62,8 @@ import{ HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
 import { _277CAReponse } from './app/containers/_277CAResponse';
+import { response_999 } from './app/containers/999_response';
+
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
 class PrivateRoute extends React.Component {
@@ -248,6 +250,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 <Route path={'/' + Strings._277CAResponse} component={_277CAReponse} />
+                                <Route path={'/' + Strings.response_999} component={response_999} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 

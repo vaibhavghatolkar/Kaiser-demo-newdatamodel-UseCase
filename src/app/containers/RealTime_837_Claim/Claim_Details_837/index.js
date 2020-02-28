@@ -74,6 +74,7 @@ export class ClaimDetails837 extends React.Component {
             selectedICdCode: '',
             claimid: '',
             Icdcodepresent: '',
+            Accidentdate:'',
             nameRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
@@ -82,6 +83,8 @@ export class ClaimDetails837 extends React.Component {
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
+        this.handleAccidentdate = this.handleAccidentdate.bind(this)
+        
         this.Saved = this.Saved.bind(this)
     }
 
@@ -302,6 +305,8 @@ export class ClaimDetails837 extends React.Component {
     }
 
     Saved() {
+        if(this.state.Icdcodepresent=="Icdcode")
+        {
         if (this.state.selectedICdCode != "") {
             let query = `mutation{updateICDCode(
                     ClaimID:"`+ this.state.claimid + `" 
@@ -310,7 +315,7 @@ export class ClaimDetails837 extends React.Component {
                     )
                   }`
 
-            console.log("asfsadds", query)
+           
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -332,7 +337,68 @@ export class ClaimDetails837 extends React.Component {
                 );
 
         }
+    }
+       else if (this.state.Icdcodepresent == "AccidentDt") {
+            if(this.state.Accidentdate!="")
+            {
+                let query = `mutation{updateAccidentDate(
+                    ClaimID:"`+ this.state.claimid + `"
+                    FileID:"`+ this.state.fileid + `"  
+                    AccidentDate:"`+ this.state.Accidentdate + `"     
+                    )
+                  }`
+             console.log("sdlnskjggsdj" , query);
+            fetch(Urls.base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    query
 
+                })
+            })
+                .then(r => r.json())
+                .then(data =>
+                    alert(data.data.updateAccidentDate),
+                    // setTimeout(() => {
+                    //     window.location.reload()
+                    // }, 1000)
+
+                );
+            }
+
+        }
+        else if (this.checkError == "ICD Code not found") {
+            if(this.state.selectedICdCode!="")
+            {
+              var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
+                  ')' +
+                  '}'
+              console.log(query);
+              fetch(Urls.base_url, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Accept': 'application/json',
+                  },
+                  body: JSON.stringify({
+                      query
+  
+                  })
+              })
+                  .then(r => r.json())
+                  .then(data =>
+                      alert(data.data.updateICDCode),
+                      setTimeout(() => {
+                          window.location.reload()
+                      }, 1000)
+  
+                  );
+  
+          }
+        }
 
     }
     renderSearchBar() {
@@ -367,9 +433,16 @@ export class ClaimDetails837 extends React.Component {
         })
         return row
     }
-
+    onChangeName(event, key) {
+    
+        this.setState({
+            Accidentdate: event.target.value
+            
+        });
+    }
     getDetails(claimId, fileId, fileData) {
         let Claim_Icdcode = ""
+        let AccidentDate = ""
         let url = Urls.real_time_claim_details
         let query = `{
             Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
@@ -416,6 +489,7 @@ export class ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
+                console.log("sdfdsss" , res.data.Claim837RTDetails[0].FieldToUpdate)
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "ICDCode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -425,6 +499,19 @@ export class ClaimDetails837 extends React.Component {
                     }
                     else {
                         Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
+                    }
+                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "AccidentDt") {
+                       
+                    //     AccidentDate = <DatePicker
+                    //     className="form-control list-header-dashboard"
+                    //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
+                    //     onChange={this.handleAccidentdate}
+                    // />
+                    AccidentDate =  <input  onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
+                    }
+                    else {
+                      
+                        AccidentDate =res.data.Claim837RTDetails[0].AccidentDate;
                     }
                     let data = res.data.Claim837RTDetails[0]
 
@@ -445,7 +532,7 @@ export class ClaimDetails837 extends React.Component {
                             { key: 'Provider address', value: data.BillingProviderAddress },
                             { key: 'Claim Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
-                            { key: 'Accident Date', value: data.AccidentDate },
+                            { key: 'Accident Date', value:  AccidentDate},
                             { key: '', },
                             { key: '', },
                         ]
@@ -596,6 +683,16 @@ export class ClaimDetails837 extends React.Component {
         setTimeout(() => {
             this.getData()
         }, 50);
+    }
+    handleAccidentdate(date) {
+       
+        this.setState({
+            Accidentdate: date,
+            
+        });
+
+       
+      
     }
 
     handleEndChange(date) {
@@ -1016,7 +1113,7 @@ export class ClaimDetails837 extends React.Component {
                                     {this.renderHeader('Claim #' + this.state.claimId)}
                                     {this.renderRows(this.state.claimDetails)}
                                     <br></br>
-                                    {this.state.Icdcodepresent == "ICDCode" ? this.renderButton() : ""}
+                                    {this.state.Icdcodepresent == "ICDCode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
                                 </table>
                                 : null
                         }

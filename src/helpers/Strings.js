@@ -74,7 +74,8 @@ const Strings = {
     EncounterDetails:'EncounterDetails',
     claimPayment_835: 'claimPaymentDashboard835',
     healthCare278: 'healthCare278Dashboard',
-    serviceDetails278: 'serviceDetails278'
+    serviceDetails278: 'serviceDetails278',
+    response_999:'response_999'
 }
 
 export default Strings;
