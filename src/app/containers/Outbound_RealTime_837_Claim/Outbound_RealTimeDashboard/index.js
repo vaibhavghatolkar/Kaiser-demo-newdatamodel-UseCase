@@ -49,7 +49,7 @@ const second_data = {
 
 
 
-export class RealTimeDashboard extends React.Component {
+export class Outbound_RealTimeDashboard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -132,7 +132,7 @@ export class RealTimeDashboard extends React.Component {
         }
 
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `",RecType: "Outbound") {
                 TotalFiles
                 TotalClaims
                 Accepted
@@ -143,9 +143,8 @@ export class RealTimeDashboard extends React.Component {
                 Total277CA
                 TotalSentToQNXT
                 InProgress
-                Resubmit
             }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `",RecType: "Outbound") {
                 From
                 MonthNo
                 Year
@@ -187,7 +186,7 @@ export class RealTimeDashboard extends React.Component {
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
                         { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
                         { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
-                        { name: 'Resubmit Queue', value: data.Claim837RTDashboardCount[0].Resubmit ? Math.round(data.Claim837RTDashboardCount[0].Resubmit * 100) / 100 : '' },
+                        { name: 'Resubmit Queue', value: 0 },
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
                     rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
@@ -233,11 +232,11 @@ export class RealTimeDashboard extends React.Component {
         return (
             <tr className="table-head">
                 <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Total Claims | Rejected Claims<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Count<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -382,11 +381,11 @@ export class RealTimeDashboard extends React.Component {
             row.push(
                 <tr>
                     <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
-                    <td className="list-item-style">{d.Type}</td>
+                    <td className="list-item-style"></td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
-                    <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
+                    <td className="list-item-style">{d.Claimcount}</td>
                 </tr>
             )
         });
@@ -431,7 +430,7 @@ export class RealTimeDashboard extends React.Component {
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"", RecType: "Inbound") {
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"", RecType: "Outbound") {
                 RecCount
                 FileID
                 FileName
@@ -557,11 +556,9 @@ export class RealTimeDashboard extends React.Component {
             if (item.name == 'Accepted Claims') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if (item.name == 'Rejected Claims' || item.name == 'Rejected Files') {
+            } else if (item.name == 'Rejected Claims') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
-            } else if (item.name == 'Resubmit Queue') {
-                claimStatus = 'Resubmit'
             } else {
                 addon = '/other'
             }
@@ -569,7 +566,7 @@ export class RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
@@ -788,7 +785,7 @@ export class RealTimeDashboard extends React.Component {
                 {this.renderSummaryDetails()}
                 {this.renderCharts()}
                 <div className="row">
-                    <div className="col-10">
+                    <div className="col-9">
                         {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
                     </div>
                 </div>

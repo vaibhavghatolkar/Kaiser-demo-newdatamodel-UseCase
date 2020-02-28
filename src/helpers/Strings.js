@@ -65,6 +65,7 @@ const Strings = {
     ClaimDetails837: 'ClaimDetails837',
     RealTimeDashboard: 'claimsDashboard',
     ClaimProcessingSummary: 'claimProcessingSummary',
+    _277CAResponse: '_277CAResponse',
     // ClaimProcessingSummary: 'claimsAudit',
     Files_837 : 'Files_837',
     MenuManagement: 'MenuManagement',
@@ -73,7 +74,8 @@ const Strings = {
     EncounterDetails:'EncounterDetails',
     claimPayment_835: 'claimPaymentDashboard835',
     healthCare278: 'healthCare278Dashboard',
-    serviceDetails278: 'serviceDetails278'
+    serviceDetails278: 'serviceDetails278',
+    response_999:'response_999'
 }
 
 export default Strings;

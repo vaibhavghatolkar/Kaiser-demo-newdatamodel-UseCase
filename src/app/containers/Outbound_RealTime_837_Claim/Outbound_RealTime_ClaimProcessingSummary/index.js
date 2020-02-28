@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import { CommonTable } from '../../../components/CommonTable';
 
 let val = ''
-export class ClaimProcessingSummary extends React.Component {
+export class Outbound_ClaimProcessingSummary extends React.Component {
 
     constructor(props) {
         super(props);
@@ -29,10 +29,6 @@ export class ClaimProcessingSummary extends React.Component {
             TotalSentToQNXT: 0,
             Total999: 0,
             Total277CA: 0,
-            Paid: 0,
-            Pending: 0,
-            Denide: 0,
-            wip90: 0,
             orderby: '',
 
             fileNameFlag : 180,
@@ -89,25 +85,22 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     getCountData() {
-
-         let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound") {
-            totalFile
-            TotalClaims
-            Accepted
-            Rejected
-            InProgress
-            Total999
-            Total277CA
-            TotalSentToQNXT
-            Paid
-            denied
-            WIP
-            Pending
-          } }`
+        let query = `{
+            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "",RecType: "Outbound") {
+                TotalClaims
+                Accepted
+                Rejected
+                Accepted_Per
+                Rejected_Per
+                Total999
+                Total277CA
+                TotalSentToQNXT
+            }
+        }`
 
         console.log(query)
 
-        fetch(Urls.claims_837, {
+        fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -117,24 +110,20 @@ export class ClaimProcessingSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.FileInCount
+                var data = res.data.Claim837RTDashboardCount
                 if (data && data.length > 0) {
                     let Accepted = data[0].Accepted
                     let Rejected = data[0].Rejected
                     let TotalSentToQNXT = data[0].TotalSentToQNXT
                     let Total999 = data[0].Total999
                     let Total277CA = data[0].Total277CA
-                  
+
                     this.setState({
                         Accepted: Accepted,
                         Rejected: Rejected,
                         TotalSentToQNXT: TotalSentToQNXT,
                         Total999: Total999,
                         Total277CA: Total277CA,
-                        Paid: data[0].Paid,
-                        Pending: data[0].Pending,
-                        Denide: data[0].denied,
-                        wip90: data[0].WIP,
                     })
                 }
             })
@@ -148,7 +137,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType: "Outbound") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -167,13 +156,9 @@ export class ClaimProcessingSummary extends React.Component {
                 FileName
                 FileCrDate
                 FileStatus
-                F999
-				F277
-                TotalLinewise835
-                TotalLine
             }
         }`
-         console.log(query)
+        console.log(query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -197,7 +182,7 @@ export class ClaimProcessingSummary extends React.Component {
                     } catch (error) {
 
                     }
-                    
+                    console.log(count)
                 }
 
                 this.setState({
@@ -249,7 +234,6 @@ export class ClaimProcessingSummary extends React.Component {
                     <td className="list-item-style">{d.ProviderLastName}</td>
                     <td className="list-item-style">{d.ProviderFirstName}</td>
                     <td className="list-item-style">{d.Claim_Amount}</td>
-                    
 
                 </tr>
             )
@@ -338,38 +322,38 @@ export class ClaimProcessingSummary extends React.Component {
             {value : 'File Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTProcessingSummary.FileName", this.state.fileNameFlag, 'fileNameFlag') , key : this.state.fileNameFlag},
             {value : 'File Date', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By Claim837RTProcessingSummary.FileCrDate", this.state.fileDateFlag, 'fileDateFlag') , key : this.state.fileDateFlag},
             {value : 'File Status', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By Claim837RTProcessingSummary.FileStatus", this.state.extraField2Flag, 'extraField2Flag') , key : this.state.extraField2Flag},
-            {value : '999'},
             {value : 'Claim Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By Claim837RTProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag') , key : this.state.claimIDFlag},
             {value : 'Claim Date', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By Claim837RTProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag') , key : this.state.createDateTimeFlag},
-            {value : 'Claim Status', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By Claim837RTProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag') , key : this.state.claimStatusFlag},  
+            {value : 'Claim Status', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By Claim837RTProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag') , key : this.state.claimStatusFlag},
+            {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
             // {value : 'Subscriber Last Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberLastName" : "Order By Claim837RTProcessingSummary.SubscriberLastName", this.state.subscriberLastNameFlag, 'subscriberLastNameFlag') , key : this.state.subscriberLastNameFlag},
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By Claim837RTProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
-            {value : 'Claim Amount'},
-            {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
             {value : 'Adjudication Status'},
+            {value : '999'},
             {value : '277CA'},
             {value : '835'},
+            {value : 'Claim Amount'},
         )
         
         rowArray.push(
             { value : 'FileName'},
             { value : 'FileCrDate', isDate: 1},
             { value : 'FileStatus'},
-            { value : 'F999'},
             { value : 'ClaimID'},
             { value : 'ClaimDate', isDate: 1},
             { value : 'ClaimStatus'},
+            { value : 'Subscriber_ID'},
             // { value : 'SubscriberLastName'},
             // { value : 'SubscriberFirstName'},
             // { value : 'ProviderLastName'},
             // { value : 'ProviderFirstName'},
-            { value : 'Claim_Amount', isAmount: 1},
-            { value : 'Subscriber_ID'},
-            { value : 'adjudication_status'},
-            { value : 'F277'},
-            { value : 'TotalLine', secondVal : 'TotalLinewise835', isBar : 1},
+            { value : 'Adjucation_Status'},
+            { value : '999'},
+            { value : '277CA'},
+            { value : '835'},
+            { value : 'Claim_Amount', isAmount: 1}
         )
 
         return(
@@ -506,12 +490,7 @@ export class ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="col summary-container1" style={{marginTop: '-10px'}}>
-                        <div className="summary-header1">WIP > 90 DAYS</div>
-                            <div className="blue summary-title1">{this.state.wip90}</div>
-                        </div>
-              
-                    </div>
+                </div>
             </div>
         )
     }
@@ -541,52 +520,78 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     renderStats() {
-        console.log(this.state.Accepted)
         return (
-           
-                <div className="row padding-left" style={{marginBottom: '10px'}}>
- 
-                        <div className="col summary-container">
+            <div>
+            <div className="row padding-left">
+                {
+                    this.state.Accepted ?
+                        <div className="col-2 summary-container">
                             <div className="summary-header">ACCEPTED CLAIMS</div>
                             <div className="green summary-title">{this.state.Accepted}</div>
-                        </div> 
-        
-                        <div className="col summary-container">
+                        </div> : null
+                }
+                {
+                    this.state.Rejected ?
+                        <div className="col-2 summary-container">
                             <div className="summary-header">REJECTED CLAIMS</div>
                             <div className="red summary-title">{this.state.Rejected}</div>
-                        </div>        
-                        <div className="col summary-container">
+                        </div> : null
+                }
+                {
+                    this.state.TotalSentToQNXT ?
+                        <div className="col-2 summary-container">
+                            <div className="summary-header">CLAIMS SENT TO QNXT</div>
+                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
+                        </div> : null
+                }
+
+                {
+                    this.state.Total999 ?
+                        <div className="col-2 summary-container">
                             <div className="summary-header">999</div>
                             <div className="red summary-title">{this.state.Total999}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">SENT TO QNXT</div>
-                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
+                        </div> : null
+                }
+                {
+                    this.state.Total277CA ?
+                        <div className="col-2 summary-container">
                             <div className="summary-header">277 CA</div>
                             <div className="red summary-title">{this.state.Total277CA}</div>
-                        </div>
-                        <div className="col summary-container">
-                            <div className="summary-header">PAID</div>
-                            <div className="green summary-title">{this.state.Paid}</div>
-                        </div> 
+                        </div> : null
+                }
                 
-                        <div className="col summary-container">
-                            <div className="summary-header">PENDING</div>
-                            <div className="orange summary-title">{this.state.Pending}</div>
-                        </div>
-              
-                        <div className="col summary-container">
-                            <div className="summary-header">DENIDE</div>
-                            <div className="red summary-title">{this.state.Denide}</div>
-                        </div> 
-                
-               
             </div>
-           
+            <div className="row padding-left">
+            {
+                    this.state.Total277CA ?
+                        <div className="col-2 summary-container">
+                            <div className="summary-header">PAID</div>
+                            <div className="green summary-title">{this.state.Total277CA}</div>
+                        </div> : null
+                }
+                {
+                    this.state.Total277CA ?
+                        <div className="col-2 summary-container">
+                            <div className="summary-header">PENDING</div>
+                            <div className="orange summary-title">{this.state.Total277CA}</div>
+                        </div> : null
+                }
+                {
+                    this.state.Total277CA ?
+                        <div className="col-2 summary-container">
+                            <div className="summary-header">DENIDE</div>
+                            <div className="red summary-title">{this.state.Total277CA}</div>
+                        </div> : null
+                }
+                {
+                    this.state.Total277CA ?
+                        <div className="col-3 summary-container">
+                            <div className="summary-header">WORK IN PROGRESS GREATER THAN 90 DAYS</div>
+                            <div className="blue summary-title">{this.state.Total277CA}</div>
+                        </div> : null
+                }
+            </div>
+            </div>
         )
     }
 

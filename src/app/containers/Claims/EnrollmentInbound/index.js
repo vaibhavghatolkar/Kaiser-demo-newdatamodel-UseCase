@@ -85,6 +85,7 @@ export class EnrollmentInbound extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            tradingpartner: [],
             claimsList: [],
             summaryList: [],
             errorCount: [],
@@ -93,12 +94,13 @@ export class EnrollmentInbound extends React.Component {
 
         this.showFile = this.showFile.bind(this)
         this.renderSummary = this.renderSummary.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
         this.Trading_PartnerList()
         this.getData()
-
         setTimeout(() => {
             this.getErrorCount()
         }, 50);
@@ -225,6 +227,35 @@ export class EnrollmentInbound extends React.Component {
                 this.setState({
                     claimsList: array,
                     summaryList: summary
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    Trading_PartnerList() {
+        let query = `{
+      
+            Trading_PartnerList (Transaction:"TradingPartner") { 
+                 
+                Trading_Partner_Name 
+            }
+           
+        }`
+
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
@@ -479,6 +510,16 @@ export class EnrollmentInbound extends React.Component {
         })
         return row
     }
+   
+    handleStartChange(date) {
+        this.setState({
+            showDetails: false,
+            startDate: date
+        });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    };
 
     renderSummaryDetails() {
         let row = []

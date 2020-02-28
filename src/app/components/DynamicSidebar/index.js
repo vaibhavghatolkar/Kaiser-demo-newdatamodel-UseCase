@@ -127,7 +127,7 @@ export class DynamicSidebar extends React.Component {
         else if(key ==116){name = Strings.healthCare278}
         else if(key ==117){name = Strings.serviceDetails278}
         else if(key ==122){name = Strings.ClaimProcessingSummary}
-
+       
         return name
     }
 
@@ -175,7 +175,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { apiflag: '1', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
-            } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276) {
+            } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276 || element.key == Strings._277CAResponse) {
                 let key = 'n'
                 if (element.key == Strings.elilgibilityErrors276) {
                     key = 'Fail'
@@ -211,6 +211,15 @@ export class DynamicSidebar extends React.Component {
             else if (element.key == Strings.serviceDetails278) {
                 data = [
                     { TransStatus: '', ErrorCode: '' },
+                ]
+            }
+            else if (element.key == Strings.response_999 || element.key == Strings.response_999) {
+                let key = 'n'
+                if (element.key == Strings.response_999) {
+                    key = 'Fail'
+                }
+                data = [
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
             }
             else {
