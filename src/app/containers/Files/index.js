@@ -212,7 +212,7 @@ export class Files extends React.Component {
             <tr className="table-head claims-text">
                 <td className="table-head-text">Claim ID</td>
                 <td className="table-head-text">Claim Status</td>
-                <td className="table-head-text list-item-style">Adjudication Status</td>
+                <td className="table-head-text list-item-style">Current State</td>
                 <td className="table-head-text list-item-style">Provider</td>
                 <td className="table-head-text list-item-style">Claim Amount</td>
                 <td className="table-head-text list-item-style">Error Code</td>

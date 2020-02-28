@@ -308,13 +308,6 @@ export class EncounterDashboard extends React.Component {
                                 xAxes: [{
                                     ticks: {
                                         fontSize: 10,
-                                        userCallback: function (label, index, labels) {
-                                            // when the floored value is the same as the value we have a whole number
-                                            if (Math.floor(label) === label) {
-                                                return label;
-                                            }
-
-                                        },
                                     }
                                 }]
                             }
@@ -428,11 +421,21 @@ export class EncounterDashboard extends React.Component {
     renderList() {
         let row = []
         const data = this.state.claimsList;
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
         data.forEach((d) => {
+            let data = []
+            data = [
+                { flag: "", State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
+            ]
             row.push(
                 <tr>
-                    <td>{d.FileName}</td>
-                    <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/EncounterDetails', state: { data } }} className="col-2">{d.FileName}</Link></td>
+                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'SentToQnxt' || d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'Rejected' ? 'red ' : ''))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount}</td>
@@ -738,6 +741,26 @@ export class EncounterDashboard extends React.Component {
         )
     }
 
+    renderValues() {
+        let row = []
+        let data = second_data.labels
+        let colors = second_data.datasets[0].backgroundColor
+        let count = 0
+        data.forEach(item => {
+            row.push(
+                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', color: 'slategrey', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div>{item}
+                </div>
+            )
+            count++
+        })
+        return (
+            <div style={{ marginTop: '20px', marginLeft: '24%' }}>
+                {row}
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -752,6 +775,7 @@ export class EncounterDashboard extends React.Component {
                     </div>
                     <div className="col-3 form-style">
                         {this.renderChart()}
+                        {this.renderValues()}
                     </div>
                 </div>
             </div>

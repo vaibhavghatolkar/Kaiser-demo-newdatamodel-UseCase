@@ -627,14 +627,14 @@ rendersearchbar()
             <div>
                 {
                     this.state.file && this.state.file.length > 0 ?
-                        <table className="table claim-Details">
+                        <table className="table claim-Details border">
                             {this.renderHeader('File')}
                             {this.renderRows(this.state.file)}
                         </table> : null
                 }
                 {
                     this.state.memberInfo && this.state.memberInfo.length > 0 ?
-                        <table className="table claim-Details">
+                        <table className="table claim-Details border">
                             {this.renderHeader('Member Info')}
                             {this.renderRows(this.state.memberInfo)}
                             <br></br>
