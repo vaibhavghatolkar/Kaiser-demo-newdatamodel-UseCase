@@ -6,6 +6,8 @@ import { Files_834 } from '../../Files_834';
 import { Topbar } from '../../../components/Topbar';
 import Urls from '../../../../helpers/Urls';
 import Strings from '../../../../helpers/Strings';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 const data = {
@@ -83,6 +85,7 @@ export class EnrollmentInbound extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            tradingpartner: [],
             claimsList: [],
             summaryList: [],
             errorCount: []
@@ -90,6 +93,8 @@ export class EnrollmentInbound extends React.Component {
 
         this.showFile = this.showFile.bind(this)
         this.renderSummary = this.renderSummary.bind(this)
+        this.handleStartChange = this.handleStartChange.bind(this)
+        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -103,7 +108,7 @@ export class EnrollmentInbound extends React.Component {
 
     componentDidMount() {
         this.getData()
-      
+      this.Trading_PartnerList()
         setTimeout(() => {
             this.getErrorCount()
         }, 50);
@@ -193,6 +198,35 @@ export class EnrollmentInbound extends React.Component {
                 this.setState({
                     claimsList: array,
                     summaryList: summary
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    Trading_PartnerList() {
+        let query = `{
+      
+            Trading_PartnerList (Transaction:"TradingPartner") { 
+                 
+                Trading_Partner_Name 
+            }
+           
+        }`
+
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
@@ -451,14 +485,100 @@ export class EnrollmentInbound extends React.Component {
         })
         return row
     }
+   
+    handleStartChange(date) {
+        this.setState({
+            showDetails: false,
+            startDate: date
+        });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    };
 
+    handleEndChange(date) {
+        this.setState({
+            showDetails: false,
+            endDate: date
+        });
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
+    getoptions() {
+        let row = []
+        this.state.tradingpartner.forEach(element => {
+            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
+    renderTopbar(){
+        return(
+            <div className="row">
+                <div className="form-group col-2">
+                    <div className="list-header-dashboard">State</div>
+                    <select className="form-control list-header-dashboard" id="state">
+                        <option value="">State</option>
+                        <option selected="selected" value="1">California</option>
+                        <option value="2">Michigan</option>
+                        <option value="3">Florida</option>
+                        <option value="4">New York</option>
+                        <option value="5">Idaho</option>
+                        <option value="6">Ohio</option>
+                        <option value="7">Illinois</option>
+                        <option value="8">Texas</option>
+                        <option value="9">Mississippi</option>
+                        <option value="10">South Carolina</option>
+                        <option value="11">New Mexico</option>
+                        <option value="12">Puerto Rico</option>
+                        <option value="13">Washington</option>
+                        <option value="14">Utah</option>
+                        <option value="15">Wisconsin</option>
+                    </select>
+                </div>
+
+                {/* <div className="form-group col-2">
+                    <div className="list-header-dashboard">Trading partner </div>
+                    <select className="form-control list-header-dashboard" id="TradingPartner"
+                        onChange={(event) => {
+                            this.onSelect(event, 'selectedTradingPartner')
+                        }}>
+                        <option value="select">Trading partner</option>
+                        {this.getoptions()}
+                    </select>
+                </div> */}
+                <div className="form-group col-2">
+                <label className="list-header1">Trading partner</label>
+                                <select  className="form-control list-header1" id="fao1">
+                                    <option value="0"></option>
+                                    {this.getoptions()}
+                                </select>
+                </div>
+                <div className="form-group col-2">
+                    <div className="list-header-dashboard">Start Date</div>
+                    <DatePicker className="form-control list-dashboard"
+                        selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD')) : ''}
+                        onChange={this.handleStartChange}
+                    />
+                </div>
+                <div className="form-group col-2">
+                    <div className="list-header-dashboard">End Date</div>
+                    <DatePicker className="form-control list-dashboard"
+                        selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD')) : ''}
+                        onChange={this.handleEndChange}
+                    />
+                </div>
+            </div>
+        )
+    }
     render() {
         return (
             <div>
                 {                            
                         <div>    
                              <h5 style={{ color: "var(--main-bg-color)", fontWeight: "700", marginTop: "10px", fontSize: '18px' }}>834 Enrollment Dashboard</h5>       
-                            <Topbar flag={2} />
+                             {this.renderTopbar()}
                             <div className="row">
                                 <div className="col-8">
                                     {this.renderCharts()}
