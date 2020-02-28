@@ -342,7 +342,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
 
     goto999 = () => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.response_999, {
+        this.props.history.push('/' + Strings.Outbound_response_999, {
             flag : 1
         })
         setTimeout(() => {
@@ -360,14 +360,14 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By EncounterProcessingSummary.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
             { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By EncounterProcessingSummary.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
             { value: '999' },
-            { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By EncounterProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
-            { value: 'Claim Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By EncounterProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
-            { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
+            { value: 'Encounter Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By EncounterProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
+            { value: 'Encounter Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By EncounterProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
+            { value: 'Encounter Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             // {value : 'Subscriber Last Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberLastName" : "Order By EncounterProcessingSummary.SubscriberLastName", this.state.subscriberLastNameFlag, 'subscriberLastNameFlag') , key : this.state.subscriberLastNameFlag},
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By EncounterProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
-            {value : 'Claim Amount'},
+            {value : 'Encounter Amount'},
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
             {value : 'Adjudication Status'},
             {value : '277CA'},
@@ -568,12 +568,12 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                 <div className="row padding-left" style={{marginBottom: '10px'}}>
  
                         <div className="col summary-container">
-                            <div className="summary-header">ACCEPTED CLAIMS</div>
+                            <div className="summary-header">ACCEPTED ENCOUNTER</div>
                             <div className="green summary-title">{this.state.Accepted}</div>
                         </div> 
         
                         <div className="col summary-container">
-                            <div className="summary-header">REJECTED CLAIMS</div>
+                            <div className="summary-header">REJECTED ENCOUNTER</div>
                             <div className="red summary-title">{this.state.Rejected}</div>
                         </div>        
                         <div className="col summary-container">

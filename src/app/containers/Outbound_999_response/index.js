@@ -30,12 +30,13 @@ export class Outbound_response_999 extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
-             State:"",
-             status: "",
-             startDate:"",
+            State: "",
+            status: "",
+            startDate: "",
             endDate: "",
-            transactionId:"",
-             errorcode:"",
+            transactionId: "",
+            errorcode: "",
+            transactionType: this.props.location.state ? (this.props.location.state.flag ? '837 Encounter' : '837') : "837",
 
             // selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
@@ -61,11 +62,11 @@ export class Outbound_response_999 extends React.Component {
         let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-         
+
 
         query = `{
            
-            Data999( RecType:"Inbound", TrasactionType:"" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
+            Data999( RecType:"Inbound", TrasactionType:"`+this.state.transactionType+`" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
                 id,
             FileName,
            Date,
@@ -74,7 +75,7 @@ export class Outbound_response_999 extends React.Component {
         TrasactionType,
         FileId
             }
-        }`     
+        }`
         console.log('query ', query)
         fetch(Urls.common_data, {
             method: 'POST',
@@ -87,11 +88,11 @@ export class Outbound_response_999 extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data) {
-                 
-  console.log(".fsdjhjsdgh" , res.data.Data999)
+
+                    console.log(".fsdjhjsdgh", res.data.Data999)
                     this.setState({
-                      files_list:  res.data.Data999,
-                       
+                        files_list: res.data.Data999,
+
                     })
                 }
             })
@@ -109,7 +110,7 @@ export class Outbound_response_999 extends React.Component {
     handlePageClick = (data) => {
         let page = data.selected + 1
         let flag = false
-        if(page != this.state.page){
+        if (page != this.state.page) {
             flag = true
         }
 
@@ -117,7 +118,7 @@ export class Outbound_response_999 extends React.Component {
             page: page
         })
 
-        if(flag){
+        if (flag) {
             setTimeout(() => {
                 this.getTransactions()
             }, 50)
@@ -148,10 +149,10 @@ export class Outbound_response_999 extends React.Component {
                     <div className="border-view collapse breakword" id={'hello' + flag}>  ISA*00*          *00*          *ZZ*80882          *ZZ*ENH3706        *191016*1626*^*00501*910161626*0*P*:~GS*FA*80882*ENH3706*20191016*162625*255546252*X*005010X231~ST*999*0001*005010X231~AK1*HC*1302*005010X222A1~AK2*837*0001*005010X222A1~IK5*A~AK9*A*1*1*1~SE*6*0001~GE*1*255546252~IEA*1*910161626~</div>
                 </div>
             </div>
-          
+
         )
     }
-    
+
 
     getoptions() {
         let row = []
@@ -213,22 +214,7 @@ export class Outbound_response_999 extends React.Component {
         return (
             <form className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col">
-                        <div className="list-dashboard">Transaction Id</div>
-                        <input className="form-control list-dashboard"
-                            id="state"
-                            onChange={(e) => {
-                                clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ transactionId: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.getTransactions()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                    </div>
+                    
                     <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
@@ -270,29 +256,25 @@ export class Outbound_response_999 extends React.Component {
                         </select>
                     </div>
 
-                    {
-                        this.state.status != 'Pass'
-                            ?
-                            <div className="form-group col">
-                                <div className="list-dashboard">Error Type</div>
-                                <select className="form-control list-dashboard" id="TradingPartner"
-                                    onChange={(event) => {
-                                        this.onSelect(event, 'errorcode')
-                                        setTimeout(() => {
-                                            this.getTransactions()
-                                        }, 50);
-                                    }}
-                                >
-                                    <option value="select"></option>
-                                    {this.getErrorOptions()}
-                                </select>
-                            </div>
-                            : null
-                    }
+                    <div className="form-group col">
+                        <div className="list-dashboard">
+                            Transaction Type
+                        </div>
+                        <select className="form-control list-dashboard"
+                            onChange={(event) => {
+                                this.onSelect(event, 'transactionType')
+                            }}
+                        >
+                            <option value="1"></option>
+                            <option selected={this.state.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                            <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
+                        </select>
+                    </div>
+
                     <div className="form-group col">
                         <div className="list-dashboard">
                             Provider Name
-   
+
                         </div>
                         <select className="form-control list-dashboard"><option value=""></option>
                             <option selected="selected" value="1">Provider Name 1</option>
@@ -325,7 +307,7 @@ export class Outbound_response_999 extends React.Component {
         this.setState({
             showDetails: true
         })
-           this.renderDetails(value)
+        this.renderDetails(value)
     }
 
     renderTransactionsNew() {
@@ -338,7 +320,7 @@ export class Outbound_response_999 extends React.Component {
             { value: 'Sender', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
             { value: 'Direction' },
             { value: 'Trasaction Type' },
-  
+
         )
 
         rowArray.push(
@@ -362,7 +344,7 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
-   
+
     // renderMaterialTable(){
     //     return(
     //         <EnhancedTable/>
@@ -381,7 +363,7 @@ export class Outbound_response_999 extends React.Component {
                         {this.renderTransactionsNew()}
                     </div>
                     <div className="col-5">
-                         {this.state.showDetails ? this.renderDetails(1) : null}
+                        {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
                 </div>
             </div>

@@ -340,7 +340,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     goto999 = () => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.response_999)
+        this.props.history.push('/' + Strings.Outbound_response_999)
         setTimeout(() => {
             window.location.reload()
         }, 50);
