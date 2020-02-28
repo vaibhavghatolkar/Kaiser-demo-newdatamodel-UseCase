@@ -181,7 +181,7 @@ export class RealTimeDashboard extends React.Component {
                     summary = [
                         { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Failed File Load', value: 0 },
+                        { name: 'Rejected Files', value: 0 },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
                         { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
@@ -231,6 +231,7 @@ export class RealTimeDashboard extends React.Component {
         return (
             <tr className="table-head">
                 <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">File Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
@@ -287,7 +288,9 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div className="row chart-div">
                 <div className="chart-container chart">
-                    <Pie data={data}
+                    {this.renderChart()}
+                    {this.renderValues()}
+                    {/* <Pie data={data}
                         options={{
                             elements: {
                                 arc: {
@@ -299,13 +302,13 @@ export class RealTimeDashboard extends React.Component {
                             }
                         }}
                         width={80}
-                        height={40} />
+                        height={40} /> */}
                 </div>
                 <div className="chart-container chart">
                     <Bar
                         data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={80}
-                        height={40}
+                        height={45}
                         options={{
                             legend: {
                                 position: 'bottom'
@@ -369,7 +372,7 @@ export class RealTimeDashboard extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-        
+
         let sendData = [
             { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
         ]
@@ -377,6 +380,7 @@ export class RealTimeDashboard extends React.Component {
             row.push(
                 <tr>
                     <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td className="list-item-style"></td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
@@ -491,6 +495,7 @@ export class RealTimeDashboard extends React.Component {
         });
         setTimeout(() => {
             this.getData()
+            this.getListData()
         }, 50);
     };
 
@@ -500,6 +505,7 @@ export class RealTimeDashboard extends React.Component {
         });
         setTimeout(() => {
             this.getData()
+            this.getListData()
         }, 50);
     }
 
@@ -564,7 +570,7 @@ export class RealTimeDashboard extends React.Component {
                         <div className={
                             (item.name == 'Total Files' || item.name == 'Total Claims') ? 'blue summary-title' :
                                 (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims') ? 'red summary-title' : ''
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
@@ -573,7 +579,7 @@ export class RealTimeDashboard extends React.Component {
                         <div className={
                             (item.name == 'Total Files' || item.name == 'Total Claims') ? 'blue summary-title' :
                                 (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims') ? 'red summary-title' : ''
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </Link>
             )
@@ -701,6 +707,21 @@ export class RealTimeDashboard extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
+
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker className="form-control list-dashboard"
+                            selected={new Date(this.state.startDate)}
+                            onChange={this.handleStartChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker className="form-control list-dashboard"
+                            selected={new Date(this.state.endDate)}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
                 </div>
             </div>
         )
@@ -727,8 +748,8 @@ export class RealTimeDashboard extends React.Component {
                         display: false,
                     }
                 }}
-                width={100}
-                height={80} />
+                width={60}
+                height={25} />
         )
     }
 
@@ -739,14 +760,14 @@ export class RealTimeDashboard extends React.Component {
         let count = 0
         data.forEach(item => {
             row.push(
-                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', color: 'slategrey', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div>{item}
+                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '24px', color: 'slategrey', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
                 </div>
             )
             count++
         })
         return (
-            <div style={{ marginTop: '20px', marginLeft: '24%' }}>
+            <div style={{ marginTop: '20px' }} className="row">
                 {row}
             </div>
         )
@@ -765,8 +786,8 @@ export class RealTimeDashboard extends React.Component {
                         {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
                     </div>
                     <div className="col-3 form-style">
-                        {this.renderChart()}
-                        {this.renderValues()}
+                        {/* {this.renderChart()} */}
+                        {/* {this.renderValues()} */}
                     </div>
                 </div>
             </div>
