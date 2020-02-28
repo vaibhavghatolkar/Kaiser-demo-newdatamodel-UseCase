@@ -743,7 +743,7 @@ export class EncounterDetails extends React.Component {
                 {/* <td className="table-head-text list-item-style">Encounter Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
                 {/* <td className="table-head-text list-item-style">Encounter Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
                 <td className="table-head-text list-item-style">Encounter Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Current State<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Error Code<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
@@ -960,11 +960,11 @@ export class EncounterDetails extends React.Component {
                 <h5 className="headerText">Encounter Details</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
-                    <div className="col-7 claim-list file-table">
+                    <div className="col-6 claim-list file-table">
                         {this.state.claimsObj ? this.renderList() : null}
                     </div>
 
-                    <div className="col-5">
+                    <div className="col-6">
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <div>

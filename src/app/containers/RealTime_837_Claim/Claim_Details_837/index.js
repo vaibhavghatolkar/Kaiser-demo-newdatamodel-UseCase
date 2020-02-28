@@ -200,9 +200,6 @@ export class ClaimDetails837 extends React.Component {
 
                     this.setState({
                         intakeClaims: res.data.Claim837RTFileDetails,
-
-
-
                     }, () => {
                         this.sortData()
                     })
@@ -883,9 +880,9 @@ export class ClaimDetails837 extends React.Component {
             <tr className="table-head">
                 <td className="table-head-text">Claim Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 {/* <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
-                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Current State<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
@@ -961,6 +958,7 @@ export class ClaimDetails837 extends React.Component {
             {
                 col = []
                 data[keys].array.forEach((d) => {
+                    console.log(d)
                     col.push(
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
@@ -971,9 +969,9 @@ export class ClaimDetails837 extends React.Component {
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
-                            <td className="style-left"> ${d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.adjudication_status}</td>
+                            <td className="style-left"> ${d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimLevelErrors}</td>
                         </tr>
                     )
