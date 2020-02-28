@@ -44,7 +44,7 @@ export class response_999 extends React.Component {
             // selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
             count: 0,
-            apiflag: props.location.state.data[0].apiflag,
+            apiflag: 0,
 
             pieArray: [],
             labelArray: [],
@@ -656,7 +656,7 @@ export class response_999 extends React.Component {
             row.push(
                 <div className="row">
                     <div className="col col-small-style">
-                        <a className="cursor-value small-font"
+                        <a className="clickable small-font"
                             onClick={() => {
                                 this.getData(d.HiPaaSUniqueID)
                                 this.getDetails(d.HiPaaSUniqueID)

@@ -66,9 +66,10 @@ import { response_999 } from './app/containers/999_response';
 import { Outbound_ClaimProcessingSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTime_ClaimProcessingSummary'
 import { Outbound_RealTimeDashboard } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTimeDashboard'
 import { Outbound_ClaimDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Claim_Details_837'
-
+import { Outbound_AuditSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_AuditSummery'
 import { Outbound_277CAReponse } from './app/containers/Outbound_277CAResponse';
 import { Outbound_ClaimsError } from './app/containers/Outbound_RealTime_837_Claim/Outbound_ClaimError'
+import { Outbound_response_999 } from './app/containers/Outbound_999_response'
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -262,7 +263,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_RealTimeDashboard} component={Outbound_RealTimeDashboard} />
                                 <Route path={'/' + Strings.Outbound_ClaimDetails837} component={Outbound_ClaimDetails837} />
                                 <Route path={'/' + Strings.Outbound_ClaimsError} component={Outbound_ClaimsError} />
-                                 
+                                <Route path={'/' + Strings.Outbound_AuditSummary} component={Outbound_AuditSummary} />
+                                <Route path={'/' + Strings.Outbound_response_999} component={Outbound_response_999} />
+                                
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
 
