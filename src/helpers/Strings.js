@@ -83,7 +83,7 @@ const Strings = {
     Outbound_RealTimeDashboard:'Outbound_RealTimeDashboard',
     Outbound_ClaimDetails837:'Outbound_ClaimDetails837',
     Outbound_ClaimsError: 'Outbound_ClaimsError',
-     Inbound_Encounter_Audit:'Inbound_Encounter_Audit',
+    Inbound_Encounter_Audit:'Inbound_Encounter_Audit',
     Outbound_AuditSummary: 'Outbound_AuditSummary',
     Outbound_response_999: 'Outbound_response_999',
     Inbound_EncounterDashboard : 'Inbound_EncounterDashboard',
