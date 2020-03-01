@@ -164,7 +164,7 @@ export class AuditSummary extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td>{d.filename}</td>
+                    <td><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary)}} style={{ color: "#6AA2B8", cursor: "pointer" }}>{d.filename}</a></td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td colSpan={2} className="list-item-style">{d.Accepted}</td>
