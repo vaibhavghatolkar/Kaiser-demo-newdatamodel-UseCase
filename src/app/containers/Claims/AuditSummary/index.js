@@ -282,7 +282,7 @@ export class AuditSummary extends React.Component {
                                                                
                         <div className="col summary-container">
                             <div className="summary-header">Send To Qnxt</div>
-                            <div className="dark_red  summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                             </div>
                   
                          

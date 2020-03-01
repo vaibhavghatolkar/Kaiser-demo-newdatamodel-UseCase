@@ -579,7 +579,7 @@ export class ClaimProcessingSummary extends React.Component {
                 
                         <div className="col summary-container">
                             <div className="summary-header">SENT TO QNXT</div>
-                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> 
                 
                         <div className="col summary-container">

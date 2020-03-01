@@ -66,7 +66,7 @@ export class Outbound_response_999 extends React.Component {
 
         query = `{
            
-            Data999( RecType:"Inbound", TrasactionType:"`+this.state.transactionType+`" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
+            Data999( RecType:"Outbound", TrasactionType:"`+this.state.transactionType+`" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
                 id,
             FileName,
            Date,
