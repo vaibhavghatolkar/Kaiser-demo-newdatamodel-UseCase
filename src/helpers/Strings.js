@@ -89,6 +89,8 @@ const Strings = {
     Inbound_EncounterDashboard : 'Inbound_EncounterDashboard',
     Inbound_EncounterDetails : 'Inbound_EncounterDetails',
     Inbound_Encounter_ClaimProcessingSummary : 'Inbound_Encounter_ClaimProcessingSummary',
+    Outbound_Encounter_RealTimeDashboard:'Outbound_Encounter_RealTimeDashboard',
+    Outbound_Encounter_ClaimDetails837: 'Outbound_Encounter_ClaimDetails837',
     Outbound_Encounter_Audit:'Outbound_Encounter_Audit',
     Outbound_Encounter_ClaimProcessingSummary:'Outbound_Encounter_ClaimProcessingSummary',
     Outbound_TradingPartnerConfiguration:'Outbound_TradingPartnerConfiguration',

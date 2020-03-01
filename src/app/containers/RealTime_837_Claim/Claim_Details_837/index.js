@@ -852,7 +852,7 @@ export class ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Service line Number</td>
+                                    <td className="table-head-text list-item-style">Service line No.</td>
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service date</td>
                                     <td className="table-head-text list-item-style">Procedure code</td>

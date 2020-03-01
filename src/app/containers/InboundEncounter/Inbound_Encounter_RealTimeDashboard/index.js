@@ -23,7 +23,7 @@ const second_data = {
         'Member Not Found',
         'Newborn Setup Pending',
         'Provider Setup Pending',
-        'Misdirected Claims'
+        'Misdirected Encounters'
     ],
     datasets: [{
         data: [100, 100, 70, 20, 50, 20],
@@ -181,10 +181,10 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                 if (data.EncounterDashboardCount && data.EncounterDashboardCount.length > 0) {
                     summary = [
                         { name: 'Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
-                        { name: 'Total Claims', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
+                        { name: 'Total Encounters', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
                         { name: 'Rejected Files', value: 0 },
-                        { name: 'Accepted Claims', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
-                        { name: 'Rejected Claims', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
+                        { name: 'Accepted Encounters', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
+                        { name: 'Rejected Encounters', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
                         { name: 'Accepted Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
                         { name: 'Rejected Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                         { name: 'Resubmit Queue', value: data.EncounterDashboardCount[0].Resubmit ? Math.round(data.EncounterDashboardCount[0].Resubmit * 100) / 100 : '' },
@@ -237,7 +237,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                 <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Total Claims | Rejected Claims<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Total Encounters | Rejected Encounters<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -248,7 +248,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
             showFile: false,
             datasets: [
                 {
-                    label: 'Total Claims',
+                    label: 'Total Encounters',
                     backgroundColor: color,
                     borderColor: color,
                     borderWidth: 1,
@@ -343,7 +343,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
             <div>
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total Claims</a>
+                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total Encounters</a>
                         <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('I')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Institutional</a>
                         <a class="nav-item nav-link" id="nav-contact-tab" onClick={() => this.handleSort('P')} data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Professional</a>
                     </div>
@@ -554,10 +554,10 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
             let addon = ''
             let claimStatus = ''
             let data = []
-            if (item.name == 'Accepted Claims') {
+            if (item.name == 'Accepted Encounters') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if (item.name == 'Rejected Claims' || item.name == 'Rejected Files') {
+            } else if (item.name == 'Rejected Encounters' || item.name == 'Rejected Files') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
             } else if (item.name == 'Resubmit Queue') {
@@ -569,23 +569,23 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Encounters' && item.name != 'Rejected Encounters' && item.name != 'Total Encounters' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                            (item.name == 'Total Files' || item.name == 'Total Encounters' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                                (item.name == 'Accepted Percent' || item.name == 'Accepted Encounters') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Encounters' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
-                    <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
+                    <Link to={{ pathname: Strings.Inbound_EncounterDetails, state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                            (item.name == 'Total Files' || item.name == 'Total Encounters' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                                (item.name == 'Accepted Percent' || item.name == 'Accepted Encounters') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Encounters' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </Link>
             )

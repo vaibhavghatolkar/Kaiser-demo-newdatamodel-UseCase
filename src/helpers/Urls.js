@@ -1,5 +1,5 @@
 let base_url = 'http://localhost:4000'
-// ?let ase_url = 'http://10.0.1.71:30508'
+// let base_url = 'http://10.0.1.71:30508'
 //  let base_url = 'http://10.0.1.248:30506'
 const Urls = {
     base_url : 'http://localhost:4000/graphQl',

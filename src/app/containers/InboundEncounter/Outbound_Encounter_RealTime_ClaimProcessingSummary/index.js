@@ -330,26 +330,6 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
         )
     }
 
-    goto277 = () => {
-        sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
-            flag : 1
-        })
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
-    }
-
-    goto999 = () => {
-        sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.response_999, {
-            flag : 1
-        })
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
-    }
-
     renderTransactionsNew() {
         const data = this.state.EncounterProcessingSummary ? this.state.EncounterProcessingSummary : []
         let headerArray = []
@@ -378,7 +358,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'FileName' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999 },
+            { value: 'F999'},
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
@@ -389,7 +369,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'Claim_Amount', isAmount: 1 },
             { value: 'Subscriber_ID' },
             { value: 'adjudication_status' },
-            { value: 'F277', isClick: 1, method: this.goto277 },
+            { value: 'F277' },
             { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
         )
 

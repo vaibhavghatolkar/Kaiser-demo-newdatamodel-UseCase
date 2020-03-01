@@ -340,7 +340,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     goto999 = () => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.response_999)
+        this.props.history.push('/' + Strings.Outbound_response_999)
         setTimeout(() => {
             window.location.reload()
         }, 50);
@@ -367,7 +367,7 @@ export class ClaimProcessingSummary extends React.Component {
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
             {value : 'Adjudication Status'},
             {value : '277CA'},
-            {value : 'Total Line count | 835 Received'},
+            {value : '835'},
         )
 
         rowArray.push(
@@ -579,7 +579,7 @@ export class ClaimProcessingSummary extends React.Component {
                 
                         <div className="col summary-container">
                             <div className="summary-header">SENT TO QNXT</div>
-                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> 
                 
                         <div className="col summary-container">
