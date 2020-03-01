@@ -367,7 +367,7 @@ export class ClaimProcessingSummary extends React.Component {
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
             {value : 'Adjudication Status'},
             {value : '277CA'},
-            {value : 'Total Line count | 835 Received'},
+            {value : '835'},
         )
 
         rowArray.push(
