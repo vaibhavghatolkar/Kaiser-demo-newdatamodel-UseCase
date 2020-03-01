@@ -21,17 +21,17 @@ export class AuditSummary extends React.Component {
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
-            TotalClaims:'', 
-            Accepted:'',
-            Rejected:'',
-            InProgress:'',           
-            Total999 :'',
-            Total277CA:'',  
-            TotalSentToQNXT:'',  
-             Paid:'', 
-            denied:'',  
-             WIP:'',
-            Pending:''
+            TotalClaims: '',
+            Accepted: '',
+            Rejected: '',
+            InProgress: '',
+            Total999: '',
+            Total277CA: '',
+            TotalSentToQNXT: '',
+            Paid: '',
+            denied: '',
+            WIP: '',
+            Pending: ''
         }
 
         this.getData = this.getData.bind(this)
@@ -41,24 +41,24 @@ export class AuditSummary extends React.Component {
     }
 
     componentDidMount() {
-      
+
         this.getData()
         this.getCommonData()
     }
 
-     //   FileID
-            //   filename
-            //   Submitted
-            //   Rejected
-            //   Pending
-            //   Verified
-            //   Error
-            //   InBizstock
+    //   FileID
+    //   filename
+    //   Submitted
+    //   Rejected
+    //   Pending
+    //   Verified
+    //   Error
+    //   InBizstock
 
     getData() {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        
+
         let query = `{
             ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound"){
           
@@ -75,6 +75,7 @@ export class AuditSummary extends React.Component {
               Pending
               F277
               F999
+              FileStatus
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -99,7 +100,7 @@ export class AuditSummary extends React.Component {
                 Pending
             }
         }`
- console.log("sa,f.hdsfkfdhg" , query)
+        console.log("sa,f.hdsfkfdhg", query)
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -118,7 +119,7 @@ export class AuditSummary extends React.Component {
                     } catch (error) {
 
                     }
-                   console.log("sdghusighsjgn", res.data.FileInCount[0])
+                    console.log("sdghusighsjgn", res.data.FileInCount[0])
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
                         SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
@@ -126,20 +127,20 @@ export class AuditSummary extends React.Component {
                         InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
                         PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
                         RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
-                        errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,                      
-                        totalFile: totalFile,                  
+                        errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
+                        totalFile: totalFile,
                         TotalClaims: res.data.FileInCount[0].TotalClaims,
                         Accepted: res.data.FileInCount[0].Accepted,
                         Rejected: res.data.FileInCount[0].Rejected,
                         InProgress: res.data.FileInCount[0].InProgress,
                         Total999: res.data.FileInCount[0].Total999,
                         Total277CA: res.data.FileInCount[0].Total277CA,
-                         TotalSentToQNXT: res.data.FileInCount[0].TotalSentToQNXT,
+                        TotalSentToQNXT: res.data.FileInCount[0].TotalSentToQNXT,
                         Paid: res.data.FileInCount[0].Paid,
                         denied: res.data.FileInCount[0].denied,
                         WIP: res.data.FileInCount[0].WIP,
                         Pending: res.data.FileInCount[0].Pending
-                        
+
                     })
                 }
             })
@@ -156,24 +157,46 @@ export class AuditSummary extends React.Component {
         )
     }
 
+    goto277 = () => {
+        sessionStorage.setItem('isOutbound', true)
+        this.props.history.push('/' + Strings.Outbound_277CAResponse)
+        setTimeout(() => {
+            window.location.reload()
+        }, 50);
+    }
+
+    goto999 = () => {
+        sessionStorage.setItem('isOutbound', true)
+        this.props.history.push('/' + Strings.Outbound_response_999)
+        setTimeout(() => {
+            window.location.reload()
+        }, 50);
+    }
+
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
-        console.log("sd,fmsdjkdsjh"  , data)
+        console.log("sd,fmsdjkdsjh", data)
 
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary)}} style={{ color: "#6AA2B8", cursor: "pointer" }}>{d.filename}</a></td>
+                    <td><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer" }}>{d.filename}</a></td>
+                    <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td colSpan={2} className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">0</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
-                    <td colSpan={2} className="list-item-style">{d.F999}</td>
-                    <td colSpan={2} className="list-item-style">{d.F277}</td>
-                  
+                    <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                        onClick={() => {
+                            this.goto999()
+                        }}>{d.F999}</a></td>
+                    <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                        onClick={() => {
+                            this.goto277()
+                        }}>{d.F277}</a></td>
                 </tr>
             )
         });
@@ -181,15 +204,16 @@ export class AuditSummary extends React.Component {
             <table className="table table-bordered claim-list">
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">File Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                    <td colSpan={2} className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td  className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td  className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                 </tr>
                 <tbody >
                     <tr>
@@ -228,7 +252,7 @@ export class AuditSummary extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -245,7 +269,7 @@ export class AuditSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data) {
-                  
+
                     this.setState({
                         tradingpartne837: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
                     })
@@ -258,44 +282,44 @@ export class AuditSummary extends React.Component {
     renderStats() {
         return (
             <div className="row padding-left" >
-              
-                        <div className="col summary-container">
-                            <div className="summary-header">Total Files</div>
-                            <div className="green summary-title">{this.state.totalFile}</div>
-                        </div> 
-                        <div className="col summary-container">
-                            <div className="summary-header">In HiPaaS</div>
-        <div className="blue summary-title">{this.state.TotalClaims}</div>
-                        </div> 
-                        <div className="col summary-container">
-                            <div className="summary-header">Accepted</div>
-                            <div className="green summary-title">{this.state.Accepted}</div>
-                        </div> 
-                        <div className="col summary-container">
-                            <div className="summary-header">Rejected</div>
-                            <div className="orange summary-title">{this.state.Rejected}</div>
-                        </div> 
-                        <div className="col summary-container">
-                            <div className="summary-header">999</div>
-                            <div className="green summary-title">{this.state.Total999}</div>
-                            </div> 
-                                                               
-                        <div className="col summary-container">
-                            <div className="summary-header">Send To Qnxt</div>
-                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                            </div>
-                  
-                         
-                        
-              
-                        <div className="col summary-container">
-                            <div className="summary-header">277 CA</div>
-                            <div className="orange summary-title">{this.state.Total277CA}</div>
-                        </div>
-              
-                       
-                        </div>   
-            
+
+                <div className="col summary-container">
+                    <div className="summary-header">Total Files</div>
+                    <div className="green summary-title">{this.state.totalFile}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">In HiPaaS</div>
+                    <div className="blue summary-title">{this.state.TotalClaims}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Accepted</div>
+                    <div className="green summary-title">{this.state.Accepted}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Rejected</div>
+                    <div className="orange summary-title">{this.state.Rejected}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">999</div>
+                    <div className="green summary-title">{this.state.Total999}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">Send To Qnxt</div>
+                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
+                </div>
+
+
+
+
+                <div className="col summary-container">
+                    <div className="summary-header">277 CA</div>
+                    <div className="orange summary-title">{this.state.Total277CA}</div>
+                </div>
+
+
+            </div>
+
         )
     }
     handleStartChange(date) {
@@ -328,7 +352,7 @@ export class AuditSummary extends React.Component {
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"                      
+                        <select className="form-control list-dashboard" id="state"
                         >
                             <option value=""></option>
                             <option selected value="1">California</option>
@@ -351,7 +375,7 @@ export class AuditSummary extends React.Component {
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <input className="form-control" type="text"
-                            
+
                         />
 
                     </div>
@@ -374,11 +398,11 @@ export class AuditSummary extends React.Component {
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
-                         onChange={(event) => {
-                            this.onSelect(event, 'selectedTradingPartner')
-                        }}
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}
                         >
-                          
+
                             <option value="select"></option>
                             {this.getoptions()}
                         </select>
@@ -388,7 +412,7 @@ export class AuditSummary extends React.Component {
         )
     }
     getoptions() {
-        console.log("sfsdsds" , this.state.tradingpartne837)
+        console.log("sfsdsds", this.state.tradingpartne837)
         let row = []
         this.state.tradingpartne837.forEach(element => {
             if (!element) {
@@ -404,7 +428,7 @@ export class AuditSummary extends React.Component {
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
                 {this.renderStats()}
-                <div className="col-12" style={{padding:"0px"}}>
+                <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
                 </div>
             </div>

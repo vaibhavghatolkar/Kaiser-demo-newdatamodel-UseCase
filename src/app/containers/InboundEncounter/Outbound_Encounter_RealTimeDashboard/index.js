@@ -98,7 +98,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Encounter") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Encounter") {
                 Trading_Partner_Name 
             }
         }`
@@ -183,10 +183,10 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         { name: 'Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
                         { name: 'Total Encounter', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
                         { name: 'Rejected Files', value: 0 },
-                        { name: 'Accepted Encounter', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
-                        { name: 'Rejected Encounter', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
-                        { name: 'Accepted Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        { name: 'Rejected Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
+                        { name: 'Clean Encounter', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
+                        { name: 'Error Encounter', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
+                        { name: 'Clean Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
+                        { name: 'Error Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                         { name: 'Resubmit Queue', value: data.EncounterDashboardCount[0].Resubmit ? Math.round(data.EncounterDashboardCount[0].Resubmit * 100) / 100 : '' },
                     ]
                     Accepted_per1 = data.EncounterDashboardCount[0].Accepted_Per
@@ -237,7 +237,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Total Encounter | Rejected Encounter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Total Encounter | Error Encounter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
@@ -307,7 +307,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         height={40} /> */}
                 </div>
                 <div className="chart-container chart">
-                    <Bar
+                    {/* <Bar
                         data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={80}
                         height={45}
@@ -322,7 +322,8 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                                     }
                                 }]
                             }
-                        }} />
+                        }} /> */}
+                        <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', height : '260px', marginLeft : '-2px' }}></img>
                 </div>
             </div>
         )
@@ -554,10 +555,10 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
             let addon = ''
             let claimStatus = ''
             let data = []
-            if (item.name == 'Accepted Encounter') {
+            if (item.name == 'Clean Encounter') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if (item.name == 'Rejected Encounter' || item.name == 'Rejected Files') {
+            } else if (item.name == 'Error Encounter' || item.name == 'Rejected Files') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
             } else if (item.name == 'Resubmit Queue') {
@@ -569,14 +570,14 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Encounter' && item.name != 'Rejected Encounter' && item.name != 'Total Encounter' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Clean Encounter' && item.name != 'Error Encounter' && item.name != 'Total Encounter' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
                             (item.name == 'Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Encounter') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                                (item.name == 'Clean Percent' || item.name == 'Clean Encounter') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Error Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
@@ -584,8 +585,8 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         <div className="summary-header">{item.name}</div>
                         <div className={
                             (item.name == 'Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Encounter') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                                (item.name == 'Clean Percent' || item.name == 'Clean Encounter') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Error Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </Link>
             )

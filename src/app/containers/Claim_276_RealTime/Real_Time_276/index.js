@@ -90,7 +90,7 @@ export class RealTime276 extends React.Component {
         console.log('I am here check me out ' + this.state.chartType)
 
         let query = `{
-            Trading_PartnerList(Transaction:"ClaimRequest") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"ClaimRequest") {
                 Trading_Partner_Name 
             }
             tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "ClaimRequestTradingPartner") {
@@ -106,7 +106,7 @@ export class RealTime276 extends React.Component {
 
         if (this.state.apiflag == 1) {
             query = `{
-                Trading_PartnerList(Transaction:"EligibilityStatus") {
+                Trading_PartnerList(RecType :"Inbound", Transaction:"EligibilityStatus") {
                     Trading_Partner_Name 
                 }
                 tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "EligibilityTradingPartner") {
@@ -981,7 +981,7 @@ export class RealTime276 extends React.Component {
                             <div className="chart-container chart">
                                 {this.renderTabs(1)}
                                 {/* <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label> */}
-                                <Bar
+                                {/* <Bar
                                     data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
                                     width={100}
                                     height={60}
@@ -1003,7 +1003,8 @@ export class RealTime276 extends React.Component {
                                                 }
                                             }]
                                         }
-                                    }} />
+                                    }} /> */}
+                                    <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', marginLeft : '-2px' }}></img>
                             </div> : null
                     }
                 </div>

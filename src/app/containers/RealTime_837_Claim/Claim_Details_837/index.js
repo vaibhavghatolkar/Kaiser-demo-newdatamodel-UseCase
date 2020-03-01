@@ -32,6 +32,7 @@ export class ClaimDetails837 extends React.Component {
             lineData: [],
             file: [],
             fileDetails: [],
+            claimStageDetails: [],
             memberInfo: {},
             subscriberNo: '',
             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
@@ -96,7 +97,7 @@ export class ClaimDetails837 extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -552,6 +553,41 @@ export class ClaimDetails837 extends React.Component {
             });
     }
 
+    getClaimStages(claimId, fileId) {
+        let url = Urls.real_time_claim_details
+        let query = `{
+            ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}") {
+              Stage
+              Createdatetime
+            }
+          }
+          `
+
+        console.log('query ', query)
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res && res.data && res.data.ClaimStagesInbound){
+                    this.setState({
+                        claimStageDetails: res.data.ClaimStagesInbound
+                    })
+
+                    console.log('claim stage', res.data.ClaimStagesInbound)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     renderRows(dictionary) {
         let row = []
         let col = []
@@ -856,7 +892,41 @@ export class ClaimDetails837 extends React.Component {
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service date</td>
                                     <td className="table-head-text list-item-style">Procedure code</td>
-                                    <td className="table-head-text list-item-style">Paid service unit Number</td>
+                                    <td className="table-head-text list-item-style">Unit</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    renderClaimStageDetails() {
+        let row = []
+        const data = this.state.claimStageDetails ? this.state.claimStageDetails : []
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td>{d.Stage}</td>
+                    <td>{moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a')}</td>
+                </tr>
+            )
+        })
+        return (
+            <div className="row">
+                <div className="col-12">
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim Stages</a></div>
+                    <div id={'event'}>
+                        <table className="table table-bordered background-color">
+                            <thead>
+                                <tr className="table-head" style={{ fontSize: "9px" }}>
+                                    <td className="table-head-text list-item-style">Stage</td>
+                                    <td className="table-head-text list-item-style">Date</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -973,6 +1043,7 @@ export class ClaimDetails837 extends React.Component {
                                     claimId: d.ClaimID
                                 }, () => {
                                     this.getDetails(d.ClaimID, d.FileID, data[keys].value)
+                                    this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
@@ -1118,6 +1189,7 @@ export class ClaimDetails837 extends React.Component {
                                 : null
                         }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
+                        {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null}
                     </div>
                 </div>
             </div>

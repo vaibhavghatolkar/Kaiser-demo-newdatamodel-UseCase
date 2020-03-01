@@ -84,7 +84,7 @@ export class Outbound_277CAReponse extends React.Component {
             }
         } else {
             query = `{
-                Trading_PartnerList(Transaction:"ClaimRequest")  {
+                Trading_PartnerList(RecType :"Outbound", Transaction:"ClaimRequest")  {
                     Trading_Partner_Name 
                 }
                 ErrorType_List(Transaction: "ClaimRequest") {
@@ -94,7 +94,7 @@ export class Outbound_277CAReponse extends React.Component {
 
             if (this.state.apiflag == 1) {
                 query = `{
-                    Trading_PartnerList(Transaction:"EligibilityStatus")  {
+                    Trading_PartnerList(RecType :"Outbound", Transaction:"EligibilityStatus")  {
                         Trading_Partner_Name 
                     }
                     ErrorType_List(Transaction: "Eligibility") {

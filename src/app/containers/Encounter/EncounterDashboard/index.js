@@ -88,7 +88,7 @@ export class EncounterDashboard extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Encounter") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Encounter") {
                 Trading_Partner_Name 
             }
         }`
@@ -296,7 +296,7 @@ export class EncounterDashboard extends React.Component {
                         height={40} />
                 </div>
                 <div className="chart-container chart">
-                    <Bar
+                    {/* <Bar
                         data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={80}
                         height={40}
@@ -311,7 +311,8 @@ export class EncounterDashboard extends React.Component {
                                     }
                                 }]
                             }
-                        }} />
+                        }} /> */}
+                        <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', height : '260px', marginLeft : '-2px' }}></img>
                 </div>
             </div>
         )

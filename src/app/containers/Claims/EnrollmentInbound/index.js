@@ -110,7 +110,7 @@ export class EnrollmentInbound extends React.Component {
     Trading_PartnerList() {
         let query = `{
   
-        Trading_PartnerList (Transaction:"TradingPartner") { 
+        Trading_PartnerList (RecType :"Inbound", Transaction:"TradingPartner") { 
              
             Trading_Partner_Name 
         }
@@ -237,7 +237,7 @@ export class EnrollmentInbound extends React.Component {
     Trading_PartnerList() {
         let query = `{
       
-            Trading_PartnerList (Transaction:"TradingPartner") { 
+            Trading_PartnerList (RecType :"Inbound", Transaction:"TradingPartner") { 
                  
                 Trading_Partner_Name 
             }

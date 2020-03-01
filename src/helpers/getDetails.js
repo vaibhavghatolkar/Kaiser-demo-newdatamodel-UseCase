@@ -2,7 +2,7 @@ import Urls from "./Urls";
 
 export const getDetails = async(key) => {
     let query = `{
-        Trading_PartnerList(Transaction:"`+key+`") {
+        Trading_PartnerList(RecType :"Inbound", Transaction:"`+key+`") {
             Trading_Partner_Name 
         }
     }`

@@ -73,6 +73,7 @@ export class Outbound_Encounter_Audit extends React.Component {
                 Pending
                 F277
                 F999
+                FileStatus
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -164,14 +165,15 @@ export class Outbound_Encounter_Audit extends React.Component {
             row.push(
                 <tr>
                     <td>{d.filename}</td>
+                    <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
-                    <td colSpan={2} className="list-item-style">{d.Accepted}</td>
+                    <td  className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">0</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
-                    <td colSpan={2} className="list-item-style">{d.F999}</td>
-                    <td colSpan={2} className="list-item-style">{d.F277}</td>
+                    <td className="list-item-style">{d.F999}</td>
+                    <td className="list-item-style">{d.F277}</td>
                   
                 </tr>
             )
@@ -180,13 +182,14 @@ export class Outbound_Encounter_Audit extends React.Component {
             <table className="table table-bordered claim-list">
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Sender <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">File Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">From Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                    <td colSpan={2} className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">Sent to State <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td  className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td  className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                 </tr>
@@ -227,7 +230,7 @@ export class Outbound_Encounter_Audit extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -267,11 +270,11 @@ export class Outbound_Encounter_Audit extends React.Component {
         <div className="blue summary-title">{this.state.TotalClaims}</div>
                         </div> 
                         <div className="col summary-container">
-                            <div className="summary-header">Accepted</div>
+                            <div className="summary-header">Clean</div>
                             <div className="green summary-title">{this.state.Accepted}</div>
                         </div> 
                         <div className="col summary-container">
-                            <div className="summary-header">Rejected</div>
+                            <div className="summary-header">Error</div>
                             <div className="orange summary-title">{this.state.Rejected}</div>
                         </div> 
                         <div className="col summary-container">
@@ -280,8 +283,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                             </div> 
                                                                
                         <div className="col summary-container">
-                            <div className="summary-header">Send To Qnxt</div>
-                            <div className="dark_red  summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="summary-header">Sent to State</div>
+                            <div className="green  summary-title">{this.state.TotalSentToQNXT}</div>
                             </div>
                   
                          

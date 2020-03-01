@@ -45,7 +45,7 @@ export class ClaimsError extends React.Component{
 
     getData(){
         
-        // let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(Transaction:"Claim837") { Trading_Partner_Name }}'
+        // let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837") { Trading_Partner_Name }}'
         let query = `{
             SP_GetRejectedClaims(Date: "", RecType: "Inbound") {
               Reason

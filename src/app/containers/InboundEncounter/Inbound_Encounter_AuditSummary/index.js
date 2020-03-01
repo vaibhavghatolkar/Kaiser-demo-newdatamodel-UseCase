@@ -73,6 +73,7 @@ export class Inbound_Encounter_Audit extends React.Component {
                 Pending
                 F277
                 F999
+                FileStatus
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -155,6 +156,26 @@ export class Inbound_Encounter_Audit extends React.Component {
         )
     }
 
+    goto277 = () => {
+        sessionStorage.setItem('isOutbound', true)
+        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
+            flag : 1
+        })
+        setTimeout(() => {
+            window.location.reload()
+        }, 50);
+    }
+
+    goto999 = () => {
+        sessionStorage.setItem('isOutbound', true)
+        this.props.history.push('/' + Strings.Outbound_response_999, {
+            flag : 1
+        })
+        setTimeout(() => {
+            window.location.reload()
+        }, 50);
+    }
+
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
@@ -164,14 +185,21 @@ export class Inbound_Encounter_Audit extends React.Component {
             row.push(
                 <tr>
                     <td>{d.filename}</td>
+                    <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td colSpan={2} className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">0</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
-                    <td colSpan={2} className="list-item-style">{d.F999}</td>
-                    <td colSpan={2} className="list-item-style">{d.F277}</td>
+                    <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                        onClick={() => {
+                            this.goto999()
+                        }}>{d.F999}</a></td>
+                    <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                        onClick={() => {
+                            this.goto277()
+                        }}>{d.F277}</a></td>
                   
                 </tr>
             )
@@ -180,13 +208,14 @@ export class Inbound_Encounter_Audit extends React.Component {
             <table className="table table-bordered claim-list">
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">File Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                    <td colSpan={2} className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td  className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td  className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td  className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                 </tr>
@@ -227,7 +256,7 @@ export class Inbound_Encounter_Audit extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -281,7 +310,7 @@ export class Inbound_Encounter_Audit extends React.Component {
                                                                
                         <div className="col summary-container">
                             <div className="summary-header">Send To Qnxt</div>
-                            <div className="dark_red  summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                             </div>
                   
                          

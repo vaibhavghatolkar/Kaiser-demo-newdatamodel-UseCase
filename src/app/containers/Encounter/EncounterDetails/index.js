@@ -92,7 +92,7 @@ export class EncounterDetails extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Encounter") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Encounter") {
                 Trading_Partner_Name 
             }
         }`

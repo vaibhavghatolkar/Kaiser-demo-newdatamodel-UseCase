@@ -27,21 +27,22 @@ export class MatchClaims extends React.Component {
 
     getData() {
         let query = `{
-            MatchClaim {
-              Match_ID
-              FileName
-              SeqID
-              Billing_Provider_ID
-              Subscriber_ID
-              Last
-              FirstName
-              amount
-              StmtBegin
-              StmtEnd
-              ExtClaimID
-              Status
+            MatchClaim (RecType:"Inbound"){
+                Match_ID
+                FileName
+                SeqID
+                Billing_Provider_ID
+                Subscriber_ID
+                Last
+                FirstName
+                amount
+                StmtBegin
+                StmtEnd
+                ExtClaimID
+                Status
             }
-          }`
+        }
+`
 
         fetch(Urls.match_claims, {
             method: 'POST',

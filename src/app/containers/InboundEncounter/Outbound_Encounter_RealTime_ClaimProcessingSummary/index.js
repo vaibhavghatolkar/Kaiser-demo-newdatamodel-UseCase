@@ -62,7 +62,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Encounter") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Encounter") {
                 Trading_Partner_Name 
             }
         }`
@@ -342,16 +342,16 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: '999' },
             { value: 'Encounter Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By EncounterProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Encounter Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By EncounterProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
-            { value: 'Encounter Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
+            { value: 'HiPaaS Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             // {value : 'Subscriber Last Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberLastName" : "Order By EncounterProcessingSummary.SubscriberLastName", this.state.subscriberLastNameFlag, 'subscriberLastNameFlag') , key : this.state.subscriberLastNameFlag},
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By EncounterProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
             {value : 'Encounter Amount'},
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
-            {value : 'Adjudication Status'},
+            {value : 'State Status'},
             {value : '277CA'},
-            {value : 'Total Line count | 835 Received'},
+            // {value : 'Total Line count | 835 Received'},
         )
 
         rowArray.push(
@@ -370,7 +370,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'Subscriber_ID' },
             { value: 'adjudication_status' },
             { value: 'F277' },
-            { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
+            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
         )
 
         return (
@@ -507,10 +507,6 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="col summary-container1" style={{ marginTop: '-10px' }}>
-                        <div className="summary-header1">WIP > 90 DAYS</div>
-                        <div className="blue summary-title1">{this.state.wip90}</div>
-                    </div>
 
                 </div>
             </div>
@@ -548,12 +544,12 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                 <div className="row padding-left" style={{marginBottom: '10px'}}>
  
                         <div className="col summary-container">
-                            <div className="summary-header">ACCEPTED ENCOUNTER </div>
+                            <div className="summary-header">CLEAN ENCOUNTER </div>
                             <div className="green summary-title">{this.state.Accepted}</div>
                         </div> 
         
                         <div className="col summary-container">
-                            <div className="summary-header">REJECTED ENCOUNTER </div>
+                            <div className="summary-header">ERROR ENCOUNTER </div>
                             <div className="red summary-title">{this.state.Rejected}</div>
                         </div>        
                         <div className="col summary-container">
@@ -562,11 +558,15 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                         </div> 
                 
                         <div className="col summary-container">
-                            <div className="summary-header">SENT TO QNXT</div>
-                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="summary-header">SENT TO STATE</div>
+                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> 
-                
                         <div className="col summary-container">
+                        <div className="summary-header">REJECTED BY STATE</div>
+                        <div className="red summary-title">{this.state.wip90}</div>
+                    </div>
+                
+                        {/* <div className="col summary-container">
                             <div className="summary-header">277 CA</div>
                             <div className="red summary-title">{this.state.Total277CA}</div>
                         </div>
@@ -583,7 +583,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                         <div className="col summary-container">
                             <div className="summary-header">DENIED</div>
                             <div className="red summary-title">{this.state.Denide}</div>
-                        </div> 
+                        </div>  */}
                 
                
             </div>

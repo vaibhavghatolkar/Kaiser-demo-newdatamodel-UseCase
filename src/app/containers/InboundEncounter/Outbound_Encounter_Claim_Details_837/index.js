@@ -74,7 +74,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
             selectedICdCode: '',
             claimid: '',
             Icdcodepresent: '',
-            Accidentdate:'',
+            Accidentdate: '',
             nameRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
@@ -84,7 +84,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
         this.handleAccidentdate = this.handleAccidentdate.bind(this)
-        
+
         this.Saved = this.Saved.bind(this)
     }
 
@@ -96,7 +96,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Encounter") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Encounter") {
                 Trading_Partner_Name 
             }
         }`
@@ -305,99 +305,96 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
     }
 
     Saved() {
-        if(this.state.Icdcodepresent=="Icdcode")
-        {
-        if (this.state.selectedICdCode != "") {
-            let query = `mutation{updateICDCode(
+        if (this.state.Icdcodepresent == "Icdcode") {
+            if (this.state.selectedICdCode != "") {
+                let query = `mutation{updateICDCode(
                     ClaimID:"`+ this.state.claimid + `" 
                     FileID:"`+ this.state.fileid + `"  
                     ICDCode:"`+ this.state.selectedICdCode + `"     
                     )
                   }`
 
-           
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
 
+                fetch(Urls.base_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query
+
+                    })
                 })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateICDCode),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
+                    .then(r => r.json())
+                    .then(data =>
+                        alert(data.data.updateICDCode),
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
 
-                );
+                    );
 
+            }
         }
-    }
-       else if (this.state.Icdcodepresent == "AccidentDt") {
-            if(this.state.Accidentdate!="")
-            {
+        else if (this.state.Icdcodepresent == "AccidentDt") {
+            if (this.state.Accidentdate != "") {
                 let query = `mutation{updateAccidentDate(
                     ClaimID:"`+ this.state.claimid + `"
                     FileID:"`+ this.state.fileid + `"  
                     AccidentDate:"`+ this.state.Accidentdate + `"     
                     )
                   }`
-             console.log("sdlnskjggsdj" , query);
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
+                console.log("sdlnskjggsdj", query);
+                fetch(Urls.base_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query
 
+                    })
                 })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateAccidentDate),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
+                    .then(r => r.json())
+                    .then(data =>
+                        alert(data.data.updateAccidentDate),
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
 
-                );
+                    );
             }
 
         }
         else if (this.checkError == "ICD Code not found") {
-            if(this.state.selectedICdCode!="")
-            {
-              var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
-                  ')' +
-                  '}'
-              console.log(query);
-              fetch(Urls.base_url, {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                  },
-                  body: JSON.stringify({
-                      query
-  
-                  })
-              })
-                  .then(r => r.json())
-                  .then(data =>
-                      alert(data.data.updateICDCode),
-                      setTimeout(() => {
-                          window.location.reload()
-                      }, 1000)
-  
-                  );
-  
-          }
+            if (this.state.selectedICdCode != "") {
+                var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
+                    ')' +
+                    '}'
+                console.log(query);
+                fetch(Urls.base_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query
+
+                    })
+                })
+                    .then(r => r.json())
+                    .then(data =>
+                        alert(data.data.updateICDCode),
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
+
+                    );
+
+            }
         }
 
     }
@@ -434,10 +431,10 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         return row
     }
     onChangeName(event, key) {
-    
+
         this.setState({
             Accidentdate: event.target.value
-            
+
         });
     }
     getDetails(claimId, fileId, fileData) {
@@ -489,7 +486,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("sdfdsss" , res.data.EncounterDetails[0].FieldToUpdate)
+                console.log("sdfdsss", res.data.EncounterDetails[0].FieldToUpdate)
                 if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
                     if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -501,17 +498,17 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                         Claim_Icdcode = res.data.EncounterDetails[0].ICDCode;
                     }
                     if (res.data.EncounterDetails[0].FieldToUpdate == "AccidentDt") {
-                       
-                    //     AccidentDate = <DatePicker
-                    //     className="form-control list-header-dashboard"
-                    //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
-                    //     onChange={this.handleAccidentdate}
-                    // />
-                    AccidentDate =  <input  onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
+
+                        //     AccidentDate = <DatePicker
+                        //     className="form-control list-header-dashboard"
+                        //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
+                        //     onChange={this.handleAccidentdate}
+                        // />
+                        AccidentDate = <input onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
                     }
                     else {
-                      
-                        AccidentDate =res.data.EncounterDetails[0].AccidentDate;
+
+                        AccidentDate = res.data.EncounterDetails[0].AccidentDate;
                     }
                     let data = res.data.EncounterDetails[0]
 
@@ -532,7 +529,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                             { key: 'Provider address', value: data.BillingProviderAddress },
                             { key: 'Encounter Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
-                            { key: 'Accident Date', value:  AccidentDate},
+                            { key: 'Accident Date', value: AccidentDate },
                             { key: '', },
                             { key: '', },
                         ]
@@ -685,14 +682,14 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         }, 50);
     }
     handleAccidentdate(date) {
-       
+
         this.setState({
             Accidentdate: date,
-            
+
         });
 
-       
-      
+
+
     }
 
     handleEndChange(date) {
@@ -794,7 +791,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                         {/* <input
                             onChange={(e) => this.onHandleChange(e)}
                             className="form-control" type="text" /> */}
-                               <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -813,7 +810,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                         />
                     </div>
                     <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
+                        <div className="list-dashboard">Sender</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
@@ -821,6 +818,10 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                             <option value="select"></option>
                             {this.getoptions()}
                         </select>
+                    </div>
+
+                    <div className="form-group col-2 button" style={{height : '32px'}}>
+                        Send clean encounters
                     </div>
                 </div>
             </div>
@@ -852,11 +853,11 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Encounter Id</td>
-                                    <td className="table-head-text list-item-style">Service line Number</td>
+                                    <td className="table-head-text list-item-style">Service line No.</td>
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service date</td>
                                     <td className="table-head-text list-item-style">Procedure code</td>
-                                    <td className="table-head-text list-item-style">Paid service unit Number</td>
+                                    <td className="table-head-text list-item-style">Unit</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -882,8 +883,8 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
             <tr className="table-head">
                 <td className="table-head-text">Encounter Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 {/* <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
-                <td className="table-head-text list-item-style">Encounter Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">HiPaaS Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">State Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Encounter Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
@@ -925,7 +926,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
-                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
             </div>
         )
@@ -951,7 +952,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-3 col-small-style border-left small-font left-align"><a href={'#'+ keys}
+                    <div className="col-3 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>

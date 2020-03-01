@@ -61,7 +61,7 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -350,7 +350,7 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
             {value : 'Adjudication Status'},
             {value : '277CA'},
-            {value : 'Total Line count | 835 Received'},
+            {value : '835'},
         )
         
         rowArray.push(
@@ -561,28 +561,28 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                         </div> 
                 
                         <div className="col summary-container">
-                            <div className="summary-header">SENT TO QNXT</div>
-                            <div className="orange summary-title">{this.state.TotalSentToQNXT}</div>
+                            <div className="summary-header">SENT CLAIMS</div>
+                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> 
                 
                         <div className="col summary-container">
                             <div className="summary-header">277 CA</div>
                             <div className="red summary-title">{this.state.Total277CA}</div>
                         </div>
-                        <div className="col summary-container">
+                        {/* <div className="col summary-container">
                             <div className="summary-header">PAID</div>
                             <div className="green summary-title">{this.state.Paid}</div>
-                        </div> 
+                        </div>  */}
                 
-                        <div className="col summary-container">
+                        {/* <div className="col summary-container">
                             <div className="summary-header">PENDING</div>
                             <div className="orange summary-title">{this.state.Pending}</div>
-                        </div>
+                        </div> */}
               
-                        <div className="col summary-container">
+                        {/* <div className="col summary-container">
                             <div className="summary-header">DENIED</div>
                             <div className="red summary-title">{this.state.Denide}</div>
-                        </div> 
+                        </div>  */}
                 
                
             </div>

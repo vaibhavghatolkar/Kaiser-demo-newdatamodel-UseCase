@@ -98,7 +98,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -306,7 +306,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                         height={40} /> */}
                 </div>
                 <div className="chart-container chart">
-                    <Bar
+                    {/* <Bar
                         data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={80}
                         height={45}
@@ -321,7 +321,8 @@ export class Outbound_RealTimeDashboard extends React.Component {
                                     }
                                 }]
                             }
-                        }} />
+                        }} /> */}
+                        <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', height : '260px', marginLeft : '-2px' }}></img>
                 </div>
             </div>
         )

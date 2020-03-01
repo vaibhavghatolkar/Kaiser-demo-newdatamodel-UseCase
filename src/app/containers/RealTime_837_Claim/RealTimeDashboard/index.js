@@ -98,7 +98,7 @@ export class RealTimeDashboard extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -307,7 +307,7 @@ export class RealTimeDashboard extends React.Component {
                         height={40} /> */}
                 </div>
                 <div className="chart-container chart">
-                    <Bar
+                    {/* <Bar
                         data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={80}
                         height={45}
@@ -322,7 +322,8 @@ export class RealTimeDashboard extends React.Component {
                                     }
                                 }]
                             }
-                        }} />
+                        }} /> */}
+                    <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', height: '260px', marginLeft: '-2px' }}></img>
                 </div>
             </div>
         )
@@ -582,11 +583,17 @@ export class RealTimeDashboard extends React.Component {
                     :
                     <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
-                        <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        <div className="row">
+                            <div className={
+                                (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                                    (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
+                                        (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                            }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                            {
+                                item.name == 'Resubmit Queue' ?
+                                    <button className="btnDesign button-resubmit">Submit</button> : ''
+                            }
+                        </div>
                     </Link>
             )
         });

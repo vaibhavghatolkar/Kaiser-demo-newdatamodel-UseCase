@@ -93,7 +93,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Outbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -755,11 +755,11 @@ export class Outbound_ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Service Line Number</td>
+                                    <td className="table-head-text list-item-style">Service line No.</td>
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service date</td>
                                     <td className="table-head-text list-item-style">Procedure code</td>
-                                    <td className="table-head-text list-item-style">Paid Service Unit Number</td>
+                                    <td className="table-head-text list-item-style">Unit</td>
                                 </tr>
                             </thead>
                             <tbody>

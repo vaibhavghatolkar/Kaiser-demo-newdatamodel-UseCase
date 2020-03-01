@@ -62,7 +62,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     getCommonData() {
         let query = `{
-            Trading_PartnerList(Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
             }
         }`
@@ -363,8 +363,9 @@ export class ClaimProcessingSummary extends React.Component {
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By Claim837RTProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
-            {value : 'Claim Amount'},
+            // {value : 'Claim Amount'},
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
+            {value : 'Transaction Status'},
             {value : 'Adjudication Status'},
             {value : '277CA'},
             {value : '835'},
@@ -382,8 +383,9 @@ export class ClaimProcessingSummary extends React.Component {
             // { value : 'SubscriberFirstName'},
             // { value : 'ProviderLastName'},
             // { value : 'ProviderFirstName'},
-            { value: 'Claim_Amount', isAmount: 1 },
+            // { value: 'Claim_Amount', isAmount: 1 },
             { value: 'Subscriber_ID' },
+            { value: '' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
             { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
@@ -587,14 +589,13 @@ export class ClaimProcessingSummary extends React.Component {
                             <div className="red summary-title">{this.state.Total277CA}</div>
                         </div>
                         <div className="col summary-container">
-                            <div className="summary-header">PAID</div>
-                            <div className="green summary-title">{this.state.Paid}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
                             <div className="summary-header">PENDING</div>
                             <div className="orange summary-title">{this.state.Pending}</div>
                         </div>
+                        <div className="col summary-container">
+                            <div className="summary-header">PAID</div>
+                            <div className="green summary-title">{this.state.Paid}</div>
+                        </div> 
               
                         <div className="col summary-container">
                             <div className="summary-header">DENIED</div>
