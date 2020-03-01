@@ -106,13 +106,13 @@ export class DynamicSidebar extends React.Component {
         else if (key == 34) { name = Strings.matchClaims }
         else if (key == 35) { name = Strings.submitClaims }
 
-        else if (key == 37 || key == 109) { name = Strings.tradingPartnerConfiguration }
-        else if (key == 38 || key == 110) { name = Strings.transactionSetup }
-        else if (key == 39 || key == 111) { name = Strings.editConfiguration }
-        else if (key == 40 || key == 112) { name = Strings.ViewCustomEdits }
-        else if (key == 41 || key == 113) { name = Strings.covered }
-        else if (key == 42 || key == 114) { name = Strings.noncovered }
-        else if (key == 43 || key == 115) { name = Strings.companionGuide }
+        else if (key == 37  ){ name = Strings.tradingPartnerConfiguration }
+        else if (key == 38 ){ name = Strings.transactionSetup }
+        else if (key == 39 ) { name = Strings.editConfiguration }
+        else if (key == 40) { name = Strings.ViewCustomEdits }
+        else if (key == 41) { name = Strings.covered }
+        else if (key == 42 ) { name = Strings.noncovered }
+        else if (key == 43 ) { name = Strings.companionGuide }
 
         else if (key == 45) { name = Strings.UserList }
         else if (key == 46) { name = Strings.MenuCreate }
@@ -127,7 +127,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 50) { name = Strings.claimPayment_835 }
         else if (key == 51) { name = Strings.MenuManagement }
       
-        else if(key == 120 || key == 121) { name = Strings.tradingPartnerDetails}
+        else if(key == 120 ) { name = Strings.tradingPartnerDetails}
         else if(key ==116){name = Strings.healthCare278}
         else if(key ==117){name = Strings.serviceDetails278}
         else if(key ==122){name = Strings.ClaimProcessingSummary}
@@ -144,7 +144,15 @@ export class DynamicSidebar extends React.Component {
         else if(key ==130){name = Strings.Outbound_Encounter_Audit}
         else if(key ==131){name = Strings.Outbound_Encounter_ClaimProcessingSummary}
         else if(key ==127){name = Strings.Outbound_277CAResponse}
-
+     
+        else if (key == 109) { name = Strings.Outbound_TradingPartnerConfiguration }
+        else if (key == 110) { name = Strings.Outbound_TransactionSetup }
+        else if ( key == 111) { name = Strings.Outbound_EditConfigurations }
+        else if (key == 112) { name = Strings.Outbound_View_customEdit }
+        else if (key == 113) { name = Strings.Outbound_Covered }
+        else if (key == 114) { name = Strings.Outbound_NonCovered }
+        else if (key == 115) { name = Strings.Outbound_CompanionGuide }
+        else if (key == 121) { name = Strings.Outbound_StatewiseTradingPartner}
         return name
     }
 

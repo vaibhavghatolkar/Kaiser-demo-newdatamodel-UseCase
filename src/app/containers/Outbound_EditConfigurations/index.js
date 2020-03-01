@@ -5,7 +5,7 @@ import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 const $ = window.$;
 
-export class EditConfiguration extends React.Component {
+export class Outbound_EditConfigurations extends React.Component {
 
     constructor(props) {
         super(props);
@@ -152,7 +152,7 @@ export class EditConfiguration extends React.Component {
     gettradingpatner() {
 
         let query = `{
-            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Inbound") { 
+            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Outbound") { 
                  
                 Trading_Partner_Name 
             }
@@ -805,7 +805,7 @@ export class EditConfiguration extends React.Component {
              max_length2: "${this.state.max_length2}"
              Min_Length2: "${this.state.Min_Length2}"
              mainloop: "${this.state.LoopID}"
-             RecType:"Inbound"
+             RecType:"Outbound"
              mainloop2: "${this.state.LoopID3}"` +
 
             'Condition : "")' +
@@ -1164,7 +1164,7 @@ export class EditConfiguration extends React.Component {
         return (
             <div>
                 <div className="container">
-                    <h5 className="headerText">Configure Custom Edits</h5>
+                    <h5 className="headerText">Configure Custom Edits(Outbound)</h5>
                     {/* {this.renderTopbar()} */}
                     {this.renderView()}
                    

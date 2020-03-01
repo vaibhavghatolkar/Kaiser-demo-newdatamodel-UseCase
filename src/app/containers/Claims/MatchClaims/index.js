@@ -27,7 +27,7 @@ export class MatchClaims extends React.Component {
 
     getData() {
         let query = `{
-            MatchClaim {
+            MatchClaim (RecType:"Inbound"){
               Match_ID
               FileName
               SeqID

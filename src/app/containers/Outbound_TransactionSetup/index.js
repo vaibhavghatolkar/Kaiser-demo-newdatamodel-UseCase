@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls'
 
-export class TransactionSetup extends React.Component {
+export class Outbound_TransactionSetup extends React.Component {
 
     constructor(props) {
         super(props);
@@ -50,7 +50,7 @@ export class TransactionSetup extends React.Component {
     getData() {
         let query = `{
       
-            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Inbound") { 
+            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Outbound") { 
                  
                 Trading_Partner_Name 
             }
@@ -124,7 +124,7 @@ export class TransactionSetup extends React.Component {
                 Directory:"${this.state.Directory}" 
                 Create_Directory:${this.state.create_directory ? this.state.create_directory : false} 
                 File_Naming_Options:"${this.state.file_naming_option ? this.state.file_naming_option : ""}" 
-                RecType:"Inbound"
+                RecType:"Outbound"
                 )
           }`
 
@@ -220,7 +220,7 @@ export class TransactionSetup extends React.Component {
                 {
                     <div>
                         <div>
-                            <h5 className="headerText">Transaction Setup</h5>
+                            <h5 className="headerText">Transaction Setup(Outbound)</h5>
                         </div><br></br>
                         {/* <div>
                             <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Transaction Setup</p>
