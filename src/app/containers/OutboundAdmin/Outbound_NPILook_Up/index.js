@@ -1,10 +1,10 @@
 import React from 'react';
 import { MDBDataTable } from 'mdbreact';
 import './style.css';
-import Urls from '../../../helpers/Urls'
+import Urls from '../../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
 
-export class Outbound_NonCovered extends React.Component {
+export class Outbound_NPILook_Up extends React.Component {
 
     constructor(props) {
         super(props);
@@ -24,18 +24,23 @@ export class Outbound_NonCovered extends React.Component {
     }
 
     getData() {
-        let query = `{
-                NonCoveredList(page:${this.state.page} State:"" RecType:"Outbound") {
-                    SeqId
-                    CPT
-                    ICDCode
-                    policy
-                    C_eff_date
-                    policyrulekey
-                    policyDesc
-                  RecCount
+       let query = `{
+            NPILookup(page:${this.state.page}) {
+                NPI
+                Provider_Secondary_Practice_Location_Address__Address_Line_1
+                Provider_Secondary_Practice_Location_Address___Address_Line_2
+                Provider_Secondary_Practice_Location_Address___City_Name
+                Provider_Secondary_Practice_Location_Address___State_Name
+                Provider_Secondary_Practice_Location_Address___Postal_Code
+                Provider_Secondary_Practice_Location_Address___Country_Code__If_outside_U_S__
+                Provider_Secondary_Practice_Location_Address___Telephone_Number
+                Provider_Secondary_Practice_Location_Address___Telephone_Extension
+                Provider_Practice_Location_Address___Fax_Number
+                RecCount
                   }
         }`
+
+        console.log(query)
 
         fetch(Urls.base_url, {
             method: 'POST',
@@ -50,16 +55,16 @@ export class Outbound_NonCovered extends React.Component {
                 console.log(res)
                 let data = res.data
                 let count = 1
-                if (data && data.NonCoveredList.length > 0) {
+                if (data && data.NPILookup.length > 0) {
 
-                    count = Math.floor(data.NonCoveredList[0].RecCount / 10)
-                    if (data.NonCoveredList[0].RecCount % 10 > 0) {
+                    count = Math.floor(data.NPILookup[0].RecCount / 10)
+                    if (data.NPILookup[0].RecCount % 10 > 0) {
                         count = count + 1
                     }
                 }
 
                 this.setState({
-                    claimsList: data.NonCoveredList,
+                    claimsList: data.NPILookup,
                     count: count
                 })
             })
@@ -72,10 +77,18 @@ export class Outbound_NonCovered extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">CPT</td>
-                <td className="table-head-text">C_eff_date</td>
-                <td className="table-head-text">policy rule key</td>
-                <td className="table-head-text">policy Description</td>
+                <td className="table-head-text list-item-style">NPI</td>
+                <td className="table-head-text list-item-style">Address1</td>
+                <td className="table-head-text list-item-style">Address2</td>
+                <td className="table-head-text list-item-style">City</td>
+                <td className="table-head-text list-item-style">State</td>
+                <td className="table-head-text list-item-style">Postal Code</td>
+                <td className="table-head-text list-item-style">Country Code</td>
+                <td className="table-head-text list-item-style">Telephone No.</td>
+                <td className="table-head-text list-item-style">Telephone Ext.</td>
+                <td className="table-head-text list-item-style">Fax No.</td>
+                
+                
             </tr>
         )
     }
@@ -96,16 +109,20 @@ export class Outbound_NonCovered extends React.Component {
 
 
         let row = []
-        let array = this.state.claimsList
-
-
+        let array = this.state.claimsList  
         array.forEach(item => {
             row.push(
                 <tr>
-                    <td>{item.CPT}</td>
-                    <td>{item.C_eff_date}</td>
-                    <td>{item.policyrulekey}</td>
-                    <td>{item.policyDesc}</td>
+                    <td>{item.NPI}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address__Address_Line_1}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___Address_Line_2}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___City_Name}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___State_Name}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___Postal_Code}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___Country_Code__If_outside_U_S__}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___Telephone_Number}</td>
+                    <td>{item.Provider_Secondary_Practice_Location_Address___Telephone_Extension}</td>
+                    <td>{item.Provider_Practice_Location_Address___Fax_Number}</td>
                 </tr>
             )
 
@@ -158,18 +175,10 @@ export class Outbound_NonCovered extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 className="headerText">NonCovered(Outbound)</h5>
+                    <h5 className="headerText">NPI LookUp(Outbound)</h5>
                 </div>
-                <div className="row">
-                    <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File
-                    <input type="file" name="filename" onChange={this.onChange} style={{ display: "none" }} />
-                    </label>
-                    {this.state.files.map(x =>
-                        <div className="file-preview" style={{ marginTop: '10px', marginLeft: '10px' }} onClick={this.displayFile.bind()}>{x.name}</div>
-                    )}
-                </div>
-            
-                <div className="row">
+               
+                  <div className="row">
                     <div className="col-12">
                         {this.renderRows()}
 
