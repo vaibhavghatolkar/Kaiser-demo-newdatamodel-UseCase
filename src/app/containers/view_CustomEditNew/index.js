@@ -12,7 +12,7 @@ export class View_CustomEditsNew extends React.Component {
             apiflag: this.props.apiflag,
             tradingpartner: [],
             selectedTradingPartner: '',
-            transaction: '837P',
+            transaction: '',
             UpdateCheckBox: '',
             checked: [],
             unchecked: [],
@@ -69,6 +69,7 @@ export class View_CustomEditsNew extends React.Component {
                   is_mandatory
                   Post_Processing
                   PostProcessingAPI
+                  Transaction
                 }
                 
             }`
@@ -119,7 +120,9 @@ export class View_CustomEditsNew extends React.Component {
                         Min_Value: item.Min_Value,
                         Max_Value: item.Max_Value,
                         Post_Processing: item.Post_Processing,
-                        PostProcessingAPI: item.PostProcessingAPI
+                        PostProcessingAPI: item.PostProcessingAPI,
+                        Validation_Level: item.Validation_Level,
+                        Transaction: item.Transaction
                     })
                 })
 
@@ -214,16 +217,19 @@ export class View_CustomEditsNew extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style" style={{width: '11%'}}>Loop Id</td>
+                <td className="table-head-text list-item-style">Transaction</td> 
+                <td className="table-head-text list-item-style" style={{width: '10%'}}>Loop Id</td>
                 {/* <td className="table-head-text list-item-style">Sub Loop Id</td> */}
                 <td className="table-head-text list-item-style">Segment</td>
                 <td className="table-head-text list-item-style">Element</td>
+                <td className="table-head-text list-item-style" style={{width: '10%'}}>Validation Level</td> 
                 <td className="table-head-text list-item-style">Usage Req.</td>
                 <td className="table-head-text list-item-style">Min | Max length</td>
                 <td className="table-head-text list-item-style">Operator</td>
-                <td className="table-head-text list-item-style" style={{width: '17%'}}>Value / URL</td>
+                <td className="table-head-text list-item-style" style={{width: '14%'}}>Value / URL</td>
                 {/* <td className="table-head-text list-item-style">Rules</td> */}
                 
+               
                 <td className="table-head-text list-item-style">Severity</td>
                 <td className="table-head-text list-item-style">Ignore</td>
                 <td className="table-head-text list-item-style">Post Processing</td>
@@ -245,16 +251,19 @@ export class View_CustomEditsNew extends React.Component {
             }
             row.push(
                 <tr>
+                    <td className="list-item-style">{d.Transaction}</td>
                     <td className="list-item-style">{d.mainLoopId} {d.loopid}</td>
                     {/* <td className="list-item-style">{d.loopid}</td> */}
                     <td className="list-item-style">{d.segment}</td>
                     <td className="list-item-style">{d.element}</td>
+                    <td className="list-item-style">{d.Validation_Level}</td>
                     <td className="list-item-style">{usageReq}</td>
                     <td className="list-item-style">{d.Min_Length} | {d.max_length}</td>
                     <td className="list-item-style">{d.operator}</td>
                     <td className="list-item-style">{value}</td>
                     {/* <td className="list-item-style">{d.condition}</td> */}
-                    
+                  
+                  
                     <td className="list-item-style">{d.severity}</td>
                     <td className="list-item-style"><input type="checkbox" checked={d.isChecked} onChange={(e) => { 
                         d.isChecked = e.target.checked
@@ -410,6 +419,7 @@ export class View_CustomEditsNew extends React.Component {
                                 this.onSelect(event, 'transaction')
                             }}
                         >
+                            <option value=""></option>
                             {this.gettrans()}
                         </select>
                     </div>

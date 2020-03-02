@@ -291,15 +291,16 @@ export class EditConfiguration extends React.Component {
             inner_flag = 2
         }
         else if (flag == 2) {
+           
+            if(loopid == undefined){
+                loopid = ' '
+            }
            // query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
            query = ` { SP_GetElement(TransactionType:"${this.state.transactionSelect}",Mainloop:"${LoopID2}",SubLoop:"${loopid}",Segment:"${value}"){Field}}` 
            inner_flag = 3
             this.setState({
                 SegmentId: value
             })
-
-
-
 
 
         }
@@ -320,6 +321,9 @@ export class EditConfiguration extends React.Component {
         }
 
         else if (flag == 5) {
+            if(loopid == undefined){
+                loopid = ' '
+            }
             query = ` { SP_GetElement(TransactionType:"${this.state.transactionSelect}",Mainloop:"${LoopID2}",SubLoop:"${loopid}",Segment:"${value}"){Field}}` 
             // query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
             inner_flag = 5
@@ -456,7 +460,7 @@ export class EditConfiguration extends React.Component {
                                                 <option value=""></option>
                                                 <option value="0">Fail</option>
                                                 <option value="1">Warning</option>
-                                                <option value="2">Skip</option>
+                                                {/* <option value="2">Skip</option> */}
                                             </select>
                                         </div>
                                     
@@ -465,7 +469,7 @@ export class EditConfiguration extends React.Component {
                                             <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
                                                 <option value=""></option>
                                                 <option value="0">TA1</option>
-                                                <option value="1">999</option>
+                                                <option selected="selected" value="1">999</option>
 
                                             </select>
                                         </div>
