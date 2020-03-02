@@ -30,7 +30,12 @@ export class Outbound_AuditSummary extends React.Component {
             Paid: '',
             denied: '',
             WIP: '',
-            Pending: ''
+            Pending: '',
+            TotalBatch: '',
+            ReadytoSend: '',
+            Valid: '',
+            Error: '',
+            ClaimSent: '',
         }
 
         this.getData = this.getData.bind(this)
@@ -60,8 +65,6 @@ export class Outbound_AuditSummary extends React.Component {
 
         let query = `{
             ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Outbound"){
-          
-
               FileID
               filename
               Submitted
@@ -75,6 +78,12 @@ export class Outbound_AuditSummary extends React.Component {
               F277
               F999
               FileStatus
+              BatchName
+              BatchStatus
+              Valid
+              Error
+              ReadytoSend
+              ClaimSent
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -93,10 +102,15 @@ export class Outbound_AuditSummary extends React.Component {
                 Total999 
                 Total277CA  
                 TotalSentToQNXT  
-                 Paid 
+                Paid 
                 denied   
-                 WIP
+                WIP
                 Pending
+                TotalBatch
+                ReadytoSend
+                Valid
+                Error
+                ClaimSent
             }
         }`
         console.log("sa,f.hdsfkfdhg", query)
@@ -138,7 +152,12 @@ export class Outbound_AuditSummary extends React.Component {
                         Paid: res.data.FileInCount[0].Paid,
                         denied: res.data.FileInCount[0].denied,
                         WIP: res.data.FileInCount[0].WIP,
-                        Pending: res.data.FileInCount[0].Pending
+                        Pending: res.data.FileInCount[0].Pending,
+                        TotalBatch : res.data.FileInCount[0].TotalBatch,
+                        ReadytoSend : res.data.FileInCount[0].ReadytoSend,
+                        Valid : res.data.FileInCount[0].Valid,
+                        Error : res.data.FileInCount[0].Error,
+                        ClaimSent : res.data.FileInCount[0].ClaimSent,
 
                     })
                 }
@@ -182,12 +201,12 @@ export class Outbound_AuditSummary extends React.Component {
                 <tr>
                     <td>{d.filename}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
-                    <td className="list-item-style"></td>
-                    <td className="list-item-style"></td>
+                    <td className="list-item-style">{d.BatchName}</td>
+                    <td className="list-item-style">{d.BatchStatus}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
-                    <td className="list-item-style"></td>
-                    <td className="list-item-style"></td>
+                    <td className="list-item-style">{d.Valid}</td>
+                    <td className="list-item-style">{d.Error}</td>
                     {/* <td colSpan={2} className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">0</td> */}
@@ -300,15 +319,19 @@ export class Outbound_AuditSummary extends React.Component {
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">Ready to Send</div>
-                    <div className="blue summary-title">{this.state.TotalClaims}</div>
+                    <div className="blue summary-title">{this.state.ReadytoSend}</div>
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">Valid</div>
-                    <div className="blue summary-title"></div>
+                    <div className="green summary-title">{this.state.Valid}</div>
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">Errors</div>
-                    <div className="blue summary-title"></div>
+                    <div className="red summary-title">{this.state.Error}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Sent Claims</div>
+                    <div className="green summary-title">{this.state.ClaimSent}</div>
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">Accepted</div>
@@ -324,19 +347,9 @@ export class Outbound_AuditSummary extends React.Component {
                 </div>
 
                 <div className="col summary-container">
-                    <div className="summary-header">Sent Claims</div>
-                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                </div>
-
-
-
-
-                <div className="col summary-container">
                     <div className="summary-header">277 CA</div>
                     <div className="orange summary-title">{this.state.Total277CA}</div>
                 </div>
-
-
             </div>
 
         )

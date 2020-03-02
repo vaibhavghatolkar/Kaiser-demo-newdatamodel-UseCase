@@ -146,6 +146,11 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 TotalSentToQNXT
                 InProgress
                 Resubmit
+                TotalBatch
+                ReadytoSend
+                Valid
+                Error
+                ClaimSent
             }
             EncounterClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Outbound") {
                 From
@@ -182,13 +187,18 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
 
                 if (data.EncounterDashboardCount && data.EncounterDashboardCount.length > 0) {
                     summary = [
-                        { name: 'Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
-                        { name: 'Total Encounter', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
-                        { name: 'Rejected Files', value: 0 },
-                        { name: 'Clean Encounter', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
-                        { name: 'Error Encounter', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
-                        { name: 'Clean Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        { name: 'Error Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
+                        { name: 'Total Batch | Total Files', value: (data.EncounterDashboardCount[0].TotalBatch ? data.EncounterDashboardCount[0].TotalBatch : "") + (data.EncounterDashboardCount[0].TotalFiles ? " | " + data.EncounterDashboardCount[0].TotalFiles : ''), isText: 1 },
+                        // { name: 'Total Batch | Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
+                        { name: 'Ready to Send', value: data.EncounterDashboardCount[0].ReadytoSend ? data.EncounterDashboardCount[0].ReadytoSend : '' },
+                        { name: 'Error Claims', value: data.EncounterDashboardCount[0].Error ? data.EncounterDashboardCount[0].Error : '' },
+                        { name: 'Claims Sent', value: data.EncounterDashboardCount[0].ClaimSent ? data.EncounterDashboardCount[0].ClaimSent : '' },
+
+                        // { name: 'Total Encounter', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
+                        // { name: 'Rejected Files', value: 0 },
+                        { name: 'Accepted Encounter', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
+                        { name: 'Rejected Encounter', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
+                        // { name: 'Clean Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
+                        // { name: 'Error Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                         { name: 'Resubmit Queue', value: data.EncounterDashboardCount[0].Resubmit ? Math.round(data.EncounterDashboardCount[0].Resubmit * 100) / 100 : '' },
                     ]
                     Accepted_per1 = data.EncounterDashboardCount[0].Accepted_Per
@@ -589,10 +599,10 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
             let addon = ''
             let claimStatus = ''
             let data = []
-            if (item.name == 'Clean Encounter') {
+            if (item.name == 'Accepted Encounter') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if (item.name == 'Error Encounter' || item.name == 'Rejected Files') {
+            } else if (item.name == 'Rejected Encounter' || item.name == 'Rejected Files') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
             } else if (item.name == 'Resubmit Queue') {
@@ -604,24 +614,24 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Clean Encounter' && item.name != 'Error Encounter' && item.name != 'Total Encounter' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Encounter' && item.name != 'Rejected Encounter' && item.name != 'Total Encounter' && item.name != 'Total Batch | Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Clean Percent' || item.name == 'Clean Encounter') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Error Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                            (item.name == 'Total Batch | Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                                (item.name == 'Clean Percent' || item.name == 'Accepted Encounter' || item.name == 'Ready to Send' || item.name == 'Claims Sent') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Rejected Encounter' || item.name == 'Rejected Files' || item.name == 'Error Claims') ? 'red summary-title' : ''
+                        }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
                     </div>
                     :
                     <Link to={{ pathname: '/Outbound_Encounter_ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Clean Percent' || item.name == 'Clean Encounter') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Error Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                            (item.name == 'Total Batch | Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                                (item.name == 'Clean Percent' || item.name == 'Accepted Encounter') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Rejected Encounter' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                        }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
                     </Link>
             )
         });
@@ -875,9 +885,40 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
         )
     }
 
+    setBatch = () => {
+        let batchName = this.state.batchList[0].BatchName
+        let query = `mutation{
+            SP_EncounterBatchSent(BatchName:"${batchName}")
+        }`
+
+        console.log(query)
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.getData()
+                    this.getListData()
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     renderButton = () => {
         return (
-            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop : '12px', marginRight : '20px', cursor: 'pointer' }}>
+            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop: '12px', marginRight: '20px' }}
+                onClick={() => {
+                    this.setBatch()
+                }}
+            >
                 Send to State
             </div>
         )
@@ -900,7 +941,6 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                             </div>
                             <hr />
                             {this.renderBatch()}
-                            {this.renderButton()}
                         </div>
                         : null}
                     {this.state.claimsList && this.state.claimsList.length > 0 ?

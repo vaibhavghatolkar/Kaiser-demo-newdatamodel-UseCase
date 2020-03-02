@@ -144,6 +144,12 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 Total277CA
                 TotalSentToQNXT
                 InProgress
+                Resubmit
+                TotalBatch
+                ReadytoSend
+                Valid
+                Error
+                ClaimSent
             }
             Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `",RecType: "Outbound") {
                 From
@@ -180,11 +186,11 @@ export class Outbound_RealTimeDashboard extends React.Component {
 
                 if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
                     summary = [
-                        { name: 'Total Batch | Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
+                        { name: 'Total Batch | Total Files', value: (data.Claim837RTDashboardCount[0].TotalBatch ? data.Claim837RTDashboardCount[0].TotalBatch : "") + (data.Claim837RTDashboardCount[0].TotalFiles ? " | " + data.Claim837RTDashboardCount[0].TotalFiles : ''), isText: 1 },
                         // { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Ready to Send', value: "" },
-                        { name: 'Error Claims', value: "" },
-                        { name: 'Claims Sent', value: "" },
+                        { name: 'Ready to Send', value: data.Claim837RTDashboardCount[0].ReadytoSend ? data.Claim837RTDashboardCount[0].ReadytoSend : '' },
+                        { name: 'Error Claims', value: data.Claim837RTDashboardCount[0].Error ? data.Claim837RTDashboardCount[0].Error : '' },
+                        { name: 'Claims Sent', value: data.Claim837RTDashboardCount[0].ClaimSent ? data.Claim837RTDashboardCount[0].ClaimSent : '' },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
                         // { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
@@ -659,9 +665,9 @@ export class Outbound_RealTimeDashboard extends React.Component {
                         <div className="summary-header">{item.name}</div>
                         <div className={
                             (item.name == 'Total Batch | Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims'|| item.name == 'Ready to Send' || item.name == "Claims Sent") ? 'green summary-title' :
+                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims' || item.name == 'Ready to Send' || item.name == "Claims Sent") ? 'green summary-title' :
                                     (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files' || item.name == 'Error Claims') ? 'red summary-title' : ''
-                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
                     </div>
                     :
                     <Link to={{ pathname: '/Outbound_ClaimDetails837', state: { data } }} className="col summary-container">
@@ -670,7 +676,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                             (item.name == 'Total Batch | Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
                                 (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
                                     (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                                }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
                     </Link>
             )
         });
@@ -864,9 +870,40 @@ export class Outbound_RealTimeDashboard extends React.Component {
         )
     }
 
+    setBatch = () => {
+        let batchName = this.state.batchList[0].BatchName
+        let query = `mutation{
+            SP_837RTBatchSent(BatchName:"${batchName}")
+        }`
+
+        console.log(query)
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.getData()
+                    this.getListData()
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     renderButton = () => {
         return (
-            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop: '12px', marginRight : '20px', cursor: 'pointer' }}>
+            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop: '12px', marginRight: '20px'}}
+                onClick={() => {
+                    this.setBatch()
+                }}
+            >
                 Send to State
             </div>
         )

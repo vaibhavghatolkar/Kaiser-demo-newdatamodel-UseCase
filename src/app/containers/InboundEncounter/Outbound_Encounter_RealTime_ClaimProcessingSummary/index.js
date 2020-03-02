@@ -104,6 +104,11 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             denied
             WIP
             Pending
+            TotalBatch
+            ReadytoSend
+            Valid
+            Error
+            ClaimSent
           } }`
 
         console.log(query)
@@ -136,6 +141,11 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                         Pending: data[0].Pending,
                         Denide: data[0].denied,
                         wip90: data[0].WIP,
+                        TotalBatch: data[0].TotalBatch,
+                        ReadytoSend: data[0].ReadytoSend,
+                        Valid: data[0].Valid,
+                        Error: data[0].Error,
+                        ClaimSent: data[0].ClaimSent,
                     })
                 }
             })
@@ -172,6 +182,8 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
 				F277
                 TotalLinewise835
                 TotalLine
+                BatchName
+                BatchStatus
             }
         }`
         console.log(query)
@@ -343,7 +355,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
     goto999 = () => {
         sessionStorage.setItem('isOutbound', false)
         this.props.history.push('/' + Strings.response_999, {
-            flag : 1
+            flag: 1
         })
         setTimeout(() => {
             window.location.reload()
@@ -359,18 +371,20 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterProcessingSummary.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
             { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By EncounterProcessingSummary.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
             { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By EncounterProcessingSummary.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
+            { value: 'Batch Name' },
+            { value: 'Batch Status' },
             { value: '999' },
             { value: 'Encounter Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By EncounterProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Encounter Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By EncounterProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
-            { value: 'HiPaaS Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
+            { value: 'Encounter Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             // {value : 'Subscriber Last Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberLastName" : "Order By EncounterProcessingSummary.SubscriberLastName", this.state.subscriberLastNameFlag, 'subscriberLastNameFlag') , key : this.state.subscriberLastNameFlag},
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By EncounterProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
-            {value : 'Encounter Amount'},
-            {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
-            {value : 'State Status'},
-            {value : '277CA'},
+            // { value: 'Encounter Amount' },
+            // { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
+            { value: 'State Status' },
+            { value: '277CA' },
             // {value : 'Total Line count | 835 Received'},
         )
 
@@ -378,7 +392,9 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'FileName' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999},
+            { value: 'BatchName' },
+            { value: 'BatchStatus' },
+            { value: 'F999', isClick: 1, method: this.goto999 },
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
@@ -386,10 +402,10 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             // { value : 'SubscriberFirstName'},
             // { value : 'ProviderLastName'},
             // { value : 'ProviderFirstName'},
-            { value: 'Claim_Amount', isAmount: 1 },
-            { value: 'Subscriber_ID' },
+            // { value: 'Claim_Amount', isAmount: 1 },
+            // { value: 'Subscriber_ID' },
             { value: 'adjudication_status' },
-            { value: 'F277', isClick: 1, method: this.goto277},
+            { value: 'F277', isClick: 1, method: this.goto277 },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
         )
 
@@ -560,37 +576,52 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
     renderStats() {
         console.log(this.state.Accepted)
         return (
-           
-                <div className="row padding-left" style={{marginBottom: '10px'}}>
- 
-                        <div className="col summary-container">
-                            <div className="summary-header">CLEAN ENCOUNTER </div>
-                            <div className="green summary-title">{this.state.Accepted}</div>
-                        </div> 
-        
-                        <div className="col summary-container">
-                            <div className="summary-header">ERROR ENCOUNTER </div>
-                            <div className="red summary-title">{this.state.Rejected}</div>
-                        </div>        
-                        <div className="col summary-container">
-                            <div className="summary-header">999</div>
-                            <div className="red summary-title">{this.state.Total999}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">SENT TO STATE</div>
-                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                        </div> 
-                        <div className="col summary-container">
-                        <div className="summary-header">REJECTED BY STATE</div>
-                        <div className="red summary-title">0</div>
-                    </div>
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">277 CA</div>
-                            <div className="red summary-title">{this.state.Total277CA}</div>
-                        </div>
-                        {/* <div className="col summary-container">
+
+            <div className="row padding-left" style={{ marginBottom: '10px' }}>
+
+                <div className="col summary-container">
+                    <div className="summary-header">READY TO SEND</div>
+                    <div className="blue summary-title">{this.state.ReadytoSend}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">ERRORS</div>
+                    <div className="red summary-title">{this.state.Error}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">SENT TO STATE</div>
+                    <div className="green summary-title">{this.state.ClaimSent}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">ACCEPTED ENCOUNTER </div>
+                    <div className="green summary-title">{this.state.Accepted}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">REJECTED ENCOUNTER </div>
+                    <div className="red summary-title">{this.state.Rejected}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">999</div>
+                    <div className="red summary-title">{this.state.Total999}</div>
+                </div>
+
+                {/* <div className="col summary-container">
+                    <div className="summary-header">SENT TO STATE</div>
+                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
+                </div> */}
+                {/* <div className="col summary-container">
+                    <div className="summary-header">REJECTED BY STATE</div>
+                    <div className="red summary-title">0</div>
+                </div> */}
+
+                <div className="col summary-container">
+                    <div className="summary-header">277 CA</div>
+                    <div className="red summary-title">{this.state.Total277CA}</div>
+                </div>
+                {/* <div className="col summary-container">
                             <div className="summary-header">PAID</div>
                             <div className="green summary-title">{this.state.Paid}</div>
                         </div> 
@@ -604,8 +635,8 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                             <div className="summary-header">DENIED</div>
                             <div className="red summary-title">{this.state.Denide}</div>
                         </div>  */}
-                
-               
+
+
             </div>
 
         )

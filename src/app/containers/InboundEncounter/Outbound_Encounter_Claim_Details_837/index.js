@@ -820,7 +820,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                         </select>
                     </div>
 
-                    <div className="form-group col-2 button" style={{height : '32px'}}>
+                    <div className="form-group col-2 button" style={{height : '32px', cursor: 'pointer'}}>
                         Send clean encounters
                     </div>
                 </div>

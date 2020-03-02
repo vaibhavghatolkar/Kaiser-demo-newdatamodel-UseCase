@@ -35,6 +35,9 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
+            ReadytoSend : '',
+            Error : '',
+            ClaimSent : '',
 
             fileNameFlag: 180,
             fileDateFlag: 180,
@@ -104,6 +107,11 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
             denied
             WIP
             Pending
+            TotalBatch
+            ReadytoSend
+            Valid
+            Error
+            ClaimSent
           } }`
 
         console.log(query)
@@ -136,6 +144,9 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                         Pending: data[0].Pending,
                         Denide: data[0].denied,
                         wip90: data[0].WIP,
+                        ReadytoSend: data[0].ReadytoSend,
+                        Error: data[0].Error,
+                        ClaimSent: data[0].ClaimSent
                     })
                 }
             })
@@ -172,6 +183,8 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
 				F277
                 TotalLinewise835
                 TotalLine
+                BatchName
+                BatchStatus
             }
         }`
         console.log(query)
@@ -376,8 +389,8 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
             { value: 'FileName' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: '' },
-            { value: '' },
+            { value: 'BatchName' },
+            { value: 'BatchStatus' },
             { value: 'F999', isClick: 1, method: this.goto999 },
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
@@ -569,17 +582,17 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
 
                 <div className="col summary-container">
                     <div className="summary-header">READY TO SEND</div>
-                    <div className="green summary-title"></div>
+                    <div className="blue summary-title">{this.state.ReadytoSend}</div>
                 </div>
 
                 <div className="col summary-container">
                     <div className="summary-header">ERRORS</div>
-                    <div className="green summary-title"></div>
+                    <div className="red summary-title">{this.state.Error}</div>
                 </div>
 
                 <div className="col summary-container">
                     <div className="summary-header">SENT CLAIMS</div>
-                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
+                    <div className="green summary-title">{this.state.ClaimSent}</div>
                 </div>
 
                 <div className="col summary-container">

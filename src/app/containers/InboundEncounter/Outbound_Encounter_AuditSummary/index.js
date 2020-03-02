@@ -31,7 +31,12 @@ export class Outbound_Encounter_Audit extends React.Component {
             Paid: '',
             denied: '',
             WIP: '',
-            Pending: ''
+            Pending: '',
+            TotalBatch : '',
+            ReadytoSend : '',
+            Valid : '',
+            Error : '',
+            ClaimSent : '',
         }
 
         this.getData = this.getData.bind(this)
@@ -74,6 +79,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                 F277
                 F999
                 FileStatus
+                BatchName
+                BatchStatus
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -96,7 +103,11 @@ export class Outbound_Encounter_Audit extends React.Component {
                 denied
                 WIP
                 Pending
-              
+                TotalBatch
+                ReadytoSend
+                Valid
+                Error
+                ClaimSent
             }
         }`
         console.log("sa,f.hdsfkfdhg", query)
@@ -138,8 +149,13 @@ export class Outbound_Encounter_Audit extends React.Component {
                         Paid: res.data.EncounterFileInCnt[0].Paid,
                         denied: res.data.EncounterFileInCnt[0].denied,
                         WIP: res.data.EncounterFileInCnt[0].WIP,
-                        Pending: res.data.EncounterFileInCnt[0].Pending
+                        Pending: res.data.EncounterFileInCnt[0].Pending,
 
+                        TotalBatch : res.data.EncounterFileInCnt[0].TotalBatch,
+                        ReadytoSend : res.data.EncounterFileInCnt[0].ReadytoSend,
+                        Valid : res.data.EncounterFileInCnt[0].Valid,
+                        Error : res.data.EncounterFileInCnt[0].Error,
+                        ClaimSent : res.data.EncounterFileInCnt[0].ClaimSent,
                     })
                 }
             })
@@ -187,6 +203,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                 <tr>
                     <td>{d.filename}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
+                    <td className="list-item-style">{d.BatchName}</td>
+                    <td className="list-item-style">{d.BatchStatus}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Accepted}</td>
@@ -210,6 +228,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                 <tr className="table-head">
                     <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">File Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Batch Name<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Batch Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">From Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
@@ -293,28 +313,33 @@ export class Outbound_Encounter_Audit extends React.Component {
                     <div className="green summary-title">{this.state.totalFile}</div>
                 </div>
                 <div className="col summary-container">
-                    <div className="summary-header">In Hi Pass</div>
-                    <div className="blue summary-title">{this.state.TotalClaims}</div>
+                    <div className="summary-header">Ready to Send</div>
+                    <div className="blue summary-title">{this.state.ReadytoSend}</div>
                 </div>
                 <div className="col summary-container">
-                    <div className="summary-header">Clean</div>
+                    <div className="summary-header">Valid</div>
+                    <div className="green summary-title">{this.state.Valid}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Errors</div>
+                    <div className="red summary-title">{this.state.Error}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Sent to State</div>
+                    <div className="green  summary-title">{this.state.ClaimSent}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Accepted</div>
                     <div className="green summary-title">{this.state.Accepted}</div>
                 </div>
                 <div className="col summary-container">
-                    <div className="summary-header">Error</div>
+                    <div className="summary-header">Rejected</div>
                     <div className="orange summary-title">{this.state.Rejected}</div>
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">999</div>
                     <div className="green summary-title">{this.state.Total999}</div>
                 </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">Sent to State</div>
-                    <div className="green  summary-title">{this.state.TotalSentToQNXT}</div>
-                </div>
-
-
 
 
                 <div className="col summary-container">
