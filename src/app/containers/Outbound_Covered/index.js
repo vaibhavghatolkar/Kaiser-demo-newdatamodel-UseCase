@@ -160,7 +160,7 @@ export class Outbound_Covered extends React.Component {
                 <div>
                     <h5 className="headerText">Covered ICD Code(Outbound)</h5>
                 </div>
-                <br/>
+              
                 <div className="row">
                     <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File
                     <input type="file" name="filename" onChange={this.onChange} style={{ display: "none"  }} />
@@ -169,7 +169,7 @@ export class Outbound_Covered extends React.Component {
                         <div className="file-preview" style={{ marginTop: '10px', marginLeft: '10px' }} onClick={this.displayFile.bind()}>{x.name}</div>
                     )}
                 </div>
-                <br/>
+              
                 <div className="row">
                     <div className="col-12">
                         {this.renderRows()}

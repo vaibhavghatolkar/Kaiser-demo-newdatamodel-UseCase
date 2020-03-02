@@ -232,6 +232,7 @@ export class ClaimDetails837 extends React.Component {
                     files['sort_' + fileId].array.push(item)
                 });
             }
+
         } else {
             intakeClaims.forEach(item => {
                 files['sort_' + item.FileID] = {
@@ -240,13 +241,15 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
         }
-
+        console.log(files)
         this.setState({
             claimsObj: files
         })
     }
 
     getTransactions = (fileId) => {
+        // var ret = fileId.replace('sort_','');
+        // alert(ret)
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
@@ -1007,7 +1010,7 @@ export class ClaimDetails837 extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
 
-        console.log(data)
+       // console.log(data)
         try {
             count = data[Object.keys(data)[0]].value.Claimcount / 10
             if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
@@ -1035,7 +1038,7 @@ export class ClaimDetails837 extends React.Component {
             {
                 col = []
                 data[keys].array.forEach((d) => {
-                    console.log(d)
+                    
                     col.push(
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
@@ -1072,7 +1075,7 @@ export class ClaimDetails837 extends React.Component {
                         pageCount={Math.floor((data[keys].value.Claimcount / 10) + (data[keys].value.Claimcount % 10 > 0 ? 1 : 0))}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}
-                        onPageChange={(page) => { this.handlePageClick(page, keys) }}
+                        onPageChange={(page) => { this.handlePageClick(page, data[keys].value.FileID) }}
                         containerClassName={'pagination'}
                         pageClassName={'page-item'}
                         previousClassName={'page-link'}

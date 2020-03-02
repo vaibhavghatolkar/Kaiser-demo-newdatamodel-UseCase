@@ -208,6 +208,7 @@ export class Outbound_EditConfigurations extends React.Component {
                     //     loopidArray1: r.data.SP_GetMainloop
                     // }
                     options[iter]["subLoopidArray"] = r.data.SP_GetSubloop
+                    options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 2) {
                     options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 3) {
@@ -221,6 +222,7 @@ export class Outbound_EditConfigurations extends React.Component {
                 }
                 else if(flag==6){
                     options[iter]["subLoopidArray1"]  = r.data.SP_GetSubloop
+                    options[iter]["segmentArray1"] = r.data.SP_GetSegment
                 }
                 console.log(options)
                 this.setState({
@@ -261,7 +263,10 @@ export class Outbound_EditConfigurations extends React.Component {
 
         if(flag==0){
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
-            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            query = `{
+                SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
+                SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
+            }`
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -285,6 +290,9 @@ export class Outbound_EditConfigurations extends React.Component {
             inner_flag = 2
         }
         else if (flag == 2) {
+            if(loopid == undefined){
+                loopid = ' '
+            }
            // query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
            query = ` { SP_GetElement(TransactionType:"${this.state.transactionSelect}",Mainloop:"${LoopID2}",SubLoop:"${loopid}",Segment:"${value}"){Field}}` 
            inner_flag = 3
@@ -314,6 +322,9 @@ export class Outbound_EditConfigurations extends React.Component {
         }
 
         else if (flag == 5) {
+            if(loopid == undefined){
+                loopid = ' '
+            }
             query = ` { SP_GetElement(TransactionType:"${this.state.transactionSelect}",Mainloop:"${LoopID2}",SubLoop:"${loopid}",Segment:"${value}"){Field}}` 
             // query = '{element(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + loopid + '"' + ' segment:' + '"' + value + '"' + ') { element }}'
             inner_flag = 5
@@ -324,7 +335,10 @@ export class Outbound_EditConfigurations extends React.Component {
         }
         else if(flag==6){
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
-            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            query = `{
+                SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
+                SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
+            }`
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -447,7 +461,7 @@ export class Outbound_EditConfigurations extends React.Component {
                                                 <option value=""></option>
                                                 <option value="0">Fail</option>
                                                 <option value="1">Warning</option>
-                                                <option value="2">Skip</option>
+                                                {/* <option value="2">Skip</option> */}
                                             </select>
                                         </div>
                                     
@@ -456,7 +470,7 @@ export class Outbound_EditConfigurations extends React.Component {
                                             <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
                                                 <option value=""></option>
                                                 <option value="0">TA1</option>
-                                                <option value="1">999</option>
+                                                <option selected="selected" value="1">999</option>
 
                                             </select>
                                         </div>

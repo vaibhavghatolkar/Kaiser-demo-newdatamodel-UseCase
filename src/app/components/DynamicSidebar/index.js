@@ -109,7 +109,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 37  ){ name = Strings.tradingPartnerConfiguration }
         else if (key == 38 ){ name = Strings.transactionSetup }
         else if (key == 39 ) { name = Strings.editConfiguration }
-        else if (key == 40) { name = Strings.ViewCustomEdits }
+        else if (key == 40) { name = Strings.View_CustomEditsNew }
         else if (key == 41) { name = Strings.covered }
         else if (key == 42 ) { name = Strings.noncovered }
         else if (key == 43 ) { name = Strings.companionGuide }
@@ -147,13 +147,16 @@ export class DynamicSidebar extends React.Component {
         else if (key == 109) { name = Strings.Outbound_TradingPartnerConfiguration }
         else if (key == 110) { name = Strings.Outbound_TransactionSetup }
         else if ( key == 111) { name = Strings.Outbound_EditConfigurations }
-        else if (key == 112) { name = Strings.Outbound_View_customEdit }
+        else if (key == 112) { name = Strings.Outbound_View_customEditNew }
         else if (key == 113) { name = Strings.Outbound_Covered }
         else if (key == 114) { name = Strings.Outbound_NonCovered }
         else if (key == 115) { name = Strings.Outbound_CompanionGuide }
         else if (key == 121) { name = Strings.Outbound_StatewiseTradingPartner}
         else if(key ==53){name = Strings.Outbound_Encounter_RealTimeDashboard}
-        else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}      
+        else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}   
+        else if(key ==133){name = Strings.NPILook_Up}  
+        else if(key ==134){name = Strings.Outbound_NPILook_Up}  
+        
 
         return name
     }
