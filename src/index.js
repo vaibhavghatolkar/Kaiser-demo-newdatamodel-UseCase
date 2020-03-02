@@ -87,7 +87,8 @@ import { Outbound_View_customEdit } from './app/containers/Outbound_View_customE
 import { Outbound_Covered } from './app/containers/Outbound_Covered';
 import { Outbound_NonCovered } from './app/containers/Outbound_NonCovered';
 import { Outbound_CompanionGuide } from './app/containers/Outbound_CompanionGuide';
-
+import {Outbound_View_customEditNew} from './app/containers/Outbound_ViewCustomEditNew'
+import {View_CustomEditsNew} from './app/containers/view_CustomEditNew'
 
 
 import { Outbound_Encounter_ClaimDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Claim_Details_837'
@@ -304,6 +305,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_NonCovered} component={Outbound_NonCovered} />
                                 <Route path={'/' + Strings.Outbound_CompanionGuide} component={Outbound_CompanionGuide} />
                                 <Route path={'/' + Strings.Outbound_Encounter_ClaimDetails837} component={Outbound_Encounter_ClaimDetails837} />
+                                <Route path={'/' + Strings.Outbound_View_customEditNew} component={Outbound_View_customEditNew} />
+                                <Route path={'/' + Strings.View_CustomEditsNew} component={View_CustomEditsNew} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 

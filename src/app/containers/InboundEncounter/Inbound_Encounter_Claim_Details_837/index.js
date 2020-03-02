@@ -1001,7 +1001,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
                         pageCount={Math.floor((data[keys].value.Claimcount / 10) + (data[keys].value.Claimcount % 10 > 0 ? 1 : 0))}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}
-                        onPageChange={(page) => { this.handlePageClick(page, keys) }}
+                        onPageChange={(page) => { this.handlePageClick(page, data[keys].value.FileID) }}
                         containerClassName={'pagination'}
                         pageClassName={'page-item'}
                         previousClassName={'page-link'}

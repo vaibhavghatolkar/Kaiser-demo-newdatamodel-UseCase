@@ -50,14 +50,15 @@ export class EditConfiguration extends React.Component {
             Min_Value2: '',
             Max_Value2: '',
             Value2: '',
-            is_mandatory2: '',
+            is_mandatory2: 'Required',
             max_length2: '',
             Min_Length2: '',
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
             transactionSelect:'837P',
-            GetCustomEdits:[]
+            GetCustomEdits:[],
+            is_mandatory: 'Required'
 
         };
 
@@ -208,6 +209,7 @@ export class EditConfiguration extends React.Component {
                     //     loopidArray1: r.data.SP_GetMainloop
                     // }
                     options[iter]["subLoopidArray"] = r.data.SP_GetSubloop
+                    options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 2) {
                     options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 3) {
@@ -221,6 +223,7 @@ export class EditConfiguration extends React.Component {
                 }
                 else if(flag==6){
                     options[iter]["subLoopidArray1"]  = r.data.SP_GetSubloop
+                    options[iter]["segmentArray1"] = r.data.SP_GetSegment
                 }
                 console.log(options)
                 this.setState({
@@ -261,7 +264,11 @@ export class EditConfiguration extends React.Component {
 
         if(flag==0){
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
-            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            query = `{
+                SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
+                SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
+            }`
+            console.log(query)
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -272,7 +279,6 @@ export class EditConfiguration extends React.Component {
             inner_flag = 1  
         }
         else if (flag == 1) {
-
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
             query = `{SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${loopid}",SubLoop:"${value}"){Segment}}`
             let options = this.state.options
@@ -324,7 +330,10 @@ export class EditConfiguration extends React.Component {
         }
         else if(flag==6){
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
-            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            query = `{
+                SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}\
+                SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
+            }`
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -514,8 +523,8 @@ export class EditConfiguration extends React.Component {
 
                                         <div className="form-group col-sm-3">
                                             <label className="list-header">Usage Req.</label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Usage_Req')}>
-                                                <option value=""></option>
+                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'is_mandatory')}>
+                                                {/* <option value=""></option> */}
                                                 <option value="0">Required</option>
                                                 <option value="1">Absent</option>
 
@@ -526,8 +535,8 @@ export class EditConfiguration extends React.Component {
                                                 Min/Max length
                                             </label>
                                             <div className="row" style={{ marginLeft: "12px" }}>
-                                                <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{ width: "100px" }} />
                                                 <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{ width: "100px" }} />
+                                                <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{ width: "100px" }} />
                                             </div>
                                         </div>
 
@@ -661,7 +670,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header">Usage Req.</label>
                                                 <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'is_mandatory2')}>
-                                                    <option value=""></option>
+                                                    {/* <option value=""></option> */}
                                                     <option value="0">Required</option>
                                                     <option value="1">Absent</option>
 
@@ -769,6 +778,7 @@ export class EditConfiguration extends React.Component {
         let OperatorId = this.state.OperatorId != '' ? this.state.OperatorId : 0;
         let Oprator_Id2 = this.state.Oprator_Id2 != '' ? this.state.Oprator_Id2 : 0;
         let is_mandatory2 = this.state.is_mandatory2 == "Required" ? true : false
+        let is_mandatory = this.state.is_mandatory  == "Required" ? true : false
 
         var query = 'mutation{' +
             'SP_ConfigureCustomEdits(ID : 0 ' +
@@ -781,7 +791,7 @@ export class EditConfiguration extends React.Component {
             'Loop_ID  :"' + this.state.LoopID2 + '" ' +
             'Segment :"' + this.state.SegmentId + '" ' +
             'Field : "' + this.state.FieldId + '" ' +
-            'is_mandatory : true   ' +
+            'is_mandatory : '+is_mandatory + ' '+
             'max_length  :"' + this.state.Maxlength + '" ' +
             'is_segcompare  :true ' +
             'Loop_ID_2  :"' + this.state.LoopID1 + '" ' +
