@@ -208,6 +208,7 @@ export class Outbound_EditConfigurations extends React.Component {
                     //     loopidArray1: r.data.SP_GetMainloop
                     // }
                     options[iter]["subLoopidArray"] = r.data.SP_GetSubloop
+                    options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 2) {
                     options[iter]["segmentArray"] = r.data.SP_GetSegment
                 } else if (flag == 3) {
@@ -221,6 +222,7 @@ export class Outbound_EditConfigurations extends React.Component {
                 }
                 else if(flag==6){
                     options[iter]["subLoopidArray1"]  = r.data.SP_GetSubloop
+                    options[iter]["segmentArray1"] = r.data.SP_GetSegment
                 }
                 console.log(options)
                 this.setState({
@@ -261,7 +263,10 @@ export class Outbound_EditConfigurations extends React.Component {
 
         if(flag==0){
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
-            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            query = `{
+                SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
+                SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
+            }`
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -324,7 +329,10 @@ export class Outbound_EditConfigurations extends React.Component {
         }
         else if(flag==6){
             // query = '{segment(flag:"c" transaction:' + '"' + this.state.transactionSelect + '"' + ' loopid:' + '"' + value + '"' + ') { segment }}'
-            query = `{SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}}`
+            query = `{
+                SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
+                SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
+            }`
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
