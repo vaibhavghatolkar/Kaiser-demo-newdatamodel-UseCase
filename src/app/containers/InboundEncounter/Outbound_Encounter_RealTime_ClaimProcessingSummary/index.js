@@ -91,7 +91,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
 
     getCountData() {
 
-        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Outbound") {
+        let query = `{EncounterFileInCnt(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Outbound") {
             totalFile
             TotalClaims
             Accepted
@@ -118,7 +118,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.FileInCount
+                var data = res.data.EncounterFileInCnt
                 if (data && data.length > 0) {
                     let Accepted = data[0].Accepted
                     let Rejected = data[0].Rejected
@@ -330,6 +330,26 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
         )
     }
 
+    goto277 = () => {
+        sessionStorage.setItem('isOutbound', false)
+        this.props.history.push('/' + Strings._277CAResponse, {
+            flag: 1
+        })
+        setTimeout(() => {
+            window.location.reload()
+        }, 50);
+    }
+
+    goto999 = () => {
+        sessionStorage.setItem('isOutbound', false)
+        this.props.history.push('/' + Strings.response_999, {
+            flag : 1
+        })
+        setTimeout(() => {
+            window.location.reload()
+        }, 50);
+    }
+
     renderTransactionsNew() {
         const data = this.state.EncounterProcessingSummary ? this.state.EncounterProcessingSummary : []
         let headerArray = []
@@ -358,7 +378,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'FileName' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999'},
+            { value: 'F999', isClick: 1, method: this.goto999},
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
@@ -369,7 +389,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'Claim_Amount', isAmount: 1 },
             { value: 'Subscriber_ID' },
             { value: 'adjudication_status' },
-            { value: 'F277' },
+            { value: 'F277', isClick: 1, method: this.goto277},
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
         )
 
@@ -563,14 +583,14 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
                         </div> 
                         <div className="col summary-container">
                         <div className="summary-header">REJECTED BY STATE</div>
-                        <div className="red summary-title">{this.state.wip90}</div>
+                        <div className="red summary-title">0</div>
                     </div>
                 
-                        {/* <div className="col summary-container">
+                        <div className="col summary-container">
                             <div className="summary-header">277 CA</div>
                             <div className="red summary-title">{this.state.Total277CA}</div>
                         </div>
-                        <div className="col summary-container">
+                        {/* <div className="col summary-container">
                             <div className="summary-header">PAID</div>
                             <div className="green summary-title">{this.state.Paid}</div>
                         </div> 

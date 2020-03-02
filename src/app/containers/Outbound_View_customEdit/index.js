@@ -4,7 +4,7 @@ import moment from 'moment';
 import '../color.css'
 import Urls from '../../../helpers/Urls';
 
-export class ViewCustomEdits extends React.Component {
+export class Outbound_View_customEdit extends React.Component {
 
     constructor(props) {
         super(props);
@@ -41,7 +41,7 @@ export class ViewCustomEdits extends React.Component {
 
         let query = `{
            
-                Rules(transaction:"`+ this.state.transaction + `"  RecType:"Inbound") {
+                Rules(transaction:"`+ this.state.transaction + `"  RecType:"Outbound") {
                     seqid
                     loopid
                     segment
@@ -98,7 +98,7 @@ export class ViewCustomEdits extends React.Component {
     getData() {
 
         let query = `{
-            Trading_PartnerList (Transaction:"TradingPartner"  RecType:"Inbound") { 
+            Trading_PartnerList (Transaction:"TradingPartner"  RecType:"Outbound") { 
                  
                 Trading_Partner_Name 
             }
@@ -335,7 +335,7 @@ export class ViewCustomEdits extends React.Component {
                 {
 
                     <div>
-                        <h5 className="headerText">View Custom Edits</h5>
+                        <h5 className="headerText">View Custom Edits(Outbound)</h5>
                         {this.renderTopbar()}
                         <div className="row">
                             <div className="col-12">

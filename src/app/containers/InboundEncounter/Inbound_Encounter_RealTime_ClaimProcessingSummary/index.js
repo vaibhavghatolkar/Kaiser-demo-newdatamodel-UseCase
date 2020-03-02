@@ -91,7 +91,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
 
     getCountData() {
 
-        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound") {
+        let query = `{EncounterFileInCnt(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound") {
             totalFile
             TotalClaims
             Accepted
@@ -118,7 +118,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.FileInCount
+                var data = res.data.EncounterFileInCnt
                 if (data && data.length > 0) {
                     let Accepted = data[0].Accepted
                     let Rejected = data[0].Rejected
@@ -333,7 +333,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
     goto277 = () => {
         sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_277CAResponse, {
-            flag : 1
+            flag: 1
         })
         setTimeout(() => {
             window.location.reload()
@@ -343,7 +343,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
     goto999 = () => {
         sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
-            flag : 1
+            flag: 1
         })
         setTimeout(() => {
             window.location.reload()
@@ -367,10 +367,11 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By EncounterProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
-            {value : 'Encounter Amount'},
-            {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
-            {value : 'State Status'},
-            {value : '277CA'},
+            { value: 'Encounter Amount' },
+            { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
+            { value: 'HiPaaS Status' },
+            { value: 'State Status' },
+            { value: '277CA' },
             // {value : 'Total Line count | 835 Received'},
         )
 
@@ -388,6 +389,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             // { value : 'ProviderFirstName'},
             { value: 'Claim_Amount', isAmount: 1 },
             { value: 'Subscriber_ID' },
+            { value: '' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
@@ -564,38 +566,38 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
     renderStats() {
         console.log(this.state.Accepted)
         return (
-           
-                <div className="row padding-left" style={{marginBottom: '10px'}}>
- 
-                        <div className="col summary-container">
-                            <div className="summary-header">ACCEPTED ENCOUNTER</div>
-                            <div className="green summary-title">{this.state.Accepted}</div>
-                        </div> 
-        
-                        <div className="col summary-container">
-                            <div className="summary-header">REJECTED ENCOUNTER</div>
-                            <div className="red summary-title">{this.state.Rejected}</div>
-                        </div>        
-                        <div className="col summary-container">
-                            <div className="summary-header">999</div>
-                            <div className="red summary-title">{this.state.Total999}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">SENT TO QNXT</div>
-                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">277 CA</div>
-                            <div className="red summary-title">{this.state.Total277CA}</div>
-                        </div>
-                        <div className="col summary-container">
-                            <div className="summary-header">NOT SENT TO STATE</div>
-                            <div className="blue summary-title1">{this.state.wip90}</div>
-                        </div>
 
-                        {/* <div className="col summary-container">
+            <div className="row padding-left" style={{ marginBottom: '10px' }}>
+
+                <div className="col summary-container">
+                    <div className="summary-header">ACCEPTED ENCOUNTER</div>
+                    <div className="green summary-title">{this.state.Accepted}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">REJECTED ENCOUNTER</div>
+                    <div className="red summary-title">{this.state.Rejected}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">999</div>
+                    <div className="red summary-title">{this.state.Total999}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">SENT TO QNXT</div>
+                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">277 CA</div>
+                    <div className="red summary-title">{this.state.Total277CA}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">NOT SENT TO STATE</div>
+                    <div className="blue summary-title1">{this.state.wip90}</div>
+                </div>
+
+                {/* <div className="col summary-container">
                             <div className="summary-header">PAID</div>
                             <div className="green summary-title">{this.state.Paid}</div>
                         </div> 
@@ -609,8 +611,8 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                             <div className="summary-header">DENIED</div>
                             <div className="red summary-title">{this.state.Denide}</div>
                         </div>  */}
-                
-               
+
+
             </div>
 
         )

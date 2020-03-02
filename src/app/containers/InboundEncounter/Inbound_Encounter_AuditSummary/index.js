@@ -60,7 +60,7 @@ export class Inbound_Encounter_Audit extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound"){
+            EncounterClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound"){
                  FileID
                 filename
                 Submitted
@@ -120,7 +120,7 @@ export class Inbound_Encounter_Audit extends React.Component {
                     }
                    console.log("sdghusighsjgn", res.data.EncounterFileInCnt[0])
                     this.setState({
-                        claimsAudit: res.data.ClaimsDailyAudit,
+                        claimsAudit: res.data.EncounterClaimsDailyAudit,
                         SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
                         VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
                         InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
@@ -134,7 +134,7 @@ export class Inbound_Encounter_Audit extends React.Component {
                         InProgress: res.data.EncounterFileInCnt[0].InProgress,
                         Total999: res.data.EncounterFileInCnt[0].Total999,
                         Total277CA: res.data.EncounterFileInCnt[0].Total277CA,
-                         TotalSentToQNXT: res.data.EncounterFileInCnt[0].TotalSentToQNXT,
+                        TotalSentToQNXT: res.data.EncounterFileInCnt[0].TotalSentToQNXT,
                         Paid: res.data.EncounterFileInCnt[0].Paid,
                         denied: res.data.EncounterFileInCnt[0].denied,
                         WIP: res.data.EncounterFileInCnt[0].WIP,

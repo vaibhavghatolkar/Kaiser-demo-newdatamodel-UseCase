@@ -25,7 +25,7 @@ export class CoveredICDCode extends React.Component {
 
     getData() {
         let query = `{
-            CoveredList(page:${this.state.page}) {
+            CoveredList(page:${this.state.page}  State:"" RecType:"Inbound") {
                 SeqId
                 CPT
                 ICDCode
@@ -36,7 +36,7 @@ export class CoveredICDCode extends React.Component {
     			RecCount
               }
         }`
-
+  console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {

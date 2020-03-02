@@ -40,7 +40,7 @@ export class CompanionGuide extends React.Component {
 
     getData() {
         let query = `{
-            GetCompanion(page:${this.state.page})    {
+            GetCompanion(page:${this.state.page} RecType:"Inbound")    {
                 RecCount
                 Edit_Reference
                 Segment

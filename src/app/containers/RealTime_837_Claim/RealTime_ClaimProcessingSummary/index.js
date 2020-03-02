@@ -365,7 +365,7 @@ export class ClaimProcessingSummary extends React.Component {
             // {value : 'Provider First Name'},
             // {value : 'Claim Amount'},
             {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
-            {value : 'Transaction Status'},
+            {value : 'HiPaaS Status'},
             {value : 'Adjudication Status'},
             {value : '277CA'},
             {value : '835'},

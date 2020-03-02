@@ -323,7 +323,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                                 }]
                             }
                         }} /> */}
-                        <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', height : '260px', marginLeft : '-2px' }}></img>
+                    <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', height: '260px', marginLeft: '-2px' }}></img>
                 </div>
             </div>
         )
@@ -756,7 +756,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                     }
                 }}
                 width={60}
-                height={25} />
+                height={30}/>
         )
     }
 
@@ -787,11 +787,9 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}
-                {this.renderCharts()}
-                <div className="row">
-                    <div className="col-10">
-                        {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
-                    </div>
+                <div className="col-10">
+                    {this.renderCharts()}
+                    {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
                 </div>
             </div>
         );

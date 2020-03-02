@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.css';
-import Urls from '../../../helpers/Urls'
-import '../color.css'
+import Urls from '../../../../helpers/Urls';
+import '../../color.css';
 
-export class TradingPartnerConfiguration extends React.Component {
+export class Outbound_TradingPartnerConfiguration extends React.Component {
 
     constructor(props) {
         super(props);
@@ -100,7 +100,7 @@ export class TradingPartnerConfiguration extends React.Component {
     }
     getData() {
         let query = `{
-            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Inbound") { 
+            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Outbound") { 
                  
                 Trading_Partner_Name 
             }
@@ -180,7 +180,7 @@ export class TradingPartnerConfiguration extends React.Component {
             File_Naming_Options
           }}`    
           
-          
+          console.log()
           fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
@@ -285,11 +285,12 @@ export class TradingPartnerConfiguration extends React.Component {
                 'UserName : "'+ this.state.UserName +'"'+
                 'Password : "'+ this.state.Password +'"'+
                 'Directory : "" '+
-                'RecType : "Inbound" '+
+                'RecType : "Outbound"'+
                 'Create_Directory : false'+' '+
                 'File_Naming_Options : "")'+
   
            '}' 
+          
      
            fetch(Urls.base_url, {
           method: 'POST',
@@ -340,7 +341,7 @@ export class TradingPartnerConfiguration extends React.Component {
                     <div>
                         <div style={{ display: 'none' }}>
                             <div style={{ borderBottom: '1px solid lightslategrey', width: '95%', height: '28px' }}>
-                                <p>Add new Client</p>
+                                <p>Add new Client(Outbound)</p>
                             </div>
                             <div className="row">
 
@@ -391,7 +392,7 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
 
                         <div>
-                        <h5 className="headerText">Trading Partner Configuration</h5>
+                        <h5 className="headerText">Trading Partner Configuration(Outbound)</h5>
                         </div><br></br>
                         <div className="row">
 

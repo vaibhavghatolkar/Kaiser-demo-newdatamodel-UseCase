@@ -4,7 +4,7 @@ import './style.css';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
 
-export class NonCovered extends React.Component {
+export class Outbound_NonCovered extends React.Component {
 
     constructor(props) {
         super(props);
@@ -25,7 +25,7 @@ export class NonCovered extends React.Component {
 
     getData() {
         let query = `{
-                NonCoveredList(page:${this.state.page}  State:"" RecType:"Inbound") {
+                NonCoveredList(page:${this.state.page} State:"" RecType:"Outbound") {
                     SeqId
                     CPT
                     ICDCode
@@ -158,7 +158,7 @@ export class NonCovered extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 className="headerText">NonCovered</h5><br/>
+                    <h5 className="headerText">NonCovered(Outbound)</h5><br/>
                 </div>
                 <div className="row">
                     <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File

@@ -55,6 +55,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
         super(props);
         this.state = {
             claimsList: [],
+            batchList: [],
             summaryList: [],
             type: "",
             apiflag: this.props.apiflag,
@@ -72,6 +73,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
             Accepted_per: 0,
             rejected_per: 0,
             page: 1,
+            batch_page: 1,
             ClaimBarChart: [],
             claimLabels: [],
             search: ''
@@ -323,7 +325,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                                 }]
                             }
                         }} /> */}
-                        <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', height : '260px', marginLeft : '-2px' }}></img>
+                    <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', height: '260px', marginLeft: '-2px' }}></img>
                 </div>
             </div>
         )
@@ -362,6 +364,15 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
         let page = data.selected + 1
         this.setState({
             page: page
+        }, () => {
+            this.getListData()
+        })
+    }
+
+    handleBatchPageClick = (data) => {
+        let page = data.selected + 1
+        this.setState({
+            batch_page: page
         }, () => {
             this.getListData()
         })
@@ -424,6 +435,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
 
     getListData = () => {
         let count = 1
+        let batch_count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -443,6 +455,19 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 Rejected
                 Type
             }
+            EncounterBatchDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.batch_page + ` , OrderBy:"", RecType: "Outbound") {
+                Claimcount
+                RecCount
+                FileID
+                BatchName
+                Sender
+                BatchStatus
+                BatchDate
+                Receiver
+                Rejected
+                Type
+                ReadytoSend
+            }
         }`
         console.log(query)
         fetch(Urls.real_time_claim_details, {
@@ -455,9 +480,9 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.EncounterFileDetails) {
+                if (res && res.data) {
 
-                    if (res.data.EncounterFileDetails.length > 0) {
+                    if (res.data.EncounterFileDetails && res.data.EncounterFileDetails.length > 0) {
 
                         count = Math.floor(res.data.EncounterFileDetails[0].RecCount / 10)
                         if (res.data.EncounterFileDetails[0].RecCount % 10 > 0) {
@@ -466,8 +491,17 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         this.setState.recount = count;
                     }
 
+                    if (res.data.EncounterBatchDetails && res.data.EncounterBatchDetails.length > 0) {
+                        batch_count = Math.floor(res.data.EncounterBatchDetails[0].RecCount / 10)
+                        if (res.data.EncounterBatchDetails[0].RecCount % 10 > 0) {
+                            batch_count = batch_count + 1
+                        }
+                        this.setState.recount = batch_count;
+                    }
+
                     this.setState({
                         claimsList: res.data.EncounterFileDetails,
+                        batchList: res.data.EncounterBatchDetails
                     })
                 }
             })
@@ -755,9 +789,70 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         display: false,
                     }
                 }}
+
                 width={60}
-                height={25} />
+                height={30} />
         )
+    }
+
+    renderBatchTableHeader() {
+        return (
+            <tr className="table-head">
+                <td className="table-head-text list-item-style">Batch Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Batch Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Batch Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Total Claims | Errored Claims<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+            </tr>
+        )
+    }
+
+    renderBatch() {
+        let row = []
+        const data = this.state.batchList;
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td>{d.BatchName}</td>
+                    <td className="list-item-style">{d.Type}</td>
+                    <td className="list-item-style">{moment(d.BatchDate).format('MM/DD/YYYY, ')}{moment(d.BatchDate).format('hh:mm a')}</td>
+                    <td className={"list-item-style " + (d.BatchStatus == 'Accepted' ? 'green ' : (d.BatchStatus == 'FullFileReject' ? 'red ' : (d.BatchStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.BatchStatus}</td>
+                    <td className="list-item-style">{d.Sender}</td>
+                    <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
+                </tr>
+            )
+        });
+
+        return (
+            <div>
+                <table className="table table-bordered claim-list">
+                    {this.state.batchList && this.state.batchList.length > 0 ? this.renderBatchTableHeader() : null}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={Math.floor(this.state.batchList[0].RecCount / 10) + (this.state.batchList[0].RecCount % 10 > 0 ? 1 : 0)}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
+            </div>
+        );
     }
 
     renderValues() {
@@ -780,6 +875,14 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
         )
     }
 
+    renderButton = () => {
+        return (
+            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop : '12px', marginRight : '20px', cursor: 'pointer' }}>
+                Send to State
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -787,11 +890,26 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 {this.renderTopbar()}
                 {this.tab()}
                 {this.renderSummaryDetails()}
-                {this.renderCharts()}
-                <div className="row">
-                    <div className="col-10">
-                        {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
-                    </div>
+                <div className="col-10">
+                    {this.renderCharts()}
+                    {this.state.batchList && this.state.batchList.length > 0 ?
+                        <div>
+                            <div className="row">
+                                <h6 style={{ marginTop: '20px', marginLeft: '20px', color: "#424242", flex: 1 }}>Batch status</h6>
+                                {this.renderButton()}
+                            </div>
+                            <hr />
+                            {this.renderBatch()}
+                            {this.renderButton()}
+                        </div>
+                        : null}
+                    {this.state.claimsList && this.state.claimsList.length > 0 ?
+                        <div>
+                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Transmission status</h6>
+                            <hr />
+                            {this.renderList()}
+                        </div>
+                        : null}
                 </div>
             </div>
         );

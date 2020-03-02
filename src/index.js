@@ -78,6 +78,18 @@ import { Outbound_Encounter_RealTimeDashboard } from './app/containers/InboundEn
 import { Inbound_Encounter_Audit } from './app/containers/InboundEncounter/Inbound_Encounter_AuditSummary';
 import { Outbound_Encounter_Audit } from './app/containers/InboundEncounter/Outbound_Encounter_AuditSummary';
 import { Outbound_Encounter_ClaimProcessingSummary } from './app/containers/InboundEncounter/Outbound_Encounter_RealTime_ClaimProcessingSummary';
+import { Outbound_TradingPartnerConfiguration } from './app/containers/OutboundAdmin/Outbound_TradingPartnerConfiguration';
+
+import { Outbound_StatewiseTradingPartner } from './app/containers/OutboundAdmin/Outbound_StatewiseTradingPartner';
+import { Outbound_TransactionSetup } from './app/containers/Outbound_TransactionSetup';
+import { Outbound_EditConfigurations } from './app/containers/Outbound_EditConfigurations';
+import { Outbound_View_customEdit } from './app/containers/Outbound_View_customEdit';
+import { Outbound_Covered } from './app/containers/Outbound_Covered';
+import { Outbound_NonCovered } from './app/containers/Outbound_NonCovered';
+import { Outbound_CompanionGuide } from './app/containers/Outbound_CompanionGuide';
+
+
+
 import { Outbound_Encounter_ClaimDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Claim_Details_837'
 
 const $ = window.$;
@@ -282,6 +294,15 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_Encounter_RealTimeDashboard} component={Outbound_Encounter_RealTimeDashboard} />
                                 <Route path={'/' + Strings.Outbound_Encounter_Audit} component={Outbound_Encounter_Audit} />
                                 <Route path={'/' + Strings.Outbound_Encounter_ClaimProcessingSummary} component={Outbound_Encounter_ClaimProcessingSummary} />
+                              
+                                <Route path={'/' + Strings.Outbound_TradingPartnerConfiguration} component={Outbound_TradingPartnerConfiguration} />
+                                <Route path={'/' + Strings.Outbound_StatewiseTradingPartner} component={Outbound_StatewiseTradingPartner} />
+                                <Route path={'/' + Strings.Outbound_TransactionSetup} component={Outbound_TransactionSetup} />
+                                <Route path={'/' + Strings.Outbound_EditConfigurations} component={Outbound_EditConfigurations} />
+                                <Route path={'/' + Strings.Outbound_View_customEdit} component={Outbound_View_customEdit} />
+                                <Route path={'/' + Strings.Outbound_Covered} component={Outbound_Covered} />
+                                <Route path={'/' + Strings.Outbound_NonCovered} component={Outbound_NonCovered} />
+                                <Route path={'/' + Strings.Outbound_CompanionGuide} component={Outbound_CompanionGuide} />
                                 <Route path={'/' + Strings.Outbound_Encounter_ClaimDetails837} component={Outbound_Encounter_ClaimDetails837} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
