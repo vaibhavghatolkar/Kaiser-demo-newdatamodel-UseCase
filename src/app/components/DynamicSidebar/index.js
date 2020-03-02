@@ -153,7 +153,10 @@ export class DynamicSidebar extends React.Component {
         else if (key == 115) { name = Strings.Outbound_CompanionGuide }
         else if (key == 121) { name = Strings.Outbound_StatewiseTradingPartner}
         else if(key ==53){name = Strings.Outbound_Encounter_RealTimeDashboard}
-        else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}      
+        else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}   
+        else if(key ==133){name = Strings.NPILook_Up}  
+        else if(key ==134){name = Strings.Outbound_NPILook_Up}  
+        
 
         return name
     }
