@@ -225,8 +225,8 @@ export class Outbound_View_customEditNew extends React.Component {
                 <td className="table-head-text list-item-style" style={{width: '10%'}}>Validation Level</td> 
                 <td className="table-head-text list-item-style">Usage Req.</td>
                 <td className="table-head-text list-item-style">Min | Max length</td>
-                <td className="table-head-text list-item-style">Operator</td>
-                <td className="table-head-text list-item-style" style={{width: '14%'}}>Value / URL</td>
+                <td className="table-head-text list-item-style" style={{width: '9%'}}>Operator</td>
+                <td className="table-head-text list-item-style" style={{width: '16%'}}>Value / URL</td>
                 {/* <td className="table-head-text list-item-style">Rules</td> */}
                 
                
