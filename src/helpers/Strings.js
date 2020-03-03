@@ -28,6 +28,7 @@ const Strings = {
     claimsAudit : 'claimsAudit',
     claimsError : 'claimsError',
     matchClaims : 'matchClaims',
+    outbound_matchClaims : 'outbound_matchClaims',
     researchQueue : 'researchQueue',
     viewEdit : 'viewEdit',
     validation : 'validation',

@@ -94,6 +94,7 @@ import {View_CustomEditsNew} from './app/containers/view_CustomEditNew'
 
 
 import { Outbound_Encounter_ClaimDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Claim_Details_837'
+import { OutboundMatchClaims } from './app/containers/Claims/OutboundMatchClaims';
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -223,6 +224,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.claimsAudit} component={AuditSummary} />
                                 <Route path={'/' + Strings.claimsError} component={ClaimsError} />
                                 <Route path={'/' + Strings.matchClaims} component={MatchClaims} />
+                                <Route path={'/' + Strings.outbound_matchClaims} component={OutboundMatchClaims} />
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
                                 <Route path={'/' + Strings.claimsDashboard_834} component={EnrollmentInbound} />
                                 <Route path={'/' + Strings.editConfiguration} component={EditConfiguration} />

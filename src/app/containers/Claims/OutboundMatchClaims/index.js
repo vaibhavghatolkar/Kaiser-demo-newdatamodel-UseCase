@@ -5,7 +5,7 @@ import { Topbar } from '../../../components/Topbar';
 import Urls from '../../../../helpers/Urls';
 import { CommonTable } from '../../../components/CommonTable';
 
-export class MatchClaims extends React.Component {
+export class OutboundMatchClaims extends React.Component {
 
     constructor(props) {
         super(props);
@@ -27,7 +27,7 @@ export class MatchClaims extends React.Component {
 
     getData() {
         let query = `{
-            MatchClaim (RecType:"Inbound"){
+            MatchClaim (RecType:"Outbound"){
                 Match_ID
                 FileName
                 SeqID
@@ -67,7 +67,7 @@ export class MatchClaims extends React.Component {
         return (
             <div className="row">
                 <div style={{ width: '95%', height: '45px', marginLeft: '20px' }}>
-                    <h5 className="headerText">Claim Match & Resend</h5>
+                    <h5  className="headerText">Claim Match & Resend (Outbound)</h5>
                 </div>
             </div>
         )

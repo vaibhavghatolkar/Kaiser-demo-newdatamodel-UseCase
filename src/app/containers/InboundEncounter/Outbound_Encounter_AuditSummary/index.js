@@ -81,6 +81,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                 FileStatus
                 BatchName
                 BatchStatus
+                Error
+                ClaimSent
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -205,12 +207,12 @@ export class Outbound_Encounter_Audit extends React.Component {
                     <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.BatchName}</td>
                     <td className="list-item-style">{d.BatchStatus}</td>
-                    <td className="list-item-style">{d.Submitted}</td>
+                    {/* <td className="list-item-style">{d.Submitted}</td> */}
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
-                    <td className="list-item-style">0</td>
-                    <td className="list-item-style">{d.SentToQNXT}</td>
+                    <td className="list-item-style">{d.Error}</td>
+                    <td className="list-item-style">{d.ClaimSent}</td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {
                             this.goto999()
@@ -230,7 +232,7 @@ export class Outbound_Encounter_Audit extends React.Component {
                     <td className="table-head-text list-item-style">File Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Batch Name<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Batch Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">From Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    {/* <td className="table-head-text list-item-style">From Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td> */}
                     <td className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>

@@ -102,9 +102,10 @@ export class DynamicSidebar extends React.Component {
         else if (key == 30) { name = Strings.claimsAudit }
         else if (key == 31) { name = Strings.ClaimDetails837 }
         else if (key == 32) { name = Strings.claimsError }
-        else if (key == 33) { name = Strings.researchQueue }
+        else if (key == 33 || key == 98) { name = Strings.researchQueue }
         else if (key == 34) { name = Strings.matchClaims }
-        else if (key == 35) { name = Strings.submitClaims }
+        else if (key == 99) { name = Strings.outbound_matchClaims }
+        else if (key == 35 || key == 100) { name = Strings.submitClaims }
 
         else if (key == 37  ){ name = Strings.tradingPartnerConfiguration }
         else if (key == 38 ){ name = Strings.transactionSetup }
