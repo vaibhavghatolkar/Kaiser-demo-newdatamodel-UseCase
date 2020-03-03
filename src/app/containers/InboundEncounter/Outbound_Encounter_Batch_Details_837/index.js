@@ -11,7 +11,7 @@ import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
 
 var val = ''
-export class Outbound_Encounter_ClaimDetails837 extends React.Component {
+export class Outbound_Encounter_BatchDetails837 extends React.Component {
 
     constructor(props) {
         super(props);
@@ -164,7 +164,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            EncounterFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Outbound") {
+            EncounterOutBatchDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Outbound") {
                 RecCount
                 FileID
                 FileName
@@ -188,12 +188,12 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.EncounterFileDetails) {
+                if (res && res.data && res.data.EncounterOutBatchDetails) {
 
-                    if (res.data.EncounterFileDetails.length > 0) {
+                    if (res.data.EncounterOutBatchDetails.length > 0) {
 
-                        count = Math.floor(res.data.EncounterFileDetails[0].RecCount / 10)
-                        if (res.data.EncounterFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.EncounterOutBatchDetails[0].RecCount / 10)
+                        if (res.data.EncounterOutBatchDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
                         this.setState.recount = count;
@@ -201,7 +201,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                     }
 
                     this.setState({
-                        intakeClaims: res.data.EncounterFileDetails,
+                        intakeClaims: res.data.EncounterOutBatchDetails,
                     }, () => {
                         this.sortData()
                     })
@@ -255,7 +255,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            EncounterProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"", RecType: "Outbound") {
+            EncounterOutProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"", RecType: "Outbound") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -283,7 +283,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.EncounterProcessingSummary
+                var data = res.data.EncounterOutProcessingSummary
                 if (data && data.length > 0) {
                     this.sortData(fileId, data)
                 }
@@ -442,7 +442,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         let AccidentDate = ""
         let url = Urls.real_time_claim_details
         let query = `{
-            EncounterDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            EncounterOutDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
               ClaimID
               ClaimDate
               ClaimTMTrackingID
@@ -463,7 +463,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
               FileID
               FieldToUpdate
             }
-            EncounterLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            EncounterBatchLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
               ClaimID
               ServiceLineCount
               ProviderPaidAmount
@@ -486,18 +486,18 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("sdfdsss", res.data.EncounterDetails[0].FieldToUpdate)
-                if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
-                    if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {
+                console.log("sdfdsss", res.data.EncounterOutDetails[0].FieldToUpdate)
+                if (res.data.EncounterOutDetails && res.data.EncounterOutDetails.length > 0) {
+                    if (res.data.EncounterOutDetails[0].FieldToUpdate == "ICDCode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
                             <option value="0" ></option>
                             {this.getIcdcodeoptions()}
                         </select>
                     }
                     else {
-                        Claim_Icdcode = res.data.EncounterDetails[0].ICDCode;
+                        Claim_Icdcode = res.data.EncounterOutDetails[0].ICDCode;
                     }
-                    if (res.data.EncounterDetails[0].FieldToUpdate == "AccidentDt") {
+                    if (res.data.EncounterOutDetails[0].FieldToUpdate == "AccidentDt") {
 
                         //     AccidentDate = <DatePicker
                         //     className="form-control list-header-dashboard"
@@ -508,13 +508,13 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                     }
                     else {
 
-                        AccidentDate = res.data.EncounterDetails[0].AccidentDate;
+                        AccidentDate = res.data.EncounterOutDetails[0].AccidentDate;
                     }
-                    let data = res.data.EncounterDetails[0]
+                    let data = res.data.EncounterOutDetails[0]
 
                     let fileDetails = [
-                        { key: 'File Name', value: fileData.FileName },
-                        { key: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
+                        { key: 'Batch Name', value: fileData.FileName },
+                        { key: 'Batch Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
                         { key: 'Receiver', value: fileData.Receiver }
                     ]
 
@@ -536,7 +536,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                     this.setState({
                         showDetails: true,
                         claimDetails: claimDetails,
-                        claimLineDetails: res.data.EncounterLineDetails,
+                        claimLineDetails: res.data.EncounterBatchLineDetails,
                         fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
@@ -581,7 +581,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
 
     // renderTransactions(){
     //     let row = []
-    //     const data = this.state.EncounterProcessingSummary ? this.state.EncounterProcessingSummary : []
+    //     const data = this.state.EncounterOutProcessingSummary ? this.state.EncounterOutProcessingSummary : []
 
     //     data.forEach((d) => {
     //         row.push(
@@ -905,23 +905,23 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-3 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterOutBatchDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
+                    Batch Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By EncounterOutBatchDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
                     Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by EncounterFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by EncounterOutBatchDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
+                    Batch Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-3 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By EncounterFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By EncounterOutBatchDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
+                    Batch Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
+                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By EncounterOutBatchDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
                     Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
                 </div>
             </div>
@@ -1054,9 +1054,9 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         let headerArray = []
         let rowArray = []
         headerArray.push(
-            { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-            { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
+            { value: 'Batch Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
+            { value: 'Batch Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
+            { value: 'Batch Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
             { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
         )
 
@@ -1080,7 +1080,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Encounter Details (Outbound)</h5>
+                <h5 className="headerText">Encounter Batch Details (Outbound)</h5>
                 {this.renderFilters()}
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">

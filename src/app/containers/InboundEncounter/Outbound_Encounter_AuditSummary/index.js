@@ -32,11 +32,11 @@ export class Outbound_Encounter_Audit extends React.Component {
             denied: '',
             WIP: '',
             Pending: '',
-            TotalBatch : '',
-            ReadytoSend : '',
-            Valid : '',
-            Error : '',
-            ClaimSent : '',
+            TotalBatch: '',
+            ReadytoSend: '',
+            Valid: '',
+            Error: '',
+            ClaimSent: '',
         }
 
         this.getData = this.getData.bind(this)
@@ -83,6 +83,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                 BatchStatus
                 Error
                 ClaimSent
+                Valid
+                ReadytoSend
             }
             ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
                 SubTotal
@@ -153,11 +155,11 @@ export class Outbound_Encounter_Audit extends React.Component {
                         WIP: res.data.EncounterFileInCnt[0].WIP,
                         Pending: res.data.EncounterFileInCnt[0].Pending,
 
-                        TotalBatch : res.data.EncounterFileInCnt[0].TotalBatch,
-                        ReadytoSend : res.data.EncounterFileInCnt[0].ReadytoSend,
-                        Valid : res.data.EncounterFileInCnt[0].Valid,
-                        Error : res.data.EncounterFileInCnt[0].Error,
-                        ClaimSent : res.data.EncounterFileInCnt[0].ClaimSent,
+                        TotalBatch: res.data.EncounterFileInCnt[0].TotalBatch,
+                        ReadytoSend: res.data.EncounterFileInCnt[0].ReadytoSend,
+                        Valid: res.data.EncounterFileInCnt[0].Valid,
+                        Error: res.data.EncounterFileInCnt[0].Error,
+                        ClaimSent: res.data.EncounterFileInCnt[0].ClaimSent,
                     })
                 }
             })
@@ -177,7 +179,7 @@ export class Outbound_Encounter_Audit extends React.Component {
     goto277 = () => {
         sessionStorage.setItem('isOutbound', false)
         this.props.history.push('/' + Strings._277CAResponse, {
-            flag : 1
+            flag: 1
         })
         setTimeout(() => {
             window.location.reload()
@@ -187,7 +189,7 @@ export class Outbound_Encounter_Audit extends React.Component {
     goto999 = () => {
         sessionStorage.setItem('isOutbound', false)
         this.props.history.push('/' + Strings.response_999, {
-            flag : 1
+            flag: 1
         })
         setTimeout(() => {
             window.location.reload()
@@ -209,8 +211,7 @@ export class Outbound_Encounter_Audit extends React.Component {
                     <td className="list-item-style">{d.BatchStatus}</td>
                     {/* <td className="list-item-style">{d.Submitted}</td> */}
                     <td className="list-item-style">{d.Submitted}</td>
-                    <td className="list-item-style">{d.Accepted}</td>
-                    <td className="list-item-style">{d.Rejected}</td>
+                    <td className="list-item-style">{d.Valid}</td>
                     <td className="list-item-style">{d.Error}</td>
                     <td className="list-item-style">{d.ClaimSent}</td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
@@ -221,7 +222,8 @@ export class Outbound_Encounter_Audit extends React.Component {
                         onClick={() => {
                             this.goto277()
                         }}>{d.F277}</a></td>
-
+                    <td className="list-item-style">{d.Accepted}</td>
+                    <td className="list-item-style">{d.Rejected}</td>
                 </tr>
             )
         });
@@ -234,13 +236,14 @@ export class Outbound_Encounter_Audit extends React.Component {
                     <td className="table-head-text list-item-style">Batch Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">From Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td> */}
                     <td className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Valid <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Error<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
                     <td className="table-head-text list-item-style">Sent to State <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                     <td className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Accepted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">Rejected <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
                 </tr>
                 <tbody >
                     <tr>
