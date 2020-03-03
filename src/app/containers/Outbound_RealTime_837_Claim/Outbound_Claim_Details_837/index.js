@@ -30,6 +30,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
             page: 1,
             initialPage: 0,
             lineData: [],
+            claimStageDetails: [],
             file: [],
             fileDetails: [],
             memberInfo: {},
@@ -697,7 +698,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                         {/* <input
                             onChange={(e) => this.onHandleChange(e)}
                             className="form-control" type="text" /> */}
-                               <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -834,6 +835,75 @@ export class Outbound_ClaimDetails837 extends React.Component {
         )
     }
 
+    getClaimStages(claimId, fileId) {
+        let url = Urls.real_time_claim_details
+        let query = `{
+            ClaimStagesOutbound(FileID:"${fileId}", ClaimID: "${claimId}") {
+              Stage
+              Createdatetime
+            }
+          }
+          `
+
+        console.log('query ', query)
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.ClaimStagesOutbound) {
+                    this.setState({
+                        claimStageDetails: res.data.ClaimStagesOutbound
+                    })
+
+                    console.log('claim stage', res.data.ClaimStagesOutbound)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    renderClaimStageDetails() {
+        let row = []
+        const data = this.state.claimStageDetails ? this.state.claimStageDetails : []
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td>{d.Stage}</td>
+                    <td>{moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a')}</td>
+                </tr>
+            )
+        })
+        return (
+            <div className="row">
+                <div className="col-12">
+                    <div className="top-padding"><a href={'#' + 'event1'} data-toggle="collapse">Claim Stages</a></div>
+                    <div id={'event1'}>
+                        <table className="table table-bordered background-color">
+                            <thead>
+                                <tr className="table-head" style={{ fontSize: "9px" }}>
+                                    <td className="table-head-text list-item-style">Stage</td>
+                                    <td className="table-head-text list-item-style">Date</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     renderList() {
         let row = []
         let col = []
@@ -854,7 +924,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-3 col-small-style border-left small-font left-align"><a href={'#'+ keys}
+                    <div className="col-3 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
@@ -876,6 +946,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                                     claimId: d.ClaimID
                                 }, () => {
                                     this.getDetails(d.ClaimID, d.FileID, data[keys].value)
+                                    this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
@@ -1021,6 +1092,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                                 : null
                         }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
+                        {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null}
                     </div>
                 </div>
             </div>

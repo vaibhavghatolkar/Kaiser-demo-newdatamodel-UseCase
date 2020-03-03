@@ -1099,7 +1099,7 @@ export class Outbound_Encounter_BatchDetails837 extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details border">
-                                    {this.renderHeader('File #' + this.state.fileid)}
+                                    {this.renderHeader('Batch #' + this.state.fileid)}
                                     {this.renderRows(this.state.fileDetails)}
                                 </table>
                                 : null
