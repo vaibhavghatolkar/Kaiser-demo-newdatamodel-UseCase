@@ -1130,8 +1130,8 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-12">
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Encounter Stages</a></div>
-                    <div id={'event'}>
+                    <div className="top-padding"><a href={'#' + 'event1'} data-toggle="collapse">Encounter Stages</a></div>
+                    <div id={'event1'}>
                         <table className="table table-bordered background-color">
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
