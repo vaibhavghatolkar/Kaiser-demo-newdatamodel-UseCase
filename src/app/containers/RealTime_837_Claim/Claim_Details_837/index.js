@@ -374,35 +374,7 @@ export class ClaimDetails837 extends React.Component {
             }
 
         }
-        else if (this.checkError == "ICD Code not found") {
-            if(this.state.selectedICdCode!="")
-            {
-              var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
-                  ')' +
-                  '}'
-              console.log(query);
-              fetch(Urls.base_url, {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                  },
-                  body: JSON.stringify({
-                      query
-  
-                  })
-              })
-                  .then(r => r.json())
-                  .then(data =>
-                      alert(data.data.updateICDCode),
-                      setTimeout(() => {
-                          window.location.reload()
-                      }, 1000)
-  
-                  );
-  
-          }
-        }
+      
 
     }
     renderSearchBar() {
@@ -495,7 +467,7 @@ export class ClaimDetails837 extends React.Component {
             .then(res => {
                 console.log("sdfdsss" , res.data.Claim837RTDetails[0].FieldToUpdate)
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
-                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "ICDCode") {
+                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
                             <option value="0" ></option>
                             {this.getIcdcodeoptions()}
@@ -1187,7 +1159,7 @@ export class ClaimDetails837 extends React.Component {
                                     {this.renderHeader('Claim #' + this.state.claimId)}
                                     {this.renderRows(this.state.claimDetails)}
                                     <br></br>
-                                    {this.state.Icdcodepresent == "ICDCode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
+                                    {this.state.Icdcodepresent == "Icdcode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
                                 </table>
                                 : null
                         }

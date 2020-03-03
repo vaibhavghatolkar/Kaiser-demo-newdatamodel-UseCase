@@ -417,7 +417,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
-                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "ICDCode") {
+                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
                             <option value="0" ></option>
                             {this.getIcdcodeoptions()}
@@ -1016,7 +1016,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                                     {this.renderHeader('Claim #' + this.state.claimId)}
                                     {this.renderRows(this.state.claimDetails)}
                                     <br></br>
-                                    {this.state.Icdcodepresent == "ICDCode" ? this.renderButton() : ""}
+                                    {this.state.Icdcodepresent == "Icdcode" ? this.renderButton() : ""}
                                 </table>
                                 : null
                         }

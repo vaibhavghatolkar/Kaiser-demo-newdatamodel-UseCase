@@ -308,14 +308,13 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
         if(this.state.Icdcodepresent=="Icdcode")
         {
         if (this.state.selectedICdCode != "") {
-            let query = `mutation{updateICDCode(
+            let query = `mutation{updateEncounterICDCode(
                     ClaimID:"`+ this.state.claimid + `" 
                     FileID:"`+ this.state.fileid + `"  
                     ICDCode:"`+ this.state.selectedICdCode + `"     
                     )
                   }`
 
-           
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -329,7 +328,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
             })
                 .then(r => r.json())
                 .then(data =>
-                    alert(data.data.updateICDCode),
+                    alert(data.data.updateEncounterICDCode),
                     setTimeout(() => {
                         window.location.reload()
                     }, 1000)
@@ -341,7 +340,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
        else if (this.state.Icdcodepresent == "AccidentDt") {
             if(this.state.Accidentdate!="")
             {
-                let query = `mutation{updateAccidentDate(
+                let query = `mutation{updateEncounterAccidentDate(
                     ClaimID:"`+ this.state.claimid + `"
                     FileID:"`+ this.state.fileid + `"  
                     AccidentDate:"`+ this.state.Accidentdate + `"     
@@ -361,7 +360,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
             })
                 .then(r => r.json())
                 .then(data =>
-                    alert(data.data.updateAccidentDate),
+                    alert(data.data.updateEncounterAccidentDate),
                     setTimeout(() => {
                         window.location.reload()
                     }, 1000)
@@ -491,7 +490,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
             .then(res => {
                 console.log("sdfdsss" , res.data.EncounterDetails[0].FieldToUpdate)
                 if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
-                    if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {
+                    if (res.data.EncounterDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
                             <option value="0" ></option>
                             {this.getIcdcodeoptions()}
@@ -1183,7 +1182,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
                                     {this.renderHeader('Encounter #' + this.state.claimId)}
                                     {this.renderRows(this.state.claimDetails)}
                                     <br></br>
-                                    {this.state.Icdcodepresent == "ICDCode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
+                                    {this.state.Icdcodepresent == "Icdcode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
                                 </table>
                                 : null
                         }
