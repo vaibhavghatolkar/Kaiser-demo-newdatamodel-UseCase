@@ -369,35 +369,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
             }
 
         }
-        else if (this.checkError == "ICD Code not found") {
-            if(this.state.selectedICdCode!="")
-            {
-              var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
-                  ')' +
-                  '}'
-              console.log(query);
-              fetch(Urls.base_url, {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Accept': 'application/json',
-                  },
-                  body: JSON.stringify({
-                      query
-  
-                  })
-              })
-                  .then(r => r.json())
-                  .then(data =>
-                      alert(data.data.updateICDCode),
-                      setTimeout(() => {
-                          window.location.reload()
-                      }, 1000)
-  
-                  );
-  
-          }
-        }
+    
 
     }
     renderSearchBar() {
@@ -1122,7 +1094,7 @@ export class Inbound_Encounter_ClaimDetails837 extends React.Component {
             row.push(
                 <tr>
                     <td>{d.Stage}</td>
-                    <td>{moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a')}</td>
+                    <td>{Number(d.Createdatetime) ? moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a') : d.Createdatetime}</td>
                 </tr>
             )
         })

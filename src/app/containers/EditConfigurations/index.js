@@ -56,7 +56,7 @@ export class EditConfiguration extends React.Component {
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
-            transactionSelect:'837P',
+            transactionSelect:'Encounter 837P',
             GetCustomEdits:[],
             is_mandatory: 'Required'
 

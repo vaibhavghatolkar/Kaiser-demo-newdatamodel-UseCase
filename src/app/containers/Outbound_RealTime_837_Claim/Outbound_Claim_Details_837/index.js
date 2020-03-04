@@ -878,7 +878,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
             row.push(
                 <tr>
                     <td>{d.Stage}</td>
-                    <td>{moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a')}</td>
+                    <td>{Number(d.Createdatetime) ? moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a') : d.Createdatetime}</td>
                 </tr>
             )
         })
