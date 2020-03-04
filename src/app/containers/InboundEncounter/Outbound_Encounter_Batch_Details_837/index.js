@@ -298,7 +298,7 @@ export class Outbound_Encounter_BatchDetails837 extends React.Component {
 
             <div>
 
-                <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
+                <button  className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
 
             </div>
         )
