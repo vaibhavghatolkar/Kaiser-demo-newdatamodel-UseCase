@@ -172,6 +172,7 @@ export class ClaimProcessingSummary extends React.Component {
 				F277
                 TotalLinewise835
                 TotalLine
+                Transaction_Status
             }
         }`
         console.log(query)
@@ -385,7 +386,7 @@ export class ClaimProcessingSummary extends React.Component {
             // { value : 'ProviderFirstName'},
             // { value: 'Claim_Amount', isAmount: 1 },
             { value: 'Subscriber_ID' },
-            { value: '' },
+            { value: 'Transaction_Status' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
             { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },

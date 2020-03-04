@@ -35,6 +35,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
+            NotSentState: '',
 
             fileNameFlag: 180,
             fileDateFlag: 180,
@@ -104,6 +105,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             denied
             WIP
             Pending
+            NotSentState
           } }`
 
         console.log(query)
@@ -136,6 +138,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                         Pending: data[0].Pending,
                         Denide: data[0].denied,
                         wip90: data[0].WIP,
+                        NotSentState: data[0].NotSentState
                     })
                 }
             })
@@ -595,7 +598,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">NOT SENT TO STATE</div>
-                    <div className="blue summary-title1">{this.state.wip90}</div>
+                    <div className="blue summary-title1">{this.state.NotSentState}</div>
                 </div>
 
                 {/* <div className="col summary-container">
