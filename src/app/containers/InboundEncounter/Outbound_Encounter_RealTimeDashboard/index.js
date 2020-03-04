@@ -190,8 +190,8 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         { name: 'Total Batch | Total Files', value: (data.EncounterDashboardCount[0].TotalBatch ? data.EncounterDashboardCount[0].TotalBatch : "") + (data.EncounterDashboardCount[0].TotalFiles ? " | " + data.EncounterDashboardCount[0].TotalFiles : ''), isText: 1 },
                         // { name: 'Total Batch | Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
                         { name: 'Ready to Send', value: data.EncounterDashboardCount[0].ReadytoSend ? data.EncounterDashboardCount[0].ReadytoSend : '' },
-                        { name: 'Error Claims', value: data.EncounterDashboardCount[0].Error ? data.EncounterDashboardCount[0].Error : '' },
-                        { name: 'Claims Sent', value: data.EncounterDashboardCount[0].ClaimSent ? data.EncounterDashboardCount[0].ClaimSent : '' },
+                        { name: 'Error Encounter', value: data.EncounterDashboardCount[0].Error ? data.EncounterDashboardCount[0].Error : '' },
+                        { name: 'Encounter Sent', value: data.EncounterDashboardCount[0].ClaimSent ? data.EncounterDashboardCount[0].ClaimSent : '' },
 
                         // { name: 'Total Encounter', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
                         // { name: 'Rejected Files', value: 0 },
@@ -620,8 +620,8 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                         <div className="summary-header">{item.name}</div>
                         <div className={
                             (item.name == 'Total Batch | Total Files' || item.name == 'Total Encounter' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Clean Percent' || item.name == 'Accepted Encounter' || item.name == 'Ready to Send' || item.name == 'Claims Sent') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Rejected Encounter' || item.name == 'Rejected Files' || item.name == 'Error Claims') ? 'red summary-title' : ''
+                                (item.name == 'Clean Percent' || item.name == 'Accepted Encounter' || item.name == 'Ready to Send' || item.name == 'Encounter Sent') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Error Percent' || item.name == 'Rejected Encounter' || item.name == 'Rejected Files' || item.name == 'Error Encounter') ? 'red summary-title' : ''
                         }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
                     </div>
                     :
@@ -813,7 +813,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 <td className="table-head-text list-item-style">Batch Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Batch Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
                 <td className="table-head-text list-item-style">Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Total Claims | Errored Claims<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Total Encounter | Errored Encounter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
             </tr>
         )
     }
