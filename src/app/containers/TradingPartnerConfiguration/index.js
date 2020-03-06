@@ -304,9 +304,9 @@ export class TradingPartnerConfiguration extends React.Component {
           .then(r => r.json())
           .then(data => alert(data.data.SP_Trading_Partner_Save))
 
-        //   setTimeout(() => {
-        //     window.location.reload()
-        // }, 1000)
+          setTimeout(() => {
+            window.location.reload()
+        }, 1000)
     }
     else
     {

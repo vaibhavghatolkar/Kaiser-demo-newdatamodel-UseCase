@@ -77,14 +77,7 @@ export class AuditSummary extends React.Component {
               F999
               FileStatus
             }
-            ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
-                SubTotal
-                VeriTotal
-                InBizstockTotal
-                PenTotal
-                RejTotal
-                errTotal
-            }
+           
             FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Inbound"){
                 totalFile
                 TotalClaims 
@@ -122,12 +115,12 @@ export class AuditSummary extends React.Component {
                     console.log("sdghusighsjgn", res.data.FileInCount[0])
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
-                        SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
-                        VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
-                        InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
-                        PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
-                        RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
-                        errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
+                        // SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
+                        // VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
+                        // InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
+                        // PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
+                        // RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
+                        // errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
                         totalFile: totalFile,
                         TotalClaims: res.data.FileInCount[0].TotalClaims,
                         Accepted: res.data.FileInCount[0].Accepted,
