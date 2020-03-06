@@ -290,7 +290,7 @@ export class TradingPartnerConfiguration extends React.Component {
                 'File_Naming_Options : "")'+
   
            '}' 
-     
+     console.log(query)
            fetch(Urls.base_url, {
           method: 'POST',
           headers: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 import '../../Files/files-styles.css';
-import { Pie, Bar } from 'react-chartjs-2';
+import { Pie, Bar, Line } from 'react-chartjs-2';
 import '../../color.css'
 import moment from 'moment';
 import { Files } from '../../Files';
@@ -307,10 +307,10 @@ export class RealTimeDashboard extends React.Component {
                         height={40} /> */}
                 </div>
                 <div className="chart-container chart">
-                    {/* <Bar
+                    <Line
                         data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
-                        width={80}
-                        height={45}
+                        width={100}
+                        height={80}
                         options={{
                             legend: {
                                 position: 'bottom'
@@ -322,8 +322,8 @@ export class RealTimeDashboard extends React.Component {
                                     }
                                 }]
                             }
-                        }} /> */}
-                    <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', height: '260px', marginLeft: '-2px' }}></img>
+                        }} />
+                    {/* <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', height: '260px', marginLeft: '-2px' }}></img> */}
                 </div>
             </div>
         )
