@@ -381,8 +381,8 @@ export class RealTime276 extends React.Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 3,
                     pointHitRadius: 1,
-                    data: [23,41,35,98,43,12,15,25,89,45,73,23, 12]
-                    // data: dataArray
+                    // data: [23,41,35,98,43,12,15,25,89,45,73,23, 12]
+                    data: dataArray
                 }
             ]
         }
@@ -1036,13 +1036,18 @@ export class RealTime276 extends React.Component {
                                             }]
                                         }
                                     }} /> */}
-                                     {/* <Line 
+                                     <Line 
                                         data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')} 
                                         style={{ width: '100%', marginLeft: '-2px' }}
                                         width={100}
                                         height={64}
-                                        /> */}
-                                <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', marginLeft: '-2px' }}></img>
+                                        options={{
+                                            legend: {
+                                                display: false,
+                                            },
+                                        }}
+                                        />
+                                {/* <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', marginLeft: '-2px' }}></img> */}
                             </div> : null
                     }
                 </div>
