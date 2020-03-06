@@ -431,7 +431,7 @@ export class EligibilityDetails extends React.Component {
             <div className="row">
                 <div className={"col-12"}>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
+                    <div className="border-view collapse breakword" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
                 </div>
             </div>
         )
