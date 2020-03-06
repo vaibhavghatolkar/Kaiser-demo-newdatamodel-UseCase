@@ -2,7 +2,7 @@ import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import './style.css'
 import '../../color.css'
-import { Pie, Bar } from 'react-chartjs-2';
+import { Pie, Bar, Line } from 'react-chartjs-2';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import { EligibilityDetails } from '../../EligibilityDetails';
@@ -355,6 +355,38 @@ export class RealTime276 extends React.Component {
         }
 
         return bardata
+    }
+
+    getLineChart(labelArray, dataArray, color) {
+        let _data = {
+            labels: labelArray,
+            datasets: [
+                {
+                    label: '',
+                    fill: true,
+                    // lineTension: 0.2,
+                    cubicInterpolationMode: 'default',
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: color,
+                    // borderCapStyle: 'round',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'round',
+                    pointBorderColor: color,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 3,
+                    pointHitRadius: 1,
+                    data: [23,41,35,98,43,12,15,25,89,45,73,23, 12]
+                    // data: dataArray
+                }
+            ]
+        }
+        return _data
     }
 
     getPieData(array, labels, colorArray) {
@@ -1004,7 +1036,13 @@ export class RealTime276 extends React.Component {
                                             }]
                                         }
                                     }} /> */}
-                                    <img src={require('../../../components/Images/chart.png')} style={{ width : '100%', marginLeft : '-2px' }}></img>
+                                     {/* <Line 
+                                        data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')} 
+                                        style={{ width: '100%', marginLeft: '-2px' }}
+                                        width={100}
+                                        height={64}
+                                        /> */}
+                                <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', marginLeft: '-2px' }}></img>
                             </div> : null
                     }
                 </div>
@@ -1165,7 +1203,7 @@ export class RealTime276 extends React.Component {
                                 this.onSelect(event, 'State')
                             }}
                         >
-                            <option  value=""></option>
+                            <option value=""></option>
                             <option selected value="1">California</option>
                             <option value="2">Michigan</option>
                             <option value="3">Florida</option>
@@ -1200,7 +1238,7 @@ export class RealTime276 extends React.Component {
                     <div className="form-group col-3">
                         <div className="list-dashboard">
                             Provider Name
-   
+
                         </div>
                         <select className="form-control list-dashboard">
                             <option value=""></option>
@@ -1253,14 +1291,14 @@ export class RealTime276 extends React.Component {
         let errorcode = ""
 
         array.forEach(item => {
-            if(item.name == 'INVALID TRANSACTIONS'){
+            if (item.name == 'INVALID TRANSACTIONS') {
                 errorcode = '999'
             } else {
                 errorcode = ""
             }
 
             data = [
-                {apiflag:apiflag,State:this.state.State ? this.state.State : 'n', selectedTradingPartner:this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate:startDate ,endDate:endDate ,transactionId:this.state.transactionId ? this.state.transactionId : 'n' , status:item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail' , count:item.value, errorcode : errorcode},
+                { apiflag: apiflag, State: this.state.State ? this.state.State : 'n', selectedTradingPartner: this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate: startDate, endDate: endDate, transactionId: this.state.transactionId ? this.state.transactionId : 'n', status: item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail', count: item.value, errorcode: errorcode },
             ]
 
             if (item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {

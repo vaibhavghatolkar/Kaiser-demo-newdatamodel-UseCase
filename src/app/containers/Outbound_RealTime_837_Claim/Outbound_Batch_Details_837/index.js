@@ -295,7 +295,7 @@ export class Outbound_BatchDetails837 extends React.Component {
 
             <div>
 
-                <button  className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
+                <button className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
 
             </div>
         )
@@ -1005,7 +1005,7 @@ export class Outbound_BatchDetails837 extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details border">
-                                    {this.renderHeader('File #' + this.state.fileid)}
+                                    {this.renderHeader('Batch #' + this.state.fileid)}
                                     {this.renderRows(this.state.fileDetails)}
                                 </table>
                                 : null
