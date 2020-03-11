@@ -1065,6 +1065,7 @@ export class ClaimDetails837 extends React.Component {
                 <table className="table claim-details">
                     {row}
                 </table>
+               <div style={{marginLeft: '-14px'}}>
                 <ReactPaginate
                     previousLabel={'previous'}
                     nextLabel={'next'}
@@ -1083,6 +1084,7 @@ export class ClaimDetails837 extends React.Component {
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
                 />
+                </div>
             </div>
         );
     }
