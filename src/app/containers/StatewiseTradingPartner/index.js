@@ -432,7 +432,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 className="headerText">Trading Partner Details</h5><br/>
+                    <h5 className="headerText">Trading Partner Details</h5><br />
                 </div>
                 <div className="container">
                     <div className="panel-group">
@@ -505,8 +505,8 @@ export class StatewiseTradingPartner extends React.Component {
        </span>
                                 </div>
                                 <div id="BasicX12Options1" className="collapse" >
-                                        <div className="row" style={{ marginLeft: "2px" }}>
-                                            {/* <div className="form-group col-sm-2">
+                                    <div className="row" style={{ marginLeft: "2px" }}>
+                                        {/* <div className="form-group col-sm-2">
                                         <label className="list-header1">Sender Name</label>
                                         <input className="form-control list-dashboard"  id="state"
                             onChange={(e) => {clearTimeout(val)
@@ -521,22 +521,22 @@ export class StatewiseTradingPartner extends React.Component {
                         />
                         
                                     </div> */}
-                                            <div className="form-group col-sm-2">
-                                                <label className="list-header1">Sender Id(ISA06)</label>
-                                                <input className="form-control list-header1" id="state"
-                                                    onChange={(e) => {
-                                                        clearTimeout(val)
-                                                        let value = e.target.value
-                                                        val = setTimeout(() => {
-                                                            this.setState({ Search_Senderid: value, showDetails: false })
-                                                            setTimeout(() => {
-                                                                this.gettranaction()
-                                                            }, 50);
-                                                        }, 300);
-                                                    }}
-                                                />
-                                            </div>
-                                            {/* <div className="form-group col-sm-2">
+                                        <div className="form-group col-sm-2">
+                                            <label className="list-header1">Sender Id(ISA06)</label>
+                                            <input className="form-control list-header1" id="state"
+                                                onChange={(e) => {
+                                                    clearTimeout(val)
+                                                    let value = e.target.value
+                                                    val = setTimeout(() => {
+                                                        this.setState({ Search_Senderid: value, showDetails: false })
+                                                        setTimeout(() => {
+                                                            this.gettranaction()
+                                                        }, 50);
+                                                    }, 300);
+                                                }}
+                                            />
+                                        </div>
+                                        {/* <div className="form-group col-sm-2">
                                         <label className="list-header1">Payer Name</label>
                                         <input className="form-control list-dashboard"  id="state"
                             onChange={(e) => {clearTimeout(val)
@@ -550,47 +550,47 @@ export class StatewiseTradingPartner extends React.Component {
                             }}
                         />
                                     </div> */}
-                                            <div className="form-group col-sm-2">
-                                                <label className="list-header1">Payer Id</label>
-                                                <input className="form-control list-header1" id="state"
-                                                    onChange={(e) => {
-                                                        clearTimeout(val)
-                                                        let value = e.target.value
-                                                        val = setTimeout(() => {
-                                                            this.setState({ Search_PayerID: value, showDetails: false })
-                                                            setTimeout(() => {
-                                                                this.gettranaction()
-                                                            }, 50);
-                                                        }, 300);
-                                                    }}
-                                                />
-                                            </div>
-                                            <div className="form-group col-sm-2">
-                                                <label className="list-header1">State</label>
-                                                <select className="form-control list-header1" onChange={(event) => {
-                                                    this.ChangeVal(event, 'Search_State')
-                                                    setTimeout(() => {
-                                                        this.gettranaction()
-                                                    }, 50);
-                                                }} >
-                                                    <option value=""></option>
-                                                    {this.Search_getoptions()}
-                                                </select>
-                                            </div>
-                                            <div className="form-group col-sm-2">
-                                                <label className="list-header1">Transaction Type</label>
-                                                <select className="form-control list-header1" va id="fao1"
-                                                    onChange={(event) => {
-                                                        this.ChangeVal(event, 'Search_Tran_Type')
+                                        <div className="form-group col-sm-2">
+                                            <label className="list-header1">Payer Id</label>
+                                            <input className="form-control list-header1" id="state"
+                                                onChange={(e) => {
+                                                    clearTimeout(val)
+                                                    let value = e.target.value
+                                                    val = setTimeout(() => {
+                                                        this.setState({ Search_PayerID: value, showDetails: false })
                                                         setTimeout(() => {
                                                             this.gettranaction()
                                                         }, 50);
-                                                    }} >>
+                                                    }, 300);
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="form-group col-sm-2">
+                                            <label className="list-header1">State</label>
+                                            <select className="form-control list-header1" onChange={(event) => {
+                                                this.ChangeVal(event, 'Search_State')
+                                                setTimeout(() => {
+                                                    this.gettranaction()
+                                                }, 50);
+                                            }} >
+                                                <option value=""></option>
+                                                {this.Search_getoptions()}
+                                            </select>
+                                        </div>
+                                        <div className="form-group col-sm-2">
+                                            <label className="list-header1">Transaction Type</label>
+                                            <select className="form-control list-header1" va id="fao1"
+                                                onChange={(event) => {
+                                                    this.ChangeVal(event, 'Search_Tran_Type')
+                                                    setTimeout(() => {
+                                                        this.gettranaction()
+                                                    }, 50);
+                                                }} >>
                                             <option value="" ></option>
-                                                    {this.Search_gettrans()}
+                                                {this.Search_gettrans()}
 
-                                                </select>
-                                           
+                                            </select>
+
 
                                         </div>
 

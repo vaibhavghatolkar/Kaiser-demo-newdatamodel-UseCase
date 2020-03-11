@@ -265,6 +265,38 @@ export class RealTimeDashboard extends React.Component {
         return bardata
     }
 
+    getLineChart(labelArray, dataArray, color) {
+        let _data = {
+            labels: labelArray,
+            datasets: [
+                {
+                    label: '',
+                    fill: true,
+                    // lineTension: 0.2,
+                    cubicInterpolationMode: 'default',
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: color,
+                    // borderCapStyle: 'round',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'round',
+                    pointBorderColor: color,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 3,
+                    pointHitRadius: 1,
+                    // data: [23,41,35,98,43,12,15,25,89,45,73,23, 12]
+                    data: dataArray
+                }
+            ]
+        }
+        return _data
+    }
+
     renderCharts() {
         const data = {
             labels: [
@@ -308,7 +340,7 @@ export class RealTimeDashboard extends React.Component {
                 </div>
                 <div className="chart-container chart">
                     <Line
-                        data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
+                        data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
                         width={100}
                         height={80}
                         options={{
@@ -583,15 +615,15 @@ export class RealTimeDashboard extends React.Component {
                     :
                     <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
-                        <div className="row">
-                            <div className={
-                                (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                    (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                        (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                            }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
+                        <div className={
+                            (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
+                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
+                        }>
+                            {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
                             {
                                 item.name == 'Resubmit Queue' ?
-                                    <button className="btnDesign button-resubmit">Submit</button> : ''
+                                    <button className="btnDesign button-resubmit">Submit</button> : null
                             }
                         </div>
                     </Link>
