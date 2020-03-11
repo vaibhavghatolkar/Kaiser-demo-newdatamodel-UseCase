@@ -499,11 +499,11 @@ export class ClaimDetails837 extends React.Component {
                         [
                             { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
                             { key: 'Claim Date', value: data.ClaimDate },
-                            { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                            { key: 'Subscriber last name', value: data.SubscriberLastName },
-                            { key: 'Admission date', value: data.AdmissionDate },
-                            { key: 'Claim amount', value: data.Claim_Amount },
-                            { key: 'Provider address', value: data.BillingProviderAddress },
+                            { key: 'Subscriber First Name', value: data.SubscriberFirstName },
+                            { key: 'Subscriber Last Name', value: data.SubscriberLastName },
+                            { key: 'Admission Date', value: data.AdmissionDate },
+                            { key: 'Claim Amount', value: data.Claim_Amount },
+                            { key: 'Provider Address', value: data.BillingProviderAddress },
                             { key: 'Claim Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
                             { key: 'Accident Date', value: AccidentDate },
@@ -861,10 +861,10 @@ export class ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Service line No.</td>
+                                    <td className="table-head-text list-item-style">Service Line No.</td>
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
-                                    <td className="table-head-text list-item-style">Service date</td>
-                                    <td className="table-head-text list-item-style">Procedure code</td>
+                                    <td className="table-head-text list-item-style">Service Date</td>
+                                    <td className="table-head-text list-item-style">Procedure Code</td>
                                     <td className="table-head-text list-item-style">Unit</td>
                                 </tr>
                             </thead>

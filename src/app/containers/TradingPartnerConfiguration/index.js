@@ -417,7 +417,7 @@ export class TradingPartnerConfiguration extends React.Component {
                         </div>
                         </div>
                         
-                        <div className="container">
+                        <div>
                             <div className="panel-group">
                                 <div className="panel panel-default">
                                     <div className="panel-heading collapsible" data-toggle="collapse" href="#BasicX12Options">
@@ -533,7 +533,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                                 </div>
 
                                                 <div className="form-group col-sm-3" style={{ marginRight: "500px" }}>
-                                                    <label>
+                                                    <label  className="list-header1">
                                                         ID
                                                    </label>
                                                     <input type="text" className="list-header1 form-control" value={ this.state.Authorization_Info_ID == null ? '' : this.state.Authorization_Info_ID } onChange={(e) => this.onChangeName(e, 'Authorization_Info_ID')} />
@@ -551,7 +551,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                                 </div>
 
                                                 <div className="form-group col-sm-3" style={{ marginRight: "500px" }}>
-                                                    <label>
+                                                    <label  className="list-header1">
                                                         ID
                             </label>
                                                     <input type="text" className="list-header1 form-control" value={ this.state.Security_Information_Id == null ? '' : this.state.Security_Information_Id} onChange={(e) => this.onChangeName(e, 'Security_Information_Id')} />
@@ -573,7 +573,7 @@ export class TradingPartnerConfiguration extends React.Component {
                                                 </div>
 
                                                 <div className="form-group col-sm-3" style={{ marginRight: "500px" }}>
-                                                    <label>
+                                                    <label  className="list-header1">
                                                         ID
                             </label>
                                                     <input type="text" className="list-header1 form-control" value={this.state.Interchange_ID} onChange={(e) => this.onChangeName(e, 'Interchange_ID')} />
