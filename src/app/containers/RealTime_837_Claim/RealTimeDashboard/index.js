@@ -317,8 +317,7 @@ export class RealTimeDashboard extends React.Component {
             flag: ''
         };
 
-        console.log(this.state.ClaimBarChart)
-
+        // console.log(this.state.ClaimBarChart)
         return (
             <div className="row chart-div">
                 <div className="chart-container chart">
@@ -345,17 +344,14 @@ export class RealTimeDashboard extends React.Component {
                         height={80}
                         options={{
                             legend: {
-                                position: 'bottom'
-                            },
-                            pieceLabel: {
-                                render: 'label',
-                                position: 'outside'
+                                position: 'bottom',
+                                display: false
                             },
                             scales: {
                                 xAxes: [{
                                     ticks: {
                                         fontSize: 10,
-                                    }
+                                    },
                                 }]
                             }
                         }} />
@@ -418,9 +414,9 @@ export class RealTimeDashboard extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style">{d.Type}</td>
-                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br/>{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
@@ -430,7 +426,7 @@ export class RealTimeDashboard extends React.Component {
 
         return (
             <div>
-                <table className="table table-bordered claim-list">
+                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed'}}>
                     {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
