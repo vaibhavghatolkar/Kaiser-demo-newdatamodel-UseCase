@@ -30,10 +30,11 @@ export class ResearchQueue extends React.Component {
                         <div>
                             <h5 className="headerText">Assigned Claims Summary - John Smith</h5>
                         </div>
-                        <div className="row">
-                            <div className="form-group col-sm-3">
-                                <label className="list-header">State</label>
-                                <select className="form-control list-header" id="selState">
+                        <div className="form-style" id='filters'>
+                <div className="form-row">
+                            <div className="form-group col-3">
+                                <label  className="list-dashboard">State</label>
+                                <select  class="form-control list-dashboard" id="selState">
                                     <option selected="selected" value="1">California</option>
                                     <option value="2">Michigan</option>
                                     <option value="3">Florida</option>
@@ -51,23 +52,23 @@ export class ResearchQueue extends React.Component {
                                     <option value="15">Wisconsin</option>
                                 </select>
                             </div>
-                            <div className="form-group col-sm-3">
-                                <label className="list-header">Submitter</label>
-                                <select className="form-control list-header" id="selTradingPartner">
+                            <div className="form-group col-3">
+                                <label className="list-dashboard">Submitter</label>
+                                <select  class="form-control list-dashboard" id="selTradingPartner">
                                     <option value="">Submitter</option>
                                     <option selected="selected" value="1">Submitter 1</option>
                                     <option value="2">Submitter 2</option>
                                 </select>
                             </div>
-                            <div className="form-group col-sm-3">
-                                <label className="list-header">Provider Name </label>
-                                <select className="form-control list-header" id="selProviderName">
+                            <div className="form-group col-3">
+                                <label className="list-dashboard">Provider Name </label>
+                                <select  class="form-control list-dashboard" id="selProviderName">
                                     <option value="">Provider Name</option>
                                     <option selected="selected" value="1">Provider Name 1</option>
                                     <option value="2">Provider Name 2</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>    </div>
                         <div className="table table-bordered claim-list">
                             <table className="table table-striped">
         
