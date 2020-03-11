@@ -69,8 +69,8 @@ export class ResearchQueue extends React.Component {
                                 </select>
                             </div>
                         </div>    </div>
-                        <div className="table table-bordered claim-list">
-                            <table className="table table-striped">
+                        <div className="table claim-list">
+                            <table className="table table-bordered">
         
                                     <tr className="table-head">
                                         <td className="table-head-text list-item-style">Assign <img className="SearchBarImage" src={require('../../components/Images/search_table.png')}></img></td>
