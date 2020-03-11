@@ -391,14 +391,8 @@ export class StatewiseTradingPartner extends React.Component {
         });
 
         return (
-            <div>
-                {/* <div className="panel-heading collapsible" data-toggle="collapse" style={{backgroundColor:"#139DC9" ,}}  >
-                <span className="panel-title" style={{color:"white" ,fontSize:"12px"}}>Trading Partner View </span>
-            </div> */}
-                {/* <div className="panel-collapse content">
-                <div className="panel-body">
-            <div> */}
-                <table className="table table-bordered claim-list" align="center" style={{ width: '95%' }}>
+            <div className="overall-padding">
+                <table className="table table-bordered claim-list" align="center">
                     {this.state.TradingPartnerList && this.state.TradingPartnerList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
@@ -434,13 +428,13 @@ export class StatewiseTradingPartner extends React.Component {
                 <div>
                     <h5 className="headerText">Trading Partner Details</h5><br />
                 </div>
-                <div className="container">
+                <div>
                     <div className="panel-group">
                         <div className="panel panel-default" style={{ border: "1px" }}>
                             <div className="panel-heading collapsible" style={{ background: "#139DC9", }} href="#BasicX12Options">
                                 <span className="panel-title" style={{ color: "white", fontSize: "12px" }}>
                                     Trading Partner Configuration
-       </span>
+                                </span>
                             </div>
                             <div id="BasicX12Options"   > <div className=" content">
 
