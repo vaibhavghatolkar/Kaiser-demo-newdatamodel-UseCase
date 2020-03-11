@@ -15,6 +15,7 @@ export class CommonTable extends React.Component {
 
     renderPagination() {
         return (
+            <div style={{marginLeft: '-14px'}}>
             <ReactPaginate
                 previousLabel={'previous'}
                 nextLabel={'next'}
@@ -33,6 +34,7 @@ export class CommonTable extends React.Component {
                 subContainerClassName={'pages pagination'}
                 activeClassName={'active'}
             />
+            </div>
         )
     }
 
@@ -111,6 +113,7 @@ export class CommonTable extends React.Component {
         return (
             <div className="margin scrollmenu">
                 {row}
+                <br/>
                 {this.renderPagination()}
             </div>
         )

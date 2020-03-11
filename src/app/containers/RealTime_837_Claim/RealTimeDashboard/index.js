@@ -340,12 +340,16 @@ export class RealTimeDashboard extends React.Component {
                 </div>
                 <div className="chart-container chart">
                     <Line
-                        data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
+                        data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
                         width={100}
                         height={80}
                         options={{
                             legend: {
                                 position: 'bottom'
+                            },
+                            pieceLabel: {
+                                render: 'label',
+                                position: 'outside'
                             },
                             scales: {
                                 xAxes: [{
@@ -613,6 +617,7 @@ export class RealTimeDashboard extends React.Component {
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
+                    
                     <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
@@ -627,6 +632,7 @@ export class RealTimeDashboard extends React.Component {
                             }
                         </div>
                     </Link>
+                   
             )
         });
 

@@ -1037,7 +1037,7 @@ export class RealTime276 extends React.Component {
                                         }
                                     }} /> */}
                                      <Line 
-                                        data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')} 
+                                        data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#139DC9')} 
                                         style={{ width: '100%', marginLeft: '-2px' }}
                                         width={100}
                                         height={64}
