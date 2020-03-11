@@ -13,6 +13,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
+import { AutoComplete } from '../../../components/AutoComplete';
+import { getProviders } from '../../../../helpers/getDetails';
 
 
 let val = ''
@@ -74,6 +76,7 @@ export class RealTimeDashboard extends React.Component {
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
+            providers: [],
             search: ''
 
         }
@@ -617,7 +620,7 @@ export class RealTimeDashboard extends React.Component {
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
-                    
+
                     <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
@@ -632,7 +635,7 @@ export class RealTimeDashboard extends React.Component {
                             }
                         </div>
                     </Link>
-                   
+
             )
         });
 
@@ -643,20 +646,31 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
-    onHandleChange(e) {
+    onHandleChange = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
         val = setTimeout(() => {
-            this.setState({
-                providerName: providerName
-            }, () => {
-                this.getData()
-                this.getListData()
+            getProviders("Inbound", providerName)
+            .then(list => {
+                this.setState({
+                    providers: list
+                })
+            }).catch(error => {
+                console.log(error)
             })
         }, 300);
     }
 
-    renderTopbar() {
+    onSelected = (value) => {
+        this.setState({
+            providerName: value
+        }, () => {
+            this.getData()
+            this.getListData()
+        })
+    }
+
+    renderTopbar = () => {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
@@ -746,17 +760,12 @@ export class RealTimeDashboard extends React.Component {
                         {/* <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         /> */}
-                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
+                        />
+                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
                     </div>
 
                     <div className="form-group col-2">
@@ -772,6 +781,17 @@ export class RealTimeDashboard extends React.Component {
                             selected={new Date(this.state.endDate)}
                             onChange={this.handleEndChange}
                         />
+                    </div>
+
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
                     </div>
                 </div>
             </div>
