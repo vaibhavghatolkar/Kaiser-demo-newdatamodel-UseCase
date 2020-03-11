@@ -72,14 +72,6 @@ td a {
     border-style: solid;
     border-width: thin;
 }
-.pagination {
-    /* display: -ms-flexbox; */
-    display: flex;
-    padding-left: 0;
-    list-style: none;
-    border-radius: .25rem;
-    font-size: 9px
-}
 .hr {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
