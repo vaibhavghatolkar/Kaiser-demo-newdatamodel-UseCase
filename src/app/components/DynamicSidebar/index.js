@@ -327,6 +327,7 @@ export class DynamicSidebar extends React.Component {
     }
 
     renderCopyright = () => {
+        // fixed-bottom
         return(
             <div className="copyright"><br/>
                 © 2020 Powered by HiPaaS,<br/> All rights reserved.

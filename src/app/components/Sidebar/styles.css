@@ -67,8 +67,7 @@ ul ul a {
 #sidebar {
     left: 0;
     padding-bottom: 70px;
-    height: 100%;
-    z-index: 999;
+    height: 90%;
     background: var(--white-color);
     color: var(--black-color);
     overflow: auto;

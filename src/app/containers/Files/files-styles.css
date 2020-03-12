@@ -173,7 +173,11 @@
 }
 .copyright{
     color: darkslategrey;
-    padding-left: 12px
+    padding-left: 12px;
+    position: fixed;                  
+    bottom:0; 
+    z-index: 1;
+    background-color: var(--white-color);
 }
 .border-bottom{
     border-bottom: 1.5px solid #139DC9 !important;
