@@ -392,20 +392,22 @@ export class TradingPartnerConfiguration extends React.Component {
 
                         <div>
                         <h5 className="headerText">Trading Partner Configuration</h5>
-                        </div><br></br>
-                        <div className="row">
+                        </div>
+                        <div className="form-style" id='filters'>
+                <div className="form-row">
+
 
                             <div className="form-group col-sm-3">
-                                <label className="list-header1">Trading partner</label>
-                                <select className="form-control list-header1" id="fao1" onChange={this.ChangeTradingPartner}>
+                                <label  className="list-dashboard">Trading partner</label>
+                                <select class="form-control list-dashboard" id="fao1" onChange={this.ChangeTradingPartner}>
                                     <option value="0">Trading partner</option>
                                     {this.getoptions()}
                                 </select>
                             </div>
 
                             <div className="form-group col-sm-3">
-                                <label className="list-header1">Trading Partner Name</label>
-                                <input className="form-control list-header1" autoComplete="off" type="text" value={this.state.Change_Trading_Partner} onChange={(e) => this.onChangeName(e, 'Change_Trading_Partner')} />
+                                <label  className="list-dashboard">Trading Partner Name</label>
+                                <input class="form-control list-dashboard" autoComplete="off" type="text" value={this.state.Change_Trading_Partner} onChange={(e) => this.onChangeName(e, 'Change_Trading_Partner')} />
                             </div>
 
                             <div className="form-group col-sm-1">
@@ -416,7 +418,7 @@ export class TradingPartnerConfiguration extends React.Component {
                             <button type="submit" className="btn light_blue btn-xs" onClick={this.handleEntailmentRequest.bind(this)}>Add New</button>
                         </div>
                         </div>
-                        
+                        </div>
                         <div>
                             <div className="panel-group">
                                 <div className="panel panel-default">

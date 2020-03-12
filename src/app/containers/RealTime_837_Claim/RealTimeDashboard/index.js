@@ -324,7 +324,7 @@ export class RealTimeDashboard extends React.Component {
                 <div className="chart-container chart">
                     {this.renderChart()}
                     {this.renderValues()}
-                    {/* <Pie data={data}
+                    <Pie data={data}
                         options={{
                             elements: {
                                 arc: {
@@ -336,7 +336,7 @@ export class RealTimeDashboard extends React.Component {
                             }
                         }}
                         width={80}
-                        height={40} /> */}
+                        height={40} />
                 </div>
                 <div className="chart-container chart">
                     <Line

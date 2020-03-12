@@ -97,6 +97,7 @@ import { Outbound_Encounter_ClaimDetails837 } from './app/containers/InboundEnco
 import { OutboundMatchClaims } from './app/containers/Claims/OutboundMatchClaims';
 import { Outbound_BatchDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Batch_Details_837';
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Batch_Details_837';
+import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -317,6 +318,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.View_CustomEditsNew} component={View_CustomEditsNew} />
                                 <Route path={'/' + Strings.Outbound_BatchDetails837} component={Outbound_BatchDetails837} />
                                 <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
+                                <Route path={'/' + Strings.Remittance_Viewer} component={Remittance_Viewer} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
