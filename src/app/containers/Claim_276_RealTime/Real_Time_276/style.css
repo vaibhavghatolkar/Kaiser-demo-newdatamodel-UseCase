@@ -88,6 +88,15 @@
     padding-left : 24px;
     padding-right : 24px;
 }
+
+.chart-container1{
+    border-radius: 8px;
+    margin: 12px;
+    box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);
+    width : 90%;
+    padding-left : 24px;
+    padding-right : 24px;
+}
 .volume-summary{
     padding : 16px;
     box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);

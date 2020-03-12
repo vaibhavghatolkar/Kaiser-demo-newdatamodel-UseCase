@@ -46,6 +46,7 @@ export class DynamicSidebar extends React.Component {
         }`
 
         console.log(query)
+     
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -55,10 +56,12 @@ export class DynamicSidebar extends React.Component {
             body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
-            .then(res => {
+            .then(
+                res => {
                 if (res.data) {
                     this.setState({
                         menuList: res.data.UserwiseMenu
+                        
                     }, () => {
                         this.sortData()
                     })
@@ -126,6 +129,7 @@ export class DynamicSidebar extends React.Component {
         else if (key == 66) { name = Strings.Inbound_EncounterDetails }
 
         else if (key == 50) { name = Strings.claimPayment_835 }
+        else if (key == 51) { name = Strings.claimPayment_835_details }
         else if (key == 51) { name = Strings.MenuManagement }
       
         else if(key == 120 ) { name = Strings.tradingPartnerDetails}
@@ -166,6 +170,20 @@ export class DynamicSidebar extends React.Component {
 
     sortData() {
         let data = this.state.menuList
+        //Adding new menu option to show 835 Details Board
+        this.state.menuList.push({
+            role_id: 40,
+            menu_id: 51,
+            menu_description: "835 Details Board",
+            sequence_id: 1,
+            parent_node: 0,
+            menuflag: true,
+            usermenuflag: false,
+            is_editor: false,
+            is_editable: false,
+            menutype: "O"   
+        })
+        
         let menuOptions = {}
         data.forEach(item => {
             if (item.parent_node == 0) {
@@ -176,6 +194,7 @@ export class DynamicSidebar extends React.Component {
                 menuOptions['Sb' + item.menu_id].name = item.menu_description
             } else {
                 item['key'] = this.getkeys(item.menu_id)
+                console.log(item.parent_node);
                 menuOptions['Sb' + item.parent_node].array.push(item)
             }
         })
@@ -252,6 +271,11 @@ export class DynamicSidebar extends React.Component {
                 ]
             }
             else if (element.key == Strings.Outbound_ClaimDetails837 || element.key == Strings.Outbound_BatchDetails837) {
+                data = [
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
+                ]
+            } 
+            else if (element.key === Strings.claimPayment_835_details) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
