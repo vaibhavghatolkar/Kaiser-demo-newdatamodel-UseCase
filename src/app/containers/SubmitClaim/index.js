@@ -35,13 +35,14 @@ export class SubmitClaim extends React.Component {
                             {/* <input type="text" name="name" style={{padding:"10px", width:"100%" , border:"none" , lineHeight: "25px"}} placeholder="Search"/> */}
                         </div>
                         <div>
-                            <h5 className="headerText">Submit Claims</h5><br></br>
+                            <h5 className="headerText">Submit Claims</h5>
                         </div>
-                        <div className="row">
+                        <div className="form-style" id='filters'>
+                <div className="form-row">
 
                             <div className="form-group col-sm-3">
-                                <label className="list-header">State</label>
-                                <select className="form-control list-header" id="state">
+                                <label  className="list-dashboard">State</label>
+                                <select  class="form-control list-dashboard" id="state">
                                     <option selected="selected" value="1">California</option>
                                     <option value="2">Michigan</option>
                                     <option value="3">Florida</option>
@@ -60,16 +61,16 @@ export class SubmitClaim extends React.Component {
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Submitter</label>
-                                <select className="form-control list-header" id="tradingPartner">
+                                <label  className="list-dashboard">Submitter</label>
+                                <select  class="form-control list-dashboard" id="tradingPartner">
                                     <option value="">Submitter</option>
                                     <option selected="selected" value="1">Submitter 1</option>
                                     <option value="2">Submitter 2</option>
                                 </select>
                             </div>
                             <div className="form-group col-sm-3">
-                                <label className="list-header">Provider Name</label>
-                                <select className="form-control list-header" id="providerName">
+                                <label  className="list-dashboard">Provider Name</label>
+                                <select class="form-control list-dashboard" id="providerName">
                                     <option value="">Provider Name</option>
                                     <option selected="selected" value="1">Provider Name 1</option>
                                     <option value="2">Provider Name 2</option>
@@ -79,7 +80,7 @@ export class SubmitClaim extends React.Component {
                                 <button type="submit" className="btn light_blue">Submit Claim</button>
                             </div>
                         </div>
-
+                        </div>
 
                         <div style={{ marginleft: "20px" }}>
                             <div className="panel-group">

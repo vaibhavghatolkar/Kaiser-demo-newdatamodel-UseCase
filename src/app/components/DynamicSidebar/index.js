@@ -161,6 +161,8 @@ export class DynamicSidebar extends React.Component {
         else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}   
         else if(key ==133){name = Strings.NPILook_Up}  
         else if(key ==134){name = Strings.Outbound_NPILook_Up}  
+        else if(key ==135){name = Strings.Outbound_BatchDetails837}  
+        else if(key ==136){name = Strings.Outbound_Encounter_BatchDetails837}  
         
 
         return name
@@ -258,7 +260,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
             }
-            else if (element.key == Strings.Outbound_Encounter_ClaimDetails837) {
+            else if (element.key == Strings.Outbound_Encounter_ClaimDetails837 || element.key == Strings.Outbound_Encounter_BatchDetails837) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
@@ -268,7 +270,7 @@ export class DynamicSidebar extends React.Component {
                     { TransStatus: '', ErrorCode: '' },
                 ]
             }
-            else if (element.key == Strings.Outbound_ClaimDetails837) {
+            else if (element.key == Strings.Outbound_ClaimDetails837 || element.key == Strings.Outbound_BatchDetails837) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]

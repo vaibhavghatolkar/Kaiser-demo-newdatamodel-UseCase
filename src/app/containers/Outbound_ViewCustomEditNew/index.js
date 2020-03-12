@@ -12,7 +12,7 @@ export class Outbound_View_customEditNew extends React.Component {
             apiflag: this.props.apiflag,
             tradingpartner: [],
             selectedTradingPartner: '',
-            transaction: '',
+            transaction: 'Encounter 837P',
             UpdateCheckBox: '',
             checked: [],
             unchecked: [],
@@ -217,14 +217,14 @@ export class Outbound_View_customEditNew extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">Transaction</td> 
+                {/* <td className="table-head-text list-item-style">Transaction</td>  */}
                 <td className="table-head-text list-item-style" style={{width: '10%'}}>Loop Id</td>
                 {/* <td className="table-head-text list-item-style">Sub Loop Id</td> */}
                 <td className="table-head-text list-item-style">Segment</td>
                 <td className="table-head-text list-item-style">Element</td>
                 <td className="table-head-text list-item-style" style={{width: '10%'}}>Validation Level</td> 
-                <td className="table-head-text list-item-style">Usage Req.</td>
-                <td className="table-head-text list-item-style">Min | Max length</td>
+                {/* <td className="table-head-text list-item-style">Usage Req.</td>
+                <td className="table-head-text list-item-style">Min | Max length</td> */}
                 <td className="table-head-text list-item-style" style={{width: '9%'}}>Operator</td>
                 <td className="table-head-text list-item-style" style={{width: '16%'}}>Value / URL</td>
                 {/* <td className="table-head-text list-item-style">Rules</td> */}
@@ -251,14 +251,14 @@ export class Outbound_View_customEditNew extends React.Component {
             }
             row.push(
                 <tr>
-                    <td className="list-item-style">{d.Transaction}</td>
+                    {/* <td className="list-item-style">{d.Transaction}</td> */}
                     <td className="list-item-style">{d.mainLoopId} {d.loopid}</td>
                     {/* <td className="list-item-style">{d.loopid}</td> */}
                     <td className="list-item-style">{d.segment}</td>
                     <td className="list-item-style">{d.element}</td>
                     <td className="list-item-style">{d.Validation_Level}</td>
-                    <td className="list-item-style">{usageReq}</td>
-                    <td className="list-item-style">{d.Min_Length} | {d.max_length}</td>
+                    {/* <td className="list-item-style">{usageReq}</td>
+                    <td className="list-item-style">{d.Min_Length} | {d.max_length}</td> */}
                     <td className="list-item-style">{d.operator}</td>
                     <td className="list-item-style">{value}</td>
                     {/* <td className="list-item-style">{d.condition}</td> */}

@@ -7,6 +7,7 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
 import DatePicker from "react-datepicker";
+import ReactPaginate from 'react-paginate';
 export class AuditSummary extends React.Component {
 
     constructor(props) {
@@ -31,7 +32,9 @@ export class AuditSummary extends React.Component {
             Paid: '',
             denied: '',
             WIP: '',
-            Pending: ''
+            Pending: '',
+            page: 1,
+            count:1
         }
 
         this.getData = this.getData.bind(this)
@@ -60,9 +63,7 @@ export class AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound"){
-          
-
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}){
               FileID
               filename
               Submitted
@@ -76,15 +77,9 @@ export class AuditSummary extends React.Component {
               F277
               F999
               FileStatus
+              RecCount
             }
-            ClaimsDailyAuditCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:""){
-                SubTotal
-                VeriTotal
-                InBizstockTotal
-                PenTotal
-                RejTotal
-                errTotal
-            }
+           
             FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Inbound"){
                 totalFile
                 TotalClaims 
@@ -100,7 +95,7 @@ export class AuditSummary extends React.Component {
                 Pending
             }
         }`
-        console.log("sa,f.hdsfkfdhg", query)
+        // console.log(query)
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -111,7 +106,7 @@ export class AuditSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
+                let data = res.data
                 if (res.data) {
                     let totalFile = 0
                     try {
@@ -119,15 +114,26 @@ export class AuditSummary extends React.Component {
                     } catch (error) {
 
                     }
-                    console.log("sdghusighsjgn", res.data.FileInCount[0])
+                    
+                    let count = 1
+                    if (data && data.ClaimsDailyAudit.length > 0) {
+    
+                        count = Math.floor(data.ClaimsDailyAudit[0].RecCount / 10)
+                        if (data.ClaimsDailyAudit[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                    }
+
+
+                    // console.log("sdghusighsjgn", res.data.FileInCount[0])
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
-                        SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
-                        VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
-                        InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
-                        PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
-                        RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
-                        errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
+                        // SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
+                        // VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
+                        // InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
+                        // PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
+                        // RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
+                        // errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
                         totalFile: totalFile,
                         TotalClaims: res.data.FileInCount[0].TotalClaims,
                         Accepted: res.data.FileInCount[0].Accepted,
@@ -139,7 +145,8 @@ export class AuditSummary extends React.Component {
                         Paid: res.data.FileInCount[0].Paid,
                         denied: res.data.FileInCount[0].denied,
                         WIP: res.data.FileInCount[0].WIP,
-                        Pending: res.data.FileInCount[0].Pending
+                        Pending: res.data.FileInCount[0].Pending,
+                        count: count
 
                     })
                 }
@@ -176,16 +183,15 @@ export class AuditSummary extends React.Component {
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
-        console.log("sd,fmsdjkdsjh", data)
 
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer" }}>{d.filename}</a></td>
+                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak:'break-all' }}>{d.filename}</a></td>
                     <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.Submitted}</td>
                     <td className="list-item-style">{d.Submitted}</td>
-                    <td colSpan={2} className="list-item-style">{d.Accepted}</td>
+                    <td className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">0</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
@@ -201,19 +207,20 @@ export class AuditSummary extends React.Component {
             )
         });
         return (
-            <table className="table table-bordered claim-list">
+            <div>
+            <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed'}}>
                 <tr className="table-head">
-                    <td className="table-head-text list-item-style">File Name <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">File Status<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Submitted <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td colSpan={2} className="table-head-text list-item-style">In HiPaaS <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Accepted PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Rejected PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">Error in PreProcess <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td style={{width: '19%'}} className="table-head-text list-item-style">File Name </td>
+                    <td style={{width: '13%'}} className="table-head-text list-item-style">File Status</td>
+                    <td className="table-head-text list-item-style">Submitted </td>
+                    <td className="table-head-text list-item-style">In HiPaaS </td>
+                    <td className="table-head-text list-item-style">Accepted PreProcess </td>
+                    <td className="table-head-text list-item-style">Rejected PreProcess </td>
+                    <td className="table-head-text list-item-style">Error in PreProcess </td>
                     {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                    <td className="table-head-text list-item-style">In Qnxt <img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">999<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
-                    <td className="table-head-text list-item-style">277 CA<img className="SearchBarImage" src={require('../../../components/Images/search_table.png')}></img></td>
+                    <td className="table-head-text list-item-style">In Qnxt </td>
+                    <td className="table-head-text list-item-style">999</td>
+                    <td className="table-head-text list-item-style">277 CA</td>
                 </tr>
                 <tbody >
                     <tr>
@@ -231,7 +238,38 @@ export class AuditSummary extends React.Component {
                     {row}
                 </tbody>
             </table>
+            <ReactPaginate
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            breakClassName={'page-link'}
+            initialPage={0}
+            pageCount={this.state.count}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={(page) => { this.handlePageClick(page) }}
+            containerClassName={'pagination'}
+            pageClassName={'page-item'}
+            previousClassName={'page-link'}
+            nextClassName={'page-link'}
+            pageLinkClassName={'page-link'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+        />
+        </div>
         )
+    }
+
+    handlePageClick(data) {
+        let page = data.selected + 1
+        this.setState({
+            page: page,
+
+        })
+
+        setTimeout(() => {
+            this.getData()
+        }, 50);
     }
 
     onSelect(event, key) {
@@ -412,7 +450,7 @@ export class AuditSummary extends React.Component {
         )
     }
     getoptions() {
-        console.log("sfsdsds", this.state.tradingpartne837)
+        // console.log("sfsdsds", this.state.tradingpartne837)
         let row = []
         this.state.tradingpartne837.forEach(element => {
             if (!element) {

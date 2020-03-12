@@ -56,7 +56,7 @@ export class Outbound_EditConfigurations extends React.Component {
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
-            transactionSelect:'837P',
+            transactionSelect:'Encounter 837P',
             GetCustomEdits:[]
 
         };
