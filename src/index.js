@@ -61,6 +61,7 @@ import { DynamicSidebar } from './app/components/DynamicSidebar'
 import{ HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
+import { ClaimPaymentDetails } from './app/containers/ClaimPayment_835/ClaimsPaymentDetails';
 import { _277CAReponse } from './app/containers/_277CAResponse';
 import { response_999 } from './app/containers/999_response';
 import { Outbound_ClaimProcessingSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTime_ClaimProcessingSummary'
@@ -199,19 +200,19 @@ class PrivateRoute extends React.Component {
                                 />
                             </div>
                             <div className="sidebar-margin container-fluid" style={{ minHeight: '100vh' }}>
-                                <div className="row border-bottom" style={{marginTop: '-5px', marginBottom: '12px'}}>
+                                {/* <div className="row border-bottom" style={{marginTop: '-5px', marginBottom: '12px'}}>
                                     <div className="padding-view">
                                         <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
                                     </div>
                                     <div className="col-11 padding-view">
                                         <input type="text" name="name" className="search-input-style col-12" placeholder="Search" />
                                     </div>
-                                </div>
+                                </div> */}
                                 <Route exact path="/">
                                     {this.state.loggedIn == true ?
 
                                         <Redirect to={{
-                                            pathname: '/' + Strings.RealTime270, state: { data }
+                                            pathname: '/' + Strings.RealTimeDashboard, state: { data }
                                         }} /> : <Redirect to="/" />}
                                 </Route>
                                 {/* <Route exact path="/" component={RealTime276} /> */}
@@ -286,6 +287,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Inbound_Encounter_ClaimProcessingSummary} component={Inbound_Encounter_ClaimProcessingSummary} />
 
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
+                                <Route path={'/' + Strings.claimPayment_835_details} component={ClaimPaymentDetails} />
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 <Route path={'/' + Strings._277CAResponse} component={_277CAReponse} />

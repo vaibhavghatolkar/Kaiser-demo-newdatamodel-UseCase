@@ -199,10 +199,11 @@ export class MenuCreate extends React.Component {
         return (
             <tr className="table-head">
                 <td className="table-text">Menu List</td>
-                <td className="table-text">View Access
 
-                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
-                </td>
+                   <td className="table-text"><div><label>View Access</label>
+
+                <input style={{ marginLeft: "10px"}} type="checkbox" onChange={this.ChangeMenuAcces}></input>
+                </div></td>
                 <td className="table-text">Edit Functionality
                 <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
                 </td>
@@ -358,7 +359,7 @@ export class MenuCreate extends React.Component {
 
 
 
-                <table className="table table-bordered" id="userList" align="center" style={{ width: '95%' }}>
+                <table className="table table-bordered" id="userList" align="center" style={{ width: '100%' }}>
                     {this.state.customList && this.state.customList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
@@ -501,15 +502,16 @@ export class MenuCreate extends React.Component {
 
     renderTopbar() {
         return (
-            <div className="row">
-                <div className="form-group col-3" style={{ marginLeft: "25px" }}>
+            
+            <div className="row" style={{padding: '0'}}>
+                <div className="form-group col-3">
                     <div className="list-header-dashboard">Select User Role</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
                         <option value="0">Select User Role</option>
                         {this.getoptions()}
                     </select>
                 </div>
-                <div className="form-group col-3" style={{ marginLeft: "25px" }}>
+                <div className="form-group col-3" >
                     <div className="list-header-dashboard">Select Menu Type</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')}>
                         <option value="I" selected>Inbound</option>
@@ -561,6 +563,7 @@ export class MenuCreate extends React.Component {
 
 
             </div>
+           
         )
     }
 

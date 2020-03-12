@@ -264,8 +264,8 @@ export class UserList extends React.Component {
                         Add New
                     </button>
                 </div>
-                <div className="row" style={{ marginTop: '30px' }}>
-                    <div className="col-7">
+                <div className="row" style={{ marginTop: '30px'}}>
+                    <div className="col-7" style={{padding: '0'}}>
                         {this.RenderUserList()}
                     </div>
                 </div>

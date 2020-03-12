@@ -31,14 +31,14 @@ export class StatewiseTradingPartner extends React.Component {
             Search_State: "",
             Search_Tran_Type: "",
             orderby: '',
-            ISA06_Name : 180,
-            ISA06_ID : 180,
-            PayerName : 180,
-            PayerID : 180,
-            ISA08_Name : 180,
-            ISA08_ID : 180,
-            State : 180,
-            Transaction_Code : 180,
+            ISA06_Name_Rotation : 180,
+            ISA06_ID_Rotation : 180,
+            PayerName_Rotation : 180,
+            PayerID_Rotation : 180,
+            ISA08_Name_Rotation : 180,
+            ISA08_ID_Rotation : 180,
+            State_Rotation : 180,
+            Transaction_Code_Rotation : 180,
         };
 
         this.displaydata = this.displaydata.bind(this)
@@ -300,14 +300,14 @@ export class StatewiseTradingPartner extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA06_Name", this.state.ISA06_Name, 'ISA06_Name')}>Sender Name</a></td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA06_ID", this.state.ISA06_ID, 'ISA06_ID')}>Sender Id(ISA06)</a></td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.PayerName", this.state.PayerName, 'PayerName')}>Payer Name</a></td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.PayerID", this.state.PayerID, 'PayerID')}> Payer ID</a></td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA08_Name", this.state.ISA08_Name, 'ISA08_Name')}>Receiver Name</a></td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA08_ID", this.state.ISA08_ID, 'ISA08_ID')}>Receiver Id(ISA08</a>)</td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.state", this.state.State, 'State')}>State</a></td>
-                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.Transaction_Code", this.state.Transaction_Code, 'Transaction_Code')}>Transaction Type</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA06_Name", this.state.ISA06_Name_Rotation, 'ISA06_Name_Rotation')}>Sender Name</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA06_ID", this.state.ISA06_ID_Rotation, 'ISA06_ID_Rotation')}>Sender Id(ISA06)</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.PayerName", this.state.PayerName_Rotation, 'PayerName_Rotation')}>Payer Name</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.PayerID", this.state.PayerID_Rotation, 'PayerID_Rotation')}> Payer ID</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA08_Name", this.state.ISA08_Name_Rotation, 'ISA08_Name_Rotation')}>Receiver Name</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA08_ID", this.state.ISA08_ID_Rotation, 'ISA08_ID_Rotation')}>Receiver Id(ISA08)</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.state", this.state.State_Rotation, 'State_Rotation')}>State</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.Transaction_Code", this.state.Transaction_Code_Rotation, 'Transaction_Code_Rotation')}>Transaction Type</a></td>
                 <td style={{ width: "10px" }}></td>
                 <td style={{ width: "10px" }}></td>
             </tr>
