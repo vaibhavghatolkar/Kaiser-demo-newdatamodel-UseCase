@@ -13,6 +13,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
+import { AutoComplete } from '../../../components/AutoComplete';
+import { getProviders } from '../../../../helpers/getDetails';
 
 
 let val = ''
@@ -74,8 +76,14 @@ export class RealTimeDashboard extends React.Component {
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
-            search: ''
-
+            providers: [],
+            second_data: {},
+            search: '',
+            nameRotation: 180,
+            dateRotation: 180,
+            statusRotation: 180,
+            orderby: "",
+            submitterRotation: 180,
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -145,13 +153,17 @@ export class RealTimeDashboard extends React.Component {
                 InProgress
                 Resubmit
             }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 From
                 MonthNo
                 Year
                 To
                 Amount
                 TotalClaims
+                X_axis
+                Y_axis
+            }
+            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
                 X_axis
                 Y_axis
             }
@@ -175,7 +187,8 @@ export class RealTimeDashboard extends React.Component {
                 let accepted = 0
                 let rejected = 0
                 let inProgress = 0
-                let ClaimBarChart = res.data.Claim837RTClaimBarchart
+                let ClaimBarChart = res.data.barchart
+                let pieChart = res.data.piechart
                 let claimLabels = []
 
                 if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
@@ -209,6 +222,36 @@ export class RealTimeDashboard extends React.Component {
                     }
                 })
 
+                let pieLabel = []
+                let pieData = []
+                pieChart.forEach((d) => {
+                    pieLabel.push(d.X_axis)
+                    pieData.push(d.Y_axis)
+                })
+
+                let second_data = {
+                    labels: pieLabel,
+                    datasets: [{
+                        data: pieData,
+                        backgroundColor: [
+                            '#139DC9',
+                            '#83D2B4',
+                            '#9DC913',
+                            '#EC6236',
+                            '#C9139D',
+                            'blue',
+                        ],
+                        hoverBackgroundColor: [
+                            '#139DC9',
+                            '#83D2B4',
+                            '#9DC913',
+                            '#EC6236',
+                            '#C9139D',
+                            'blue',
+                        ]
+                    }]
+                }
+
                 this.setState({
                     summaryList: summary,
                     Accepted_per: Accepted_per1,
@@ -217,7 +260,8 @@ export class RealTimeDashboard extends React.Component {
                     claimLabels: claimLabels,
                     accepted: accepted,
                     rejected: rejected,
-                    inProgress: inProgress
+                    inProgress: inProgress,
+                    second_data: second_data
                 })
             })
             .catch(err => {
@@ -229,15 +273,31 @@ export class RealTimeDashboard extends React.Component {
         this.setState({ search });
     };
 
+    handleToggle = (e, rotation, key) => { 
+        let addOn = " asc"
+        if (rotation == 0) {
+            addOn = " desc"
+        }
+
+        e = e + addOn
+        this.setState({
+            orderby: e,
+            [key]: rotation == 0 ? 180 : 0
+        })
+        setTimeout(() => {
+            this.getListData()
+        }, 50);
+    }
+
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Total Claims | Rejected Claims<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name</td>
+                <td className="table-head-text list-item-style">Type</td>
+                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date</td>
+                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status</td>
+                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter</td>
+                <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
     }
@@ -317,8 +377,7 @@ export class RealTimeDashboard extends React.Component {
             flag: ''
         };
 
-        console.log(this.state.ClaimBarChart)
-
+        // console.log(this.state.ClaimBarChart)
         return (
             <div className="row chart-div">
                 <div className="chart-container chart">
@@ -345,17 +404,14 @@ export class RealTimeDashboard extends React.Component {
                         height={80}
                         options={{
                             legend: {
-                                position: 'bottom'
-                            },
-                            pieceLabel: {
-                                render: 'label',
-                                position: 'outside'
+                                position: 'bottom',
+                                display: false
                             },
                             scales: {
                                 xAxes: [{
                                     ticks: {
                                         fontSize: 10,
-                                    }
+                                    },
                                 }]
                             }
                         }} />
@@ -418,9 +474,9 @@ export class RealTimeDashboard extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style">{d.Type}</td>
-                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br/>{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
@@ -430,7 +486,7 @@ export class RealTimeDashboard extends React.Component {
 
         return (
             <div>
-                <table className="table table-bordered claim-list">
+                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed'}}>
                     {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
@@ -468,7 +524,7 @@ export class RealTimeDashboard extends React.Component {
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"", RecType: "Inbound") {
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound") {
                 RecCount
                 FileID
                 FileName
@@ -617,7 +673,7 @@ export class RealTimeDashboard extends React.Component {
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
                     </div>
                     :
-                    
+
                     <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
@@ -632,7 +688,7 @@ export class RealTimeDashboard extends React.Component {
                             }
                         </div>
                     </Link>
-                   
+
             )
         });
 
@@ -643,20 +699,31 @@ export class RealTimeDashboard extends React.Component {
         )
     }
 
-    onHandleChange(e) {
+    onHandleChange = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
         val = setTimeout(() => {
-            this.setState({
-                providerName: providerName
-            }, () => {
-                this.getData()
-                this.getListData()
+            getProviders("Inbound", providerName)
+            .then(list => {
+                this.setState({
+                    providers: list
+                })
+            }).catch(error => {
+                console.log(error)
             })
         }, 300);
     }
 
-    renderTopbar() {
+    onSelected = (value) => {
+        this.setState({
+            providerName: value
+        }, () => {
+            this.getData()
+            this.getListData()
+        })
+    }
+
+    renderTopbar = () => {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
@@ -746,17 +813,12 @@ export class RealTimeDashboard extends React.Component {
                         {/* <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         /> */}
-                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
+                        />
+                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
                     </div>
 
                     <div className="form-group col-2">
@@ -773,6 +835,17 @@ export class RealTimeDashboard extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
+
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                 </div>
             </div>
         )
@@ -787,8 +860,12 @@ export class RealTimeDashboard extends React.Component {
     }
 
     renderChart() {
+        if(this.state.second_data && Object.keys(this.state.second_data).length == 0){
+            return
+        }
+
         return (
-            <Pie data={second_data}
+            <Pie data={this.state.second_data}
                 options={{
                     elements: {
                         arc: {
@@ -799,15 +876,18 @@ export class RealTimeDashboard extends React.Component {
                         display: false,
                     }
                 }}
-                width={60}
-                height={30} />
+                width={90}
+                height={55} />
         )
     }
 
     renderValues() {
+        if(this.state.second_data && Object.keys(this.state.second_data).length == 0){
+            return
+        }
         let row = []
-        let data = second_data.labels
-        let colors = second_data.datasets[0].backgroundColor
+        let data = this.state.second_data.labels
+        let colors = this.state.second_data.datasets[0].backgroundColor
         let count = 0
         data.forEach(item => {
             row.push(

@@ -579,7 +579,7 @@ export class EligibilityDetails extends React.Component {
                     </div>
 
                     <div className="form-group col">
-                        <div className="list-dashboard">Submitter </div>
+                        <div className="list-dashboard">Submitte </div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
                                 this.onSelect(event, 'selectedTradingPartner')
