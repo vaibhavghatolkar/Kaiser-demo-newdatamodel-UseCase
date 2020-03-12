@@ -31,6 +31,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
             initialPage: 0,
             lineData: [],
             file: [],
+            claimStageDetails: [],
             fileDetails: [],
             memberInfo: {},
             subscriberNo: '',
@@ -819,10 +820,6 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-
-                    <div className="form-group col-2 button" style={{height : '32px', cursor: 'pointer'}}>
-                        Send clean encounters
-                    </div>
                 </div>
             </div>
         )
@@ -974,6 +971,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                                     claimId: d.ClaimID
                                 }, () => {
                                     this.getDetails(d.ClaimID, d.FileID, data[keys].value)
+                                    this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
@@ -1080,6 +1078,75 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         )
     }
 
+    getClaimStages(claimId, fileId) {
+        let url = Urls.real_time_claim_details
+        let query = `{
+            EncounterStagesOutbound(FileID:"${fileId}", ClaimID: "${claimId}") {
+              Stage
+              Createdatetime
+            }
+          }
+          `
+
+        console.log('query ', query)
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(res && res.data && res.data.EncounterStagesOutbound){
+                    this.setState({
+                        claimStageDetails: res.data.EncounterStagesOutbound
+                    })
+
+                    console.log('claim stage', res.data.EncounterStagesOutbound)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    renderClaimStageDetails() {
+        let row = []
+        const data = this.state.claimStageDetails ? this.state.claimStageDetails : []
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td>{d.Stage}</td>
+                    <td>{Number(d.Createdatetime) ? moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a') : d.Createdatetime}</td>
+                </tr>
+            )
+        })
+        return (
+            <div className="row">
+                <div className="col-12">
+                    <div className="top-padding"><a href={'#' + 'event1'} data-toggle="collapse">Encounter Stages</a></div>
+                    <div id={'event1'}>
+                        <table className="table table-bordered background-color">
+                            <thead>
+                                <tr className="table-head" style={{ fontSize: "9px" }}>
+                                    <td className="table-head-text list-item-style">Stage</td>
+                                    <td className="table-head-text list-item-style">Date</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     render() {
 
         return (
@@ -1119,6 +1186,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                                 : null
                         }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
+                        {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null}
                     </div>
                 </div>
             </div>

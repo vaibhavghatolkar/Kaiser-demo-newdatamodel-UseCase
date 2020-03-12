@@ -95,6 +95,8 @@ import {View_CustomEditsNew} from './app/containers/view_CustomEditNew'
 
 import { Outbound_Encounter_ClaimDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Claim_Details_837'
 import { OutboundMatchClaims } from './app/containers/Claims/OutboundMatchClaims';
+import { Outbound_BatchDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Batch_Details_837';
+import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Batch_Details_837';
 
 const $ = window.$;
 {/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
@@ -313,6 +315,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_NPILook_Up} component={Outbound_NPILook_Up} />
                                 <Route path={'/' + Strings.Outbound_View_customEditNew} component={Outbound_View_customEditNew} />
                                 <Route path={'/' + Strings.View_CustomEditsNew} component={View_CustomEditsNew} />
+                                <Route path={'/' + Strings.Outbound_BatchDetails837} component={Outbound_BatchDetails837} />
+                                <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 

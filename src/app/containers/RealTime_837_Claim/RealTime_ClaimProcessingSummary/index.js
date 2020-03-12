@@ -172,6 +172,7 @@ export class ClaimProcessingSummary extends React.Component {
 				F277
                 TotalLinewise835
                 TotalLine
+                Transaction_Status
             }
         }`
         console.log(query)
@@ -385,7 +386,7 @@ export class ClaimProcessingSummary extends React.Component {
             // { value : 'ProviderFirstName'},
             // { value: 'Claim_Amount', isAmount: 1 },
             { value: 'Subscriber_ID' },
-            { value: '' },
+            { value: 'Transaction_Status' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
             { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
@@ -526,7 +527,7 @@ export class ClaimProcessingSummary extends React.Component {
                         </select>
                     </div>
                     <div className="col summary-container1" style={{ marginTop: '-10px' }}>
-                        <div className="summary-header1">WIP > 90 DAYS</div>
+                        <div className="summary-header1">WIP > 90 Days</div>
                         <div className="blue summary-title1">{this.state.wip90}</div>
                     </div>
 
@@ -566,12 +567,12 @@ export class ClaimProcessingSummary extends React.Component {
                 <div className="row padding-left" style={{marginBottom: '10px'}}>
  
                         <div className="col summary-container">
-                            <div className="summary-header">ACCEPTED CLAIMS</div>
+                            <div className="summary-header">Accepted Claims</div>
                             <div className="green summary-title">{this.state.Accepted}</div>
                         </div> 
         
                         <div className="col summary-container">
-                            <div className="summary-header">REJECTED CLAIMS</div>
+                            <div className="summary-header">Rejected Claims</div>
                             <div className="red summary-title">{this.state.Rejected}</div>
                         </div>        
                         <div className="col summary-container">
@@ -580,7 +581,7 @@ export class ClaimProcessingSummary extends React.Component {
                         </div> 
                 
                         <div className="col summary-container">
-                            <div className="summary-header">SENT TO QNXT</div>
+                            <div className="summary-header">Sent To QNXT</div>
                             <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                         </div> 
                 
@@ -589,16 +590,16 @@ export class ClaimProcessingSummary extends React.Component {
                             <div className="red summary-title">{this.state.Total277CA}</div>
                         </div>
                         <div className="col summary-container">
-                            <div className="summary-header">PENDING</div>
+                            <div className="summary-header">Pending</div>
                             <div className="orange summary-title">{this.state.Pending}</div>
                         </div>
                         <div className="col summary-container">
-                            <div className="summary-header">PAID</div>
+                            <div className="summary-header">Paid</div>
                             <div className="green summary-title">{this.state.Paid}</div>
                         </div> 
               
                         <div className="col summary-container">
-                            <div className="summary-header">DENIED</div>
+                            <div className="summary-header">Denied</div>
                             <div className="red summary-title">{this.state.Denide}</div>
                         </div> 
                 

@@ -446,11 +446,20 @@ export class Outbound_RealTimeDashboard extends React.Component {
     renderBatch() {
         let row = []
         const data = this.state.batchList;
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let sendData = [
+            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
+        ]
 
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td>{d.BatchName}</td>
+                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: Strings.Outbound_BatchDetails837, state: { data: sendData } }}>{d.BatchName}</Link></td>
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.BatchDate).format('MM/DD/YYYY, ')}{moment(d.BatchDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.BatchStatus == 'Accepted' ? 'green ' : (d.BatchStatus == 'FullFileReject' ? 'red ' : (d.BatchStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.BatchStatus}</td>

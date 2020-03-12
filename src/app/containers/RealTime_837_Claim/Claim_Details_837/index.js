@@ -75,7 +75,7 @@ export class ClaimDetails837 extends React.Component {
             selectedICdCode: '',
             claimid: '',
             Icdcodepresent: '',
-            Accidentdate:'',
+            Accidentdate: '',
             nameRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
@@ -85,7 +85,7 @@ export class ClaimDetails837 extends React.Component {
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
         this.handleAccidentdate = this.handleAccidentdate.bind(this)
-        
+
         this.Saved = this.Saved.bind(this)
     }
 
@@ -309,72 +309,70 @@ export class ClaimDetails837 extends React.Component {
     }
 
     Saved() {
-        if(this.state.Icdcodepresent=="Icdcode")
-        {
-        if (this.state.selectedICdCode != "") {
-            let query = `mutation{updateICDCode(
+        if (this.state.Icdcodepresent == "Icdcode") {
+            if (this.state.selectedICdCode != "") {
+                let query = `mutation{updateICDCode(
                     ClaimID:"`+ this.state.claimid + `" 
                     FileID:"`+ this.state.fileid + `"  
                     ICDCode:"`+ this.state.selectedICdCode + `"     
                     )
                   }`
 
-           
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
 
+                fetch(Urls.base_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query
+
+                    })
                 })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateICDCode),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
+                    .then(r => r.json())
+                    .then(data =>
+                        alert(data.data.updateICDCode),
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
 
-                );
+                    );
 
+            }
         }
-    }
-       else if (this.state.Icdcodepresent == "AccidentDt") {
-            if(this.state.Accidentdate!="")
-            {
+        else if (this.state.Icdcodepresent == "AccidentDt") {
+            if (this.state.Accidentdate != "") {
                 let query = `mutation{updateAccidentDate(
                     ClaimID:"`+ this.state.claimid + `"
                     FileID:"`+ this.state.fileid + `"  
                     AccidentDate:"`+ this.state.Accidentdate + `"     
                     )
                   }`
-             console.log("sdlnskjggsdj" , query);
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
+                console.log("sdlnskjggsdj", query);
+                fetch(Urls.base_url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query
 
+                    })
                 })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateAccidentDate),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
+                    .then(r => r.json())
+                    .then(data =>
+                        alert(data.data.updateAccidentDate),
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
 
-                );
+                    );
             }
 
         }
-      
+
 
     }
     renderSearchBar() {
@@ -410,10 +408,10 @@ export class ClaimDetails837 extends React.Component {
         return row
     }
     onChangeName(event, key) {
-    
+
         this.setState({
             Accidentdate: event.target.value
-            
+
         });
     }
     getDetails(claimId, fileId, fileData) {
@@ -465,7 +463,7 @@ export class ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("sdfdsss" , res.data.Claim837RTDetails[0].FieldToUpdate)
+                console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -477,17 +475,17 @@ export class ClaimDetails837 extends React.Component {
                         Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
                     }
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "AccidentDt") {
-                       
-                    //     AccidentDate = <DatePicker
-                    //     className="form-control list-header-dashboard"
-                    //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
-                    //     onChange={this.handleAccidentdate}
-                    // />
-                    AccidentDate =  <input  onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
+
+                        //     AccidentDate = <DatePicker
+                        //     className="form-control list-header-dashboard"
+                        //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
+                        //     onChange={this.handleAccidentdate}
+                        // />
+                        AccidentDate = <input onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
                     }
                     else {
-                      
-                        AccidentDate =res.data.Claim837RTDetails[0].AccidentDate;
+
+                        AccidentDate = res.data.Claim837RTDetails[0].AccidentDate;
                     }
                     let data = res.data.Claim837RTDetails[0]
 
@@ -501,14 +499,14 @@ export class ClaimDetails837 extends React.Component {
                         [
                             { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
                             { key: 'Claim Date', value: data.ClaimDate },
-                            { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                            { key: 'Subscriber last name', value: data.SubscriberLastName },
-                            { key: 'Admission date', value: data.AdmissionDate },
-                            { key: 'Claim amount', value: data.Claim_Amount },
-                            { key: 'Provider address', value: data.BillingProviderAddress },
+                            { key: 'Subscriber First Name', value: data.SubscriberFirstName },
+                            { key: 'Subscriber Last Name', value: data.SubscriberLastName },
+                            { key: 'Admission Date', value: data.AdmissionDate },
+                            { key: 'Claim Amount', value: data.Claim_Amount },
+                            { key: 'Provider Address', value: data.BillingProviderAddress },
                             { key: 'Claim Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
-                            { key: 'Accident Date', value:  AccidentDate},
+                            { key: 'Accident Date', value: AccidentDate },
                             { key: '', },
                             { key: '', },
                         ]
@@ -550,7 +548,7 @@ export class ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if(res && res.data && res.data.ClaimStagesInbound){
+                if (res && res.data && res.data.ClaimStagesInbound) {
                     this.setState({
                         claimStageDetails: res.data.ClaimStagesInbound
                     })
@@ -696,14 +694,14 @@ export class ClaimDetails837 extends React.Component {
         }, 50);
     }
     handleAccidentdate(date) {
-       
+
         this.setState({
             Accidentdate: date,
-            
+
         });
 
-       
-      
+
+
     }
 
     handleEndChange(date) {
@@ -805,7 +803,7 @@ export class ClaimDetails837 extends React.Component {
                         {/* <input
                             onChange={(e) => this.onHandleChange(e)}
                             className="form-control" type="text" /> */}
-                               <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -863,10 +861,10 @@ export class ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Service line No.</td>
+                                    <td className="table-head-text list-item-style">Service Line No.</td>
                                     {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
-                                    <td className="table-head-text list-item-style">Service date</td>
-                                    <td className="table-head-text list-item-style">Procedure code</td>
+                                    <td className="table-head-text list-item-style">Service Date</td>
+                                    <td className="table-head-text list-item-style">Procedure Code</td>
                                     <td className="table-head-text list-item-style">Unit</td>
                                 </tr>
                             </thead>
@@ -888,7 +886,7 @@ export class ClaimDetails837 extends React.Component {
             row.push(
                 <tr>
                     <td>{d.Stage}</td>
-                    <td>{moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a')}</td>
+                    <td>{Number(d.Createdatetime) ? moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a') : d.Createdatetime}</td>
                 </tr>
             )
         })
@@ -925,12 +923,12 @@ export class ClaimDetails837 extends React.Component {
     renderClaimsHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">Claim Id<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                {/* <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
-                <td className="table-head-text list-item-style">Claim Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Adjudication Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                <td className="table-head-text list-item-style">Claim Id</td>
+                {/* <td className="table-head-text list-item-style">Claim Date</td> */}
+                <td className="table-head-text list-item-style">Claim Status</td>
+                <td className="table-head-text list-item-style">Adjudication Status</td>
+                <td className="table-head-text list-item-style">Claim Amount</td>
+                <td className="table-head-text list-item-style">Error</td>
             </tr>
         )
     }
@@ -953,24 +951,24 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-3 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name
+                    {/* File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-2 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Type
+                    {/* Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-2 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date
+                    {/* File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-3 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status
+                    {/* File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-2 col-header justify-align">
-                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
-                    Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter
+                    {/* Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
             </div>
         )
@@ -982,7 +980,7 @@ export class ClaimDetails837 extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
 
-       // console.log(data)
+        // console.log(data)
         try {
             count = data[Object.keys(data)[0]].value.Claimcount / 10
             if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
@@ -996,7 +994,7 @@ export class ClaimDetails837 extends React.Component {
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
-                    <div className="col-3 col-small-style border-left small-font left-align"><a href={'#'+ keys}
+                    <div className="col-3 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
@@ -1010,7 +1008,7 @@ export class ClaimDetails837 extends React.Component {
             {
                 col = []
                 data[keys].array.forEach((d) => {
-                    
+
                     col.push(
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
@@ -1064,7 +1062,10 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div>
                 {this.renderTableHeader()}
-                {row}
+                <table className="table claim-details">
+                    {row}
+                </table>
+               <div style={{marginLeft: '-14px'}}>
                 <ReactPaginate
                     previousLabel={'previous'}
                     nextLabel={'next'}
@@ -1083,6 +1084,7 @@ export class ClaimDetails837 extends React.Component {
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
                 />
+                </div>
             </div>
         );
     }
@@ -1134,7 +1136,6 @@ export class ClaimDetails837 extends React.Component {
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">
                         {this.state.claimsObj ? this.renderList() : null}
-                        {/* {this.state.claimsObj ? this.renderTable() : null} */}
                     </div>
 
                     <div className="col-6">

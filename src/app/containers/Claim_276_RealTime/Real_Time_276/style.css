@@ -139,7 +139,7 @@
 .summary-title{
     font-size: 20px !important;
     color: var(--grayBlack);
-    padding-left: 8px;
+    /* padding-left: 8px; */
     padding-bottom: 12px;
 }
 .summary-title1{
