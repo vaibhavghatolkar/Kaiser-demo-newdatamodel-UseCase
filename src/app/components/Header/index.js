@@ -1,8 +1,13 @@
 import React from 'react'
 import './styles.css'
 import "../../containers/color.css";
+import Strings from '../../../helpers/Strings';
 
 export class Header extends React.Component {
+
+    constructor(props){
+        super(props);
+    }
 
     logout() {
         localStorage.clear();
@@ -10,8 +15,8 @@ export class Header extends React.Component {
         window.location.reload()
     }
 
-    changePassword() {
-
+    changePassword = () => {
+        this.props.history.push('/' + Strings.ChangePassword)
     }
 
     render() {

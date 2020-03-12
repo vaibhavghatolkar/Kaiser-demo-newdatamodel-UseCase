@@ -30,7 +30,15 @@ export class StatewiseTradingPartner extends React.Component {
             Search_PayerName: '',
             Search_State: "",
             Search_Tran_Type: "",
-
+            orderby: '',
+            ISA06_Name : 180,
+            ISA06_ID : 180,
+            PayerName : 180,
+            PayerID : 180,
+            ISA08_Name : 180,
+            ISA08_ID : 180,
+            State : 180,
+            Transaction_Code : 180,
         };
 
         this.displaydata = this.displaydata.bind(this)
@@ -49,7 +57,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         let query =
             `{
-                TradingPartnerlist (ID:0 page:` + this.state.page + ` OrderBy:"" Transaction:"` + this.state.Search_Tran_Type + `" State:"` + this.state.Search_State + `" PayerID:"` + this.state.Search_PayerID + `" PayerName:"` + this.state.Search_PayerName + `"  ISA06_ID:"` + this.state.Search_Senderid + `" ISA06_Name:"` + this.state.Search_Sendername + `" ISA08_ID :"" ISA08_Name:"") { 
+                TradingPartnerlist (ID:0 page:` + this.state.page + ` OrderBy:"${this.state.orderby}" Transaction:"` + this.state.Search_Tran_Type + `" State:"` + this.state.Search_State + `" PayerID:"` + this.state.Search_PayerID + `" PayerName:"` + this.state.Search_PayerName + `"  ISA06_ID:"` + this.state.Search_Senderid + `" ISA06_Name:"` + this.state.Search_Sendername + `" ISA08_ID :"" ISA08_Name:"") { 
                 Rcount
                 ID
                 ISA06_ID
@@ -272,17 +280,34 @@ export class StatewiseTradingPartner extends React.Component {
             [key]: event.target.value
         });
     }
+    
+    handleSort(e, rotation, key) {
+        let addOn = " asc"
+        if (rotation == 0) {
+            addOn = " desc"
+        }
+
+        e = e + addOn
+        this.setState({
+            orderby: e,
+            [key]: rotation == 0 ? 180 : 0
+        })
+        setTimeout(() => {
+            this.gettranaction()
+        }, 50);
+    }
+    
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">Sender Name</td>
-                <td className="table-head-text">Sender Id(ISA06)</td>
-                <td className="table-head-text">Payer Name</td>
-                <td className="table-head-text"> Payer ID</td>
-                <td className="table-head-text">Receiver Name</td>
-                <td className="table-head-text">Receiver Id(ISA08)</td>
-                <td className="table-head-text">State</td>
-                <td className="table-head-text">Transaction Type</td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA06_Name", this.state.ISA06_Name, 'ISA06_Name')}>Sender Name</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA06_ID", this.state.ISA06_ID, 'ISA06_ID')}>Sender Id(ISA06)</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.PayerName", this.state.PayerName, 'PayerName')}>Payer Name</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.PayerID", this.state.PayerID, 'PayerID')}> Payer ID</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA08_Name", this.state.ISA08_Name, 'ISA08_Name')}>Receiver Name</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.ISA08_ID", this.state.ISA08_ID, 'ISA08_ID')}>Receiver Id(ISA08</a>)</td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.state", this.state.State, 'State')}>State</a></td>
+                <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.Transaction_Code", this.state.Transaction_Code, 'Transaction_Code')}>Transaction Type</a></td>
                 <td style={{ width: "10px" }}></td>
                 <td style={{ width: "10px" }}></td>
             </tr>
