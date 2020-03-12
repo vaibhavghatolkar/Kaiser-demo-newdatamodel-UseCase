@@ -61,6 +61,7 @@ import { DynamicSidebar } from './app/components/DynamicSidebar'
 import{ HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
+import { ClaimPaymentDetails } from './app/containers/ClaimPayment_835/ClaimsPaymentDetails';
 import { _277CAReponse } from './app/containers/_277CAResponse';
 import { response_999 } from './app/containers/999_response';
 import { Outbound_ClaimProcessingSummary } from './app/containers/Outbound_RealTime_837_Claim/Outbound_RealTime_ClaimProcessingSummary'
@@ -284,6 +285,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Inbound_Encounter_ClaimProcessingSummary} component={Inbound_Encounter_ClaimProcessingSummary} />
 
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
+                                <Route path={'/' + Strings.claimPayment_835_details} component={ClaimPaymentDetails} />
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 <Route path={'/' + Strings._277CAResponse} component={_277CAReponse} />

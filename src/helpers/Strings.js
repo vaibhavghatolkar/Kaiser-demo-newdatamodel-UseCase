@@ -77,6 +77,7 @@ const Strings = {
     EncounterDashboard:'EncounterDashboard',
     EncounterDetails:'EncounterDetails',
     claimPayment_835: 'claimPaymentDashboard835',
+    claimPayment_835_details : 'claimPaymentDashboard835Details',
     healthCare278: 'healthCare278Dashboard',
     serviceDetails278: 'serviceDetails278',
     response_999:'response_999',
