@@ -1,6 +1,7 @@
 import React from 'react'
 import './styles.css'
 import "../../containers/color.css";
+import Button from '@material-ui/core/Button';
 
 export class Header extends React.Component {
 
@@ -27,6 +28,10 @@ export class Header extends React.Component {
                             <div class="dropdown-content">
                                 <a onClick={this.changePassword}>Change Password</a>
                                 <a onClick={this.logout}>Logout</a>
+                                <Button variant="contained" color="primary">
+      Hello World
+    </Button>
+                                
                             </div>
                         </div>
                         : ''
