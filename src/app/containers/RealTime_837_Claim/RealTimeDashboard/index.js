@@ -664,7 +664,7 @@ export class RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Resubmit Queue')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
