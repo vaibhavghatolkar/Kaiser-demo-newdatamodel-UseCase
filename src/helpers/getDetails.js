@@ -33,7 +33,7 @@ export const getProviders = async (recType, input_query) => {
         }
     }`
 
-    return fetch(Urls.base_url, {
+    return fetch(Urls.common_data, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

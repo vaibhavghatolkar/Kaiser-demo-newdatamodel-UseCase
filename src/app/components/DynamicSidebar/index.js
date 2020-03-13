@@ -319,28 +319,30 @@ export class DynamicSidebar extends React.Component {
             <div id="tabs">
                 <div className="row p">
                     <div className="col-6 p nopadding">
-                        <a href=""
-                            onClick={() => {
-                                isOutbound = false
-                                sessionStorage.setItem('isOutbound', false)
-                                setTimeout(() => {
-                                    window.location.reload()
-                                }, 50);
-                            }}>
+                        <a className="clickable"
+                            // onClick={() => {
+                            //     isOutbound = false
+                            //     sessionStorage.setItem('isOutbound', false)
+                            //     setTimeout(() => {
+                            //         window.location.reload()
+                            //     }, 50);
+                            // }}
+                            >
                             <p className="p smaller-font">Inbound</p>
                             {!isOutbound ? <hr className="underline p" /> : null}
                         </a>
                     </div>
 
                     <div className="col-6 p nopadding">
-                        <a href=""
-                            onClick={() => {
-                                isOutbound = true
-                                sessionStorage.setItem('isOutbound', true)
-                                setTimeout(() => {
-                                    window.location.reload()
-                                }, 50);
-                            }}>
+                        <a className="clickable"
+                            // onClick={() => {
+                            //     isOutbound = true
+                            //     sessionStorage.setItem('isOutbound', true)
+                            //     setTimeout(() => {
+                            //         window.location.reload()
+                            //     }, 50);
+                            // }}
+                            >
                             <p className="p smaller-font">Outbound</p>
                             {isOutbound ? <hr className="underline p" /> : null}
                         </a>
