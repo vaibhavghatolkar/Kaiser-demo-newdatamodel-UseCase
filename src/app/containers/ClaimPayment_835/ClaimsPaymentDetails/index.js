@@ -15,6 +15,7 @@ export class ClaimPaymentDetails extends React.Component {
 
     constructor(props) {
         super(props);
+    
         console.log('hello these are the props', props)
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
@@ -40,6 +41,8 @@ export class ClaimPaymentDetails extends React.Component {
             plan_code: '',
             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            Service_startDate: '',
+            Service_endDate: '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -82,13 +85,15 @@ export class ClaimPaymentDetails extends React.Component {
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
-        this.Saved = this.Saved.bind(this)
+        this.Service_StartChange = this.Service_StartChange.bind(this)
+        this.Service_EndChange = this.Service_EndChange.bind(this)
+ 
     }
 
     componentDidMount() {
         this.getCommonData()
         this.getData()
-        this.getIcdCode()
+      
     }
 
     getCommonData() {
@@ -119,38 +124,7 @@ export class ClaimPaymentDetails extends React.Component {
                 console.log(err)
             });
     }
-    getIcdCode() {
-        let query = `{
-            ClaimsICDCODE  {
-                SeqId
-                ICD_CODE
-                Year
-                ExtraField1
-            }
-        }`
-
-
-        fetch(Urls.real_time_claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-
-                if (res.data) {
-                    this.setState({
-                        Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
-                    })
-                }
-            })
-            .catch(err => {
-                console.log(err)
-            });
-    }
+   
     getData = () => {
         let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -212,10 +186,7 @@ export class ClaimPaymentDetails extends React.Component {
                 console.log(err)
             });
     }
-    ChangeVal(event, key) {
-        this.state.selectedICdCode = event.target.options[event.target.selectedIndex].text;
-
-    }
+   
     sortData(fileId, data) {
         let files = {}
         let intakeClaims = this.state.intakeClaims
@@ -289,52 +260,8 @@ export class ClaimPaymentDetails extends React.Component {
                 console.log(err)
             });
     }
-    renderButton() {
+    
 
-        return (
-
-            <div>
-
-                <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
-
-            </div>
-        )
-    }
-
-    Saved() {
-        if (this.state.selectedICdCode != "") {
-            let query = `mutation{updateICDCode(
-                    ClaimID:"`+ this.state.claimid + `" 
-                    FileID:"`+ this.state.fileid + `"  
-                    ICDCode:"`+ this.state.selectedICdCode + `"     
-                    )
-                  }`
-
-            console.log("asfsadds", query)
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
-
-                })
-            })
-                .then(r => r.json())
-                .then(data =>
-                    alert(data.data.updateICDCode),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 1000)
-
-                );
-
-        }
-
-
-    }
     renderSearchBar() {
         return (
             <div className="row">
@@ -357,15 +284,6 @@ export class ClaimPaymentDetails extends React.Component {
         }, () => {
             this.getTransactions(fileId)
         })
-    }
-
-    getIcdcodeoptions() {
-        let row = []
-        this.state.Icdcode.forEach(element => {
-
-            row.push(<option value="">{element.ICD_CODE}</option>)
-        })
-        return row
     }
 
     getDetails(claimId, fileId, fileData) {
@@ -417,15 +335,7 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
-                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
-                        Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
-                            <option value="0" ></option>
-                            {this.getIcdcodeoptions()}
-                        </select>
-                    }
-                    else {
-                        Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
-                    }
+                   
                     let data = res.data.Claim837RTDetails[0]
 
                     let fileDetails = [
@@ -436,18 +346,19 @@ export class ClaimPaymentDetails extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
-                            { key: 'Claim Date', value: data.ClaimDate },
-                            { key: 'Subscriber first name', value: data.SubscriberFirstName },
-                            { key: 'Subscriber last name', value: data.SubscriberLastName },
-                            { key: 'Admission date', value: data.AdmissionDate },
-                            { key: 'Claim amount', value: data.Claim_Amount },
-                            { key: 'Provider address', value: data.BillingProviderAddress },
-                            { key: 'Claim Status', value: data.ClaimStatus },
-                            { key: 'ICD Code', value: Claim_Icdcode },
-                            { key: 'Accident Date', value: data.AccidentDate },
-                            { key: '', },
-                            { key: '', },
+                            { key: 'Claim Number', },
+                            { key: 'Payer Name',  },
+                            { key: 'Payer Number',  },
+                            { key: 'Claim Status Code', },
+                            { key: 'Claim Filling Indicator', },
+                            { key: 'Claim Received Date', },
+                            { key: 'Patient ID',  },
+                            { key: 'Patient Name',  },
+                            { key: 'Provider ID', },
+                            { key: 'Provider Name',  },
+                            { key: 'Rendering Provider ID', },
+                            { key: 'Facility Code Value', },
+                            { key: 'Patient Control Number', },
                         ]
                     this.setState({
                         showDetails: true,
@@ -478,7 +389,7 @@ export class ClaimPaymentDetails extends React.Component {
                 </div>
             )
 
-            if (col.length % 4 == 0) {
+            if (col.length % 3 == 0) {
                 row.push(<div className="row">{col}</div>)
                 col = []
             }
@@ -495,48 +406,6 @@ export class ClaimPaymentDetails extends React.Component {
         )
     }
 
-    // renderTransactions(){
-    //     let row = []
-    //     const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
-
-    //     data.forEach((d) => {
-    //         row.push(
-    //             <tr>
-    //                 <td><a href="#" onClick={() => {
-    //                     this.setState({
-    //                         claimId : d.ClaimID
-    //                     }, () => {
-    //                         this.getDetails(d.ClaimID)
-    //                     })
-    //                 }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-    //                 <td>{d.ClaimDate}</td>
-    //                 <td>{d.Claim_Amount}</td>
-    //                 <td>{d.ClaimStatus}</td>
-    //                 <td>{d.adjudication_status}</td>
-    //                 <td>{d.ClaimLevelErrors}</td>
-    //             </tr>
-    //         )
-    //     })
-    //     return(
-    //         <div>
-    //             <table className="table table-bordered claim-list">
-    //                 <thead>
-    //                     <tr className="table-head" style={{fontSize:"9px"}}>
-    //                         <td className="table-head-text">Claim Id</td>
-    //                         <td className="table-head-text list-item-style">Claim Date</td>
-    //                         <td className="table-head-text list-item-style">Claim Amount</td>
-    //                         <td className="table-head-text list-item-style">Claim Status</td>
-    //                         <td className="table-head-text list-item-style">Current State</td>
-    //                         <td className="table-head-text list-item-style">Error Code</td>
-    //                     </tr>
-    //                 </thead>
-    //                 <tbody>
-    //                     {row}
-    //                 </tbody>
-    //             </table>
-    //         </div>
-    //     )
-    // }
 
     renderDetails(flag) {
         return (
@@ -550,24 +419,8 @@ export class ClaimPaymentDetails extends React.Component {
         )
     }
 
-    getoptions() {
-        let row = []
-        this.state.tradingpartner.forEach(element => {
-            if (!element) {
-                return
-            }
-            row.push(<option value="" selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""}>{element.Trading_Partner_Name}</option>)
-        })
-        return row
-    }
-
-    getErrorOptions() {
-        let row = []
-        this.state.errorList.forEach(element => {
-            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
-        })
-        return row
-    }
+  
+   
 
     onSelect(event, key) {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
@@ -597,10 +450,31 @@ export class ClaimPaymentDetails extends React.Component {
             this.getData()
         }, 50);
     }
-
+    
     handleEndChange(date) {
         this.setState({
             endDate: date,
+            showDetails: false
+        });
+
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+
+    Service_StartChange(date) {
+        this.setState({
+            Service_startDate: date,
+            showDetails: false
+        });
+
+        setTimeout(() => {
+            this.getData()
+        }, 50);
+    }
+    Service_EndChange(date) {
+        this.setState({
+            Service_endDate: date,
             showDetails: false
         });
 
@@ -687,38 +561,10 @@ export class ClaimPaymentDetails extends React.Component {
 
                         />
                         </div>
-                    </div>
+               
                     
 
-                    {/*   <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text,
-                                    showDetails: false
-                                }, () => {
-                                    this.getData()
-                                })
-                            }}>
-                            <option selected={this.state.State == '' ? "selected" : ""} value=""></option>
-                            <option selected={this.state.State == '' ? "selected" : ""} value="1">California</option>
-                            <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
-                            <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
-                            <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>
-                            <option selected={this.state.State == 'Idaho' ? "selected" : ""} value="5">Idaho</option>
-                            <option selected={this.state.State == 'Ohio' ? "selected" : ""} value="6">Ohio</option>
-                            <option selected={this.state.State == 'Illinois' ? "selected" : ""} value="7">Illinois</option>
-                            <option selected={this.state.State == 'Texas' ? "selected" : ""} value="8">Texas</option>
-                            <option selected={this.state.State == 'Mississippi' ? "selected" : ""} value="9">Mississippi</option>
-                            <option selected={this.state.State == 'South Carolina' ? "selected" : ""} value="10">South Carolina</option>
-                            <option selected={this.state.State == 'New Mexico' ? "selected" : ""} value="11">New Mexico</option>
-                            <option selected={this.state.State == 'Puerto Rico' ? "selected" : ""} value="12">Puerto Rico</option>
-                            <option selected={this.state.State == 'Washington' ? "selected" : ""} value="13">Washington</option>
-                            <option selected={this.state.State == 'Utah' ? "selected" : ""} value="14">Utah</option>
-                            <option selected={this.state.State == 'Wisconsin' ? "selected" : ""} value="15">Wisconsin</option>
-                        </select> */} 
-                  
-                  <div className="form-row">
+                       
                     <div className="form-group col-2">
                         <div className="list-dashboard">Claim Received - Start Date</div>
                         <DatePicker
@@ -740,29 +586,19 @@ export class ClaimPaymentDetails extends React.Component {
                         <div className="list-dashboard">Service - Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
-                            onChange={this.handleStartChange}
+                            selected={this.state.Service_startDate ? new Date(this.state.Service_startDate) : ''}
+                            onChange={this.Service_StartChange}
                         />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Service - End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
-                            onChange={this.handleEndChange}
+                            selected={this.state.Service_endDate ? new Date(this.state.Service_endDate) : ''}
+                            onChange={this.Service_EndChange}
                         />
                     </div>
-                   {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>  */}
-                </div>
+                    </div>
             </div>
         )
     }
@@ -792,9 +628,9 @@ export class ClaimPaymentDetails extends React.Component {
         return (
             <div className="row">
                 <div className="col-12">
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim Line Data</a></div>
-                    <div id={'event'}>
-                        <table className="table table-bordered background-color">
+                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Service Line Information</a></div>
+                    <div id={'event'}  style={{overflow:"auto"}} >
+                        <table className="table table-bordered background-color" style={{marginBottom:"0px"}}>
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                 <td className="table-head-text list-item-style">Service Dates</td>
@@ -808,12 +644,7 @@ export class ClaimPaymentDetails extends React.Component {
                                 <td className="table-head-text list-item-style">Adj Amount</td>
                                 <td className="table-head-text list-item-style">Paid Amount</td>
 
-{/*                       <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Service line No.</td>
-                                     <td className="table-head-text list-item-style">Provider paid amount</td> 
-                                    <td className="table-head-text list-item-style">Service date</td>
-                                    <td className="table-head-text list-item-style">Procedure code</td>
-                                    <td className="table-head-text list-item-style">Unit</td> */}
+
               
                                 </tr>
                             </thead>
@@ -838,17 +669,16 @@ export class ClaimPaymentDetails extends React.Component {
     renderClaimsHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text">Claim Number<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                {/* <td className="table-head-text list-item-style">Claim Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */}
-                <td className="table-head-text list-item-style">Payer<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Check/EFT Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Check/EFT Number<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Patient Name(ID)<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Total Charged Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+                  <td className="table-head-text list-item-style">Patient Name</td>
+                <td className="table-head-text">Patient Control</td>
+                <td className="table-head-text list-item-style">Payer Control</td>
+                {/* <td className="table-head-text list-item-style">Check/EFT Date</td>
+                <td className="table-head-text list-item-style">Check/EFT Number</td> */}              
+                <td className="table-head-text list-item-style">Total Charged Amount</td>
 
-                <td className="table-head-text list-item-style">Total Paid Amount<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Action<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-               {/* <td className="table-head-text list-item-style">Error<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td> */} 
+                <td className="table-head-text list-item-style">Total Paid Amount</td>
+              {/* <td className="table-head-text list-item-style">Action</td> */}
+               {/* <td className="table-head-text list-item-style">Error</td> */} 
             </tr>
         )
     }
@@ -872,23 +702,23 @@ export class ClaimPaymentDetails extends React.Component {
             <div className="row">
                 <div className="col-3 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Claim Number
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Claim Date
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                   Check/EFT Number
                 </div>
                 <div className="col-3 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img> */}
-                    File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Check/EFT Date
                 </div>
                 <div className="col-2 col-header justify-align">
                     {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></ */}
-                    Sender<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img>
+                    Sender
                 </div>
             </div>
         )
@@ -917,11 +747,11 @@ export class ClaimPaymentDetails extends React.Component {
                     <div className="col-3 col-small-style border-left small-font left-align"><a href={'#'+ keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
-                        }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.Type}</div>
-                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
-                    <div className="col-3 col-small-style small-font">{data[keys].value.FileStatus}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.Sender}</div>
+                        }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">9999999</a></div>
+                    <div className="col-2 col-small-style small-font"></div>
+                    <div className="col-2 col-small-style small-font"></div>
+                    <div className="col-3 col-small-style small-font"></div>
+                    <div className="col-2 col-small-style small-font"></div>
                 </div>
             )
 
@@ -939,14 +769,11 @@ export class ClaimPaymentDetails extends React.Component {
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
-                            <td className="list-item-style">{d.ClaimStatus}</td>
-                            <td className="list-item-style">{d.adjudication_status}</td>
-                            <td className="style-left"> ${d.Claim_Amount}</td>
-                            <td className="list-item-style">{d.ClaimLevelErrors}</td>
-                            {/* To be Filled with right data */}
-                            <td className="style-left"> ${d.Claim_Amount}</td>
-                            <td className="style-left"> ${d.Claim_Amount}</td>
-                            <td className="style-left"> ${d.Claim_Amount}</td>
+                            <td className="list-item-style"></td>
+                            <td className="list-item-style"></td>
+                            <td className="style-left"> </td>
+                            <td className="list-item-style"></td>
+                        
                             
                         </tr>
                     )
@@ -987,6 +814,7 @@ export class ClaimPaymentDetails extends React.Component {
             <div>
                 {this.renderTableHeader()}
                 {row}
+                <div style={{marginLeft: '-14px'}}>  <br></br>
                 <ReactPaginate
                     previousLabel={'previous'}
                     nextLabel={'next'}
@@ -1005,6 +833,7 @@ export class ClaimPaymentDetails extends React.Component {
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
                 />
+            </div>
             </div>
         );
     }
@@ -1063,26 +892,17 @@ export class ClaimPaymentDetails extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <div>
-                                    <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
-                                    <hr />
+                                  
                                 </div> : null
                         }
-                        {/*
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                <table className="table claim-Details border">
-                                    {this.renderHeader('File #' + this.state.fileid)}
-                                    {this.renderRows(this.state.fileDetails)}
-                                </table>
-                                : null
-                        */}
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details border">
-                                    {this.renderHeader('Claim #' + this.state.claimId)}
+                                    {/* {this.renderHeader('Claim #' + this.state.claimId)} */}
+                                      {this.renderHeader('Claim Information ')}
                                     {this.renderRows(this.state.claimDetails)}
-                                    <br></br>
-                                    {this.state.Icdcodepresent == "Icdcode" ? this.renderButton() : ""}
-                                </table>
+                                  
+                                 </table>
                                 : null
                         }
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}

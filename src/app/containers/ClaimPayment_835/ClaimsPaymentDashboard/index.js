@@ -315,16 +315,10 @@ export class ClaimPaymentDashboard extends React.Component {
     
             <h6 > Volume - This Month trends</h6>
             </div>
-            <div className = "col-5">
            
-            Filter by 
-            <input type="text"></input>
-            </div>
            
             </div>
-            <div className="row">
-            <p style= {{color : "grey"}}> as of today</p>
-            </div>
+            
     
         <Chart1
   width={'700px'}

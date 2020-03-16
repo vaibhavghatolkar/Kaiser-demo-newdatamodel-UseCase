@@ -414,7 +414,18 @@ export class ClaimDetails837 extends React.Component {
 
         });
     }
-    getDetails(claimId, fileId, fileData) {
+
+    getDatePicker = () => {
+        return (
+            <DatePicker
+                className="form-control list-header-dashboard"
+                selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
+                onChange={this.handleAccidentdate}
+            />
+        )
+    }
+
+    getDetails = (claimId, fileId, fileData) => {
         let Claim_Icdcode = ""
         let AccidentDate = ""
         let url = Urls.real_time_claim_details
@@ -474,14 +485,11 @@ export class ClaimDetails837 extends React.Component {
                     else {
                         Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
                     }
+                    let isDate = 0
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "AccidentDt") {
-
-                        //     AccidentDate = <DatePicker
-                        //     className="form-control list-header-dashboard"
-                        //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
-                        //     onChange={this.handleAccidentdate}
-                        // />
-                        AccidentDate = <input onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
+                        isDate = 1
+                        AccidentDate = this.getDatePicker()
+                        // AccidentDate = <input onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' className="form-control list-header1" style={{ width: "100px " , marginLeft:"-10px" }}></input>
                     }
                     else {
 
@@ -506,7 +514,7 @@ export class ClaimDetails837 extends React.Component {
                             { key: 'Provider Address', value: data.BillingProviderAddress },
                             { key: 'Claim Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
-                            { key: 'Accident Date', value: AccidentDate },
+                            { key: 'Accident Date', value: isDate ? "" : AccidentDate, isDate: isDate },
                             { key: '', },
                             { key: '', },
                         ]
@@ -570,7 +578,7 @@ export class ClaimDetails837 extends React.Component {
             col.push(
                 <div className="col">
                     <div className="header">{item.key}</div>
-                    <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
+                    {item.isDate ? this.getDatePicker() : <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
                 </div>
             )
 
@@ -693,21 +701,16 @@ export class ClaimDetails837 extends React.Component {
             this.getData()
         }, 50);
     }
-    handleAccidentdate(date) {
-
+    handleAccidentdate = (date) => {
         this.setState({
             Accidentdate: date,
-
         });
-
-
-
     }
 
     handleEndChange(date) {
         this.setState({
             endDate: date,
-            showDetails: false
+            // showDetails: false
         });
 
         setTimeout(() => {
@@ -1065,25 +1068,25 @@ export class ClaimDetails837 extends React.Component {
                 <table className="table claim-details">
                     {row}
                 </table>
-               <div style={{marginLeft: '-14px'}}>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.setState.recount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClick1(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
+                <div style={{ marginLeft: '-14px' }}>
+                    <ReactPaginate
+                        previousLabel={'previous'}
+                        nextLabel={'next'}
+                        breakLabel={'...'}
+                        breakClassName={'page-link'}
+                        initialPage={0}
+                        pageCount={this.setState.recount}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={(page) => { this.handlePageClick1(page) }}
+                        containerClassName={'pagination'}
+                        pageClassName={'page-item'}
+                        previousClassName={'page-link'}
+                        nextClassName={'page-link'}
+                        pageLinkClassName={'page-link'}
+                        subContainerClassName={'pages pagination'}
+                        activeClassName={'active'}
+                    />
                 </div>
             </div>
         );

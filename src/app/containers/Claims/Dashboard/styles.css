@@ -162,3 +162,6 @@ td a {
     float: right;
     margin-top : 3px;
 }
+::-webkit-scrollbar:horizontal{
+   height: 8px;
+}
