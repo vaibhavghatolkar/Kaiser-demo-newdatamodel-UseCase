@@ -267,6 +267,7 @@ export class ClaimPaymentDetails extends React.Component {
                 ClaimLevelErrors
                 ClaimUniqueID
                 FileID
+                ClaimRefId
             }
         }`
         console.log(query)

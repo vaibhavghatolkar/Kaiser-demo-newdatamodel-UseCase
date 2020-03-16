@@ -11,6 +11,7 @@ import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
+import { StateDropdown } from '../../../components/StateDropdown';
 
 var val = ''
 export class ClaimDetails837 extends React.Component {
@@ -276,6 +277,7 @@ export class ClaimDetails837 extends React.Component {
                 ClaimLevelErrors
                 ClaimUniqueID
                 FileID
+                ClaimRefId
             }
         }`
         console.log(query)
@@ -416,12 +418,12 @@ export class ClaimDetails837 extends React.Component {
 
         });
     }
-    getDetails(claimId, fileId, fileData) {
+    getDetails(claimId, fileId, fileData, ClaimRefId) {
         let Claim_Icdcode = ""
         let AccidentDate = ""
         let url = Urls.real_time_claim_details
         let query = `{
-            Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", SeqID: ${ClaimRefId}) {
               ClaimID
               ClaimDate
               ClaimTMTrackingID
@@ -779,38 +781,24 @@ export class ClaimDetails837 extends React.Component {
         })
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text,
+            showDetails: false
+        }, () => {
+            this.getData()
+        })
+    }
+
     renderFilters() {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text,
-                                    showDetails: false
-                                }, () => {
-                                    this.getData()
-                                })
-                            }}>
-                            <option selected={this.state.State == '' ? "selected" : ""} value=""></option>
-                            <option selected={this.state.State == '' ? "selected" : ""} value="1">California</option>
-                            <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
-                            <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
-                            <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>
-                            <option selected={this.state.State == 'Idaho' ? "selected" : ""} value="5">Idaho</option>
-                            <option selected={this.state.State == 'Ohio' ? "selected" : ""} value="6">Ohio</option>
-                            <option selected={this.state.State == 'Illinois' ? "selected" : ""} value="7">Illinois</option>
-                            <option selected={this.state.State == 'Texas' ? "selected" : ""} value="8">Texas</option>
-                            <option selected={this.state.State == 'Mississippi' ? "selected" : ""} value="9">Mississippi</option>
-                            <option selected={this.state.State == 'South Carolina' ? "selected" : ""} value="10">South Carolina</option>
-                            <option selected={this.state.State == 'New Mexico' ? "selected" : ""} value="11">New Mexico</option>
-                            <option selected={this.state.State == 'Puerto Rico' ? "selected" : ""} value="12">Puerto Rico</option>
-                            <option selected={this.state.State == 'Washington' ? "selected" : ""} value="13">Washington</option>
-                            <option selected={this.state.State == 'Utah' ? "selected" : ""} value="14">Utah</option>
-                            <option selected={this.state.State == 'Wisconsin' ? "selected" : ""} value="15">Wisconsin</option>
-                        </select>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
@@ -1034,7 +1022,7 @@ export class ClaimDetails837 extends React.Component {
                                 this.setState({
                                     claimId: d.ClaimID
                                 }, () => {
-                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value)
+                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value, d.ClaimRefId)
                                     this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>

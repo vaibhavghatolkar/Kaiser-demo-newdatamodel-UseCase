@@ -200,12 +200,12 @@ export class MenuCreate extends React.Component {
             <tr className="table-head">
                 <td className="table-text">Menu List</td>
 
-                   <td className="table-text"><div className="row" style={{marginLeft: '5px'}}><label>View Access </label>
+                   <td className="table-text"><div className="row" style={{marginLeft: '5px'}}><div>View Access </div>
 
-                <input style={{ marginLeft: "10px", marginTop: '3px'}} type="checkbox" onChange={this.ChangeMenuAcces}></input>
+                <input style={{ marginLeft: "10px", alignSelf: 'center', marginTop: '3px'}} type="checkbox" onChange={this.ChangeMenuAcces}></input>
                 </div></td>
                 <td className="table-text"><div className="row" style={{marginLeft: '5px'}}><div>Edit Functionality </div>
-                <input style={{ marginLeft: "10px", marginTop: '3px' }} type="checkbox" onChange={this.ChangeFunAccess}></input>
+                <input style={{ marginLeft: "10px", alignSelf: 'center', marginTop: '3px' }} type="checkbox" onChange={this.ChangeFunAccess}></input>
                 </div></td>
 
 
