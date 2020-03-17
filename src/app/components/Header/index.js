@@ -115,7 +115,7 @@ export class Header extends React.Component {
                                 <div className="row">
                                     <div class="col" style={{ marginLeft: '25%' }}>
                                         <button class="btn btn-display" onClick={this.updatePassword} >Update</button>
-                                        <button class="btn btn-display" style={{ marginLeft: '20px' }} data-dismiss="modal">close</button>
+                                        <button class="btn btn-display" style={{ marginLeft: '20px' }} data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>

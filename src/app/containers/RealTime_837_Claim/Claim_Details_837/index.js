@@ -468,6 +468,17 @@ export class ClaimDetails837 extends React.Component {
             .then(res => res.json())
             .then(res => {
                 console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
+                // let data = res.data
+                // let count = 1
+                // if (data && data.Claim837RTLineDetails.length > 0) {
+
+                //     count = Math.floor(data.Claim837RTLineDetails[0].RecCount / 10)
+                //     if (data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
+                //         count = count + 1
+                //     }
+                // }
+
+
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -521,7 +532,8 @@ export class ClaimDetails837 extends React.Component {
                         fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
-                        Icdcodepresent: data.FieldToUpdate
+                        Icdcodepresent: data.FieldToUpdate,
+                        // count: count
                     })
                 }
             })
@@ -879,6 +891,24 @@ export class ClaimDetails837 extends React.Component {
                                 {row}
                             </tbody>
                         </table>
+                        {/* <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.count}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                /> */}
                     </div>
                 </div>
             </div>
