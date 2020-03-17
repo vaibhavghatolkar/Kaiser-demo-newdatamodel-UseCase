@@ -1,8 +1,8 @@
-let base_url = 'http://localhost:4000'
+ let base_url = 'http://localhost:4000'
 // let base_url = 'http://10.0.1.71:30506'
 //  let base_url = 'http://10.0.1.248:30508'
 const Urls = {
-    base_url : 'http://localhost:4000/graphQl',
+ base_url : 'http://localhost:4000/graphQl',
     // base_url : 'http://10.0.1.71:30506/graphQl',
     // base_url : 'http://10.0.1.248:30508/graphQl',
     eligibility_url : base_url + '/eligibility',

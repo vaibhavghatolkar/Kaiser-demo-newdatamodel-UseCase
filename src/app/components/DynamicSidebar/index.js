@@ -128,8 +128,8 @@ export class DynamicSidebar extends React.Component {
         else if (key == 65) { name = Strings.Inbound_EncounterDashboard }
         else if (key == 66) { name = Strings.Inbound_EncounterDetails }
 
-        else if (key == 68) { name = Strings.claimPayment_835 }
-        else if (key == 69) { name = Strings.claimPayment_835_details }
+        else if (key == 50) { name = Strings.claimPayment_835 }
+        else if (key == 51) { name = Strings.claimPayment_835_details }
         else if (key == 51) { name = Strings.MenuManagement }
       
         else if(key == 120 ) { name = Strings.tradingPartnerDetails}
@@ -171,18 +171,18 @@ export class DynamicSidebar extends React.Component {
     sortData() {
         let data = this.state.menuList
         //Adding new menu option to show 835 Details Board
-        this.state.menuList.push({
-            role_id: 40,
-            menu_id: 51,
-            menu_description: "835 Details Board",
-            sequence_id: 1,
-            parent_node: 0,
-            menuflag: true,
-            usermenuflag: false,
-            is_editor: false,
-            is_editable: false,
-            menutype: "O"   
-        })
+        // this.state.menuList.push({
+        //     role_id: 40,
+        //     menu_id: 51,
+        //     menu_description: "835 Details Board",
+        //     sequence_id: 1,
+        //     parent_node: 0,
+        //     menuflag: true,
+        //     usermenuflag: false,
+        //     is_editor: false,
+        //     is_editable: false,
+        //     menutype: "O"   
+        // })
         
         let menuOptions = {}
         data.forEach(item => {
@@ -351,6 +351,7 @@ export class DynamicSidebar extends React.Component {
     }
 
     renderCopyright = () => {
+        // fixed-bottom
         return(
             <div className="copyright"><br/>
                 © 2020 Powered by HiPaaS,<br/> All rights reserved.

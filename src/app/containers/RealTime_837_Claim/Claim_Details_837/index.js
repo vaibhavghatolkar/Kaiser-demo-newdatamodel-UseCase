@@ -9,6 +9,8 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
+import { getProviders } from '../../../../helpers/getDetails';
+import { AutoComplete } from '../../../components/AutoComplete';
 
 var val = ''
 export class ClaimDetails837 extends React.Component {
@@ -757,15 +759,27 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
-    onHandleChange(e) {
-        let providerName = e.target.value
+    onHandleChange = (e) => {
         clearTimeout(val)
+        let providerName = e.target.value
         val = setTimeout(() => {
-            this.setState({
-                providerName: providerName
-            })
-            this.getData()
+            getProviders("Inbound", providerName)
+                .then(list => {
+                    this.setState({
+                        providers: list
+                    })
+                }).catch(error => {
+                    console.log(error)
+                })
         }, 300);
+    }
+
+    onSelected = (value) => {
+        this.setState({
+            providerName: value
+        }, () => {
+            this.getData()
+        })
     }
 
     renderFilters() {
@@ -806,7 +820,12 @@ export class ClaimDetails837 extends React.Component {
                         {/* <input
                             onChange={(e) => this.onHandleChange(e)}
                             className="form-control" type="text" /> */}
-                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
+                        />
+                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -954,23 +973,23 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-3 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
                     {/* File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-2 col-header justify-align">
-                    Type
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTFileDetails.Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
                     {/* Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
                     {/* File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-3 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
                     {/* File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Submitter</a>
                     {/* Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                 </div>
             </div>

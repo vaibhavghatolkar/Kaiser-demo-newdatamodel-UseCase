@@ -2,6 +2,7 @@ import React from 'react';
 import './UserList.css';
 import '../color.css'
 import Urls from '../../../helpers/Urls';
+const $ = window.$;
 
 export class UserList extends React.Component {
 
@@ -36,6 +37,10 @@ export class UserList extends React.Component {
         this.getUserRole();
     }
     saveUser() {
+        let { firstName, lastName, email, password, userRole } = this.state;
+        if (!firstName || !lastName || !email || !password || !userRole) {
+            alert("Please enter the fields");
+        }else{
 
         let query = `mutation{updateuser(
             Id:`+ this.state.id + ` 
@@ -63,6 +68,7 @@ export class UserList extends React.Component {
                 if (res.errors) {
                     alert(res.errors[0].message)
                 } else {
+                    $("#myModal2").modal("hide");
                     if (res.data.updateuser == "") {
                         alert("User Updated Successfully.")
                     } else {
@@ -74,6 +80,7 @@ export class UserList extends React.Component {
             }).catch(err => {
                 console.log(err)
             })
+        }
     }
     getUserRole() {
         let query = `{
@@ -258,15 +265,14 @@ export class UserList extends React.Component {
 
         return (
             <div>
-
                 <div className="row">
                     <h5 className="headerText">HiPaaS User List</h5>
                     <button type="button" class="btn btn-design" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
                         Add New
                     </button>
                 </div>
-                <div className="row" style={{ marginTop: '30px' }}>
-                    <div className="col-7">
+                <div className="row" style={{ marginTop: '30px'}}>
+                    <div className="col-7" style={{padding: '0'}}>
                         {this.RenderUserList()}
                     </div>
                 </div>
@@ -300,6 +306,8 @@ export class UserList extends React.Component {
                                     <input onChange={(e) => this.onHandleChange(e, 'email')} name="email" type="text" className="form-control width1" id="Email"
                                         disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter email" value={this.state.email} />
                                 </div>
+                                <br/><br/>
+
                                 <div class="form-group">
                                     <label for="Password">Password</label>
                                     <input onChange={(e) => this.onHandleChange(e, 'password')} name="password" type="password" className="form-control width1" id="Password"
@@ -310,6 +318,7 @@ export class UserList extends React.Component {
                                     <input onChange={(e) => this.onHandleChange(e, 'phoneNo')} name="phoneNo" type="text" className="form-control width1" id="phoneno"
                                         placeholder="Enter Phone Number" value={this.state.phoneNo} />
                                 </div>
+                                <br/><br/>
                                 <div class="form-group">
                                     <label for="UserRole">User Role</label>
                                     <select className="form-control width1" name="userRole" onChange={(e) => this.onHandleChange(e, 'userRole')} value={this.state.userRole}>
@@ -318,7 +327,7 @@ export class UserList extends React.Component {
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-display" style={{ marginLeft: '0px' }} data-value={this.state.id} data-dismiss="modal" onClick={this.saveUser} >{this.state.UserStatus}</button>
+                                <button type="submit" class="btn btn-display" style={{ marginLeft: '0px' }} data-value={this.state.id} onClick={this.saveUser} >{this.state.UserStatus}</button>
 
                             </div>
                         </div>

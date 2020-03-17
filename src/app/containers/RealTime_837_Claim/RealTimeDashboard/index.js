@@ -80,6 +80,7 @@ export class RealTimeDashboard extends React.Component {
             second_data: {},
             search: '',
             nameRotation: 180,
+            typeRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
             orderby: "",
@@ -152,6 +153,7 @@ export class RealTimeDashboard extends React.Component {
                 TotalSentToQNXT
                 InProgress
                 Resubmit
+                RejectedFileCount
             }
             barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 From
@@ -195,12 +197,12 @@ export class RealTimeDashboard extends React.Component {
                     summary = [
                         { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Rejected Files', value: 0 },
+                        { name: 'Rejected Files', value: data.Claim837RTDashboardCount[0].RejectedFileCount ? data.Claim837RTDashboardCount[0].RejectedFileCount : ''  },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
                         { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
                         { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
-                        { name: 'Resubmit Queue', value: data.Claim837RTDashboardCount[0].Resubmit ? Math.round(data.Claim837RTDashboardCount[0].Resubmit * 100) / 100 : '' },
+                        // { name: 'Resubmit Queue', value: data.Claim837RTDashboardCount[0].Resubmit ? Math.round(data.Claim837RTDashboardCount[0].Resubmit * 100) / 100 : '' },
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
                     rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
@@ -273,7 +275,7 @@ export class RealTimeDashboard extends React.Component {
         this.setState({ search });
     };
 
-    handleToggle = (e, rotation, key) => { 
+    handleToggle = (e, rotation, key) => {
         let addOn = " asc"
         if (rotation == 0) {
             addOn = " desc"
@@ -292,11 +294,11 @@ export class RealTimeDashboard extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.nameRotation}deg)`, marginRight: '4px' }}></img>File Name</td>
-                <td className="table-head-text list-item-style">Type</td>
-                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '4px' }}></img>File Date</td>
-                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '4px' }}></img>File Status</td>
-                <td className="table-head-text list-item-style"><img onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '4px' }}></img>Submitter</td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTFileDetails.Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -382,8 +384,8 @@ export class RealTimeDashboard extends React.Component {
             <div className="row chart-div">
                 <div className="chart-container chart">
                     {this.renderChart()}
-                    {this.renderValues()}
-                    <Pie data={data}
+                    {this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0 ? this.renderValues() : null}
+                    {/* <Pie data={data}
                         options={{
                             elements: {
                                 arc: {
@@ -476,7 +478,7 @@ export class RealTimeDashboard extends React.Component {
                 <tr>
                     <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style">{d.Type}</td>
-                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br/>{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
@@ -486,7 +488,7 @@ export class RealTimeDashboard extends React.Component {
 
         return (
             <div>
-                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed'}}>
+                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
                     {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
@@ -662,7 +664,7 @@ export class RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Rejected Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Resubmit Queue')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
@@ -704,13 +706,13 @@ export class RealTimeDashboard extends React.Component {
         let providerName = e.target.value
         val = setTimeout(() => {
             getProviders("Inbound", providerName)
-            .then(list => {
-                this.setState({
-                    providers: list
+                .then(list => {
+                    this.setState({
+                        providers: list
+                    })
+                }).catch(error => {
+                    console.log(error)
                 })
-            }).catch(error => {
-                console.log(error)
-            })
         }, 300);
     }
 
@@ -860,31 +862,30 @@ export class RealTimeDashboard extends React.Component {
     }
 
     renderChart() {
-        if(this.state.second_data && Object.keys(this.state.second_data).length == 0){
-            return
-        }
-
         return (
-            <Pie data={this.state.second_data}
-                options={{
-                    elements: {
-                        arc: {
-                            borderWidth: 0
+            this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0
+                ?
+                <Pie data={this.state.second_data}
+                    options={{
+                        elements: {
+                            arc: {
+                                borderWidth: 0
+                            }
+                        },
+                        legend: {
+                            display: false,
                         }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                }}
-                width={90}
-                height={55} />
+                    }}
+                    width={90}
+                    height={55} />
+                :
+                <div style={{textAlign: 'center'}}>
+                    No Data Present
+                </div>
         )
     }
 
     renderValues() {
-        if(this.state.second_data && Object.keys(this.state.second_data).length == 0){
-            return
-        }
         let row = []
         let data = this.state.second_data.labels
         let colors = this.state.second_data.datasets[0].backgroundColor

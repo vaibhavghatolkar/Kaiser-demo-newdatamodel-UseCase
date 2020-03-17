@@ -7,6 +7,8 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import Strings from '../../../../helpers/Strings'
 import { CommonTable } from '../../../components/CommonTable';
+import { AutoComplete } from '../../../components/AutoComplete';
+import { getProviders } from '../../../../helpers/getDetails';
 
 let val = ''
 export class ClaimProcessingSummary extends React.Component {
@@ -16,6 +18,7 @@ export class ClaimProcessingSummary extends React.Component {
         this.state = {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
+            providers: [],
             recCount: 0,
             pageCount: 1,
             Months: 0,
@@ -91,7 +94,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     getCountData() {
 
-        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound") {
+        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound", Provider:"${this.state.providerName}") {
             totalFile
             TotalClaims
             Accepted
@@ -365,11 +368,11 @@ export class ClaimProcessingSummary extends React.Component {
             // {value : 'Provider Last Name'},
             // {value : 'Provider First Name'},
             // {value : 'Claim Amount'},
-            {value : 'Subscriber Id', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag') , key : this.state.subscriber_IDFlag},
-            {value : 'HiPaaS Status'},
-            {value : 'Adjudication Status'},
-            {value : '277CA'},
-            {value : '835'},
+            { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
+            { value: 'HiPaaS Status' },
+            { value: 'Adjudication Status' },
+            { value: '277CA' },
+            { value: '835' },
         )
 
         rowArray.push(
@@ -435,17 +438,28 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
-    onHandleChange(e) {
+    onHandleChange = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
         val = setTimeout(() => {
-            this.setState({
-                providerName: providerName
-            }, () => {
-                this.getCountData()
-                this.getData()
-            })
+            getProviders("Inbound", providerName)
+                .then(list => {
+                    this.setState({
+                        providers: list
+                    })
+                }).catch(error => {
+                    console.log(error)
+                })
         }, 300);
+    }
+
+    onSelected = (value) => {
+        this.setState({
+            providerName: value
+        }, () => {
+            this.getCountData()
+            this.getData()
+        })
     }
 
     getoptions() {
@@ -495,8 +509,10 @@ export class ClaimProcessingSummary extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
                         />
 
                     </div>
@@ -563,47 +579,47 @@ export class ClaimProcessingSummary extends React.Component {
     renderStats() {
         console.log(this.state.Accepted)
         return (
-           
-                <div className="row padding-left" style={{marginBottom: '10px'}}>
- 
-                        <div className="col summary-container">
-                            <div className="summary-header">Accepted Claims</div>
-                            <div className="green summary-title">{this.state.Accepted}</div>
-                        </div> 
-        
-                        <div className="col summary-container">
-                            <div className="summary-header">Rejected Claims</div>
-                            <div className="red summary-title">{this.state.Rejected}</div>
-                        </div>        
-                        <div className="col summary-container">
-                            <div className="summary-header">999</div>
-                            <div className="red summary-title">{this.state.Total999}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">Sent To QNXT</div>
-                            <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                        </div> 
-                
-                        <div className="col summary-container">
-                            <div className="summary-header">277 CA</div>
-                            <div className="red summary-title">{this.state.Total277CA}</div>
-                        </div>
-                        <div className="col summary-container">
-                            <div className="summary-header">Pending</div>
-                            <div className="orange summary-title">{this.state.Pending}</div>
-                        </div>
-                        <div className="col summary-container">
-                            <div className="summary-header">Paid</div>
-                            <div className="green summary-title">{this.state.Paid}</div>
-                        </div> 
-              
-                        <div className="col summary-container">
-                            <div className="summary-header">Denied</div>
-                            <div className="red summary-title">{this.state.Denide}</div>
-                        </div> 
-                
-               
+
+            <div className="row padding-left" style={{ marginBottom: '10px' }}>
+
+                <div className="col summary-container">
+                    <div className="summary-header">Accepted Claims</div>
+                    <div className="green summary-title">{this.state.Accepted}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">Rejected Claims</div>
+                    <div className="red summary-title">{this.state.Rejected}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">999</div>
+                    <div className="red summary-title">{this.state.Total999}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">Sent To QNXT</div>
+                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">277 CA</div>
+                    <div className="red summary-title">{this.state.Total277CA}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Pending</div>
+                    <div className="orange summary-title">{this.state.Pending}</div>
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">Paid</div>
+                    <div className="green summary-title">{this.state.Paid}</div>
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">Denied</div>
+                    <div className="red summary-title">{this.state.Denide}</div>
+                </div>
+
+
             </div>
 
         )

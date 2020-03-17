@@ -5,7 +5,10 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import Strings from '../../../../helpers/Strings';
+import { AutoComplete } from '../../../components/AutoComplete';
+import { getProviders } from '../../../../helpers/getDetails';
 
+let val = ''
 export class Outbound_AuditSummary extends React.Component {
 
     constructor(props) {
@@ -20,6 +23,8 @@ export class Outbound_AuditSummary extends React.Component {
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
+            providerName: '',
+            orderby: '',
             TotalClaims: '',
             Accepted: '',
             Rejected: '',
@@ -64,7 +69,7 @@ export class Outbound_AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Outbound"){
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Outbound", Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}"){
               FileID
               filename
               Submitted
@@ -93,7 +98,7 @@ export class Outbound_AuditSummary extends React.Component {
                 RejTotal
                 errTotal
             }
-            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Outbound"){
+            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"",ToDt:"",RecType:"Outbound", Provider:"${this.state.providerName}"){
                 totalFile
                 TotalClaims 
                 Accepted
@@ -378,6 +383,29 @@ export class Outbound_AuditSummary extends React.Component {
         }, 50);
     }
 
+    onHandleChange = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+        val = setTimeout(() => {
+            getProviders("Inbound", providerName)
+                .then(list => {
+                    this.setState({
+                        providers: list
+                    })
+                }).catch(error => {
+                    console.log(error)
+                })
+        }, 300);
+    }
+
+    onSelected = (value) => {
+        this.setState({
+            providerName: value
+        }, () => {
+            this.getData()
+        })
+    }
+
     renderTopBar() {
         return (
             <div className="form-style" id='filters'>
@@ -406,8 +434,10 @@ export class Outbound_AuditSummary extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text"
-
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
                         />
 
                     </div>
