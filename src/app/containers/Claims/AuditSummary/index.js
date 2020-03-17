@@ -9,6 +9,8 @@ import { getDetails, getProviders } from '../../../../helpers/getDetails';
 import DatePicker from "react-datepicker";
 import ReactPaginate from 'react-paginate';
 import { AutoComplete } from '../../../components/AutoComplete';
+import { StateDropdown } from '../../../components/StateDropdown';
+import { Tiles } from '../../../components/Tiles';
 
 let val = ''
 export class AuditSummary extends React.Component {
@@ -25,6 +27,7 @@ export class AuditSummary extends React.Component {
             selectedTradingPartner: '',
             providerName: '',
             orderby: "",
+            State: "",
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
@@ -42,7 +45,7 @@ export class AuditSummary extends React.Component {
             page: 1,
             count: 1,
             nameRotation: 180,
-            statusRotation : 180
+            statusRotation: 180
         }
 
         this.getData = this.getData.bind(this)
@@ -71,7 +74,7 @@ export class AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}"){
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}", State:"${this.state.State}"){
               FileID
               filename
               Submitted
@@ -88,7 +91,7 @@ export class AuditSummary extends React.Component {
               RecCount
             }
            
-            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}"){
+            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
                 totalFile
                 TotalClaims 
                 Accepted
@@ -242,7 +245,7 @@ export class AuditSummary extends React.Component {
                         <td className="table-head-text list-item-style">Rejected PreProcess </td>
                         <td className="table-head-text list-item-style">Error in PreProcess </td>
                         {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                        <td className="table-head-text list-item-style">In Qnxt </td>
+                        <td className="table-head-text list-item-style">In MCG </td>
                         <td className="table-head-text list-item-style">999</td>
                         <td className="table-head-text list-item-style">277 CA</td>
                     </tr>
@@ -341,45 +344,33 @@ export class AuditSummary extends React.Component {
                 console.log(err)
             });
     }
-    renderStats() {
+
+    _renderStats() {
+        let _summary = [
+            { header: 'Total Files', value: this.state.totalFile, style: "green summary-title" },
+            { header: 'In HiPaaS', value: this.state.TotalClaims },
+            { header: 'Accepted', value: this.state.Accepted },
+            { header: 'Rejected', value: this.state.Rejected },
+            { header: '999', value: this.state.Total999, style: "green summary-title" },
+            { header: 'Send To MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            { header: '277 CA', value: this.state.Total277CA, style: "orange summary-title" }
+        ]
+        let row = []
+
+        _summary.forEach(item => {
+            row.push(
+                <Tiles
+                    header_text={item.header}
+                    value={item.value}
+                    isClickable={false}
+                    _style={item.style}
+                />
+            )
+        })
+
         return (
             <div className="row padding-left" >
-
-                <div className="col summary-container">
-                    <div className="summary-header">Total Files</div>
-                    <div className="green summary-title">{this.state.totalFile}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">In HiPaaS</div>
-                    <div className="blue summary-title">{this.state.TotalClaims}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">Accepted</div>
-                    <div className="green summary-title">{this.state.Accepted}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">Rejected</div>
-                    <div className="orange summary-title">{this.state.Rejected}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">999</div>
-                    <div className="green summary-title">{this.state.Total999}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">Send To Qnxt</div>
-                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                </div>
-
-
-
-
-                <div className="col summary-container">
-                    <div className="summary-header">277 CA</div>
-                    <div className="orange summary-title">{this.state.Total277CA}</div>
-                </div>
-
-
+                {row}
             </div>
 
         )
@@ -431,31 +422,24 @@ export class AuditSummary extends React.Component {
         })
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text,
+            showDetails: false
+        }, () => {
+            this.getData()
+        })
+    }
+
     renderTopBar() {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                        >
-                            <option value=""></option>
-                            <option selected value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
@@ -465,6 +449,18 @@ export class AuditSummary extends React.Component {
                             onSelected={this.onSelected}
                         />
 
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}
+                        >
+
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -481,18 +477,6 @@ export class AuditSummary extends React.Component {
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
                         />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}
-                        >
-
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
                     </div>
                 </div>
             </div>
@@ -514,7 +498,7 @@ export class AuditSummary extends React.Component {
             <div>
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
-                {this.renderStats()}
+                {this._renderStats()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
                 </div>

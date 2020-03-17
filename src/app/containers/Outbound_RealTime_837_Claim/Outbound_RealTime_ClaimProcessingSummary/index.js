@@ -7,6 +7,7 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { CommonTable } from '../../../components/CommonTable';
 import Strings from '../../../../helpers/Strings';
+import { StateDropdown } from '../../../components/StateDropdown';
 
 let val = ''
 export class Outbound_ClaimProcessingSummary extends React.Component {
@@ -35,9 +36,9 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
-            ReadytoSend : '',
-            Error : '',
-            ClaimSent : '',
+            ReadytoSend: '',
+            Error: '',
+            ClaimSent: '',
 
             fileNameFlag: 180,
             fileDateFlag: 180,
@@ -94,7 +95,7 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
 
     getCountData() {
 
-        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Outbound", Provider:"${this.state.providerName}") {
+        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Outbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
             totalFile
             TotalClaims
             Accepted
@@ -185,6 +186,7 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                 TotalLine
                 BatchName
                 BatchStatus
+                ClaimRefId
             }
         }`
         console.log(query)
@@ -359,6 +361,22 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
+    gotoDetails = () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let sendData = [
+            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
+        ]
+
+        this.props.history.push('/' + Strings.Outbound_ClaimDetails837, {
+            data : sendData
+        })
+    }
+
     renderTransactionsNew() {
         const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
         let headerArray = []
@@ -386,7 +404,7 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
         )
 
         rowArray.push(
-            { value: 'FileName' },
+            { value: 'FileName', method: this.gotoDetails, isClick: 1 },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
             { value: 'BatchName' },
@@ -473,39 +491,25 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
         return row
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text,
+            showDetails: false
+        }, () => {
+            this.getCountData()
+            this.getData()
+        })
+    }
+
     renderTopBar() {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text
-                                }, () => {
-                                    this.getCountData()
-                                    this.getData()
-                                })
-                            }}
-                        >
-                            <option value=""></option>
-                            <option value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
@@ -513,6 +517,16 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                             onChange={(e) => this.onHandleChange(e)}
                         />
 
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Sender</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -530,19 +544,9 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
-                    <div className="col summary-container1" style={{ marginTop: '-10px' }}>
-                        <div className="summary-header1">WIP > 90 DAYS</div>
-                        <div className="blue summary-title1">{this.state.wip90}</div>
+                    <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
+                        <div className="summary-header">WIP > 90 Days</div>
+                        <div className="blue summary-title">{this.state.wip90}</div>
                     </div>
 
                 </div>

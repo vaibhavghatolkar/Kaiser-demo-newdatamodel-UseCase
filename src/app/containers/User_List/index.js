@@ -278,9 +278,9 @@ export class UserList extends React.Component {
                 </div>
 
 
-                <div class="modal right fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div class="modal right fade widthHandling" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content" style={{ paddingRight: "45px" }}>
+                        <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>{this.state.UserStatus}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "10px" }}>&times;</span></button>

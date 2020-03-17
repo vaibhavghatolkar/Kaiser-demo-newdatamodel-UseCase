@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
+import { StateDropdown } from '../../../components/StateDropdown';
 
 
 let val = ''
@@ -668,7 +669,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != '2Total Claims')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
@@ -685,7 +686,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                             (item.name == 'Total Batch | Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
                                 (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
                                     (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                                }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
+                        }>{item.isText == 1 ? item.value : (Number(item.value) ? item.value : 0) + (item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : '')}</div>
                     </Link>
             )
         });
@@ -710,10 +711,43 @@ export class Outbound_RealTimeDashboard extends React.Component {
         }, 300);
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text,
+            showDetails: false
+        }, () => {
+            this.getData()
+            this.getListData()
+        })
+    }
+
     renderTopbar() {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        {/* <input className="form-control" type="text"
+                            onChange={(e) => this.onHandleChange(e)}
+                        /> */}
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Sender</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
                         <select
@@ -763,53 +797,6 @@ export class Outbound_RealTimeDashboard extends React.Component {
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option selected="selected" value="2">Last year</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text
-                                }, () => {
-                                    this.getData()
-                                    this.getListData()
-                                })
-                            }}
-                        >
-                            <option value=""></option>
-                            <option selected value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        {/* <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        /> */}
-                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
                         </select>
                     </div>
 
@@ -908,7 +895,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
 
     renderButton = () => {
         return (
-            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop: '12px', marginRight: '20px'}}
+            <div className="btnDesign button-resubmit" style={{ width: '96px', marginTop: '12px', marginRight: '20px' }}
                 onClick={() => {
                     this.setBatch()
                 }}

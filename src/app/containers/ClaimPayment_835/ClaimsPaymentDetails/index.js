@@ -248,6 +248,7 @@ export class ClaimPaymentDetails extends React.Component {
                 PayerName
                 TotalChargeAmt
                 TotalClaimPaymentAmt
+                
             }
         }`
         console.log(query)

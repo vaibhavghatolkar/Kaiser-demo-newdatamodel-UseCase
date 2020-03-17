@@ -24,6 +24,8 @@ export class Login extends React.Component {
               Login, Id, DbTech, role_id
             }
           }`
+
+          console.log('query ', query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {

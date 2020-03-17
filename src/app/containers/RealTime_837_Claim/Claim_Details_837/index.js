@@ -11,6 +11,7 @@ import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
+import { StateDropdown } from '../../../components/StateDropdown';
 
 var val = ''
 export class ClaimDetails837 extends React.Component {
@@ -82,6 +83,9 @@ export class ClaimDetails837 extends React.Component {
             dateRotation: 180,
             statusRotation: 180,
             submitterRotation: 180,
+            seqID:'',
+            fileDataDetails: '',
+            page1: 1
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -205,6 +209,7 @@ export class ClaimDetails837 extends React.Component {
 
                     this.setState({
                         intakeClaims: res.data.Claim837RTFileDetails,
+    
                     }, () => {
                         this.sortData()
                     })
@@ -245,7 +250,8 @@ export class ClaimDetails837 extends React.Component {
         }
         console.log(files)
         this.setState({
-            claimsObj: files
+            claimsObj: files,
+            page: 1
         })
     }
 
@@ -276,6 +282,7 @@ export class ClaimDetails837 extends React.Component {
                 ClaimLevelErrors
                 ClaimUniqueID
                 FileID
+                ClaimRefId
             }
         }`
         console.log(query)
@@ -401,6 +408,15 @@ export class ClaimDetails837 extends React.Component {
         })
     }
 
+    handlePageClickLine = (data) => {
+        let page = data.selected + 1
+     
+            this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
+        
+    }
+
+
+
     getIcdcodeoptions() {
         let row = []
         this.state.Icdcode.forEach(element => {
@@ -427,12 +443,12 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
-    getDetails = (claimId, fileId, fileData) => {
+    getDetails(claimId, fileId, ClaimRefId, fileData, page) {
         let Claim_Icdcode = ""
         let AccidentDate = ""
         let url = Urls.real_time_claim_details
         let query = `{
-            Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", SeqID: ${ClaimRefId}) {
               ClaimID
               ClaimDate
               ClaimTMTrackingID
@@ -453,13 +469,14 @@ export class ClaimDetails837 extends React.Component {
               FileID
               FieldToUpdate
             }
-            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page}) {
               ClaimID
               ServiceLineCount
               ProviderPaidAmount
               ServiceDate
               ProcedureDate
               PaidServiceUnitCount
+              RecCount
             }
           }
           `
@@ -476,7 +493,18 @@ export class ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
+                // console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
+                let data = res.data
+                let count = 1
+                if (data && data.Claim837RTLineDetails.length > 0) {
+
+                    count = Math.floor(data.Claim837RTLineDetails[0].RecCount / 10)
+                    if (data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
+                        count = count + 1
+                    }
+                }
+
+
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -527,7 +555,10 @@ export class ClaimDetails837 extends React.Component {
                         fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
-                        Icdcodepresent: data.FieldToUpdate
+                        Icdcodepresent: data.FieldToUpdate,
+                        count: count,
+                        seqID: ClaimRefId,
+                        fileDataDetails: fileData
                     })
                 }
             })
@@ -782,38 +813,24 @@ export class ClaimDetails837 extends React.Component {
         })
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text,
+            showDetails: false
+        }, () => {
+            this.getData()
+        })
+    }
+
     renderFilters() {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text,
-                                    showDetails: false
-                                }, () => {
-                                    this.getData()
-                                })
-                            }}>
-                            <option selected={this.state.State == '' ? "selected" : ""} value=""></option>
-                            <option selected={this.state.State == '' ? "selected" : ""} value="1">California</option>
-                            <option selected={this.state.State == 'Michigan' ? "selected" : ""} value="2">Michigan</option>
-                            <option selected={this.state.State == 'Florida' ? "selected" : ""} value="3">Florida</option>
-                            <option selected={this.state.State == 'New York' ? "selected" : ""} value="4">New York</option>
-                            <option selected={this.state.State == 'Idaho' ? "selected" : ""} value="5">Idaho</option>
-                            <option selected={this.state.State == 'Ohio' ? "selected" : ""} value="6">Ohio</option>
-                            <option selected={this.state.State == 'Illinois' ? "selected" : ""} value="7">Illinois</option>
-                            <option selected={this.state.State == 'Texas' ? "selected" : ""} value="8">Texas</option>
-                            <option selected={this.state.State == 'Mississippi' ? "selected" : ""} value="9">Mississippi</option>
-                            <option selected={this.state.State == 'South Carolina' ? "selected" : ""} value="10">South Carolina</option>
-                            <option selected={this.state.State == 'New Mexico' ? "selected" : ""} value="11">New Mexico</option>
-                            <option selected={this.state.State == 'Puerto Rico' ? "selected" : ""} value="12">Puerto Rico</option>
-                            <option selected={this.state.State == 'Washington' ? "selected" : ""} value="13">Washington</option>
-                            <option selected={this.state.State == 'Utah' ? "selected" : ""} value="14">Utah</option>
-                            <option selected={this.state.State == 'Wisconsin' ? "selected" : ""} value="15">Wisconsin</option>
-                        </select>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
@@ -826,6 +843,16 @@ export class ClaimDetails837 extends React.Component {
                             onSelected={this.onSelected}
                         />
                         {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -842,16 +869,6 @@ export class ClaimDetails837 extends React.Component {
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
                         />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
                     </div>
                 </div>
             </div>
@@ -894,6 +911,24 @@ export class ClaimDetails837 extends React.Component {
                                 {row}
                             </tbody>
                         </table>
+                        <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.count}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClickLine(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
                     </div>
                 </div>
             </div>
@@ -948,7 +983,8 @@ export class ClaimDetails837 extends React.Component {
                 <td className="table-head-text list-item-style">Claim Id</td>
                 {/* <td className="table-head-text list-item-style">Claim Date</td> */}
                 <td className="table-head-text list-item-style">Claim Status</td>
-                <td className="table-head-text list-item-style">Adjudication Status</td>
+                {/* <td className="table-head-text list-item-style">Adjudication Status</td> */}
+                <td className="table-head-text list-item-style">Subscriber Id</td>
                 <td className="table-head-text list-item-style">Claim Amount</td>
                 <td className="table-head-text list-item-style">Error</td>
             </tr>
@@ -1035,15 +1071,16 @@ export class ClaimDetails837 extends React.Component {
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
-                                    claimId: d.ClaimID
+                                    claimId: d.ClaimID, showDetails: false
                                 }, () => {
-                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value)
+                                    this.getDetails(d.ClaimID, d.FileID, d.ClaimRefId, data[keys].value, 1)
                                     this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
                             <td className="list-item-style">{d.ClaimStatus}</td>
-                            <td className="list-item-style">{d.adjudication_status}</td>
+                            {/* <td className="list-item-style">{d.adjudication_status}</td> */}
+                            <td className="list-item-style">{d.Subscriber_ID}</td>
                             <td className="style-left"> ${d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimLevelErrors}</td>
                         </tr>
