@@ -320,13 +320,13 @@ export class DynamicSidebar extends React.Component {
                 <div className="row p">
                     <div className="col-6 p nopadding">
                         <a className="clickable"
-                            // onClick={() => {
-                            //     isOutbound = false
-                            //     sessionStorage.setItem('isOutbound', false)
-                            //     setTimeout(() => {
-                            //         window.location.reload()
-                            //     }, 50);
-                            // }}
+                            onClick={() => {
+                                isOutbound = false
+                                sessionStorage.setItem('isOutbound', false)
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 50);
+                            }}
                             >
                             <p className="p smaller-font">Inbound</p>
                             {!isOutbound ? <hr className="underline p" /> : null}
@@ -335,13 +335,13 @@ export class DynamicSidebar extends React.Component {
 
                     <div className="col-6 p nopadding">
                         <a className="clickable"
-                            // onClick={() => {
-                            //     isOutbound = true
-                            //     sessionStorage.setItem('isOutbound', true)
-                            //     setTimeout(() => {
-                            //         window.location.reload()
-                            //     }, 50);
-                            // }}
+                            onClick={() => {
+                                isOutbound = true
+                                sessionStorage.setItem('isOutbound', true)
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 50);
+                            }}
                             >
                             <p className="p smaller-font">Outbound</p>
                             {isOutbound ? <hr className="underline p" /> : null}

@@ -436,6 +436,18 @@ export class Outbound_AuditSummary extends React.Component {
 
                     </div>
                     <div className="form-group col-2">
+                        <div className="list-dashboard">Sender</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}
+                        >
+
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -450,18 +462,6 @@ export class Outbound_AuditSummary extends React.Component {
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
                         />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}
-                        >
-
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
                     </div>
                 </div>
             </div>

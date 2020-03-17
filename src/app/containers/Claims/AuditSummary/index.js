@@ -245,7 +245,7 @@ export class AuditSummary extends React.Component {
                         <td className="table-head-text list-item-style">Rejected PreProcess </td>
                         <td className="table-head-text list-item-style">Error in PreProcess </td>
                         {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                        <td className="table-head-text list-item-style">In Qnxt </td>
+                        <td className="table-head-text list-item-style">In MCG </td>
                         <td className="table-head-text list-item-style">999</td>
                         <td className="table-head-text list-item-style">277 CA</td>
                     </tr>
@@ -344,46 +344,6 @@ export class AuditSummary extends React.Component {
                 console.log(err)
             });
     }
-    renderStats() {
-        return (
-            <div className="row padding-left" >
-
-                <div className="col summary-container">
-                    <div className="summary-header">Total Files</div>
-                    <div className="green summary-title">{this.state.totalFile}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">In HiPaaS</div>
-                    <div className="blue summary-title">{this.state.TotalClaims}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">Accepted</div>
-                    <div className="green summary-title">{this.state.Accepted}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">Rejected</div>
-                    <div className="red summary-title">{this.state.Rejected}</div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">999</div>
-                    <div className="green summary-title">{this.state.Total999}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">Send To Qnxt</div>
-                    <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">277 CA</div>
-                    <div className="orange summary-title">{this.state.Total277CA}</div>
-                </div>
-
-
-            </div>
-
-        )
-    }
 
     _renderStats() {
         let _summary = [
@@ -392,7 +352,7 @@ export class AuditSummary extends React.Component {
             { header: 'Accepted', value: this.state.Accepted },
             { header: 'Rejected', value: this.state.Rejected },
             { header: '999', value: this.state.Total999, style: "green summary-title" },
-            { header: 'Send To Qnxt', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            { header: 'Send To MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
             { header: '277 CA', value: this.state.Total277CA, style: "orange summary-title" }
         ]
         let row = []
@@ -491,6 +451,18 @@ export class AuditSummary extends React.Component {
 
                     </div>
                     <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}
+                        >
+
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -505,18 +477,6 @@ export class AuditSummary extends React.Component {
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
                         />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}
-                        >
-
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
                     </div>
                 </div>
             </div>
@@ -538,7 +498,6 @@ export class AuditSummary extends React.Component {
             <div>
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
-                {/* {this.renderStats()} */}
                 {this._renderStats()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}

@@ -669,7 +669,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != '2Total Claims')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
@@ -726,6 +726,29 @@ export class Outbound_RealTimeDashboard extends React.Component {
             <div className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        {/* <input className="form-control" type="text"
+                            onChange={(e) => this.onHandleChange(e)}
+                        /> */}
+                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Sender</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
                         <select
                             className="form-control list-dashboard" id="state"
@@ -774,29 +797,6 @@ export class Outbound_RealTimeDashboard extends React.Component {
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
                             <option selected="selected" value="2">Last year</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        {/* <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        /> */}
-                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
                         </select>
                     </div>
 

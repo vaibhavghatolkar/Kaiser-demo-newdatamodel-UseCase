@@ -645,75 +645,6 @@ export class RealTimeDashboard extends React.Component {
         }, 50);
     }
 
-    renderSummaryDetails() {
-        let row = []
-        let array = this.state.summaryList
-        let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let data = []
-            if (item.name == 'Accepted Claims') {
-                addon = '/accept'
-                claimStatus = 'Accepted'
-            } else if (item.name == 'Rejected Claims') {
-                addon = '/reject'
-                claimStatus = 'Rejected'
-            } else if (item.name == 'Resubmit Queue') {
-                claimStatus = 'Resubmit'
-            } else if (item.name == 'Rejected Files') {
-                claimStatus = 'RejectedFile'
-            } else {
-                addon = '/other'
-            }
-            data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
-            ]
-            row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Accepted Files' && item.name != 'Resubmit Queue' && item.name != "Rejected Files")
-                    ?
-                    <div className="col summary-container">
-                        <div className="summary-header">{item.name}</div>
-                        <div className={
-                            (item.name == 'Total Accepted Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                        }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                    </div>
-                    :
-
-                    <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
-                        <div className="summary-header">{item.name}</div>
-                        <div className={
-                            (item.name == 'Total Accepted Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
-                                (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
-                                    (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
-                        }>
-                            {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
-                            {
-                                item.name == 'Resubmit Queue' ?
-                                    <button className="btnDesign button-resubmit">Submit</button> : null
-                            }
-                        </div>
-                    </Link>
-
-            )
-        });
-
-        return (
-            <div className="row padding-left">
-                {row}
-            </div>
-        )
-    }
-
     _renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
@@ -746,13 +677,13 @@ export class RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                    <Tiles
-                        isClickable={(item.name == 'Accepted Claims' || item.name == 'Rejected Claims' || item.name == 'Total Claims' || item.name == 'Total Accepted Files' || item.name == 'Resubmit Queue' || item.name == "Rejected Files")}
-                        _data={data}
-                        header_text={item.name}
-                        value={item.value}
-                        url={'/ClaimDetails837'}
-                    />
+                <Tiles
+                    isClickable={(item.name == 'Accepted Claims' || item.name == 'Rejected Claims' || item.name == 'Total Claims' || item.name == 'Total Accepted Files' || item.name == 'Resubmit Queue' || item.name == "Rejected Files")}
+                    _data={data}
+                    header_text={item.name}
+                    value={item.value}
+                    url={'/ClaimDetails837'}
+                />
 
             )
         });
@@ -792,6 +723,35 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        {/* <input className="form-control" type="text"
+                            onChange={(e) => this.onHandleChange(e)}
+                        /> */}
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
+                        />
+                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
+                    </div>
+
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
                         <select
@@ -857,35 +817,6 @@ export class RealTimeDashboard extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        {/* <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        /> */}
-                        <AutoComplete
-                            list={this.state.providers}
-                            onHandleChange={this.onHandleChange}
-                            onSelected={this.onSelected}
-                        />
-                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
-                    </div>
-
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
                 </div>
             </div>
         )
@@ -949,7 +880,6 @@ export class RealTimeDashboard extends React.Component {
                 <h5 className="headerText">Claims Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
-                {/* {this.renderSummaryDetails()} */}
                 {this._renderSummaryDetails()}
                 <div className="col-10">
                     {this.renderCharts()}
