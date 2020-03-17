@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { getProviders } from '../../../../helpers/getDetails';
+import { StateDropdown } from '../../../components/StateDropdown';
 
 
 let val = ''
@@ -195,9 +196,9 @@ export class RealTimeDashboard extends React.Component {
 
                 if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
                     summary = [
-                        { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
+                        { name: 'Total Accepted Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Rejected Files', value: data.Claim837RTDashboardCount[0].RejectedFileCount ? data.Claim837RTDashboardCount[0].RejectedFileCount : ''  },
+                        { name: 'Rejected Files', value: data.Claim837RTDashboardCount[0].RejectedFileCount ? data.Claim837RTDashboardCount[0].RejectedFileCount : '' },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
                         { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
@@ -588,6 +589,15 @@ export class RealTimeDashboard extends React.Component {
         return row
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text
+        }, () => {
+            this.getData()
+            this.getListData()
+        })
+    }
+
     handleStartChange(date) {
         this.setState({
             startDate: date
@@ -652,11 +662,13 @@ export class RealTimeDashboard extends React.Component {
             if (item.name == 'Accepted Claims') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if (item.name == 'Rejected Claims' || item.name == 'Rejected Files') {
+            } else if (item.name == 'Rejected Claims') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
             } else if (item.name == 'Resubmit Queue') {
                 claimStatus = 'Resubmit'
+            } else if (item.name == 'Rejected Files') {
+                claimStatus = 'RejectedFile'
             } else {
                 addon = '/other'
             }
@@ -664,12 +676,12 @@ export class RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Accepted Files' && item.name != 'Resubmit Queue')
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                            (item.name == 'Total Accepted Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
                                 (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
                                     (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>{Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
@@ -679,7 +691,7 @@ export class RealTimeDashboard extends React.Component {
                     <Link to={{ pathname: '/ClaimDetails837', state: { data } }} className="col summary-container">
                         <div className="summary-header">{item.name}</div>
                         <div className={
-                            (item.name == 'Total Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
+                            (item.name == 'Total Accepted Files' || item.name == 'Total Claims' || item.name == 'Resubmit Queue') ? 'blue summary-title' :
                                 (item.name == 'Accepted Percent' || item.name == 'Accepted Claims') ? 'green summary-title' :
                                     (item.name == 'Failed File Load' || item.name == 'Rejected Percent' || item.name == 'Rejected Claims' || item.name == 'Rejected Files') ? 'red summary-title' : ''
                         }>
@@ -781,49 +793,6 @@ export class RealTimeDashboard extends React.Component {
                         </select>
                     </div>
                     <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text
-                                }, () => {
-                                    this.getData()
-                                    this.getListData()
-                                })
-                            }}
-                        >
-                            <option value=""></option>
-                            <option selected value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        {/* <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        /> */}
-                        <AutoComplete
-                            list={this.state.providers}
-                            onHandleChange={this.onHandleChange}
-                            onSelected={this.onSelected}
-                        />
-                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
-                    </div>
-
-                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(this.state.startDate)}
@@ -836,6 +805,24 @@ export class RealTimeDashboard extends React.Component {
                             selected={new Date(this.state.endDate)}
                             onChange={this.handleEndChange}
                         />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        {/* <input className="form-control" type="text"
+                            onChange={(e) => this.onHandleChange(e)}
+                        /> */}
+                        <AutoComplete
+                            list={this.state.providers}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
+                        />
+                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
                     </div>
 
                     <div className="form-group col-2">
@@ -879,7 +866,7 @@ export class RealTimeDashboard extends React.Component {
                     width={90}
                     height={55} />
                 :
-                <div style={{textAlign: 'center'}}>
+                <div style={{ textAlign: 'center' }}>
                     No Data Present
                 </div>
         )

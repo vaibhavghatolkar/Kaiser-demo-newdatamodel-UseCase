@@ -7,6 +7,7 @@ import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
 import { getDetails } from '../../../../helpers/getDetails';
 import DatePicker from "react-datepicker";
+import { StateDropdown } from '../../../components/StateDropdown';
 export class Outbound_Encounter_Audit extends React.Component {
 
     constructor(props) {
@@ -381,31 +382,23 @@ export class Outbound_Encounter_Audit extends React.Component {
         }, 50);
     }
 
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text
+        }, () => {
+            this.getData()
+        })
+    }
+
     renderTopBar() {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                        >
-                            <option value=""></option>
-                            <option selected value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
