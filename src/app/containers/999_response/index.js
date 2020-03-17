@@ -150,15 +150,14 @@ export class response_999 extends React.Component {
          
 
         query = `{
-           
             Data999( RecType:"Inbound", TrasactionType:"`+this.state.transactionType+`" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
                 id,
-            FileName,
-           Date,
-        Submitter,
-        Direction,
-        TrasactionType,
-        FileId
+                FileName,
+                Date,
+                Submitter,
+                Direction,
+                TrasactionType,
+                FileId
             }
         }`     
         console.log('query ', query)

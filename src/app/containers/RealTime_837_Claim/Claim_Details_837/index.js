@@ -933,7 +933,8 @@ export class ClaimDetails837 extends React.Component {
                 <td className="table-head-text list-item-style">Claim Id</td>
                 {/* <td className="table-head-text list-item-style">Claim Date</td> */}
                 <td className="table-head-text list-item-style">Claim Status</td>
-                <td className="table-head-text list-item-style">Adjudication Status</td>
+                {/* <td className="table-head-text list-item-style">Adjudication Status</td> */}
+                <td className="table-head-text list-item-style">Subscriber Id</td>
                 <td className="table-head-text list-item-style">Claim Amount</td>
                 <td className="table-head-text list-item-style">Error</td>
             </tr>
@@ -1028,7 +1029,8 @@ export class ClaimDetails837 extends React.Component {
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
                             <td className="list-item-style">{d.ClaimStatus}</td>
-                            <td className="list-item-style">{d.adjudication_status}</td>
+                            {/* <td className="list-item-style">{d.adjudication_status}</td> */}
+                            <td className="list-item-style">{d.Subscriber_ID}</td>
                             <td className="style-left"> ${d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimLevelErrors}</td>
                         </tr>
