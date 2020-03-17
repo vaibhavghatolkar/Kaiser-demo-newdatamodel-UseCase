@@ -10,6 +10,7 @@ import { CommonTable } from '../../../components/CommonTable';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { getProviders } from '../../../../helpers/getDetails';
 import { StateDropdown } from '../../../components/StateDropdown';
+import { Tiles } from '../../../components/Tiles';
 
 let val = ''
 export class ClaimProcessingSummary extends React.Component {
@@ -529,11 +530,10 @@ export class ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="col summary-container1" style={{ marginTop: '-10px' }}>
-                        <div className="summary-header1">WIP > 90 Days</div>
-                        <div className="blue summary-title1">{this.state.wip90}</div>
+                    <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
+                        <div className="summary-header">WIP > 90 Days</div>
+                        <div className="blue summary-title">{this.state.wip90}</div>
                     </div>
-
                 </div>
             </div>
         )
@@ -612,12 +612,46 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
+    _renderStats() {
+        let _summary = [
+            { header: 'Accepted Claims', value: this.state.Accepted },
+            { header: 'Rejected Claims', value: this.state.Rejected },
+            { header: '999', value: this.state.Total999, style: "red summary-title" },
+            { header: 'Sent To QNXT', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
+            { header: 'Pending', value: this.state.Pending, style: "orange summary-title" },
+            { header: 'Paid', value: this.state.Paid },
+            { header: 'Denied', value: this.state.Denide }
+        ]
+
+        let row = []
+
+        _summary.forEach(item => {
+            row.push(
+                <Tiles
+                    header_text={item.header}
+                    value={item.value}
+                    isClickable={false}
+                    _style={item.style}
+                />
+            )
+        })
+        return (
+
+            <div className="row padding-left" style={{ marginBottom: '10px' }}>
+                {row}
+            </div>
+
+        )
+    }
+
     render() {
         return (
             <div>
                 <h5 className="headerText">Claim Processing Summary</h5>
                 {this.renderTopBar()}
-                {this.renderStats()}
+                {/* {this.renderStats()} */}
+                {this._renderStats()}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 ? this.renderTransactionsNew() : null}
             </div>
         );

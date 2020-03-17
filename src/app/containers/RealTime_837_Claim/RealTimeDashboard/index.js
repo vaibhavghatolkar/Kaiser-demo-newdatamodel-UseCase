@@ -16,6 +16,7 @@ import Strings from '../../../../helpers/Strings';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { getProviders } from '../../../../helpers/getDetails';
 import { StateDropdown } from '../../../components/StateDropdown';
+import { Tiles } from '../../../components/Tiles';
 
 
 let val = ''
@@ -676,7 +677,7 @@ export class RealTimeDashboard extends React.Component {
                 { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
             ]
             row.push(
-                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Accepted Files' && item.name != 'Resubmit Queue')
+                (item.name != 'Accepted Claims' && item.name != 'Rejected Claims' && item.name != 'Total Claims' && item.name != 'Total Accepted Files' && item.name != 'Resubmit Queue' && item.name != "Rejected Files")
                     ?
                     <div className="col summary-container">
                         <div className="summary-header">{item.name}</div>
@@ -702,6 +703,56 @@ export class RealTimeDashboard extends React.Component {
                             }
                         </div>
                     </Link>
+
+            )
+        });
+
+        return (
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
+    }
+
+    _renderSummaryDetails() {
+        let row = []
+        let array = this.state.summaryList
+        let apiflag = this.state.apiflag
+        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let data = []
+            if (item.name == 'Accepted Claims') {
+                addon = '/accept'
+                claimStatus = 'Accepted'
+            } else if (item.name == 'Rejected Claims') {
+                addon = '/reject'
+                claimStatus = 'Rejected'
+            } else if (item.name == 'Resubmit Queue') {
+                claimStatus = 'Resubmit'
+            } else if (item.name == 'Rejected Files') {
+                claimStatus = 'RejectedFile'
+            } else {
+                addon = '/other'
+            }
+            data = [
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
+            ]
+            row.push(
+                    <Tiles
+                        isClickable={(item.name == 'Accepted Claims' || item.name == 'Rejected Claims' || item.name == 'Total Claims' || item.name == 'Total Accepted Files' || item.name == 'Resubmit Queue' || item.name == "Rejected Files")}
+                        _data={data}
+                        header_text={item.name}
+                        value={item.value}
+                        url={'/ClaimDetails837'}
+                    />
 
             )
         });
@@ -898,7 +949,8 @@ export class RealTimeDashboard extends React.Component {
                 <h5 className="headerText">Claims Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
-                {this.renderSummaryDetails()}
+                {/* {this.renderSummaryDetails()} */}
+                {this._renderSummaryDetails()}
                 <div className="col-10">
                     {this.renderCharts()}
                     {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}

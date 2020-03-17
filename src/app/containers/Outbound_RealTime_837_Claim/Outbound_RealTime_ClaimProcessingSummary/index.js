@@ -528,9 +528,9 @@ export class Outbound_ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="col summary-container1" style={{ marginTop: '-10px' }}>
-                        <div className="summary-header1">WIP > 90 DAYS</div>
-                        <div className="blue summary-title1">{this.state.wip90}</div>
+                    <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
+                        <div className="summary-header">WIP > 90 Days</div>
+                        <div className="blue summary-title">{this.state.wip90}</div>
                     </div>
 
                 </div>

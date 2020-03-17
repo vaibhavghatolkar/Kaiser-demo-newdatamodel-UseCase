@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import ReactPaginate from 'react-paginate';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
+import { Tiles } from '../../../components/Tiles';
 
 let val = ''
 export class AuditSummary extends React.Component {
@@ -44,7 +45,7 @@ export class AuditSummary extends React.Component {
             page: 1,
             count: 1,
             nameRotation: 180,
-            statusRotation : 180
+            statusRotation: 180
         }
 
         this.getData = this.getData.bind(this)
@@ -361,7 +362,7 @@ export class AuditSummary extends React.Component {
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">Rejected</div>
-                    <div className="orange summary-title">{this.state.Rejected}</div>
+                    <div className="red summary-title">{this.state.Rejected}</div>
                 </div>
                 <div className="col summary-container">
                     <div className="summary-header">999</div>
@@ -373,15 +374,43 @@ export class AuditSummary extends React.Component {
                     <div className="green summary-title">{this.state.TotalSentToQNXT}</div>
                 </div>
 
-
-
-
                 <div className="col summary-container">
                     <div className="summary-header">277 CA</div>
                     <div className="orange summary-title">{this.state.Total277CA}</div>
                 </div>
 
 
+            </div>
+
+        )
+    }
+
+    _renderStats() {
+        let _summary = [
+            { header: 'Total Files', value: this.state.totalFile, style: "green summary-title" },
+            { header: 'In HiPaaS', value: this.state.TotalClaims },
+            { header: 'Accepted', value: this.state.Accepted },
+            { header: 'Rejected', value: this.state.Rejected },
+            { header: '999', value: this.state.Total999, style: "green summary-title" },
+            { header: 'Send To Qnxt', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            { header: '277 CA', value: this.state.Total277CA, style: "orange summary-title" }
+        ]
+        let row = []
+
+        _summary.forEach(item => {
+            row.push(
+                <Tiles
+                    header_text={item.header}
+                    value={item.value}
+                    isClickable={false}
+                    _style={item.style}
+                />
+            )
+        })
+
+        return (
+            <div className="row padding-left" >
+                {row}
             </div>
 
         )
@@ -509,7 +538,8 @@ export class AuditSummary extends React.Component {
             <div>
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
-                {this.renderStats()}
+                {/* {this.renderStats()} */}
+                {this._renderStats()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
                 </div>
