@@ -43,6 +43,7 @@ export class Outbound_response_999 extends React.Component {
             page: 1,
             count: 0,
             apiflag: 0,
+            Response: '',
 
             pieArray: [],
             labelArray: [],
@@ -66,16 +67,16 @@ export class Outbound_response_999 extends React.Component {
 
 
         query = `{
-           
-            Data999( RecType:"Outbound", TrasactionType:"`+this.state.transactionType+`" FileId:0,FileName:"" StartDt:"` + startDate + `" EndDt:"` + endDate + `") {
-                id,
-            FileName,
-           Date,
-        Submitter,
-        Direction,
-        TrasactionType,
-        FileId
-            }
+                Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}") {
+                  FileId
+                  FileName
+                  Date
+                  Submitter
+                  id
+                  status
+                  Response
+                  TrasactionType
+              }
         }`
         console.log('query ', query)
         fetch(Urls.common_data, {
@@ -142,18 +143,56 @@ export class Outbound_response_999 extends React.Component {
         }, 50);
     }
 
+    render999Details(fileId) {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let query = `{
+            Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}") {
+              FileId
+              FileName
+              Date
+              Submitter
+              id
+              status
+              Response
+              TrasactionType
+          }
+    }`
+        console.log('query ', query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                // alert(res.data.Data999[0].Response)
+                if (res.data) {
+                    this.setState({
+                        Response: res.data.Data999[0].Response,
+                        showDetails: true
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+
+    }
+
     renderDetails(flag) {
         return (
             <div className="row">
                 <div className={"col-12"}>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse breakword" id={'hello' + flag}>  ISA*00*          *00*          *ZZ*80882          *ZZ*ENH3706        *191016*1626*^*00501*910161626*0*P*:~GS*FA*80882*ENH3706*20191016*162625*255546252*X*005010X231~ST*999*0001*005010X231~AK1*HC*1302*005010X222A1~AK2*837*0001*005010X222A1~IK5*A~AK9*A*1*1*1~SE*6*0001~GE*1*255546252~IEA*1*910161626~</div>
+                    <div className="border-view collapse breakword" id={'hello' + flag}>{this.state.Response}</div>
                 </div>
             </div>
-
         )
     }
-
 
     getoptions() {
         let row = []
@@ -223,7 +262,7 @@ export class Outbound_response_999 extends React.Component {
         return (
             <form className="form-style" id='filters'>
                 <div className="form-row">
-                    
+
                     <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
@@ -294,10 +333,7 @@ export class Outbound_response_999 extends React.Component {
     }
 
     onClick = (value) => {
-        this.setState({
-            showDetails: true
-        })
-        this.renderDetails(value)
+        this.render999Details(value)
     }
 
     renderTransactionsNew() {
@@ -308,7 +344,7 @@ export class Outbound_response_999 extends React.Component {
             { value: 'FileName', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
             { value: 'Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
             { value: 'Sender', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-            { value: 'Direction' },
+            { value: 'Status' },
             { value: 'Trasaction Type' },
 
         )
@@ -317,7 +353,7 @@ export class Outbound_response_999 extends React.Component {
             { value: 'FileName', upScale: 1 },
             { value: 'Date', isDate: 1, isNottime: 1 },
             { value: 'Submitter' },
-            { value: 'Direction' },
+            { value: 'status' },
             { value: 'TrasactionType' }
         )
 
@@ -328,7 +364,7 @@ export class Outbound_response_999 extends React.Component {
                 data={data}
                 count={this.state.count}
                 handlePageClick={this.handlePageClick}
-                onClickKey={1}
+                onClickKey={'FileId'}
                 onClick={this.onClick}
             />
         )

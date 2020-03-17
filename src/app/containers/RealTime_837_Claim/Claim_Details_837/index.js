@@ -83,6 +83,9 @@ export class ClaimDetails837 extends React.Component {
             dateRotation: 180,
             statusRotation: 180,
             submitterRotation: 180,
+            seqID:'',
+            fileDataDetails: '',
+            page1: 1
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -206,6 +209,7 @@ export class ClaimDetails837 extends React.Component {
 
                     this.setState({
                         intakeClaims: res.data.Claim837RTFileDetails,
+    
                     }, () => {
                         this.sortData()
                     })
@@ -246,7 +250,8 @@ export class ClaimDetails837 extends React.Component {
         }
         console.log(files)
         this.setState({
-            claimsObj: files
+            claimsObj: files,
+            page: 1
         })
     }
 
@@ -403,6 +408,15 @@ export class ClaimDetails837 extends React.Component {
         })
     }
 
+    handlePageClickLine = (data) => {
+        let page = data.selected + 1
+     
+            this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
+        
+    }
+
+
+
     getIcdcodeoptions() {
         let row = []
         this.state.Icdcode.forEach(element => {
@@ -418,7 +432,7 @@ export class ClaimDetails837 extends React.Component {
 
         });
     }
-    getDetails(claimId, fileId, fileData, ClaimRefId) {
+    getDetails(claimId, fileId, ClaimRefId, fileData, page) {
         let Claim_Icdcode = ""
         let AccidentDate = ""
         let url = Urls.real_time_claim_details
@@ -444,13 +458,14 @@ export class ClaimDetails837 extends React.Component {
               FileID
               FieldToUpdate
             }
-            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page}) {
               ClaimID
               ServiceLineCount
               ProviderPaidAmount
               ServiceDate
               ProcedureDate
               PaidServiceUnitCount
+              RecCount
             }
           }
           `
@@ -467,7 +482,18 @@ export class ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
+                // console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
+                let data = res.data
+                let count = 1
+                if (data && data.Claim837RTLineDetails.length > 0) {
+
+                    count = Math.floor(data.Claim837RTLineDetails[0].RecCount / 10)
+                    if (data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
+                        count = count + 1
+                    }
+                }
+
+
                 if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -521,7 +547,10 @@ export class ClaimDetails837 extends React.Component {
                         fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
-                        Icdcodepresent: data.FieldToUpdate
+                        Icdcodepresent: data.FieldToUpdate,
+                        count: count,
+                        seqID: ClaimRefId,
+                        fileDataDetails: fileData
                     })
                 }
             })
@@ -879,6 +908,24 @@ export class ClaimDetails837 extends React.Component {
                                 {row}
                             </tbody>
                         </table>
+                        <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={this.state.count}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClickLine(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
                     </div>
                 </div>
             </div>
@@ -1021,9 +1068,9 @@ export class ClaimDetails837 extends React.Component {
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
-                                    claimId: d.ClaimID
+                                    claimId: d.ClaimID, showDetails: false
                                 }, () => {
-                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value, d.ClaimRefId)
+                                    this.getDetails(d.ClaimID, d.FileID, d.ClaimRefId, data[keys].value, 1)
                                     this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
