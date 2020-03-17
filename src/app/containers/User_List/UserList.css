@@ -80,3 +80,6 @@ font-size: 12px;
     background-color: var(--main-bg-color);
     color: var(--white-color);
 }
+.widthHandling{
+    padding-right: 50px !important;
+}
