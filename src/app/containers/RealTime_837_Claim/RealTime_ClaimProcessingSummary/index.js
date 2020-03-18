@@ -65,7 +65,7 @@ export class ClaimProcessingSummary extends React.Component {
         this.getData()
     }
 
-    getCommonData() {
+    getCommonData = async() => {
         let query = `{
             Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
@@ -94,7 +94,7 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
-    getCountData() {
+    getCountData = async() => {
 
         let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
             totalFile
@@ -149,7 +149,7 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
-    getData() {
+    getData = async() => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
