@@ -64,10 +64,10 @@ export class Outbound_response_999 extends React.Component {
         let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
+        let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
 
         query = `{
-                Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}") {
+                Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}") {
                   FileId
                   FileName
                   Date
@@ -188,7 +188,7 @@ export class Outbound_response_999 extends React.Component {
             <div className="row">
                 <div className={"col-12"}>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse breakword" id={'hello' + flag}>{this.state.Response}</div>
+                    <div className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
                 </div>
             </div>
         )
@@ -300,7 +300,7 @@ export class Outbound_response_999 extends React.Component {
                         </select>
                     </div>
 
-                    <div className="form-group col">
+                    {/* <div className="form-group col">
                         <div className="list-dashboard">
                             Provider Name
 
@@ -309,7 +309,7 @@ export class Outbound_response_999 extends React.Component {
                             <option selected="selected" value="1">Provider Name 1</option>
                             <option value="2">Provider Name 2</option>
                         </select>
-                    </div>
+                    </div> */}
 
                     <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>

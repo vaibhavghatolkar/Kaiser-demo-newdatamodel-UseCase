@@ -245,9 +245,11 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
-    goto999 = () => {
+    goto999 = (fileId) => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999)
+        this.props.history.push('/' + Strings.Outbound_response_999, {
+            fileId: fileId
+        })
         setTimeout(() => {
             window.location.reload()
         }, 50);
@@ -298,7 +300,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'FileName', method: this.gotoDetails, isClick: 1 },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999 },
+            { value: 'F999', isClick: 1, method: this.goto999, key_argument : 'FileID' },
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
@@ -311,7 +313,8 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'Transaction_Status' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
-            { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
+            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
+            { value: ''},
         )
 
         return (

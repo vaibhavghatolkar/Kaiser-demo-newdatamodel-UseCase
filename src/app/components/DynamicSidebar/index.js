@@ -279,8 +279,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
-            } 
-            else {
+            } else {
                 addon = ''
             }
 

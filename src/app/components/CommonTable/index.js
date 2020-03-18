@@ -84,7 +84,7 @@ export class CommonTable extends React.Component {
                                 <a style={{ color: "#6AA2B8", cursor: "pointer" }}
                                     onClick={() => { 
                                         if(row_item.isClick){
-                                            row_item.method()
+                                            row_item.method(row_item.key_argument ? data_item[row_item.key_argument] : '')
                                         } else {
                                             this.props.onClick(data_item[this.props.onClickKey]) 
                                         }
