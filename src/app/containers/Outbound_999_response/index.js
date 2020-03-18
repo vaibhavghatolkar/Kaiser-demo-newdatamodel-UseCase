@@ -360,8 +360,8 @@ export class Outbound_response_999 extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">File Name</td>
                 <td className="table-head-text list-item-style" style={{width: '35%'}}><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.FileName", this.state.fileRotation, 'fileRotation')}>837 File Name</a></td>
+                <td className="table-head-text list-item-style"> 999 File Name</td>
                 {/* <td className="table-head-text list-item-style">Sender</td> */}
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.Date", this.state.dateRotation, 'dateRotation')}>Date</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.status", this.state.statusRotation, 'statusRotation')}>Status</a></td>
@@ -379,11 +379,11 @@ export class Outbound_response_999 extends React.Component {
            
             row.push(
                 <tr>
-                      <td className="list-item-style"></td>
                     <td className="list-item-style"><a className="clickable" 
                     onClick={() => {
                         this.render999Details(item.FileId)
                     }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{item.FileName}</a></td>
+                      <td className="list-item-style"></td>
                     <td className="list-item-style">{date}</td>
                     {/* <td className="list-item-style">{item.Submitter}</td> */}
                     <td className="list-item-style">{item.status}</td>
