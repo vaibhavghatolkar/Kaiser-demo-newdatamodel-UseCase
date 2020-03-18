@@ -953,10 +953,11 @@ export class ClaimDetails837 extends React.Component {
         const data = this.state.claimStageDetails ? this.state.claimStageDetails : []
 
         data.forEach((d) => {
+            let date = d.Createdatetime ? moment((d.Createdatetime)).format("MM/DD/YYYY hh:mm a") : ''
             row.push(
                 <tr>
-                    <td>{d.Stage}</td>
-                    <td>{Number(d.Createdatetime) ? moment(Number(d.Createdatetime)).format('MM/DD/YYYY, hh:mm a') : d.Createdatetime}</td>
+                    <td className="list-item-style">{d.Stage}</td>
+                    <td className="list-item-style">{date}</td>
                 </tr>
             )
         })

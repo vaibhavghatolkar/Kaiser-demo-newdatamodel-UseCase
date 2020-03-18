@@ -10,6 +10,7 @@ import Strings from '../../../../helpers/Strings';
 import { CommonTable } from '../../../components/CommonTable';
 import Chart1 from "react-google-charts";
 import Paper from '@material-ui/core/Paper';
+import ReactPaginate from 'react-paginate';
 
 import {
   Chart,
@@ -140,7 +141,19 @@ export class ClaimPaymentDashboard extends React.Component {
             rejected_per: 0,
             ClaimBarChart: [],
             claimLabels: [],
-        data
+             data,
+//////////----------table----
+            Organization: '',
+           startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            Service_startDate: '',
+            Service_endDate: '',
+            Sender:'',
+            page: 1,
+            count: 0,
+            orderby:''
+
+
     
         }
         this.handleStartChange = this.handleStartChange.bind(this);
@@ -162,6 +175,7 @@ export class ClaimPaymentDashboard extends React.Component {
     componentDidMount() {
         this.getCommonData()
         this.getData()
+        this.getListData()
     }
 
     getCommonData() {
@@ -269,13 +283,16 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     renderTableHeader() {
+        
         return (
             <tr className="table-head">
-                <td className="table-head-text">File Name</td>
+                <td className="table-head-text list-item-style">File Name</td>
                 <td className="table-head-text list-item-style">File Date</td>
-                <td className="table-head-text list-item-style">File Status</td>
-                <td className="table-head-text list-item-style">Submitter</td>
-                <td className="table-head-text list-item-style">Claim Count</td>
+                <td className="table-head-text list-item-style">Remittance sent</td>
+                <td className="table-head-text list-item-style">Remittance sent date</td>
+                <td className="table-head-text list-item-style">Compliance vs Submission date</td>
+                <td className="table-head-text list-item-style"># of errors</td>
+                <td className="table-head-text list-item-style">Receiver</td>
             </tr>
         )
     }
@@ -366,9 +383,71 @@ export class ClaimPaymentDashboard extends React.Component {
         }, 50);
     }
 
+    getListData = () => {
+     
+        let count = 1
+        let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
+        let ServiceEndDate = this.state.ServiceEndDate ? moment(this.state.ServiceEndDate).format('YYYY-MM-DD') : ""
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let providerName = this.state.providerName
+        if (!providerName) {
+            providerName = ''
+        }
+
+        let query = `{            
+            RemittanceViewerFileDetails(Sender:"${this.state.Sender}",State:"${this.state.State ? this.state.State : ''}",Organization:"${this.state.Organization}",EFTStartDt:"${Service_startDate}",EFTEndDt:"${ServiceEndDate}",ClaimReceivedStartDt:"${startDate}",ClaimReceivedEndDt:"${endDate}", page: ` + this.state.page + ` , OrderBy:"` + this.state.orderby + `") {
+                RecCount
+  Sender
+  Organization
+  FileID
+  FileName
+  CheckEFTNo
+  FileDate
+  PayerName
+  PayerID
+  AccountNo
+  CHECKEFTFlag
+  CheckEFTDt
+  Receiver
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.RemittanceViewerFileDetails) {
+
+                    if (res.data.RemittanceViewerFileDetails.length > 0) {
+
+                        count = Math.floor(res.data.RemittanceViewerFileDetails[0].RecCount / 10)
+                        if (res.data.RemittanceViewerFileDetails[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                        this.setState.recount = count;
+                    }
+
+                    this.setState({
+                        claimsList: res.data.RemittanceViewerFileDetails,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     renderList() {
         let row = []
         const data = this.state.claimsList;
+        console.log("" , data)
         data.forEach((d) => {
             row.push(
                 <tr>
@@ -850,6 +929,63 @@ export class ClaimPaymentDashboard extends React.Component {
         }
     }
 
+    handlePageClick = (data) => {
+        let page = data.selected + 1
+        this.setState({
+            page: page
+        }, () => {
+            this.getListData()
+        })
+    }
+
+
+    renderList() {
+        let row = []
+        const data = this.state.claimsList;
+    
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.FileName}</td>
+                           <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style"></td>
+            <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Receiver}</td>
+                </tr>
+            )
+        });
+
+        return (
+            <div>
+                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
+                    {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+                <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={'...'}
+                    breakClassName={'page-link'}
+                    initialPage={0}
+                    pageCount={Math.floor(this.state.claimsList[0].RecCount / 5) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0)}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={(page) => { this.handlePageClick(page) }}
+                    containerClassName={'pagination'}
+                    pageClassName={'page-item'}
+                    previousClassName={'page-link'}
+                    nextClassName={'page-link'}
+                    pageLinkClassName={'page-link'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                />
+            </div>
+        );
+    }
     renderGraphs() {
 
         const data = [
@@ -1229,7 +1365,8 @@ export class ClaimPaymentDashboard extends React.Component {
                 <div className="row">
                 <div className="col-9">
                <br></br>  
-                {this.renderTransactionsNew()}
+               {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
+                {/* {this.renderTransactionsNew()} */}
                 </div>
                 <div className="col-3 nopadding">
 
