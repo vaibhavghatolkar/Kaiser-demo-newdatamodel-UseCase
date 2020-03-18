@@ -122,6 +122,7 @@ export class Remittance_Viewer extends React.Component {
                 TotalLinewise835
                 TotalLine
                 Transaction_Status
+                MolinaClaimID
             }
         }`
         console.log(query)
