@@ -5,7 +5,7 @@ let base_url = 'http://localhost:4000' //local
 const Urls = {
     base_url : 'http://localhost:4000/graphQl', //local
     // base_url : 'http://10.0.1.71:30506/graphQl', //sql
-    //  let base_url = 'http://10.0.1.248:30508/graphQl' //graph
+    // base_url : 'http://10.0.1.248:30508/graphQl', //graph
     // base_url : 'http://10.229.4.247:30108/graphQl', //molina
     eligibility_url : base_url + '/eligibility',
     common_data : base_url + '/common_data',

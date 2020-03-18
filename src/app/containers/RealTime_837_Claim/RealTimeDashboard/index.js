@@ -399,7 +399,7 @@ export class RealTimeDashboard extends React.Component {
                             }
                         }}
                         width={80}
-                        height={40} />
+                        height={40} /> */}
                 </div>
                 <div className="chart-container chart">
                     <Line

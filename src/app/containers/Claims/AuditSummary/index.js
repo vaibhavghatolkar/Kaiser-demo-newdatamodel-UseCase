@@ -183,9 +183,11 @@ export class AuditSummary extends React.Component {
         }, 50);
     }
 
-    goto999 = () => {
+    goto999 = (fileId) => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999)
+        this.props.history.push('/' + Strings.Outbound_response_999, {
+            fileId: fileId
+        })
         setTimeout(() => {
             window.location.reload()
         }, 50);
@@ -224,7 +226,7 @@ export class AuditSummary extends React.Component {
                     <td className="list-item-style">{d.SentToQNXT}</td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {
-                            this.goto999()
+                            this.goto999(d.FileID)
                         }}>{d.F999}</a></td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {

@@ -36,6 +36,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
             fileDetails: [],
             memberInfo: {},
             subscriberNo: '',
+            molina_claimId: '',
             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type: '',
@@ -270,6 +271,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                 ClaimUniqueID
                 FileID
                 ClaimRefId
+                MolinaClaimID
             }
         }`
         console.log(query)
@@ -395,6 +397,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
               AccidentDate
               FileID
               FieldToUpdate
+              MolinaClaimID
             }
             Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
               ClaimID
@@ -931,12 +934,14 @@ export class Outbound_ClaimDetails837 extends React.Component {
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
-                                    claimId: d.ClaimID
+                                    claimId: d.ClaimID,
+                                    showDetails: false,
+                                    molina_claimId : d.MolinaClaimID
                                 }, () => {
                                     this.getDetails(d.ClaimID, d.FileID, data[keys].value, d.ClaimRefId)
                                     this.getClaimStages(d.ClaimID, d.FileID)
                                 })
-                            }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
+                            }} style={{ color: "var(--light-blue)" }}>{d.MolinaClaimID}</a></td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.adjudication_status}</td>
@@ -1072,7 +1077,7 @@ export class Outbound_ClaimDetails837 extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                 <table className="table claim-Details border">
-                                    {this.renderHeader('Claim #' + this.state.claimId)}
+                                    {this.renderHeader('Claim #' + this.state.molina_claimId)}
                                     {this.renderRows(this.state.claimDetails)}
                                     <br></br>
                                     {this.state.Icdcodepresent == "Icdcode" ? this.renderButton() : ""}

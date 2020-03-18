@@ -179,6 +179,7 @@ export class ClaimProcessingSummary extends React.Component {
                 TotalLine
                 Transaction_Status
                 ClaimRefId
+                MolinaClaimID
             }
         }`
         console.log(query)
@@ -245,9 +246,11 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
-    goto999 = () => {
+    goto999 = (fileId) => {
         sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999)
+        this.props.history.push('/' + Strings.Outbound_response_999, {
+            fileId: fileId
+        })
         setTimeout(() => {
             window.location.reload()
         }, 50);
@@ -279,7 +282,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By Claim837RTProcessingSummary.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
             { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By Claim837RTProcessingSummary.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
             { value: '999' },
-            { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By Claim837RTProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
+            { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By Claim837RTProcessingSummary.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Claim Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By Claim837RTProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
             { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By Claim837RTProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             // {value : 'Subscriber Last Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberLastName" : "Order By Claim837RTProcessingSummary.SubscriberLastName", this.state.subscriberLastNameFlag, 'subscriberLastNameFlag') , key : this.state.subscriberLastNameFlag},
@@ -298,8 +301,8 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'FileName', method: this.gotoDetails, isClick: 1 },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999 },
-            { value: 'ClaimID' },
+            { value: 'F999', isClick: 1, method: this.goto999, key_argument : 'FileID' },
+            { value: 'MolinaClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
             // { value : 'SubscriberLastName'},
@@ -311,7 +314,8 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'Transaction_Status' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
-            { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
+            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
+            { value: ''},
         )
 
         return (
