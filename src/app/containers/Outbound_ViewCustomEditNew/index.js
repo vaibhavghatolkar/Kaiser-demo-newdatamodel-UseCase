@@ -86,7 +86,7 @@ export class Outbound_View_customEditNew extends React.Component {
         //     condition
         //     Ignore
         //   }
-        console.log('Query ', query)
+        console.log(query)
 
         fetch(Urls.base_url, {
             method: 'POST',

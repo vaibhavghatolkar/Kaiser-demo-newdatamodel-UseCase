@@ -67,7 +67,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                    
                }`
 
-        console.log('Query ', query)
+        console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -112,7 +112,6 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                 this.setState({
                     TradingPartnerList: array,
                     count: count
-                    // tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {

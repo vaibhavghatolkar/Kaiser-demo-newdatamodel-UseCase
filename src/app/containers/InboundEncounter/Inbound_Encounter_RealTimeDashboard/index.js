@@ -104,7 +104,7 @@ export class Inbound_Encounter_RealTimeDashboard extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {

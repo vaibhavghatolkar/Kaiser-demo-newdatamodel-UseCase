@@ -1,5 +1,4 @@
 import React from 'react'
-// import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
 import { Topbar } from '../../components/Topbar';
 import Urls from '../../../helpers/Urls';
@@ -21,7 +20,6 @@ export class HealthCare278 extends React.Component {
         }
 
         this.getData = this.getData.bind(this)
-        // this.onSelect = this.onSelect.bind(this)
     }
 
     componentDidMount() {
@@ -82,7 +80,6 @@ export class HealthCare278 extends React.Component {
                     <div className="col-2">
                         <div className="center-align">Total Request</div>
                         <div className="center-align"><a href="#" className="blue bold-text summary-values"
-                        // onClick={() => {this.props.handleFlag(Strings.claimDetails)}}
 
                         >
                             <Link to={{ pathname: '/serviceDetails278', state: { data: data } }}> {this.state.totalFile} </Link>
@@ -622,9 +619,6 @@ export class HealthCare278 extends React.Component {
                 <div className="form-group col-3">
                     <div className="list-dashboard">State</div>
                     <select className="form-control list-dashboard" id="state"
-                        // onChange={(event) => {
-                        //     this.onSelect(event, 'State')
-                        // }}
                     >
                         <option value=""></option>
                         <option selected="selected" value="1">California</option>
@@ -649,9 +643,6 @@ export class HealthCare278 extends React.Component {
                         Submitter
                         </div>
                     <select className="form-control list-dashboard" id="TradingPartner"
-                    // onChange={(event) => {
-                    //     this.onSelect(event, 'selectedTradingPartner')
-                    // }}
                     >
                         <option selected="selected" value="select">GH GENERATIONS</option>
                         <option value="select">AVAILITY</option>

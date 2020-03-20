@@ -56,15 +56,6 @@ export class Outbound_AuditSummary extends React.Component {
         this.getCommonData()
     }
 
-    //   FileID
-    //   filename
-    //   Submitted
-    //   Rejected
-    //   Pending
-    //   Verified
-    //   Error
-    //   InBizstock
-
     getData() {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
@@ -367,7 +358,6 @@ export class Outbound_AuditSummary extends React.Component {
         });
 
         setTimeout(() => {
-            // this.getCountData()
             this.getData()
         }, 50);
     }
@@ -379,7 +369,6 @@ export class Outbound_AuditSummary extends React.Component {
         });
 
         setTimeout(() => {
-            // this.getCountData()
             this.getData()
         }, 50);
     }

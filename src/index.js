@@ -99,7 +99,6 @@ import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEnco
 import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
 
 const $ = window.$;
-{/* <Files_837 flag={this.state.errorflag} selectedTradingPartner='' startDate="" endDate=""/> */ }
 class PrivateRoute extends React.Component {
     constructor(props) {
         super(props);
@@ -116,9 +115,7 @@ class PrivateRoute extends React.Component {
 
             loggedIn,
             timeout: 1800000,
-            //  timeOut: 10000,
             isTimedOut: false
-            // timeOut,
         };
 
         this.handleFlag = this.handleFlag.bind(this)
@@ -129,14 +126,6 @@ class PrivateRoute extends React.Component {
 
     }
 
-    // componentDidMount(){
-    //     setTimeout(() => {
-    //         localStorage.clear()
-    //         this.setState({timeOut:true});
-    //       },600000000);
-
-    // }
-
     handleFlag(loggedIn) {
         this.setState({
 
@@ -146,17 +135,14 @@ class PrivateRoute extends React.Component {
     }
 
     onAction(e) {
-        // console.log('user did something', e)
         this.setState({ isTimedOut: false })
     }
 
     onActive(e) {
-        // console.log('user is active', e)
         this.setState({ isTimedOut: false })
     }
 
     onIdle(e) {
-        // console.log('user is idle', e)
         const isTimedOut = this.state.isTimedOut
 
         if (isTimedOut) {
@@ -335,7 +321,6 @@ class PrivateRoute extends React.Component {
 }
 
 ReactDOM.render(<PrivateRoute />, document.getElementById('app'));
-// ReactDOM.render(<App />, document.getElementById('app'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -75,6 +75,7 @@ export class RealTimeDashboard extends React.Component {
             inProgress: 0,
             Accepted_per: 0,
             rejected_per: 0,
+            rejectedFileCount: 0,
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
@@ -102,9 +103,42 @@ export class RealTimeDashboard extends React.Component {
     }
 
     componentDidMount() {
+        this.getRejectedFile()
         this.getCommonData()
         this.getData()
+        this._getCounts()
         this.getListData()
+    }
+
+    getRejectedFile = async () => {
+
+        let query = `{
+            Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+              TotalRejectedFiles
+            }
+        }`
+
+        console.log(query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let data = res.data
+                    this.setState({
+                        rejectedFileCount : data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : ''
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     getCommonData() {
@@ -114,7 +148,7 @@ export class RealTimeDashboard extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -136,12 +170,7 @@ export class RealTimeDashboard extends React.Component {
             });
     }
 
-    getData() {
-        let chartType = this.state.chartType
-        if (!chartType) {
-            chartType = "Monthwise"
-        }
-
+    _getCounts = async () => {
         let query = `{
             Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 TotalFiles
@@ -157,6 +186,63 @@ export class RealTimeDashboard extends React.Component {
                 Resubmit
                 RejectedFileCount
             }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let summary = []
+                let data = res.data
+                let Accepted_per1 = 0
+                let rejected_per1 = 0
+                let accepted = 0
+                let rejected = 0
+                let inProgress = 0
+
+                if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
+                    summary = [
+                    { name: 'Total Accepted Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
+                    { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
+                    { name: 'Rejected Files', value: this.state.rejectedFileCount },
+                    { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
+                    { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
+                    { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
+                    { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
+                    ]
+                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
+                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
+                    accepted = data.Claim837RTDashboardCount[0].Accepted
+                    rejected = data.Claim837RTDashboardCount[0].Rejected
+                    inProgress = data.Claim837RTDashboardCount[0].InProgress
+                }
+
+                this.setState({
+                    summaryList: summary,
+                    Accepted_per: Accepted_per1,
+                    rejected_per: rejected_per1,
+                    accepted: accepted,
+                    rejected: rejected,
+                    inProgress: inProgress,
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    getData = async () => {
+        let chartType = this.state.chartType
+        if (!chartType) {
+            chartType = "Monthwise"
+        }
+        let query = `{
             barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 From
                 MonthNo
@@ -184,34 +270,9 @@ export class RealTimeDashboard extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let array = []
-                let summary = []
-                let data = res.data
-                let Accepted_per1 = 0
-                let rejected_per1 = 0
-                let accepted = 0
-                let rejected = 0
-                let inProgress = 0
                 let ClaimBarChart = res.data.barchart
                 let pieChart = res.data.piechart
                 let claimLabels = []
-
-                if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
-                    summary = [
-                        { name: 'Total Accepted Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
-                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Rejected Files', value: data.Claim837RTDashboardCount[0].RejectedFileCount ? data.Claim837RTDashboardCount[0].RejectedFileCount : '' },
-                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
-                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
-                        { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
-                        // { name: 'Resubmit Queue', value: data.Claim837RTDashboardCount[0].Resubmit ? Math.round(data.Claim837RTDashboardCount[0].Resubmit * 100) / 100 : '' },
-                    ]
-                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
-                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
-                    accepted = data.Claim837RTDashboardCount[0].Accepted
-                    rejected = data.Claim837RTDashboardCount[0].Rejected
-                    inProgress = data.Claim837RTDashboardCount[0].InProgress
-                }
 
                 let count = 0
                 ClaimBarChart.forEach((d) => {
@@ -257,20 +318,15 @@ export class RealTimeDashboard extends React.Component {
                 }
 
                 this.setState({
-                    summaryList: summary,
-                    Accepted_per: Accepted_per1,
-                    rejected_per: rejected_per1,
                     ClaimBarChart: array,
                     claimLabels: claimLabels,
-                    accepted: accepted,
-                    rejected: rejected,
-                    inProgress: inProgress,
                     second_data: second_data
                 })
             })
             .catch(err => {
                 console.log(err)
             })
+
     }
 
     updateSearch = search => {
@@ -296,11 +352,11 @@ export class RealTimeDashboard extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTFileDetails.Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -336,11 +392,9 @@ export class RealTimeDashboard extends React.Component {
                 {
                     label: '',
                     fill: true,
-                    // lineTension: 0.2,
                     cubicInterpolationMode: 'default',
                     backgroundColor: 'rgba(75,192,192,0.4)',
                     borderColor: color,
-                    // borderCapStyle: 'round',
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: 'round',
@@ -353,7 +407,6 @@ export class RealTimeDashboard extends React.Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 3,
                     pointHitRadius: 1,
-                    // data: [23,41,35,98,43,12,15,25,89,45,73,23, 12]
                     data: dataArray
                 }
             ]
@@ -380,26 +433,12 @@ export class RealTimeDashboard extends React.Component {
             }],
             flag: ''
         };
-
-        // console.log(this.state.ClaimBarChart)
+        
         return (
             <div className="row chart-div">
                 <div className="chart-container chart">
                     {this.renderChart()}
                     {this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0 ? this.renderValues() : null}
-                    {/* <Pie data={data}
-                        options={{
-                            elements: {
-                                arc: {
-                                    borderWidth: 0
-                                }
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }}
-                        width={80}
-                        height={40} /> */}
                 </div>
                 <div className="chart-container chart">
                     <Line
@@ -419,7 +458,6 @@ export class RealTimeDashboard extends React.Component {
                                 }]
                             }
                         }} />
-                    {/* <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', height: '260px', marginLeft: '-2px' }}></img> */}
                 </div>
             </div>
         )
@@ -430,7 +468,9 @@ export class RealTimeDashboard extends React.Component {
             type: e
         })
         setTimeout(() => {
+            this.getRejectedFile()
             this.getData()
+            this._getCounts()
             this.getListData()
         }, 50);
     }
@@ -594,7 +634,9 @@ export class RealTimeDashboard extends React.Component {
         this.setState({
             State: event.target.options[event.target.selectedIndex].text
         }, () => {
+            this.getRejectedFile()
             this.getData()
+            this._getCounts()
             this.getListData()
         })
     }
@@ -604,7 +646,9 @@ export class RealTimeDashboard extends React.Component {
             startDate: date
         });
         setTimeout(() => {
+            this.getRejectedFile()
             this.getData()
+            this._getCounts()
             this.getListData()
         }, 50);
     };
@@ -614,7 +658,9 @@ export class RealTimeDashboard extends React.Component {
             endDate: date
         });
         setTimeout(() => {
+            this.getRejectedFile()
             this.getData()
+            this._getCounts()
             this.getListData()
         }, 50);
     }
@@ -631,17 +677,10 @@ export class RealTimeDashboard extends React.Component {
         }
 
         setTimeout(() => {
+            this.getRejectedFile()
             this.getData()
+            this._getCounts()
             this.getListData()
-        }, 50);
-    }
-
-    MonthsEvent(event, key) {
-        this.setState({
-            [key]: event.target.options[event.target.selectedIndex].value
-        })
-        setTimeout(() => {
-            this.getData()
         }, 50);
     }
 
@@ -714,7 +753,9 @@ export class RealTimeDashboard extends React.Component {
         this.setState({
             providerName: value
         }, () => {
+            this.getRejectedFile()
             this.getData()
+            this._getCounts()
             this.getListData()
         })
     }
@@ -731,15 +772,11 @@ export class RealTimeDashboard extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        {/* <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        /> */}
                         <AutoComplete
                             list={this.state.providers}
                             onHandleChange={this.onHandleChange}
                             onSelected={this.onSelected}
                         />
-                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
                     </div>
 
                     <div className="form-group col-2">
@@ -791,7 +828,9 @@ export class RealTimeDashboard extends React.Component {
                                 })
 
                                 setTimeout(() => {
+                                    this.getRejectedFile()
                                     this.getData()
+                                    this._getCounts()
                                     this.getListData()
                                 }, 50);
                             }}

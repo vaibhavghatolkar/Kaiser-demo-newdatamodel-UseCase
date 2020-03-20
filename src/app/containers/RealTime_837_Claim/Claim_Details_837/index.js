@@ -85,13 +85,13 @@ export class ClaimDetails837 extends React.Component {
             dateRotation: 180,
             statusRotation: 180,
             submitterRotation: 180,
-            claimIdRotation : 180,
-            claimStatusRotation : 180,
-            subsciberRotation : 180,
-            claimAmountRotation : 180,
-            errorRotation : 180,
+            claimIdRotation: 180,
+            claimStatusRotation: 180,
+            subsciberRotation: 180,
+            claimAmountRotation: 180,
+            errorRotation: 180,
 
-            seqID:'',
+            seqID: '',
             fileDataDetails: '',
             page1: 1
         }
@@ -116,7 +116,7 @@ export class ClaimDetails837 extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -217,7 +217,7 @@ export class ClaimDetails837 extends React.Component {
 
                     this.setState({
                         intakeClaims: res.data.Claim837RTFileDetails,
-    
+
                     }, () => {
                         this.sortData()
                     })
@@ -264,9 +264,6 @@ export class ClaimDetails837 extends React.Component {
     }
 
     getTransactions = (fileId) => {
-        // var ret = fileId.replace('sort_','');
-        // alert(ret)
-
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -419,9 +416,9 @@ export class ClaimDetails837 extends React.Component {
 
     handlePageClickLine = (data) => {
         let page = data.selected + 1
-     
-            this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
-        
+
+        this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
+
     }
 
 
@@ -492,7 +489,7 @@ export class ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -504,7 +501,6 @@ export class ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                // console.log("sdfdsss", res.data.Claim837RTDetails[0].FieldToUpdate)
                 let data = res.data
                 let count = 1
                 if (data && data.Claim837RTLineDetails.length > 0) {
@@ -530,7 +526,6 @@ export class ClaimDetails837 extends React.Component {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "AccidentDt") {
                         isDate = 1
                         AccidentDate = this.getDatePicker()
-                        // AccidentDate = <input onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' className="form-control list-header1" style={{ width: "100px " , marginLeft:"-10px" }}></input>
                     }
                     else {
 
@@ -546,7 +541,7 @@ export class ClaimDetails837 extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Claim HiPaaS Id', value: data.ClaimTMTrackingID },
+                            { key: 'File Claim Id', value: data.ClaimID },
                             { key: 'Claim Date', value: data.ClaimDate },
                             { key: 'Subscriber First Name', value: data.SubscriberFirstName },
                             { key: 'Subscriber Last Name', value: data.SubscriberLastName },
@@ -588,7 +583,7 @@ export class ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -642,49 +637,6 @@ export class ClaimDetails837 extends React.Component {
             </div>
         )
     }
-
-    // renderTransactions(){
-    //     let row = []
-    //     const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
-
-    //     data.forEach((d) => {
-    //         row.push(
-    //             <tr>
-    //                 <td><a href="#" onClick={() => {
-    //                     this.setState({
-    //                         claimId : d.ClaimID
-    //                     }, () => {
-    //                         this.getDetails(d.ClaimID)
-    //                     })
-    //                 }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-    //                 <td>{d.ClaimDate}</td>
-    //                 <td>{d.Claim_Amount}</td>
-    //                 <td>{d.ClaimStatus}</td>
-    //                 <td>{d.adjudication_status}</td>
-    //                 <td>{d.ClaimLevelErrors}</td>
-    //             </tr>
-    //         )
-    //     })
-    //     return(
-    //         <div>
-    //             <table className="table table-bordered claim-list">
-    //                 <thead>
-    //                     <tr className="table-head" style={{fontSize:"9px"}}>
-    //                         <td className="table-head-text">Claim Id</td>
-    //                         <td className="table-head-text list-item-style">Claim Date</td>
-    //                         <td className="table-head-text list-item-style">Claim Amount</td>
-    //                         <td className="table-head-text list-item-style">Claim Status</td>
-    //                         <td className="table-head-text list-item-style">Current State</td>
-    //                         <td className="table-head-text list-item-style">Error Code</td>
-    //                     </tr>
-    //                 </thead>
-    //                 <tbody>
-    //                     {row}
-    //                 </tbody>
-    //             </table>
-    //         </div>
-    //     )
-    // }
 
     renderDetails(flag) {
         return (
@@ -754,7 +706,6 @@ export class ClaimDetails837 extends React.Component {
     handleEndChange(date) {
         this.setState({
             endDate: date,
-            // showDetails: false
         });
 
         setTimeout(() => {
@@ -845,15 +796,11 @@ export class ClaimDetails837 extends React.Component {
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
-                        {/* <input
-                            onChange={(e) => this.onHandleChange(e)}
-                            className="form-control" type="text" /> */}
                         <AutoComplete
                             list={this.state.providers}
                             onHandleChange={this.onHandleChange}
                             onSelected={this.onSelected}
                         />
-                        {/* <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select> */}
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
@@ -893,9 +840,9 @@ export class ClaimDetails837 extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
+                    <td>{d.ClaimID}</td>
                     <td>{d.MolinaClaimID}</td>
                     <td>{d.ServiceLineCount}</td>
-                    {/* <td>{d.ProviderPaidAmount}</td> */}
                     <td>{d.ServiceDate}</td>
                     <td>{d.ProcedureDate}</td>
                     <td>{d.PaidServiceUnitCount}</td>
@@ -911,10 +858,12 @@ export class ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">
+                                        <a>File Claim Id</a>
+                                    </td>
+                                    <td className="table-head-text list-item-style">
                                         <a>Claim Id</a>
                                     </td>
                                     <td className="table-head-text list-item-style">Service Line No.</td>
-                                    {/* <td className="table-head-text list-item-style">Provider paid amount</td> */}
                                     <td className="table-head-text list-item-style">Service Date</td>
                                     <td className="table-head-text list-item-style">Procedure Code</td>
                                     <td className="table-head-text list-item-style">Unit</td>
@@ -925,23 +874,23 @@ export class ClaimDetails837 extends React.Component {
                             </tbody>
                         </table>
                         <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.state.count}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClickLine(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
+                            previousLabel={'previous'}
+                            nextLabel={'next'}
+                            breakLabel={'...'}
+                            breakClassName={'page-link'}
+                            initialPage={0}
+                            pageCount={this.state.count}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={(page) => { this.handlePageClickLine(page) }}
+                            containerClassName={'pagination'}
+                            pageClassName={'page-item'}
+                            previousClassName={'page-link'}
+                            nextClassName={'page-link'}
+                            pageLinkClassName={'page-link'}
+                            subContainerClassName={'pages pagination'}
+                            activeClassName={'active'}
+                        />
                     </div>
                 </div>
             </div>
@@ -994,13 +943,11 @@ export class ClaimDetails837 extends React.Component {
     renderClaimsHeader(fileId) {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => {this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTProcessingSummary.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId)}}>Claim Id</a></td>
-                {/* <td className="table-head-text list-item-style">Claim Date</td> */}
-                {/* <td className="table-head-text list-item-style">Adjudication Status</td> */}
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => {this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTProcessingSummary.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId)}}>Claim Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => {this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTProcessingSummary.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId)}}>Subscriber Id</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => {this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTProcessingSummary.Claim_Amount", this.state.claimAmountRotation, 'claimAmountRotation', fileId)}}>Claim Amount</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => {this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTProcessingSummary.ClaimLevelErrors", this.state.errorRotation, 'errorRotation', fileId)}}>Error</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Claim Id</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>Claim Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Subscriber Id</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Claim_Amount", this.state.claimAmountRotation, 'claimAmountRotation', fileId) }}>Claim Amount</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimLevelErrors", this.state.errorRotation, 'errorRotation', fileId) }}>Error</a></td>
             </tr>
         )
     }
@@ -1040,24 +987,19 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-3 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By Claim837RTFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
-                    {/* File Name<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Claim837RTFileDetails.Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
-                    {/* Type<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by Claim837RTFileDetails.FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
-                    {/* File Date<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
                 </div>
                 <div className="col-3 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By Claim837RTFileDetails.FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
-                    {/* File Status<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Claim837RTFileDetails.Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Submitter</a>
-                    {/* Submitter<img src={require('../../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Submitter</a>
                 </div>
             </div>
         )
@@ -1069,7 +1011,6 @@ export class ClaimDetails837 extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
 
-        // console.log(data)
         try {
             count = data[Object.keys(data)[0]].value.Claimcount / 10
             if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
@@ -1102,7 +1043,7 @@ export class ClaimDetails837 extends React.Component {
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
-                                    claimId: d.ClaimID, 
+                                    claimId: d.ClaimID,
                                     showDetails: false,
                                     molina_claimId: d.MolinaClaimID
                                 }, () => {
@@ -1110,9 +1051,7 @@ export class ClaimDetails837 extends React.Component {
                                     this.getClaimStages(d.ClaimID, d.FileID)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.MolinaClaimID}</a></td>
-                            {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
                             <td className="list-item-style">{d.ClaimStatus}</td>
-                            {/* <td className="list-item-style">{d.adjudication_status}</td> */}
                             <td className="list-item-style">{d.Subscriber_ID}</td>
                             <td className="style-left"> ${d.Claim_Amount}</td>
                             <td className="list-item-style">{d.ClaimLevelErrors}</td>

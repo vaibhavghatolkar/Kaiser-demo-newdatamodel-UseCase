@@ -70,7 +70,6 @@ const Strings = {
     ClaimProcessingSummary: 'claimProcessingSummary',
     _277CAResponse: '_277CAResponse',
     Outbound_277CAResponse: 'Outbound_277CAResponse',
-    // ClaimProcessingSummary: 'claimsAudit',
     Files_837 : 'Files_837',
     MenuManagement: 'MenuManagement',
     TradingPartner:'TradingPartner',

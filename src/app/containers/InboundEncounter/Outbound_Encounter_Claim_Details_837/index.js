@@ -103,7 +103,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -476,7 +476,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -500,12 +500,6 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                         Claim_Icdcode = res.data.EncounterDetails[0].ICDCode;
                     }
                     if (res.data.EncounterDetails[0].FieldToUpdate == "AccidentDt") {
-
-                        //     AccidentDate = <DatePicker
-                        //     className="form-control list-header-dashboard"
-                        //     selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
-                        //     onChange={this.handleAccidentdate}
-                        // />
                         AccidentDate = <input onChange={(e) => this.onChangeName(e, 'Accidentdate')} type='text' style={{ width: "80px" }}></input>
                     }
                     else {
@@ -581,48 +575,6 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         )
     }
 
-    // renderTransactions(){
-    //     let row = []
-    //     const data = this.state.EncounterProcessingSummary ? this.state.EncounterProcessingSummary : []
-
-    //     data.forEach((d) => {
-    //         row.push(
-    //             <tr>
-    //                 <td><a href="#" onClick={() => {
-    //                     this.setState({
-    //                         claimId : d.ClaimID
-    //                     }, () => {
-    //                         this.getDetails(d.ClaimID)
-    //                     })
-    //                 }} style={{ color: "#6AA2B8" }}>{d.ClaimID}</a></td>
-    //                 <td>{d.ClaimDate}</td>
-    //                 <td>{d.Claim_Amount}</td>
-    //                 <td>{d.ClaimStatus}</td>
-    //                 <td>{d.adjudication_status}</td>
-    //                 <td>{d.ClaimLevelErrors}</td>
-    //             </tr>
-    //         )
-    //     })
-    //     return(
-    //         <div>
-    //             <table className="table table-bordered claim-list">
-    //                 <thead>
-    //                     <tr className="table-head" style={{fontSize:"9px"}}>
-    //                         <td className="table-head-text">Claim Id</td>
-    //                         <td className="table-head-text list-item-style">Claim Date</td>
-    //                         <td className="table-head-text list-item-style">Claim Amount</td>
-    //                         <td className="table-head-text list-item-style">Claim Status</td>
-    //                         <td className="table-head-text list-item-style">Current State</td>
-    //                         <td className="table-head-text list-item-style">Error Code</td>
-    //                     </tr>
-    //                 </thead>
-    //                 <tbody>
-    //                     {row}
-    //                 </tbody>
-    //             </table>
-    //         </div>
-    //     )
-    // }
 
     renderDetails(flag) {
         return (
@@ -1075,7 +1027,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',

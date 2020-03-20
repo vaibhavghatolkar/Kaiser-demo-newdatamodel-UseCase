@@ -84,37 +84,6 @@ const data = [
   
 
 let val = ''
-// const second_data = {
-//     labels: [
-//         'ICD Code not found',
-//         'Accident Date not present',
-//         'Member Not Found',
-//         'Newborn Setup Pending',
-//         'Provider Setup Pending',
-//         'Misdirected Claims'
-//     ],
-//     datasets: [{
-//         data: [100, 100, 70, 20, 50, 20],
-//         backgroundColor: [
-//             '#139DC9',
-//             '#83D2B4',
-//             '#9DC913',
-//             '#EC6236',
-//             '#C9139D',
-//             'blue',
-//         ],
-//         hoverBackgroundColor: [
-//             '#139DC9',
-//             '#83D2B4',
-//             '#9DC913',
-//             '#EC6236',
-//             '#C9139D',
-//             'blue',
-//         ]
-//     }],
-//     flag: ''
-// };
-
 export class ClaimPaymentDashboard extends React.Component {
 
     constructor(props) {
@@ -185,7 +154,7 @@ export class ClaimPaymentDashboard extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {

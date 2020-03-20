@@ -8,9 +8,6 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import Strings from '../../../helpers/Strings'
 import { Pie } from 'react-chartjs-2';
-// import EnhancedTable from '../../components/DataTable';
-// import TableRow from '@material-ui/core/TableRow';
-// import TableCell from '@material-ui/core/TableCell';
 import '../Files/files-styles.css';
 import { CommonTable } from '../../components/CommonTable';
 import { StateDropdown } from '../../components/StateDropdown';
@@ -243,7 +240,7 @@ export class _277CAReponse extends React.Component {
             }`
         }
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',

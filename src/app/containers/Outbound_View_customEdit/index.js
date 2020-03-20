@@ -56,7 +56,7 @@ export class Outbound_View_customEdit extends React.Component {
                 
             }`
 
-        console.log('Query ', query)
+        console.log(query)
 
         fetch(Urls.tradingPartner, {
             method: 'POST',

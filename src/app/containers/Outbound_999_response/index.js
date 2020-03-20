@@ -39,7 +39,6 @@ export class Outbound_response_999 extends React.Component {
             errorcode: "",
             transactionType: this.props.location.state ? (this.props.location.state.flag ? '837 Encounter' : '837') : "837",
 
-            // selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
             count: 0,
             apiflag: 0,
@@ -83,7 +82,7 @@ export class Outbound_response_999 extends React.Component {
               RecCount
             }
           }`
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -171,7 +170,7 @@ export class Outbound_response_999 extends React.Component {
               TrasactionType
           }
     }`
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -182,7 +181,6 @@ export class Outbound_response_999 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                // alert(res.data.Data999[0].Response)
                 if (res.data) {
                     this.setState({
                         Response: res.data.Data999[0].Response,
@@ -352,11 +350,6 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
-    // onClick = (value) => {
-        
-    //     this.render999Details(value)
-    // }
-
     renderTableHeader() {
         return (
             <tr className="table-head">
@@ -393,35 +386,7 @@ export class Outbound_response_999 extends React.Component {
 
         });
 
-        // let headerArray = []
-        // let rowArray = []
-        // headerArray.push(
-        //     { value: 'FileName', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-        //     { value: 'Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-        //     { value: 'Sender', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-        //     { value: 'Status' },
-        //     { value: 'Trasaction Type' },
-
-        // )
-
-        // rowArray.push(
-        //     { value: 'FileName', upScale: 1 },
-        //     { value: 'Date', isDate: 1, isNottime: 1 },
-        //     { value: 'Submitter' },
-        //     { value: 'status' },
-        //     { value: 'TrasactionType' }
-        // )
-
         return (
-            // <CommonTable
-            //     headerArray={headerArray}
-            //     rowArray={rowArray}
-            //     data={data}
-            //     count={this.state.count}
-            //     handlePageClick={this.handlePageClick}
-            //     onClickKey={'FileId'}
-            //     onClick={this.onClick}
-            // />
             <div>
                 <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
                     {this.state.files_list && this.state.files_list.length > 0 ? this.renderTableHeader() : null}
@@ -452,12 +417,6 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
-
-    // renderMaterialTable(){
-    //     return(
-    //         <EnhancedTable/>
-    //     )
-    // }
 
     render() {
         return (

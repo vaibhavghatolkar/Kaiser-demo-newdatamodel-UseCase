@@ -63,7 +63,6 @@ export class Outbound_EditConfigurations extends React.Component {
 
         this.onChange = this.onChange.bind(this);
         this.operation = this.operation.bind(this)
-        // this.renderView = this.renderView.bind(this)
         this.clicked = this.clicked.bind(this)
         this.getData = this.getData.bind(this)
         this.onSelect = this.onSelect.bind(this)
@@ -74,11 +73,6 @@ export class Outbound_EditConfigurations extends React.Component {
     }
 
     componentDidMount() {
-        // $(document).ready(function(){
-        //     $('button').click(function(){
-        //         $('.alert').show()
-        //     }) 
-        // });
 
         this.getviewdetails()
         this.gettradingpatner()

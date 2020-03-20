@@ -1,5 +1,5 @@
 import React from 'react';
-// import './style.css';
+
 import Urls from '../../../../helpers/Urls';
 import '../../color.css'
 

@@ -313,7 +313,6 @@ export class Files_834 extends React.Component {
                        {key : "File Name", value : data[0].FileName},
                         {key : "File Date", value : data[0].CreateDateTime},
                         {key : "Sender", value : data[0].sender}, 
-                   // {key : "Receiver", value : data[0].receiver}     
                     ]
                   
                   var CheckError=  data[0].Error_Field;
@@ -380,17 +379,8 @@ export class Files_834 extends React.Component {
                       
                     ]
     
-                    // let coverage_data = []
-                    // data.forEach(element => {
-                    //     coverage_data.push({
-                    //         'startDate': element.StartDate,
-                    //         'endDate': element.EndDate
-                    //     })
-                    // });
-    
                     this.setState({
                         file: file,
-                        // coverage_data: coverage_data,
                         memberInfo: memberInfo,
                         File_ID:fileId,
                         Error_Field:data[0].Error_Field,

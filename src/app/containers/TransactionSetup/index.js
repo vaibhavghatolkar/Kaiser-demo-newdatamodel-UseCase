@@ -179,7 +179,6 @@ export class TransactionSetup extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                // console.log('Data : ',r.data.Trading_Partner[0].Functional_Ack_Options)
                 console.log(r.data.TransactionSetup[0])
                 this.setState({
                     Transaction_Type: r.data.TransactionSetup[0].Transaction_Type,
