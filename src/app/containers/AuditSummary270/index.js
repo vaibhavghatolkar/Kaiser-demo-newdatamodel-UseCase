@@ -130,7 +130,7 @@ export class AuditSummary270 extends React.Component{
                 <div className="col-2">
                     <div className="small-text">Total Error</div>
                     <div className="red bold-text summary-values center-align"><a href="#" onClick={() => {
-                        // this.props.handleFlag(Strings.ElilgibilityDetails270)
+                        
                     }}>
                         <Link to={'/' + Strings.ElilgibilityDetails270 + '/1'}>{this.state.rejectedCount}</Link>
                     </a></div>

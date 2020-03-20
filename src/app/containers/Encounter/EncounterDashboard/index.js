@@ -94,7 +94,7 @@ export class EncounterDashboard extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -720,7 +720,6 @@ export class EncounterDashboard extends React.Component {
                     },
                     legend: {
                         display: false
-                        // position: 'bottom'
                     }
                 }}
                 width={100}

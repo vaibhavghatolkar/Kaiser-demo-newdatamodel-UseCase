@@ -68,7 +68,7 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -378,12 +378,6 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'Encounter Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By EncounterProcessingSummary.ClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Encounter Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By EncounterProcessingSummary.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
             { value: 'Encounter Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By EncounterProcessingSummary.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
-            // {value : 'Subscriber Last Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberLastName" : "Order By EncounterProcessingSummary.SubscriberLastName", this.state.subscriberLastNameFlag, 'subscriberLastNameFlag') , key : this.state.subscriberLastNameFlag},
-            // {value : 'Subscriber First Name', method : () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.SubscriberFirstName" : "Order By EncounterProcessingSummary.SubscriberFirstName", this.state.subscriberFirstNameFlag, 'subscriberFirstNameFlag') , key : this.state.subscriberFirstNameFlag},
-            // {value : 'Provider Last Name'},
-            // {value : 'Provider First Name'},
-            // { value: 'Encounter Amount' },
-            // { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By EncounterProcessingSummary.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
             { value: 'State Status' },
             { value: '277CA' },
             // {value : 'Total Line count | 835 Received'},
@@ -399,12 +393,6 @@ export class Outbound_Encounter_ClaimProcessingSummary extends React.Component {
             { value: 'ClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
-            // { value : 'SubscriberLastName'},
-            // { value : 'SubscriberFirstName'},
-            // { value : 'ProviderLastName'},
-            // { value : 'ProviderFirstName'},
-            // { value: 'Claim_Amount', isAmount: 1 },
-            // { value: 'Subscriber_ID' },
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },

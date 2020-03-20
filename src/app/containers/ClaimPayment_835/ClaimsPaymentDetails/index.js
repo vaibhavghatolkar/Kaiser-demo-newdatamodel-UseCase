@@ -106,7 +106,7 @@ export class ClaimPaymentDetails extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -343,7 +343,7 @@ export class ClaimPaymentDetails extends React.Component {
           }
           `
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(Urls.real_time_claim_details, {
             method: 'POST',

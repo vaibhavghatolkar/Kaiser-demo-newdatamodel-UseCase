@@ -57,19 +57,12 @@ export class AuditSummary extends React.Component {
     componentDidMount() {
 
         this.getData()
+        this._getCounts()
         this.getCommonData()
     }
 
-    //   FileID
-    //   filename
-    //   Submitted
-    //   Rejected
-    //   Pending
-    //   Verified
-    //   Error
-    //   InBizstock
+    _getCounts = async() => {
 
-    getData() {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
@@ -90,7 +83,46 @@ export class AuditSummary extends React.Component {
               FileStatus
               RecCount
             }
-           
+        }`
+        console.log(query)
+        fetch(Urls.claims_837, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let data = res.data
+                if (res.data) {
+
+                    let count = 1
+                    if (data && data.ClaimsDailyAudit.length > 0) {
+
+                        count = Math.floor(data.ClaimsDailyAudit[0].RecCount / 10)
+                        if (data.ClaimsDailyAudit[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                    }
+                    
+                    this.setState({
+                        claimsAudit: res.data.ClaimsDailyAudit,
+                        count: count
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    getData = async() => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
+        let query = `{
             FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
                 totalFile
                 TotalClaims 
@@ -126,25 +158,7 @@ export class AuditSummary extends React.Component {
 
                     }
 
-                    let count = 1
-                    if (data && data.ClaimsDailyAudit.length > 0) {
-
-                        count = Math.floor(data.ClaimsDailyAudit[0].RecCount / 10)
-                        if (data.ClaimsDailyAudit[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                    }
-
-
-                    // console.log("sdghusighsjgn", res.data.FileInCount[0])
                     this.setState({
-                        claimsAudit: res.data.ClaimsDailyAudit,
-                        // SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
-                        // VeriTotal: res.data.ClaimsDailyAuditCount[0].VeriTotal,
-                        // InBizstockTotal: res.data.ClaimsDailyAuditCount[0].InBizstockTotal,
-                        // PenTotal: res.data.ClaimsDailyAuditCount[0].PenTotal,
-                        // RejTotal: res.data.ClaimsDailyAuditCount[0].RejTotal,
-                        // errTotal: res.data.ClaimsDailyAuditCount[0].errTotal,
                         totalFile: totalFile,
                         TotalClaims: res.data.FileInCount[0].TotalClaims,
                         Accepted: res.data.FileInCount[0].Accepted,
@@ -157,8 +171,6 @@ export class AuditSummary extends React.Component {
                         denied: res.data.FileInCount[0].denied,
                         WIP: res.data.FileInCount[0].WIP,
                         Pending: res.data.FileInCount[0].Pending,
-                        count: count
-
                     })
                 }
             })
@@ -206,6 +218,7 @@ export class AuditSummary extends React.Component {
         })
         setTimeout(() => {
             this.getData()
+            this._getCounts() 
         }, 50);
     }
 
@@ -253,16 +266,6 @@ export class AuditSummary extends React.Component {
                     </tr>
                     <tbody >
                         <tr>
-                            {/* <td>Totals</td>
-                        <td className="list-item-style">{this.state.SubTotal}</td>
-                        <td colSpan={2} className="list-item-style">{this.state.InBizstockTotal}</td>
-                        <td className="list-item-style">{this.state.RejTotal}</td>
-                        <td className="list-item-style">0</td>
-                        <td colSpan={2} className="list-item-style">{this.state.VeriTotal}</td>
-                        <td></td>
-                        <td></td> */}
-                            {/* <td className="list-item-style">{this.state.PenTotal}</td>
-                        <td className="list-item-style">{this.state.errTotal}</td> */}
                         </tr>
                         {row}
                     </tbody>
@@ -298,6 +301,7 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
+            this._getCounts() 
         }, 50);
     }
 
@@ -314,6 +318,7 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
+            this._getCounts() 
         }, 50);
     }
 
@@ -384,8 +389,8 @@ export class AuditSummary extends React.Component {
         });
 
         setTimeout(() => {
-            // this.getCountData()
             this.getData()
+            this._getCounts() 
         }, 50);
     }
 
@@ -396,8 +401,8 @@ export class AuditSummary extends React.Component {
         });
 
         setTimeout(() => {
-            // this.getCountData()
             this.getData()
+            this._getCounts() 
         }, 50);
     }
 
@@ -421,6 +426,7 @@ export class AuditSummary extends React.Component {
             providerName: value
         }, () => {
             this.getData()
+            this._getCounts() 
         })
     }
 
@@ -430,6 +436,7 @@ export class AuditSummary extends React.Component {
             showDetails: false
         }, () => {
             this.getData()
+            this._getCounts() 
         })
     }
 
@@ -485,7 +492,6 @@ export class AuditSummary extends React.Component {
         )
     }
     getoptions() {
-        // console.log("sfsdsds", this.state.tradingpartne837)
         let row = []
         this.state.tradingpartne837.forEach(element => {
             if (!element) {

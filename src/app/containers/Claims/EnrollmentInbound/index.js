@@ -216,10 +216,6 @@ export class EnrollmentInbound extends React.Component {
 
                 summary = [
                     { name: 'Total Files', value: counts.total_file },
-                    // { name: 'Total Enrollment', value: counts.Total_enrollment },
-                    // { name: 'Additions', value: counts.addition },
-                    // { name: 'Changes', value: counts.Change },
-                    // { name: 'Termination', value: counts.term },
                     { name: 'Total Errors', value: counts.Error },
                     { name: 'Resubmit', value: counts.Resubmit }
                 ]
@@ -460,7 +456,7 @@ export class EnrollmentInbound extends React.Component {
                             <td>
                                 <a href="#"
                                     onClick={() => {
-                                        // this.showFile(d.name) 
+                                        
                                     }} className={
                                         (d.name == 'Total Enrollment' || d.name == 'Additions' || d.name == 'Total Files') ? 'blue bold-text summary-values' :
                                             (d.name == 'Changes' || d.name == 'Termination') ? 'purple bold-text summary-values' :
@@ -590,7 +586,7 @@ export class EnrollmentInbound extends React.Component {
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
                             onChange={(event) => {
-                                // this.onSelect(event, 'State')
+                                
                             }}
                         >
                             <option value=""></option>
@@ -618,7 +614,7 @@ export class EnrollmentInbound extends React.Component {
                         </div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
-                                // this.onSelect(event, 'selectedTradingPartner')
+                                
                             }}
                         >
                             <option value="select"></option>

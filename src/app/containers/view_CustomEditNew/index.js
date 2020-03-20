@@ -86,7 +86,7 @@ export class View_CustomEditsNew extends React.Component {
         //     condition
         //     Ignore
         //   }
-        console.log('Query ', query)
+        console.log(query)
 
         fetch(Urls.base_url, {
             method: 'POST',

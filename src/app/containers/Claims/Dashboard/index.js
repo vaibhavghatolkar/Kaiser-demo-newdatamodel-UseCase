@@ -99,7 +99,6 @@ export class Claims extends React.Component {
 
         this.showFile = this.showFile.bind(this)
         this.renderSummary = this.renderSummary.bind(this)
-        // this.getData = this.getData.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -162,7 +161,7 @@ export class Claims extends React.Component {
             }
         }`
 
-        console.log('Query ', query)
+        console.log(query)
 
         if (this.state.apiflag) {
             query = `{
@@ -211,10 +210,6 @@ export class Claims extends React.Component {
                     { name: 'Submitted Claims', value: data.ClaimCount ? data.ClaimCount[0].SubCount : '' },
                     { name: 'Accepted Claims', value: data.ClaimAccCount ? data.ClaimAccCount[0].AccCount : '' },
                     { name: 'Rejected Claims', value: data.ClaimRejCount ? data.ClaimRejCount[0].RejCount : '' },
-                    // {name:'Claims Queue', value : 250},
-                    // {name:'Work in Progress', value : 123},
-                    // {name:'Paid Claims', value : data.ClaimPaidCount ? data.ClaimPaidCount[0].PaidCount : '' },
-                    // {name:'Partial Paid Claims', value : data.ClaimDeniedCount ? data.ClaimDeniedCount[0].DeniedCount : ''}
                 ]
 
                 this.setState({
@@ -330,10 +325,6 @@ export class Claims extends React.Component {
     renderSummary() {
         let row = []
         const data = this.state.summaryList;
-        // this.state.flag
-        // this.state.selectedTradingPartner
-        // this.state.startDate
-        // this.state.endDate
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYYMMDD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYYMMDD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -356,7 +347,6 @@ export class Claims extends React.Component {
                 <tr>
                     <td className="bold-text">{d.name}</td>
                     <td><a href="#" onClick={() => { 
-                        // this.showFile(d.name) 
                     }} className={
                         (d.name == 'Total Files' || d.name == 'Submitted Claims') ? 'blue bold-text summary-values' :
                             (d.name == 'Paid Claims' || d.name == 'Accepted Claims') ? 'green bold-text summary-values' :
@@ -366,7 +356,6 @@ export class Claims extends React.Component {
                     }>
                         
                           <Link to={{ pathname: '/Files_837' , state: {data}}}> {d.value} </Link>     
-                        {/* <Link to={'/Files_837' + addon + '/' + selectedTradingPartner + '/' + startDate + '/' + endDate}>{d.value}</Link> */}
                     </a></td>
                 </tr>
             )
@@ -391,7 +380,6 @@ export class Claims extends React.Component {
                     },
                     legend: {
                         display: false
-                        // position: 'bottom'
                     }
                 }}
                 width={500}

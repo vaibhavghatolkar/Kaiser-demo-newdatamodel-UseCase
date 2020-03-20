@@ -20,7 +20,6 @@ export class Outbound_Covered extends React.Component {
     }
 
     componentDidMount() {
-        // this.getData()
     }
 
     getData() {

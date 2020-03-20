@@ -179,7 +179,6 @@ export class UserList extends React.Component {
 
     }
     displayUser(event) {
-        // alert(event.target.dataset.value)
         let query = `{
               User(Userid:${event.target.dataset.value} Email:"") {
                 Id
@@ -241,7 +240,6 @@ export class UserList extends React.Component {
                 )
               }
           `
-        //   console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -355,11 +353,6 @@ export class UserList extends React.Component {
         )
     }
 
-    // modal(){
-    //     return(
-
-    //     )
-    // }
     render() {
         return (
             <div>

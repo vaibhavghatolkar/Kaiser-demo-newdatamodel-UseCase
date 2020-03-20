@@ -56,7 +56,7 @@ export class ViewCustomEdits extends React.Component {
                 
             }`
 
-        console.log('Query ', query)
+        console.log(query)
 
         fetch(Urls.tradingPartner, {
             method: 'POST',
@@ -87,7 +87,6 @@ export class ViewCustomEdits extends React.Component {
 
                 this.setState({
                     customList: array,
-                    // tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
@@ -199,7 +198,6 @@ export class ViewCustomEdits extends React.Component {
             checkedCheckbox: this.state.checked,
             uncheckCheckbox: this.state.unchecked
         })
-        // console.log(this.state.UpdateCheckBox)
     }
     showFile(name) {
         this.setState({

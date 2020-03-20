@@ -7,9 +7,6 @@ import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
-// import EnhancedTable from '../../components/DataTable';
-// import TableRow from '@material-ui/core/TableRow';
-// import TableCell from '@material-ui/core/TableCell';
 import '../Files/files-styles.css';
 import { CommonTable } from '../../components/CommonTable';
 import { StateDropdown } from '../../components/StateDropdown';
@@ -41,8 +38,6 @@ export class response_999 extends React.Component {
             transactionId:"",
              errorcode:"",
              transactionType: this.props.location.state ? (this.props.location.state.flag ? '837 Encounter' : '837') : "837",
-
-            // selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
             count: 0,
             apiflag: 0,
@@ -160,7 +155,7 @@ export class response_999 extends React.Component {
                 FileId
             }
         }`     
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -682,12 +677,6 @@ export class response_999 extends React.Component {
         )
     }
 
-    // renderMaterialTable(){
-    //     return(
-    //         <EnhancedTable/>
-    //     )
-    // }
-
     render() {
         return (
             <div>
@@ -695,8 +684,6 @@ export class response_999 extends React.Component {
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-7 margin-top">
-                        {/* {this.renderMaterialTable()} */}
-                        {/* {this.renderEnhancedTable()} */}
                         {this.renderTransactionsNew()}
                     </div>
                     <div className="col-5">

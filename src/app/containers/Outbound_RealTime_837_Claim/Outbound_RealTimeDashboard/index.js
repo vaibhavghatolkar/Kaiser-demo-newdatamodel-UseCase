@@ -105,7 +105,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -188,14 +188,12 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
                     summary = [
                         { name: 'Total Batch | Total Files', value: (data.Claim837RTDashboardCount[0].TotalBatch ? data.Claim837RTDashboardCount[0].TotalBatch : "") + (data.Claim837RTDashboardCount[0].TotalFiles ? " | " + data.Claim837RTDashboardCount[0].TotalFiles : ''), isText: 1 },
-                        // { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
+                        
                         { name: 'Ready to Send', value: data.Claim837RTDashboardCount[0].ReadytoSend ? data.Claim837RTDashboardCount[0].ReadytoSend : '' },
                         { name: 'Error Claims', value: data.Claim837RTDashboardCount[0].Error ? data.Claim837RTDashboardCount[0].Error : '' },
                         { name: 'Claims Sent', value: data.Claim837RTDashboardCount[0].ClaimSent ? data.Claim837RTDashboardCount[0].ClaimSent : '' },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
                         { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
-                        // { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        // { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                         { name: 'Resubmit Queue', value: 0 },
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per

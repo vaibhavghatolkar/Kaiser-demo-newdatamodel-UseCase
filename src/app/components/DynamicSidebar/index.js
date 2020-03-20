@@ -170,20 +170,6 @@ export class DynamicSidebar extends React.Component {
 
     sortData() {
         let data = this.state.menuList
-        //Adding new menu option to show 835 Details Board
-        // this.state.menuList.push({
-        //     role_id: 40,
-        //     menu_id: 51,
-        //     menu_description: "835 Details Board",
-        //     sequence_id: 1,
-        //     parent_node: 0,
-        //     menuflag: true,
-        //     usermenuflag: false,
-        //     is_editor: false,
-        //     is_editable: false,
-        //     menutype: "O"   
-        // })
-        
         let menuOptions = {}
         data.forEach(item => {
             if (item.parent_node == 0) {

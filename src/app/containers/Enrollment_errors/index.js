@@ -144,7 +144,6 @@ export class EnrollmentErrors extends React.Component {
 
     renderList() {
         let row = []
-        // <td className="list-item-style bold-text">{moment(d.date).format('YYYY/MM/DD')}</td>
         const data = this.state.summaryList;
         data.forEach((d) => {
             row.push(

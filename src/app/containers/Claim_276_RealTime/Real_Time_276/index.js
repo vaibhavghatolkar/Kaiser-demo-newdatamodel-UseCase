@@ -121,7 +121,7 @@ export class RealTime276 extends React.Component {
             }`
         }
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -201,7 +201,7 @@ export class RealTime276 extends React.Component {
             }`
         }
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -273,8 +273,6 @@ export class RealTime276 extends React.Component {
         }
         console.log("asdad", data)
         let summary = [
-            // { name: 'OVERALL VOLUME(DAILY)', value: data.Daily_Volume },
-            // { name: 'OVERALL VOLUME(DAILY)', value: 1 },
             { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
             { name: 'ERROR PERCENTAGE', value: data.Error_Per },
@@ -365,11 +363,9 @@ export class RealTime276 extends React.Component {
                 {
                     label: '',
                     fill: true,
-                    // lineTension: 0.2,
                     cubicInterpolationMode: 'default',
                     backgroundColor: 'rgba(75,192,192,0.4)',
                     borderColor: color,
-                    // borderCapStyle: 'round',
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: 'round',
@@ -382,7 +378,6 @@ export class RealTime276 extends React.Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 3,
                     pointHitRadius: 1,
-                    // data: [23,41,35,98,43,12,15,25,89,45,73,23, 12]
                     data: dataArray
                 }
             ]
@@ -391,15 +386,6 @@ export class RealTime276 extends React.Component {
     }
 
     getPieData(array, labels, colorArray) {
-        // let data = {
-        //     labels: labels,
-        //     datasets: [{
-        //         data: array,
-        //         backgroundColor: colorArray,
-        //         hoverBackgroundColor: colorArray
-        //     }]
-        // }
-
         const data = {
             labels: [
                 'Completed',
@@ -1055,10 +1041,6 @@ export class RealTime276 extends React.Component {
                 <div className="row chart-div">
                     {
                         this.dateviewtabledata()
-                        // this.state.errorArray && this.state.errorArray.length > 0 ?
-                        //     // this.renderSummary() 
-                        //     ""
-                        //     : null
                     }
                 </div>
             </div>
@@ -1299,26 +1281,6 @@ export class RealTime276 extends React.Component {
 
             if (item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {
                 row.push(
-
-
-                    // <Link 
-                    //     to={
-                    //         '/' + url + 
-                    //         '/' + (this.state.State ? this.state.State : 'n') + 
-                    //         '/' + (this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n') + 
-                    //         '/' + startDate + 
-                    //         '/' + endDate + 
-                    //         '/' + (this.state.transactionId ? this.state.transactionId : 'n') + 
-                    //         '/' + (item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail') + 
-                    //         '/' + item.value
-                    //     } className="col-2 summary-container">
-                    //     <div>
-                    //         <div className="summary-header">{item.name}</div>
-                    //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                    //     </div>
-                    // </Link>
-
-
                     item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
                         ?
                         <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
@@ -1343,16 +1305,6 @@ export class RealTime276 extends React.Component {
                                 {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
                             </div>
                         </div>
-                    // <Link
-                    //     to={
-                    //         '/' + url, 
-
-                    //     } className="col-2 summary-container">
-                    //     <div>
-                    //         <div className="summary-header">{item.name}</div>
-                    //         <div className="summary-title">{item.value}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}</div>
-                    //     </div>
-                    // </Link>
                 )
             }
         });

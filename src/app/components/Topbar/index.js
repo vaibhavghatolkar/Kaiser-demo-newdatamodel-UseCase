@@ -47,14 +47,6 @@ export class Topbar extends React.Component {
         })
     }
 
-    // getOptions() {
-    //     let row = []
-    
-    //     this.state.tradingpartner.forEach(element => {
-    //         row.push(<option value="">{element.Trading_Partner_Name}</option>)
-    //     })
-    //     return row
-    // }
       changeDate(date1){
         this.setState({
             endDate: date1
@@ -96,25 +88,11 @@ export class Topbar extends React.Component {
                     this.props.flag == 1
                     ?
                     ""
-                // <div className="form-group col-3">
-                //     <label className="list-header">Submitter</label>
-                //     <select className="form-control list-header" id="TradingPartner" 
-                //         onChange={(event) => {
-                //             this.props.onSelect(event, 'selectedTradingPartner')
-                //         }}>
-                //         <option selected="selected" value="">Trading partner</option>
-                //         {
-                //             this.props.tradingpartner ? this.getOptions() : null
-                //         }
-                //     </select>
-                // </div>
                 :
                 <div className="form-group col-3">
                 <label className="list-header">{this.props.isOutbound==1? 'Sender': 'Submitter'}</label>
                 <select className="form-control list-header" id="TradingPartner" 
-                    // onChange={(event) => {
-                    //     this.props.onSelect(event, 'selectedTradingPartner')
-                    // }}
+                    
                     >
                     <option selected="selected" value="">Trading partner</option>
                     {

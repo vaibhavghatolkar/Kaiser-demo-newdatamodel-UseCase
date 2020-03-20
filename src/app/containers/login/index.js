@@ -25,7 +25,7 @@ export class Login extends React.Component {
             }
           }`
 
-          console.log('query ', query)
+          console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {

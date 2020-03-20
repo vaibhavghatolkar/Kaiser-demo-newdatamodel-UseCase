@@ -52,14 +52,6 @@ export class Outbound_Encounter_Audit extends React.Component {
         this.getCommonData()
     }
 
-    //   FileID
-    //   filename
-    //   Submitted
-    //   Rejected
-    //   Pending
-    //   Verified
-    //   Error
-    //   InBizstock
 
     getData() {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -365,7 +357,6 @@ export class Outbound_Encounter_Audit extends React.Component {
         });
 
         setTimeout(() => {
-            // this.getCountData()
             this.getData()
         }, 50);
     }
@@ -377,7 +368,6 @@ export class Outbound_Encounter_Audit extends React.Component {
         });
 
         setTimeout(() => {
-            // this.getCountData()
             this.getData()
         }, 50);
     }

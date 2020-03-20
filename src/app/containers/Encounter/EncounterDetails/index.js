@@ -357,7 +357,7 @@ export class EncounterDetails extends React.Component {
           }
           `
 
-        console.log('query ', query)
+        console.log(query)
 
         fetch(url, {
             method: 'POST',

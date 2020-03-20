@@ -106,7 +106,7 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
             }
         }`
 
-        console.log('query ', query)
+        console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -189,17 +189,11 @@ export class Outbound_Encounter_RealTimeDashboard extends React.Component {
                 if (data.EncounterDashboardCount && data.EncounterDashboardCount.length > 0) {
                     summary = [
                         { name: 'Total Batch | Total Files', value: (data.EncounterDashboardCount[0].TotalBatch ? data.EncounterDashboardCount[0].TotalBatch : "") + (data.EncounterDashboardCount[0].TotalFiles ? " | " + data.EncounterDashboardCount[0].TotalFiles : ''), isText: 1 },
-                        // { name: 'Total Batch | Total Files', value: data.EncounterDashboardCount[0].TotalFiles ? data.EncounterDashboardCount[0].TotalFiles : '' },
                         { name: 'Ready to Send', value: data.EncounterDashboardCount[0].ReadytoSend ? data.EncounterDashboardCount[0].ReadytoSend : '' },
                         { name: 'Error Encounter', value: data.EncounterDashboardCount[0].Error ? data.EncounterDashboardCount[0].Error : '' },
                         { name: 'Encounter Sent', value: data.EncounterDashboardCount[0].ClaimSent ? data.EncounterDashboardCount[0].ClaimSent : '' },
-
-                        // { name: 'Total Encounter', value: data.EncounterDashboardCount[0].TotalClaims ? data.EncounterDashboardCount[0].TotalClaims : '' },
-                        // { name: 'Rejected Files', value: 0 },
                         { name: 'Accepted Encounter', value: data.EncounterDashboardCount[0].Accepted ? data.EncounterDashboardCount[0].Accepted : '' },
                         { name: 'Rejected Encounter', value: data.EncounterDashboardCount[0].Rejected ? data.EncounterDashboardCount[0].Rejected : '' },
-                        // { name: 'Clean Percent', value: data.EncounterDashboardCount[0].Accepted_Per ? Math.round(data.EncounterDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        // { name: 'Error Percent', value: data.EncounterDashboardCount[0].Rejected_Per ? Math.round(data.EncounterDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                         { name: 'Resubmit Queue', value: data.EncounterDashboardCount[0].Resubmit ? Math.round(data.EncounterDashboardCount[0].Resubmit * 100) / 100 : '' },
                     ]
                     Accepted_per1 = data.EncounterDashboardCount[0].Accepted_Per

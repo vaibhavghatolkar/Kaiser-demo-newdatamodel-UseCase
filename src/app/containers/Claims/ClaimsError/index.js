@@ -44,8 +44,6 @@ export class ClaimsError extends React.Component{
     }
 
     getData(){
-        
-        // let query = '{ SP_GetRejectedClaims(Date:"") { Reason BillingProviderLastName FileName FileDate Member_Account_Number SubscriberLastName SubscriberFirstName } ClaimRejCount (submitter:"'+this.state.selectedTradingPartner+'",fromDt:"",ToDt:""){ RejCount } Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837") { Trading_Partner_Name }}'
         let query = `{
             SP_GetRejectedClaims(Date: "", RecType: "Inbound") {
               Reason
@@ -164,8 +162,7 @@ export class ClaimsError extends React.Component{
                     <div className="small-text">Total Rejection</div>
                     <div className="red bold-text summary-values center-align"><a href="#" 
                         onClick={() => {
-                            // this.props.handleFlag(Strings.claimDetails, 1)
-                            // '/'+ Strings.claimDetails + '/:flag/:selectedTradingPartner/:startDate/:endDate'
+                            
                         }}>
                               <Link to={{pathname: '/Files_837' , state: {data}}}> {this.state.rejectedCount} </Link>            
                         {/* <Link to={'/' + Strings.claimDetails + '/reject/n/n/n'}>{this.state.rejectedCount}</Link> */}
