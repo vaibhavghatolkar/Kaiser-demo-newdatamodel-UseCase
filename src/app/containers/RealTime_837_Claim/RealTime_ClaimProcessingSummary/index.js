@@ -59,7 +59,7 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "File Date", field: "FileCrDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "999", field: "F999" },
-                { headerName: "Claim Id", field: "MolinaClaimID" },
+                { headerName: "Molina Claim Id", field: "MolinaClaimID" },
                 { headerName: "Claim Date", field: "ClaimDate" },
                 { headerName: "Claim Status", field: "ClaimStatus" },
                 { headerName: "	Subscriber Id                ", field: "Subscriber_ID" },
@@ -293,7 +293,7 @@ export class ClaimProcessingSummary extends React.Component {
 
                 this.setState({
                     Claim837RTProcessingSummary: data,
-                    rowData: data,
+                    rowData: this.state.gridType == 1 ? data : [],
                     recCount: count,
                 })
             })
@@ -317,6 +317,7 @@ export class ClaimProcessingSummary extends React.Component {
         })
 
         setTimeout(() => {
+            this.getCountData()
             this.getData()
         }, 50);
     }
@@ -414,6 +415,7 @@ export class ClaimProcessingSummary extends React.Component {
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
+            this.getCountData()
             this.getData()
         }, 50);
     }
@@ -430,6 +432,7 @@ export class ClaimProcessingSummary extends React.Component {
         }
 
         setTimeout(() => {
+            this.getCountData()
             this.getData()
         }, 50);
     }
@@ -530,6 +533,7 @@ export class ClaimProcessingSummary extends React.Component {
                                 this.setState({
                                     page: 1,
                                     rowData : [],
+                                    Claim837RTProcessingSummary: [],
                                     gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     this.getData()

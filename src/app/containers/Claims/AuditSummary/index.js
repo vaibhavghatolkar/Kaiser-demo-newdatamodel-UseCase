@@ -192,7 +192,7 @@ export class AuditSummary extends React.Component {
 
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
-                        rowData: res.data.ClaimsDailyAudit,
+                        rowData: this.state.gridType == 1 ? res.data.ClaimsDailyAudit : [],
                         count: count
                     })
                 }
@@ -592,6 +592,7 @@ export class AuditSummary extends React.Component {
                                 this.setState({
                                     page: 1,
                                     rowData : [],
+                                    claimsAudit: [],
                                     gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     this._getCounts()

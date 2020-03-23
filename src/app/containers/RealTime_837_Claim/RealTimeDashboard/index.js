@@ -679,7 +679,7 @@ export class RealTimeDashboard extends React.Component {
 
                     this.setState({
                         claimsList: res.data.Claim837RTDashboardFileDetails,
-                        rowData: res.data.Claim837RTDashboardFileDetails
+                        rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : []
                     })
                 }
             })
