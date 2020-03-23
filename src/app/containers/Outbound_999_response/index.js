@@ -80,6 +80,8 @@ export class Outbound_response_999 extends React.Component {
               Response
               TrasactionType
               RecCount
+              ResponseFileName
+              ResponseFileDate
             }
           }`
         console.log(query)
@@ -244,7 +246,7 @@ export class Outbound_response_999 extends React.Component {
             startDate: date,
             showDetails: false,
             initialPage: 0,
-            page:1
+            page: 1
         });
 
         setTimeout(() => {
@@ -257,7 +259,7 @@ export class Outbound_response_999 extends React.Component {
             endDate: date,
             showDetails: false,
             initialPage: 0,
-            page:1
+            page: 1
         });
 
         setTimeout(() => {
@@ -270,7 +272,7 @@ export class Outbound_response_999 extends React.Component {
             State: event.target.options[event.target.selectedIndex].text,
             showDetails: false,
             initialPage: 0,
-            page:1
+            page: 1
         }, () => {
             this.getTransactions()
         })
@@ -287,21 +289,6 @@ export class Outbound_response_999 extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-{/* 
-                    <div className="form-group col">
-                        <div className="list-dashboard">Sender </div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                                setTimeout(() => {
-                                    this.getTransactions()
-                                }, 50);
-                            }}
-                        >
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div> */}
 
                     <div className="form-group col-2">
                         <div className="list-dashboard">
@@ -317,17 +304,6 @@ export class Outbound_response_999 extends React.Component {
                             <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
                         </select>
                     </div>
-
-                    {/* <div className="form-group col">
-                        <div className="list-dashboard">
-                            Provider Name
-
-                        </div>
-                        <select className="form-control list-dashboard"><option value=""></option>
-                            <option selected="selected" value="1">Provider Name 1</option>
-                            <option value="2">Provider Name 2</option>
-                        </select>
-                    </div> */}
 
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -353,12 +329,14 @@ export class Outbound_response_999 extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style" style={{width: '35%'}}><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.FileName", this.state.fileRotation, 'fileRotation')}>837 File Name</a></td>
-                <td className="table-head-text list-item-style"> 999 File Name</td>
-                {/* <td className="table-head-text list-item-style">Sender</td> */}
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.Date", this.state.dateRotation, 'dateRotation')}>Date</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.status", this.state.statusRotation, 'statusRotation')}>Status</a></td>
-                {/* <td className="table-head-text list-item-style">Trasaction Type</td> */}
+                <td className="table-head-text list-item-style">Response File Name</td>
+                <td className="table-head-text list-item-style">Date</td>
+                <td className="table-head-text list-item-style">
+                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.FileName", this.state.fileRotation, 'fileRotation')}>837 File Name</a>
+                </td>
+                <td className="table-head-text list-item-style">
+                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.status", this.state.statusRotation, 'statusRotation')}>Status</a>
+                </td>
             </tr>
         )
     }
@@ -368,19 +346,18 @@ export class Outbound_response_999 extends React.Component {
         let row = []
 
         data.forEach(item => {
-            let date = item.Date ? moment((item.Date)).format("MM/DD/YYYY hh:mm a") : ''
-           
+            let date = item.ResponseFileDate ? moment((item.ResponseFileDate)).format("MM/DD/YYYY hh:mm a") : ''
+
             row.push(
                 <tr>
-                    <td className="list-item-style"><a className="clickable" 
-                    onClick={() => {
-                        this.render999Details(item.FileId)
-                    }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{item.FileName}</a></td>
-                      <td className="list-item-style"></td>
+                    <td className="list-item-style">
+                        <a className="clickable"
+                            onClick={() => {
+                                this.render999Details(item.FileId)
+                            }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{item.ResponseFileName}</a></td>
                     <td className="list-item-style">{date}</td>
-                    {/* <td className="list-item-style">{item.Submitter}</td> */}
+                    <td className="list-item-style" style={{wordBreak: 'break-all'}}>{item.FileName}</td>
                     <td className="list-item-style">{item.status}</td>
-                    {/* <td className="list-item-style">{item.TrasactionType}</td> */}
                 </tr>
             )
 
@@ -425,8 +402,6 @@ export class Outbound_response_999 extends React.Component {
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-6 margin-top">
-                        {/* {this.renderMaterialTable()} */}
-                        {/* {this.renderEnhancedTable()} */}
                         {this.renderTransactionsNew()}
                     </div>
                     <div className="col-6 margin-top">

@@ -55,14 +55,41 @@ export class AuditSummary extends React.Component {
     }
 
     componentDidMount() {
-
         this.getData()
         this._getCounts()
         this.getCommonData()
     }
 
-    _getCounts = async() => {
+    _get999Count = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
+        let query = `{
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+              Total999
+            }
+         }`
+        console.log(query)
+        fetch(Urls.claims_837, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    Total999: res.data.Total999Response[0].Total999,
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    _getCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
@@ -106,7 +133,7 @@ export class AuditSummary extends React.Component {
                             count = count + 1
                         }
                     }
-                    
+
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
                         count: count
@@ -116,9 +143,13 @@ export class AuditSummary extends React.Component {
             .catch(err => {
                 console.log(err)
             });
+
+        setTimeout(() => {
+            this._get999Count()
+        }, 1000);
     }
 
-    getData = async() => {
+    getData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
@@ -164,7 +195,6 @@ export class AuditSummary extends React.Component {
                         Accepted: res.data.FileInCount[0].Accepted,
                         Rejected: res.data.FileInCount[0].Rejected,
                         InProgress: res.data.FileInCount[0].InProgress,
-                        Total999: res.data.FileInCount[0].Total999,
                         Total277CA: res.data.FileInCount[0].Total277CA,
                         TotalSentToQNXT: res.data.FileInCount[0].TotalSentToQNXT,
                         Paid: res.data.FileInCount[0].Paid,
@@ -218,7 +248,8 @@ export class AuditSummary extends React.Component {
         })
         setTimeout(() => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         }, 50);
     }
 
@@ -301,7 +332,8 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         }, 50);
     }
 
@@ -318,7 +350,8 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         }, 50);
     }
 
@@ -390,7 +423,8 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         }, 50);
     }
 
@@ -402,7 +436,8 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         }, 50);
     }
 
@@ -426,7 +461,8 @@ export class AuditSummary extends React.Component {
             providerName: value
         }, () => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         })
     }
 
@@ -436,7 +472,8 @@ export class AuditSummary extends React.Component {
             showDetails: false
         }, () => {
             this.getData()
-            this._getCounts() 
+            this._getCounts()
+
         })
     }
 

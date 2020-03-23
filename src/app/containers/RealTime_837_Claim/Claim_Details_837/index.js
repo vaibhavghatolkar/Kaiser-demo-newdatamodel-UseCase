@@ -32,6 +32,10 @@ export class ClaimDetails837 extends React.Component {
             intakeClaims: [],
             page: 1,
             initialPage: 0,
+            lineCount: 0,
+            HL20 : 0,
+            HL22 : 0,
+            HL23 : 0,
             lineData: [],
             file: [],
             fileDetails: [],
@@ -416,7 +420,7 @@ export class ClaimDetails837 extends React.Component {
 
     handlePageClickLine = (data) => {
         let page = data.selected + 1
-
+        this._getHLDetails(this.state.fileid)
         this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
 
     }
@@ -475,6 +479,7 @@ export class ClaimDetails837 extends React.Component {
               FileID
               FieldToUpdate
               MolinaClaimID
+              LXCount
             }
             Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page}) {
               ClaimID
@@ -533,12 +538,6 @@ export class ClaimDetails837 extends React.Component {
                     }
                     let data = res.data.Claim837RTDetails[0]
 
-                    let fileDetails = [
-                        { key: 'File Name', value: fileData.FileName },
-                        { key: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
-                        { key: 'Receiver', value: fileData.Receiver }
-                    ]
-
                     let claimDetails =
                         [
                             { key: 'File Claim Id', value: data.ClaimID },
@@ -558,13 +557,13 @@ export class ClaimDetails837 extends React.Component {
                         showDetails: true,
                         claimDetails: claimDetails,
                         claimLineDetails: res.data.Claim837RTLineDetails,
-                        fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
                         Icdcodepresent: data.FieldToUpdate,
                         count: count,
                         seqID: ClaimRefId,
-                        fileDataDetails: fileData
+                        fileDataDetails: fileData,
+                        lineCount : data ? data.LXCount : 0
                     })
                 }
             })
@@ -852,7 +851,10 @@ export class ClaimDetails837 extends React.Component {
         return (
             <div className="row">
                 <div className="col-12">
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Claim Line Data</a></div>
+                    <div className="top-padding">
+                        <a href={'#' + 'event'} data-toggle="collapse">Claim Line Data</a>
+                        <div className="right-aligned">Line count : {this.state.lineCount}</div>
+                    </div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
@@ -943,7 +945,7 @@ export class ClaimDetails837 extends React.Component {
     renderClaimsHeader(fileId) {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Claim Id</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Molina Claim Id</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>Claim Status</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Subscriber Id</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Claim_Amount", this.state.claimAmountRotation, 'claimAmountRotation', fileId) }}>Claim Amount</a></td>
@@ -1005,6 +1007,52 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
+    _getHLDetails = async(fileId) => {
+        let query = `{
+            Claim837RTHLCount(FileID: "${fileId}") {
+              FileID
+              HL22
+              HL20
+              HL23
+            }
+        }`
+
+        console.log(query)
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data && res.data.Claim837RTHLCount && res.data.Claim837RTHLCount.length > 0) {
+                    let fileData = this.state.fileDataDetails
+                    let fileDetails = [
+                        { key: 'File Name', value: fileData.FileName },
+                        { key: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
+                        { key: 'Receiver', value: fileData.Receiver },
+                        { key: 'HL20 Count', value: this.state.HL20 },
+                        { key: 'HL22 Count', value: this.state.HL22 },
+                        { key: 'HL23 Count', value: this.state.HL23 },
+                        { key: '', value: ''},
+                        { key: '', value: ''},
+                    ]
+                    this.setState({
+                        HL20 :res.data.Claim837RTHLCount[0].HL20,
+                        HL22:res.data.Claim837RTHLCount[0].HL22, 
+                        HL23 :res.data.Claim837RTHLCount[0].HL23, 
+                        fileDetails: fileDetails
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     renderList() {
         let row = []
         let col = []
@@ -1047,14 +1095,15 @@ export class ClaimDetails837 extends React.Component {
                                     showDetails: false,
                                     molina_claimId: d.MolinaClaimID
                                 }, () => {
+                                    this._getHLDetails(d.FileID)
                                     this.getDetails(d.ClaimID, d.FileID, d.ClaimRefId, data[keys].value, 1)
                                     this.getClaimStages(d.ClaimID, d.FileID)
                                 })
-                            }} style={{ color: "var(--light-blue)" }}>{d.MolinaClaimID}</a></td>
+                            }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.MolinaClaimID}</a></td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
                             <td className="list-item-style">{d.Subscriber_ID}</td>
                             <td className="style-left"> ${d.Claim_Amount}</td>
-                            <td className="list-item-style">{d.ClaimLevelErrors}</td>
+                            <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ClaimLevelErrors}</td>
                         </tr>
                     )
                 })
@@ -1062,7 +1111,7 @@ export class ClaimDetails837 extends React.Component {
 
             row.push(
                 <div id={keys} className="collapse">
-                    <table id="" className="table table-bordered claim-details">
+                    <table id="" className="table table-bordered claim-details" style={{ tableLayout: 'fixed' }}>
                         {this.renderClaimsHeader(data[keys].value.FileID)}
                         {col}
                     </table>

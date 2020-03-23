@@ -65,6 +65,35 @@ export class ClaimProcessingSummary extends React.Component {
         this.getData()
     }
 
+    _get999Count = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
+        let query = `{
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+              Total999
+            }
+         }`
+        console.log(query)
+        fetch(Urls.claims_837, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    Total999: res.data.Total999Response[0].Total999,
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     getCommonData = async() => {
         let query = `{
             Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
@@ -95,6 +124,9 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     getCountData = async() => {
+        setTimeout(() => {
+            this._get999Count()
+        }, 1000);
 
         let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
             totalFile
@@ -128,14 +160,12 @@ export class ClaimProcessingSummary extends React.Component {
                     let Accepted = data[0].Accepted
                     let Rejected = data[0].Rejected
                     let TotalSentToQNXT = data[0].TotalSentToQNXT
-                    let Total999 = data[0].Total999
                     let Total277CA = data[0].Total277CA
 
                     this.setState({
                         Accepted: Accepted,
                         Rejected: Rejected,
                         TotalSentToQNXT: TotalSentToQNXT,
-                        Total999: Total999,
                         Total277CA: Total277CA,
                         Paid: data[0].Paid,
                         Pending: data[0].Pending,
@@ -282,7 +312,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
             { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
             { value: '999' },
-            { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
+            { value: 'Molina Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Claim Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
             { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
