@@ -26,6 +26,8 @@ export class Outbound_response_999 extends React.Component {
             submitterRotation: 180,
             errorRotation: 180,
             rotation: 180,
+            fileNameRotation : 180,
+            dateRotation : 180,
             files_list: [],
             tradingpartner: [],
             errorList: [],
@@ -329,8 +331,10 @@ export class Outbound_response_999 extends React.Component {
     renderTableHeader() {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">Response File Name</td>
-                <td className="table-head-text list-item-style">Date</td>
+                <td className="table-head-text list-item-style">
+                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.ResponseFileName", this.state.fileNameRotation, 'fileNameRotation')}>Response File Name</a></td>
+                <td className="table-head-text list-item-style">
+                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.ResponseFileDate", this.state.dateRotation, 'dateRotation')}>Date</a></td>
                 <td className="table-head-text list-item-style">
                     <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.FileName", this.state.fileRotation, 'fileRotation')}>837 File Name</a>
                 </td>
@@ -356,7 +360,7 @@ export class Outbound_response_999 extends React.Component {
                                 this.render999Details(item.FileId)
                             }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{item.ResponseFileName}</a></td>
                     <td className="list-item-style">{date}</td>
-                    <td className="list-item-style" style={{wordBreak: 'break-all'}}>{item.FileName}</td>
+                    <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{item.FileName}</td>
                     <td className="list-item-style">{item.status}</td>
                 </tr>
             )

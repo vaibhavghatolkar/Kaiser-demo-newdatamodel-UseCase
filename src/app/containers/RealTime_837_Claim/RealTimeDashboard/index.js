@@ -937,6 +937,8 @@ export class RealTimeDashboard extends React.Component {
                         <select className="form-control list-dashboard" id="Grid"
                             onChange={(event) => {
                                 this.setState({
+                                    page: 1,
+                                    rowData : [],
                                     gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     this.getListData()
