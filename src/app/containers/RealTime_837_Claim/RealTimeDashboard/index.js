@@ -417,16 +417,23 @@ export class RealTimeDashboard extends React.Component {
     renderCharts() {
         return (
             <div className="chart-div">
+                {
+                    this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0
+                        ?
+                        <div className="row chart-container-full chart">
+                            <div className="col-9 nopadding">
+                                <div className="chart-header">Error Chart</div>
+                                {this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0 ? this.renderValues() : null}
+                            </div>
+                            <div className="col-3 chart-align">
+                                {this.renderChart()}
+                            </div>
+                        </div> :
+                        <div className="chart-container-full chart" style={{ textAlign: 'center' }}>
+                            No Data Present
+                        </div>
+                }
                 <div className="row chart-container-full chart">
-                    <div className="col-9">
-                        <div className="chart-header">Error Chart</div>
-                        {this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0 ? this.renderValues() : null}
-                    </div>
-                    <div className="col-3 chart-align">
-                        {this.renderChart()}
-                    </div>
-                </div>
-                <div className="chart-container-full chart">
                     <div className="chart-header">Total Claims</div>
                     <Line
                         data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
@@ -868,25 +875,19 @@ export class RealTimeDashboard extends React.Component {
 
     renderChart() {
         return (
-            this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0
-                ?
-                <Pie data={this.state.second_data}
-                    options={{
-                        elements: {
-                            arc: {
-                                borderWidth: 0
-                            }
-                        },
-                        legend: {
-                            display: false,
+            <Pie data={this.state.second_data}
+                options={{
+                    elements: {
+                        arc: {
+                            borderWidth: 0
                         }
-                    }}
-                    width={20}
-                    height={17} />
-                :
-                <div style={{ textAlign: 'center' }}>
-                    No Data Present
-                </div>
+                    },
+                    legend: {
+                        display: false,
+                    }
+                }}
+                width={20}
+                height={17} />
         )
     }
 
