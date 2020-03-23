@@ -76,6 +76,7 @@ export class RealTimeDashboard extends React.Component {
             Accepted_per: 0,
             rejected_per: 0,
             rejectedFileCount: 0,
+            acceptedFileCount: 0,
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
@@ -86,6 +87,7 @@ export class RealTimeDashboard extends React.Component {
             typeRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
+            _statusRotation: 180,
             orderby: "",
             submitterRotation: 180,
         }
@@ -115,6 +117,7 @@ export class RealTimeDashboard extends React.Component {
         let query = `{
             Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
               TotalRejectedFiles
+              TotalAcceptedFiles
             }
         }`
 
@@ -132,7 +135,8 @@ export class RealTimeDashboard extends React.Component {
                 if (res.data) {
                     let data = res.data
                     this.setState({
-                        rejectedFileCount: data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : ''
+                        rejectedFileCount: data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : '',
+                        acceptedFileCount: data.Claim837RTRejectedFile[0].TotalAcceptedFiles ? data.Claim837RTRejectedFile[0].TotalAcceptedFiles : '',
                     })
                 }
             })
@@ -208,7 +212,7 @@ export class RealTimeDashboard extends React.Component {
 
                 if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
                     summary = [
-                        { name: 'Total Accepted Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
+                        { name: 'Total Accepted Files', value: this.state.acceptedFileCount },
                         { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
                         { name: 'Rejected Files', value: this.state.rejectedFileCount },
                         { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
@@ -357,6 +361,7 @@ export class RealTimeDashboard extends React.Component {
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Status</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -517,6 +522,7 @@ export class RealTimeDashboard extends React.Component {
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Sender}</td>
+                    <td className="list-item-style">{d.Status}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
                 </tr>
             )
@@ -524,7 +530,7 @@ export class RealTimeDashboard extends React.Component {
 
         return (
             <div>
-                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
+                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed', marginTop : '30px' }}>
                     {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
@@ -562,7 +568,7 @@ export class RealTimeDashboard extends React.Component {
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound") {
+            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound") {
                 RecCount
                 FileID
                 FileName
@@ -572,6 +578,7 @@ export class RealTimeDashboard extends React.Component {
                 FileStatus
                 Rejected
                 Type
+                Status
             }
         }`
         console.log(query)
@@ -585,19 +592,19 @@ export class RealTimeDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.Claim837RTFileDetails) {
+                if (res && res.data && res.data.Claim837RTDashboardFileDetails) {
 
-                    if (res.data.Claim837RTFileDetails.length > 0) {
+                    if (res.data.Claim837RTDashboardFileDetails.length > 0) {
 
-                        count = Math.floor(res.data.Claim837RTFileDetails[0].RecCount / 10)
-                        if (res.data.Claim837RTFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.Claim837RTDashboardFileDetails[0].RecCount / 10)
+                        if (res.data.Claim837RTDashboardFileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
                         this.setState.recount = count;
                     }
 
                     this.setState({
-                        claimsList: res.data.Claim837RTFileDetails,
+                        claimsList: res.data.Claim837RTDashboardFileDetails,
                     })
                 }
             })
@@ -919,9 +926,7 @@ export class RealTimeDashboard extends React.Component {
                 {this.tab()}
                 {this._renderSummaryDetails()}
                 {this.renderCharts()}
-                <div className="col-11" style={{ marginTop: '30px' }}>
-                    {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
-                </div>
+                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
             </div>
         );
     }

@@ -258,15 +258,20 @@ export class AuditSummary extends React.Component {
         const data = this.state.claimsAudit;
 
         data.forEach((d) => {
+            let count = 0
+            try {
+                count = Number(d.Submitted) ? Number(d.Submitted) : 0  - Number(d.InHiPaaS) ? Number(d.InHiPaaS) : 0
+            } catch (error) {}
+
             row.push(
                 <tr>
                     <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
                     <td className="list-item-style">{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Submitted}</td>
-                    <td className="list-item-style">{d.Submitted}</td>
+                    <td className="list-item-style">{d.Submitted ? d.Submitted : 0}</td>
+                    <td className="list-item-style">{d.InHiPaaS ? d.InHiPaaS : 0}</td>
                     <td className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
-                    <td className="list-item-style">0</td>
+                    <td className="list-item-style">{count}</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {
