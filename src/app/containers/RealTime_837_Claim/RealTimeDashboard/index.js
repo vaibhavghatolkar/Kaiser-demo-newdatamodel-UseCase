@@ -132,7 +132,7 @@ export class RealTimeDashboard extends React.Component {
                 if (res.data) {
                     let data = res.data
                     this.setState({
-                        rejectedFileCount : data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : ''
+                        rejectedFileCount: data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : ''
                     })
                 }
             })
@@ -208,13 +208,13 @@ export class RealTimeDashboard extends React.Component {
 
                 if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
                     summary = [
-                    { name: 'Total Accepted Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
-                    { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                    { name: 'Rejected Files', value: this.state.rejectedFileCount },
-                    { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
-                    { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
-                    { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                    { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
+                        { name: 'Total Accepted Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
+                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
+                        { name: 'Rejected Files', value: this.state.rejectedFileCount },
+                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
+                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
+                        { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
+                        { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
                     ]
                     Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
                     rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
@@ -415,36 +415,23 @@ export class RealTimeDashboard extends React.Component {
     }
 
     renderCharts() {
-        const data = {
-            labels: [
-                'Accepted',
-                'Rejected',
-            ],
-            datasets: [{
-                data: [this.state.Accepted_per, this.state.rejected_per],
-                backgroundColor: [
-                    '#139DC9',
-                    '#daea00',
-                ],
-                hoverBackgroundColor: [
-                    '#139DC9',
-                    '#daea00',
-                ]
-            }],
-            flag: ''
-        };
-        
         return (
-            <div className="row chart-div">
-                <div className="chart-container chart">
-                    {this.renderChart()}
-                    {this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0 ? this.renderValues() : null}
+            <div className="chart-div">
+                <div className="row chart-container-full chart">
+                    <div className="col-9">
+                        <div className="chart-header">Error Chart</div>
+                        {this.state.second_data && this.state.second_data.labels && this.state.second_data.labels.length > 0 ? this.renderValues() : null}
+                    </div>
+                    <div className="col-3 chart-align">
+                        {this.renderChart()}
+                    </div>
                 </div>
-                <div className="chart-container chart">
+                <div className="chart-container-full chart">
+                    <div className="chart-header">Total Claims</div>
                     <Line
                         data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
-                        width={100}
-                        height={80}
+                        width={20}
+                        height={4}
                         options={{
                             legend: {
                                 position: 'bottom',
@@ -764,13 +751,13 @@ export class RealTimeDashboard extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
@@ -779,7 +766,7 @@ export class RealTimeDashboard extends React.Component {
                         />
                     </div>
 
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -789,7 +776,7 @@ export class RealTimeDashboard extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Time Range</div>
                         <select
                             className="form-control list-dashboard" id="state"
@@ -842,19 +829,29 @@ export class RealTimeDashboard extends React.Component {
                             <option selected="selected" value="2">Last year</option>
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(this.state.startDate)}
                             onChange={this.handleStartChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(this.state.endDate)}
                             onChange={this.handleEndChange}
                         />
+                    </div>
+                    <div className="form-group col">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="Grid"
+                            onChange={(event) => {
+
+                            }}>
+                            <option value="select">Default</option>
+                            <option value="select">Classic</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -884,8 +881,8 @@ export class RealTimeDashboard extends React.Component {
                             display: false,
                         }
                     }}
-                    width={90}
-                    height={55} />
+                    width={20}
+                    height={17} />
                 :
                 <div style={{ textAlign: 'center' }}>
                     No Data Present
@@ -900,14 +897,14 @@ export class RealTimeDashboard extends React.Component {
         let count = 0
         data.forEach(item => {
             row.push(
-                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '24px', color: 'slategrey', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
+                <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item}</div>
                 </div>
             )
             count++
         })
         return (
-            <div style={{ marginTop: '20px' }} className="row">
+            <div>
                 {row}
             </div>
         )
@@ -920,8 +917,8 @@ export class RealTimeDashboard extends React.Component {
                 {this.renderTopbar()}
                 {this.tab()}
                 {this._renderSummaryDetails()}
-                <div className="col-10">
-                    {this.renderCharts()}
+                {this.renderCharts()}
+                <div className="col-11" style={{ marginTop: '30px' }}>
                     {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
                 </div>
             </div>
