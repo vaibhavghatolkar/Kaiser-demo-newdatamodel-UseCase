@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    registry = "devcoolinc/testrepo"
+    registry = "hipaasinc/frontendrepo"
     registryCredential = "dockercred"
     dockerImage = ""
   }

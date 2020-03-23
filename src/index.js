@@ -114,7 +114,8 @@ class PrivateRoute extends React.Component {
         this.state = {
 
             loggedIn,
-            timeout: 1800000,
+            // timeout: 1200000,
+             timeOut: 1000*600,
             isTimedOut: false
         };
 
@@ -168,9 +169,9 @@ class PrivateRoute extends React.Component {
                     element={document}
                     onActive={this.onActive}
                     onIdle={this.onIdle}
-                    // onAction={this.onAction}
+                    onAction={this.onAction}
                     debounce={250}
-                    timeout={this.state.timeout} />
+                    timeout={this.state.timeOut} />
 
                 {this.state.loggedIn === false ?
                     <div> <Route exact path="/" render={(props) => <Login handleFlag={this.handleFlag} {...props} />} />
