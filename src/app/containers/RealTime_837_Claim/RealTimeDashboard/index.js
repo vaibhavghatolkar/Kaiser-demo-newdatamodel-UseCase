@@ -17,7 +17,9 @@ import { AutoComplete } from '../../../components/AutoComplete';
 import { getProviders } from '../../../../helpers/getDetails';
 import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
-
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 let val = ''
 const second_data = {
@@ -90,6 +92,51 @@ export class RealTimeDashboard extends React.Component {
             _statusRotation: 180,
             orderby: "",
             submitterRotation: 180,
+            gridType : 0,
+
+            columnDefs: [
+                { headerName: "File Name", field: "FileName" },
+                { headerName: "Type", field: "Type" },
+                { headerName: "File Date", field: "FileDate" },
+                { headerName: "File Status", field: "FileStatus" },
+                { headerName: "Submitter", field: "Sender" },
+                { headerName: "Status", field: "Status" },
+                { headerName: "Total Claims", field: "Claimcount" },
+                { headerName: "Rejected Claims", field: "Rejected" },
+            ],
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -558,6 +605,33 @@ export class RealTimeDashboard extends React.Component {
         );
     }
 
+    _renderList() {
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={this.state.columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={true}
+                        pagination={true}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
     getListData = () => {
         let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -568,7 +642,7 @@ export class RealTimeDashboard extends React.Component {
         }
 
         let query = `{            
-            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound") {
+            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}) {
                 RecCount
                 FileID
                 FileName
@@ -605,6 +679,7 @@ export class RealTimeDashboard extends React.Component {
 
                     this.setState({
                         claimsList: res.data.Claim837RTDashboardFileDetails,
+                        rowData: res.data.Claim837RTDashboardFileDetails
                     })
                 }
             })
@@ -861,7 +936,11 @@ export class RealTimeDashboard extends React.Component {
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="Grid"
                             onChange={(event) => {
-
+                                this.setState({
+                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    this.getListData()
+                                })
                             }}>
                             <option value="select">Default</option>
                             <option value="select">Classic</option>
@@ -926,7 +1005,8 @@ export class RealTimeDashboard extends React.Component {
                 {this.tab()}
                 {this._renderSummaryDetails()}
                 {this.renderCharts()}
-                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
+                {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
+                {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
             </div>
         );
     }

@@ -221,3 +221,9 @@
 .right-aligned{
     float: right;
 }
+.ag-theme-balham .ag-header{
+    background-color: var(--main-bg-color) !important;
+}
+.ag-header-cell-text {
+    color: var(--white-color);
+}

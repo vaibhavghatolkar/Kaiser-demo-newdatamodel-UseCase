@@ -11,6 +11,9 @@ import { AutoComplete } from '../../../components/AutoComplete';
 import { getProviders } from '../../../../helpers/getDetails';
 import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 let val = ''
 export class ClaimProcessingSummary extends React.Component {
@@ -21,6 +24,7 @@ export class ClaimProcessingSummary extends React.Component {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             providers: [],
+            gridType: 0,
             recCount: 0,
             pageCount: 1,
             Months: 0,
@@ -50,6 +54,54 @@ export class ClaimProcessingSummary extends React.Component {
             subscriber_IDFlag: 180,
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
+            columnDefs: [
+                { headerName: "File Name", field: "FileName" },
+                { headerName: "File Date", field: "FileCrDate" },
+                { headerName: "File Status", field: "FileStatus" },
+                { headerName: "999", field: "F999" },
+                { headerName: "Claim Id", field: "MolinaClaimID" },
+                { headerName: "Claim Date", field: "ClaimDate" },
+                { headerName: "Claim Status", field: "ClaimStatus" },
+                { headerName: "	Subscriber Id                ", field: "Subscriber_ID" },
+                { headerName: "HiPaaS Status                ", field: "Transaction_Status" },
+                { headerName: "Adjudication Status                ", field: "adjudication_status" },
+                { headerName: "277CA                ", field: "F277" },
+                { headerName: "835", field: "F277" },
+            ],
+
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
         }
 
         this.getData = this.getData.bind(this)
@@ -94,7 +146,7 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
-    getCommonData = async() => {
+    getCommonData = async () => {
         let query = `{
             Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
                 Trading_Partner_Name 
@@ -123,7 +175,7 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
-    getCountData = async() => {
+    getCountData = async () => {
         setTimeout(() => {
             this._get999Count()
         }, 1000);
@@ -179,12 +231,12 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
-    getData = async() => {
+    getData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}) {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -241,6 +293,7 @@ export class ClaimProcessingSummary extends React.Component {
 
                 this.setState({
                     Claim837RTProcessingSummary: data,
+                    rowData: data,
                     recCount: count,
                 })
             })
@@ -298,7 +351,7 @@ export class ClaimProcessingSummary extends React.Component {
         ]
 
         this.props.history.push('/' + Strings.ClaimDetails837, {
-            data : sendData
+            data: sendData
         })
     }
 
@@ -326,7 +379,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'FileName', method: this.gotoDetails, isClick: 1 },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999, key_argument : 'FileID' },
+            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },
             { value: 'MolinaClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
@@ -335,7 +388,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'adjudication_status' },
             { value: 'F277', isClick: 1, method: this.goto277 },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
-            { value: ''},
+            { value: '' },
         )
 
         return (
@@ -429,13 +482,13 @@ export class ClaimProcessingSummary extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
@@ -444,7 +497,7 @@ export class ClaimProcessingSummary extends React.Component {
                         />
 
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -454,7 +507,7 @@ export class ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -462,13 +515,28 @@ export class ClaimProcessingSummary extends React.Component {
                             onChange={this.handleStartChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
                         />
+                    </div>
+                    <div className="form-group col">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.setState({
+                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    this.getData()
+                                })
+                            }}
+                        >
+                            <option value="select">Default</option>
+                            <option value="select">Classic</option>
+                        </select>
                     </div>
                     <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
                         <div className="summary-header">WIP > 90 Days</div>
@@ -536,13 +604,39 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
+    _renderTransactions() {
+        return (
+            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
+                <AgGridReact
+                    modules={this.state.modules}
+                    columnDefs={this.state.columnDefs}
+                    autoGroupColumnDef={this.state.autoGroupColumnDef}
+                    defaultColDef={this.state.defaultColDef}
+                    suppressRowClickSelection={true}
+                    groupSelectsChildren={true}
+                    debug={true}
+                    rowSelection={this.state.rowSelection}
+                    rowGroupPanelShow={this.state.rowGroupPanelShow}
+                    pivotPanelShow={this.state.pivotPanelShow}
+                    enableRangeSelection={true}
+                    paginationAutoPageSize={true}
+                    pagination={true}
+                    onGridReady={this.onGridReady}
+                    rowData={this.state.rowData}
+                >
+                </AgGridReact>
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
                 <h5 className="headerText">Claim Processing Summary</h5>
                 {this.renderTopBar()}
                 {this._renderStats()}
-                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 ? this.renderTransactionsNew() : null}
+                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
             </div>
         );
     }

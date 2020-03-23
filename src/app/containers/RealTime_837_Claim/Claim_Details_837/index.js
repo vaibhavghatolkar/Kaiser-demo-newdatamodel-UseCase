@@ -540,7 +540,7 @@ export class ClaimDetails837 extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'File Claim Id', value: data.ClaimID },
+                            { key: 'X12 Claim Id', value: data.ClaimID },
                             { key: 'Claim Date', value: data.ClaimDate },
                             { key: 'Subscriber First Name', value: data.SubscriberFirstName },
                             { key: 'Subscriber Last Name', value: data.SubscriberLastName },
@@ -860,7 +860,7 @@ export class ClaimDetails837 extends React.Component {
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
                                     <td className="table-head-text list-item-style">
-                                        <a>File Claim Id</a>
+                                        <a>X12 Claim Id</a>
                                     </td>
                                     <td className="table-head-text list-item-style">
                                         <a>Claim Id</a>

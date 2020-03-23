@@ -11,6 +11,9 @@ import ReactPaginate from 'react-paginate';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 let val = ''
 export class AuditSummary extends React.Component {
@@ -24,7 +27,10 @@ export class AuditSummary extends React.Component {
             SubTotal: 0,
             VeriTotal: 0,
             InBizstockTotal: 0,
+            acceptedFiles: 0,
+            gridType: 0,
             selectedTradingPartner: '',
+            type: '',
             providerName: '',
             orderby: "",
             State: "",
@@ -45,7 +51,52 @@ export class AuditSummary extends React.Component {
             page: 1,
             count: 1,
             nameRotation: 180,
-            statusRotation: 180
+            statusRotation: 180,
+            columnDefs: [
+                { headerName: "File Name", field: "filename" },
+                { headerName: "File Status", field: "FileStatus" },
+                { headerName: "Submitted", field: "Submitted" },
+                { headerName: "In HiPaaS", field: "InHiPaaS" },
+                { headerName: "Accepted PreProcess", field: "Accepted" },
+                { headerName: "Rejected PreProcess", field: "Rejected" },
+                { headerName: "Error in PreProcess", field: "Rejected" },
+                { headerName: "In MCG	", field: "SentToQNXT" },
+                { headerName: "999", field: "F999" },
+                { headerName: "277 CA", field: "goto277" },
+            ],
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: true,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
         }
 
         this.getData = this.getData.bind(this)
@@ -68,6 +119,9 @@ export class AuditSummary extends React.Component {
             Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
               Total999
             }
+            Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+                TotalAcceptedFiles
+            }
          }`
         console.log(query)
         fetch(Urls.claims_837, {
@@ -82,6 +136,7 @@ export class AuditSummary extends React.Component {
             .then(res => {
                 this.setState({
                     Total999: res.data.Total999Response[0].Total999,
+                    acceptedFiles: res.data.Claim837RTRejectedFile[0].TotalAcceptedFiles,
                 })
             })
             .catch(err => {
@@ -94,7 +149,7 @@ export class AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}", State:"${this.state.State}"){
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}", State:"${this.state.State}", GridType:${this.state.gridType}){
               FileID
               filename
               Submitted
@@ -109,6 +164,7 @@ export class AuditSummary extends React.Component {
               F999
               FileStatus
               RecCount
+              InHiPaaS
             }
         }`
         console.log(query)
@@ -136,6 +192,7 @@ export class AuditSummary extends React.Component {
 
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
+                        rowData: res.data.ClaimsDailyAudit,
                         count: count
                     })
                 }
@@ -260,8 +317,8 @@ export class AuditSummary extends React.Component {
         data.forEach((d) => {
             let count = 0
             try {
-                count = Number(d.Submitted) ? Number(d.Submitted) : 0  - Number(d.InHiPaaS) ? Number(d.InHiPaaS) : 0
-            } catch (error) {}
+                count = (Number(d.Submitted) ? Number(d.Submitted) : 0) - (Number(d.InHiPaaS) ? Number(d.InHiPaaS) : 0)
+            } catch (error) { }
 
             row.push(
                 <tr>
@@ -356,7 +413,6 @@ export class AuditSummary extends React.Component {
         setTimeout(() => {
             this.getData()
             this._getCounts()
-
         }, 50);
     }
 
@@ -392,7 +448,7 @@ export class AuditSummary extends React.Component {
 
     _renderStats() {
         let _summary = [
-            { header: 'Total Files', value: this.state.totalFile, style: "green summary-title" },
+            { header: 'Total Accepted Files', value: this.state.acceptedFiles, style: "green summary-title" },
             { header: 'In HiPaaS', value: this.state.TotalClaims },
             { header: 'Accepted', value: this.state.Accepted },
             { header: 'Rejected', value: this.state.Rejected },
@@ -529,6 +585,21 @@ export class AuditSummary extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.setState({
+                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    this._getCounts()
+                                })
+                            }}
+                        >
+                            <option value="select">Default</option>
+                            <option value="select">Classic</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         )
@@ -543,6 +614,38 @@ export class AuditSummary extends React.Component {
         })
         return row
     }
+
+    _renderTransactions() {
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={this.state.columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={true}
+                        pagination={true}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                    >
+
+                    </AgGridReact>
+
+                </div>
+
+
+            </div>
+        )
+    }
+
     render() {
         return (
             <div>
@@ -550,7 +653,8 @@ export class AuditSummary extends React.Component {
                 {this.renderTopBar()}
                 {this._renderStats()}
                 <div className="col-12" style={{ padding: "0px" }}>
-                    {this.state.claimsAudit && this.state.claimsAudit.length > 0 ? this.renderTransactions() : null}
+                    {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                    {this.state.claimsAudit && this.state.claimsAudit.length > 0 && !this.state.gridType ? this.renderTransactions() : null}
                 </div>
             </div>
         );

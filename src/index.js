@@ -98,11 +98,11 @@ import { Outbound_BatchDetails837 } from './app/containers/Outbound_RealTime_837
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Batch_Details_837';
 import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
 
-import "ag-grid-enterprise/dist/styles/ag-grid.css";
-import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
+// import "ag-grid-enterprise/dist/styles/ag-grid.css";
+// import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
 
-import {LicenseManager} from "ag-grid-enterprise";
-LicenseManager.setLicenseKey(Strings.license_key);
+// import {LicenseManager} from "ag-grid-enterprise";
+// LicenseManager.setLicenseKey(Strings.license_key);
 
 const $ = window.$;
 class PrivateRoute extends React.Component {
