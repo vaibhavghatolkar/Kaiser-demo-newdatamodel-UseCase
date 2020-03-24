@@ -80,7 +80,7 @@ export class AuditSummary extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: true,
+                editable: false,
                 enableRowGroup: true,
                 enablePivot: true,
                 enableValue: true,
