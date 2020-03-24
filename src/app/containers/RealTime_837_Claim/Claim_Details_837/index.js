@@ -270,7 +270,8 @@ export class ClaimDetails837 extends React.Component {
                     }
 
                     this.setState({
-                        rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : []
+                        rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : [],
+                        recount: count
                     }, () => {
                         this.sortData()
                     })
@@ -324,13 +325,13 @@ export class ClaimDetails837 extends React.Component {
                         if (res.data.Claim837RTFileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
-                        this.setState.recount = count;
+                        // this.setState.recount = count;
 
                     }
-
+                    console.log('This is the reccount ', count)
                     this.setState({
                         intakeClaims: res.data.Claim837RTFileDetails,
-
+                        recount: count
                     }, () => {
                         this.sortData()
                     })
@@ -1289,7 +1290,7 @@ export class ClaimDetails837 extends React.Component {
                         breakLabel={'...'}
                         breakClassName={'page-link'}
                         initialPage={0}
-                        pageCount={this.setState.recount}
+                        pageCount={this.state.recount}
                         marginPagesDisplayed={2}
                         pageRangeDisplayed={5}
                         onPageChange={(page) => { this.handlePageClick1(page) }}
