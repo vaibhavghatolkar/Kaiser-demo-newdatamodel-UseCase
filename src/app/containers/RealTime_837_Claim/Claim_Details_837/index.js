@@ -16,6 +16,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
+
 var val = ''
 export class ClaimDetails837 extends React.Component {
 
@@ -53,6 +54,7 @@ export class ClaimDetails837 extends React.Component {
             plan_code: '',
             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag != 'n' ? props.location.state.data[0].gridflag : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -104,7 +106,7 @@ export class ClaimDetails837 extends React.Component {
             page1: 1,
 
             gridType: 0,
-
+     
             columnDefs: [
                 { headerName: "File Name", field: "FileName" },
                 { headerName: "Type", field: "Type" },
@@ -141,6 +143,7 @@ export class ClaimDetails837 extends React.Component {
                 flex: 1,
                 minWidth: 100,
             },
+            
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
@@ -148,6 +151,9 @@ export class ClaimDetails837 extends React.Component {
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
+            showerror:'',
+          rowData: [],
+        
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -232,8 +238,66 @@ export class ClaimDetails837 extends React.Component {
         if (!providerName) {
             providerName = ''
         }
+        let query;      
+     if(this.state.gridflag=="Rejected" || this.state.gridflag=="Total Claims" || this.state.gridflag=="Accepted")
+     {      
+         query = `{            
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Inbound" , GridType:${this.state.gridType}) {
+                RecCount
+                FileID
+                FileName
+                Sender
+                FileDate
+                Claimcount
+                FileStatus
+                Receiver
+                Rejected
+                Type
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.Claim837RTFileDetails) {
 
-        let query = `{            
+                    if (res.data.Claim837RTFileDetails.length > 0) {
+
+                        count = Math.floor(res.data.Claim837RTFileDetails[0].RecCount / 10)
+                        if (res.data.Claim837RTFileDetails[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                        this.setState.recount = count;
+
+                    }
+
+                    this.setState({
+                        rowData: this.state.gridType == 1 ? res.data.Claim837RTFileDetails : []
+                      
+
+                    }, () => {
+                        this.sortData()
+                    })
+
+
+                }
+
+
+            })
+            .catch(err => {
+                console.log(err)
+            });
+     }
+     else
+     {
+        query= `{            
             Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}) {
                 RecCount
                 FileID
@@ -280,6 +344,8 @@ export class ClaimDetails837 extends React.Component {
             .catch(err => {
                 console.log(err)
             });
+     }
+    
     }
 
 
@@ -293,7 +359,7 @@ export class ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Inbound") {
+            Claim837RTFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `", RecType: "Inbound" , GridType:${this.state.gridType}) {
                 RecCount
                 FileID
                 FileName
@@ -417,7 +483,7 @@ export class ClaimDetails837 extends React.Component {
             .then(res => res.json())
             .then(res => {
                 var data = res.data.Claim837RTProcessingSummary
-                if (data && data.length > 0) {
+              
                     if (this.state.gridType) {
                         this.setState({
                             claims_rowData: data
@@ -425,7 +491,47 @@ export class ClaimDetails837 extends React.Component {
                     } else {
                         this.sortData(fileId, data)
                     }
-                }
+                
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+    get_Error = (ClaimID,seqid, fileID) => {
+     
+     
+
+        let query = `{            
+            ClaimErrorStages  (ClaimID:"` + ClaimID + `",SeqID:` + seqid + `,FileID:"` + fileID + `") {
+            FileID
+            ClaimID
+            Stage
+            StageFileID
+            ErrorDesc
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                var data = res.data.ClaimErrorStages
+               
+                    if (this.state.gridType) {
+                        this.setState({
+                            Error_data: data
+                        })
+                    } else {
+                        this.sortData(fileID, data)
+                    }
+                
             })
             .catch(err => {
                 console.log(err)
@@ -1365,6 +1471,7 @@ export class ClaimDetails837 extends React.Component {
                         pagination={true}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                     
                         onCellClicked={(event) => {
                             this.setState({
                                 showClaims: true
@@ -1385,7 +1492,7 @@ export class ClaimDetails837 extends React.Component {
             { headerName: "Claim Status", field: "ClaimStatus" },
             { headerName: "Subscriber Id", field: "Subscriber_ID" },
             { headerName: "Claim Amount", field: "Claim_Amount" },
-            { headerName: "Error", field: "ClaimLevelErrors" },
+            // { headerName: "Error", field: "ClaimLevelErrors" },
         ]
 
         return (
@@ -1407,6 +1514,54 @@ export class ClaimDetails837 extends React.Component {
                         pagination={true}
                         onGridReady={this.onGridReady}
                         rowData={this.state.claims_rowData}
+                      
+                        onCellClicked={(event) => {
+                            this.setState({
+                                showerror: true,
+                                claimError_Status:event.data.ClaimStatus,
+                             
+                            })
+                            console.log('this is the event', event)
+                            this.get_Error(event.data.ClaimID ,event.data.ClaimRefId, event.data.FileID)
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+    _renderError() {
+        let columnDefs = [
+            { headerName: "X12 Claim ID", field: "ClaimID" },
+            { headerName: "Stage", field: "Stage" },
+            { headerName: "Error Description", field: "ErrorDesc" },
+       
+  
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={true}
+                        pagination={true}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Error_data}
+                        
+                         
+                     
                     >
                     </AgGridReact>
                 </div>
@@ -1426,6 +1581,7 @@ export class ClaimDetails837 extends React.Component {
                         <div>
                             {this._renderList()}
                             {this.state.showClaims ? this._renderClaims() : null}
+                            {this.state.showerror && this.state. claimError_Status=="Rejected" ? this._renderError() : null}
                         </div>
                         :
                         <div className="row padding-left">

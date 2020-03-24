@@ -93,6 +93,7 @@ export class RealTimeDashboard extends React.Component {
             orderby: "",
             submitterRotation: 180,
             gridType : 0,
+            gridflag:'',
 
             columnDefs: [
                 { headerName: "File Name", field: "FileName" },
@@ -774,22 +775,35 @@ export class RealTimeDashboard extends React.Component {
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
+            let gridflag=''
             let data = []
             if (item.name == 'Accepted Claims') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
+                gridflag="Accepted"
             } else if (item.name == 'Rejected Claims') {
                 addon = '/reject'
                 claimStatus = 'Rejected'
+                gridflag="Rejected"
             } else if (item.name == 'Resubmit Queue') {
                 claimStatus = 'Resubmit'
+                gridflag= 'Resubmit'
             } else if (item.name == 'Rejected Files') {
                 claimStatus = 'RejectedFile'
-            } else {
+                gridflag= 'RejectedFile'
+            }
+            else if (item.name == 'Total Claims') {
+               
+                gridflag= 'Total Claims'
+            }
+            else if (item.name == 'Total Accepted Files') {
+                   gridflag= 'Total Accepted Files'
+            }
+             else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type,gridflag:gridflag },
             ]
             row.push(
                 <Tiles
