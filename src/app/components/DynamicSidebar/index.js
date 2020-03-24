@@ -224,7 +224,7 @@ export class DynamicSidebar extends React.Component {
 
             } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Inbound_EncounterDetails) {
                 data = [
-                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n',gridflag:'' },
                 ]
             } else if (element.key == Strings.Files_837) {
                 data = [
