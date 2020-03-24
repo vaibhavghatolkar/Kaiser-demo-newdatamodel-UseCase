@@ -12,6 +12,9 @@ import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
 export class ClaimDetails837 extends React.Component {
@@ -33,9 +36,10 @@ export class ClaimDetails837 extends React.Component {
             page: 1,
             initialPage: 0,
             lineCount: 0,
-            HL20 : 0,
-            HL22 : 0,
-            HL23 : 0,
+            HL20: 0,
+            HL22: 0,
+            HL23: 0,
+            showClaims: false,
             lineData: [],
             file: [],
             fileDetails: [],
@@ -97,7 +101,53 @@ export class ClaimDetails837 extends React.Component {
 
             seqID: '',
             fileDataDetails: '',
-            page1: 1
+            page1: 1,
+
+            gridType: 0,
+
+            columnDefs: [
+                { headerName: "File Name", field: "FileName" },
+                { headerName: "Type", field: "Type" },
+                { headerName: "File Date", field: "FileDate" },
+                { headerName: "File Status", field: "FileStatus" },
+                { headerName: "Submitter", field: "Sender" },
+                { headerName: "Status", field: "Status" },
+                { headerName: "Total Claims", field: "Claimcount" },
+                { headerName: "Rejected Claims", field: "Rejected" },
+            ],
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -173,6 +223,65 @@ export class ClaimDetails837 extends React.Component {
                 console.log(err)
             });
     }
+
+    getListData = () => {
+        let count = 1
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let providerName = this.state.providerName
+        if (!providerName) {
+            providerName = ''
+        }
+
+        let query = `{            
+            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}) {
+                RecCount
+                FileID
+                FileName
+                Sender
+                FileDate
+                Claimcount
+                FileStatus
+                Rejected
+                Type
+                Status
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.Claim837RTDashboardFileDetails) {
+
+                    if (res.data.Claim837RTDashboardFileDetails.length > 0) {
+
+                        count = Math.floor(res.data.Claim837RTDashboardFileDetails[0].RecCount / 10)
+                        if (res.data.Claim837RTDashboardFileDetails[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                        this.setState.recount = count;
+                    }
+
+                    this.setState({
+                        rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : []
+                    }, () => {
+                        this.sortData()
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
+
     getData = () => {
         let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -276,7 +385,7 @@ export class ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound") {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}) {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -308,7 +417,13 @@ export class ClaimDetails837 extends React.Component {
             .then(res => {
                 var data = res.data.Claim837RTProcessingSummary
                 if (data && data.length > 0) {
-                    this.sortData(fileId, data)
+                    if (this.state.gridType) {
+                        this.setState({
+                            claims_rowData: data
+                        })
+                    } else {
+                        this.sortData(fileId, data)
+                    }
                 }
             })
             .catch(err => {
@@ -563,7 +678,7 @@ export class ClaimDetails837 extends React.Component {
                         count: count,
                         seqID: ClaimRefId,
                         fileDataDetails: fileData,
-                        lineCount : data ? data.LXCount : 0
+                        lineCount: data ? data.LXCount : 0
                     })
                 }
             })
@@ -827,6 +942,28 @@ export class ClaimDetails837 extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.setState({
+                                    page: 1,
+                                    rowData: [],
+                                    claimsAudit: [],
+                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    if (this.state.gridType == 1) {
+                                        this.getListData()
+                                    } else {
+                                        this.getData()
+                                    }
+                                })
+                            }}
+                        >
+                            <option value="select">Default</option>
+                            <option value="select">Classic</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         )
@@ -1007,7 +1144,7 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
-    _getHLDetails = async(fileId) => {
+    _getHLDetails = async (fileId) => {
         let query = `{
             Claim837RTHLCount(FileID: "${fileId}") {
               FileID
@@ -1037,13 +1174,13 @@ export class ClaimDetails837 extends React.Component {
                         { key: 'HL20 Count', value: this.state.HL20 },
                         { key: 'HL22 Count', value: this.state.HL22 },
                         { key: 'HL23 Count', value: this.state.HL23 },
-                        { key: '', value: ''},
-                        { key: '', value: ''},
+                        { key: '', value: '' },
+                        { key: '', value: '' },
                     ]
                     this.setState({
-                        HL20 :res.data.Claim837RTHLCount[0].HL20,
-                        HL22:res.data.Claim837RTHLCount[0].HL22, 
-                        HL23 :res.data.Claim837RTHLCount[0].HL23, 
+                        HL20: res.data.Claim837RTHLCount[0].HL20,
+                        HL22: res.data.Claim837RTHLCount[0].HL22,
+                        HL23: res.data.Claim837RTHLCount[0].HL23,
                         fileDetails: fileDetails
                     })
                 }
@@ -1207,47 +1344,125 @@ export class ClaimDetails837 extends React.Component {
         )
     }
 
+    _renderList() {
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={this.state.columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={true}
+                        pagination={true}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                        onCellClicked={(event) => {
+                            this.setState({
+                                showClaims: true
+                            })
+                            console.log('this is the event', event)
+                            this.getTransactions(event.data.FileID)
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+    _renderClaims() {
+        let columnDefs = [
+            { headerName: "Molina Claim Id", field: "MolinaClaimID" },
+            { headerName: "Claim Status", field: "ClaimStatus" },
+            { headerName: "Subscriber Id", field: "Subscriber_ID" },
+            { headerName: "Claim Amount", field: "Claim_Amount" },
+            { headerName: "Error", field: "ClaimLevelErrors" },
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={true}
+                        pagination={true}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.claims_rowData}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
     render() {
 
         return (
             <div>
                 <h5 className="headerText">Claims Details</h5>
                 {this.renderFilters()}
-                <div className="row padding-left">
-                    <div className="col-6 claim-list file-table">
-                        {this.state.claimsObj ? this.renderList() : null}
-                    </div>
+                {
+                    this.state.gridType
+                        ?
+                        <div>
+                            {this._renderList()}
+                            {this.state.showClaims ? this._renderClaims() : null}
+                        </div>
+                        :
+                        <div className="row padding-left">
+                            <div className="col-6 claim-list file-table">
+                                {this.state.claimsObj ? this.renderList() : null}
+                            </div>
 
-                    <div className="col-6">
-                        {
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                <div>
-                                    <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
-                                    <hr />
-                                </div> : null
-                        }
-                        {
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                <table className="table claim-Details border">
-                                    {this.renderHeader('File #' + this.state.fileid)}
-                                    {this.renderRows(this.state.fileDetails)}
-                                </table>
-                                : null
-                        }
-                        {
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                <table className="table claim-Details border">
-                                    {this.renderHeader('Claim #' + this.state.molina_claimId)}
-                                    {this.renderRows(this.state.claimDetails)}
-                                    <br></br>
-                                    {this.state.Icdcodepresent == "Icdcode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
-                                </table>
-                                : null
-                        }
-                        {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
-                        {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null}
-                    </div>
-                </div>
+                            <div className="col-6">
+                                {
+                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                        <div>
+                                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
+                                            <hr />
+                                        </div> : null
+                                }
+                                {
+                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                        <table className="table claim-Details border">
+                                            {this.renderHeader('File #' + this.state.fileid)}
+                                            {this.renderRows(this.state.fileDetails)}
+                                        </table>
+                                        : null
+                                }
+                                {
+                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                        <table className="table claim-Details border">
+                                            {this.renderHeader('Claim #' + this.state.molina_claimId)}
+                                            {this.renderRows(this.state.claimDetails)}
+                                            <br></br>
+                                            {this.state.Icdcodepresent == "Icdcode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
+                                        </table>
+                                        : null
+                                }
+                                {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
+                                {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null}
+                            </div>
+                        </div>
+                }
             </div>
         );
     }
