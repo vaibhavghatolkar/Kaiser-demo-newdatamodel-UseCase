@@ -817,6 +817,7 @@ export class ClaimPaymentDetails extends React.Component {
     renderTableHeader() {
         return (
             <div className="row">
+               
                 <div className="col-3 col-header justify-align">
                    
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
@@ -826,6 +827,10 @@ export class ClaimPaymentDetails extends React.Component {
                  
                 </div>
                 <div className="col-2 col-header justify-align">
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.Organization", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Organization</a>
+                    
+                </div>
+                <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.CheckEFTNo", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Check/EFT No.</a>
                    
                 </div>
@@ -833,10 +838,7 @@ export class ClaimPaymentDetails extends React.Component {
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.CheckEFTDt", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Check/EFT Date</a>
                   
                 </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.Organization", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Organization</a>
-                    
-                </div>
+                
             </div>
         )
     }
@@ -862,14 +864,16 @@ export class ClaimPaymentDetails extends React.Component {
           
             row.push(
                 <div className="row">
+                    
                     <div className="col-3 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
                     <div className="col-2 col-small-style small-font">{ moment((data[keys].value.FileDate)).format("MM/DD/YYYY hh:mm A")}</div>
+                    <div className="col-2 col-small-style small-font">{data[keys].value.Organization}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.CheckEFTNo}</div>
                     <div className="col-3 col-small-style small-font">{ moment((data[keys].value.CheckEFTDt)).format("MM/DD/YYYY")}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.Organization}</div>
+                    
                 </div>
             )
 
@@ -986,7 +990,7 @@ export class ClaimPaymentDetails extends React.Component {
                         {
                             this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                             <div>
-                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Information</h6>
+                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Remittance Information</h6>
                             <hr />
                         </div> : null
                         }
