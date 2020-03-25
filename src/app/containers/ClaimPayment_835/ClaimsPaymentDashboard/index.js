@@ -11,6 +11,7 @@ import { CommonTable } from '../../../components/CommonTable';
 import Chart1 from "react-google-charts";
 import Paper from '@material-ui/core/Paper';
 import ReactPaginate from 'react-paginate';
+import DatePicker from "react-datepicker";
 
 import {
   Chart,
@@ -82,7 +83,36 @@ const data = [
     />
   );
   
-
+  const second_data = {
+    labels: [
+        'ICD Code not found',
+        'Accident Date not present',
+        'Member Not Found',
+        'Newborn Setup Pending',
+        'Provider Setup Pending',
+        'Misdirected Claims'
+    ],
+    datasets: [{
+        data: [100, 100, 70, 20, 50, 20],
+        backgroundColor: [
+            '#139DC9',
+            '#83D2B4',
+            '#9DC913',
+            '#EC6236',
+            '#C9139D',
+            'blue',
+        ],
+        hoverBackgroundColor: [
+            '#139DC9',
+            '#83D2B4',
+            '#9DC913',
+            '#EC6236',
+            '#C9139D',
+            'blue',
+        ]
+    }],
+    flag: ''
+};
 let val = ''
 export class ClaimPaymentDashboard extends React.Component {
 
@@ -639,35 +669,35 @@ export class ClaimPaymentDashboard extends React.Component {
                 <div className="row padding-left">
     
            
-        <div className="col-2 summary-container">
+        {/* <div className="col-2 summary-container">
             <div className="summary-header"> # of claims</div>
             <div  className= 'blue summary-title' >
             449k
             </div>
-        </div>
+        </div> */}
 
-        <div className="col-2 summary-container">
+        <div className="col summary-container">
         <div className="summary-header">   Total # of 835</div>
         <div  className= 'green summary-title' >
         426k
         </div>
     </div>
     
-        <div className="col-2 summary-container">
+        <div className="col summary-container">
         <div className="summary-header">  Partial</div>
         <div  className= 'blue summary-title' >
         33k
         </div>
     </div>
-    <div className="col-2 summary-container">
+    <div className="col summary-container">
         <div className="summary-header">  Denied</div>
         <div  className= 'red summary-title' >
         2k
         </div>
     </div>
-    <div className="col-2 summary-container">
+    <div className="col summary-container">
         <div className="summary-header">  Pending</div>
-        <div  className= 'yellow summary-title' >
+        <div  className= 'orange summary-title' >
         1k
         </div>
     </div>
@@ -985,7 +1015,7 @@ export class ClaimPaymentDashboard extends React.Component {
         
         return(
 
-            <div className = "chart-container1 chart chart-div">
+            <div className = "chart-container2 chart chart-div">
             
             <div style ={{color : "grey"}} className="row">
 
@@ -1016,11 +1046,11 @@ export class ClaimPaymentDashboard extends React.Component {
    <hr style ={{ borderColor : 'lightgrey'}}  />
 
   
-<div className ="row">
+{/* <div className ="row">
 <div className="col-9"> BCBS </div>
 <div className="col-3"> 16</div>
-</div>
-<hr style ={{ borderColor : 'lightgrey'}}  />
+</div> */}
+{/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
 </div>
 
             <div className="col-4">
@@ -1083,6 +1113,96 @@ export class ClaimPaymentDashboard extends React.Component {
             </div>
         )
     }
+
+    renderCharts() {
+        const data = {
+            labels: ["Compliance", "Non-Compliance"],
+            datasets: [{
+                data: [90, 10],
+                backgroundColor: [
+                    '#139DC9',
+                    '#daea00',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#daea00',
+                ]
+            }],
+            flag: ''
+        };
+
+        return (
+            <div className="row chart-div">
+                <div className="chart-container chart col-12">
+                    <Pie data={data}
+                        options={{
+                            elements: {
+                                arc: {
+                                    borderWidth: 0
+                                }
+                            },
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }}
+                        width={130}
+                        height={90} />
+                        
+                </div>
+                </div>
+                )
+            }
+
+
+            renderErrorChart() {
+                return (
+                    <Pie data={second_data}
+                        options={{
+                            elements: {
+                                arc: {
+                                    borderWidth: 0
+                                }
+                            },
+                            legend: {
+                                display: false,
+                            }
+                        }}
+                        width={100}
+                        height={60} />
+                )
+            }
+
+            renderValues() {
+                let row = []
+                let data = second_data.labels
+                let colors = second_data.datasets[0].backgroundColor
+                let count = 0
+                data.forEach(item => {
+                    row.push(
+                        <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '60px', color: 'slategrey', alignItems: 'center' }}>
+                            <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
+                        </div>
+                    )
+                    count++
+                })
+                return (
+                    <div style={{ marginTop: '20px' }} className="row">
+                        {row}
+                    </div>
+                )
+            }
+
+            RenderMainErrorChart(){
+                return(
+                    <div className="row chart-div">
+                <div className="chart-container chart col-12">
+                    <div style={{fontWeight: '500'}}>Denial code wise count</div><br/>
+                    {this.renderErrorChart()}
+                    {/* {this.renderValues()} */}
+                    </div>
+                    </div>
+                )
+            }
 
     renderMaterialChart() {
 
@@ -1287,6 +1407,126 @@ export class ClaimPaymentDashboard extends React.Component {
 
     }
 
+    renderTopbar() {
+        return (
+            <div className="form-style" id='filters'>
+                <div className="form-row">
+                    
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">State</div>
+                        <select className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                this.setState({
+                                    State: event.target.options[event.target.selectedIndex].text
+                                }, () => {
+                                    this.getData()
+                                })
+                            }}
+                        >
+                            <option value=""></option>
+                            <option value="1">California</option>
+                            <option value="2">Michigan</option>
+                            <option value="3">Florida</option>
+                            <option value="4">New York</option>
+                            <option value="5">Idaho</option>
+                            <option value="6">Ohio</option>
+                            <option value="7">Illinois</option>
+                            <option value="8">Texas</option>
+                            <option value="9">Mississippi</option>
+                            <option value="10">South Carolina</option>
+                            <option value="11">New Mexico</option>
+                            <option value="12">Puerto Rico</option>
+                            <option value="13">Washington</option>
+                            <option value="14">Utah</option>
+                            <option value="15">Wisconsin</option>
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Provider</div>
+                        <input className="form-control" type="text"
+                            onChange={(e) => this.onHandleChange(e)}
+                        />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Submitter</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.onSelect(event, 'selectedTradingPartner')
+                            }}>
+                            <option value="select"></option>
+                            {this.getoptions()}
+                        </select>
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Time Range</div>
+                        <select
+                            className="form-control list-dashboard" id="state"
+                            onChange={(event) => {
+                                let day = 0
+                                let chartType = ''
+                                let selected_val = event.target.options[event.target.selectedIndex].text
+
+                                if (selected_val == 'Last week') {
+                                    day = 7
+                                    chartType = 'Datewise'
+                                } else if (selected_val == 'Last 30 days') {
+                                    day = 30
+                                    chartType = 'Weekwise'
+                                } else if (selected_val == 'Last 90 days') {
+                                    day = 90
+                                } else if (selected_val == 'Last 180 days') {
+                                    day = 180
+                                } else if (selected_val == 'Last year') {
+                                    day = 365
+                                }
+
+                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
+                                let endDate = moment().format('YYYY-MM-DD')
+
+                                if (!selected_val) {
+                                    startDate = ''
+                                    endDate = ''
+                                }
+
+                                this.setState({
+                                    startDate: startDate,
+                                    endDate: endDate,
+                                    selected_val: selected_val,
+                                    chartType: chartType
+                                })
+
+                                setTimeout(() => {
+                                    this.getData()
+                                }, 50);
+                            }}
+                            >
+                            <option value="1">Last week</option>
+                            <option value="2">Last 30 days</option>
+                            <option value="2">Last 90 days</option>
+                            <option value="2">Last 180 days</option>
+                            <option value="2" selected="selected">Last year</option>
+                        </select>
+                    </div>
+                    <div className="form-group col">
+                        <div className="list-dashboard">Start Date</div>
+                        <DatePicker className="form-control list-dashboard"
+                            // selected={new Date(this.state.startDate)}
+                            onChange={this.handleStartChange}
+                        />
+                    </div>
+                    <div className="form-group col">
+                        <div className="list-dashboard">End Date</div>
+                        <DatePicker className="form-control list-dashboard"
+                            // selected={new Date(this.state.endDate)}
+                            onChange={this.handleEndChange}
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
 
     render() {
 
@@ -1299,26 +1539,29 @@ export class ClaimPaymentDashboard extends React.Component {
         let data3 = [20,60,30];
 
         return (
-            <div>
-                <br></br>
-                <div className="row">
+            <div><br/>
+                  <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}> 835 Dashboard</h5><br></br>
                 
-
+                  <div className="row">
                 <div className="col-9">
-                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}> 835 Dashboard</h5><br></br>
+                {this.renderTopbar()}
                 {this.renderSummaryDetails()}
-                {this.renderMonthlyTrendsChart()}
+                {/* {this.renderMonthlyTrendsChart()} */}
+                {this.renderGraphs()}
                 </div>
+               
                 <div className="col-3 nopadding">
-                {this.renderGooglePieChart('Compliance',lables1,data1,data1)}
-                {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)}
+                {this.renderCharts()}
+                {this.RenderMainErrorChart()}
+                {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
+                {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
               
                 </div>
                 </div>
 
               
 
-                <div className="row">
+                {/* <div className="row">
                 <div className="col-9">
                 {this.renderGraphs()}
                 </div>
@@ -1327,7 +1570,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)}
               
                 </div>
-                </div>
+                </div> */}
 
 
 
@@ -1340,7 +1583,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 <div className="col-3 nopadding">
 
           
-                {this.renderGoogleStackedBarChart()}
+                {/* {this.renderGoogleStackedBarChart()} */}
           
               
                 </div>

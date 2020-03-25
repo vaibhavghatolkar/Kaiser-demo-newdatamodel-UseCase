@@ -196,8 +196,8 @@ export class Outbound_response_999 extends React.Component {
         return (
             <div className="row">
                 <div className={"col-12"}>
-                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
+                    <div className="top-padding"><a  >{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
+                    <div style={{height:"200px" ,overflow: "auto"}} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
                 </div>
             </div>
         )

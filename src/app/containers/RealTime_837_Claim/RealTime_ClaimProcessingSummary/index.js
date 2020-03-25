@@ -24,7 +24,7 @@ export class ClaimProcessingSummary extends React.Component {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             providers: [],
-            gridType: 0,
+            gridType: 1,
             recCount: 0,
             pageCount: 1,
             Months: 0,
@@ -54,6 +54,8 @@ export class ClaimProcessingSummary extends React.Component {
             subscriber_IDFlag: 180,
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName" },
                 { headerName: "File Date", field: "FileCrDate" },
@@ -541,7 +543,7 @@ export class ClaimProcessingSummary extends React.Component {
                             }}
                         >
                             <option value="select">Default</option>
-                            <option value="select">Classic</option>
+                            <option selected value="select">Classic</option>
                         </select>
                     </div>
                     <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
@@ -625,8 +627,10 @@ export class ClaimProcessingSummary extends React.Component {
                     rowGroupPanelShow={this.state.rowGroupPanelShow}
                     pivotPanelShow={this.state.pivotPanelShow}
                     enableRangeSelection={true}
-                    paginationAutoPageSize={true}
+                    paginationAutoPageSize={false}
                     pagination={true}
+                    domLayout={this.state.domLayout}
+                    paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
                 >

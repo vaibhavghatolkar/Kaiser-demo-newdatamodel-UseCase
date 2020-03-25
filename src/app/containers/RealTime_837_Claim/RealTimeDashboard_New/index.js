@@ -102,7 +102,7 @@ export class RealTimeDashboard_New extends React.Component {
             _statusRotation: 180,
             orderby: "",
             submitterRotation: 180,
-            gridType: 0,
+            gridType: 1,
             gridflag: '',
 
             columnDefs: [
@@ -725,7 +725,7 @@ export class RealTimeDashboard_New extends React.Component {
         }
 
         let query = `{            
-            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}) {
+            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}, LoadStatus:"") {
                 RecCount
                 FileID
                 FileName
@@ -1032,7 +1032,7 @@ export class RealTimeDashboard_New extends React.Component {
                                 })
                             }}>
                             <option value="select">Default</option>
-                            <option value="select">Classic</option>
+                            <option selected value="select">Classic</option>
                         </select>
                     </div>
                 </div>
