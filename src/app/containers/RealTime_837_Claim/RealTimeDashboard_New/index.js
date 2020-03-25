@@ -71,6 +71,7 @@ export class RealTimeDashboard_New extends React.Component {
             chartType: 'Monthwise',
             selectedTradingPartner: '',
             State: '',
+            totalFiles: 0,
             Months: 0,
             accepted: 0,
             rejected: 0,
@@ -344,6 +345,7 @@ export class RealTimeDashboard_New extends React.Component {
 
                 this.setState({
                     summaryList: summary,
+                    totalFiles: totalCount
                 })
             })
             .catch(err => {
@@ -551,13 +553,13 @@ export class RealTimeDashboard_New extends React.Component {
         return (
             piechart_data && piechart_data.labels && piechart_data.labels.length > 0
                 ?
-                <div className="row chart-container-full chart">
-                    <div className="col-9 nopadding">
-                        <div className="chart-header">{header}</div>
-                        {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
-                    </div>
-                    <div className="col-3 chart-align">
+                <div className="chart-container-full chart">
+                    <div className="chart-header">{header}</div>
+                    <div className="chart-align">
                         {this.renderChart(piechart_data)}
+                    </div>
+                    <div className="nopadding">
+                        {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
                     </div>
                 </div> :
                 <div className="chart-container-full chart" style={{ textAlign: 'center' }}>
@@ -569,8 +571,14 @@ export class RealTimeDashboard_New extends React.Component {
     renderCharts() {
         return (
             <div className="chart-div">
-                {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
-                {this.renderPieChart('Top 10 Claim Level Errors', this.state.pie_data)}
+                <div className="row">
+                    <div className="col-5">
+                        {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
+                    </div>
+                    <div className="col-5">
+                        {this.renderPieChart('Top 10 Claim Level Errors', this.state.pie_data)}
+                    </div>
+                </div>
                 <div className="row chart-container-full chart">
                     <div className="chart-header">Volume Analysis</div>
                     <Line
@@ -1052,7 +1060,7 @@ export class RealTimeDashboard_New extends React.Component {
                     }
                 }}
                 width={20}
-                height={15} />
+                height={11} />
         )
     }
 
@@ -1063,14 +1071,14 @@ export class RealTimeDashboard_New extends React.Component {
         let count = 0
         data.forEach(item => {
             row.push(
-                <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item.length > 130 ? (item.substr(0, 130) + '...') : item}</div>
+                <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginLeft: '12px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item.length > 10 ? (item.substr(0, 10) + '...') : item}</div>
                 </div>
             )
             count++
         })
         return (
-            <div>
+            <div className="row" style={{marginTop : '16px'}}>
                 {row}
             </div>
         )
@@ -1088,7 +1096,7 @@ export class RealTimeDashboard_New extends React.Component {
         })
 
         return (
-            <div className="col-3 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )
@@ -1098,17 +1106,21 @@ export class RealTimeDashboard_New extends React.Component {
         let stage_1 = [
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
-            { 'name': 'Reconciled with Error Claims', 'value': this.state.ReconciledError_Claims },
-            { 'name': 'Full File Rejected', 'value': this.state.FileReject_Claims },
+            { 'name': 'Reconciled Error Claims', 'value': this.state.ReconciledError_Claims },
         ]
         let stage_2 = [
             { 'name': 'Accepted Claims', 'value': this.state.Accepted_Claims },
-            { 'name': 'Rejected Claims', 'value': this.state.Rejected_Claims },
-            { 'name': 'Processing Claims', 'value': this.state.Processing_Claims },
+            { 'name': 'Accepted with Errors Claims', 'value': this.state.Rejected_Claims },
+            { 'name': 'Full File Rejected', 'value': this.state.FileReject_Claims },
         ]
         let stage_3 = [
-            { 'name': 'Loaded in MCG', 'value': 0 },
+            { 'name': 'Load in MCG', 'value': 0 },
             { 'name': 'Load Errors', 'value': 0 },
+        ]
+
+        let stage_4 = [
+            { 'name': '999 Not Sent', 'value': 0 },
+            { 'name': '277CA Not Sent', 'value': this.state.totalFiles },
         ]
 
         return (
@@ -1116,6 +1128,7 @@ export class RealTimeDashboard_New extends React.Component {
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}
+                {this._renderClaimTables(stage_4)}
             </div>
         )
     }
