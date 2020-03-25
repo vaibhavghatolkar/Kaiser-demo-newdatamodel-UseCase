@@ -1488,7 +1488,9 @@ export class ClaimDetails837 extends React.Component {
 
     _renderClaims() {
         let columnDefs = [
+            { headerName: "X12 Claim Id", field: "ClaimID" },
             { headerName: "Molina Claim Id", field: "MolinaClaimID" },
+            { headerName: "Claim Date", field: "ClaimDate" },
             { headerName: "Claim Status", field: "ClaimStatus" },
             { headerName: "Subscriber Id", field: "Subscriber_ID" },
             { headerName: "Claim Amount", field: "Claim_Amount" },
