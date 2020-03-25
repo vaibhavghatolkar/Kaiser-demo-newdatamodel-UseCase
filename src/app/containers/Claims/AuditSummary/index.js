@@ -65,7 +65,7 @@ export class AuditSummary extends React.Component {
                 { headerName: "Claims In HiPaaS", field: "InHiPaaS" },
                 { headerName: "Accepted PreProcess", field: "Accepted" },
                 { headerName: "Rejected PreProcess", field: "Rejected" },
-                { headerName: "Error in PreProcess", field: "Rejected" },
+                { headerName: "Error in PreProcess", field: "Error" },
                 { headerName: "In MCG	", field: "SentToQNXT" },
                 { headerName: "999", field: "F999" },
                 { headerName: "277 CA", field: "goto277" },
@@ -171,6 +171,7 @@ export class AuditSummary extends React.Component {
               F999
               FileStatus
               RecCount
+              Error
               InHiPaaS
             }
         }`

@@ -55,6 +55,7 @@ export class Claim_Details_837_Grid extends React.Component {
             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag != 'n' ? props.location.state.data[0].gridflag : '',
+            fileStatus: props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -396,9 +397,12 @@ export class Claim_Details_837_Grid extends React.Component {
         if (!providerName) {
             providerName = ''
         }
-
+        let claimStatus = ''
+        if(this.state.fileStatus == 'Accepted with Errors'){
+            claimStatus = 'Rejected'
+        }
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}) {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${claimStatus}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}, FileStatus : "${this.state.fileStatus}") {
                 RecCount
                 ClaimID
                 ClaimDate
