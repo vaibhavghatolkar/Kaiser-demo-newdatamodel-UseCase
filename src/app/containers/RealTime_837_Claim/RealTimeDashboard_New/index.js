@@ -111,7 +111,7 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitter", field: "Sender" },
-                { headerName: "Status", field: "Status" },
+                { headerName: "Load Status", field: "Status" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
             ],
@@ -489,7 +489,7 @@ export class RealTimeDashboard_New extends React.Component {
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Load Status</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -572,7 +572,7 @@ export class RealTimeDashboard_New extends React.Component {
                 {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                 {this.renderPieChart('Top 10 Claim Level Errors', this.state.pie_data)}
                 <div className="row chart-container-full chart">
-                    <div className="chart-header">Total Claims</div>
+                    <div className="chart-header">Volume Analysis</div>
                     <Line
                         data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
                         width={20}
@@ -885,11 +885,10 @@ export class RealTimeDashboard_New extends React.Component {
             ]
             row.push(
                 <Tiles
-                    isClickable={(item.name == 'Accepted Claims' || item.name == 'Rejected Claims' || item.name == 'Total Claims' || item.name == 'Total Accepted Files' || item.name == 'Resubmit Queue' || item.name == "Rejected Files")}
+                    isClickable={true}
                     _data={data}
                     header_text={item.name}
                     value={item.value}
-                    // isCol1={true}
                     url={'/ClaimDetails837'}
                 />
 
@@ -1108,7 +1107,7 @@ export class RealTimeDashboard_New extends React.Component {
         let stage_1 = [
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
-            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims },
+            { 'name': 'Reconciled with Error Claims', 'value': this.state.ReconciledError_Claims },
             { 'name': 'Full File Rejected', 'value': this.state.FileReject_Claims },
         ]
         let stage_2 = [
@@ -1119,8 +1118,6 @@ export class RealTimeDashboard_New extends React.Component {
         let stage_3 = [
             { 'name': 'Loaded in MCG', 'value': 0 },
             { 'name': 'Load Errors', 'value': 0 },
-            { 'name': 'Accepted Percent', 'value': 0 },
-            { 'name': 'Rejected Percent', 'value': 0 },
         ]
 
         return (
