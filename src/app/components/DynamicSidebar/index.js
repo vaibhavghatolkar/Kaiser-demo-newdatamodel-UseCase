@@ -103,7 +103,8 @@ export class DynamicSidebar extends React.Component {
 
         else if (key == 29) { name = Strings.RealTimeDashboard }
         else if (key == 30) { name = Strings.claimsAudit }
-        else if (key == 31) { name = Strings.ClaimDetails837 }
+        else if (key == 31) { name = Strings.Claim_Details_837_Grid }
+        // else if (key == 31) { name = Strings.ClaimDetails837 }
         else if (key == 32) { name = Strings.claimsError }
         else if (key == 33 || key == 98) { name = Strings.researchQueue }
         else if (key == 34) { name = Strings.matchClaims }
@@ -222,7 +223,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Inbound_EncounterDetails) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid ||element.key == Strings.Inbound_EncounterDetails) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n',gridflag:'' },
                 ]
