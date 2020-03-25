@@ -471,6 +471,7 @@ export class ClaimDetails837 extends React.Component {
                 FileID
                 ClaimRefId
                 MolinaClaimID
+                Transaction_Status
             }
         }`
         console.log(query)
@@ -1493,8 +1494,12 @@ export class ClaimDetails837 extends React.Component {
     _renderClaims() {
         let columnDefs = [
             { headerName: "Molina Claim Id", field: "MolinaClaimID" },
+            { headerName: "X12 Claim Id", field: "ClaimID" },          
+            { headerName: "Claim Date", field: "ClaimDate" },
             { headerName: "Claim Status", field: "ClaimStatus" },
             { headerName: "Subscriber Id", field: "Subscriber_ID" },
+            { headerName: "HiPaaS Status", field: "Transaction_Status" },
+            { headerName: "Adjudication Status", field: "adjudication_status" },
             { headerName: "Claim Amount", field: "Claim_Amount" },
             // { headerName: "Error", field: "ClaimLevelErrors" },
         ]

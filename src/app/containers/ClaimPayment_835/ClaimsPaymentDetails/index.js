@@ -583,6 +583,22 @@ export class ClaimPaymentDetails extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
+                <div className="form-group col-2">
+                        <div className="list-dashboard">Organization</div>
+                      <input className="form-control" 
+                                                onChange={(e) => {
+                                                    clearTimeout(val)
+                                                    let value = e.target.value
+                                                    val = setTimeout(() => {
+                                                        this.setState({ Organization: value, showDetails: false })
+                                                        setTimeout(() => {
+                                                            this.getData()
+                                                        }, 50);
+                                                    }, 300);
+                                                }}
+                                            />
+                    </div>
+            
                     <div className="form-group col-sm-2">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-header-dashboard" va id="fao1"
@@ -613,21 +629,7 @@ export class ClaimPaymentDetails extends React.Component {
                                                 }}
                                             />
                     </div> */}
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Organization</div>
-                      <input className="form-control" 
-                                                onChange={(e) => {
-                                                    clearTimeout(val)
-                                                    let value = e.target.value
-                                                    val = setTimeout(() => {
-                                                        this.setState({ Organization: value, showDetails: false })
-                                                        setTimeout(() => {
-                                                            this.getData()
-                                                        }, 50);
-                                                    }, 300);
-                                                }}
-                                            />
-                    </div>
+                  
                     <div className="form-group col-2">
                         <div className="list-dashboard">Check/EFT Start Date</div>
                         <DatePicker
