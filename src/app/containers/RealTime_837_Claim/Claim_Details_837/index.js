@@ -106,6 +106,8 @@ export class ClaimDetails837 extends React.Component {
             page1: 1,
 
             gridType: 0,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
      
             columnDefs: [
                 { headerName: "File Name", field: "FileName" },
@@ -1454,7 +1456,7 @@ export class ClaimDetails837 extends React.Component {
     _renderList() {
         return (
             <div>
-                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={this.state.columnDefs}
@@ -1467,8 +1469,10 @@ export class ClaimDetails837 extends React.Component {
                         rowGroupPanelShow={this.state.rowGroupPanelShow}
                         pivotPanelShow={this.state.pivotPanelShow}
                         enableRangeSelection={true}
-                        paginationAutoPageSize={true}
+                        paginationAutoPageSize={false}
                         pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                      
@@ -1497,7 +1501,7 @@ export class ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1510,8 +1514,10 @@ export class ClaimDetails837 extends React.Component {
                         rowGroupPanelShow={this.state.rowGroupPanelShow}
                         pivotPanelShow={this.state.pivotPanelShow}
                         enableRangeSelection={true}
-                        paginationAutoPageSize={true}
+                        paginationAutoPageSize={false}
                         pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.claims_rowData}
                       
@@ -1542,7 +1548,7 @@ export class ClaimDetails837 extends React.Component {
 
         return (
             <div>
-                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1555,8 +1561,10 @@ export class ClaimDetails837 extends React.Component {
                         rowGroupPanelShow={this.state.rowGroupPanelShow}
                         pivotPanelShow={this.state.pivotPanelShow}
                         enableRangeSelection={true}
-                        paginationAutoPageSize={true}
+                        paginationAutoPageSize={false}
                         pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.Error_data}
                         

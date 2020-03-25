@@ -54,6 +54,8 @@ export class ClaimProcessingSummary extends React.Component {
             subscriber_IDFlag: 180,
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName" },
                 { headerName: "File Date", field: "FileCrDate" },
@@ -625,8 +627,10 @@ export class ClaimProcessingSummary extends React.Component {
                     rowGroupPanelShow={this.state.rowGroupPanelShow}
                     pivotPanelShow={this.state.pivotPanelShow}
                     enableRangeSelection={true}
-                    paginationAutoPageSize={true}
+                    paginationAutoPageSize={false}
                     pagination={true}
+                    domLayout={this.state.domLayout}
+                    paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
                 >

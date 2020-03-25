@@ -52,6 +52,8 @@ export class AuditSummary extends React.Component {
             count: 1,
             nameRotation: 180,
             statusRotation: 180,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "filename" },
                 { headerName: "File Status", field: "FileStatus" },
@@ -621,8 +623,8 @@ export class AuditSummary extends React.Component {
 
     _renderTransactions() {
         return (
-            <div>
-                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+            <div style={{ width: '100%', height: '100%' }}>
+                <div className="ag-theme-balham" style={{ maxHeight: '100%',padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={this.state.columnDefs}
@@ -635,8 +637,10 @@ export class AuditSummary extends React.Component {
                         rowGroupPanelShow={this.state.rowGroupPanelShow}
                         pivotPanelShow={this.state.pivotPanelShow}
                         enableRangeSelection={true}
-                        paginationAutoPageSize={true}
+                        paginationAutoPageSize={false}
                         pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                     >
