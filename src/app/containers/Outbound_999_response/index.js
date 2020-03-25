@@ -151,6 +151,7 @@ export class Outbound_response_999 extends React.Component {
 
         e = e + addOn
         this.setState({
+            showDetails: false,
             orderby: e,
             [key]: rotation == 0 ? 180 : 0
         })
@@ -159,21 +160,14 @@ export class Outbound_response_999 extends React.Component {
         }, 50);
     }
 
-    render999Details(fileId) {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+    render999Details(refId) {
         let query = `{
-            Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "", page: 1, OrderBy: "") {
+            Data999_Response (RefId:${refId}) {
               FileId
-              FileName
-              Date
-              Submitter
-              id
-              status
+              RefId
               Response
-              TrasactionType
-          }
-    }`
+            }
+          }`
         console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
@@ -187,7 +181,7 @@ export class Outbound_response_999 extends React.Component {
             .then(res => {
                 if (res.data) {
                     this.setState({
-                        Response: res.data.Data999[0].Response,
+                        Response: res.data.Data999_Response[0].Response,
                         showDetails: true
                     })
                 }
@@ -357,7 +351,7 @@ export class Outbound_response_999 extends React.Component {
                     <td className="list-item-style">
                         <a className="clickable"
                             onClick={() => {
-                                this.render999Details(item.FileId)
+                                this.render999Details(item.id)
                             }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{item.ResponseFileName}</a></td>
                     <td className="list-item-style">{date}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{item.FileName}</td>

@@ -80,7 +80,7 @@ export class AuditSummary extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: true,
+                editable: false,
                 enableRowGroup: true,
                 enablePivot: true,
                 enableValue: true,
@@ -330,7 +330,8 @@ export class AuditSummary extends React.Component {
                     <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">{count}</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
-                    <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                    <td className="list-item-style">
+                        <a style={{ color: "#6AA2B8", cursor: "pointer",  wordBreak: 'break-all' }}
                         onClick={() => {
                             this.goto999(d.FileID)
                         }}>{d.F999}</a></td>
