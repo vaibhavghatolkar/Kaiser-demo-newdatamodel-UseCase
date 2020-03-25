@@ -868,8 +868,6 @@ export class RealTimeDashboard_New extends React.Component {
                 claimStatus = 'Rejected'
             } else if (item.name == 'Reconciled Files') {
                 loadStatus = 'Reconciled'
-            } else if (item.name == 'Total Accepted Files') {
-
             } else {
                 addon = '/other'
             }
@@ -882,7 +880,7 @@ export class RealTimeDashboard_New extends React.Component {
                     _data={data}
                     header_text={item.name}
                     value={item.value}
-                    url={'/ClaimDetails837'}
+                    url={Strings.Claim_Details_837_Grid}
                 />
 
             )

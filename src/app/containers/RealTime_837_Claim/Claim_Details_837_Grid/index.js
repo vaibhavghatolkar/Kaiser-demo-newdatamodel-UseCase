@@ -115,7 +115,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitter", field: "Sender" },
-                { headerName: "Status", field: "Status" },
+                { headerName: "Load Status", field: "Status" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
             ],
