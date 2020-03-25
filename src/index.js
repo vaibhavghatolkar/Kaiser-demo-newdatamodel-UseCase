@@ -97,7 +97,7 @@ import { OutboundMatchClaims } from './app/containers/Claims/OutboundMatchClaims
 import { Outbound_BatchDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Batch_Details_837';
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Batch_Details_837';
 import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
-
+import { Claim_Details_837_Grid } from './app/containers/RealTime_837_Claim/Claim_Details_837_Grid'
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
 
@@ -312,6 +312,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_BatchDetails837} component={Outbound_BatchDetails837} />
                                 <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
                                 <Route path={'/' + Strings.Remittance_Viewer} component={Remittance_Viewer} />
+                                <Route path={'/' + Strings.Claim_Details_837_Grid} component={Claim_Details_837_Grid} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
