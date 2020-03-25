@@ -98,6 +98,10 @@ import { Outbound_BatchDetails837 } from './app/containers/Outbound_RealTime_837
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Batch_Details_837';
 import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
 import { Claim_Details_837_Grid } from './app/containers/RealTime_837_Claim/Claim_Details_837_Grid'
+import { RealTimeDashboard_New } from './app/containers/RealTime_837_Claim/RealTimeDashboard_New';
+import { Payment_details } from './app/containers/ClaimPayment_835/PaymentDetails';
+
+
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
 
@@ -267,7 +271,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.FullComparsion_dashboard} component={FullComparsion_dashboard} />
                                 {/* <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} /> */}
                                 <Route path={'/' + Strings.ClaimDetails837} component={ClaimDetails837} />
-                                <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard} />
+                                {/* <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard} /> */}
+                                <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard_New} />
                                 <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
                                 <Route path={'/' + Strings.Files_837} component={Files_837} />
                                 <Route path={'/' + Strings.MenuManagement} component={MenuManagement} />
@@ -313,6 +318,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
                                 <Route path={'/' + Strings.Remittance_Viewer} component={Remittance_Viewer} />
                                 <Route path={'/' + Strings.Claim_Details_837_Grid} component={Claim_Details_837_Grid} />
+                                <Route path={'/' + Strings.Payment_details} component={Payment_details} />
                                 
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 

@@ -14,19 +14,19 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 
 import {
-  Chart,
-  ArgumentAxis,
-  ValueAxis,
-  AreaSeries,
-  PieSeries,
-  Title,
-  Legend,
+    Chart,
+    ArgumentAxis,
+    ValueAxis,
+    AreaSeries,
+    PieSeries,
+    Title,
+    Legend,
 } from '@devexpress/dx-react-chart-material-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { ArgumentScale, Animation } from '@devexpress/dx-react-chart';
 import {
-  curveCatmullRom,
-  area,
+    curveCatmullRom,
+    area,
 } from 'd3-shape';
 import { scalePoint } from 'd3-scale';
 
@@ -36,54 +36,54 @@ const data = [
     { month: 'Mar', appStore: 107, googlePlay: 20 },
     { month: 'Apr', appStore: 113, googlePlay: 17 },
 
-  ];
+];
 
-  const demoStyles = () => ({
+const demoStyles = () => ({
     chart: {
-      paddingRight: '20px',
-      backgroundColor : ['grey', 'black'],
-      fill: 'black'
+        paddingRight: '20px',
+        backgroundColor: ['grey', 'black'],
+        fill: 'black'
     },
-  });
+});
 
-  const legendStyles = () => ({
+const legendStyles = () => ({
     root: {
-      display: 'flex',
-      margin: 'auto',
-      flexDirection: 'row',
-      backgroundColor: ['grey', 'green'],
-      fill: 'black'
+        display: 'flex',
+        margin: 'auto',
+        flexDirection: 'row',
+        backgroundColor: ['grey', 'green'],
+        fill: 'black'
     },
-  });
-  const legendRootBase = ({ classes, ...restProps }) => (
+});
+const legendRootBase = ({ classes, ...restProps }) => (
     <Legend.Root {...restProps} className={classes.root} />
-  );
-  const Root = withStyles(legendStyles, { name: 'LegendRoot' })(legendRootBase);
-  const legendLabelStyles = () => ({
+);
+const Root = withStyles(legendStyles, { name: 'LegendRoot' })(legendRootBase);
+const legendLabelStyles = () => ({
     label: {
-      whiteSpace: 'nowrap',
-      backgroundColor: ['grey', 'blue'],
-      fill: 'black'
+        whiteSpace: 'nowrap',
+        backgroundColor: ['grey', 'blue'],
+        fill: 'black'
     },
-  });
-  const legendLabelBase = ({ classes, ...restProps }) => (
+});
+const legendLabelBase = ({ classes, ...restProps }) => (
     <Legend.Label className={classes.label} {...restProps} />
-  );
-  const Label = withStyles(legendLabelStyles, { name: 'LegendLabel' })(legendLabelBase);
+);
+const Label = withStyles(legendLabelStyles, { name: 'LegendLabel' })(legendLabelBase);
 
-  
-  const Area = props => (
+
+const Area = props => (
     <AreaSeries.Path
-      {...props}
-      path={area()
-        .x(({ arg }) => arg)
-        .y1(({ val }) => val)
-        .y0(({ startVal }) => startVal)
-        .curve(curveCatmullRom)}
+        {...props}
+        path={area()
+            .x(({ arg }) => arg)
+            .y1(({ val }) => val)
+            .y0(({ startVal }) => startVal)
+            .curve(curveCatmullRom)}
     />
-  );
-  
-  const second_data = {
+);
+
+const second_data = {
     labels: [
         'ICD Code not found',
         'Accident Date not present',
@@ -124,10 +124,10 @@ export class ClaimPaymentDashboard extends React.Component {
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
-            pielabels : [],
-            pievalues : [],
-            startDate : moment().subtract(7,'d').format('YYYY-MM-DD'),
-            endDate : moment().format('YYYY-MM-DD'),
+            pielabels: [],
+            pievalues: [],
+            startDate: moment().subtract(7, 'd').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Datewise',
             selectedTradingPartner: '',
@@ -140,20 +140,22 @@ export class ClaimPaymentDashboard extends React.Component {
             rejected_per: 0,
             ClaimBarChart: [],
             claimLabels: [],
-             data,
-//////////----------table----
+            data,
+            //////////----------table----
             Organization: '',
-           startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             Service_startDate: '',
             Service_endDate: '',
-            Sender:'',
+            Sender: '',
             page: 1,
             count: 0,
-            orderby:''
+            orderby: '',
+            providerChartLabel: ['Provider Name 1', 'Provider Name 2', 'Provider Name 3', 'Provider Name 4', 'Provider Name 5'],
+            providerChartData: [4, 5, 1, 2, 3],
+            ErrorChartLabel: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+            ErrorChartData: [9, 5, 1, 3, 4, 8, 7, 11, 2, 6, 10, 12],
 
-
-    
         }
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
@@ -282,7 +284,7 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     renderTableHeader() {
-        
+
         return (
             <tr className="table-head">
                 <td className="table-head-text list-item-style">File Name</td>
@@ -291,7 +293,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 <td className="table-head-text list-item-style">Remittance sent date</td>
                 <td className="table-head-text list-item-style">Compliance vs Submission date</td>
                 <td className="table-head-text list-item-style"># of errors</td>
-                <td className="table-head-text list-item-style">Receiver</td>
+                {/* <td className="table-head-text list-item-style">Receiver</td> */}
             </tr>
         )
     }
@@ -324,52 +326,52 @@ export class ClaimPaymentDashboard extends React.Component {
     renderMonthlyTrendsChart() {
 
         return (
-            <div className = "chart-div chart-container1 chart">
-            <div className="row">
+            <div className="chart-div chart-container1 chart">
+                <div className="row">
 
-            <div className = "col-7">
-    
-            <h6 > Volume - This Month trends</h6>
+                    <div className="col-7">
+
+                        <h6 > Volume - This Month trends</h6>
+                    </div>
+
+
+                </div>
+
+
+                <Chart1
+                    width={'700px'}
+                    height={'300px'}
+                    chartType="LineChart"
+                    loader={<div>Loading Chart</div>}
+                    data={[
+                        ['x', 'EFT'],
+                        [0, 0],
+                        [1, 10],
+                        [2, 23],
+                        [3, 17],
+                        [4, 18],
+                        [5, 9],
+                        [6, 11],
+                        [7, 27],
+                        [8, 33],
+                        [9, 40],
+                        [10, 32],
+                        [11, 35],
+                    ]}
+                    options={{
+                        series: {
+                            0: { curveType: 'function' },
+                        },
+                        chartArea: { width: '100%' },
+
+                        colors: ['#139DC9'],
+
+                        fill: true
+                    }}
+
+                />
+
             </div>
-           
-           
-            </div>
-            
-    
-        <Chart1
-  width={'700px'}
-  height={'300px'}
-  chartType="LineChart"
-  loader={<div>Loading Chart</div>}
-  data={[
-    ['x', 'EFT'],
-    [0, 0],
-    [1, 10],
-    [2, 23],
-    [3, 17],
-    [4, 18],
-    [5, 9],
-    [6, 11],
-    [7, 27],
-    [8, 33],
-    [9, 40],
-    [10, 32],
-    [11, 35],
-  ]}
-  options={{
-    series: {
-        0: { curveType: 'function' },
-      },
-      chartArea: { width: '100%' },
-
-      colors: ['#139DC9'],
-
-      fill : true
-  }}
-
-/>
-
-</div>
         );
     }
 
@@ -383,7 +385,7 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     getListData = () => {
-     
+
         let count = 1
         let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
         let ServiceEndDate = this.state.ServiceEndDate ? moment(this.state.ServiceEndDate).format('YYYY-MM-DD') : ""
@@ -446,7 +448,7 @@ export class ClaimPaymentDashboard extends React.Component {
     renderList() {
         let row = []
         const data = this.state.claimsList;
-        console.log("" , data)
+        console.log("", data)
         data.forEach((d) => {
             row.push(
                 <tr>
@@ -590,7 +592,7 @@ export class ClaimPaymentDashboard extends React.Component {
                                     this.getData()
                                 }, 50);
                             }}
-                            >
+                        >
                             <option selected="selected" value="1">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
@@ -660,51 +662,51 @@ export class ClaimPaymentDashboard extends React.Component {
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
 
-        
-    
+
+
 
         return (
-         
-           
-                <div className="row padding-left">
-    
-           
-        {/* <div className="col-2 summary-container">
+
+
+            <div className="row padding-left">
+
+
+                {/* <div className="col-2 summary-container">
             <div className="summary-header"> # of claims</div>
             <div  className= 'blue summary-title' >
             449k
             </div>
         </div> */}
 
-        <div className="col summary-container">
-        <div className="summary-header">   Total # of 835</div>
-        <div  className= 'green summary-title' >
-        426k
+                <div className="col summary-container">
+                    <div className="summary-header">   Total # of 835</div>
+                    <div className='green summary-title' >
+                        426k
         </div>
-    </div>
-    
-        <div className="col summary-container">
-        <div className="summary-header">  Partial</div>
-        <div  className= 'blue summary-title' >
-        33k
+                </div>
+
+                <div className="col summary-container">
+                    <div className="summary-header">  Partial</div>
+                    <div className='blue summary-title' >
+                        33k
         </div>
-    </div>
-    <div className="col summary-container">
-        <div className="summary-header">  Denied</div>
-        <div  className= 'red summary-title' >
-        2k
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">  Denied</div>
+                    <div className='red summary-title' >
+                        2k
         </div>
-    </div>
-    <div className="col summary-container">
-        <div className="summary-header">  Pending</div>
-        <div  className= 'orange summary-title' >
-        1k
+                </div>
+                <div className="col summary-container">
+                    <div className="summary-header">  Pending</div>
+                    <div className='orange summary-title' >
+                        1k
         </div>
-    </div>
-        </div>
-                
-           
-           
+                </div>
+            </div>
+
+
+
         )
     }
 
@@ -716,7 +718,7 @@ export class ClaimPaymentDashboard extends React.Component {
         })
     }
 
-    renderPieChart(heading,labels,data) {
+    renderPieChart(heading, labels, data) {
 
         const second_data = {
             labels: [
@@ -734,160 +736,160 @@ export class ClaimPaymentDashboard extends React.Component {
                     'blue',
                 ]
             }],
-        
+
         };
-        
+
         return (
             <div>
 
-            <h6> {heading}</h6>
-            <Pie data={second_data}
-               
-                width={100}
-                height={80} />
-                </div>
+                <h6> {heading}</h6>
+                <Pie data={second_data}
+
+                    width={100}
+                    height={80} />
+            </div>
         )
     }
 
     renderTransactionsNew(flag) {
 
-       
+
         let data = this.state.files_list ? this.state.files_list : []
         let headerArray = []
         let rowArray = []
         headerArray.push(
             { value: 'File Generated/Created', upScale: 1 },
-            { value: 'File Created Date'},
+            { value: 'File Created Date' },
             { value: 'Remittance sent' },
             { value: 'Remittance sent date' },
-            { value: 'Compliance vs Submission date'},
-            { value: '# of errors'},
-            { value: 'Receiver'}    
+            { value: 'Compliance vs Submission date' },
+            { value: '# of errors' },
+            { value: 'Receiver' }
         )
 
-      
+
 
         rowArray.push(
             { value: 'File_Generated', upScale: 1 },
             { value: 'File_Created_Date', isDate: 1, isNottime: 1 },
             { value: 'Remittance_sent' },
             { value: 'Remittance_sent_date' },
-            { value: 'Compliance_vs_Submission_date'},
-            { value: 'no_of_errors'},
-            { value: 'Receiver'}    
-           
+            { value: 'Compliance_vs_Submission_date' },
+            { value: 'no_of_errors' },
+            { value: 'Receiver' }
+
         )
 
         data = [
             {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
 
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
-
-
-            },
-
-            {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
-
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
 
 
             },
 
             {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
 
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
-
-
-            },
-
-            {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
-
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
 
 
             },
 
             {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
 
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
-            },
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
 
-            {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
-
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
-            },
-
-
-            {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
-
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
-
-            },
-
-
-            {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
-
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
 
             },
 
             {
-                File_Generated : '99090023232.txt',
-                File_Created_Date : 1582810469000,
-                Remittance_sent : '99090023232.txt',
-                Remittance_sent_date : 1582810469000,
-                Compliance_vs_Submission_date : 1582810469000,
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
 
-                no_of_errors : 2,
-                Receiver : 'TRICARE FOR LIFE'
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
+
+
+            },
+
+            {
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
+
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
+            },
+
+            {
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
+
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
+            },
+
+
+            {
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
+
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
+
+            },
+
+
+            {
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
+
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
+
+            },
+
+            {
+                File_Generated: '99090023232.txt',
+                File_Created_Date: 1582810469000,
+                Remittance_sent: '99090023232.txt',
+                Remittance_sent_date: 1582810469000,
+                Compliance_vs_Submission_date: 1582810469000,
+
+                no_of_errors: 2,
+                Receiver: 'TRICARE FOR LIFE'
 
             }
 
@@ -897,19 +899,19 @@ export class ClaimPaymentDashboard extends React.Component {
 
         ]
 
-        if(flag) {
+        if (flag) {
 
-        return (
-            <CommonTable
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-                count={this.state.count}
-                handlePageClick={this.handlePageClick}
-                onClickKey={'HiPaaSUniqueID'}
-                onClick={this.onClick1}
-            />
-        )
+            return (
+                <CommonTable
+                    headerArray={headerArray}
+                    rowArray={rowArray}
+                    data={data}
+                    count={this.state.count}
+                    handlePageClick={this.handlePageClick}
+                    onClickKey={'HiPaaSUniqueID'}
+                    onClick={this.onClick1}
+                />
+            )
         }
         else {
 
@@ -941,17 +943,17 @@ export class ClaimPaymentDashboard extends React.Component {
     renderList() {
         let row = []
         const data = this.state.claimsList;
-    
+
         data.forEach((d) => {
             row.push(
                 <tr>
                     <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.FileName}</td>
-                           <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style"></td>
-            <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Receiver}</td>
+                    {/* <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Receiver}</td> */}
                 </tr>
             )
         });
@@ -992,124 +994,196 @@ export class ClaimPaymentDashboard extends React.Component {
             ["2010", 10, "color: grey"],
             ["2020", 14, "color: grey"],
             ["2030", 16, "color: grey"],
-            ["2040", 22,"color: grey"],
+            ["2040", 22, "color: grey"],
             [
-              "2050",
-              28,
-              "stroke-color: grey; stroke-opacity: 0.6; stroke-width: 2; fill-color: grey; fill-opacity: 0.2"
+                "2050",
+                28,
+                "stroke-color: grey; stroke-opacity: 0.6; stroke-width: 2; fill-color: grey; fill-opacity: 0.2"
             ]
-          ];
+        ];
 
-         const  options={
+        const options = {
             title: 'Average days for submission',
             chartArea: { width: '20%' },
             colors: ['lightgrey'],
             hAxis: {
-              title: 'Total Population',
-              minValue: 0,
+                title: 'Total Population',
+                minValue: 0,
             },
             vAxis: {
-              title: '',
+                title: '',
             },
-          } ;
-        
-        return(
+        };
 
-            <div className = "chart-container2 chart chart-div">
-            
-            <div style ={{color : "grey"}} className="row">
+        return (
 
-            <div className="col-4">
-            <h6> Providers</h6>
-            <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} />
-            <br></br> 
+            <div className="chart-container2 chart chart-div">
 
-            <p style ={{color : "grey"}} > Provider </p>
+                <div style={{ color: "grey" }} className="row">
 
-            <div className ="row">
-            <div className="col-9"> Kaiser </div>
-            <div className="col-3"> 128</div>
-         </div>
-           <hr style ={{ borderColor : 'lightgrey'}}  />
-       
-        <div className ="row">
-        <div className="col-9"> Aetna </div>
-        <div className="col-3"> 96</div>
-     </div>
-       <hr style ={{ borderColor : 'lightgrey'}}  />
-   
+                    <div className="col-4" style={{ padding: '0' }}>
+                        <h6>Top 5 Providers</h6>
+                        {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
 
-    <div className ="row">
-    <div className="col-9"> Cigna </div>
-    <div className="col-3"> 64</div>
- </div>
-   <hr style ={{ borderColor : 'lightgrey'}}  />
+                        <Bar
+                            data={this.getBarData(this.state.providerChartLabel, this.state.providerChartData, '#139DC9')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            userCallback: function (label, index, labels) {
+                                                // when the floored value is the same as the value we have a whole number
+                                                if (Math.floor(label) === label) {
+                                                    return label;
+                                                }
 
-  
-{/* <div className ="row">
+                                            },
+                                        }
+                                    }],
+                                },
+                            }} />
+                        <br /><br />
+
+                        <p style={{ color: "grey" }} > Provider </p>
+
+                        <div className="row">
+                            <div className="col-9"> Kaiser </div>
+                            <div className="col-3"> 128</div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+
+                        <div className="row">
+                            <div className="col-9"> Aetna </div>
+                            <div className="col-3"> 96</div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+
+
+                        <div className="row">
+                            <div className="col-9"> Cigna </div>
+                            <div className="col-3"> 64</div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+
+
+                        {/* <div className ="row">
 <div className="col-9"> BCBS </div>
 <div className="col-3"> 16</div>
 </div> */}
-{/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
-</div>
+                        {/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
+                    </div>
 
-            <div className="col-4">
-            <h6> EFT vs CHK </h6>
-            <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} />
-            <p style ={{color : "grey"}} > Provider </p>
+                    <div className="col-4" style={{padding: '0'}}>
+                        <h6> EFT vs CHK </h6>
+                        {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
+                        <Bar
+                            data={this.getBarData(this.state.ErrorChartLabel, this.state.ErrorChartData, '#139DC9')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            userCallback: function (label, index, labels) {
+                                                // when the floored value is the same as the value we have a whole number
+                                                if (Math.floor(label) === label) {
+                                                    return label;
+                                                }
 
-            <div className ="row">
-            <div className="col-9"> Example 1 </div>
-            <div className="col-3"> 100% </div>
-         </div>
-           <hr style ={{ borderColor : 'lightgrey'}}  />
-       
-        <div className ="row">
-        <div className="col-9">  Example 2 </div>
-        <div className="col-3"> 86% </div>
-     </div>
-       <hr style ={{ borderColor : 'lightgrey'}}  />
-   
+                                            },
+                                        }
+                                    }],
+                                },
+                            }} />
+                        <br /><br />
+                        <p style={{ color: "grey" }} > Provider </p>
 
-    <div className ="row">
-    <div className="col-9"> Example 3 </div>
-    <div className="col-3"> 64% </div>
- </div>
-   <hr style ={{ borderColor : 'lightgrey'}}  />
+                        <div className="row">
+                            <div className="col-9"> Example 1 </div>
+                            <div className="col-3"> 100% </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
 
-  
-    <div className ="row">
-    <div className="col-9"> Example 4 </div>
-    <div className="col-3"> 16% </div>
-    </div>
-    <hr style ={{ borderColor : 'lightgrey'}}  />
-            </div>
-            <div className="col-4">
-            <h6> Average # of Errors </h6>
-            <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} />
-            <p style ={{color : "grey"}} > Error Reason </p>
+                        <div className="row">
+                            <div className="col-9">  Example 2 </div>
+                            <div className="col-3"> 86% </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
 
-            <div className ="row">
-        <div className="col-9">   Negative numbers </div>
-        <div className="col-3"> 82 </div>
-     </div>
-       <hr style ={{ borderColor : 'lightgrey'}}  />
-   
 
-    <div className ="row">
-    <div className="col-9">  Charge exceeds fee </div>
-    <div className="col-3"> 18 </div>
- </div>
-   <hr style ={{ borderColor : 'lightgrey'}}  />
+                        <div className="row">
+                            <div className="col-9"> Example 3 </div>
+                            <div className="col-3"> 64% </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
 
-  
-    <div className ="row">
-    <div className="col-9"> Example  </div>
-    <div className="col-3"> 12 </div>
-    </div>
-    <hr style ={{ borderColor : 'lightgrey'}}  />
-            </div>
-            </div>
+
+                        <div className="row">
+                            <div className="col-9"> Example 4 </div>
+                            <div className="col-3"> 16% </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+                    </div>
+                    <div className="col-4" style={{ padding: '0' }}>
+                        <h6> Average # of Errors </h6>
+                        {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
+                        <Bar
+                            data={this.getBarData(this.state.ErrorChartLabel, this.state.ErrorChartData, '#139DC9')}
+                            width={100}
+                            height={60}
+                            options={{
+                                legend: {
+                                    display: false,
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            userCallback: function (label, index, labels) {
+                                                // when the floored value is the same as the value we have a whole number
+                                                if (Math.floor(label) === label) {
+                                                    return label;
+                                                }
+
+                                            },
+                                        }
+                                    }],
+                                },
+                            }} />
+                        <br /><br />
+                        <p style={{ color: "grey" }} > Error Reason </p>
+
+                        <div className="row">
+                            <div className="col-9">   Negative numbers </div>
+                            <div className="col-3"> 82 </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+
+
+                        <div className="row">
+                            <div className="col-9">  Charge exceeds fee </div>
+                            <div className="col-3"> 18 </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+
+
+                        <div className="row">
+                            <div className="col-9"> Example  </div>
+                            <div className="col-3"> 12 </div>
+                        </div>
+                        <hr style={{ borderColor: 'lightgrey' }} />
+                    </div>
+                </div>
             </div>
         )
     }
@@ -1147,99 +1221,99 @@ export class ClaimPaymentDashboard extends React.Component {
                         }}
                         width={130}
                         height={90} />
-                        
+
                 </div>
+            </div>
+        )
+    }
+
+
+    renderErrorChart() {
+        return (
+            <Pie data={second_data}
+                options={{
+                    elements: {
+                        arc: {
+                            borderWidth: 0
+                        }
+                    },
+                    legend: {
+                        display: false,
+                    }
+                }}
+                width={100}
+                height={60} />
+        )
+    }
+
+    renderValues() {
+        let row = []
+        let data = second_data.labels
+        let colors = second_data.datasets[0].backgroundColor
+        let count = 0
+        data.forEach(item => {
+            row.push(
+                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '60px', color: 'slategrey', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
                 </div>
-                )
-            }
+            )
+            count++
+        })
+        return (
+            <div style={{ marginTop: '20px' }} className="row">
+                {row}
+            </div>
+        )
+    }
 
-
-            renderErrorChart() {
-                return (
-                    <Pie data={second_data}
-                        options={{
-                            elements: {
-                                arc: {
-                                    borderWidth: 0
-                                }
-                            },
-                            legend: {
-                                display: false,
-                            }
-                        }}
-                        width={100}
-                        height={60} />
-                )
-            }
-
-            renderValues() {
-                let row = []
-                let data = second_data.labels
-                let colors = second_data.datasets[0].backgroundColor
-                let count = 0
-                data.forEach(item => {
-                    row.push(
-                        <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '60px', color: 'slategrey', alignItems: 'center' }}>
-                            <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
-                        </div>
-                    )
-                    count++
-                })
-                return (
-                    <div style={{ marginTop: '20px' }} className="row">
-                        {row}
-                    </div>
-                )
-            }
-
-            RenderMainErrorChart(){
-                return(
-                    <div className="row chart-div">
+    RenderMainErrorChart() {
+        return (
+            <div className="row chart-div">
                 <div className="chart-container chart col-12">
-                    <div style={{fontWeight: '500'}}>Denial code wise count</div><br/>
+                    <div style={{ fontWeight: '500' }}>Denial code wise count</div><br />
                     {this.renderErrorChart()}
                     {/* {this.renderValues()} */}
-                    </div>
-                    </div>
-                )
-            }
+                </div>
+            </div>
+        )
+    }
 
     renderMaterialChart() {
 
-       
-          const { data: chartData } = this.state;
 
-    return (
-      <Paper  className = {demoStyles.chart}>
-        <Chart
-        className = {demoStyles.chart}
-          data={chartData}
-          
-        >
-          <ArgumentScale factory={scalePoint} />
-          <ArgumentAxis />
-          <ValueAxis className = {demoStyles.chart} />
+        const { data: chartData } = this.state;
 
-          <AreaSeries
-           className = {demoStyles.chart}
-            name="Old claims"
-            valueField="appStore"
-            argumentField="month"
-            seriesComponent={Area}
-          />
-          <AreaSeries
-          className = {demoStyles.chart}
-            name="Current Claims"
-            valueField="googlePlay"
-            argumentField="month"
-            seriesComponent={Area}
-          />
-          <Animation />
-          <Legend position="bottom" rootComponent={Root} labelComponent={Label} />
-          <Title text="Volume- This month's trends" />
-        </Chart>
-      </Paper>
-    );
+        return (
+            <Paper className={demoStyles.chart}>
+                <Chart
+                    className={demoStyles.chart}
+                    data={chartData}
+
+                >
+                    <ArgumentScale factory={scalePoint} />
+                    <ArgumentAxis />
+                    <ValueAxis className={demoStyles.chart} />
+
+                    <AreaSeries
+                        className={demoStyles.chart}
+                        name="Old claims"
+                        valueField="appStore"
+                        argumentField="month"
+                        seriesComponent={Area}
+                    />
+                    <AreaSeries
+                        className={demoStyles.chart}
+                        name="Current Claims"
+                        valueField="googlePlay"
+                        argumentField="month"
+                        seriesComponent={Area}
+                    />
+                    <Animation />
+                    <Legend position="bottom" rootComponent={Root} labelComponent={Label} />
+                    <Title text="Volume- This month's trends" />
+                </Chart>
+            </Paper>
+        );
 
     }
 
@@ -1247,43 +1321,43 @@ export class ClaimPaymentDashboard extends React.Component {
     renderMaterialPieChart() {
 
         const pieData = [
-            { country: 'Russia', area: 12, color : 'blue'},
-            { country: 'Canada', area: 7, color :  'black'},
+            { country: 'Russia', area: 12, color: 'blue' },
+            { country: 'Canada', area: 7, color: 'black' },
             { country: 'USA', area: 7 },
-        
-          ];
 
-          return (
+        ];
+
+        return (
 
             <div>
-            <Paper className = {demoStyles.chart}>
-              <Chart
-                data={pieData}
-                options = { {
-                    colors : ['lightgrey','green','black']
-                }
+                <Paper className={demoStyles.chart}>
+                    <Chart
+                        data={pieData}
+                        options={{
+                            colors: ['lightgrey', 'green', 'black']
+                        }
 
-                }
-              >
-                <PieSeries
-                className = {demoStyles.chart}
-                  valueField="area"
-                  argumentField="country"
-                  options = { {
-                    colors : ['lightgrey','green','black']
-                }
-            }
-                 
+                        }
+                    >
+                        <PieSeries
+                            className={demoStyles.chart}
+                            valueField="area"
+                            argumentField="country"
+                            options={{
+                                colors: ['lightgrey', 'green', 'black']
+                            }
+                            }
 
-                />
-                <Title
-                  text="Claim adjustment reason code"
-                />
-                <Animation />
-              </Chart>
-            </Paper>
+
+                        />
+                        <Title
+                            text="Claim adjustment reason code"
+                        />
+                        <Animation />
+                    </Chart>
+                </Paper>
             </div>
-          );
+        );
 
     }
 
@@ -1296,37 +1370,37 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
 
             <div className="row">
-<div className="chart-container1 chart">
+                <div className="chart-container1 chart">
 
-        <Chart1
-  width={'200px'}
-  height={'400px'}
-  chartType="BarChart"
-  loader={<div>Loading Chart</div>}
-  data={[
-    ['City', 'Country', 'Month',  { role: 'annotation' }],
-    ['USA', 81750, 80080,'USA'],
-    ['India', 37920, 36940,'India'],
-    ['China', 26950, 28960, 'China'],
-    ['Ukraine', 20990, 19530,'Ukraine'],
-    ['Philadelphia', 15260, 15170,'Philadelphia'],
-  ]}
-  options={{
-    title: '835 Data Quality',
-    chartArea: { width: '100%' },
-    colors: ['#139DC9', '#42b0d3'],
-    hAxis: {
-      minValue: 0,
-    },
-    vAxis: {
-    },
-    isStacked : true
-  }}
-  // For tests
-  rootProps={{ 'data-testid': '4' }}
-/>
-</div>
-</div>
+                    <Chart1
+                        width={'200px'}
+                        height={'400px'}
+                        chartType="BarChart"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            ['City', 'Country', 'Month', { role: 'annotation' }],
+                            ['USA', 81750, 80080, 'USA'],
+                            ['India', 37920, 36940, 'India'],
+                            ['China', 26950, 28960, 'China'],
+                            ['Ukraine', 20990, 19530, 'Ukraine'],
+                            ['Philadelphia', 15260, 15170, 'Philadelphia'],
+                        ]}
+                        options={{
+                            title: '835 Data Quality',
+                            chartArea: { width: '100%' },
+                            colors: ['#139DC9', '#42b0d3'],
+                            hAxis: {
+                                minValue: 0,
+                            },
+                            vAxis: {
+                            },
+                            isStacked: true
+                        }}
+                        // For tests
+                        rootProps={{ 'data-testid': '4' }}
+                    />
+                </div>
+            </div>
         );
     }
 
@@ -1368,40 +1442,40 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
 
-    renderGooglePieChart(tittle,data,labels,colors) {
+    renderGooglePieChart(tittle, data, labels, colors) {
 
 
         return (
 
             <div className="row chart-div">
-<div className="chart-container1 chart">
-            <Chart1
-  width={'250px'}
-  height={'250px'}
-  chartType="PieChart"
-  loader={<div>Loading Chart</div>}
-  data={[
-    ['Task', 'Hours per Day'],
-    ['Work', 11],
-    ['Eat', 2],
-    ['Commute', 2],
-    ['Watch TV', 2],
-    ['Sleep', 7],
-  ]}
-  options={{
-    title: tittle,
-    chartArea: { width: '100%' },
-    is3D: true,
-    series: {5: {type: 'line'}},
-    legend : {position: 'top', textStyle: {color: 'blue', fontSize: 16}, type: 'rectangle'},
-    legend : 'none'
- 
+                <div className="chart-container1 chart">
+                    <Chart1
+                        width={'250px'}
+                        height={'250px'}
+                        chartType="PieChart"
+                        loader={<div>Loading Chart</div>}
+                        data={[
+                            ['Task', 'Hours per Day'],
+                            ['Work', 11],
+                            ['Eat', 2],
+                            ['Commute', 2],
+                            ['Watch TV', 2],
+                            ['Sleep', 7],
+                        ]}
+                        options={{
+                            title: tittle,
+                            chartArea: { width: '100%' },
+                            is3D: true,
+                            series: { 5: { type: 'line' } },
+                            legend: { position: 'top', textStyle: { color: 'blue', fontSize: 16 }, type: 'rectangle' },
+                            legend: 'none'
 
-  }}
-  rootProps={{ 'data-testid': '1' }}
-/>
-</div>
-</div>
+
+                        }}
+                        rootProps={{ 'data-testid': '1' }}
+                    />
+                </div>
+            </div>
 
         );
 
@@ -1411,7 +1485,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    
+
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
@@ -1499,7 +1573,7 @@ export class ClaimPaymentDashboard extends React.Component {
                                     this.getData()
                                 }, 50);
                             }}
-                            >
+                        >
                             <option value="1">Last week</option>
                             <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
@@ -1526,40 +1600,38 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-
-
     render() {
 
-        let lables1 = ['Not Compliant','Compliant'];
+        let lables1 = ['Not Compliant', 'Compliant'];
         let lables2 = ['Member not eligible', 'Dependent not covered', 'Provider not authorized'];
         let lables3 = ['Negative number', 'Not valid CARC', 'Missing'];
 
-        let data1 = [20,60];
-        let data2 = [20,60,30];
-        let data3 = [20,60,30];
+        let data1 = [20, 60];
+        let data2 = [20, 60, 30];
+        let data3 = [20, 60, 30];
 
         return (
-            <div><br/>
-                  <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}> 835 Dashboard</h5><br></br>
-                
-                  <div className="row">
-                <div className="col-9">
-                {this.renderTopbar()}
-                {this.renderSummaryDetails()}
-                {/* {this.renderMonthlyTrendsChart()} */}
-                {this.renderGraphs()}
-                </div>
-               
-                <div className="col-3 nopadding">
-                {this.renderCharts()}
-                {this.RenderMainErrorChart()}
-                {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
-                {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
-              
-                </div>
+            <div><br />
+                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}> 835 Dashboard</h5><br></br>
+
+                <div className="row">
+                    <div className="col-9">
+                        {this.renderTopbar()}
+                        {this.renderSummaryDetails()}
+                        {/* {this.renderMonthlyTrendsChart()} */}
+                        {this.renderGraphs()}
+                    </div>
+
+                    <div className="col-3 nopadding">
+                        {this.renderCharts()}
+                        {this.RenderMainErrorChart()}
+                        {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
+                        {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
+
+                    </div>
                 </div>
 
-              
+
 
                 {/* <div className="row">
                 <div className="col-9">
@@ -1575,18 +1647,18 @@ export class ClaimPaymentDashboard extends React.Component {
 
 
                 <div className="row">
-                <div className="col-9">
-               <br></br>  
-               {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
-                {/* {this.renderTransactionsNew()} */}
-                </div>
-                <div className="col-3 nopadding">
+                    <div className="col-9">
+                        <br></br>
+                        {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
+                        {/* {this.renderTransactionsNew()} */}
+                    </div>
+                    <div className="col-3 nopadding">
 
-          
-                {/* {this.renderGoogleStackedBarChart()} */}
-          
-              
-                </div>
+
+                        {/* {this.renderGoogleStackedBarChart()} */}
+
+
+                    </div>
                 </div>
             </div>
         );

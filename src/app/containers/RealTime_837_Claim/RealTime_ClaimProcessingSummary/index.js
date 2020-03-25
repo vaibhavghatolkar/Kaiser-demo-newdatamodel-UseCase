@@ -24,7 +24,7 @@ export class ClaimProcessingSummary extends React.Component {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             providers: [],
-            gridType: 0,
+            gridType: 1,
             recCount: 0,
             pageCount: 1,
             Months: 0,
@@ -543,7 +543,7 @@ export class ClaimProcessingSummary extends React.Component {
                             }}
                         >
                             <option value="select">Default</option>
-                            <option value="select">Classic</option>
+                            <option selected value="select">Classic</option>
                         </select>
                     </div>
                     <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>

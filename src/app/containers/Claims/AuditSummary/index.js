@@ -28,7 +28,7 @@ export class AuditSummary extends React.Component {
             VeriTotal: 0,
             InBizstockTotal: 0,
             acceptedFiles: 0,
-            gridType: 0,
+            gridType: 1,
             selectedTradingPartner: '',
             type: '',
             providerName: '',
@@ -603,7 +603,7 @@ export class AuditSummary extends React.Component {
                             }}
                         >
                             <option value="select">Default</option>
-                            <option value="select">Classic</option>
+                            <option selected value="select">Classic</option>
                         </select>
                     </div>
                 </div>
