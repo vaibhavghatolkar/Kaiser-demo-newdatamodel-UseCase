@@ -52,6 +52,10 @@ export class AuditSummary extends React.Component {
             count: 1,
             nameRotation: 180,
             statusRotation: 180,
+            totalCount:'',
+            accepted_Files:'',
+            acceptedwithErrors:'',
+            rejected_Files:'',
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
@@ -110,6 +114,7 @@ export class AuditSummary extends React.Component {
     componentDidMount() {
         this.getData()
         this._getCounts()
+        this._getCountsNew()
         this.getCommonData()
     }
 
@@ -266,6 +271,51 @@ export class AuditSummary extends React.Component {
             .catch(err => {
                 console.log(err)
             });
+    }
+
+    _getCountsNew = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
+        let query = `{
+            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                TotalCount
+                Accepted
+                Rejected
+                AcceptedwithErrors
+                Processing
+            }
+            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                Reconciled
+                ReconciledError
+                Loaded
+                LoadedError
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let data = res.data.Claim837RTDashboardCountNew
+               
+            
+                this.setState({
+                    totalCount: data[0].TotalCount,
+                    accepted_Files: data[0].Accepted,
+                    acceptedwithErrors: data[0].AcceptedwithErrors,
+                    rejected_Files: data[0].Rejected
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     renderSearchBar() {
@@ -451,10 +501,15 @@ export class AuditSummary extends React.Component {
 
     _renderStats() {
         let _summary = [
-            { header: 'Total Accepted Files', value: this.state.acceptedFiles, style: "green summary-title" },
+            // { header: 'Total Accepted Files', value: this.state.acceptedFiles, style: "green summary-title" },
+            
+            // { header: 'Total Files', value: this.state.totalCount },
+            { header: 'Accepted Files', value: this.state.accepted_Files },
+            { header: 'Accepted with Errors', value: this.state.acceptedwithErrors },
+            { header: 'Rejected Files', value: this.state.rejected_Files },
             { header: 'In HiPaaS', value: this.state.TotalClaims },
-            { header: 'Accepted', value: this.state.Accepted },
-            { header: 'Rejected', value: this.state.Rejected },
+            { header: 'Accepted Claims', value: this.state.Accepted },
+            { header: 'Rejected Claims', value: this.state.Rejected },
             { header: '999', value: this.state.Total999, style: "green summary-title" },
             { header: 'Send To MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
             { header: '277 CA', value: this.state.Total277CA, style: "orange summary-title" }
