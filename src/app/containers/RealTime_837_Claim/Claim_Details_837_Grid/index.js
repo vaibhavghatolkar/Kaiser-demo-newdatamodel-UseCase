@@ -105,7 +105,7 @@ export class Claim_Details_837_Grid extends React.Component {
             fileDataDetails: '',
             page1: 1,
 
-            gridType: 0,
+            gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
      
@@ -243,7 +243,7 @@ export class Claim_Details_837_Grid extends React.Component {
         }
           
    let query= `{            
-    Claim837RTDashboardFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"") {
+    Claim837RTDashboardFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"${this.state.gridflag}") {
                 RecCount
                 FileID
                 FileName
@@ -1015,7 +1015,7 @@ export class Claim_Details_837_Grid extends React.Component {
                             }}
                         >
                             <option value="select">Default</option>
-                            <option value="select">Classic</option>
+                            <option selected value="select">Classic</option>
                         </select>
                     </div>
                 </div>

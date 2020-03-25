@@ -853,35 +853,28 @@ export class RealTimeDashboard_New extends React.Component {
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
-            let gridflag = ''
+            let loadStatus = ''
             let data = []
-            if (item.name == 'Accepted Claims') {
+            if (item.name == 'Accepted Files') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-                gridflag = "Accepted"
-            } else if (item.name == 'Rejected Claims') {
+            } else if (item.name == 'Accepted with Errors') {
                 addon = '/reject'
-                claimStatus = 'Rejected'
-                gridflag = "Rejected"
-            } else if (item.name == 'Resubmit Queue') {
-                claimStatus = 'Resubmit'
-                gridflag = 'Resubmit'
+                claimStatus = 'Accepted with Errors'
+            } else if (item.name == 'Processing Files') {
+                addon = '/reject'
+                claimStatus = 'Received'
             } else if (item.name == 'Rejected Files') {
-                claimStatus = 'RejectedFile'
-                gridflag = 'RejectedFile'
-            }
-            else if (item.name == 'Total Claims') {
+                claimStatus = 'Rejected'
+            } else if (item.name == 'Reconciled Files') {
+                loadStatus = 'Reconciled'
+            } else if (item.name == 'Total Accepted Files') {
 
-                gridflag = 'Total Claims'
-            }
-            else if (item.name == 'Total Accepted Files') {
-                gridflag = 'Total Accepted Files'
-            }
-            else {
+            } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type, gridflag: gridflag },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type, gridflag: loadStatus },
             ]
             row.push(
                 <Tiles
