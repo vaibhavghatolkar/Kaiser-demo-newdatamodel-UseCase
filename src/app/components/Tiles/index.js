@@ -15,7 +15,7 @@ export class Tiles extends React.Component {
         let style =
             this.props.header_text.toLowerCase().indexOf('total') != -1 ? 'blue summary-title' :
                 this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 ? 'green summary-title' :
-                    (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1) ? 'red summary-title' : 'blue summary-title'
+                    (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) ? 'red summary-title' : 'blue summary-title'
         return style
     }
 
@@ -25,7 +25,7 @@ export class Tiles extends React.Component {
         let style = this._getstyles()
         return (
             this.props.isClickable ?
-                <Link to={{ pathname: this.props.url, state: { data: this.props._data } }} className="col summary-container">
+                <Link to={{ pathname: this.props.url, state: { data: this.props._data } }} className={this.props.header_text == 'Accepted with Errors' ? "summary-exception summary-container" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
                         {Number(this.props.value) ? this.props.value : 0}
@@ -36,7 +36,7 @@ export class Tiles extends React.Component {
                     </div>
                 </Link>
                 :
-                <div className="col summary-container">
+                <div className={this.props.header_text == 'Accepted with Errors' ? "summary-exception summary-container" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
                         {Number(this.props.value) ? this.props.value : 0}</div>

@@ -97,6 +97,7 @@ import { OutboundMatchClaims } from './app/containers/Claims/OutboundMatchClaims
 import { Outbound_BatchDetails837 } from './app/containers/Outbound_RealTime_837_Claim/Outbound_Batch_Details_837';
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/InboundEncounter/Outbound_Encounter_Batch_Details_837';
 import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
+import { RealTimeDashboard_New } from './app/containers/RealTime_837_Claim/RealTimeDashboard_New';
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -267,7 +268,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.FullComparsion_dashboard} component={FullComparsion_dashboard} />
                                 {/* <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} /> */}
                                 <Route path={'/' + Strings.ClaimDetails837} component={ClaimDetails837} />
-                                <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard} />
+                                {/* <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard} /> */}
+                                <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard_New} />
                                 <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
                                 <Route path={'/' + Strings.Files_837} component={Files_837} />
                                 <Route path={'/' + Strings.MenuManagement} component={MenuManagement} />

@@ -227,3 +227,7 @@
 .ag-header-cell-text {
     color: var(--white-color);
 }
+.summary-exception{
+    padding-left: 12px;
+    padding-right: 12px;
+}
