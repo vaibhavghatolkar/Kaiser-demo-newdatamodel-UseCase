@@ -123,6 +123,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 { headerName: "Load Status", field: "Status" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
+                { headerName: "Error Description", field: "FileLevelError" },
             ],
 
             autoGroupColumnDef: {
@@ -264,6 +265,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 Status
                 State
                 ProcessID
+                FileLevelError
             }
         }`
         console.log(query)
@@ -1192,15 +1194,15 @@ export class Claim_Details_837_Grid extends React.Component {
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
                 </div>
-                <div className="col-1 col-header justify-align">
+                <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
                 </div>
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a>
                 </div>
-                <div className="col-1 col-header justify-align">
+                {/* <div className="col-1 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
-                </div>
+                </div> */}
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
                 </div>
@@ -1208,7 +1210,7 @@ export class Claim_Details_837_Grid extends React.Component {
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Submitter</a>
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By FileLevelError", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Error Description</a>
                 </div>
             </div>
         )
@@ -1283,12 +1285,12 @@ export class Claim_Details_837_Grid extends React.Component {
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-1 col-small-style small-font">{data[keys].value.State}</div>
+                    <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
                     <div className="col-2 col-small-style small-font" style={{wordBreak: 'break-all'}}>{data[keys].value.ProcessID}</div>
-                    <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div>
+                    {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
                     <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.Sender}</div>
+                    <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
             )
 
