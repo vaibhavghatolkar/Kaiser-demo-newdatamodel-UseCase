@@ -57,7 +57,7 @@ export class ClaimProcessingSummary extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName" },
+                { headerName: "File Name", field: "FileName" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
                 { headerName: "File Date", field: "FileCrDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "999", field: "F999" },
@@ -353,7 +353,7 @@ export class ClaimProcessingSummary extends React.Component {
             { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
         ]
 
-        this.props.history.push('/' + Strings.ClaimDetails837, {
+        this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
             data: sendData
         })
     }
@@ -636,6 +636,9 @@ export class ClaimProcessingSummary extends React.Component {
                     onCellClicked={(event) => {
                         if(event.colDef.headerName == '999'){
                         this.goto999(event.data.FileID)
+                        }
+                        if(event.colDef.headerName == 'File Name'){
+                            this.gotoDetails()
                         }
                     }}
                 >

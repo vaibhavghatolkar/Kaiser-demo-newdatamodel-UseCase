@@ -59,7 +59,7 @@ export class AuditSummary extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "filename" },
+                { headerName: "File Name", field: "filename" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitted", field: "Submitted" },
                 { headerName: "Claims In HiPaaS", field: "InHiPaaS" },
@@ -68,7 +68,7 @@ export class AuditSummary extends React.Component {
                 { headerName: "Error in PreProcess", field: "Error" },
                 { headerName: "In MCG	", field: "SentToQNXT" },
                 { headerName: "999", field: "F999" },
-                { headerName: "277 CA", field: "goto277" },
+                { headerName: "277 CA", field: "F277" },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -704,6 +704,10 @@ export class AuditSummary extends React.Component {
                             if(event.colDef.headerName == '999'){
                             this.goto999(event.data.FileID)
                             }
+                            if(event.colDef.headerName == 'File Name'){
+                                this.props.history.push('/' + Strings.ClaimProcessingSummary)
+                            }
+                            
                         }}
                     >
 

@@ -72,6 +72,7 @@ export class RealTimeDashboard_New extends React.Component {
             selectedTradingPartner: '',
             State: '',
             totalFiles: 0,
+            LoadingClaims: 0,
             Months: 0,
             accepted: 0,
             rejected: 0,
@@ -109,7 +110,7 @@ export class RealTimeDashboard_New extends React.Component {
             domLayout: 'autoHeight',
 
             columnDefs: [
-                { headerName: "File Name", field: "FileName" },
+                { headerName: "File Name", field: "FileName" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
                 { headerName: "Type", field: "Type" },
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
@@ -182,6 +183,7 @@ export class RealTimeDashboard_New extends React.Component {
                 FileReject_Claims
                 Processing_Claims
                 ReconciledError_Claims
+                LoadingClaims
             }
         }`
 
@@ -208,6 +210,7 @@ export class RealTimeDashboard_New extends React.Component {
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
+                        LoadingClaims: _data ? _data.LoadingClaims : 0,
                     })
                 }
             })
@@ -346,7 +349,7 @@ export class RealTimeDashboard_New extends React.Component {
                     { name: 'Reconciled Error', value: reconciledError },
                     { name: 'Load Error', value: loadedError },
                     { name: 'Load in MCG', value: loaded },
-                    { name: 'HiPaaS | MCG', value: processing, second_val : MCGLoadingFiles },
+                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                 ]
 
                 this.setState({
@@ -556,17 +559,47 @@ export class RealTimeDashboard_New extends React.Component {
     }
 
     renderPieChart = (header, piechart_data) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let addon = ''
+        let claimStatus = ''
+        let loadStatus = ''
+        if (header == 'Top 10 File Level Errors') {
+            addon = '/accept'
+            claimStatus = 'Rejected'
+        } else if (header == 'Top 10 Claim Level Errors') {
+            addon = '/reject'
+            claimStatus = 'Rejected'
+        }
+
+        let sendData = [
+            {
+                flag: addon,
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                status: claimStatus,
+                type: type,
+                gridflag: loadStatus
+            },
+        ]
+
         return (
             piechart_data && piechart_data.labels && piechart_data.labels.length > 0
                 ?
-                <div className="row chart-container-full chart">
+                <div className="row chart-container-full chart clickable" onClick={() => {this.gotoClaimDetails(sendData)}}>
                     <div className="col-7 nopadding">
                         <div className="chart-header">{header}</div>
                         {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
                     </div>
-                    <div className="col-5 chart-align">
-                        {this.renderChart(piechart_data)}
-                    </div>
+                        <div className="col-5 chart-align">
+                            {this.renderChart(piechart_data)}
+                        </div>
                 </div> :
                 <div className="chart-container-full chart" style={{ textAlign: 'center' }}>
                     No Data Present
@@ -702,6 +735,27 @@ export class RealTimeDashboard_New extends React.Component {
         );
     }
 
+    gotoClaimDetails = (data) => {
+        let sendData = []
+        if(data && data.length > 0){
+            sendData = data
+        } else {
+            let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+            let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+            let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+            let State = this.state.State ? this.state.State : 'n'
+            let type = this.state.type ? this.state.type : ''
+    
+            sendData = [
+                { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
+            ]
+        }
+
+        this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
+            data: sendData
+        })
+    }
+
     _renderList() {
         return (
             <div>
@@ -724,6 +778,12 @@ export class RealTimeDashboard_New extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        onCellClicked={(event) => {
+                            console.log('this is the event', event)
+                            if (event.colDef.headerName == 'File Name') {
+                                this.gotoClaimDetails()
+                            }
+                        }}
                     >
                     </AgGridReact>
                 </div>
@@ -1162,7 +1222,7 @@ export class RealTimeDashboard_New extends React.Component {
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims },
         ]
         let stage_3 = [
-            { 'name': 'Load in MCG', 'value': 0 },
+            { 'name': 'Load in MCG', 'value': this.state.LoadingClaims },
             { 'name': 'Load Error', 'value': 0 },
         ]
 
@@ -1187,7 +1247,7 @@ export class RealTimeDashboard_New extends React.Component {
                 <h5 className="headerText">Claims Dashboard</h5>
                 {this.renderTopbar()}
                 {this.tab()}
-                <div className="general-header" style={{marginBottom: "-6px"}}>File Status</div>
+                <div className="general-header" style={{ marginBottom: "-6px" }}>File Status</div>
                 {this._renderSummaryDetails()}
                 <div className="general-header">Claim Status</div>
                 {this.renderClaimDetails()}

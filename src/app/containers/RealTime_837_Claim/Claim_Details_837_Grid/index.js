@@ -54,7 +54,7 @@ export class Claim_Details_837_Grid extends React.Component {
             plan_code: '',
             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag != 'n' ? props.location.state.data[0].gridflag : '',
+            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
             fileStatus: props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
             flag: flag,
             coverage_data: [],
@@ -108,10 +108,9 @@ export class Claim_Details_837_Grid extends React.Component {
 
             gridType: 1,
             paginationPageSize: 10,
-            domLayout: 'autoHeight',
-     
+            domLayout: 'autoHeight',         
             columnDefs: [
-                { headerName: "File Name", field: "FileName" },
+                { headerName: "File Name", field: "FileName" , cellStyle: {color: '#139DC9' , cursor: 'pointer'} },
                 { headerName: "Type", field: "Type" },
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
@@ -120,6 +119,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
             ],
+        
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,
@@ -145,8 +145,10 @@ export class Claim_Details_837_Grid extends React.Component {
                 filter: true,
                 flex: 1,
                 minWidth: 100,
+                
             },
             
+       
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
@@ -158,7 +160,7 @@ export class Claim_Details_837_Grid extends React.Component {
           rowData: [],
         
         }
-
+     
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
         this.handleAccidentdate = this.handleAccidentdate.bind(this)
@@ -1425,6 +1427,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        icons={this.state.icons}
                      
                         onCellClicked={(event) => {
                             this.setState({
@@ -1442,7 +1445,7 @@ export class Claim_Details_837_Grid extends React.Component {
 
     _renderClaims() {
         let columnDefs = [
-            { headerName: "Molina Claim Id", field: "MolinaClaimID" },
+            { headerName: "Molina Claim Id", field: "MolinaClaimID" , cellStyle: {color: '#139DC9' , cursor: 'pointer' }},
             { headerName: "X12 Claim Id", field: "ClaimID" },          
             { headerName: "Claim Date", field: "ClaimDate" },
             { headerName: "Claim Status", field: "ClaimStatus" },
@@ -1450,6 +1453,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "HiPaaS Status", field: "Transaction_Status" },
             { headerName: "Adjudication Status", field: "adjudication_status" },
             { headerName: "Claim Amount", field: "Claim_Amount" },
+            
             // { headerName: "Error", field: "ClaimLevelErrors" },
         ]
 
