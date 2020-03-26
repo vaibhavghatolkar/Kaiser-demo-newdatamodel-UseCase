@@ -43,7 +43,7 @@ export class Login extends React.Component {
                         loggedIn: true
                     })
                     setTimeout(() => {
-                        localStorage.setItem("token", "sdjjasdnjas")
+                        sessionStorage.setItem("token", "sdjjasdnjas")
                         localStorage.setItem("UserId", res.data.UserLogin[0].Id)
                         localStorage.setItem("DbTech", res.data.UserLogin[0].DbTech)
                         localStorage.setItem("role_id", res.data.UserLogin[0].role_id)
