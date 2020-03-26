@@ -28,6 +28,8 @@ export class AuditSummary extends React.Component {
             VeriTotal: 0,
             InBizstockTotal: 0,
             acceptedFiles: 0,
+            HiPaaSCount: 0,
+            loaded: 0,
             gridType: 1,
             selectedTradingPartner: '',
             type: '',
@@ -52,6 +54,8 @@ export class AuditSummary extends React.Component {
             count: 1,
             nameRotation: 180,
             statusRotation: 180,
+            stateRotation : 180,
+            processIdRotation : 180,
             totalCount: '',
             accepted_Files: '',
             acceptedwithErrors: '',
@@ -60,6 +64,8 @@ export class AuditSummary extends React.Component {
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "filename", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State" },
+                { headerName: "ProcessID", field: "ProcessID" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitted", field: "Submitted" },
                 { headerName: "Claims In HiPaaS", field: "InHiPaaS" },
@@ -113,6 +119,7 @@ export class AuditSummary extends React.Component {
 
     componentDidMount() {
         this.getData()
+        this.getClaimCounts()
         this._getCounts()
         this._getCountsNew()
         this.getCommonData()
@@ -151,6 +158,46 @@ export class AuditSummary extends React.Component {
             });
     }
 
+    getClaimCounts = async () => {
+        let query = `{
+            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+                HiPaaSCount
+            }
+            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+                Accepted_Claims
+                Rejected_Claims
+                LoadingClaims
+            }
+        }`
+
+        console.log(query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
+                    let _data = res.data.Claim837RTDashboardTable[0]
+
+                    this.setState({
+                        HiPaaSCount: data ? data.HiPaaSCount : 0,
+                        Accepted: _data ? _data.Accepted_Claims : 0,
+                        Rejected: _data ? _data.Rejected_Claims : 0,
+                        loaded: _data ? _data.LoadingClaims : 0,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     _getCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
@@ -173,6 +220,8 @@ export class AuditSummary extends React.Component {
               RecCount
               Error
               InHiPaaS
+              State
+              ProcessID
             }
         }`
         console.log(query)
@@ -257,11 +306,8 @@ export class AuditSummary extends React.Component {
                     this.setState({
                         totalFile: totalFile,
                         TotalClaims: res.data.FileInCount[0].TotalClaims,
-                        Accepted: res.data.FileInCount[0].Accepted,
-                        Rejected: res.data.FileInCount[0].Rejected,
                         InProgress: res.data.FileInCount[0].InProgress,
                         Total277CA: res.data.FileInCount[0].Total277CA,
-                        TotalSentToQNXT: res.data.FileInCount[0].TotalSentToQNXT,
                         Paid: res.data.FileInCount[0].Paid,
                         denied: res.data.FileInCount[0].denied,
                         WIP: res.data.FileInCount[0].WIP,
@@ -358,6 +404,7 @@ export class AuditSummary extends React.Component {
         })
         setTimeout(() => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
 
         }, 50);
@@ -376,6 +423,8 @@ export class AuditSummary extends React.Component {
             row.push(
                 <tr>
                     <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
+                    <td className="list-item-style">{d.State}</td>
+                    <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
                     <td className="list-item-style">{d.Submitted ? d.Submitted : 0}</td>
                     <td className="list-item-style">{d.InHiPaaS ? d.InHiPaaS : 0}</td>
@@ -400,6 +449,8 @@ export class AuditSummary extends React.Component {
                 <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
                     <tr className="table-head">
                         <td style={{ width: '19%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.filename", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
+                        <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.State", this.state.stateRotation, 'stateRotation')}>State</a></td>
+                        <td style={{ wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a></td>
                         <td style={{ width: '13%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
                         <td className="table-head-text list-item-style">Submitted </td>
                         <td className="table-head-text list-item-style">Claims In HiPaaS </td>
@@ -448,6 +499,7 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
 
         }, 50);
@@ -466,6 +518,7 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
         }, 50);
     }
@@ -508,11 +561,11 @@ export class AuditSummary extends React.Component {
             { header: 'Accepted Files', value: this.state.accepted_Files },
             { header: 'Accepted with Errors', value: this.state.acceptedwithErrors },
             { header: 'Rejected Files', value: this.state.rejected_Files },
-            { header: 'Claims In HiPaaS', value: this.state.TotalClaims },
+            { header: 'Claims In HiPaaS', value: this.state.HiPaaSCount },
             { header: 'Accepted Claims', value: this.state.Accepted },
             { header: 'Rejected Claims', value: this.state.Rejected },
             { header: '999', value: this.state.Total999, style: "green summary-title" },
-            { header: 'Load in MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            { header: 'Load in MCG', value: this.state.loaded, style: "green summary-title" },
             { header: '277 CA', value: this.state.Total277CA, style: "orange summary-title" }
         ]
         let row = []
@@ -543,6 +596,7 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
 
         }, 50);
@@ -556,6 +610,7 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
 
         }, 50);
@@ -581,6 +636,7 @@ export class AuditSummary extends React.Component {
             providerName: value
         }, () => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
 
         })
@@ -592,6 +648,7 @@ export class AuditSummary extends React.Component {
             showDetails: false
         }, () => {
             this.getData()
+            this.getClaimCounts()
             this._getCounts()
 
         })
@@ -701,13 +758,13 @@ export class AuditSummary extends React.Component {
                         rowData={this.state.rowData}
 
                         onCellClicked={(event) => {
-                            if(event.colDef.headerName == '999'){
-                            this.goto999(event.data.FileID)
+                            if (event.colDef.headerName == '999') {
+                                this.goto999(event.data.FileID)
                             }
-                            if(event.colDef.headerName == 'File Name'){
+                            if (event.colDef.headerName == 'File Name') {
                                 this.props.history.push('/' + Strings.ClaimProcessingSummary)
                             }
-                            
+
                         }}
                     >
 

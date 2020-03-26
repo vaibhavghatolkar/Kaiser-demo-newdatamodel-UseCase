@@ -123,6 +123,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 { headerName: "Load Status", field: "Status" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
+                { headerName: "Error Description", field: "FileLevelError" },
             ],
 
             autoGroupColumnDef: {
@@ -161,9 +162,10 @@ export class Claim_Details_837_Grid extends React.Component {
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
-            showerror: '',
-            rowData: [],
-
+            showerror:'',
+          rowData: [],
+          Aggrid_ClaimLineData:''
+        
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -264,6 +266,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 Status
                 State
                 ProcessID
+                FileLevelError
             }
         }`
         console.log(query)
@@ -400,6 +403,7 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     getTransactions = (fileId) => {
+        
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -660,7 +664,7 @@ export class Claim_Details_837_Grid extends React.Component {
               MolinaClaimID
               LXCount
             }
-            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page}) {
+            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page} , GridType:${this.state.gridType}) {
               ClaimID
               ServiceLineCount
               ProviderPaidAmount
@@ -673,7 +677,7 @@ export class Claim_Details_837_Grid extends React.Component {
           }
           `
 
-        console.log(query)
+        console.log("sadnbsahffsahvdhavhav" , query)
 
         fetch(url, {
             method: 'POST',
@@ -687,6 +691,7 @@ export class Claim_Details_837_Grid extends React.Component {
             .then(res => {
                 let data = res.data
                 let count = 1
+                
                 if (data && data.Claim837RTLineDetails.length > 0) {
 
                     count = Math.floor(data.Claim837RTLineDetails[0].RecCount / 10)
@@ -735,14 +740,16 @@ export class Claim_Details_837_Grid extends React.Component {
                     this.setState({
                         showDetails: true,
                         claimDetails: claimDetails,
-                        claimLineDetails: res.data.Claim837RTLineDetails,
+                        claimLineDetails: res.data.Claim837RTLineDetails,                      
                         fileid: data.FileID,
                         claimid: data.ClaimID,
                         Icdcodepresent: data.FieldToUpdate,
                         count: count,
                         seqID: ClaimRefId,
                         fileDataDetails: fileData,
-                        lineCount: data ? data.LXCount : 0
+                        lineCount: data ? data.LXCount : 0,
+                        Aggrid_ClaimLineData : res.data.Claim837RTLineDetails,
+                        Aggrid_Claim_Info_data:res.data.Claim837RTDetails
                     })
                 }
             })
@@ -1014,6 +1021,8 @@ export class Claim_Details_837_Grid extends React.Component {
                                     page: 1,
                                     rowData: [],
                                     claimsAudit: [],
+                                    showerror: false,
+                                    showClaims:false,
                                     gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     if (this.state.gridType == 1) {
@@ -1192,15 +1201,15 @@ export class Claim_Details_837_Grid extends React.Component {
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
                 </div>
-                <div className="col-1 col-header justify-align">
+                <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
                 </div>
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a>
                 </div>
-                <div className="col-1 col-header justify-align">
+                {/* <div className="col-1 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
-                </div>
+                </div> */}
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
                 </div>
@@ -1208,7 +1217,7 @@ export class Claim_Details_837_Grid extends React.Component {
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Submitter</a>
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By FileLevelError", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Error Description</a>
                 </div>
             </div>
         )
@@ -1283,12 +1292,12 @@ export class Claim_Details_837_Grid extends React.Component {
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-1 col-small-style small-font">{data[keys].value.State}</div>
+                    <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
                     <div className="col-2 col-small-style small-font" style={{wordBreak: 'break-all'}}>{data[keys].value.ProcessID}</div>
-                    <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div>
+                    {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
                     <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.Sender}</div>
+                    <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
             )
 
@@ -1444,7 +1453,8 @@ export class Claim_Details_837_Grid extends React.Component {
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
-                                    showClaims: true
+                                    showClaims: true,
+                                    showerror: false,
                                 })
                                 console.log('this is the event', event)
                                 this.getTransactions(event.data.FileID)
@@ -1458,6 +1468,7 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     _renderClaims() {
+        
         let columnDefs = [
             { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "X12 Claim Id", field: "ClaimID" },
@@ -1501,7 +1512,9 @@ export class Claim_Details_837_Grid extends React.Component {
 
                                 })
                                 console.log('this is the event', event)
-                                this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
+                                this.get_Error(event.data.ClaimID ,event.data.ClaimRefId, event.data.FileID)
+                                this.getDetails(event.data.ClaimID, event.data.FileID,event.data.ClaimRefId,"", 1)
+                              
                             }
                         }}
                     >
@@ -1512,6 +1525,8 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     _renderError() {
+        if(this.state.Error_data==undefined) {this.state.Error_data=[]}
+        console.log("_renderError" ,this.state.Error_data);
         let columnDefs = [
             { headerName: "X12 Claim ID", field: "ClaimID" },
             { headerName: "Stage", field: "Stage" },
@@ -1550,7 +1565,95 @@ export class Claim_Details_837_Grid extends React.Component {
             </div>
         )
     }
+    _ClaimLineTable() {
+        if(this.state.Aggrid_ClaimLineData==undefined) {this.state.Aggrid_ClaimLineData=[]}
+        console.log("_ClaimLineTable" ,this.state.Aggrid_ClaimLineData);
+        let columnDefs = [
+            { headerName: "X12 Claim ID", field: "ClaimID" },
+            { headerName: "Claim Id", field: "MolinaClaimID" },
+            { headerName: "Service Line No.", field: "ServiceLineCount" },
+            { headerName: " Service Date", field: "ServiceDate" },
+            { headerName: "Procedure Code", field: "ProcedureDate" },
+            { headerName: "Unit", field: "PaidServiceUnitCount" },
+            
+        ]
 
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Aggrid_ClaimLineData}
+                        
+                         
+                     
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+    _ClaimView_Info_Table() {
+        if(this.state.Aggrid_Claim_Info_data==undefined) {this.state.Aggrid_Claim_Info_data=[]}
+        console.log('Aggrid_Claim_Info_data',this.state.Aggrid_Claim_Info_data)
+       let columnDefs = [
+            { headerName: "X12 Claim Id", field: "ClaimID" },
+            { headerName: "Claim Date", field: "ClaimDate" },
+            { headerName: "Subscriber First Name", field: "SubscriberFirstName" },
+            { headerName: "Subscriber Last Name", field: "SubscriberLastName" },
+            { headerName: "Admission Date", field: "AdmissionDate" },
+            { headerName: "Claim Amount", field: "Claim_Amount" },
+            { headerName: "Provider Address", field: "BillingProviderAddress" },
+            { headerName: "Claim Status", field: "ClaimStatus" },
+            { headerName: "ICD Code", field: "ICDCode" },
+            { headerName: "Accident Date", field: "AccidentDate" },
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Aggrid_Claim_Info_data}
+                        
+                         
+                     
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
     render() {
 
         return (
@@ -1562,8 +1665,11 @@ export class Claim_Details_837_Grid extends React.Component {
                         ?
                         <div>
                             {this._renderList()}
-                            {this.state.showClaims ? this._renderClaims() : null}
-                            {this.state.showerror && this.state.claimError_Status == "Rejected" ? this._renderError() : null}
+                            {this.state.showClaims ? this._renderClaims() : null}                           
+                            {this.state.showerror && this.state. claimError_Status=="Rejected" ? this._renderError() : null}
+                            {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                            {this.state.showerror ? this._ClaimLineTable() : null}
+                            
                         </div>
                         :
                         <div className="row padding-left">

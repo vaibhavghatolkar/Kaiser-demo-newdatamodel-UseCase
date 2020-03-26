@@ -102,8 +102,8 @@ export class RealTimeDashboard_New extends React.Component {
             dateRotation: 180,
             statusRotation: 180,
             _statusRotation: 180,
-            stateRotation : 180,
-            processIdRotation : 180,
+            stateRotation: 180,
+            processIdRotation: 180,
             orderby: "",
             submitterRotation: 180,
             gridType: 1,
@@ -574,12 +574,14 @@ export class RealTimeDashboard_New extends React.Component {
         let addon = ''
         let claimStatus = ''
         let loadStatus = ''
+        let generalStatus = ''
+
         if (header == 'Top 10 File Level Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
         } else if (header == 'Top 10 Claim Level Errors') {
             addon = '/reject'
-            claimStatus = 'Rejected'
+            generalStatus = 'Rejected'
         }
 
         let sendData = [
@@ -591,7 +593,8 @@ export class RealTimeDashboard_New extends React.Component {
                 endDate: endDate,
                 status: claimStatus,
                 type: type,
-                gridflag: loadStatus
+                gridflag: loadStatus,
+                generalStatus : generalStatus
             },
         ]
 
@@ -702,7 +705,7 @@ export class RealTimeDashboard_New extends React.Component {
                 <tr>
                     <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}><Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }}>{d.FileName}</Link></td>
                     <td className="list-item-style">{d.State}</td>
-                    <td className="list-item-style" style={{wordBreak: 'break-all'}}>{d.ProcessID}</td>
+                    <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
@@ -954,6 +957,8 @@ export class RealTimeDashboard_New extends React.Component {
                 claimStatus = 'Rejected'
             } else if (item.name == 'Reconciled Files') {
                 loadStatus = 'Reconciled'
+            } else if (item.name == 'Reconciled Error') {
+                loadStatus = 'Reconciled Exception'
             } else {
                 addon = '/other'
             }
@@ -963,7 +968,6 @@ export class RealTimeDashboard_New extends React.Component {
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Reconciled Error' &&
                         item.name != 'Load Error' &&
                         item.name != 'Load in MCG' &&
                         item.name != 'HiPaaS | MCG'
@@ -1190,6 +1194,8 @@ export class RealTimeDashboard_New extends React.Component {
                 generalStatus = 'Rejected'
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
+            } else if(item.name == 'Reconciled Error'){
+                loadStatus = 'Reconciled Exception'
             }
 
             let sendData = [
@@ -1229,7 +1235,7 @@ export class RealTimeDashboard_New extends React.Component {
         let stage_1 = [
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
-            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims },
+            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
         ]
         let stage_2 = [
             { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
