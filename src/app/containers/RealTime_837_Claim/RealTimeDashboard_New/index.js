@@ -81,6 +81,7 @@ export class RealTimeDashboard_New extends React.Component {
             rejected_per: 0,
             rejectedFileCount: 0,
             acceptedFileCount: 0,
+            LoadedErrorClaims: 0,
 
             X12Count: 0,
             HiPaaSCount: 0,
@@ -188,6 +189,7 @@ export class RealTimeDashboard_New extends React.Component {
                 Processing_Claims
                 ReconciledError_Claims
                 LoadingClaims
+                LoadedErrorClaims
             }
         }`
 
@@ -215,6 +217,7 @@ export class RealTimeDashboard_New extends React.Component {
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
                         LoadingClaims: _data ? _data.LoadingClaims : 0,
+                        LoadedErrorClaims : _data ? _data.LoadedErrorClaims : 0
                     })
                 }
             })
@@ -1244,7 +1247,7 @@ export class RealTimeDashboard_New extends React.Component {
         ]
         let stage_3 = [
             { 'name': 'Load in MCG', 'value': this.state.LoadingClaims },
-            { 'name': 'Load Error', 'value': 0 },
+            { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims },
         ]
 
         let stage_4 = [
