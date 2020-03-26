@@ -54,7 +54,7 @@ export class Claim_Details_837_Grid extends React.Component {
             plan_code: '',
             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag != 'n' ? props.location.state.data[0].gridflag : '',
+            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
             fileStatus: props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
             flag: flag,
             coverage_data: [],

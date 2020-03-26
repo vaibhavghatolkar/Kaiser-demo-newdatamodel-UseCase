@@ -68,7 +68,7 @@ export class AuditSummary extends React.Component {
                 { headerName: "Error in PreProcess", field: "Error" },
                 { headerName: "In MCG	", field: "SentToQNXT" },
                 { headerName: "999", field: "F999" },
-                { headerName: "277 CA", field: "goto277" },
+                { headerName: "277 CA", field: "F277" },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -699,6 +699,12 @@ export class AuditSummary extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        onCellClicked={(event) => {
+                            console.log('this is the event', event)
+                            if(event.colDef.headerName == 'File Name'){
+                                this.props.history.push('/' + Strings.ClaimProcessingSummary)
+                            }
+                        }}
                     >
 
                     </AgGridReact>

@@ -353,7 +353,7 @@ export class ClaimProcessingSummary extends React.Component {
             { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
         ]
 
-        this.props.history.push('/' + Strings.ClaimDetails837, {
+        this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
             data: sendData
         })
     }
@@ -633,6 +633,12 @@ export class ClaimProcessingSummary extends React.Component {
                     paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
+                    onCellClicked={(event) => {
+                        console.log('this is the event', event)
+                        if(event.colDef.headerName == 'File Name'){
+                            this.gotoDetails()
+                        }
+                    }}
                 >
                 </AgGridReact>
             </div>
