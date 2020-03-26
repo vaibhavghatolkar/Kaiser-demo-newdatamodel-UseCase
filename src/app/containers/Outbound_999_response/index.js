@@ -10,6 +10,9 @@ import { Pie } from 'react-chartjs-2';
 import '../Files/files-styles.css';
 import { CommonTable } from '../../components/CommonTable';
 import { StateDropdown } from '../../components/StateDropdown';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
 export class Outbound_response_999 extends React.Component {
@@ -52,7 +55,49 @@ export class Outbound_response_999 extends React.Component {
             orderby: '',
             fileRotation: 180,
             dateRotation: 180,
-            statusRotation: 180
+            statusRotation: 180,
+            gridType:1,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
+            columnDefs: [
+                { headerName: "Response File Name", field: "ResponseFileName" },
+                { headerName: "Date", field: "ResponseFileDate" },
+                { headerName: "837 File Name", field: "FileName" },
+                { headerName: "Status", field: "status" },
+            ],
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
 
         }
 
@@ -72,7 +117,7 @@ export class Outbound_response_999 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
         query = `{
-            Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}") {
+            Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}) {
               FileId
               FileName
               Date
@@ -106,10 +151,11 @@ export class Outbound_response_999 extends React.Component {
                         count = count + 1
                     }
                 }
-
+                
                 if (res.data) {
                     this.setState({
                         files_list: res.data.Data999,
+                        rowData: this.state.gridType == 1 ? res.data.Data999 : [],
                         count: count
                     })
                 }
@@ -317,6 +363,25 @@ export class Outbound_response_999 extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.setState({
+                                    page: 1,
+                                    rowData : [],
+                                    showDetails: false,
+                                    files_list: [],
+                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    this.getTransactions()
+                                })
+                            }}
+                        >
+                            <option value="select">Default</option>
+                            <option selected value="select">Classic</option>
+                        </select>
+                    </div>
                 </div>
             </form>
         )
@@ -392,6 +457,45 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
+    _renderTransactions() {
+        console.log(this.state.rowData)
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '17px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={this.state.columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                        onCellClicked={(event) => {
+                            if(event.colDef.headerName == 'Response File Name'){
+                            this.render999Details(event.data.id)
+                            }
+                        }}
+                    >
+
+                    </AgGridReact>
+
+                </div>
+
+
+            </div>
+        )
+    }
+
 
     render() {
         return (
@@ -399,10 +503,13 @@ export class Outbound_response_999 extends React.Component {
                 <h5 className="headerText">999 Acknowledgement (Outbound)</h5>
                 {this.renderFilters()}
                 <div className="row">
-                    <div className="col-6 margin-top">
-                        {this.renderTransactionsNew()}
+                    <div className="col-7 margin-top">
+                        {/* {this.renderTransactionsNew()} */}
+
+                    {this.state.files_list && this.state.files_list.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                    {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
                     </div>
-                    <div className="col-6 margin-top">
+                    <div className="col-5 margin-top">
                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
                 </div>

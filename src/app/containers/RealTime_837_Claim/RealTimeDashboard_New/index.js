@@ -105,6 +105,8 @@ export class RealTimeDashboard_New extends React.Component {
             submitterRotation: 180,
             gridType: 1,
             gridflag: '',
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
 
             columnDefs: [
                 { headerName: "File Name", field: "FileName" },
@@ -703,7 +705,7 @@ export class RealTimeDashboard_New extends React.Component {
     _renderList() {
         return (
             <div>
-                <div className="ag-theme-balham" style={{ height: '430px', padding: '0', marginTop: '24px' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={this.state.columnDefs}
@@ -716,8 +718,10 @@ export class RealTimeDashboard_New extends React.Component {
                         rowGroupPanelShow={this.state.rowGroupPanelShow}
                         pivotPanelShow={this.state.pivotPanelShow}
                         enableRangeSelection={true}
-                        paginationAutoPageSize={true}
+                        paginationAutoPageSize={false}
                         pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                     >

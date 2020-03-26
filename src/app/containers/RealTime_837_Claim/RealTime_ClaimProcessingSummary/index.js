@@ -633,6 +633,11 @@ export class ClaimProcessingSummary extends React.Component {
                     paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
+                    onCellClicked={(event) => {
+                        if(event.colDef.headerName == '999'){
+                        this.goto999(event.data.FileID)
+                        }
+                    }}
                 >
                 </AgGridReact>
             </div>
