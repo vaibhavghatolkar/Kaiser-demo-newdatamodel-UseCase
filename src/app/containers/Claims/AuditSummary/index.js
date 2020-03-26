@@ -701,13 +701,13 @@ export class AuditSummary extends React.Component {
                         rowData={this.state.rowData}
 
                         onCellClicked={(event) => {
-                            if(event.colDef.headerName == '999'){
-                            this.goto999(event.data.FileID)
+                            if (event.colDef.headerName == '999') {
+                                this.goto999(event.data.FileID)
                             }
-                            if(event.colDef.headerName == 'File Name'){
+                            if (event.colDef.headerName == 'File Name') {
                                 this.props.history.push('/' + Strings.ClaimProcessingSummary)
                             }
-                            
+
                         }}
                     >
 
