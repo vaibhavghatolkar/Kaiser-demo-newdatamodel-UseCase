@@ -106,7 +106,7 @@ export class RealTimeDashboard_New extends React.Component {
             gridflag: '',
 
             columnDefs: [
-                { headerName: "File Name", field: "FileName" },
+                { headerName: "File Name", field: "FileName" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
                 { headerName: "Type", field: "Type" },
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },

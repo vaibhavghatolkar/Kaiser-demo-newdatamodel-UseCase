@@ -57,7 +57,7 @@ export class ClaimProcessingSummary extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName" },
+                { headerName: "File Name", field: "FileName" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
                 { headerName: "File Date", field: "FileCrDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "999", field: "F999" },

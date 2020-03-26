@@ -55,7 +55,7 @@ export class AuditSummary extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "filename" },
+                { headerName: "File Name", field: "filename" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitted", field: "Submitted" },
                 { headerName: "In HiPaaS", field: "InHiPaaS" },
