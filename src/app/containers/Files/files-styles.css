@@ -239,3 +239,8 @@
     padding-left : 24px;
     padding-right : 24px;
 }
+.general-header{
+    font-size: 18px;
+    color: var(--grayBlack);   
+    padding-top: 12px;
+}

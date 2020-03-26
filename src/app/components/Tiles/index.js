@@ -28,7 +28,7 @@ export class Tiles extends React.Component {
                 <Link to={{ pathname: this.props.url, state: { data: this.props._data } }} className={this.props.header_text == 'Accepted with Errors' ? "summary-exception summary-container" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
-                        {Number(this.props.value) ? this.props.value : 0}
+                        {Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('|' + this.props.second_val) : ''}
                         {
                             this.props.header_text == 'Resubmit Queue' ?
                                 <button className="btnDesign button-resubmit">Submit</button> : null
@@ -39,7 +39,8 @@ export class Tiles extends React.Component {
                 <div className={this.props.header_text == 'Accepted with Errors' ? "summary-exception summary-container" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
-                        {Number(this.props.value) ? this.props.value : 0}</div>
+                        {Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('|' + this.props.second_val) : ''}
+                    </div>
                 </div>
         )
     }

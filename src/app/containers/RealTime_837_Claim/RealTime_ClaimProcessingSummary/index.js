@@ -238,7 +238,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}) {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -583,9 +583,9 @@ export class ClaimProcessingSummary extends React.Component {
         let _summary = [
             { header: 'Accepted Claims', value: this.state.Accepted },
             { header: 'Rejected Claims', value: this.state.Rejected },
-            { header: '999', value: this.state.Total999, style: "red summary-title" },
-            { header: 'Sent To MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
-            { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
+            // { header: '999', value: this.state.Total999, style: "red summary-title" },
+            { header: 'Load in MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            // { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
             { header: 'Pending', value: this.state.Pending, style: "orange summary-title" },
             { header: 'Paid', value: this.state.Paid },
             { header: 'Denied', value: this.state.Denide }

@@ -1270,7 +1270,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div className="row chart-div">
                 <div className="chart-container chart col-12">
-                    <div style={{ fontWeight: '500' }}>Denial code wise count</div><br />
+                    <div style={{ fontWeight: '500' }}>Top Denial Reason codes</div><br />
                     {this.renderErrorChart()}
                     {/* {this.renderValues()} */}
                 </div>
