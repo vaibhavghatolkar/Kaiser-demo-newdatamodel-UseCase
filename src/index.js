@@ -112,7 +112,7 @@ const $ = window.$;
 class PrivateRoute extends React.Component {
     constructor(props) {
         super(props);
-        const token = localStorage.getItem("token");
+        const token = sessionStorage.getItem("token");
         let loggedIn;
 
         if (token == null) {
@@ -158,6 +158,7 @@ class PrivateRoute extends React.Component {
 
         if (isTimedOut) {
             localStorage.clear()
+            sessionStorage.clear()
             window.location.reload()
         } else {
             this.setState({ showModal: true })

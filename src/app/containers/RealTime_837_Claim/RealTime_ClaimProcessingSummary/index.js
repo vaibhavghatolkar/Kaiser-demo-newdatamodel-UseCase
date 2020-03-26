@@ -634,8 +634,10 @@ export class ClaimProcessingSummary extends React.Component {
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
                     onCellClicked={(event) => {
-                        console.log('this is the event', event)
-                        if (event.colDef.headerName == 'File Name') {
+                        if(event.colDef.headerName == '999'){
+                        this.goto999(event.data.FileID)
+                        }
+                        if(event.colDef.headerName == 'File Name'){
                             this.gotoDetails()
                         }
                     }}

@@ -680,7 +680,7 @@ export class AuditSummary extends React.Component {
     _renderTransactions() {
         return (
             <div style={{ width: '100%', height: '100%' }}>
-                <div className="ag-theme-balham" style={{ maxHeight: '100%', padding: '0', marginTop: '24px' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={this.state.columnDefs}
@@ -699,11 +699,15 @@ export class AuditSummary extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+
                         onCellClicked={(event) => {
-                            console.log('this is the event', event)
-                            if (event.colDef.headerName == 'File Name') {
+                            if(event.colDef.headerName == '999'){
+                            this.goto999(event.data.FileID)
+                            }
+                            if(event.colDef.headerName == 'File Name'){
                                 this.props.history.push('/' + Strings.ClaimProcessingSummary)
                             }
+                            
                         }}
                     >
 
