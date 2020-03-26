@@ -57,17 +57,17 @@ export class ClaimProcessingSummary extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
+                { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "File Date", field: "FileCrDate" },
                 { headerName: "File Status", field: "FileStatus" },
-                { headerName: "999", field: "F999" },
+                { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Molina Claim Id", field: "MolinaClaimID" },
                 { headerName: "Claim Date", field: "ClaimDate" },
                 { headerName: "Claim Status", field: "ClaimStatus" },
                 { headerName: "	Subscriber Id                ", field: "Subscriber_ID" },
                 { headerName: "HiPaaS Status                ", field: "Transaction_Status" },
                 { headerName: "Adjudication Status                ", field: "adjudication_status" },
-                { headerName: "277CA                ", field: "F277" },
+                { headerName: "277CA                ", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "835", field: "F277" },
             ],
 
@@ -238,7 +238,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -534,9 +534,9 @@ export class ClaimProcessingSummary extends React.Component {
                             onChange={(event) => {
                                 this.setState({
                                     page: 1,
-                                    rowData : [],
+                                    rowData: [],
                                     Claim837RTProcessingSummary: [],
-                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     this.getData()
                                 })

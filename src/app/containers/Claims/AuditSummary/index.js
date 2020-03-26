@@ -52,14 +52,14 @@ export class AuditSummary extends React.Component {
             count: 1,
             nameRotation: 180,
             statusRotation: 180,
-            totalCount:'',
-            accepted_Files:'',
-            acceptedwithErrors:'',
-            rejected_Files:'',
+            totalCount: '',
+            accepted_Files: '',
+            acceptedwithErrors: '',
+            rejected_Files: '',
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "filename" ,cellStyle: {color: '#139DC9' , cursor: 'pointer'}  },
+                { headerName: "File Name", field: "filename", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitted", field: "Submitted" },
                 { headerName: "Claims In HiPaaS", field: "InHiPaaS" },
@@ -67,8 +67,8 @@ export class AuditSummary extends React.Component {
                 { headerName: "Rejected PreProcess", field: "Rejected" },
                 { headerName: "Error in PreProcess", field: "Error" },
                 { headerName: "In MCG	", field: "SentToQNXT" },
-                { headerName: "999", field: "F999" },
-                { headerName: "277 CA", field: "F277" },
+                { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277 CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -305,8 +305,8 @@ export class AuditSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let data = res.data.Claim837RTDashboardCountNew
-               
-            
+
+
                 this.setState({
                     totalCount: data[0].TotalCount,
                     accepted_Files: data[0].Accepted,
@@ -384,10 +384,10 @@ export class AuditSummary extends React.Component {
                     <td className="list-item-style">{count}</td>
                     <td className="list-item-style">{d.SentToQNXT}</td>
                     <td className="list-item-style">
-                        <a style={{ color: "#6AA2B8", cursor: "pointer",  wordBreak: 'break-all' }}
-                        onClick={() => {
-                            this.goto999(d.FileID)
-                        }}>{d.F999}</a></td>
+                        <a style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}
+                            onClick={() => {
+                                this.goto999(d.FileID)
+                            }}>{d.F999}</a></td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {
                             this.goto277()
@@ -503,7 +503,7 @@ export class AuditSummary extends React.Component {
     _renderStats() {
         let _summary = [
             // { header: 'Total Accepted Files', value: this.state.acceptedFiles, style: "green summary-title" },
-            
+
             // { header: 'Total Files', value: this.state.totalCount },
             { header: 'Accepted Files', value: this.state.accepted_Files },
             { header: 'Accepted with Errors', value: this.state.acceptedwithErrors },
@@ -650,9 +650,9 @@ export class AuditSummary extends React.Component {
                             onChange={(event) => {
                                 this.setState({
                                     page: 1,
-                                    rowData : [],
+                                    rowData: [],
                                     claimsAudit: [],
-                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     this._getCounts()
                                 })
