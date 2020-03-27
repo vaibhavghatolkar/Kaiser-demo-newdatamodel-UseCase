@@ -292,7 +292,10 @@ export class Claim_Details_837_Grid extends React.Component {
                     this.setState({
                         rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : [],
                         intakeClaims: res.data.Claim837RTDashboardFileDetails,
-                        recount: count
+                        recount: count,
+                        Ag_FileName:res.data.Claim837RTDashboardFileDetails[0].FileName,
+                        Ag_FileDate:res.data.Claim837RTDashboardFileDetails[0].FileDate,
+                        Ag_Receiver:res.data.Claim837RTDashboardFileDetails[0].Receiver
                     }, () => {
                         this.sortData()
                     })
@@ -961,7 +964,9 @@ export class Claim_Details_837_Grid extends React.Component {
     _handleStateChange = (event) => {
         this.setState({
             State: event.target.options[event.target.selectedIndex].text,
-            showDetails: false
+            showDetails: false,
+            showerror: false,
+            showClaims:false
         }, () => {
             this.getData()
         })
@@ -1466,7 +1471,7 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     _renderClaims() {
-        
+      
         let columnDefs = [
             { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "X12 Claim Id", field: "ClaimID" },
@@ -1482,7 +1487,9 @@ export class Claim_Details_837_Grid extends React.Component {
 
         return (
             <div>
+                 
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Claim Data</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1505,8 +1512,12 @@ export class Claim_Details_837_Grid extends React.Component {
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'Molina Claim Id') {
                                 this.setState({
+
                                     showerror: true,
                                     claimError_Status: event.data.ClaimStatus,
+                                    Error_data:[],
+                                    Aggrid_ClaimLineData:[],
+                                    Aggrid_Claim_Info_data:[],
 
                                 })
                                 console.log('this is the event', event)
@@ -1536,6 +1547,7 @@ export class Claim_Details_837_Grid extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Claim Error Description</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1579,6 +1591,7 @@ export class Claim_Details_837_Grid extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Claim Line Data</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1608,9 +1621,12 @@ export class Claim_Details_837_Grid extends React.Component {
     }
     _ClaimView_Info_Table() {
         if(this.state.Aggrid_Claim_Info_data==undefined) {this.state.Aggrid_Claim_Info_data=[]}
-        console.log('Aggrid_Claim_Info_data',this.state.Aggrid_Claim_Info_data)
-       let columnDefs = [
-            { headerName: "X12 Claim Id", field: "ClaimID" },
+        console.log('Aggrid_Claim_Info_data',this.state.Aggrid_Claim_Info_data , this.state.Ag_FileName)
+        let columnDefs = [     
+        { headerName: " File Name", field: this.state.Ag_FileName },
+        { headerName: "File Date", field: this.state.Ag_FileDate },
+        { headerName: "Receiver", field: this.state.Ag_Receiver },
+          { headerName: "X12 Claim Id", field: "ClaimID" },
             { headerName: "Claim Date", field: "ClaimDate" },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName" },
             { headerName: "Subscriber Last Name", field: "SubscriberLastName" },
@@ -1625,6 +1641,7 @@ export class Claim_Details_837_Grid extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Claim Information</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1665,7 +1682,7 @@ export class Claim_Details_837_Grid extends React.Component {
                             {this._renderList()}
                             {this.state.showClaims ? this._renderClaims() : null}                           
                             {this.state.showerror && this.state. claimError_Status=="Rejected" ? this._renderError() : null}
-                            {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                            {this.state.showerror ?  this._ClaimView_Info_Table() : null}
                             {this.state.showerror ? this._ClaimLineTable() : null}
                             
                         </div>
