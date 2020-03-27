@@ -14,6 +14,7 @@ import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { Link } from 'react-router-dom'
 
 let val = ''
 export class ClaimProcessingSummary extends React.Component {
@@ -47,6 +48,15 @@ export class ClaimProcessingSummary extends React.Component {
             wip90: 0,
             orderby: '',
 
+            X12Count: 0,
+            Accepted_Claims: 0,
+            Rejected_Claims: 0,
+            FileReject_Claims:0,
+            Processing_Claims: 0,
+            ReconciledError_Claims:0,
+            LoadingClaims: 0,
+            LoadedErrorClaims: 0,
+
             fileNameFlag: 180,
             fileDateFlag: 180,
             extraField2Flag: 180,
@@ -57,6 +67,7 @@ export class ClaimProcessingSummary extends React.Component {
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
             paginationPageSize: 10,
+            file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -127,7 +138,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
               Total999
             }
          }`
@@ -183,12 +194,18 @@ export class ClaimProcessingSummary extends React.Component {
     getClaimCounts = async () => {
         let query = `{
             Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+                X12Count
                 HiPaaSCount
+                MCGLoadCount
             }
             Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
                 Accepted_Claims
                 Rejected_Claims
+                FileReject_Claims
+                Processing_Claims
+                ReconciledError_Claims
                 LoadingClaims
+                LoadedErrorClaims
             }
         }`
 
@@ -208,10 +225,20 @@ export class ClaimProcessingSummary extends React.Component {
                     let _data = res.data.Claim837RTDashboardTable[0]
 
                     this.setState({
-                        HiPaaSCount: data ? data.HiPaaSCount : 0,
                         Accepted: _data ? _data.Accepted_Claims : 0,
                         Rejected: _data ? _data.Rejected_Claims : 0,
                         loaded: _data ? _data.LoadingClaims : 0,
+
+
+                        X12Count: data ? data.X12Count : 0,
+                        HiPaaSCount: data ? data.HiPaaSCount : 0,
+                        Accepted_Claims: _data ? _data.Accepted_Claims : 0,
+                        Rejected_Claims: _data ? _data.Rejected_Claims : 0,
+                        FileReject_Claims: _data ? _data.FileReject_Claims : 0,
+                        Processing_Claims: _data ? _data.Processing_Claims : 0,
+                        ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
+                        LoadingClaims: _data ? data.MCGLoadCount : 0,
+                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
                     })
                 }
             })
@@ -275,7 +302,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -363,21 +390,21 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     goto277 = () => {
-        sessionStorage.setItem('isOutbound', true)
+        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_277CAResponse)
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 50);
     }
 
     goto999 = (fileId) => {
-        sessionStorage.setItem('isOutbound', true)
+        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
             fileId: fileId
         })
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 50);
     }
 
     gotoDetails = () => {
@@ -588,10 +615,10 @@ export class ClaimProcessingSummary extends React.Component {
                             <option selected value="select">Classic</option>
                         </select>
                     </div>
-                    <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
+                    {/* <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
                         <div className="summary-header">WIP > 90 Days</div>
                         <div className="blue summary-title">{this.state.wip90}</div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
@@ -656,6 +683,107 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
+    _renderClaimTables = (array) => {
+        let row = []
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let loadStatus = ''
+            let generalStatus = ''
+            let mcgStatus = ''
+            let color = "var(--red)"
+
+            if (item.name == 'Accepted') {
+                generalStatus = 'Accepted'
+                color = "var(--green)"
+            } else if (item.name == 'Accepted with Errors') {
+                generalStatus = 'Rejected'
+            } else if (item.name == 'File Rejected') {
+                generalStatus = 'File Rejected'
+            } else if (item.name == 'Reconciled Error') {
+                loadStatus = 'Reconcile Exception'
+            } else if (item.name == 'Load in MCG') {
+                mcgStatus = 'Loaded'
+                color = "var(--main-bg-color)"
+            } else if (item.name == 'Load Error') {
+                mcgStatus = 'Exception'
+            }
+
+            let sendData = [
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: claimStatus,
+                    type: type,
+                    gridflag: loadStatus,
+                    generalStatus: generalStatus,
+                    mcgStatus: mcgStatus
+                },
+            ]
+            row.push(
+                <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
+                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
+                    {
+                        item.isClick ?
+                            <Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
+                            :
+                            <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
+                    }
+                </div>
+            )
+        })
+
+        return (
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+                {row}
+            </div>
+        )
+    }
+
+
+    renderClaimDetails = () => {
+        let stage_1 = [
+            { 'name': 'X12 Count', 'value': this.state.X12Count },
+            { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
+            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
+        ]
+        let stage_2 = [
+            { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
+            { 'name': 'Accepted with Errors', 'value': this.state.Rejected_Claims, 'isClick': 1 },
+            { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
+        ]
+        let stage_3 = [
+            { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
+            { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
+        ]
+
+        let stage_4 = [
+            { 'name': '999 Not Sent', 'value': 0 },
+            { 'name': '277CA Not Sent', 'value': this.state.totalFiles },
+        ]
+
+        return (
+            <div className="row" style={{ marginBottom: '12px' }}>
+                {this._renderClaimTables(stage_1)}
+                {this._renderClaimTables(stage_2)}
+                {this._renderClaimTables(stage_3)}
+                {/* {this._renderClaimTables(stage_4)} */}
+            </div>
+        )
+    }
+
+
+   
+
     _renderTransactions() {
         return (
             <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
@@ -696,7 +824,8 @@ export class ClaimProcessingSummary extends React.Component {
             <div>
                 <h5 className="headerText">Claim Processing Summary</h5>
                 {this.renderTopBar()}
-                {this._renderStats()}
+                {/* {this._renderStats()} */}
+                {this.renderClaimDetails()}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && this.state.gridType ? this._renderTransactions() : null}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
             </div>

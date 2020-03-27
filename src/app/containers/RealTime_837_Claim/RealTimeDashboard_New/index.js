@@ -83,6 +83,8 @@ export class RealTimeDashboard_New extends React.Component {
             rejectedFileCount: 0,
             acceptedFileCount: 0,
             LoadedErrorClaims: 0,
+            total_999: 0,
+            rejectedCount: 0,
 
             X12Count: 0,
             HiPaaSCount: 0,
@@ -120,8 +122,9 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "Type", field: "Type" },
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
-                { headerName: "Submitter", field: "Sender" },
                 { headerName: "Load Status", field: "Status" },
+                { headerName: "MCG Load Status", field: "MCGStatus" },
+                { headerName: "Submitter", field: "Sender" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
             ],
@@ -182,6 +185,7 @@ export class RealTimeDashboard_New extends React.Component {
             Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
                 X12Count
                 HiPaaSCount
+                MCGLoadCount
             }
             Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
                 Accepted_Claims
@@ -212,12 +216,12 @@ export class RealTimeDashboard_New extends React.Component {
                     this.setState({
                         X12Count: data ? data.X12Count : 0,
                         HiPaaSCount: data ? data.HiPaaSCount : 0,
+                        LoadingClaims: data ? data.MCGLoadCount : 0,
                         Accepted_Claims: _data ? _data.Accepted_Claims : 0,
                         Rejected_Claims: _data ? _data.Rejected_Claims : 0,
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadingClaims: _data ? _data.LoadingClaims : 0,
                         LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
                     })
                 }
@@ -362,6 +366,7 @@ export class RealTimeDashboard_New extends React.Component {
 
                 this.setState({
                     summaryList: summary,
+                    rejectedCount: rejected,
                     totalFiles: totalCount
                 })
             })
@@ -509,8 +514,9 @@ export class RealTimeDashboard_New extends React.Component {
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Load Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By MCGStatus", this.state.mcg_statusRotation, 'mcg_statusRotation')}>MCG Load Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -713,8 +719,9 @@ export class RealTimeDashboard_New extends React.Component {
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Status}</td>
+                    <td className="list-item-style">{d.MCGStatus}</td>
+                    <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
                 </tr>
             )
@@ -842,6 +849,7 @@ export class RealTimeDashboard_New extends React.Component {
                 Status
                 State
                 ProcessID
+                MCGStatus
             }
         }`
         console.log(query)
@@ -924,9 +932,40 @@ export class RealTimeDashboard_New extends React.Component {
     _refreshScreen = () => {
         this.getRejectedFile()
         this.getClaimCounts()
+        this._get999Count()
         this.getData()
         this._getCounts()
         this.getListData()
+    }
+
+    _get999Count = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
+        let query = `{
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
+              Total999
+              NotSent999
+            }
+         }`
+        console.log(query)
+        fetch(Urls.claims_837, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    total_999: res.data.Total999Response[0].NotSent999,
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     onSelect(event, key) {
@@ -976,7 +1015,7 @@ export class RealTimeDashboard_New extends React.Component {
             } else if (item.name == 'Reconciled Files') {
                 loadStatus = 'Reconciled'
             } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconciled Exception'
+                loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load Error') {
                 mcgStatus = 'Exception'
             } else if (item.name == 'Load in MCG') {
@@ -1226,7 +1265,7 @@ export class RealTimeDashboard_New extends React.Component {
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
             } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconciled Exception'
+                loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
                 color = "var(--main-bg-color)"
@@ -1285,8 +1324,8 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         let stage_4 = [
-            { 'name': '999 Not Sent', 'value': 0 },
-            { 'name': '277CA Not Sent', 'value': this.state.totalFiles },
+            { 'name': '999 Not Sent', 'value': this.state.total_999 },
+            { 'name': '277CA Not Sent', 'value': (this.state.totalFiles - this.state.rejectedCount) },
         ]
 
         return (
