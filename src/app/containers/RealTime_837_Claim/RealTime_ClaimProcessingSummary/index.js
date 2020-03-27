@@ -25,6 +25,7 @@ export class ClaimProcessingSummary extends React.Component {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             providers: [],
+            incoming_fileId: '',
             gridType: 1,
             recCount: 0,
             pageCount: 1,
@@ -407,7 +408,7 @@ export class ClaimProcessingSummary extends React.Component {
         // }, 50);
     }
 
-    gotoDetails = () => {
+    gotoDetails = (fileId) => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -415,7 +416,7 @@ export class ClaimProcessingSummary extends React.Component {
         let type = this.state.type ? this.state.type : ''
 
         let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
+            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId : fileId ? fileId : this.state.incoming_fileId },
         ]
 
         this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
@@ -444,7 +445,7 @@ export class ClaimProcessingSummary extends React.Component {
         )
 
         rowArray.push(
-            { value: 'FileName', method: this.gotoDetails, isClick: 1 },
+            { value: 'FileName', method: this.gotoDetails, isClick: 1, key_argument: 'FileID' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
             { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },
@@ -726,7 +727,7 @@ export class ClaimProcessingSummary extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     generalStatus: generalStatus,
-                    mcgStatus: mcgStatus
+                    mcgStatus: mcgStatus,
                 },
             ]
             row.push(
@@ -810,7 +811,11 @@ export class ClaimProcessingSummary extends React.Component {
                             this.goto999(event.data.FileID)
                         }
                         if (event.colDef.headerName == 'File Name') {
-                            this.gotoDetails()
+                            this.setState({
+                                incoming_fileId: event.data.FileID
+                            }, () => {
+                                this.gotoDetails()
+                            })
                         }
                     }}
                 >

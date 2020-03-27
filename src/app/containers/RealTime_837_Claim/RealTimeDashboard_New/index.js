@@ -701,19 +701,22 @@ export class RealTimeDashboard_New extends React.Component {
     renderList() {
         let row = []
         const data = this.state.claimsList;
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
-        ]
+        
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}><Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>
+                        <a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                            onClick={() => {
+                                this.setState({
+                                    incoming_fileId: d.FileID
+                                }, () => {
+                                    this.gotoClaimDetails()
+                                })
+                            }}>
+                            {d.FileName}
+                        </a>
+                    </td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.Type}</td>
