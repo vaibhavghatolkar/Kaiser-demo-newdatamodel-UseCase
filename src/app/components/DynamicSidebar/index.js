@@ -165,6 +165,8 @@ export class DynamicSidebar extends React.Component {
         else if(key ==135){name = Strings.Outbound_BatchDetails837}  
         else if(key ==136){name = Strings.Outbound_Encounter_BatchDetails837}  
         else if(key ==137){name = Strings.Payment_details}
+        else if(key ==138){name = Strings.Outbound_response_999}
+        else if(key ==139){name = Strings.Outbound_277CAResponse}
         return name
     }
 

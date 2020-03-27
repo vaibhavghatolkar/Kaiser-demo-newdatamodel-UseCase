@@ -132,7 +132,7 @@ export class AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
               Total999
             }
             Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
@@ -376,21 +376,21 @@ export class AuditSummary extends React.Component {
     }
 
     goto277 = () => {
-        sessionStorage.setItem('isOutbound', true)
+        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_277CAResponse)
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 50);
     }
 
     goto999 = (fileId) => {
-        sessionStorage.setItem('isOutbound', true)
+        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
             fileId: fileId
         })
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 50);
     }
 
     handleSort(e, rotation, key) {
@@ -764,7 +764,9 @@ export class AuditSummary extends React.Component {
                                 this.goto999(event.data.FileID)
                             }
                             if (event.colDef.headerName == 'File Name') {
-                                this.props.history.push('/' + Strings.ClaimProcessingSummary)
+                                this.props.history.push('/' + Strings.ClaimProcessingSummary, {
+                                    file_id : event.data.FileID
+                                })
                             }
 
                         }}
