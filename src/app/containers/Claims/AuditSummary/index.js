@@ -403,15 +403,15 @@ export class AuditSummary extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Total Files', value: totalCount },
-                    { name: 'Accepted Files', value: accepted },
+                    { name: 'Total', value: totalCount },
+                    { name: 'Accepted', value: accepted },
                     { name: 'Accepted with Errors', value: acceptedwithErrors },
-                    { name: 'Rejected Files', value: rejected },
-                    { name: 'Reconciled Files', value: reconciled },
+                    { name: 'Rejected', value: rejected },
+                    { name: 'Reconciled', value: reconciled },
                     { name: 'Reconciled Error', value: reconciledError },
                     { name: 'Load Error', value: loadedError },
                     { name: 'Load in MCG', value: loaded },
-                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    // { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                     { name: '999', value: Total999 },
                     { name: '277 CA', value: Total277CA }
                 ]
@@ -442,6 +442,7 @@ export class AuditSummary extends React.Component {
             let addon = ''
             let claimStatus = ''
             let loadStatus = ''
+            let mcgStatus = ''
             let data = []
             if (item.name == 'Accepted Files') {
                 addon = '/accept'
@@ -457,18 +458,30 @@ export class AuditSummary extends React.Component {
             } else if (item.name == 'Reconciled Files') {
                 loadStatus = 'Reconciled'
             } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconciled Exception'
+                loadStatus = 'Reconcile Exception'
+            }else if (item.name == 'Load Error') {
+                mcgStatus = 'Exception'
+            } else if (item.name == 'Load in MCG') {
+                mcgStatus = 'Loaded'
             } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type, gridflag: loadStatus },
+                { 
+                    flag: addon, 
+                    State: State, 
+                    selectedTradingPartner: selectedTradingPartner, 
+                    startDate: startDate, 
+                    endDate: endDate, 
+                    status: claimStatus, 
+                    type: type, 
+                    gridflag: loadStatus,
+                    mcgStatus: mcgStatus
+                },
             ]
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Load Error' &&
-                        item.name != 'Load in MCG' &&
                         item.name != 'HiPaaS | MCG' &&
                         item.name != '999' &&
                         item.name != '277 CA'
@@ -913,6 +926,7 @@ export class AuditSummary extends React.Component {
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
                 {/* {this._renderStats()} */}
+                <div className="general-header" style={{ marginBottom: "-6px" }}>File Status</div>
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}
