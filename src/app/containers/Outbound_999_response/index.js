@@ -60,7 +60,7 @@ export class Outbound_response_999 extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "Response File Name", field: "ResponseFileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Response File Name", field: "ResponseFileName" , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Date", field: "ResponseFileDate" },
                 { headerName: "837 File Name", field: "FileName" },
                 { headerName: "Status", field: "status" },
