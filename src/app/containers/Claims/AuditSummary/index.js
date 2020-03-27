@@ -24,6 +24,7 @@ export class AuditSummary extends React.Component {
             claimsAudit: [],
             tradingpartne837: [],
             providers: [],
+            summaryList: [],
             SubTotal: 0,
             VeriTotal: 0,
             InBizstockTotal: 0,
@@ -339,6 +340,15 @@ export class AuditSummary extends React.Component {
                 ReconciledError
                 Loaded
                 LoadedError
+                ProcessingFiles
+                MCGLoadingFiles
+            }
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+                Total999
+              }
+
+              FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
+                Total277CA  
             }
         }`
         console.log(query)
@@ -352,19 +362,132 @@ export class AuditSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
+                // let data = res.data.Claim837RTDashboardCountNew
+                // this.setState({
+                //     totalCount: data[0].TotalCount,
+                //     accepted_Files: data[0].Accepted,
+                //     acceptedwithErrors: data[0].AcceptedwithErrors,
+                //     rejected_Files: data[0].Rejected
+                // })
+                let summary = []
                 let data = res.data.Claim837RTDashboardCountNew
+                let _data = res.data.Claim837RTDashboardCountFileStatuswise
+                let reconciled = ''
+                let reconciledError = ''
+                let loaded = ''
+                let loadedError = ''
+                let totalCount = ''
+                let accepted = ''
+                let rejected = ''
+                let acceptedwithErrors = ''
+                let processing = ''
+                let MCGLoadingFiles = ''
+                let Total999= res.data.Total999Response[0].Total999
+                let Total277CA= res.data.FileInCount[0].Total277CA
 
+
+                if (data && data.length > 0) {
+                    totalCount = data[0].TotalCount
+                    accepted = data[0].Accepted
+                    rejected = data[0].Rejected
+                    acceptedwithErrors = data[0].AcceptedwithErrors
+                }
+               
+                if (_data && _data.length > 0) {
+                    reconciled = _data[0].Reconciled
+                    reconciledError = _data[0].ReconciledError
+                    loaded = _data[0].Loaded
+                    loadedError = _data[0].LoadedError
+                    processing = _data[0].ProcessingFiles
+                    MCGLoadingFiles = _data[0].MCGLoadingFiles
+                }
+
+                summary = [
+                    { name: 'Total Files', value: totalCount },
+                    { name: 'Accepted Files', value: accepted },
+                    { name: 'Accepted with Errors', value: acceptedwithErrors },
+                    { name: 'Rejected Files', value: rejected },
+                    { name: 'Reconciled Files', value: reconciled },
+                    { name: 'Reconciled Error', value: reconciledError },
+                    { name: 'Load Error', value: loadedError },
+                    { name: 'Load in MCG', value: loaded },
+                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    { name: '999', value: Total999 },
+                    { name: '277 CA', value: Total277CA }
+                ]
 
                 this.setState({
-                    totalCount: data[0].TotalCount,
-                    accepted_Files: data[0].Accepted,
-                    acceptedwithErrors: data[0].AcceptedwithErrors,
-                    rejected_Files: data[0].Rejected
+                    summaryList: summary,
+                    totalFiles: totalCount
                 })
             })
             .catch(err => {
                 console.log(err)
             })
+    }
+
+
+    _renderSummaryDetails() {
+        let row = []
+        let array = this.state.summaryList
+        let apiflag = this.state.apiflag
+        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let loadStatus = ''
+            let data = []
+            if (item.name == 'Accepted Files') {
+                addon = '/accept'
+                claimStatus = 'Accepted'
+            } else if (item.name == 'Accepted with Errors') {
+                addon = '/reject'
+                claimStatus = 'Accepted with Errors'
+            } else if (item.name == 'Processing Files') {
+                addon = '/reject'
+                claimStatus = 'Received'
+            } else if (item.name == 'Rejected Files') {
+                claimStatus = 'Rejected'
+            } else if (item.name == 'Reconciled Files') {
+                loadStatus = 'Reconciled'
+            } else if (item.name == 'Reconciled Error') {
+                loadStatus = 'Reconciled Exception'
+            } else {
+                addon = '/other'
+            }
+            data = [
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type, gridflag: loadStatus },
+            ]
+            row.push(
+                <Tiles
+                    isClickable={
+                        item.name != 'Load Error' &&
+                        item.name != 'Load in MCG' &&
+                        item.name != 'HiPaaS | MCG' &&
+                        item.name != '999' &&
+                        item.name != '277 CA'
+                    }
+                    _data={data}
+                    header_text={item.name}
+                    value={item.value}
+                    second_val={item.second_val}
+                    url={Strings.Claim_Details_837_Grid}
+                />
+
+            )
+        });
+
+        return (
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
     }
 
     renderSearchBar() {
@@ -522,6 +645,7 @@ export class AuditSummary extends React.Component {
             this.getData()
             this.getClaimCounts()
             this._getCounts()
+            this._getCountsNew()
         }, 50);
     }
 
@@ -600,6 +724,7 @@ export class AuditSummary extends React.Component {
             this.getData()
             this.getClaimCounts()
             this._getCounts()
+            this._getCountsNew()
 
         }, 50);
     }
@@ -614,6 +739,7 @@ export class AuditSummary extends React.Component {
             this.getData()
             this.getClaimCounts()
             this._getCounts()
+            this._getCountsNew()
 
         }, 50);
     }
@@ -640,6 +766,7 @@ export class AuditSummary extends React.Component {
             this.getData()
             this.getClaimCounts()
             this._getCounts()
+            this._getCountsNew()
 
         })
     }
@@ -652,6 +779,7 @@ export class AuditSummary extends React.Component {
             this.getData()
             this.getClaimCounts()
             this._getCounts()
+            this._getCountsNew()
 
         })
     }
@@ -786,7 +914,8 @@ export class AuditSummary extends React.Component {
             <div>
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
-                {this._renderStats()}
+                {/* {this._renderStats()} */}
+                {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && !this.state.gridType ? this.renderTransactions() : null}
