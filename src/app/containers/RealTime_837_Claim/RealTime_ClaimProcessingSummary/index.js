@@ -707,7 +707,7 @@ export class ClaimProcessingSummary extends React.Component {
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
             } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconciled Exception'
+                loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
                 color = "var(--main-bg-color)"
