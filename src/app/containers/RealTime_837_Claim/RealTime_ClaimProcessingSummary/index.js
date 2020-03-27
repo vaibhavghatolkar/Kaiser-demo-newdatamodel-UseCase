@@ -67,6 +67,7 @@ export class ClaimProcessingSummary extends React.Component {
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
             paginationPageSize: 10,
+            file_id: props && props.location.state.data[0] && props.location.state.data[0].file_id ? props.location.state.data[0].file_id : '',
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -137,7 +138,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
               Total999
             }
          }`
@@ -388,21 +389,21 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     goto277 = () => {
-        sessionStorage.setItem('isOutbound', true)
+        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_277CAResponse)
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 50);
     }
 
     goto999 = (fileId) => {
-        sessionStorage.setItem('isOutbound', true)
+        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
             fileId: fileId
         })
-        setTimeout(() => {
-            window.location.reload()
-        }, 50);
+        // setTimeout(() => {
+        //     window.location.reload()
+        // }, 50);
     }
 
     gotoDetails = () => {
