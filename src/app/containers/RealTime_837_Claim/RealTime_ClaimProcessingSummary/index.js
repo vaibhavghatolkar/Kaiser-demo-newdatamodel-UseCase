@@ -67,7 +67,7 @@ export class ClaimProcessingSummary extends React.Component {
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
             paginationPageSize: 10,
-            file_id: props && props.location.state.data[0] && props.location.state.data[0].file_id ? props.location.state.data[0].file_id : '',
+            file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -302,7 +302,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
