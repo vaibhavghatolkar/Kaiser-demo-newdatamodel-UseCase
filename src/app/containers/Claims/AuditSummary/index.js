@@ -70,6 +70,8 @@ export class AuditSummary extends React.Component {
                 { headerName: "State", field: "State" },
                 { headerName: "ProcessID", field: "ProcessID" },
                 { headerName: "File Status", field: "FileStatus" },
+                { headerName: "Load Status", field: "LoadStatus" },
+                { headerName: "MCG Load Status	", field: "MCGStatus" },
                 { headerName: "Submitted", field: "Submitted" },
                 { headerName: "Claims In HiPaaS", field: "InHiPaaS" },
                 { headerName: "Accepted PreProcess", field: "Accepted" },
@@ -222,6 +224,8 @@ export class AuditSummary extends React.Component {
               InHiPaaS
               State
               ProcessID
+              LoadStatus
+              MCGStatus
             }
         }`
         console.log(query)
@@ -400,7 +404,7 @@ export class AuditSummary extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Total', value: totalCount },
+                    { name: 'Total Files', value: totalCount },
                     { name: 'Accepted', value: accepted },
                     { name: 'Accepted with Errors', value: acceptedwithErrors },
                     { name: 'Rejected', value: rejected },
@@ -441,18 +445,18 @@ export class AuditSummary extends React.Component {
             let loadStatus = ''
             let mcgStatus = ''
             let data = []
-            if (item.name == 'Accepted Files') {
+            if (item.name == 'Accepted') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
             } else if (item.name == 'Accepted with Errors') {
                 addon = '/reject'
                 claimStatus = 'Accepted with Errors'
-            } else if (item.name == 'Processing Files') {
+            } else if (item.name == 'Processing') {
                 addon = '/reject'
                 claimStatus = 'Received'
-            } else if (item.name == 'Rejected Files') {
+            } else if (item.name == 'Rejected') {
                 claimStatus = 'Rejected'
-            } else if (item.name == 'Reconciled Files') {
+            } else if (item.name == 'Reconciled') {
                 loadStatus = 'Reconciled'
             } else if (item.name == 'Reconciled Error') {
                 loadStatus = 'Reconcile Exception'
@@ -925,7 +929,6 @@ export class AuditSummary extends React.Component {
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
                 {/* {this._renderStats()} */}
-                <div className="general-header" style={{ marginBottom: "-6px" }}>File Status</div>
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}

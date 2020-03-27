@@ -122,8 +122,9 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "Type", field: "Type" },
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
-                { headerName: "Submitter", field: "Sender" },
                 { headerName: "Load Status", field: "Status" },
+                { headerName: "MCG Load Status", field: "MCGStatus" },
+                { headerName: "Submitter", field: "Sender" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
             ],
@@ -513,8 +514,9 @@ export class RealTimeDashboard_New extends React.Component {
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Load Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By MCGStatus", this.state.mcg_statusRotation, 'mcg_statusRotation')}>MCG Load Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -717,8 +719,9 @@ export class RealTimeDashboard_New extends React.Component {
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Status}</td>
+                    <td className="list-item-style">{d.MCGStatus}</td>
+                    <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
                 </tr>
             )
@@ -846,6 +849,7 @@ export class RealTimeDashboard_New extends React.Component {
                 Status
                 State
                 ProcessID
+                MCGStatus
             }
         }`
         console.log(query)
