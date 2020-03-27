@@ -39,6 +39,8 @@ export class AuditSummary extends React.Component {
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
+            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: '',
             Accepted: '',
             Rejected: '',
