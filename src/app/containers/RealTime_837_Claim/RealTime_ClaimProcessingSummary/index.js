@@ -28,11 +28,13 @@ export class ClaimProcessingSummary extends React.Component {
             recCount: 0,
             pageCount: 1,
             Months: 0,
+            loaded: 0,
             selectedTradingPartner: "",
             State: "",
+            type: "",
             providerName: "",
-            startDate: "",
-            endDate: "",
+            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
             Rejected: 0,
@@ -116,6 +118,7 @@ export class ClaimProcessingSummary extends React.Component {
     componentDidMount() {
         this.getCommonData()
         this.getCountData()
+        this.getClaimCounts()
         this.getData()
     }
 
@@ -177,6 +180,46 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
+    getClaimCounts = async () => {
+        let query = `{
+            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+                HiPaaSCount
+            }
+            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+                Accepted_Claims
+                Rejected_Claims
+                LoadingClaims
+            }
+        }`
+
+        console.log(query)
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
+                    let _data = res.data.Claim837RTDashboardTable[0]
+
+                    this.setState({
+                        HiPaaSCount: data ? data.HiPaaSCount : 0,
+                        Accepted: _data ? _data.Accepted_Claims : 0,
+                        Rejected: _data ? _data.Rejected_Claims : 0,
+                        loaded: _data ? _data.LoadingClaims : 0,
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
+
     getCountData = async () => {
         setTimeout(() => {
             this._get999Count()
@@ -211,15 +254,9 @@ export class ClaimProcessingSummary extends React.Component {
             .then(res => {
                 var data = res.data.FileInCount
                 if (data && data.length > 0) {
-                    let Accepted = data[0].Accepted
-                    let Rejected = data[0].Rejected
-                    let TotalSentToQNXT = data[0].TotalSentToQNXT
                     let Total277CA = data[0].Total277CA
 
                     this.setState({
-                        Accepted: Accepted,
-                        Rejected: Rejected,
-                        TotalSentToQNXT: TotalSentToQNXT,
                         Total277CA: Total277CA,
                         Paid: data[0].Paid,
                         Pending: data[0].Pending,
@@ -238,7 +275,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -320,6 +357,7 @@ export class ClaimProcessingSummary extends React.Component {
 
         setTimeout(() => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         }, 50);
     }
@@ -418,6 +456,7 @@ export class ClaimProcessingSummary extends React.Component {
         })
         setTimeout(() => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         }, 50);
     }
@@ -435,6 +474,7 @@ export class ClaimProcessingSummary extends React.Component {
 
         setTimeout(() => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         }, 50);
     }
@@ -459,6 +499,7 @@ export class ClaimProcessingSummary extends React.Component {
             providerName: value
         }, () => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         })
     }
@@ -479,6 +520,7 @@ export class ClaimProcessingSummary extends React.Component {
             State: event.target.options[event.target.selectedIndex].text
         }, () => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         })
     }
@@ -563,6 +605,7 @@ export class ClaimProcessingSummary extends React.Component {
 
         setTimeout(() => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         }, 50);
     }
@@ -575,6 +618,7 @@ export class ClaimProcessingSummary extends React.Component {
 
         setTimeout(() => {
             this.getCountData()
+            this.getClaimCounts()
             this.getData()
         }, 50);
     }
@@ -584,7 +628,7 @@ export class ClaimProcessingSummary extends React.Component {
             { header: 'Accepted Claims', value: this.state.Accepted },
             { header: 'Rejected Claims', value: this.state.Rejected },
             // { header: '999', value: this.state.Total999, style: "red summary-title" },
-            { header: 'Load in MCG', value: this.state.TotalSentToQNXT, style: "green summary-title" },
+            { header: 'Load in MCG', value: this.state.loaded, style: "green summary-title" },
             // { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
             { header: 'Pending', value: this.state.Pending, style: "orange summary-title" },
             { header: 'Paid', value: this.state.Paid },
@@ -634,10 +678,10 @@ export class ClaimProcessingSummary extends React.Component {
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
                     onCellClicked={(event) => {
-                        if(event.colDef.headerName == '999'){
-                        this.goto999(event.data.FileID)
+                        if (event.colDef.headerName == '999') {
+                            this.goto999(event.data.FileID)
                         }
-                        if(event.colDef.headerName == 'File Name'){
+                        if (event.colDef.headerName == 'File Name') {
                             this.gotoDetails()
                         }
                     }}

@@ -12,6 +12,7 @@ import Chart1 from "react-google-charts";
 import Paper from '@material-ui/core/Paper';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
+import { Tiles } from '../../../components/Tiles';
 
 import {
     Chart,
@@ -121,6 +122,8 @@ export class ClaimPaymentDashboard extends React.Component {
         this.state = {
             claimsList: [],
             summaryList: [],
+            summaryCount:[],
+            totalFiles: [],
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
@@ -177,6 +180,7 @@ export class ClaimPaymentDashboard extends React.Component {
         this.getCommonData()
         this.getData()
         this.getListData()
+        this._getCounts()
     }
 
     getCommonData() {
@@ -1021,11 +1025,11 @@ export class ClaimPaymentDashboard extends React.Component {
 
                 <div style={{ color: "grey" }} className="row">
 
-                    <div className="col-4" style={{ padding: '0' }}>
-                        <h6>Top 5 Providers</h6>
+                    {/* <div className="col-4" style={{ padding: '0' }}>
+                        <h6>Top 5 Providers</h6> */}
                         {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
 
-                        <Bar
+                        {/* <Bar
                             data={this.getBarData(this.state.providerChartLabel, this.state.providerChartData, '#139DC9')}
                             width={100}
                             height={60}
@@ -1069,7 +1073,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             <div className="col-9"> Cigna </div>
                             <div className="col-3"> 64</div>
                         </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
+                        <hr style={{ borderColor: 'lightgrey' }} /> */}
 
 
                         {/* <div className ="row">
@@ -1077,9 +1081,9 @@ export class ClaimPaymentDashboard extends React.Component {
 <div className="col-3"> 16</div>
 </div> */}
                         {/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
-                    </div>
+                    {/* </div> */}
 
-                    <div className="col-4" style={{padding: '0'}}>
+                    <div className="col-5" style={{padding: '0'}}>
                         <h6> EFT vs CHK </h6>
                         {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
                         <Bar
@@ -1134,7 +1138,8 @@ export class ClaimPaymentDashboard extends React.Component {
                         </div>
                         <hr style={{ borderColor: 'lightgrey' }} />
                     </div>
-                    <div className="col-4" style={{ padding: '0' }}>
+                        <div className="col-1"></div>
+                    <div className="col-5" style={{ padding: '0' }}>
                         <h6> Average # of Errors </h6>
                         {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
                         <Bar
@@ -1361,8 +1366,85 @@ export class ClaimPaymentDashboard extends React.Component {
 
     }
 
-    renderMaterialDonutChart() {
+    _getCounts = async () => {
+        let query = `{
+            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                TotalCount
+                Accepted
+                Rejected
+                AcceptedwithErrors
+                Processing
+            }
+            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                Reconciled
+                ReconciledError
+                Loaded
+                LoadedError
+                ProcessingFiles
+                MCGLoadingFiles
+            }
+        }`
+        console.log(query)
+        fetch(Urls.real_time_claim, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let summary = []
+                let data = res.data.Claim837RTDashboardCountNew
+                let _data = res.data.Claim837RTDashboardCountFileStatuswise
+                let reconciled = ''
+                let reconciledError = ''
+                let loaded = ''
+                let loadedError = ''
+                let totalCount = ''
+                let accepted = ''
+                let rejected = ''
+                let acceptedwithErrors = ''
+                let processing = ''
+                let MCGLoadingFiles = ''
 
+                if (data && data.length > 0) {
+                    totalCount = data[0].TotalCount
+                    accepted = data[0].Accepted
+                    rejected = data[0].Rejected
+                    acceptedwithErrors = data[0].AcceptedwithErrors
+                }
+
+                if (_data && _data.length > 0) {
+                    reconciled = _data[0].Reconciled
+                    reconciledError = _data[0].ReconciledError
+                    loaded = _data[0].Loaded
+                    loadedError = _data[0].LoadedError
+                    processing = _data[0].ProcessingFiles
+                    MCGLoadingFiles = _data[0].MCGLoadingFiles
+                }
+
+                summary = [
+                    { name: 'Total Files', value: totalCount },
+                    { name: 'Accepted Files', value: accepted },
+                    { name: 'Accepted with Errors', value: acceptedwithErrors },
+                    { name: 'Rejected Files', value: rejected },
+                    { name: 'Reconciled Files', value: reconciled },
+                    { name: 'Reconciled Error', value: reconciledError },
+                    { name: 'Load Error', value: loadedError },
+                    { name: 'Load in MCG', value: loaded },
+                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                ]
+                console.log(summary)
+                this.setState({
+                    summaryCount: summary,
+                    totalFiles: totalCount
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     renderGoogleStackedBarChart() {
@@ -1479,6 +1561,161 @@ export class ClaimPaymentDashboard extends React.Component {
 
         );
 
+    }
+
+
+    _renderSummaryDetails() {
+        let row = []
+        let array = this.state.summaryCount
+        let apiflag = this.state.apiflag
+        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let loadStatus = ''
+            let data = []
+            if (item.name == 'Accepted Files') {
+                addon = '/accept'
+                claimStatus = 'Accepted'
+            } else if (item.name == 'Accepted with Errors') {
+                addon = '/reject'
+                claimStatus = 'Accepted with Errors'
+            } else if (item.name == 'Processing Files') {
+                addon = '/reject'
+                claimStatus = 'Received'
+            } else if (item.name == 'Rejected Files') {
+                claimStatus = 'Rejected'
+            } else if (item.name == 'Reconciled Files') {
+                loadStatus = 'Reconciled'
+            } else {
+                addon = '/other'
+            }
+            data = [
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type, gridflag: loadStatus },
+            ]
+            row.push(
+                <Tiles
+                    isClickable={
+                        item.name != 'Reconciled Error' &&
+                        item.name != 'Load Error' &&
+                        item.name != 'Load in MCG' &&
+                        item.name != 'HiPaaS | MCG'
+                    }
+                    _data={data}
+                    header_text={item.name}
+                    value={item.value}
+                    second_val={item.second_val}
+                    // url={Strings.Claim_Details_837_Grid}
+                />
+
+            )
+        });
+
+        return (
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
+    }
+
+    _renderClaimTables = (array) => {
+        let row = []
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let loadStatus = ''
+            let generalStatus = ''
+            let color = "var(--red)"
+
+            if (item.name == 'Accepted') {
+                generalStatus = 'Accepted'
+                color = "var(--green)"
+            } else if (item.name == 'Accepted with Errors') {
+                generalStatus = 'Rejected'
+            } else if (item.name == 'File Rejected') {
+                generalStatus = 'File Rejected'
+            }
+
+            let sendData = [
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: claimStatus,
+                    type: type,
+                    gridflag: loadStatus,
+                    generalStatus: generalStatus
+                },
+            ]
+            row.push(
+                <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
+                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
+                    {
+                        item.isClick ?
+                            <Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
+                            :
+                            <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
+                    }
+                </div>
+            )
+        })
+
+        return (
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+                {row}
+            </div>
+        )
+    }
+
+
+    renderClaimDetails = () => {
+        let stage_1 = [
+            { 'name': 'Received', 'value': '12K' },
+            { 'name': 'HiPaaS Received', 'value': '11K' },
+            { 'name': 'Reconciled Error', 'value': 900 },
+            { 'name': 'File Rejected',  'value': 14 }
+        ]
+        let stage_2 = [
+            { 'name': 'Accepted', 'value': '1M' },
+            { 'name': 'Rejected', 'value': '3K' },
+            { 'name': 'Processing', 'value': 12 },
+            { 'name': 'Reconile 837', 'value': '10K' },
+            
+        ]
+        let stage_3 = [
+            { 'name': 'Sent to External', 'value': 0 },
+            { 'name': 'Send Errors', 'value': '100%' },
+            { 'name': 'Accepted %', 'value': '85%' },
+            { 'name': 'Rejected %', 'value': '15%' }
+        ]
+
+        // let stage_4 = [
+        //     { 'name': '999 Error', 'value': 0 },
+        //     { 'name': '277CA Error', 'value': 12 },
+        // ]
+
+        return (
+            <div className="row" style={{ marginBottom: '12px' }}>
+                {this._renderClaimTables(stage_1)}
+                {this._renderClaimTables(stage_2)}
+                {this._renderClaimTables(stage_3)}
+                {/* {this._renderClaimTables(stage_4)} */}
+            </div>
+        )
     }
 
     renderTopbar() {
@@ -1615,14 +1852,34 @@ export class ClaimPaymentDashboard extends React.Component {
                 <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}> 835 Dashboard</h5><br></br>
 
                 <div className="row">
-                    <div className="col-9">
+                    <div className="col-12">
                         {this.renderTopbar()}
-                        {this.renderSummaryDetails()}
+                        {/* {this.renderSummaryDetails()} */}
+                        <div className="general-header" style={{ marginBottom: "-6px" }}>File Level</div>
+                        {this._renderSummaryDetails()}
+                        <div className="general-header">Payment Level</div>
+                        {this.renderClaimDetails()}
                         {/* {this.renderMonthlyTrendsChart()} */}
-                        {this.renderGraphs()}
+                       {/* <div className="row">
+                           <div className="col-4">
+                           {this.renderCharts()}
+                           </div>
+                           <div className="col-1"></div>
+                           <div className="col-4">
+                        {this.RenderMainErrorChart()}
+                           </div>
+                       </div> */}
                     </div>
 
-                    <div className="col-3 nopadding">
+                   
+                </div>
+                <div className="row">
+                <div className="col-8 nopadding">
+                {this.renderGraphs()}  
+                <br></br> 
+                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}    
+                </div>
+                <div className="col-3 nopadding" style={{marginLeft: '30px'}}>
                         {this.renderCharts()}
                         {this.RenderMainErrorChart()}
                         {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
@@ -1630,7 +1887,6 @@ export class ClaimPaymentDashboard extends React.Component {
 
                     </div>
                 </div>
-
 
 
                 {/* <div className="row">
@@ -1649,7 +1905,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 <div className="row">
                     <div className="col-9">
                         <br></br>
-                        {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}
+                       
                         {/* {this.renderTransactionsNew()} */}
                     </div>
                     <div className="col-3 nopadding">

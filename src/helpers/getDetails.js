@@ -76,7 +76,7 @@ export const getStates = async () => {
             .then(res => {
                 let data = []
                 res.data.StateList.forEach(item => {
-                    data.push(item.State)
+                    data.push(item.StateCode)
                 })
                 return data
             })
