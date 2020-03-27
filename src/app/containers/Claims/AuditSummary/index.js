@@ -133,9 +133,7 @@ export class AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-              Total999
-            }
+
             Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
                 TotalAcceptedFiles
             }
@@ -152,7 +150,6 @@ export class AuditSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    Total999: res.data.Total999Response[0].Total999,
                     acceptedFiles: res.data.Claim837RTRejectedFile[0].TotalAcceptedFiles,
                 })
             })
@@ -343,7 +340,7 @@ export class AuditSummary extends React.Component {
                 ProcessingFiles
                 MCGLoadingFiles
             }
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
                 Total999
               }
 
