@@ -122,7 +122,9 @@ export class Claim_Details_837_Grid extends React.Component {
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "Submitter", field: "Sender" },
+
                 { headerName: "Load Status", field: "Status" },
+                { headerName: "MCG Status", field: "MCGStatus" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
                 { headerName: "Error Description", field: "FileLevelError" },
@@ -269,6 +271,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 State
                 ProcessID
                 FileLevelError
+                MCGStatus
             }
         }`
         console.log(query)
@@ -297,9 +300,8 @@ export class Claim_Details_837_Grid extends React.Component {
                         rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : [],
                         intakeClaims: res.data.Claim837RTDashboardFileDetails,
                         recount: count,
-                        Ag_FileName:res.data.Claim837RTDashboardFileDetails[0].FileName,
-                        Ag_FileDate:res.data.Claim837RTDashboardFileDetails[0].FileDate,
-                        Ag_Receiver:res.data.Claim837RTDashboardFileDetails[0].Receiver
+                       
+                       
                     }, () => {
                         this.sortData()
                     })
@@ -435,6 +437,8 @@ export class Claim_Details_837_Grid extends React.Component {
                 ClaimRefId
                 MolinaClaimID
                 Transaction_Status
+                FileName
+                FileCrDate
             }
         }`
         console.log(query)
@@ -452,7 +456,9 @@ export class Claim_Details_837_Grid extends React.Component {
 
                 if (this.state.gridType) {
                     this.setState({
-                        claims_rowData: data
+                        claims_rowData: data,
+                        Ag_grid_FileName: res.data.Claim837RTProcessingSummary[0].FileName,
+                        Ag_grid_fileDate:res.data.Claim837RTProcessingSummary[0].FileCrDate,
                     })
                 } else {
                     this.sortData(fileId, data)
@@ -475,6 +481,9 @@ export class Claim_Details_837_Grid extends React.Component {
             Stage
             StageFileID
             ErrorDesc
+            FileName
+            FileDate
+            MolinaClaimID
             }
         }`
         console.log(query)
@@ -493,6 +502,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 if (this.state.gridType) {
                     this.setState({
                         Error_data: data
+                        
                     })
                 } else {
                     this.sortData(fileID, data)
@@ -668,6 +678,12 @@ export class Claim_Details_837_Grid extends React.Component {
               FieldToUpdate
               MolinaClaimID
               LXCount
+              FileName
+              FileDate
+              HL20Count
+              HL22Count
+              HL23Count
+              Receiver
             }
             Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page} , GridType:${this.state.gridType}) {
               ClaimID
@@ -1030,6 +1046,7 @@ export class Claim_Details_837_Grid extends React.Component {
                                     claimsAudit: [],
                                     showerror: false,
                                     showClaims:false,
+                                    showDetails:false,
                                     gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     if (this.state.gridType == 1) {
@@ -1478,6 +1495,9 @@ export class Claim_Details_837_Grid extends React.Component {
       
         let columnDefs = [
             { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            //            { headerName: "File Name", field: "FileName" },
+            // { headerName: "File Date", field: "FileCrDate" },
+               
             { headerName: "X12 Claim Id", field: "ClaimID" },
             { headerName: "Claim Date", field: "ClaimDate" },
             { headerName: "Claim Status", field: "ClaimStatus" },
@@ -1486,6 +1506,8 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "Adjudication Status", field: "adjudication_status" },
             { headerName: "Claim Amount", field: "Claim_Amount" },
 
+
+
             // { headerName: "Error", field: "ClaimLevelErrors" },
         ]
 
@@ -1493,7 +1515,7 @@ export class Claim_Details_837_Grid extends React.Component {
             <div>
                  
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Claim Data</h6>
+        <h6 className="font-size">Claim  Information For <label style={{color:'var(--main-bg-color)'}}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1541,17 +1563,23 @@ export class Claim_Details_837_Grid extends React.Component {
         if(this.state.Error_data==undefined) {this.state.Error_data=[]}
         console.log("_renderError" ,this.state.Error_data);
         let columnDefs = [
-            { headerName: "X12 Claim ID", field: "ClaimID" },
+            // { headerName: "File Name", field: "FileName" },
+            // { headerName: "File Date", field: "FileDate" },
             { headerName: "Stage", field: "Stage" },
+            { headerName: "Molina Claim ID", field: "MolinaClaimID" },
+            { headerName: "X12 Claim ID", field: "ClaimID" },
+                       
+              
             { headerName: "Error Description", field: "ErrorDesc" },
-
+            
+            
 
         ]
 
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Claim Error Description</h6>
+                {/* <h6 className="font-size">Claim Error Description</h6> */}
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1583,8 +1611,9 @@ export class Claim_Details_837_Grid extends React.Component {
         if(this.state.Aggrid_ClaimLineData==undefined) {this.state.Aggrid_ClaimLineData=[]}
         console.log("_ClaimLineTable" ,this.state.Aggrid_ClaimLineData);
         let columnDefs = [
-            { headerName: "X12 Claim ID", field: "ClaimID" },
-            { headerName: "Claim Id", field: "MolinaClaimID" },
+            { headerName: "Molina Claim ID", field: "MolinaClaimID" },
+                        { headerName: "X12 Claim ID", field: "ClaimID" },
+           
             { headerName: "Service Line No.", field: "ServiceLineCount" },
             { headerName: " Service Date", field: "ServiceDate" },
             { headerName: "Procedure Code", field: "ProcedureDate" },
@@ -1595,7 +1624,7 @@ export class Claim_Details_837_Grid extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Claim Line Data</h6>
+                <h6 className="font-size">Claim Line Data</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1627,9 +1656,14 @@ export class Claim_Details_837_Grid extends React.Component {
         if(this.state.Aggrid_Claim_Info_data==undefined) {this.state.Aggrid_Claim_Info_data=[]}
         console.log('Aggrid_Claim_Info_data',this.state.Aggrid_Claim_Info_data , this.state.Ag_FileName)
         let columnDefs = [     
-        { headerName: " File Name", field: this.state.Ag_FileName },
-        { headerName: "File Date", field: this.state.Ag_FileDate },
-        { headerName: "Receiver", field: this.state.Ag_Receiver },
+            
+  
+        { headerName: " File Name", field: "FileName" },    
+        { headerName: "Receiver", field:"Receiver" },
+        { headerName: " HL20 Count", field: "HL20Count" },
+        { headerName: "HL22 Count", field:"HL22Count"  },
+        { headerName: "HL23 Count", field:"HL23Count" },
+        { headerName: "Molina Claim Id", field: "MolinaClaimID" },
           { headerName: "X12 Claim Id", field: "ClaimID" },
             { headerName: "Claim Date", field: "ClaimDate" },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName" },
@@ -1645,7 +1679,7 @@ export class Claim_Details_837_Grid extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Claim Information</h6>
+               
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
