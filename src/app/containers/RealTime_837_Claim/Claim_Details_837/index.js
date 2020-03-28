@@ -797,10 +797,10 @@ export class ClaimDetails837 extends React.Component {
             });
     }
 
-    getClaimStages(claimId, fileId) {
+    getClaimStages(claimId, fileId, seqId) {
         let url = Urls.real_time_claim_details
         let query = `{
-            ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}") {
+            ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}", SeqID: ${seqId}) {
               Stage
               Createdatetime
             }
@@ -1344,7 +1344,7 @@ export class ClaimDetails837 extends React.Component {
                                 }, () => {
                                     this._getHLDetails(d.FileID)
                                     this.getDetails(d.ClaimID, d.FileID, d.ClaimRefId, data[keys].value, 1)
-                                    this.getClaimStages(d.ClaimID, d.FileID)
+                                    this.getClaimStages(d.ClaimID, d.FileID, d.ClaimRefId)
                                 })
                             }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.MolinaClaimID}</a></td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
