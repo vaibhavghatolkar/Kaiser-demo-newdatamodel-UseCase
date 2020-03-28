@@ -803,7 +803,8 @@ export class Claim_Details_837_Grid extends React.Component {
             .then(res => {
                 if (res && res.data && res.data.ClaimStagesInbound) {
                     this.setState({
-                        claimStageDetails: res.data.ClaimStagesInbound
+                        claimStageDetails: res.data.ClaimStagesInbound,
+                        Aggrid_ClaimStage:res.data.ClaimStagesInbound,
                     })
 
                     console.log('claim stage', res.data.ClaimStagesInbound)
@@ -1544,12 +1545,13 @@ export class Claim_Details_837_Grid extends React.Component {
                                     Error_data:[],
                                     Aggrid_ClaimLineData:[],
                                     Aggrid_Claim_Info_data:[],
+                                    Aggrid_ClaimStage:[],
 
                                 })
                                 console.log('this is the event', event)
                                 this.get_Error(event.data.ClaimID ,event.data.ClaimRefId, event.data.FileID)
                                 this.getDetails(event.data.ClaimID, event.data.FileID,event.data.ClaimRefId,"", 1)
-                              
+                                this.getClaimStages(event.data.ClaimID,  event.data.FileID)
                             }
                         }}
                     >
@@ -1707,6 +1709,47 @@ export class Claim_Details_837_Grid extends React.Component {
             </div>
         )
     }
+    
+    _ClaimStage() {
+        if(this.state.Aggrid_ClaimStage==undefined) {this.state.Aggrid_ClaimStage=[]}
+        console.log("_ClaimStage" ,this.state.Aggrid_ClaimStage);
+        let columnDefs = [
+            { headerName: "Stage", field: "Stage" },
+            { headerName: "Date", field: "Createdatetime" },                       
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="font-size">Claim Stage</h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Aggrid_ClaimStage}
+                        
+                         
+                     
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
     render() {
 
         return (
@@ -1722,6 +1765,7 @@ export class Claim_Details_837_Grid extends React.Component {
                             {this.state.showerror && this.state. claimError_Status=="Rejected" ? this._renderError() : null}
                             {this.state.showerror ?  this._ClaimView_Info_Table() : null}
                             {this.state.showerror ? this._ClaimLineTable() : null}
+                            {this.state.showerror ? this._ClaimStage() : null}
                             
                         </div>
                         :
