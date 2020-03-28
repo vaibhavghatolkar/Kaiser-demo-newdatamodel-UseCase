@@ -950,6 +950,10 @@ export class RealTimeDashboard_New extends React.Component {
               Total999
               NotSent999
             }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
+                Total277CA
+                NotSent277CA
+            }
          }`
         console.log(query)
         fetch(Urls.claims_837, {

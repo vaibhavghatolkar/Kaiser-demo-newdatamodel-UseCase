@@ -79,7 +79,7 @@ export class AuditSummary extends React.Component {
                 { headerName: "Error in PreProcess", field: "Error" },
                 { headerName: "In MCG	", field: "SentToQNXT" },
                 { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277 CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -346,8 +346,10 @@ export class AuditSummary extends React.Component {
             }
             Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
                 Total999
-              }
-
+            }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
+                Total277CA
+            }
               FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
                 Total277CA  
             }
@@ -384,7 +386,7 @@ export class AuditSummary extends React.Component {
                 let processing = ''
                 let MCGLoadingFiles = ''
                 let Total999 = res.data.Total999Response[0].Total999
-                let Total277CA = res.data.FileInCount[0].Total277CA
+                let Total277CA = res.data.Total277CAResponse[0].Total277CA
 
 
                 if (data && data.length > 0) {
@@ -512,9 +514,11 @@ export class AuditSummary extends React.Component {
         )
     }
 
-    goto277 = () => {
+    goto277 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse)
+        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
+            fileId: fileId
+        })
         // setTimeout(() => {
         //     window.location.reload()
         // }, 50);
@@ -578,7 +582,7 @@ export class AuditSummary extends React.Component {
                             }}>{d.F999}</a></td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {
-                            this.goto277()
+                            this.goto277(d.FileID)
                         }}>{d.F277}</a></td>
                 </tr>
             )
@@ -904,6 +908,9 @@ export class AuditSummary extends React.Component {
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == '999') {
                                 this.goto999(event.data.FileID)
+                            }
+                            if (event.colDef.headerName == '277CA') {
+                                this.goto277(event.data.FileID)
                             }
                             if (event.colDef.headerName == 'File Name') {
                                 this.props.history.push('/' + Strings.ClaimProcessingSummary, {

@@ -267,13 +267,13 @@ export class MenuManagement extends React.Component {
         let row = []
         const data = this.state.customList;
         let menuOptions = {}
-        // console.log(data)
+        console.log(data)
         data.forEach((d) => {
             var roletype = d.parent_node;
             var menuID = d.menu_id;
            
-            // console.log(roletype)
-            // console.log(d.menu_id)
+            console.log(roletype)
+            console.log(d.menu_id)
          
             if(d.isChecked == "0"){
                 d.isChecked = false
