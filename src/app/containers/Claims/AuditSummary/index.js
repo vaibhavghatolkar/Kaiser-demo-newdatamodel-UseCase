@@ -57,8 +57,8 @@ export class AuditSummary extends React.Component {
             count: 1,
             nameRotation: 180,
             statusRotation: 180,
-            stateRotation : 180,
-            processIdRotation : 180,
+            stateRotation: 180,
+            processIdRotation: 180,
             totalCount: '',
             accepted_Files: '',
             acceptedwithErrors: '',
@@ -383,8 +383,8 @@ export class AuditSummary extends React.Component {
                 let acceptedwithErrors = ''
                 let processing = ''
                 let MCGLoadingFiles = ''
-                let Total999= res.data.Total999Response[0].Total999
-                let Total277CA= res.data.FileInCount[0].Total277CA
+                let Total999 = res.data.Total999Response[0].Total999
+                let Total277CA = res.data.FileInCount[0].Total277CA
 
 
                 if (data && data.length > 0) {
@@ -393,7 +393,7 @@ export class AuditSummary extends React.Component {
                     rejected = data[0].Rejected
                     acceptedwithErrors = data[0].AcceptedwithErrors
                 }
-               
+
                 if (_data && _data.length > 0) {
                     reconciled = _data[0].Reconciled
                     reconciledError = _data[0].ReconciledError
@@ -460,7 +460,7 @@ export class AuditSummary extends React.Component {
                 loadStatus = 'Reconciled'
             } else if (item.name == 'Reconciled Error') {
                 loadStatus = 'Reconcile Exception'
-            }else if (item.name == 'Load Error') {
+            } else if (item.name == 'Load Error') {
                 mcgStatus = 'Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
@@ -468,14 +468,14 @@ export class AuditSummary extends React.Component {
                 addon = '/other'
             }
             data = [
-                { 
-                    flag: addon, 
-                    State: State, 
-                    selectedTradingPartner: selectedTradingPartner, 
-                    startDate: startDate, 
-                    endDate: endDate, 
-                    status: claimStatus, 
-                    type: type, 
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: claimStatus,
+                    type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus
                 },
@@ -561,7 +561,7 @@ export class AuditSummary extends React.Component {
 
             row.push(
                 <tr>
-                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
+                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary, { file_id: d.FileID }) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
@@ -907,7 +907,7 @@ export class AuditSummary extends React.Component {
                             }
                             if (event.colDef.headerName == 'File Name') {
                                 this.props.history.push('/' + Strings.ClaimProcessingSummary, {
-                                    file_id : event.data.FileID
+                                    file_id: event.data.FileID
                                 })
                             }
 
