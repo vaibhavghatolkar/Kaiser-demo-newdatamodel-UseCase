@@ -623,10 +623,10 @@ export class Load_Exception extends React.Component {
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a>
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a>
                 </div>
                 {/* <div className="col-1 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
@@ -877,13 +877,23 @@ export class Load_Exception extends React.Component {
 
     _renderClaims() {
       
+        let defaultColDef= {
+            editable: false,
+            enableRowGroup: true,
+            enablePivot: true,
+            enableValue: true,
+            sortable: true,
+            resizable: true,
+            filter: true,
+        }
+
           let columnDefs = [
-            { headerName: "File Name", field: "FileName"},
-            { headerName: "File Date", field: "FileDate"},
-            { headerName: "Process ID", field: "ProcessID"},
+            { headerName: "File Name", field: "FileName",width:200},
+            { headerName: "File Date", field: "FileDate", width:150},
+            { headerName: "Process ID", field: "ProcessID", width:120},
                        
-            { headerName: "State" , field: "State" },
-            { headerName: "Exception", field: "Exception"}
+            { headerName: "State" , field: "State", width:100 },
+            { headerName: "Exception", field: "Exception",flex:1}
           ]
 
         return (
@@ -894,7 +904,7 @@ export class Load_Exception extends React.Component {
                         modules={this.state.modules}
                         columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
+                        defaultColDef={defaultColDef}
                         suppressRowClickSelection={true}
                         groupSelectsChildren={true}
                         debug={true}
