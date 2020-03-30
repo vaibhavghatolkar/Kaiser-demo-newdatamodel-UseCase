@@ -1529,10 +1529,21 @@ export class Claim_Details_837_Grid extends React.Component {
     _renderError() {
         if(this.state.Error_data==undefined) {this.state.Error_data=[]}
         console.log("_renderError" ,this.state.Error_data);
+
+        let defaultColDef= {
+            editable: false,
+            enableRowGroup: true,
+            enablePivot: true,
+            enableValue: true,
+            sortable: true,
+            resizable: true,
+            filter: true,
+        }
+
         let columnDefs = [
-            { headerName: "X12 Claim ID", field: "ClaimID" },
-            { headerName: "Stage", field: "Stage" },
-            { headerName: "Error Description", field: "ErrorDesc" },
+            { headerName: "X12 Claim ID", field: "ClaimID",  width: 200 },
+            { headerName: "Stage", field: "Stage", width: 200 },
+            { headerName: "Error Description", field: "ErrorDesc", flex: 1  },
 
 
         ]
@@ -1544,7 +1555,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         modules={this.state.modules}
                         columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
+                        defaultColDef={defaultColDef}
                         suppressRowClickSelection={true}
                         groupSelectsChildren={true}
                         debug={true}
