@@ -213,7 +213,7 @@ export class Load_Exception extends React.Component {
         }
 
         let query = `{            
-            Claim837RTDashboardFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"${this.state.gridflag}", Status:"${this.state.generalStatus}", MCGStatus:"${this.state.mcgStatus}", FileID: "${this.state.incoming_fileId}") {
+            Claim837RTLoadExceptionFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"", Status:"", MCGStatus:"", FileID: "") {
                 RecCount
                 FileID
                 FileName
@@ -241,20 +241,20 @@ export class Load_Exception extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.Claim837RTDashboardFileDetails) {
+                if (res && res.data && res.data.Claim837RTLoadExceptionFileDetails) {
 
-                    if (res.data.Claim837RTDashboardFileDetails.length > 0) {
+                    if (res.data.Claim837RTLoadExceptionFileDetails.length > 0) {
 
-                        count = Math.floor(res.data.Claim837RTDashboardFileDetails[0].RecCount / 10)
-                        if (res.data.Claim837RTDashboardFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.Claim837RTLoadExceptionFileDetails[0].RecCount / 10)
+                        if (res.data.Claim837RTLoadExceptionFileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
                         this.setState.recount = count;
                     }
 
                     this.setState({
-                        rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : [],
-                        intakeClaims: res.data.Claim837RTDashboardFileDetails,
+                        rowData: this.state.gridType == 1 ? res.data.Claim837RTLoadExceptionFileDetails : [],
+                        intakeClaims: res.data.Claim837RTLoadExceptionFileDetails,
                         recount: count,
                        
                        
