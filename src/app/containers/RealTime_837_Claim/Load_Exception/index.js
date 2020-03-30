@@ -22,7 +22,7 @@ export class Load_Exception extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
+       
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'
@@ -180,7 +180,7 @@ export class Load_Exception extends React.Component {
             }
         }`
 
-        console.log(query)
+   
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -198,7 +198,7 @@ export class Load_Exception extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+           
             });
     }
   
@@ -230,7 +230,7 @@ export class Load_Exception extends React.Component {
                 MCGStatus
             }
         }`
-        console.log(query)
+      
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -264,7 +264,7 @@ export class Load_Exception extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+              
             });
     }  
     sortData(fileId, data) {
@@ -288,7 +288,7 @@ export class Load_Exception extends React.Component {
                 }
             })
         }
-        console.log(files)
+     
         this.setState({
             claimsObj: files,
             page: 1
@@ -314,7 +314,7 @@ export class Load_Exception extends React.Component {
                 Exception
             }
         }`
-        console.log(query)
+
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -338,7 +338,7 @@ export class Load_Exception extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+        
             });
     }
     
@@ -463,7 +463,7 @@ export class Load_Exception extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                  
                 })
         }, 300);
     }
@@ -864,8 +864,7 @@ export class Load_Exception extends React.Component {
                                     Ag_grid_FileName: '',
                                     Ag_grid_fileDate:'',
                                 })
-                                console.log('this is the event', event)
-                                this.getTransactions(event.data.FileID)
+                                 this.getTransactions(event.data.FileID)
                             }
                         }}
                     >
