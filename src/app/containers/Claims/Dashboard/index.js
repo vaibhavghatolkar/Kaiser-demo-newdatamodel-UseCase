@@ -161,7 +161,7 @@ export class Claims extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         if (this.state.apiflag) {
             query = `{
@@ -217,7 +217,7 @@ export class Claims extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

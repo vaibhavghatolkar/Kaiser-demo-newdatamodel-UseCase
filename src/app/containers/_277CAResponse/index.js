@@ -102,7 +102,7 @@ export class _277CAReponse extends React.Component {
             }
         }
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -129,7 +129,7 @@ export class _277CAReponse extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -151,7 +151,7 @@ export class _277CAReponse extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -180,7 +180,7 @@ export class _277CAReponse extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -240,7 +240,7 @@ export class _277CAReponse extends React.Component {
             }`
         }
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -261,7 +261,7 @@ export class _277CAReponse extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

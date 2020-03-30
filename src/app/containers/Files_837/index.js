@@ -79,7 +79,7 @@ export class Files_837 extends React.Component {
                 })
             }
         }).catch(error => {
-            console.log(error)
+            process.env.NODE_ENV == 'development' && console.log(error)
         })
 
         this.getData();
@@ -108,7 +108,7 @@ export class Files_837 extends React.Component {
             query = '{ ClaimRejCountDataFileSummary(submitter:"'+this.state.selectedTradingPartner+'",fromDt:"'+startDate+'",ToDt:"'+endDate+'") { FileID FileName FileDate FSubmitter_N103 FReceiver_N103 FExtraField2 BillingProviderLastName BillingProviderFirstName CreateDateTime CountData } }'
         }
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.claim_details, {
             method: 'POST',
@@ -137,7 +137,7 @@ export class Files_837 extends React.Component {
                     this.sortData()
                 }, 50);
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     getClaimData(FileID, ClaimID) {
@@ -153,12 +153,12 @@ export class Files_837 extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                console.log("Here is the data hurray : " + JSON.stringify(r))
+                process.env.NODE_ENV == 'development' && console.log("Here is the data hurray : " + JSON.stringify(r))
                 this.setState({
                     lineData: r.data.IntakeClaimLineDataFileIDClaimID
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
     getICDCode() {
         let query = `{
@@ -189,7 +189,7 @@ export class Files_837 extends React.Component {
                 })
 
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
     onClick(fileId){
         let query = "{ IntakeClaimDatatblwithFile(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
@@ -198,7 +198,7 @@ export class Files_837 extends React.Component {
         } else if(this.state.flag == 'Rejected Claims'){
             query = "{ ClaimRejCountData(page:"+this.state.page+", fileId:"+fileId+") { SeqID FileID TransactionID FileName FileDate BatchID TransmissionID ClaimExtNmbr ClaimID ClaimTMTrackingID PaytoPlanInfo Billing_Provider_ID SecondaryBilling_ID Subscriber_ID ExtSubscriber_ID Member_ID Member_Account_Number Member_Last_Name Member_First_Name MemberMI Member_DOB DiagnosisCodes Claim_Amount PatientPaid NetBalance Adjust InsuranceBalance VAN_Trace_Number COB_Claim_Number ClaimStatus ClaimCode OtherID ClaimSupplimentalInfo ContractInformation PatientDueAmmount ExternalCorrelationToken LineCount ExtraField1 ExtraField2 ExtraField3 ExtraField4 ExtraField5 ExtraField6 ExtraField7 ExtraField8 ExtraField9 CreatedBy CreateDateTime Created_Date HL_ID_BillingProvider HL_Level_BillingProvider PRV_Billing01 PRV_Billing02 PRV_Billing03 NM101_BillingProviderId BillingProviderLastName BillingProviderFirstName NM108_BillingProvider NM109_BillingProvider BillingProviderAddress BillingProviderCity_State_Zip BillingProvider_TaxId BillingProvider_PER01 BillingProvider_PER02 BillingProvider_PER03 BillingProvider_PER04 NM101_PayToProvider PayToProviderLastName PayToProviderFirstName NM108_PayToProvider NM109_PayToProvider PayToProviderAddress PayToProviderCity_State_Zip PayToProvider_TaxId PayToProvider_PER01 PayToProvider_PER02 PayToProvider_PER03 PayToProvider_PER04 HL_ID_Subscriber HL_Level_Subscriber SBR01 SBR02 SBR03 SBR09 SubscriberLastName SubscriberFirstName SubscriberDOB NM108_Subscriber NM109_Subscriber SubscriberAddress SubscriberCity_State_Zip SubscriberSecondaryIdentification CasualityClaimNumber PayerLastName PayerFirstName NM108_Payer NM109_Payer PayerAddress PayerCity_State_Zip PayerSecondaryId BillingProviderSecondaryId HL_ID_Patient HL_Level_Patient PatientLastName PatientFirstName NM108_Patient NM109_Patient PatientAddress PatientCity_State_Zip PatientDOB CLM01 CLM02 CLM05_01 CLM05_02 CLM05_03 StatementBegin StatementEnd DischargeHour AdmissionDate RepricerReceivevDate ErrorCode ErrorDesc Field1 ClaimLevelErrors Field3 Field4 NM109_2330 CLM_11 ClaimLevelICDErrorFlag ClaimLevelCLMErrorFlag HI01 adjudication_status FSubmitter_N103 FReceiver_N103 FExtraField2 } }"
         }
-        console.log("Query : " + query)
+        process.env.NODE_ENV == 'development' && console.log("Query : " + query)
         fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
@@ -219,7 +219,7 @@ export class Files_837 extends React.Component {
                 }
                 this.sortData(fileId, data)
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     sortData(fileId, data) {
@@ -299,14 +299,14 @@ export class Files_837 extends React.Component {
                     file: file
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
 
     }
     getClaimTableData(fileId, claimId) {
        
         this.getICDCode();
         let query = '{ IntakeClaimData(fileId: ' + fileId + ', ClaimID: ' + '"' + claimId + '"' + ') { ClaimTMTrackingID SubscriberFirstName SubscriberLastName AdmissionDate Claim_Amount BillingProviderFirstName BillingProviderLastName BillingProviderAddress BillingProviderCity_State_Zip ClaimStatus DiagnosisCodes SeqID ClaimID ClaimLevelErrors  ClaimExtNmbr} }'
-        console.log(query);
+        process.env.NODE_ENV == 'development' && console.log(query);
         fetch(Urls.claim_details, {
             method: 'POST',
             headers: {
@@ -363,7 +363,7 @@ export class Files_837 extends React.Component {
                     claimsDetails: claimsDetails
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
     getIcdcodeoptions() {
         let row = []
@@ -404,7 +404,7 @@ export class Files_837 extends React.Component {
                     coverage_data: coverage_data
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     renderTableHeader() {
@@ -627,7 +627,7 @@ export class Files_837 extends React.Component {
             var query = 'mutation{ updateAccidentDate(SeqID :' + this.state.SelectFileID + ' ' + 'AccidentDate :"' + this.state.ClaimExt + '"' +
                 ')' +
                 '}'
-            console.log(query);
+            process.env.NODE_ENV == 'development' && console.log(query);
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -656,7 +656,7 @@ export class Files_837 extends React.Component {
             var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
                 ')' +
                 '}'
-            console.log(query);
+            process.env.NODE_ENV == 'development' && console.log(query);
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {

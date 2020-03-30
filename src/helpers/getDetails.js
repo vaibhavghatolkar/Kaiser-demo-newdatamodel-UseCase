@@ -23,7 +23,7 @@ export const getDetails = async (key) => {
             }
         })
         .catch(err => {
-            console.log(err)
+            process.env.NODE_ENV == 'development' && console.log(err)
         });
 }
 
@@ -53,7 +53,7 @@ export const getProviders = async (recType, input_query) => {
             }
         })
         .catch(err => {
-            console.log(err)
+            process.env.NODE_ENV == 'development' && console.log(err)
         });
 }
 
@@ -64,7 +64,7 @@ export const getStates = async () => {
                 StateCode
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         return fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -82,6 +82,6 @@ export const getStates = async () => {
                 return data
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }

@@ -69,7 +69,7 @@ export class MenuManagement extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     onHandleChange(e, key) {
@@ -98,7 +98,7 @@ export class MenuManagement extends React.Component {
             is_editor      
             is_editable
           }}`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -134,7 +134,7 @@ export class MenuManagement extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
 
@@ -170,7 +170,7 @@ export class MenuManagement extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
     }
@@ -426,7 +426,7 @@ export class MenuManagement extends React.Component {
             ')' +
             '}'
 
-        if (Strings.isDev) { console.log(query) };
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) };
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -447,7 +447,7 @@ export class MenuManagement extends React.Component {
 
             )
             .catch(err =>
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             )
     }
 

@@ -94,7 +94,7 @@ export class EncounterDashboard extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -112,7 +112,7 @@ export class EncounterDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -146,7 +146,7 @@ export class EncounterDashboard extends React.Component {
                 Y_axis
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -209,7 +209,7 @@ export class EncounterDashboard extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -277,7 +277,7 @@ export class EncounterDashboard extends React.Component {
             flag: ''
         };
 
-        console.log(this.state.ClaimBarChart)
+        process.env.NODE_ENV == 'development' && console.log(this.state.ClaimBarChart)
 
         return (
             <div className="row chart-div">
@@ -379,7 +379,7 @@ export class EncounterDashboard extends React.Component {
                 FileStatus
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -407,7 +407,7 @@ export class EncounterDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

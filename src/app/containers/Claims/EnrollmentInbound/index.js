@@ -131,7 +131,7 @@ export class EnrollmentInbound extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -153,7 +153,7 @@ export class EnrollmentInbound extends React.Component {
                     errorCount: data
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     getoptions() {
@@ -226,7 +226,7 @@ export class EnrollmentInbound extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -255,7 +255,7 @@ export class EnrollmentInbound extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

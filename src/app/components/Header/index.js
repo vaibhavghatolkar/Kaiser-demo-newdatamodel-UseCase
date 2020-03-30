@@ -34,7 +34,7 @@ export class Header extends React.Component {
             let query = `mutation{
             ChangePassword(Id:`+ userId + ` OldPassword:"` + this.state.oldPassword + `" NewPassword:"` + this.state.newPassword + `" ForgotOrNot:0)
           }`
-          if (Strings.isDev) { console.log(query) }
+          if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -48,7 +48,7 @@ export class Header extends React.Component {
                     alert(res.data.ChangePassword);
                     window.location.reload()
                 }).catch(err => {
-                    console.log(err)
+                    process.env.NODE_ENV == 'development' && console.log(err)
                 })
         }
     }

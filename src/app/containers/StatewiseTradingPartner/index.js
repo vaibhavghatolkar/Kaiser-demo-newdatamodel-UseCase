@@ -76,7 +76,7 @@ export class StatewiseTradingPartner extends React.Component {
                    
                }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -123,7 +123,7 @@ export class StatewiseTradingPartner extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -135,7 +135,7 @@ export class StatewiseTradingPartner extends React.Component {
             }           
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -153,7 +153,7 @@ export class StatewiseTradingPartner extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     getData() {
@@ -163,7 +163,7 @@ export class StatewiseTradingPartner extends React.Component {
                 StateCode
             }
        }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -181,7 +181,7 @@ export class StatewiseTradingPartner extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     handlePageClick(data) {
@@ -253,7 +253,7 @@ export class StatewiseTradingPartner extends React.Component {
                 '}'
 
 
-            if (Strings.isDev) { console.log(query) }
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -319,7 +319,7 @@ export class StatewiseTradingPartner extends React.Component {
             'Is_Active : 0)' +
 
             '}'
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -359,7 +359,7 @@ export class StatewiseTradingPartner extends React.Component {
            }`
 
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -388,7 +388,7 @@ export class StatewiseTradingPartner extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
     }

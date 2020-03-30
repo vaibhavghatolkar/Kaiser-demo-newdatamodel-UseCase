@@ -56,7 +56,7 @@ export class HealthCare278 extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

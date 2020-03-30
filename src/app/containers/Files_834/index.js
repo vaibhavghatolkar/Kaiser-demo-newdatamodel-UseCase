@@ -12,7 +12,7 @@ export class Files_834 extends React.Component {
 
     constructor(props) {
         super(props);
-    console.log("sdfhdshv" ,props)
+    process.env.NODE_ENV == 'development' && console.log("sdfhdshv" ,props)
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -49,7 +49,7 @@ export class Files_834 extends React.Component {
     
 
     Ignore() {
-        console.log(this.state.File_ID);
+        process.env.NODE_ENV == 'development' && console.log(this.state.File_ID);
         var query = 'mutation{ SP_Ignore834errordetails(FileId :"'+ this.state.File_ID +'" '+ 'Nm109 :"'+this.state.subscriberNo +'"'+   
          ')'+
 '}'
@@ -76,7 +76,7 @@ export class Files_834 extends React.Component {
 
     
     Saved() {
-        console.log(this.state.subscriberNo);
+        process.env.NODE_ENV == 'development' && console.log(this.state.subscriberNo);
         var Updatefild='';
         if (this.state.Error_Field == "Subscriber")
         {
@@ -132,7 +132,7 @@ export class Files_834 extends React.Component {
   
     getData() {
         let query = '{SP_834FilecountwisedetailsGQL(Type:'+'"'+this.state.Total +'"'+'){ FileName FileID  sender receiver FileStatus CreateDateTime dcount  }}'
-        console.log('query : ' + query)
+        process.env.NODE_ENV == 'development' && console.log('query : ' + query)
         fetch(Urls.enrollment_details, {
             method: 'POST',
             headers: {
@@ -154,7 +154,7 @@ export class Files_834 extends React.Component {
                     this.sortData()
                 }, 50);
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     getClaimData(FileID, ClaimID) {
@@ -170,12 +170,12 @@ export class Files_834 extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                console.log("Here is the data hurray : " + JSON.stringify(r))
+                process.env.NODE_ENV == 'development' && console.log("Here is the data hurray : " + JSON.stringify(r))
                 this.setState({
                     lineData: r.data.IntakeClaimLineDataFileIDClaimID
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     onClick(fileId){
@@ -183,7 +183,7 @@ export class Files_834 extends React.Component {
             return
         }
         let query = '{ SP_834FileDetailsPagingGQL(Type :'+'"'+this.state.Total +'"'+', PageIndex:'+this.state.page+', FileID: '+fileId+') { SubscriberNo fileid Enrollment_type InsLineCode Insurer_Status TransCode MemberAmount Error CreateDateTime status1 } }'
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.enrollment_details, {
             method: 'POST',
             headers: {
@@ -196,10 +196,10 @@ export class Files_834 extends React.Component {
             .then(r => {
                 let data = []
                 data = r.data.SP_834FileDetailsPagingGQL
-                console.log(data);
+                process.env.NODE_ENV == 'development' && console.log(data);
                 this.sortData(fileId, data)
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     sortData(fileId, data) {
@@ -265,7 +265,7 @@ export class Files_834 extends React.Component {
 
     handleClick(fileId, subscriber, type) {
         let query = '{ SP_834FileHeaderDetails(FileID: '+'"'+fileId +'"'+', Subscriber:'+'"'+subscriber +'"'+', Type: '+type +') { FileName FileID sender receiver SubscriberNo MemberFName MemberLName Telephone StreetAddress City State PostalCode Enrollment_type dob gender InsLineCode MemberAmount EnrollmentStatus StartDate EndDate CreateDateTime relationship member_relationship_name } }'
-        console.log('query : ', query)
+        process.env.NODE_ENV == 'development' && console.log('query : ', query)
         fetch(Urls.enrollment_details, {
             method: 'POST',
             headers: {
@@ -292,7 +292,7 @@ export class Files_834 extends React.Component {
                     coverage_data: coverage_data
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
 
             let query1 = '{ SP_834EnrollementDetails(FileID: '+'"'+fileId +'"'+', Subscriber:'+'"'+subscriber +'") { FileName   FileID   sender   receiver   IdentificationCode   InsurerStatus   SubscriberNo   MemberFName   MemberLName   Telephone   StreetAddress   City   State   PostalCode   Enrollment_type   dob   gender   Emplymentstatus   CreateDateTime   INS_Insurer_relationship   member_relationship_name   Plan_Coverage_Level   DTP_336_Employment_BeginDT   Member_Policy_No   Department_Agency   Error_Field   N1_Plan_insurer_name } }'
         
@@ -387,7 +387,7 @@ export class Files_834 extends React.Component {
                         
                     })
                 })
-                .then(data => console.log('data returned:', data));
+                .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     
     }
 
@@ -456,7 +456,7 @@ rendersearchbar()
         let row = []
         let col = []
         let data = this.state.claimsObj;
-        console.log('this is the data ', data)
+        process.env.NODE_ENV == 'development' && console.log('this is the data ', data)
         Object.keys(data).map((keys) => {
             row.push(
                 <div className="row">
@@ -473,7 +473,7 @@ rendersearchbar()
             {
                 col = []
                 data[keys].array.forEach(item => {
-                    console.log(item.Insurer_Status);
+                    process.env.NODE_ENV == 'development' && console.log(item.Insurer_Status);
                     col.push(
                         <tr>
                           
@@ -592,7 +592,7 @@ rendersearchbar()
     renderTable() {
         let row = []
         const data = this.state.coverage_data;
-   console.log("testing",data);
+   process.env.NODE_ENV == 'development' && console.log("testing",data);
         data.forEach((item) => {
             row.push(
                 <tr>

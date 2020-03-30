@@ -36,7 +36,7 @@ export class CoveredICDCode extends React.Component {
     			RecCount
               }
         }`
-  console.log(query)
+  process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -63,15 +63,15 @@ export class CoveredICDCode extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
     onChange(e) {
         var files = e.target.files;
-        console.log(files);
+        process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
-        console.log(filesArr);
+        process.env.NODE_ENV == 'development' && console.log(filesArr);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 

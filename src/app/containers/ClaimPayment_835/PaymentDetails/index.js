@@ -105,7 +105,7 @@ export class Payment_details  extends React.Component {
                 CheckEFTDt
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -140,7 +140,7 @@ export class Payment_details  extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -220,7 +220,7 @@ export class Payment_details  extends React.Component {
                 StateCode
             }
        }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -238,7 +238,7 @@ export class Payment_details  extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

@@ -111,7 +111,7 @@ export class Files extends React.Component {
                     this.sortData()
                 }, 50);
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     getClaimData(FileID, ClaimID) {
@@ -127,12 +127,12 @@ export class Files extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                console.log("Here is the data hurray : " + JSON.stringify(r))
+                process.env.NODE_ENV == 'development' && console.log("Here is the data hurray : " + JSON.stringify(r))
                 this.setState({
                     lineData: r.data.IntakeClaimLineDataFileIDClaimID
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     sortData() {

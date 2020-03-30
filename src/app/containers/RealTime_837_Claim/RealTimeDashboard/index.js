@@ -170,7 +170,7 @@ export class RealTimeDashboard extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { if (Strings.isDev) { console.log(query) } }
+        if (Strings.isDev) { if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) } }
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -191,7 +191,7 @@ export class RealTimeDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -202,7 +202,7 @@ export class RealTimeDashboard extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -220,7 +220,7 @@ export class RealTimeDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -241,7 +241,7 @@ export class RealTimeDashboard extends React.Component {
                 RejectedFileCount
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -287,7 +287,7 @@ export class RealTimeDashboard extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -313,7 +313,7 @@ export class RealTimeDashboard extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         
         fetch(Urls.real_time_claim, {
             method: 'POST',
@@ -380,7 +380,7 @@ export class RealTimeDashboard extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
     }
@@ -662,7 +662,7 @@ export class RealTimeDashboard extends React.Component {
                 Status
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -691,7 +691,7 @@ export class RealTimeDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -840,7 +840,7 @@ export class RealTimeDashboard extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }

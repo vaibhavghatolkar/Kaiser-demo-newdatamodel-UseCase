@@ -190,7 +190,7 @@ export class ClaimPaymentDashboard extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -208,7 +208,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -234,7 +234,7 @@ export class ClaimPaymentDashboard extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -274,7 +274,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -417,7 +417,7 @@ export class ClaimPaymentDashboard extends React.Component {
   Receiver
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -445,14 +445,14 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
     renderList() {
         let row = []
         const data = this.state.claimsList;
-        console.log("", data)
+        process.env.NODE_ENV == 'development' && console.log("", data)
         data.forEach((d) => {
             row.push(
                 <tr>
@@ -1384,7 +1384,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 MCGLoadingFiles
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -1436,14 +1436,14 @@ export class ClaimPaymentDashboard extends React.Component {
                     { name: 'Load in MCG', value: loaded },
                     { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                 ]
-                console.log(summary)
+                process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
                     summaryCount: summary,
                     totalFiles: totalCount
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

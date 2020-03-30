@@ -43,7 +43,7 @@ export class OutboundMatchClaims extends React.Component {
             }
         }
 `
-        console.log('Query', query)
+        process.env.NODE_ENV == 'development' && console.log('Query', query)
         fetch(Urls.match_claims, {
             method: 'POST',
             headers: {
@@ -59,7 +59,7 @@ export class OutboundMatchClaims extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

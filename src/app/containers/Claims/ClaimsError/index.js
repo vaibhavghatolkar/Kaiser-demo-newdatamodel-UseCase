@@ -59,7 +59,7 @@ export class ClaimsError extends React.Component{
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -78,7 +78,7 @@ export class ClaimsError extends React.Component{
             }
         })
         .catch(err => {
-            console.log(err)
+            process.env.NODE_ENV == 'development' && console.log(err)
         });
     }
 

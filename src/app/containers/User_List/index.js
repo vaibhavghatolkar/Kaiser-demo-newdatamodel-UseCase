@@ -55,7 +55,7 @@ export class UserList extends React.Component {
             )
           }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -79,7 +79,7 @@ export class UserList extends React.Component {
                     }, 50);
                 }
             }).catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
         }
     }
@@ -118,7 +118,7 @@ export class UserList extends React.Component {
                     userListDisplay: res.data.User
                 })
             }).catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     getoptions() {
@@ -214,7 +214,7 @@ export class UserList extends React.Component {
                     id: data.Id
                 })
             }).catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     clearState() {
@@ -255,7 +255,7 @@ export class UserList extends React.Component {
                     this.getUserRole()  
                 }, 50);
             }).catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

@@ -69,7 +69,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -87,7 +87,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -109,7 +109,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
             NotSentState
           } }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.claims_837, {
             method: 'POST',
@@ -144,7 +144,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -179,7 +179,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                 Transaction_Status
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -212,7 +212,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -547,7 +547,7 @@ export class Inbound_Encounter_ClaimProcessingSummary extends React.Component {
     }
 
     renderStats() {
-        console.log(this.state.Accepted)
+        process.env.NODE_ENV == 'development' && console.log(this.state.Accepted)
         return (
 
             <div className="row padding-left" style={{ marginBottom: '10px' }}>

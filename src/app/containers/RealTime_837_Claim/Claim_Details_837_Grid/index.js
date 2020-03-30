@@ -193,7 +193,7 @@ export class Claim_Details_837_Grid extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -211,7 +211,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     getIcdCode() {
@@ -243,7 +243,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -274,7 +274,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 MCGStatus
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -308,7 +308,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -338,7 +338,7 @@ export class Claim_Details_837_Grid extends React.Component {
     //             Type
     //         }
     //     }`
-    //     if (Strings.isDev) { console.log(query) }
+    //     if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
     //     fetch(Urls.real_time_claim_details, {
     //         method: 'POST',
     //         headers: {
@@ -360,7 +360,7 @@ export class Claim_Details_837_Grid extends React.Component {
     //                     // this.setState.recount = count;
 
     //                 }
-    //                 console.log('This is the reccount ', count)
+    //                 process.env.NODE_ENV == 'development' && console.log('This is the reccount ', count)
     //                 this.setState({
     //                     intakeClaims: res.data.Claim837RTFileDetails,
     //                     recount: count
@@ -374,7 +374,7 @@ export class Claim_Details_837_Grid extends React.Component {
 
     //         })
     //         .catch(err => {
-    //             console.log(err)
+    //             process.env.NODE_ENV == 'development' && console.log(err)
     //         });
     // }
     ChangeVal(event, key) {
@@ -402,7 +402,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
         }
-        console.log(files)
+        process.env.NODE_ENV == 'development' && console.log(files)
         this.setState({
             claimsObj: files,
             page: 1
@@ -438,7 +438,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 FileCrDate
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -463,7 +463,7 @@ export class Claim_Details_837_Grid extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -483,7 +483,7 @@ export class Claim_Details_837_Grid extends React.Component {
             MolinaClaimID
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -507,7 +507,7 @@ export class Claim_Details_837_Grid extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     renderButton() {
@@ -694,7 +694,7 @@ export class Claim_Details_837_Grid extends React.Component {
           }
           `
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
         fetch(url, {
             method: 'POST',
@@ -771,7 +771,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -785,7 +785,7 @@ export class Claim_Details_837_Grid extends React.Component {
           }
           `
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
         fetch(url, {
             method: 'POST',
@@ -805,7 +805,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -963,7 +963,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }
@@ -1252,7 +1252,7 @@ export class Claim_Details_837_Grid extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -1284,7 +1284,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -1555,7 +1555,7 @@ export class Claim_Details_837_Grid extends React.Component {
 
     _renderError() {
         if(this.state.Error_data==undefined) {this.state.Error_data=[]}
-        console.log("_renderError" ,this.state.Error_data);
+        process.env.NODE_ENV == 'development' && console.log("_renderError" ,this.state.Error_data);
 
         let defaultColDef= {
             editable: false,

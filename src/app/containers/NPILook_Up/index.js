@@ -41,7 +41,7 @@ export class NPILook_Up extends React.Component {
                   }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
         fetch(Urls.base_url, {
             method: 'POST',
@@ -53,7 +53,7 @@ export class NPILook_Up extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
+                process.env.NODE_ENV == 'development' && console.log(res)
                 let data = res.data
                 let count = 1
                 if (data && data.NPILookup.length > 0) {
@@ -70,7 +70,7 @@ export class NPILook_Up extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -96,9 +96,9 @@ export class NPILook_Up extends React.Component {
 
     onChange(e) {
         var files = e.target.files;
-        console.log(files);
+        process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
-        console.log(filesArr);
+        process.env.NODE_ENV == 'development' && console.log(filesArr);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 

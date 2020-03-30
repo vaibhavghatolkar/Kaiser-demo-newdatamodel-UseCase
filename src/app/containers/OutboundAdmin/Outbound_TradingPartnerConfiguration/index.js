@@ -105,7 +105,7 @@ export class Outbound_TradingPartnerConfiguration extends React.Component {
                 Trading_Partner_Name 
             }
         }`
-        console.log(query);
+        process.env.NODE_ENV == 'development' && console.log(query);
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -122,7 +122,7 @@ export class Outbound_TradingPartnerConfiguration extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -180,7 +180,7 @@ export class Outbound_TradingPartnerConfiguration extends React.Component {
             File_Naming_Options
           }}`    
           
-          console.log()
+          process.env.NODE_ENV == 'development' && console.log()
           fetch(Urls.tradingPartner, {
             method: 'POST',
             headers: {
@@ -191,7 +191,7 @@ export class Outbound_TradingPartnerConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                           console.log(";fksdlfjsjfs", r.data)
+                           process.env.NODE_ENV == 'development' && console.log(";fksdlfjsjfs", r.data)
                 this.setState({
                     Trading_Partner_id:r.data.Trading_Partner[0].ID,
                     
@@ -227,16 +227,16 @@ export class Outbound_TradingPartnerConfiguration extends React.Component {
    
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
-        // console.log(event.target.options[event.target.selectedIndex].text)
+        // process.env.NODE_ENV == 'development' && console.log(event.target.options[event.target.selectedIndex].text)
     }
 
     onChange(e) {
         var files = e.target.files;
-        console.log(files);
+        process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
-        console.log(filesArr);
+        process.env.NODE_ENV == 'development' && console.log(filesArr);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 
@@ -328,7 +328,7 @@ export class Outbound_TradingPartnerConfiguration extends React.Component {
     }
 
     changeCheckbox(event, key){
-        console.log(event.target.checked)
+        process.env.NODE_ENV == 'development' && console.log(event.target.checked)
         this.setState({
             [key] : event.target.checked
         })

@@ -105,7 +105,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -123,7 +123,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -163,7 +163,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 Y_axis
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -228,7 +228,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -292,7 +292,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
             flag: ''
         };
 
-        console.log(this.state.ClaimBarChart)
+        process.env.NODE_ENV == 'development' && console.log(this.state.ClaimBarChart)
 
         return (
             <div className="row chart-div">
@@ -534,7 +534,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 ReadytoSend
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -571,7 +571,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -870,7 +870,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
             SP_837RTBatchSent(BatchName:"${batchName}")
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -887,7 +887,7 @@ export class Outbound_RealTimeDashboard extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

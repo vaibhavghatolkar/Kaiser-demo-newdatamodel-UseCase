@@ -104,13 +104,13 @@ export class EditConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log('Data : ', res)
+                process.env.NODE_ENV == 'development' && console.log('Data : ', res)
                 this.setState({
                     OperatorMaster: res.data.OperatorMaster,
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
     }
@@ -123,7 +123,7 @@ export class EditConfiguration extends React.Component {
             }           
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -141,7 +141,7 @@ export class EditConfiguration extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -153,7 +153,7 @@ export class EditConfiguration extends React.Component {
                 Trading_Partner_Name 
             }
         }`
-        if (Strings.isDev) { console.log(query) };
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) };
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -164,13 +164,13 @@ export class EditConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log('Data : ', res)
+                process.env.NODE_ENV == 'development' && console.log('Data : ', res)
                 this.setState({
                     tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
 
@@ -180,7 +180,7 @@ export class EditConfiguration extends React.Component {
 
     getData(query, flag, iter) {
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.customEdits, {
             method: 'POST',
             headers: {
@@ -220,19 +220,19 @@ export class EditConfiguration extends React.Component {
                     options[iter]["subLoopidArray1"]  = r.data.SP_GetSubloop
                     options[iter]["segmentArray1"] = r.data.SP_GetSegment
                 }
-                console.log(options)
+                process.env.NODE_ENV == 'development' && console.log(options)
                 this.setState({
                     options: options
                 })
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     onChange(e) {
         var files = e.target.files;
-        console.log(files);
+        process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
-        console.log(filesArr);
+        process.env.NODE_ENV == 'development' && console.log(filesArr);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 
@@ -263,7 +263,7 @@ export class EditConfiguration extends React.Component {
                 SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
                 SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
             }`
-            if (Strings.isDev) { console.log(query) }
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -747,7 +747,7 @@ export class EditConfiguration extends React.Component {
     }
 
     renderAddView(iter) {
-        console.log("this is iter " + JSON.stringify(this.state.operation), ' askjdf : ', iter)
+        process.env.NODE_ENV == 'development' && console.log("this is iter " + JSON.stringify(this.state.operation), ' askjdf : ', iter)
         return (
             <div className="pull-left" style={{ margin: 12 }}>
                 {
@@ -820,7 +820,7 @@ export class EditConfiguration extends React.Component {
             'Condition : "")' +
 
             '}'
-        if (Strings.isDev) { console.log(query) };
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) };
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -839,7 +839,7 @@ export class EditConfiguration extends React.Component {
                 }, 2000)
 
             ).catch(error => {
-                console.log(error)
+                process.env.NODE_ENV == 'development' && console.log(error)
             })
 
 
@@ -895,7 +895,7 @@ export class EditConfiguration extends React.Component {
                    
                }`
 
-        console.log('dcdvbnvbnvdskjdg ', query)
+        process.env.NODE_ENV == 'development' && console.log('dcdvbnvbnvdskjdg ', query)
 
         fetch(Urls.tradingPartner, {
             method: 'POST',
@@ -930,7 +930,7 @@ export class EditConfiguration extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -1023,7 +1023,7 @@ export class EditConfiguration extends React.Component {
                 }
 
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.customEdits, {
             method: 'POST',
             headers: {
@@ -1049,7 +1049,7 @@ export class EditConfiguration extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     

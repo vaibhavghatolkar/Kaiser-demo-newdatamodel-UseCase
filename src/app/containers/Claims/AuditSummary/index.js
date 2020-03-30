@@ -140,7 +140,7 @@ export class AuditSummary extends React.Component {
                 TotalAcceptedFiles
             }
          }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -156,7 +156,7 @@ export class AuditSummary extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -172,7 +172,7 @@ export class AuditSummary extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -196,7 +196,7 @@ export class AuditSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -228,7 +228,7 @@ export class AuditSummary extends React.Component {
               MCGStatus
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -259,7 +259,7 @@ export class AuditSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
 
         setTimeout(() => {
@@ -287,7 +287,7 @@ export class AuditSummary extends React.Component {
                 Pending
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -320,7 +320,7 @@ export class AuditSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -354,7 +354,7 @@ export class AuditSummary extends React.Component {
                 Total277CA  
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -425,7 +425,7 @@ export class AuditSummary extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -693,7 +693,7 @@ export class AuditSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -772,7 +772,7 @@ export class AuditSummary extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }

@@ -56,7 +56,7 @@ export class Outbound_View_customEdit extends React.Component {
                 
             }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.tradingPartner, {
             method: 'POST',
@@ -91,7 +91,7 @@ export class Outbound_View_customEdit extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -103,7 +103,7 @@ export class Outbound_View_customEdit extends React.Component {
                 Trading_Partner_Name 
             }
         }`
-        console.log(query);
+        process.env.NODE_ENV == 'development' && console.log(query);
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -114,13 +114,13 @@ export class Outbound_View_customEdit extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log('Data : ', res)
+                process.env.NODE_ENV == 'development' && console.log('Data : ', res)
                 this.setState({
                     tradingpartner: res.data.Trading_PartnerList
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
 
@@ -199,7 +199,7 @@ export class Outbound_View_customEdit extends React.Component {
             checkedCheckbox: this.state.checked,
             uncheckCheckbox: this.state.unchecked
         })
-        // console.log(this.state.UpdateCheckBox)
+        // process.env.NODE_ENV == 'development' && console.log(this.state.UpdateCheckBox)
     }
     showFile(name) {
         this.setState({
@@ -253,7 +253,7 @@ export class Outbound_View_customEdit extends React.Component {
                 updateIgnoreCode(uncheck:"`+ false_val + `" check:"` + true_val + `")
               }
         `
-        console.log(" aslkhsajkfhfakfb",query)
+        process.env.NODE_ENV == 'development' && console.log(" aslkhsajkfhfakfb",query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -267,7 +267,7 @@ export class Outbound_View_customEdit extends React.Component {
                 alert(res.data.updateIgnoreCode)
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     renderTopbar() {
