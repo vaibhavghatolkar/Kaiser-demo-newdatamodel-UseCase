@@ -57,8 +57,8 @@ export class AuditSummary extends React.Component {
             count: 1,
             nameRotation: 180,
             statusRotation: 180,
-            stateRotation : 180,
-            processIdRotation : 180,
+            stateRotation: 180,
+            processIdRotation: 180,
             totalCount: '',
             accepted_Files: '',
             acceptedwithErrors: '',
@@ -70,6 +70,8 @@ export class AuditSummary extends React.Component {
                 { headerName: "State", field: "State" },
                 { headerName: "ProcessID", field: "ProcessID" },
                 { headerName: "File Status", field: "FileStatus" },
+                { headerName: "Load Status", field: "LoadStatus" },
+                { headerName: "MCG Load Status	", field: "MCGStatus" },
                 { headerName: "Submitted", field: "Submitted" },
                 { headerName: "Claims In HiPaaS", field: "InHiPaaS" },
                 { headerName: "Accepted PreProcess", field: "Accepted" },
@@ -77,7 +79,7 @@ export class AuditSummary extends React.Component {
                 { headerName: "Error in PreProcess", field: "Error" },
                 { headerName: "In MCG	", field: "SentToQNXT" },
                 { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277 CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -222,6 +224,8 @@ export class AuditSummary extends React.Component {
               InHiPaaS
               State
               ProcessID
+              LoadStatus
+              MCGStatus
             }
         }`
         console.log(query)
@@ -342,8 +346,10 @@ export class AuditSummary extends React.Component {
             }
             Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
                 Total999
-              }
-
+            }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
+                Total277CA
+            }
               FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
                 Total277CA  
             }
@@ -379,8 +385,8 @@ export class AuditSummary extends React.Component {
                 let acceptedwithErrors = ''
                 let processing = ''
                 let MCGLoadingFiles = ''
-                let Total999= res.data.Total999Response[0].Total999
-                let Total277CA= res.data.FileInCount[0].Total277CA
+                let Total999 = res.data.Total999Response[0].Total999
+                let Total277CA = res.data.Total277CAResponse[0].Total277CA
 
 
                 if (data && data.length > 0) {
@@ -389,7 +395,7 @@ export class AuditSummary extends React.Component {
                     rejected = data[0].Rejected
                     acceptedwithErrors = data[0].AcceptedwithErrors
                 }
-               
+
                 if (_data && _data.length > 0) {
                     reconciled = _data[0].Reconciled
                     reconciledError = _data[0].ReconciledError
@@ -400,7 +406,7 @@ export class AuditSummary extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Total', value: totalCount },
+                    { name: 'Total Files', value: totalCount },
                     { name: 'Accepted', value: accepted },
                     { name: 'Accepted with Errors', value: acceptedwithErrors },
                     { name: 'Rejected', value: rejected },
@@ -441,22 +447,22 @@ export class AuditSummary extends React.Component {
             let loadStatus = ''
             let mcgStatus = ''
             let data = []
-            if (item.name == 'Accepted Files') {
+            if (item.name == 'Accepted') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
             } else if (item.name == 'Accepted with Errors') {
                 addon = '/reject'
                 claimStatus = 'Accepted with Errors'
-            } else if (item.name == 'Processing Files') {
+            } else if (item.name == 'Processing') {
                 addon = '/reject'
                 claimStatus = 'Received'
-            } else if (item.name == 'Rejected Files') {
+            } else if (item.name == 'Rejected') {
                 claimStatus = 'Rejected'
-            } else if (item.name == 'Reconciled Files') {
+            } else if (item.name == 'Reconciled') {
                 loadStatus = 'Reconciled'
             } else if (item.name == 'Reconciled Error') {
                 loadStatus = 'Reconcile Exception'
-            }else if (item.name == 'Load Error') {
+            } else if (item.name == 'Load Error') {
                 mcgStatus = 'Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
@@ -464,14 +470,14 @@ export class AuditSummary extends React.Component {
                 addon = '/other'
             }
             data = [
-                { 
-                    flag: addon, 
-                    State: State, 
-                    selectedTradingPartner: selectedTradingPartner, 
-                    startDate: startDate, 
-                    endDate: endDate, 
-                    status: claimStatus, 
-                    type: type, 
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: claimStatus,
+                    type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus
                 },
@@ -508,9 +514,11 @@ export class AuditSummary extends React.Component {
         )
     }
 
-    goto277 = () => {
+    goto277 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse)
+        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
+            fileId: fileId
+        })
         // setTimeout(() => {
         //     window.location.reload()
         // }, 50);
@@ -557,7 +565,7 @@ export class AuditSummary extends React.Component {
 
             row.push(
                 <tr>
-                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
+                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary, { file_id: d.FileID }) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
@@ -574,7 +582,7 @@ export class AuditSummary extends React.Component {
                             }}>{d.F999}</a></td>
                     <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
                         onClick={() => {
-                            this.goto277()
+                            this.goto277(d.FileID)
                         }}>{d.F277}</a></td>
                 </tr>
             )
@@ -901,9 +909,12 @@ export class AuditSummary extends React.Component {
                             if (event.colDef.headerName == '999') {
                                 this.goto999(event.data.FileID)
                             }
+                            if (event.colDef.headerName == '277CA') {
+                                this.goto277(event.data.FileID)
+                            }
                             if (event.colDef.headerName == 'File Name') {
                                 this.props.history.push('/' + Strings.ClaimProcessingSummary, {
-                                    file_id : event.data.FileID
+                                    file_id: event.data.FileID
                                 })
                             }
 
@@ -925,7 +936,6 @@ export class AuditSummary extends React.Component {
                 <h5 className="headerText">Claims Audit Summary</h5>
                 {this.renderTopBar()}
                 {/* {this._renderStats()} */}
-                <div className="general-header" style={{ marginBottom: "-6px" }}>File Status</div>
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}

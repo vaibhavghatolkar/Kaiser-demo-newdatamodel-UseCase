@@ -244,3 +244,7 @@
     color: var(--grayBlack);   
     padding-top: 12px;
 }
+.font-size
+{
+    font-size: 14px;
+}

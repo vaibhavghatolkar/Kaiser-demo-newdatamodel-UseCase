@@ -122,8 +122,9 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "Type", field: "Type" },
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "File Status", field: "FileStatus" },
-                { headerName: "Submitter", field: "Sender" },
                 { headerName: "Load Status", field: "Status" },
+                { headerName: "MCG Load Status", field: "MCGStatus" },
+                { headerName: "Submitter", field: "Sender" },
                 { headerName: "Total Claims", field: "Claimcount" },
                 { headerName: "Rejected Claims", field: "Rejected" },
             ],
@@ -513,8 +514,9 @@ export class RealTimeDashboard_New extends React.Component {
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Load Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By MCGStatus", this.state.mcg_statusRotation, 'mcg_statusRotation')}>MCG Load Status</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
                 <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
             </tr>
         )
@@ -699,26 +701,30 @@ export class RealTimeDashboard_New extends React.Component {
     renderList() {
         let row = []
         const data = this.state.claimsList;
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
-        ]
+        
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}><Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }}>{d.FileName}</Link></td>
+                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>
+                        <a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                            onClick={() => {
+                                this.setState({
+                                    incoming_fileId: d.FileID
+                                }, () => {
+                                    this.gotoClaimDetails()
+                                })
+                            }}>
+                            {d.FileName}
+                        </a>
+                    </td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.Type}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Status}</td>
+                    <td className="list-item-style">{d.MCGStatus}</td>
+                    <td className="list-item-style">{d.Sender}</td>
                     <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
                 </tr>
             )
@@ -846,6 +852,7 @@ export class RealTimeDashboard_New extends React.Component {
                 Status
                 State
                 ProcessID
+                MCGStatus
             }
         }`
         console.log(query)
@@ -942,6 +949,10 @@ export class RealTimeDashboard_New extends React.Component {
             Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
               Total999
               NotSent999
+            }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
+                Total277CA
+                NotSent277CA
             }
          }`
         console.log(query)
