@@ -100,6 +100,8 @@ import { Remittance_Viewer } from './app/containers/Remittance_Viewer';
 import { Claim_Details_837_Grid } from './app/containers/RealTime_837_Claim/Claim_Details_837_Grid'
 import { RealTimeDashboard_New } from './app/containers/RealTime_837_Claim/RealTimeDashboard_New';
 import { Payment_details } from './app/containers/ClaimPayment_835/PaymentDetails';
+import { Load_Exception } from './app/containers/RealTime_837_Claim/Load_Exception';
+
 
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
@@ -320,7 +322,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Remittance_Viewer} component={Remittance_Viewer} />
                                 <Route path={'/' + Strings.Claim_Details_837_Grid} component={Claim_Details_837_Grid} />
                                 <Route path={'/' + Strings.Payment_details} component={Payment_details} />
-                                
+                                <Route path={'/' + Strings.Load_Exception} component={Load_Exception} />
+                                    
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
 

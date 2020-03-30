@@ -1765,7 +1765,7 @@ export class Claim_Details_837_Grid extends React.Component {
                             {this.state.showerror && this.state. claimError_Status=="Rejected" ? this._renderError() : null}
                             {this.state.showerror ?  this._ClaimView_Info_Table() : null}
                             {this.state.showerror ? this._ClaimLineTable() : null}
-                            {this.state.showerror ? this._ClaimStage() : null}
+                            {/* {this.state.showerror ? this._ClaimStage() : null} */}
                             
                         </div>
                         :
@@ -1801,7 +1801,7 @@ export class Claim_Details_837_Grid extends React.Component {
                                         : null
                                 }
                                 {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
-                                {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null}
+                                {/* {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null} */}
                             </div>
                         </div>
                 }
