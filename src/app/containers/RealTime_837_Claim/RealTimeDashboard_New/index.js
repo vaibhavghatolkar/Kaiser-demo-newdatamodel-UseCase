@@ -216,7 +216,7 @@ export class RealTimeDashboard_New extends React.Component {
                     this.setState({
                         X12Count: data ? data.X12Count : 0,
                         HiPaaSCount: data ? data.HiPaaSCount : 0,
-                        LoadingClaims: data ? data.MCGLoadCount : 0,
+                        LoadingClaims: _data ? _data.LoadingClaims : 0,
                         Accepted_Claims: _data ? _data.Accepted_Claims : 0,
                         Rejected_Claims: _data ? _data.Rejected_Claims : 0,
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,

@@ -312,8 +312,12 @@ export class Load_Exception extends React.Component {
                 State
                 ProcessID
                 Exception
+                ClaimID
+                ProcessName
             }
         }`
+
+        // console.log(query)
 
         fetch(Urls.claim_processing, {
             method: 'POST',
@@ -651,8 +655,9 @@ export class Load_Exception extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td>{d.Exception}</td>
-                  
+                    <td>{d.ClaimID}</td>
+                    <td style={{wordBreak: 'break-all'}}>{d.ProcessName}</td>
+                    <td style={{wordBreak: 'break-all'}}>{d.Exception}</td>
                 </tr>
             )
         })
@@ -665,8 +670,9 @@ export class Load_Exception extends React.Component {
                             <thead>
                                 <tr className="table-head">
                             
+                                    <td className="table-head-text list-item-style">Claim Id</td>
+                                    <td className="table-head-text list-item-style">Process Name</td>
                                     <td className="table-head-text list-item-style">Exception</td>
-                               
                                 </tr>
                             </thead>
                             <tbody>
@@ -890,6 +896,8 @@ export class Load_Exception extends React.Component {
             { headerName: "File Name", field: "FileName",width:200},
             { headerName: "File Date", field: "FileDate", width:150},
             { headerName: "Process ID", field: "ProcessID", width:120},
+            { headerName: "Claim Id", field: "ClaimID", width:120},
+            { headerName: "Process Name", field: "ProcessName", width:120},
                        
             { headerName: "State" , field: "State", width:100 },
             { headerName: "Exception", field: "Exception",flex:1}

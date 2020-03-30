@@ -245,7 +245,7 @@ export class ClaimProcessingSummary extends React.Component {
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadingClaims: _data ? data.MCGLoadCount : 0,
+                        LoadingClaims: _data ? _data.LoadingClaims : 0,
                         LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
                     })
                 }
