@@ -106,7 +106,7 @@ export class ClaimPaymentDetails extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -124,7 +124,7 @@ export class ClaimPaymentDetails extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -156,7 +156,7 @@ export class ClaimPaymentDetails extends React.Component {
   CheckEFTDt
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -193,7 +193,7 @@ export class ClaimPaymentDetails extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -252,7 +252,7 @@ export class ClaimPaymentDetails extends React.Component {
                 
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -270,7 +270,7 @@ export class ClaimPaymentDetails extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -343,7 +343,7 @@ export class ClaimPaymentDetails extends React.Component {
           }
           `
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
@@ -405,10 +405,10 @@ export class ClaimPaymentDetails extends React.Component {
                       
                     })
                  }
-                 console.log("sdnsajhsfjf" , this.state. claimLineDetails)
+                 process.env.NODE_ENV == 'development' && console.log("sdnsajhsfjf" , this.state. claimLineDetails)
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -547,7 +547,7 @@ export class ClaimPaymentDetails extends React.Component {
                 StateCode
             }
        }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -565,7 +565,7 @@ export class ClaimPaymentDetails extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

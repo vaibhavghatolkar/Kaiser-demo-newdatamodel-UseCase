@@ -72,6 +72,8 @@ export class ClaimProcessingSummary extends React.Component {
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "ProcessID" },
+                { headerName: "State", field: "State" },
                 { headerName: "File Date", field: "FileCrDate" },
                 { headerName: "File Status", field: "FileStatus" },
                 { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -147,7 +149,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
             
          }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -164,7 +166,7 @@ export class ClaimProcessingSummary extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -175,7 +177,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -193,7 +195,7 @@ export class ClaimProcessingSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -215,7 +217,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -249,7 +251,7 @@ export class ClaimProcessingSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -273,7 +275,7 @@ export class ClaimProcessingSummary extends React.Component {
             Pending
           } }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
         fetch(Urls.claims_837, {
             method: 'POST',
@@ -297,7 +299,7 @@ export class ClaimProcessingSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -332,9 +334,11 @@ export class ClaimProcessingSummary extends React.Component {
                 Transaction_Status
                 ClaimRefId
                 MolinaClaimID
+                ProcessID
+                State
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -368,7 +372,7 @@ export class ClaimProcessingSummary extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -522,7 +526,7 @@ export class ClaimProcessingSummary extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }

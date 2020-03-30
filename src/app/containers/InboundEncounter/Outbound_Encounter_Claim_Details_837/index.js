@@ -102,7 +102,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -120,7 +120,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     getIcdCode() {
@@ -152,7 +152,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     getData = () => {
@@ -178,7 +178,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 Type
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -213,7 +213,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     ChangeVal(event, key) {
@@ -273,7 +273,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 FileID
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -290,7 +290,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     renderButton() {
@@ -346,7 +346,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                     AccidentDate:"`+ this.state.Accidentdate + `"     
                     )
                   }`
-                console.log("sdlnskjggsdj", query);
+                process.env.NODE_ENV == 'development' && console.log("sdlnskjggsdj", query);
                 fetch(Urls.base_url, {
                     method: 'POST',
                     headers: {
@@ -374,7 +374,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 var query = 'mutation{ updateICDCode(SeqID :' + this.state.SelectFileID + ' ' + 'ICDCode :"' + this.state.selectedICdCode + '"' +
                     ')' +
                     '}'
-                console.log(query);
+                process.env.NODE_ENV == 'development' && console.log(query);
                 fetch(Urls.base_url, {
                     method: 'POST',
                     headers: {
@@ -475,7 +475,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -487,7 +487,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log("sdfdsss", res.data.EncounterDetails[0].FieldToUpdate)
+                process.env.NODE_ENV == 'development' && console.log("sdfdsss", res.data.EncounterDetails[0].FieldToUpdate)
                 if (res.data.EncounterDetails && res.data.EncounterDetails.length > 0) {
                     if (res.data.EncounterDetails[0].FieldToUpdate == "ICDCode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
@@ -540,7 +540,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -873,7 +873,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
 
-        console.log(data)
+        process.env.NODE_ENV == 'development' && console.log(data)
         try {
             count = data[Object.keys(data)[0]].value.Claimcount / 10
             if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
@@ -901,7 +901,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
             {
                 col = []
                 data[keys].array.forEach((d) => {
-                    console.log(d)
+                    process.env.NODE_ENV == 'development' && console.log(d)
                     col.push(
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
@@ -1026,7 +1026,7 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -1043,11 +1043,11 @@ export class Outbound_Encounter_ClaimDetails837 extends React.Component {
                         claimStageDetails: res.data.EncounterStagesOutbound
                     })
 
-                    console.log('claim stage', res.data.EncounterStagesOutbound)
+                    process.env.NODE_ENV == 'development' && console.log('claim stage', res.data.EncounterStagesOutbound)
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

@@ -198,7 +198,7 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -227,7 +227,7 @@ export class RealTimeDashboard_New extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -240,7 +240,7 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -260,7 +260,7 @@ export class RealTimeDashboard_New extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -271,7 +271,7 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -289,7 +289,7 @@ export class RealTimeDashboard_New extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -311,7 +311,7 @@ export class RealTimeDashboard_New extends React.Component {
                 MCGLoadingFiles
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -371,7 +371,7 @@ export class RealTimeDashboard_New extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -442,7 +442,7 @@ export class RealTimeDashboard_New extends React.Component {
                 Y_axis
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -480,7 +480,7 @@ export class RealTimeDashboard_New extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
     }
@@ -854,7 +854,7 @@ export class RealTimeDashboard_New extends React.Component {
                 MCGStatus
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -883,7 +883,7 @@ export class RealTimeDashboard_New extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -954,7 +954,7 @@ export class RealTimeDashboard_New extends React.Component {
                 NotSent277CA
             }
          }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -970,7 +970,7 @@ export class RealTimeDashboard_New extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -1074,7 +1074,7 @@ export class RealTimeDashboard_New extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }
@@ -1266,7 +1266,7 @@ export class RealTimeDashboard_New extends React.Component {
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
                 color = "var(--green)"
-            } else if (item.name == 'Accepted with Errors') {
+            } else if (item.name == 'Rejected') {
                 generalStatus = 'Rejected'
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
@@ -1321,7 +1321,7 @@ export class RealTimeDashboard_New extends React.Component {
         ]
         let stage_2 = [
             { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
-            { 'name': 'Accepted with Errors', 'value': this.state.Rejected_Claims, 'isClick': 1 },
+            { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
         ]
         let stage_3 = [

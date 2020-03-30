@@ -69,7 +69,7 @@ export class Remittance_Viewer extends React.Component {
             }
         }`
 
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -87,7 +87,7 @@ export class Remittance_Viewer extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -125,7 +125,7 @@ export class Remittance_Viewer extends React.Component {
                 MolinaClaimID
             }
         }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -158,7 +158,7 @@ export class Remittance_Viewer extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

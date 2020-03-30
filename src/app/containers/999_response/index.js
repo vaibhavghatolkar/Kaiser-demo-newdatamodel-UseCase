@@ -105,7 +105,7 @@ export class response_999 extends React.Component {
             }
         }
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -132,7 +132,7 @@ export class response_999 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -155,7 +155,7 @@ export class response_999 extends React.Component {
                 FileId
             }
         }`     
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -168,7 +168,7 @@ export class response_999 extends React.Component {
             .then(res => {
                 if (res.data) {
                  
-  console.log(".fsdjhjsdgh" , res.data.Data999)
+  process.env.NODE_ENV == 'development' && console.log(".fsdjhjsdgh" , res.data.Data999)
                     this.setState({
                       files_list:  res.data.Data999,
                        
@@ -176,7 +176,7 @@ export class response_999 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

@@ -132,7 +132,7 @@ export class Outbound_277CAReponse extends React.Component {
               ResponseFileDate
             }
           }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -162,7 +162,7 @@ export class Outbound_277CAReponse extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -215,7 +215,7 @@ export class Outbound_277CAReponse extends React.Component {
               Response
             }
           }`
-        if (Strings.isDev) { console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -234,7 +234,7 @@ export class Outbound_277CAReponse extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
 
     }

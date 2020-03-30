@@ -105,7 +105,7 @@ export class TradingPartnerConfiguration extends React.Component {
                 Trading_Partner_Name 
             }
         }`
-        console.log(query);
+        process.env.NODE_ENV == 'development' && console.log(query);
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -122,7 +122,7 @@ export class TradingPartnerConfiguration extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -226,9 +226,9 @@ export class TradingPartnerConfiguration extends React.Component {
    
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
-        // console.log(event.target.options[event.target.selectedIndex].text)
+        // process.env.NODE_ENV == 'development' && console.log(event.target.options[event.target.selectedIndex].text)
     }
 
     onChange(e) {
@@ -287,7 +287,7 @@ export class TradingPartnerConfiguration extends React.Component {
                 'File_Naming_Options : "")'+
   
            '}' 
-     console.log(query)
+     process.env.NODE_ENV == 'development' && console.log(query)
            fetch(Urls.base_url, {
           method: 'POST',
           headers: {
@@ -324,7 +324,7 @@ export class TradingPartnerConfiguration extends React.Component {
     }
 
     changeCheckbox(event, key){
-        console.log(event.target.checked)
+        process.env.NODE_ENV == 'development' && console.log(event.target.checked)
         this.setState({
             [key] : event.target.checked
         })

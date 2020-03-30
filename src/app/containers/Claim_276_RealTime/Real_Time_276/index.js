@@ -88,7 +88,7 @@ export class RealTime276 extends React.Component {
         } else if (!this.state.chartType && this.state.apiflag == 0) {
             chartType = "ClaimRequestMonthwise"
         }
-        console.log('I am here check me out ' + this.state.chartType)
+        process.env.NODE_ENV == 'development' && console.log('I am here check me out ' + this.state.chartType)
 
         let query = `{
             Trading_PartnerList(RecType :"Inbound", Transaction:"ClaimRequest") {
@@ -121,7 +121,7 @@ export class RealTime276 extends React.Component {
             }`
         }
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -138,7 +138,7 @@ export class RealTime276 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -201,7 +201,7 @@ export class RealTime276 extends React.Component {
             }`
         }
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -218,7 +218,7 @@ export class RealTime276 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -271,7 +271,7 @@ export class RealTime276 extends React.Component {
         } else {
             data = res.data.ClaimRequest276[0]
         }
-        console.log("asdad", data)
+        process.env.NODE_ENV == 'development' && console.log("asdad", data)
         let summary = [
             { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq },
             { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },

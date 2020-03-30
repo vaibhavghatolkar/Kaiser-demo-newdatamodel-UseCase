@@ -177,7 +177,7 @@ export class ClaimDetails837 extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -195,7 +195,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     getIcdCode() {
@@ -227,7 +227,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -256,7 +256,7 @@ export class ClaimDetails837 extends React.Component {
                 Type
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -293,7 +293,7 @@ export class ClaimDetails837 extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
      }
      else
@@ -312,7 +312,7 @@ export class ClaimDetails837 extends React.Component {
                 Status
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -343,7 +343,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
      }
     
@@ -373,7 +373,7 @@ export class ClaimDetails837 extends React.Component {
                 Type
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -395,7 +395,7 @@ export class ClaimDetails837 extends React.Component {
                         // this.setState.recount = count;
 
                     }
-                    console.log('This is the reccount ', count)
+                    process.env.NODE_ENV == 'development' && console.log('This is the reccount ', count)
                     this.setState({
                         intakeClaims: res.data.Claim837RTFileDetails,
                         recount: count
@@ -409,7 +409,7 @@ export class ClaimDetails837 extends React.Component {
 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     ChangeVal(event, key) {
@@ -437,7 +437,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
         }
-        console.log(files)
+        process.env.NODE_ENV == 'development' && console.log(files)
         this.setState({
             claimsObj: files,
             page: 1
@@ -473,7 +473,7 @@ export class ClaimDetails837 extends React.Component {
                 Transaction_Status
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -496,7 +496,7 @@ export class ClaimDetails837 extends React.Component {
                 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -513,7 +513,7 @@ export class ClaimDetails837 extends React.Component {
             ErrorDesc
             }
         }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -536,7 +536,7 @@ export class ClaimDetails837 extends React.Component {
                 
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     renderButton() {
@@ -592,7 +592,7 @@ export class ClaimDetails837 extends React.Component {
                     AccidentDate:"`+ this.state.Accidentdate + `"     
                     )
                   }`
-                console.log("sdlnskjggsdj", query);
+                process.env.NODE_ENV == 'development' && console.log("sdlnskjggsdj", query);
                 fetch(Urls.base_url, {
                     method: 'POST',
                     headers: {
@@ -718,7 +718,7 @@ export class ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -792,7 +792,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -806,7 +806,7 @@ export class ClaimDetails837 extends React.Component {
           }
           `
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
             method: 'POST',
@@ -825,7 +825,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -983,7 +983,7 @@ export class ClaimDetails837 extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }
@@ -1261,7 +1261,7 @@ export class ClaimDetails837 extends React.Component {
             }
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -1293,7 +1293,7 @@ export class ClaimDetails837 extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 

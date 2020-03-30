@@ -28,9 +28,9 @@ export class Outbound_CompanionGuide extends React.Component {
 
     onChange(e) {
         var files = e.target.files;
-        console.log(files);
+        process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
-        console.log(filesArr);
+        process.env.NODE_ENV == 'development' && console.log(filesArr);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 
@@ -84,7 +84,7 @@ export class Outbound_CompanionGuide extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 

@@ -67,7 +67,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                    
                }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -85,7 +85,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                 let data = res.data
 
                 let iterator = data.TradingPartnerlist
-                console.log("ejfsdfhdj", iterator)
+                process.env.NODE_ENV == 'development' && console.log("ejfsdfhdj", iterator)
                 iterator.forEach(item => {
                     array.push({
                         ID: item.ID,
@@ -115,7 +115,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
 
@@ -127,7 +127,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
             }           
         }`
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -145,7 +145,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     getData() {
@@ -155,7 +155,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                 StateCode
             }
        }`
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -173,7 +173,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
             })
 
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
     handlePageClick(data) {
@@ -245,7 +245,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                 '}'
 
 
-            console.log(query)
+            process.env.NODE_ENV == 'development' && console.log(query)
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -294,7 +294,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
             'Is_Active : 0)' +
 
             '}'
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -334,7 +334,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
            }`
 
 
-        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -363,7 +363,7 @@ export class Outbound_StatewiseTradingPartner extends React.Component {
                 })
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             })
 
     }

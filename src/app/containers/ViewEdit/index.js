@@ -52,7 +52,7 @@ export class ViewEdit extends React.Component {
                     })
                 }
             })
-            .then(data => console.log('data returned:', data));
+            .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
     renderHeader() {

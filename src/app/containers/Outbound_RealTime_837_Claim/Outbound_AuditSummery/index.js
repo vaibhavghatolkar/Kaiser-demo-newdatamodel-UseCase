@@ -110,7 +110,7 @@ export class Outbound_AuditSummary extends React.Component {
                 ClaimSent
             }
         }`
-        console.log("sa,f.hdsfkfdhg", query)
+        process.env.NODE_ENV == 'development' && console.log("sa,f.hdsfkfdhg", query)
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -121,7 +121,7 @@ export class Outbound_AuditSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log(res)
+                process.env.NODE_ENV == 'development' && console.log(res)
                 if (res.data) {
                     let totalFile = 0
                     try {
@@ -129,7 +129,7 @@ export class Outbound_AuditSummary extends React.Component {
                     } catch (error) {
 
                     }
-                    console.log("sdghusighsjgn", res.data.FileInCount[0])
+                    process.env.NODE_ENV == 'development' && console.log("sdghusighsjgn", res.data.FileInCount[0])
                     this.setState({
                         claimsAudit: res.data.ClaimsDailyAudit,
                         SubTotal: res.data.ClaimsDailyAuditCount[0].SubTotal,
@@ -160,7 +160,7 @@ export class Outbound_AuditSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
 
@@ -191,7 +191,7 @@ export class Outbound_AuditSummary extends React.Component {
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
-        console.log("sd,fmsdjkdsjh", data)
+        process.env.NODE_ENV == 'development' && console.log("sd,fmsdjkdsjh", data)
 
         data.forEach((d) => {
             row.push(
@@ -303,7 +303,7 @@ export class Outbound_AuditSummary extends React.Component {
                 }
             })
             .catch(err => {
-                console.log(err)
+                process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
     renderStats() {
@@ -383,7 +383,7 @@ export class Outbound_AuditSummary extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                    console.log(error)
+                    process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
     }
@@ -457,7 +457,7 @@ export class Outbound_AuditSummary extends React.Component {
         )
     }
     getoptions() {
-        console.log("sfsdsds", this.state.tradingpartne837)
+        process.env.NODE_ENV == 'development' && console.log("sfsdsds", this.state.tradingpartne837)
         let row = []
         this.state.tradingpartne837.forEach(element => {
             if (!element) {
