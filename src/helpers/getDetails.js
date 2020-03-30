@@ -1,4 +1,5 @@
 import Urls from "./Urls";
+import Strings from "./Strings";
 
 export const getDetails = async (key) => {
     let query = `{
@@ -63,7 +64,7 @@ export const getStates = async () => {
                 StateCode
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         return fetch(Urls.common_data, {
             method: 'POST',
             headers: {

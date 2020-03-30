@@ -147,7 +147,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
             
          }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -175,7 +175,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -215,7 +215,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -273,7 +273,7 @@ export class ClaimProcessingSummary extends React.Component {
             Pending
           } }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(Urls.claims_837, {
             method: 'POST',
@@ -334,7 +334,7 @@ export class ClaimProcessingSummary extends React.Component {
                 MolinaClaimID
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {

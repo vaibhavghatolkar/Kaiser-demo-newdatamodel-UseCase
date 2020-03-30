@@ -2,6 +2,7 @@ import React from 'react';
 import './UserList.css';
 import '../color.css'
 import Urls from '../../../helpers/Urls';
+import Strings from '../../../helpers/Strings';
 const $ = window.$;
 
 export class UserList extends React.Component {
@@ -54,7 +55,7 @@ export class UserList extends React.Component {
             )
           }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -138,7 +139,6 @@ export class UserList extends React.Component {
     RenderUserList() {
         let row = []
         const data = this.state.userListDisplay;
-        console.log(data)
         data.forEach((d) => {
             var FullName = d.FirstName + " " + d.LastName
 

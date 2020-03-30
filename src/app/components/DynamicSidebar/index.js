@@ -45,7 +45,7 @@ export class DynamicSidebar extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
      
         fetch(Urls.users, {
             method: 'POST',
@@ -182,12 +182,9 @@ export class DynamicSidebar extends React.Component {
                 menuOptions['Sb' + item.menu_id].name = item.menu_description
             } else {
                 item['key'] = this.getkeys(item.menu_id)
-                console.log(item.parent_node);
                 menuOptions['Sb' + item.parent_node].array.push(item)
             }
         })
-
-        console.log('Menu options ', menuOptions)
 
         this.setState({
             menuOptions: menuOptions

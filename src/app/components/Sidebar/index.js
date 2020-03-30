@@ -98,7 +98,6 @@ export class Sidebar extends React.Component {
     }
 
     handleClick(key) {
-        console.log('this is the key : ' + key)
         alert(key);
         this.props.handleFlag(key)
     }

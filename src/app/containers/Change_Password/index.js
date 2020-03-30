@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls';
 import '../color.css'
+import Strings from '../../../helpers/Strings';
 
 export class ChangePassword extends React.Component {
 
@@ -24,7 +25,7 @@ export class ChangePassword extends React.Component {
         let query = `mutation{
             ChangePassword(Id:`+userId+` OldPassword:"`+this.state.oldPassword+`" NewPassword:"`+this.state.newPassword+`" ForgotOrNot:0)
           }`
-          console.log(query)
+          if (Strings.isDev) { console.log(query) }
             fetch(Urls.base_url , {
                 method: 'POST',
                 headers: {

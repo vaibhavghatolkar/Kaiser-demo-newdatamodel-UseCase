@@ -36,7 +36,6 @@ export class CommonNestedTable extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
        
-        console.log(data)
         let rowArray = []
         // try {         
         //     count = data[Object.keys(data)[0]].value.Claimcount / 10

@@ -22,7 +22,6 @@ export class ClaimDetails837 extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'
@@ -823,8 +822,6 @@ export class ClaimDetails837 extends React.Component {
                     this.setState({
                         claimStageDetails: res.data.ClaimStagesInbound
                     })
-
-                    console.log('claim stage', res.data.ClaimStagesInbound)
                 }
             })
             .catch(err => {
@@ -1481,7 +1478,6 @@ export class ClaimDetails837 extends React.Component {
                             this.setState({
                                 showClaims: true
                             })
-                            console.log('this is the event', event)
                             this.getTransactions(event.data.FileID)
                         }}
                     >
@@ -1532,7 +1528,6 @@ export class ClaimDetails837 extends React.Component {
                                 claimError_Status:event.data.ClaimStatus,
                              
                             })
-                            console.log('this is the event', event)
                             this.get_Error(event.data.ClaimID ,event.data.ClaimRefId, event.data.FileID)
                         }}
                     >

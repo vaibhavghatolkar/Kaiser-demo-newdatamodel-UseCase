@@ -15,6 +15,7 @@ import { StateDropdown } from '../../../components/StateDropdown';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Strings from '../../../../helpers/Strings';
 
 
 var val = ''
@@ -22,7 +23,6 @@ export class Claim_Details_837_Grid extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'
@@ -193,7 +193,7 @@ export class Claim_Details_837_Grid extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -274,7 +274,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 MCGStatus
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -338,7 +338,7 @@ export class Claim_Details_837_Grid extends React.Component {
     //             Type
     //         }
     //     }`
-    //     console.log(query)
+    //     if (Strings.isDev) { console.log(query) }
     //     fetch(Urls.real_time_claim_details, {
     //         method: 'POST',
     //         headers: {
@@ -438,7 +438,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 FileCrDate
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -483,7 +483,7 @@ export class Claim_Details_837_Grid extends React.Component {
             MolinaClaimID
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -563,7 +563,6 @@ export class Claim_Details_837_Grid extends React.Component {
                     AccidentDate:"`+ this.state.Accidentdate + `"     
                     )
                   }`
-                console.log("sdlnskjggsdj", query);
                 fetch(Urls.base_url, {
                     method: 'POST',
                     headers: {
@@ -695,7 +694,7 @@ export class Claim_Details_837_Grid extends React.Component {
           }
           `
 
-        console.log("sadnbsahffsahvdhavhav" , query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(url, {
             method: 'POST',
@@ -786,7 +785,7 @@ export class Claim_Details_837_Grid extends React.Component {
           }
           `
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(url, {
             method: 'POST',
@@ -803,8 +802,6 @@ export class Claim_Details_837_Grid extends React.Component {
                         claimStageDetails: res.data.ClaimStagesInbound,
                         Aggrid_ClaimStage:res.data.ClaimStagesInbound,
                     })
-
-                    console.log('claim stage', res.data.ClaimStagesInbound)
                 }
             })
             .catch(err => {
@@ -1255,7 +1252,7 @@ export class Claim_Details_837_Grid extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -1478,7 +1475,6 @@ export class Claim_Details_837_Grid extends React.Component {
                                     showClaims: true,
                                     showerror: false,
                                 })
-                                console.log('this is the event', event)
                                 this.getTransactions(event.data.FileID)
                             }
                         }}
@@ -1545,7 +1541,6 @@ export class Claim_Details_837_Grid extends React.Component {
                                     Aggrid_ClaimStage:[],
 
                                 })
-                                console.log('this is the event', event)
                                 this.get_Error(event.data.ClaimID ,event.data.ClaimRefId, event.data.FileID)
                                 this.getDetails(event.data.ClaimID, event.data.FileID,event.data.ClaimRefId,"", 1)
                                 this.getClaimStages(event.data.ClaimID,  event.data.FileID, event.data.ClaimRefId)
@@ -1560,7 +1555,6 @@ export class Claim_Details_837_Grid extends React.Component {
 
     _renderError() {
         if(this.state.Error_data==undefined) {this.state.Error_data=[]}
-        console.log("_renderError" ,this.state.Error_data);
         let columnDefs = [
             // { headerName: "File Name", field: "FileName" },
             // { headerName: "File Date", field: "FileDate" },
@@ -1608,7 +1602,6 @@ export class Claim_Details_837_Grid extends React.Component {
     }
     _ClaimLineTable() {
         if(this.state.Aggrid_ClaimLineData==undefined) {this.state.Aggrid_ClaimLineData=[]}
-        console.log("_ClaimLineTable" ,this.state.Aggrid_ClaimLineData);
         let columnDefs = [
             { headerName: "Molina Claim ID", field: "MolinaClaimID" },
                         { headerName: "X12 Claim ID", field: "ClaimID" },
@@ -1653,7 +1646,6 @@ export class Claim_Details_837_Grid extends React.Component {
     }
     _ClaimView_Info_Table() {
         if(this.state.Aggrid_Claim_Info_data==undefined) {this.state.Aggrid_Claim_Info_data=[]}
-        console.log('Aggrid_Claim_Info_data',this.state.Aggrid_Claim_Info_data , this.state.Ag_FileName)
         let columnDefs = [     
             
   
@@ -1709,7 +1701,6 @@ export class Claim_Details_837_Grid extends React.Component {
     
     _ClaimStage() {
         if(this.state.Aggrid_ClaimStage==undefined) {this.state.Aggrid_ClaimStage=[]}
-        console.log("_ClaimStage" ,this.state.Aggrid_ClaimStage);
         let columnDefs = [
             { headerName: "Stage", field: "Stage" },
             { headerName: "Date", field: "Createdatetime" },                       

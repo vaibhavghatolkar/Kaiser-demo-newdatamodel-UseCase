@@ -173,7 +173,6 @@ export class Claims extends React.Component {
                   Receiver_N103
                 }
             }`
-            console.log("hey here it is !!", JSON.stringify(this.props.state))
         }
 
         fetch(Urls.claims_837 , {

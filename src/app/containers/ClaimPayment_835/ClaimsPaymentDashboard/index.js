@@ -190,7 +190,7 @@ export class ClaimPaymentDashboard extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -234,7 +234,7 @@ export class ClaimPaymentDashboard extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -417,7 +417,7 @@ export class ClaimPaymentDashboard extends React.Component {
   Receiver
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -1384,7 +1384,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 MCGLoadingFiles
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {

@@ -3,6 +3,7 @@ import '../TradingPartnerConfiguration/style.css';
 import { Topbar } from '../../components/Topbar';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
+import Strings from '../../../helpers/Strings';
 const $ = window.$;
 
 export class EditConfiguration extends React.Component {
@@ -122,7 +123,7 @@ export class EditConfiguration extends React.Component {
             }           
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -152,7 +153,7 @@ export class EditConfiguration extends React.Component {
                 Trading_Partner_Name 
             }
         }`
-        console.log(query);
+        if (Strings.isDev) { console.log(query) };
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -179,7 +180,7 @@ export class EditConfiguration extends React.Component {
 
     getData(query, flag, iter) {
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.customEdits, {
             method: 'POST',
             headers: {
@@ -262,7 +263,7 @@ export class EditConfiguration extends React.Component {
                 SP_GetSubloop(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}") {SubLoop}
                 SP_GetSegment(TransactionType:"${this.state.transactionSelect}",Mainloop:"${value}",SubLoop:""){Segment}
             }`
-            console.log(query)
+            if (Strings.isDev) { console.log(query) }
             let options = this.state.options
             options[iter]["selected_mainloopid"] = value
 
@@ -819,7 +820,7 @@ export class EditConfiguration extends React.Component {
             'Condition : "")' +
 
             '}'
-        console.log(query);
+        if (Strings.isDev) { console.log(query) };
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -1022,7 +1023,7 @@ export class EditConfiguration extends React.Component {
                 }
 
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.customEdits, {
             method: 'POST',
             headers: {

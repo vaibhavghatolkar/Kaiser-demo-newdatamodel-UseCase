@@ -69,7 +69,7 @@ export class Remittance_Viewer extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -125,7 +125,7 @@ export class Remittance_Viewer extends React.Component {
                 MolinaClaimID
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {

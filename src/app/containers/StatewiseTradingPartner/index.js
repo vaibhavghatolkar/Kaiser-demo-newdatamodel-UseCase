@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
+import Strings from '../../../helpers/Strings';
 var val = ''
 export class StatewiseTradingPartner extends React.Component {
 
@@ -75,7 +76,7 @@ export class StatewiseTradingPartner extends React.Component {
                    
                }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(Urls.common_data, {
             method: 'POST',
@@ -93,7 +94,6 @@ export class StatewiseTradingPartner extends React.Component {
                 let data = res.data
 
                 let iterator = data.TradingPartnerlist
-                console.log("ejfsdfhdj", iterator)
                 iterator.forEach(item => {
                     array.push({
                         ID: item.ID,
@@ -135,7 +135,7 @@ export class StatewiseTradingPartner extends React.Component {
             }           
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -163,7 +163,7 @@ export class StatewiseTradingPartner extends React.Component {
                 StateCode
             }
        }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -253,7 +253,7 @@ export class StatewiseTradingPartner extends React.Component {
                 '}'
 
 
-            console.log(query)
+            if (Strings.isDev) { console.log(query) }
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -319,7 +319,7 @@ export class StatewiseTradingPartner extends React.Component {
             'Is_Active : 0)' +
 
             '}'
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -359,7 +359,7 @@ export class StatewiseTradingPartner extends React.Component {
            }`
 
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {

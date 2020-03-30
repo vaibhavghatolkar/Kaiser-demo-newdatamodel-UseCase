@@ -140,7 +140,7 @@ export class AuditSummary extends React.Component {
                 TotalAcceptedFiles
             }
          }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -172,7 +172,7 @@ export class AuditSummary extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -228,7 +228,7 @@ export class AuditSummary extends React.Component {
               MCGStatus
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -287,7 +287,7 @@ export class AuditSummary extends React.Component {
                 Pending
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -354,7 +354,7 @@ export class AuditSummary extends React.Component {
                 Total277CA  
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
