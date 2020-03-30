@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls'
+import Strings from '../../../helpers/Strings';
 
 export class Outbound_TransactionSetup extends React.Component {
 
@@ -128,7 +129,7 @@ export class Outbound_TransactionSetup extends React.Component {
                 )
           }`
 
-        console.log(query)
+          if (Strings.isDev) { console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {

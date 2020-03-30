@@ -2,6 +2,7 @@ import React from 'react'
 import './styles.css'
 import "../../containers/color.css";
 import Urls from '../../../helpers/Urls';
+import Strings from '../../../helpers/Strings';
 const $ = window.$;
 
 export class Header extends React.Component {
@@ -33,7 +34,7 @@ export class Header extends React.Component {
             let query = `mutation{
             ChangePassword(Id:`+ userId + ` OldPassword:"` + this.state.oldPassword + `" NewPassword:"` + this.state.newPassword + `" ForgotOrNot:0)
           }`
-            console.log(query)
+          if (Strings.isDev) { console.log(query) }
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {

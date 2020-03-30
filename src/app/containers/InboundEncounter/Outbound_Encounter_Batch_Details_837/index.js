@@ -16,7 +16,6 @@ export class Outbound_Encounter_BatchDetails837 extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'

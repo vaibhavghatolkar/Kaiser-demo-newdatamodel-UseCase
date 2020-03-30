@@ -81,7 +81,7 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "	Subscriber Id                ", field: "Subscriber_ID" },
                 { headerName: "HiPaaS Status                ", field: "Transaction_Status" },
                 { headerName: "Adjudication Status                ", field: "adjudication_status" },
-                { headerName: "277CA                ", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "835", field: "F277" },
             ],
 
@@ -142,8 +142,12 @@ export class ClaimProcessingSummary extends React.Component {
             Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
               Total999
             }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
+                Total277CA
+            }
+            
          }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {
@@ -156,6 +160,7 @@ export class ClaimProcessingSummary extends React.Component {
             .then(res => {
                 this.setState({
                     Total999: res.data.Total999Response[0].Total999,
+                    Total277CA: res.data.Total277CAResponse[0].Total277CA,
                 })
             })
             .catch(err => {
@@ -170,7 +175,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -210,7 +215,7 @@ export class ClaimProcessingSummary extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -268,7 +273,7 @@ export class ClaimProcessingSummary extends React.Component {
             Pending
           } }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(Urls.claims_837, {
             method: 'POST',
@@ -282,10 +287,8 @@ export class ClaimProcessingSummary extends React.Component {
             .then(res => {
                 var data = res.data.FileInCount
                 if (data && data.length > 0) {
-                    let Total277CA = data[0].Total277CA
 
                     this.setState({
-                        Total277CA: Total277CA,
                         Paid: data[0].Paid,
                         Pending: data[0].Pending,
                         Denide: data[0].denied,
@@ -331,7 +334,7 @@ export class ClaimProcessingSummary extends React.Component {
                 MolinaClaimID
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -390,9 +393,11 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
-    goto277 = () => {
+    goto277 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse)
+        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
+            fileId: fileId
+        })
         // setTimeout(() => {
         //     window.location.reload()
         // }, 50);
@@ -455,7 +460,7 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'Subscriber_ID' },
             { value: 'Transaction_Status' },
             { value: 'adjudication_status' },
-            { value: 'F277', isClick: 1, method: this.goto277 },
+            { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
             { value: '' },
         )
@@ -809,6 +814,9 @@ export class ClaimProcessingSummary extends React.Component {
                     onCellClicked={(event) => {
                         if (event.colDef.headerName == '999') {
                             this.goto999(event.data.FileID)
+                        }
+                        if (event.colDef.headerName == '277CA') {
+                            this.goto277(event.data.FileID)
                         }
                         if (event.colDef.headerName == 'File Name') {
                             this.setState({

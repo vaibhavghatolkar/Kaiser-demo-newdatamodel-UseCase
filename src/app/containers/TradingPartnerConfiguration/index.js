@@ -191,7 +191,6 @@ export class TradingPartnerConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(r => {
-                           console.log(";fksdlfjsjfs", r.data)
                 this.setState({
                     Trading_Partner_id:r.data.Trading_Partner[0].ID,
                     
@@ -234,9 +233,7 @@ export class TradingPartnerConfiguration extends React.Component {
 
     onChange(e) {
         var files = e.target.files;
-        console.log(files);
         var filesArr = Array.prototype.slice.call(files);
-        console.log(filesArr);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Urls from '../../../helpers/Urls';
 import '../color.css'
+import Strings from '../../../helpers/Strings';
 
 export class MenuManagement extends React.Component {
 
@@ -61,7 +62,7 @@ export class MenuManagement extends React.Component {
                 alert("User Role Saved Successfully");
                 let userrole = this.state.userrole
                 userrole.push(res.data.updateuserrole[0])
-                console.log(userrole)
+               
                 this.setState({
                     userrole: [...userrole],
                     userRoleName: ''
@@ -72,7 +73,7 @@ export class MenuManagement extends React.Component {
             })
     }
     onHandleChange(e, key) {
-        
+
         this.setState({
             [key]: e.target.value
         });
@@ -97,7 +98,7 @@ export class MenuManagement extends React.Component {
             is_editor      
             is_editable
           }}`
-          console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -112,7 +113,6 @@ export class MenuManagement extends React.Component {
                 let summary = []
                 let data = res.data.UserwiseMenu
                 let iterator = data
-                console.log(res.data);
                 iterator.forEach(item => {
                     array.push({
                         loopid: item.menu_description,
@@ -152,7 +152,7 @@ export class MenuManagement extends React.Component {
             }
            
         }`
-        
+
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -215,13 +215,12 @@ export class MenuManagement extends React.Component {
         if (checkboxValue == true) {
 
             data.forEach((d) => {
-                
-                    d.is_editable = true
-                
-                
+
+                d.is_editable = true
+
+
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -231,7 +230,6 @@ export class MenuManagement extends React.Component {
                 d.is_editable = false
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -247,7 +245,6 @@ export class MenuManagement extends React.Component {
                 d.isChecked = true
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -257,7 +254,6 @@ export class MenuManagement extends React.Component {
                 d.isChecked = false
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -267,26 +263,22 @@ export class MenuManagement extends React.Component {
         let row = []
         const data = this.state.customList;
         let menuOptions = {}
-        // console.log(data)
         data.forEach((d) => {
             var roletype = d.parent_node;
             var menuID = d.menu_id;
-           
-            // console.log(roletype)
-            // console.log(d.menu_id)
-         
-            if(d.isChecked == "0"){
+
+            if (d.isChecked == "0") {
                 d.isChecked = false
             }
-            if(d.is_editable == "0"){
+            if (d.is_editable == "0") {
                 d.is_editable = false
             }
-           
+
             row.push(
 
                 <tr>
 
-                    <td style={{ fontWeight: roletype=="0" ? "bold" : "" }}>
+                    <td style={{ fontWeight: roletype == "0" ? "bold" : "" }}>
 
                         {d.loopid}
                     </td>
@@ -296,38 +288,37 @@ export class MenuManagement extends React.Component {
                         let parent = d.parent_node
                         let menuId = d.menu_id
                         let data2 = [...data]
-                        let count=0;
+                        let count = 0;
                         // alert(parent)true
                         data2.forEach((item) => {
-                             
-                             if(item.parent_node == parent || item.menu_id == parent){
+
+                            if (item.parent_node == parent || item.menu_id == parent) {
                                 // if(item.parent_node==1)
                                 // {
-                                                               
+
                                 //        count++;
                                 //        alert(count);
-                                                                      
+
                                 // }
-                                
-                                if(item.menu_id == parent){ 
-                                    if(item.isChecked == false) 
-                                    {
-                                        item.isChecked = true 
-                                    } 
+
+                                if (item.menu_id == parent) {
+                                    if (item.isChecked == false) {
+                                        item.isChecked = true
+                                    }
                                     // if(item.isChecked == false){
                                     //     item.isChecked = true 
                                     // }  
-                                   
+
                                 }
-                               
+
 
                             }
-                            else if(menuId == item.parent_node){
+                            else if (menuId == item.parent_node) {
                                 item.isChecked = e.target.checked
                             }
-   
+
                         })
-                       
+
                         this.setState({
                             customList: [...data]
                         })
@@ -338,7 +329,7 @@ export class MenuManagement extends React.Component {
                         this.setState({
                             customList: [...data]
                         })
-        }} />}</td>
+                    }} />}</td>
 
 
                 </tr>
@@ -377,7 +368,6 @@ export class MenuManagement extends React.Component {
             checkedCheckbox: this.state.checked,
             uncheckCheckbox: this.state.unchecked
         })
-        console.log(this.state.checkedCheckbox)
     }
     showFile(name) {
         this.setState({
@@ -397,68 +387,68 @@ export class MenuManagement extends React.Component {
 
 
     Update() {
-        
-            let data = this.state.customList
-            let true_val = ''
-            let false_val = ''
-            let str1 = ''
-            let str2 = ''
-            data.forEach(element => {
-                if (element.isChecked) {
-                    true_val = true_val + element.menu_id + ','
-                    str1 = true_val.replace(/,(?=\s*$)/, '');
 
-                } else {
-                    false_val = false_val + element.menu_id + ','
-                    str2 = false_val.replace(/,(?=\s*$)/, '');
-                }
-            });
-            let access_Val = ''
-            let falseaccess_Val = ''
-            let access_Val_str1 = ''
-            let falseaccess_Val_str2 = ''
-            data.forEach(element => {
-                if (element.is_editable) {
-                    access_Val = access_Val + element.menu_id + ','
-                    access_Val_str1 = access_Val.replace(/,(?=\s*$)/, '');
+        let data = this.state.customList
+        let true_val = ''
+        let false_val = ''
+        let str1 = ''
+        let str2 = ''
+        data.forEach(element => {
+            if (element.isChecked) {
+                true_val = true_val + element.menu_id + ','
+                str1 = true_val.replace(/,(?=\s*$)/, '');
 
-                } else {
-                    falseaccess_Val = falseaccess_Val + element.menu_id + ','
-                    falseaccess_Val_str2 = falseaccess_Val.replace(/,(?=\s*$)/, '');
-                }
-            });
+            } else {
+                false_val = false_val + element.menu_id + ','
+                str2 = false_val.replace(/,(?=\s*$)/, '');
+            }
+        });
+        let access_Val = ''
+        let falseaccess_Val = ''
+        let access_Val_str1 = ''
+        let falseaccess_Val_str2 = ''
+        data.forEach(element => {
+            if (element.is_editable) {
+                access_Val = access_Val + element.menu_id + ','
+                access_Val_str1 = access_Val.replace(/,(?=\s*$)/, '');
 
-            var query = 'mutation{ MenuMasterUpdate('+
-                'uncheck :"' + str2 + '"' +
-                'check :"' + str1 + '"' +
-                'unchkeditor :"' + falseaccess_Val_str2 + '"' +
-                'chkeditor :"' + access_Val_str1 + '"' +
-                ')' +
-                '}'
+            } else {
+                falseaccess_Val = falseaccess_Val + element.menu_id + ','
+                falseaccess_Val_str2 = falseaccess_Val.replace(/,(?=\s*$)/, '');
+            }
+        });
 
-            console.log(query);
-            fetch(Urls.base_url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                body: JSON.stringify({
-                    query
+        var query = 'mutation{ MenuMasterUpdate(' +
+            'uncheck :"' + str2 + '"' +
+            'check :"' + str1 + '"' +
+            'unchkeditor :"' + falseaccess_Val_str2 + '"' +
+            'chkeditor :"' + access_Val_str1 + '"' +
+            ')' +
+            '}'
 
-                })
+        if (Strings.isDev) { console.log(query) };
+        fetch(Urls.base_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                query
+
             })
-                .then(r => r.json())
-                .then(data => 
-                    alert(data.data.MenuMasterUpdate),
-                    setTimeout(() => {
-                        window.location.reload()
-                    }, 2000)
-                   
-                    )
-                .catch(err => 
-                    console.log(err)
-                    )
+        })
+            .then(r => r.json())
+            .then(data =>
+                alert(data.data.MenuMasterUpdate),
+                setTimeout(() => {
+                    window.location.reload()
+                }, 2000)
+
+            )
+            .catch(err =>
+                console.log(err)
+            )
     }
 
     RenderUserRoleList() {
@@ -494,7 +484,7 @@ export class MenuManagement extends React.Component {
     renderTopbar() {
         return (
             <div className="row">
-                
+
                 <div className="form-group col-3" style={{ marginLeft: "25px" }}>
                     <div className="list-header-dashboard">Select Menu Type</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')}>
@@ -510,7 +500,7 @@ export class MenuManagement extends React.Component {
 
                 <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content" style={{paddingRight: "25px"}}>
+                        <div class="modal-content" style={{ paddingRight: "25px" }}>
                             <div class="modal-header">
                                 <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>User Role</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "20px" }}>&times;</span></button>

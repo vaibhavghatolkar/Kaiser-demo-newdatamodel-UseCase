@@ -198,7 +198,7 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -240,7 +240,7 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -271,7 +271,7 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -311,7 +311,7 @@ export class RealTimeDashboard_New extends React.Component {
                 MCGLoadingFiles
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -442,7 +442,7 @@ export class RealTimeDashboard_New extends React.Component {
                 Y_axis
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim, {
             method: 'POST',
             headers: {
@@ -813,7 +813,6 @@ export class RealTimeDashboard_New extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                         onCellClicked={(event) => {
-                            console.log('this is the event', event)
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
                                     incoming_fileId: event.data.FileID
@@ -855,7 +854,7 @@ export class RealTimeDashboard_New extends React.Component {
                 MCGStatus
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -950,8 +949,12 @@ export class RealTimeDashboard_New extends React.Component {
               Total999
               NotSent999
             }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
+                Total277CA
+                NotSent277CA
+            }
          }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
             headers: {

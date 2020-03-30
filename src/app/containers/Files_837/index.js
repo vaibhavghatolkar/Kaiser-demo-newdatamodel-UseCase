@@ -13,7 +13,6 @@ export class Files_837 extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
         let flag 
       flag = props.location.state.data[0].flag;
       

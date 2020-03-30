@@ -9,6 +9,7 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
+import Strings from '../../../../helpers/Strings';
 
 var val = ''
 export class ClaimPaymentDetails extends React.Component {
@@ -16,7 +17,6 @@ export class ClaimPaymentDetails extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('hello these are the props', props)
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'
@@ -106,7 +106,7 @@ export class ClaimPaymentDetails extends React.Component {
             }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -156,7 +156,7 @@ export class ClaimPaymentDetails extends React.Component {
   CheckEFTDt
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -252,7 +252,7 @@ export class ClaimPaymentDetails extends React.Component {
                 
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -343,7 +343,7 @@ export class ClaimPaymentDetails extends React.Component {
           }
           `
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
@@ -547,7 +547,7 @@ export class ClaimPaymentDetails extends React.Component {
                 StateCode
             }
        }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -851,7 +851,7 @@ export class ClaimPaymentDetails extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
 
-        console.log(data)
+        
         try {
             count = data[Object.keys(data)[0]].value.RecCount / 10
             if (data[Object.keys(data)[0]].value.RecCount % 10 > 0) {
@@ -882,7 +882,7 @@ export class ClaimPaymentDetails extends React.Component {
             {
                 col = []
                 data[keys].array.forEach((d) => {
-                    console.log(d)
+                    
                     col.push(
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {

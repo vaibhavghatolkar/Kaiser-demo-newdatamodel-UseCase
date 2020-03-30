@@ -2,6 +2,7 @@ import React from 'react';
 import './style.css';
 import Urls from '../../../helpers/Urls';
 import '../color.css'
+import Strings from '../../../helpers/Strings';
 
 export class Login extends React.Component {
 
@@ -25,7 +26,7 @@ export class Login extends React.Component {
             }
           }`
 
-          console.log(query)
+          if (Strings.isDev) { console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -36,8 +37,6 @@ export class Login extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-
-                console.log(res)
                 if (res.data.UserLogin[0].Login == 1) {
                     this.setState({
                         loggedIn: true

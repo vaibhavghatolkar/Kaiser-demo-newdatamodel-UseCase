@@ -3,6 +3,7 @@ import { MDBDataTable } from 'mdbreact';
 import './style.css';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
+import Strings from '../../../helpers/Strings';
 
 export class NPILook_Up extends React.Component {
 
@@ -40,7 +41,7 @@ export class NPILook_Up extends React.Component {
                   }
         }`
 
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
 
         fetch(Urls.base_url, {
             method: 'POST',

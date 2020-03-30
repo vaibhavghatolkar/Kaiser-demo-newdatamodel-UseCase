@@ -13,6 +13,7 @@ import { StateDropdown } from '../../components/StateDropdown';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Strings from '../../../helpers/Strings';
 
 var val = ''
 export class Outbound_response_999 extends React.Component {
@@ -131,7 +132,7 @@ export class Outbound_response_999 extends React.Component {
               ResponseFileDate
             }
           }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -214,7 +215,7 @@ export class Outbound_response_999 extends React.Component {
               Response
             }
           }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -458,7 +459,6 @@ export class Outbound_response_999 extends React.Component {
     }
 
     _renderTransactions() {
-        console.log(this.state.rowData)
         return (
             <div style={{ width: '100%', height: '100%' }}>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '17px' }}>

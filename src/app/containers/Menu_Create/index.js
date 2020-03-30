@@ -3,6 +3,7 @@ import './style.css';
 import '../color.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
+import Strings from '../../../helpers/Strings';
 
 export class MenuCreate extends React.Component {
 
@@ -52,7 +53,7 @@ export class MenuCreate extends React.Component {
            is_active
          }
        }`
-       console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.base_url, {
             method: 'POST',
             headers: {
@@ -66,7 +67,6 @@ export class MenuCreate extends React.Component {
                 alert("User Role Saved Successfully");
                 let userrole = this.state.userrole
                 userrole.push(res.data.updateuserrole[0])
-                console.log(userrole)
                 this.setState({
                     userrole: [...userrole],
                     userRoleName: ''
@@ -102,7 +102,8 @@ export class MenuCreate extends React.Component {
             is_editor      
             is_editable
           }}`
-        console.log(query)
+
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -157,7 +158,7 @@ export class MenuCreate extends React.Component {
             }
            
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -200,12 +201,12 @@ export class MenuCreate extends React.Component {
             <tr className="table-head">
                 <td className="table-text">Menu List</td>
 
-                   <td className="table-text"><div className="row" style={{marginLeft: '5px'}}><div>View Access </div>
+                <td className="table-text"><div className="row" style={{ marginLeft: '5px' }}><div>View Access </div>
 
-                <input style={{ marginLeft: "10px", alignSelf: 'center', marginTop: '3px'}} type="checkbox" onChange={this.ChangeMenuAcces}></input>
+                    <input style={{ marginLeft: "10px", alignSelf: 'center', marginTop: '3px' }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
                 </div></td>
-                <td className="table-text"><div className="row" style={{marginLeft: '5px'}}><div>Edit Functionality </div>
-                <input style={{ marginLeft: "10px", alignSelf: 'center', marginTop: '3px' }} type="checkbox" onChange={this.ChangeFunAccess}></input>
+                <td className="table-text"><div className="row" style={{ marginLeft: '5px' }}><div>Edit Functionality </div>
+                    <input style={{ marginLeft: "10px", alignSelf: 'center', marginTop: '3px' }} type="checkbox" onChange={this.ChangeFunAccess}></input>
                 </div></td>
 
 
@@ -221,13 +222,12 @@ export class MenuCreate extends React.Component {
         if (checkboxValue == true) {
 
             data.forEach((d) => {
-                if(d.is_editable == true){
+                if (d.is_editable == true) {
                     d.isAccessValue = true
                 }
-                
+
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -237,7 +237,6 @@ export class MenuCreate extends React.Component {
                 d.isAccessValue = false
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -253,7 +252,6 @@ export class MenuCreate extends React.Component {
                 d.isChecked = true
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -263,7 +261,6 @@ export class MenuCreate extends React.Component {
                 d.isChecked = false
 
             })
-            console.log(data);
             this.setState({
                 customList: data,
             })
@@ -272,67 +269,64 @@ export class MenuCreate extends React.Component {
     renderList() {
         let row = []
         const data = this.state.customList;
-        console.log(data);
         data.forEach((d) => {
             var roletype = d.parent_node;
             var menuID = d.menu_id;
             var isDisabled = "";
-            if(d.is_editable == false){
+            if (d.is_editable == false) {
                 isDisabled = "disabled";
                 d.isAccessValue = false
             }
-            if(d.isChecked == "0"){
+            if (d.isChecked == "0") {
                 d.isChecked = false
             }
-            if(d.isAccessValue == "0"){
+            if (d.isAccessValue == "0") {
                 d.isAccessValue = false
             }
-           console.log(d.isAccessValue)
             row.push(
 
                 <tr>
 
-                    <td style={{ fontWeight: roletype=="0" ? "bold" : "" }}>
+                    <td style={{ fontWeight: roletype == "0" ? "bold" : "" }}>
 
                         {d.loopid}
                     </td>
 
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
-                       d.isChecked = e.target.checked
-                       let parent = d.parent_node
-                       let menuId = d.menu_id
-                       let data2 = [...data]
-                       let count=0;
-                       // alert(parent)true
-                       data2.forEach((item) => {
-                            
-                            if(item.parent_node == parent || item.menu_id == parent){
-                               // if(item.parent_node==1)
-                               // {
-                                                              
-                               //        count++;
-                               //        alert(count);
-                                                                     
-                               // }
-                               
-                               if(item.menu_id == parent){ 
-                                   if(item.isChecked == false) 
-                                   {
-                                       item.isChecked = true 
-                                   } 
-                                   // if(item.isChecked == false){
-                                   //     item.isChecked = true 
-                                   // }  
-                                  
-                               }
-                              
+                        d.isChecked = e.target.checked
+                        let parent = d.parent_node
+                        let menuId = d.menu_id
+                        let data2 = [...data]
+                        let count = 0;
+                        // alert(parent)true
+                        data2.forEach((item) => {
 
-                           }
-                           else if(menuId == item.parent_node){
-                               item.isChecked = e.target.checked
-                           }
-  
-                       })
+                            if (item.parent_node == parent || item.menu_id == parent) {
+                                // if(item.parent_node==1)
+                                // {
+
+                                //        count++;
+                                //        alert(count);
+
+                                // }
+
+                                if (item.menu_id == parent) {
+                                    if (item.isChecked == false) {
+                                        item.isChecked = true
+                                    }
+                                    // if(item.isChecked == false){
+                                    //     item.isChecked = true 
+                                    // }  
+
+                                }
+
+
+                            }
+                            else if (menuId == item.parent_node) {
+                                item.isChecked = e.target.checked
+                            }
+
+                        })
                         this.setState({
                             customList: [...data]
                         })
@@ -343,7 +337,7 @@ export class MenuCreate extends React.Component {
                         this.setState({
                             customList: [...data]
                         })
-        }} />}</td>
+                    }} />}</td>
 
 
                 </tr>
@@ -382,7 +376,6 @@ export class MenuCreate extends React.Component {
             checkedCheckbox: this.state.checked,
             uncheckCheckbox: this.state.unchecked
         })
-        console.log(this.state.checkedCheckbox)
     }
     showFile(name) {
         this.setState({
@@ -435,14 +428,14 @@ export class MenuCreate extends React.Component {
                 }
             });
 
-            var query = 'mutation{ updateuserwisemenu(roleid : ' + this.state.userroleID+ ' ' +
+            var query = 'mutation{ updateuserwisemenu(roleid : ' + this.state.userroleID + ' ' +
                 'uncheck :"' + str2 + '"' +
                 'check :"' + str1 + '"' +
                 'unchkeditor :"' + falseaccess_Val_str2 + '"' +
                 'chkeditor :"' + access_Val_str1 + '"' +
                 ')' +
                 '}'
-                console.log(query)
+            if (Strings.isDev) { console.log(query) }
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -455,13 +448,13 @@ export class MenuCreate extends React.Component {
                 })
             })
                 .then(r => r.json())
-                .then(data =>{
+                .then(data => {
                     alert(data.data.updateuserwisemenu)
                     setTimeout(() => {
                         window.location.reload()
                     }, 100);
-                } )
-                
+                })
+
         }
         else {
             alert("Please Select User Role")
@@ -502,8 +495,8 @@ export class MenuCreate extends React.Component {
 
     renderTopbar() {
         return (
-            
-            <div className="row" style={{padding: '0'}}>
+
+            <div className="row" style={{ padding: '0' }}>
                 <div className="form-group col-3">
                     <div className="list-header-dashboard">Select User Role</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
@@ -533,7 +526,7 @@ export class MenuCreate extends React.Component {
 
                 <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content" style={{paddingRight: "25px"}}>
+                        <div class="modal-content" style={{ paddingRight: "25px" }}>
                             <div class="modal-header">
                                 <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>User Role</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "20px" }}>&times;</span></button>
@@ -563,7 +556,7 @@ export class MenuCreate extends React.Component {
 
 
             </div>
-           
+
         )
     }
 
@@ -573,7 +566,7 @@ export class MenuCreate extends React.Component {
                 <div>
                     <h5 className="headerText">User Role Management</h5>
                 </div>
-                
+
                 {
 
                     <div>

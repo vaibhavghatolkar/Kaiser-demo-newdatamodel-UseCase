@@ -27,7 +27,6 @@ export class AutoComplete extends React.Component {
     }
 
     renderDialog = () => {
-        console.log('hello this is the list : ', this.props.list)
         let list = this.props.list
         let row = []
         list.forEach(element => {

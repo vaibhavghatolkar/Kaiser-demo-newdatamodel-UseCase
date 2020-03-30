@@ -8,6 +8,7 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import '../../Files/files-styles.css';
 import { StateDropdown } from '../../../components/StateDropdown';
+import Strings from '../../../../helpers/Strings';
 
 var val = ''
 export class Payment_details  extends React.Component {
@@ -104,7 +105,7 @@ export class Payment_details  extends React.Component {
                 CheckEFTDt
             }
         }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -219,7 +220,7 @@ export class Payment_details  extends React.Component {
                 StateCode
             }
        }`
-        console.log(query)
+        if (Strings.isDev) { console.log(query) }
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {

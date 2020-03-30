@@ -22,7 +22,6 @@ export class ClaimDetails837 extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('hello these are the props', props)
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'
@@ -454,7 +453,7 @@ export class ClaimDetails837 extends React.Component {
         }
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
+            Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"",EndDt:"",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -797,10 +796,10 @@ export class ClaimDetails837 extends React.Component {
             });
     }
 
-    getClaimStages(claimId, fileId) {
+    getClaimStages(claimId, fileId, seqId) {
         let url = Urls.real_time_claim_details
         let query = `{
-            ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}") {
+            ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}", SeqID: ${seqId}) {
               Stage
               Createdatetime
             }
@@ -823,8 +822,6 @@ export class ClaimDetails837 extends React.Component {
                     this.setState({
                         claimStageDetails: res.data.ClaimStagesInbound
                     })
-
-                    console.log('claim stage', res.data.ClaimStagesInbound)
                 }
             })
             .catch(err => {
@@ -1344,7 +1341,7 @@ export class ClaimDetails837 extends React.Component {
                                 }, () => {
                                     this._getHLDetails(d.FileID)
                                     this.getDetails(d.ClaimID, d.FileID, d.ClaimRefId, data[keys].value, 1)
-                                    this.getClaimStages(d.ClaimID, d.FileID)
+                                    this.getClaimStages(d.ClaimID, d.FileID, d.ClaimRefId)
                                 })
                             }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.MolinaClaimID}</a></td>
                             <td className="list-item-style">{d.ClaimStatus}</td>
@@ -1481,7 +1478,6 @@ export class ClaimDetails837 extends React.Component {
                             this.setState({
                                 showClaims: true
                             })
-                            console.log('this is the event', event)
                             this.getTransactions(event.data.FileID)
                         }}
                     >
@@ -1532,7 +1528,6 @@ export class ClaimDetails837 extends React.Component {
                                 claimError_Status:event.data.ClaimStatus,
                              
                             })
-                            console.log('this is the event', event)
                             this.get_Error(event.data.ClaimID ,event.data.ClaimRefId, event.data.FileID)
                         }}
                     >

@@ -18,7 +18,6 @@ export class StateDropdown extends React.Component {
 
     _getState = async () => {
         let stateArray = await getStates()
-        console.log('Hello', stateArray)
         this.setState({
             _states: stateArray
         })
