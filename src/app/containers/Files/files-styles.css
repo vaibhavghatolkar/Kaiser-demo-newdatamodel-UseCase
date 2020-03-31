@@ -228,8 +228,9 @@
     color: var(--white-color);
 }
 .summary-exception{
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 9px;
+    padding-right: 4px;
+    width: 10%;
 }
 .chart-container2{
     border-radius: 8px;
@@ -247,4 +248,16 @@
 .font-size
 {
     font-size: 14px;
+}
+.summary-container-uniform {
+    box-shadow: 1px 2px 4px rgba(134, 134, 134, 0.5);
+    background-color: var(--light-grey);
+    margin-right: 12px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+}
+.scrollmenu{
+    /* overflow: scroll;
+    overflow-y: hidden; */
 }

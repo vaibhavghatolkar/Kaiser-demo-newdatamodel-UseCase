@@ -125,3 +125,6 @@ td{
     padding-top: 7px !important;
     padding-bottom: 0px !important;
 }
+.fixed-style{
+    position: fixed;
+}

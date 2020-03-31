@@ -65,6 +65,7 @@ export class AuditSummary extends React.Component {
             rejected_Files: '',
             paginationPageSize: 10,
             domLayout: 'autoHeight',
+            NotSent999: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].notSent ? props.location.state.data[0].notSent : '',
             columnDefs: [
                 { headerName: "File Name", field: "filename", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "State", field: "State" },
@@ -205,7 +206,7 @@ export class AuditSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}", State:"${this.state.State}", GridType:${this.state.gridType}){
+            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}", State:"${this.state.State}", GridType:${this.state.gridType}, NotSent999:"${this.state.NotSent999}"){
               FileID
               filename
               Submitted

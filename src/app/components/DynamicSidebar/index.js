@@ -171,6 +171,7 @@ export class DynamicSidebar extends React.Component {
         else if(key ==139){name = Strings.Outbound_277CAResponse}
         else if(key ==140){name = Strings.Load_Exception}
         else if(key ==141){name = Strings.AuditSummary835}
+        else if(key ==142){name = Strings.ClaimPayment_835_ProcessingSummary}
         return name
     }
 
@@ -225,7 +226,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid ||element.key == Strings.Inbound_EncounterDetails  || element.key==Strings.Load_Exception) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid ||element.key == Strings.Inbound_EncounterDetails  || element.key==Strings.Load_Exception || element.key==Strings. ClaimPayment_835_Exception) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n',gridflag:'' },
                 ]

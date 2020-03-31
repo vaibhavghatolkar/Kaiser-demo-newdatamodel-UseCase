@@ -17,7 +17,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Link } from 'react-router-dom'
 
 let val = ''
-export class ClaimProcessingSummary extends React.Component {
+export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     constructor(props) {
         super(props);
@@ -70,22 +70,23 @@ export class ClaimProcessingSummary extends React.Component {
             paginationPageSize: 10,
             file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             domLayout: 'autoHeight',
+            
             columnDefs: [
-                { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Process Id", field: "ProcessID" },
-                { headerName: "State", field: "State" },
-                { headerName: "File Date", field: "FileCrDate" },
-                { headerName: "File Status", field: "FileStatus" },
-                { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Molina Claim Id", field: "MolinaClaimID" },
-                { headerName: "Claim Date", field: "ClaimDate" },
-                { headerName: "Claim Status", field: "ClaimStatus" },
-                { headerName: "	Subscriber Id                ", field: "Subscriber_ID" },
-                { headerName: "HiPaaS Status                ", field: "Transaction_Status" },
-                { headerName: "277CA Status", field: "" },
-                { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Adjudication Status                ", field: "adjudication_status" },
-                // { headerName: "835", field: "F277" },
+      
+                { headerName: "QNXT File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "" },
+                { headerName: "State", field: "" },
+                { headerName: "QNXT File Date", field: "FileDate" },
+                { headerName: "QNXT File Status", field: "" },
+                { headerName: "999", field: "", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Claim Id", field: "ClaimID" },
+                { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
+                { headerName: "Check EFT No", field: "CheckEFTNo" },
+                { headerName: "Check EFT Date", field: "CheckEFTDt" },
+                { headerName: "Payment Method                ", field: "CHECKEFTFlag" },
+                { headerName: "Total Charge Amount    ", field: "TotalChargeAmt" },
+                { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt" },
+            
             ],
 
             autoGroupColumnDef: {
@@ -162,8 +163,8 @@ export class ClaimProcessingSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    Total999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : '',
-                    Total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : '',
+                    Total999: res.data.Total999Response[0].Total999,
+                    Total277CA: res.data.Total277CAResponse[0].Total277CA,
                 })
             })
             .catch(err => {
@@ -246,7 +247,7 @@ export class ClaimProcessingSummary extends React.Component {
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadingClaims: _data ? _data.LoadingClaims : 0,
+                        LoadingClaims: _data ? data.MCGLoadCount : 0,
                         LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
                     })
                 }
@@ -309,37 +310,32 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"") {
-                RecCount
-                ClaimID
-                ClaimDate
-                ClaimTMTrackingID
-                Subscriber_ID
-                Claim_Amount
-                ClaimStatus
-                ProviderLastName
-                ProviderFirstName
-                SubscriberLastName
-                SubscriberFirstName
-                adjudication_status
-                ClaimLevelErrors
-                ClaimUniqueID
-                FileID
-                FileName
-                FileCrDate
-                FileStatus
-                F999
-				F277
-                TotalLinewise835
-                TotalLine
-                Transaction_Status
-                ClaimRefId
-                MolinaClaimID
-                ProcessID
-                State
+            PaymentProcessingSummary   {
+                RefID
+  RecCount
+  FileID
+  FileName
+  FileDate
+  ClaimID
+  ClaimReceivedDate
+  PatientName
+  PatientControlNo
+  PayerName
+  TotalChargeAmt
+  TotalClaimPaymentAmt
+  Sender
+  Organization
+  TransactionType
+  CheckEFTNo
+  TRN03
+  PayerID
+  CheckEFTDt
+  AccountNo
+  CHECKEFTFlag
+  Receiver
             }
         }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+       console.log("sakhjsaf" , query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -350,22 +346,22 @@ export class ClaimProcessingSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.Claim837RTProcessingSummary
+                var data = res.data.PaymentProcessingSummary 
                 let count = 0
-                if (data && data.length > 0) {
-                    let recCount = data[0].RecCount
-                    try {
-                        count = recCount / 10
-                        count = count.floor(count)
-                        if (recCount % 10 > 0) {
-                            count = count + 1
-                        }
-                    } catch (error) {
+                // if (data && data.length > 0) {
+                //     let recCount = data[0].RecCount
+                //     try {
+                //         count = recCount / 10
+                //         count = count.floor(count)
+                //         if (recCount % 10 > 0) {
+                //             count = count + 1
+                //         }
+                //     } catch (error) {
 
-                    }
+                //     }
 
-                }
-
+                // }
+console.log("asjfhsaf" , data)
                 this.setState({
                     Claim837RTProcessingSummary: data,
                     rowData: this.state.gridType == 1 ? data : [],
@@ -440,41 +436,38 @@ export class ClaimProcessingSummary extends React.Component {
         let rowArray = []
 
         headerArray.push(
-            { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By n.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
-            { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
+            { value: ' QNXT File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By n.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
+            { value: 'QNXT File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
+            { value: 'QNXT File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
             { value: '999' },
-            { value: 'Molina Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
-            { value: 'Claim Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
-            { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
-            { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
-            { value: 'HiPaaS Status' },
-            { value: '277CA Status' },
-            { value: '277CA' },
-            { value: 'Adjudication Status' },
-            // { value: '835' },
+            { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
+            { value: 'Claim Received Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
+            { value: 'Check EFT No', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
+            { value: 'Check EFT Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
+            { value: 'Payment Method' },
+            { value: 'Total Charge Amount' },
+            { value: 'Total Paid Amount' },
+       
         )
-
+       
         rowArray.push(
             { value: 'FileName', method: this.gotoDetails, isClick: 1, key_argument: 'FileID' },
-            { value: 'FileCrDate', isDate: 1 },
-            { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },
-            { value: 'MolinaClaimID' },
-            { value: 'ClaimDate', isDate: 1 },
-            { value: 'ClaimStatus' },
-            { value: 'Subscriber_ID' },
-            { value: 'Transaction_Status' },
+            { value: 'FileDate', isDate: 1 },
             { value: '' },
-            { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
-            { value: 'adjudication_status' },
+            { value: ''  },
+            { value: 'ClaimID' },
+            { value: 'ClaimReceivedDate', isDate: 1 },
+            { value: 'CheckEFTNo' },
+            { value: 'CheckEFTDt' },
+            { value: 'CheckEFTNo' },
+            { value: 'TotalChargeAmt' },
+            { value: 'TotalClaimPaymentAmt'  },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
-            // { value: '' },
+        
         )
 
         return (
             <CommonTable
-                overflow={true}
                 headerArray={headerArray}
                 rowArray={rowArray}
                 data={data}
@@ -766,23 +759,23 @@ export class ClaimProcessingSummary extends React.Component {
 
     renderClaimDetails = () => {
         let stage_1 = [
-            { 'name': 'X12 Count', 'value': this.state.X12Count },
-            { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
-            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
+            { 'name': 'Received From QNXT', 'value': '12K' },
+            { 'name': 'In HiPaaS', 'value': '11K' },
+            { 'name': 'Error', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
-            { 'name': 'Accepted with Errors', 'value': this.state.Rejected_Claims, 'isClick': 1 },
-            { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
+            { 'name': 'WIP', 'value': 90 },
+            { 'name': 'Pending', 'value': 100 },
+            { 'name': 'Paid', 'value': 120 },
+            { 'name': 'Denied', 'value': 10 },
         ]
-        let stage_3 = [
-            { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
-            { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
+        let stage_3 = [ 
+            { 'name': 'Sent to Availity', 'value': 80 },
+            { 'name': '999 Not Sent', 'value': 30 },
         ]
 
         let stage_4 = [
-            { 'name': '999 Not Sent', 'value': 0 },
-            { 'name': '277CA Not Sent', 'value': this.state.totalFiles },
+       
         ]
 
         return (
@@ -819,21 +812,21 @@ export class ClaimProcessingSummary extends React.Component {
                     paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
-                    onCellClicked={(event) => {
-                        if (event.colDef.headerName == '999') {
-                            this.goto999(event.data.FileID)
-                        }
-                        if (event.colDef.headerName == '277CA') {
-                            this.goto277(event.data.FileID)
-                        }
-                        if (event.colDef.headerName == 'File Name') {
-                            this.setState({
-                                incoming_fileId: event.data.FileID
-                            }, () => {
-                                this.gotoDetails()
-                            })
-                        }
-                    }}
+                    // onCellClicked={(event) => {
+                    //     if (event.colDef.headerName == '999') {
+                    //         this.goto999(event.data.FileID)
+                    //     }
+                    //     if (event.colDef.headerName == '277CA') {
+                    //         this.goto277(event.data.FileID)
+                    //     }
+                    //     if (event.colDef.headerName == 'File Name') {
+                    //         this.setState({
+                    //             incoming_fileId: event.data.FileID
+                    //         }, () => {
+                    //             this.gotoDetails()
+                    //         })
+                    //     }
+                    // }}
                 >
                 </AgGridReact>
             </div>
@@ -843,7 +836,7 @@ export class ClaimProcessingSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Claim Processing Summary</h5>
+                <h5 className="headerText">Payment Processing Summary</h5>
                 {this.renderTopBar()}
                 {/* {this._renderStats()} */}
                 {this.renderClaimDetails()}

@@ -102,6 +102,8 @@ import { RealTimeDashboard_New } from './app/containers/RealTime_837_Claim/RealT
 import { Payment_details } from './app/containers/ClaimPayment_835/PaymentDetails';
 import { Load_Exception } from './app/containers/RealTime_837_Claim/Load_Exception';
 import {AuditSummary835} from './app/containers/ClaimPayment_835/AuditSummary835'
+import { ClaimPayment_835_Exception } from './app/containers/ClaimPayment_835/ClaimPayment_835_Exception';
+import { ClaimPayment_835_ProcessingSummary } from './app/containers/ClaimPayment_835/ClaimPayment_835_ProcessingSummary';
 
 
 
@@ -194,12 +196,12 @@ class PrivateRoute extends React.Component {
                     <div className="container-fluid white-background">
                         <Header /> <br /><br /><br /><br /><br />
                         <div className="row">
-                            <div className="sidebar-width nopadding white-background">
+                            <div className="sidebar-width nopadding white-background col-2">
                                 <DynamicSidebar
                                     handleFlag={this.handleFlag}
                                 />
                             </div>
-                            <div className="sidebar-margin container-fluid" style={{ minHeight: '100vh' }}>
+                            <div className="container-fluid col-10" style={{ minHeight: '100vh' }}>
                                 {/* <div className="row border-bottom" style={{marginTop: '-5px', marginBottom: '12px'}}>
                                     <div className="padding-view">
                                         <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
@@ -326,6 +328,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Load_Exception} component={Load_Exception} />
                                 <Route path={'/' + Strings.AuditSummary835} component={AuditSummary835} />
                                     
+                                <Route path={'/' + Strings.ClaimPayment_835_Exception} component={ClaimPayment_835_Exception} />
+                                <Route path={'/' + Strings.ClaimPayment_835_ProcessingSummary} component={ClaimPayment_835_ProcessingSummary} />
+                                
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
                                 

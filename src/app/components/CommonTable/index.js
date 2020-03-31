@@ -90,10 +90,10 @@ export class CommonTable extends React.Component {
                                         }
                                     }}
                                 >
-                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
+                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment.utc(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment.utc(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
                                 </a> :
                                 <a>
-                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
+                                    {row_item.isAmount == 1 ? '$' : ''}{row_item.isDate == 1 ? moment.utc(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) != 'Invalid date' ? moment.utc(Number(data_item[row_item.value]) ? Number(data_item[row_item.value]) : data_item[row_item.value]).format(timeformat) : data_item[row_item.value] : data_item[row_item.value]} {row_item.isBar == 1 ? ' | ' + data_item[row_item.secondVal] : ''}
                                 </a>
                         }
                     </div>)
