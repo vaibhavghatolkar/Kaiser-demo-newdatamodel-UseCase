@@ -70,16 +70,16 @@ export class AuditSummary835 extends React.Component {
                 { headerName: "File Date", field: "Date" },
                 { headerName: "State", field: "State" },
                 { headerName: "ProcessID", field: "ProcessID" },
-                { headerName: "File Status", field: "Accepted" },
+                { headerName: "File Status", field: "" },
                 { headerName: "Remittance File Name", field: "RemittanceFileName" },
                 { headerName: "Remittance File Date	", field: "RemittanceFileDate" },
-                { headerName: "Recevied", field: "received" },
-                { headerName: "In HiPaaS", field: "received" },
+                { headerName: "Received", field: "" },
+                { headerName: "In HiPaaS", field: "" },
+                { headerName: "Error in PreProcess", field: "" },
+                { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "Accepted PreProcess", field: "Accepted" },
                 // { headerName: "Rejected PreProcess", field: "Rejected" },
-                { headerName: "Error in PreProcess", field: "error" },
                 // { headerName: "In MCG	", field: "SentToQNXT" },
-                { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
             autoGroupColumnDef: {
@@ -239,17 +239,10 @@ export class AuditSummary835 extends React.Component {
                             count = count + 1
                         }
                     }
-                    let auditData = res.data.AuditSummary835
-                   auditData.forEach(element =>{
-                       element["Accepted"] = "Accepted"
-                       element["received"] = 1
-                       element["error"] = 0
-                   })
-                    
 
                     this.setState({
                         claimsAudit: res.data.AuditSummary835,
-                        rowData: this.state.gridType == 1 ? auditData : [],
+                        rowData: this.state.gridType == 1 ? res.data.AuditSummary835 : [],
                         count: count
                     })
                 }
@@ -414,7 +407,7 @@ export class AuditSummary835 extends React.Component {
                     { name: '999 Received', value: Total999 },
                     // { name: '277 CA', value: Total277CA }
                 ]
-                
+
                 this.setState({
                     summaryList: summary,
                     totalFiles: totalCount
@@ -552,7 +545,6 @@ export class AuditSummary835 extends React.Component {
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
-
         data.forEach((d) => {
             let count = 0
             try {
@@ -561,25 +553,17 @@ export class AuditSummary835 extends React.Component {
 
             row.push(
                 <tr>
-                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary, { file_id: d.FileID }) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
+                    <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.QNXTFileName}</td>
+                    <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Date}</td>
                     <td className="list-item-style">{d.State}</td>
-                    <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
-                    <td className="list-item-style">{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Submitted ? d.Submitted : 0}</td>
-                    <td className="list-item-style">{d.InHiPaaS ? d.InHiPaaS : 0}</td>
-                    <td className="list-item-style">{d.Accepted}</td>
-                    <td className="list-item-style">{d.Rejected}</td>
-                    <td className="list-item-style">{count}</td>
-                    <td className="list-item-style">{d.SentToQNXT}</td>
-                    <td className="list-item-style">
-                        <a style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}
-                            onClick={() => {
-                                this.goto999(d.FileID)
-                            }}>{d.F999}</a></td>
-                    <td className="list-item-style"><a style={{ color: "#6AA2B8", cursor: "pointer" }}
-                        onClick={() => {
-                            this.goto277(d.FileID)
-                        }}>{d.F277}</a></td>
+                    <td className="list-item-style">{d.ProcessID}</td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style">{d.RemittanceFileName}</td>
+                    <td className="list-item-style">{d.RemittanceFileDate}</td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style"></td>
+                    <td className="list-item-style">{d.F999}</td>
                 </tr>
             )
         });
@@ -587,19 +571,17 @@ export class AuditSummary835 extends React.Component {
             <div>
                 <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
                     <tr className="table-head">
-                        <td style={{ width: '19%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.filename", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
-                        <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.State", this.state.stateRotation, 'stateRotation')}>State</a></td>
-                        <td style={{ wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a></td>
-                        <td style={{ width: '13%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                        <td className="table-head-text list-item-style">Submitted </td>
-                        <td className="table-head-text list-item-style">Claims In HiPaaS </td>
-                        <td className="table-head-text list-item-style">Accepted PreProcess </td>
-                        <td className="table-head-text list-item-style">Rejected PreProcess </td>
-                        <td className="table-head-text list-item-style">Error in PreProcess </td>
-                        {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                        <td className="table-head-text list-item-style">In MCG </td>
+                        <td className="table-head-text list-item-style">QNXT File Name</td>
+                        <td className="table-head-text list-item-style">File Date</td>
+                        <td className="table-head-text list-item-style">State</td>
+                        <td className="table-head-text list-item-style">ProcessID</td>
+                        <td className="table-head-text list-item-style">File Status</td>
+                        <td className="table-head-text list-item-style">Remittance File Name</td>
+                        <td className="table-head-text list-item-style">Remittance File Date	</td>
+                        <td className="table-head-text list-item-style">Received</td>
+                        <td className="table-head-text list-item-style">In HiPaaS</td>
+                        <td className="table-head-text list-item-style">Error in PreProcess</td>
                         <td className="table-head-text list-item-style">999</td>
-                        <td className="table-head-text list-item-style">277 CA</td>
                     </tr>
                     <tbody >
                         <tr>
@@ -900,21 +882,6 @@ export class AuditSummary835 extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == '999') {
-                                this.goto999(event.data.FileID)
-                            }
-                            if (event.colDef.headerName == '277CA') {
-                                this.goto277(event.data.FileID)
-                            }
-                            if (event.colDef.headerName == 'File Name') {
-                                this.props.history.push('/' + Strings.ClaimProcessingSummary, {
-                                    file_id: event.data.FileID
-                                })
-                            }
-
-                        }}
                     >
 
                     </AgGridReact>
