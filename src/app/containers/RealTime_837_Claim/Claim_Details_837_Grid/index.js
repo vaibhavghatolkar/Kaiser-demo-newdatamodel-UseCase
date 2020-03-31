@@ -1314,7 +1314,7 @@ export class Claim_Details_837_Grid extends React.Component {
                     <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
                     <div className="col-2 col-small-style small-font" style={{wordBreak: 'break-all'}}>{data[keys].value.ProcessID}</div>
                     {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-2 col-small-style small-font">{data[keys].value.FileDate}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
