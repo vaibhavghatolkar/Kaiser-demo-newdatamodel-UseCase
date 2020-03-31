@@ -410,7 +410,7 @@ export class Outbound_response_999 extends React.Component {
         let row = []
 
         data.forEach(item => {
-            let date = item.ResponseFileDate ? moment((item.ResponseFileDate)).format("MM/DD/YYYY hh:mm a") : ''
+            let date = item.ResponseFileDate ? moment.utc((item.ResponseFileDate)).format("MM/DD/YYYY hh:mm a") : ''
 
             row.push(
                 <tr>
