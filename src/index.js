@@ -101,6 +101,7 @@ import { Claim_Details_837_Grid } from './app/containers/RealTime_837_Claim/Clai
 import { RealTimeDashboard_New } from './app/containers/RealTime_837_Claim/RealTimeDashboard_New';
 import { Payment_details } from './app/containers/ClaimPayment_835/PaymentDetails';
 import { Load_Exception } from './app/containers/RealTime_837_Claim/Load_Exception';
+import {AuditSummary835} from './app/containers/ClaimPayment_835/AuditSummary835'
 
 
 
@@ -323,10 +324,11 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Claim_Details_837_Grid} component={Claim_Details_837_Grid} />
                                 <Route path={'/' + Strings.Payment_details} component={Payment_details} />
                                 <Route path={'/' + Strings.Load_Exception} component={Load_Exception} />
+                                <Route path={'/' + Strings.AuditSummary835} component={AuditSummary835} />
                                     
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
-
+                                
 
                             </div>
                         </div>

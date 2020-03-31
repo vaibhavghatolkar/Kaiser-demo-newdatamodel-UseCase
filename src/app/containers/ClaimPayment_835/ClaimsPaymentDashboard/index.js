@@ -13,6 +13,9 @@ import Paper from '@material-ui/core/Paper';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Tiles } from '../../../components/Tiles';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 import {
     Chart,
@@ -84,36 +87,7 @@ const Area = props => (
     />
 );
 
-const second_data = {
-    labels: [
-        'ICD Code not found',
-        'Accident Date not present',
-        'Member Not Found',
-        'Newborn Setup Pending',
-        'Provider Setup Pending',
-        'Misdirected Claims'
-    ],
-    datasets: [{
-        data: [100, 100, 70, 20, 50, 20],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ]
-    }],
-    flag: ''
-};
+
 let val = ''
 export class ClaimPaymentDashboard extends React.Component {
 
@@ -124,15 +98,17 @@ export class ClaimPaymentDashboard extends React.Component {
             summaryList: [],
             summaryCount:[],
             totalFiles: [],
+            second_data: {},
+            pie_data: {},
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(7, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
-            chartType: 'Datewise',
+            chartType: 'Monthwise',
             selectedTradingPartner: '',
             State: '',
             Months: 0,
@@ -143,11 +119,10 @@ export class ClaimPaymentDashboard extends React.Component {
             rejected_per: 0,
             ClaimBarChart: [],
             claimLabels: [],
+            complience:[],
             data,
             //////////----------table----
             Organization: '',
-            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
-            endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             Service_startDate: '',
             Service_endDate: '',
             Sender: '',
@@ -159,7 +134,56 @@ export class ClaimPaymentDashboard extends React.Component {
             ErrorChartLabel: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
             ErrorChartData: [9, 5, 1, 3, 4, 8, 7, 11, 2, 6, 10, 12],
 
+            gridType: 1,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
+
+            columnDefs: [
+                { headerName: "QNXT File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "File Date", field: "FileDate" },
+                { headerName: "Remittance sent", field: "" },
+                { headerName: "Remittance sent date", field: "" },
+                // { headerName: "Compliance vs Submission date", field: "" },
+                { headerName: "# of errors", field: "" },
+                
+            ],
+
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
+                minWidth: 100,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
         }
+
+        
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
 
@@ -181,6 +205,7 @@ export class ClaimPaymentDashboard extends React.Component {
         this.getData()
         this.getListData()
         this._getCounts()
+        this._getPieChartData()
     }
 
     getCommonData() {
@@ -291,11 +316,11 @@ export class ClaimPaymentDashboard extends React.Component {
 
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">File Name</td>
+                <td className="table-head-text list-item-style">QNXT File Name</td>
                 <td className="table-head-text list-item-style">File Date</td>
                 <td className="table-head-text list-item-style">Remittance sent</td>
                 <td className="table-head-text list-item-style">Remittance sent date</td>
-                <td className="table-head-text list-item-style">Compliance vs Submission date</td>
+                {/* <td className="table-head-text list-item-style">Compliance vs Submission date</td> */}
                 <td className="table-head-text list-item-style"># of errors</td>
                 {/* <td className="table-head-text list-item-style">Receiver</td> */}
             </tr>
@@ -441,6 +466,7 @@ export class ClaimPaymentDashboard extends React.Component {
 
                     this.setState({
                         claimsList: res.data.RemittanceViewerFileDetails,
+                        rowData: this.state.gridType == 1 ? res.data.RemittanceViewerFileDetails : []
                     })
                 }
             })
@@ -550,111 +576,6 @@ export class ClaimPaymentDashboard extends React.Component {
         }, 300);
     }
 
-    renderTopbar() {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Time Range</div>
-                        <select
-                            className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                let day = 0
-                                let chartType = ''
-                                let selected_val = event.target.options[event.target.selectedIndex].text
-
-                                if (selected_val == 'Last week') {
-                                    day = 7
-                                    chartType = 'Datewise'
-                                } else if (selected_val == 'Last 30 days') {
-                                    day = 30
-                                    chartType = 'Weekwise'
-                                } else if (selected_val == 'Last 90 days') {
-                                    day = 90
-                                } else if (selected_val == 'Last 180 days') {
-                                    day = 180
-                                } else if (selected_val == 'Last year') {
-                                    day = 365
-                                }
-
-                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
-                                let endDate = moment().format('YYYY-MM-DD')
-
-                                if (!selected_val) {
-                                    startDate = ''
-                                    endDate = ''
-                                }
-
-                                this.setState({
-                                    startDate: startDate,
-                                    endDate: endDate,
-                                    selected_val: selected_val,
-                                    chartType: chartType
-                                })
-
-                                setTimeout(() => {
-                                    this.getData()
-                                }, 50);
-                            }}
-                        >
-                            <option selected="selected" value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
-                            <option value="2">Last 90 days</option>
-                            <option value="2">Last 180 days</option>
-                            <option value="2">Last year</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text
-                                }, () => {
-                                    this.getData()
-                                })
-                            }}
-                        >
-                            <option value=""></option>
-                            <option value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-
     renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
@@ -720,39 +641,6 @@ export class ClaimPaymentDashboard extends React.Component {
             endDate,
             selected_val
         })
-    }
-
-    renderPieChart(heading, labels, data) {
-
-        const second_data = {
-            labels: [
-
-                labels
-            ],
-            datasets: [{
-                data: data,
-                backgroundColor: [
-                    '#BE61CA',
-                    'pink',
-                    'grey'
-                ],
-                hoverBackgroundColor: [
-                    'blue',
-                ]
-            }],
-
-        };
-
-        return (
-            <div>
-
-                <h6> {heading}</h6>
-                <Pie data={second_data}
-
-                    width={100}
-                    height={80} />
-            </div>
-        )
     }
 
     renderTransactionsNew(flag) {
@@ -955,7 +843,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style"></td>
-                    <td className="list-item-style"></td>
+                    {/* <td className="list-item-style"></td> */}
                     <td className="list-item-style"></td>
                     {/* <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Receiver}</td> */}
                 </tr>
@@ -1194,10 +1082,17 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     renderCharts() {
+        let Data = this.state.complience
+        let pieLabel = []
+        let pieData = []
+        Data.forEach((d) => {
+            pieLabel.push(d.Type)
+            pieData.push(d.TotalCount)
+        })
         const data = {
-            labels: ["Compliance", "Non-Compliance"],
+            labels: pieLabel,
             datasets: [{
-                data: [90, 10],
+                data: pieData,
                 backgroundColor: [
                     '#139DC9',
                     '#daea00',
@@ -1213,6 +1108,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div className="row chart-div">
                 <div className="chart-container chart col-12">
+                <div className="chart-header">Compliance</div>
                     <Pie data={data}
                         options={{
                             elements: {
@@ -1233,50 +1129,50 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
 
-    renderErrorChart() {
-        return (
-            <Pie data={second_data}
-                options={{
-                    elements: {
-                        arc: {
-                            borderWidth: 0
-                        }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                }}
-                width={100}
-                height={60} />
-        )
-    }
+    // renderErrorChart() {
+    //     return (
+    //         <Pie data={second_data}
+    //             options={{
+    //                 elements: {
+    //                     arc: {
+    //                         borderWidth: 0
+    //                     }
+    //                 },
+    //                 legend: {
+    //                     display: false,
+    //                 }
+    //             }}
+    //             width={100}
+    //             height={60} />
+    //     )
+    // }
 
-    renderValues() {
-        let row = []
-        let data = second_data.labels
-        let colors = second_data.datasets[0].backgroundColor
-        let count = 0
-        data.forEach(item => {
-            row.push(
-                <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '60px', color: 'slategrey', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
-                </div>
-            )
-            count++
-        })
-        return (
-            <div style={{ marginTop: '20px' }} className="row">
-                {row}
-            </div>
-        )
-    }
+    // renderValues() {
+    //     let row = []
+    //     let data = second_data.labels
+    //     let colors = second_data.datasets[0].backgroundColor
+    //     let count = 0
+    //     data.forEach(item => {
+    //         row.push(
+    //             <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '60px', color: 'slategrey', alignItems: 'center' }}>
+    //                 <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
+    //             </div>
+    //         )
+    //         count++
+    //     })
+    //     return (
+    //         <div style={{ marginTop: '20px' }} className="row">
+    //             {row}
+    //         </div>
+    //     )
+    // }
 
     RenderMainErrorChart() {
         return (
             <div className="row chart-div">
                 <div className="chart-container chart col-12">
                     <div style={{ fontWeight: '500' }}>Top Denial Reason codes</div><br />
-                    {this.renderErrorChart()}
+                    {/* {this.renderErrorChart()} */}
                     {/* {this.renderValues()} */}
                 </div>
             </div>
@@ -1426,15 +1322,15 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Total Files', value: totalCount },
-                    { name: 'Accepted Files', value: accepted },
-                    { name: 'Accepted with Errors', value: acceptedwithErrors },
-                    { name: 'Rejected Files', value: rejected },
-                    { name: 'Reconciled Files', value: reconciled },
-                    { name: 'Reconciled Error', value: reconciledError },
-                    { name: 'Load Error', value: loadedError },
-                    { name: 'Load in MCG', value: loaded },
-                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    { name: 'Load From QNXT', value: totalCount },
+                    // { name: 'Accepted Files', value: accepted },
+                    { name: 'Vaildated', value: acceptedwithErrors },
+                    { name: 'Error', value: rejected },
+                    { name: 'Send To Availity', value: reconciled },
+                    { name: '999 Received', value: reconciledError },
+                    // { name: 'Load Error', value: loadedError },
+                    // { name: 'Load in MCG', value: loaded },
+                    // { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
@@ -1684,23 +1580,22 @@ export class ClaimPaymentDashboard extends React.Component {
 
     renderClaimDetails = () => {
         let stage_1 = [
-            { 'name': 'Received', 'value': '12K' },
-            { 'name': 'HiPaaS Received', 'value': '11K' },
-            { 'name': 'Reconciled Error', 'value': 900 },
-            { 'name': 'File Rejected',  'value': 14 }
+            { 'name': 'Received From QNXT', 'value': '12K' },
+            { 'name': 'In HiPaaS', 'value': '11K' },
+            { 'name': 'Error', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'Accepted', 'value': '1M' },
-            { 'name': 'Rejected', 'value': '3K' },
-            { 'name': 'Processing', 'value': 12 },
-            { 'name': 'Reconile 837', 'value': '10K' },
+            { 'name': 'WIP', 'value': 90 },
+            { 'name': 'Pending', 'value': 100 },
+            { 'name': 'Paid', 'value': 120 },
+            { 'name': 'Denied', 'value': 10 },
             
         ]
         let stage_3 = [
-            { 'name': 'Sent to External', 'value': 0 },
-            { 'name': 'Send Errors', 'value': '100%' },
-            { 'name': 'Accepted %', 'value': '85%' },
-            { 'name': 'Rejected %', 'value': '15%' }
+            { 'name': 'Sent to Availity', 'value': 80 },
+            { 'name': '999 Not Sent', 'value': 30 },
+            // { 'name': 'Accepted %', 'value': '85%' },
+            // { 'name': 'Rejected %', 'value': '15%' }
         ]
 
         // let stage_4 = [
@@ -1723,7 +1618,7 @@ export class ClaimPaymentDashboard extends React.Component {
             <div className="form-style" id='filters'>
                 <div className="form-row">
 
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-dashboard" id="state"
                             onChange={(event) => {
@@ -1752,13 +1647,13 @@ export class ClaimPaymentDashboard extends React.Component {
                             <option value="15">Wisconsin</option>
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Provider</div>
                         <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -1768,7 +1663,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Time Range</div>
                         <select
                             className="form-control list-dashboard" id="state"
@@ -1832,10 +1727,291 @@ export class ClaimPaymentDashboard extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
+                    <div className="form-group col">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="Grid"
+                            onChange={(event) => {
+                                this.setState({
+                                    page: 1,
+                                    rowData: [],
+                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    this.getListData()
+                                })
+                            }}>
+                            <option value="select">Default</option>
+                            <option selected value="select">Classic</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         )
     }
+
+    getPieChartData = (pieChart) => {
+        let pieLabel = []
+        let pieData = []
+        pieChart.forEach((d) => {
+            pieLabel.push(d.X_axis)
+            pieData.push(d.Y_axis)
+        })
+
+        let second_data = {
+            labels: pieLabel,
+            datasets: [{
+                data: pieData,
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DC913',
+                    '#EC6236',
+                    '#C9139D',
+                    'blue',
+                    '#5369e7',
+                    '#b7bf11',
+                    '#448dce',
+                    '#cb662c',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DC913',
+                    '#EC6236',
+                    '#C9139D',
+                    'blue',
+                    '#5369e7',
+                    '#b7bf11',
+                    '#448dce',
+                    '#cb662c',
+                ]
+            }]
+        }
+
+
+
+        return second_data
+    }
+
+    _getPieChartData = async () => {
+        let chartType = this.state.chartType
+        if (!chartType) {
+            chartType = "Monthwise"
+        }
+        let query = `{
+            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                From
+                MonthNo
+                Year
+                To
+                Amount
+                TotalClaims
+                X_axis
+                Y_axis
+            }
+            file_piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "FileErrorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+                X_axis
+                Y_axis
+            }
+            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+                X_axis
+                Y_axis
+            }
+            CompliancePieChart835 {
+                Type
+                TotalCount
+              }
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.real_time_claim, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                let array = []
+                let ClaimBarChart = res.data.barchart
+                let claimLabels = []
+                let second_data = this.getPieChartData(res.data.file_piechart)
+                let pie_data = this.getPieChartData(res.data.piechart)
+                let complience = res.data.CompliancePieChart835
+
+                let count = 0
+                ClaimBarChart.forEach((d) => {
+                    count++;
+                    array.push(
+                        d.Y_axis ? parseFloat(d.Y_axis) : 0
+                    )
+                    if (chartType == 'Weekwise') {
+                        claimLabels.push('week' + count)
+                    } else {
+                        claimLabels.push(d.X_axis)
+                    }
+                })
+
+                this.setState({
+                    ClaimBarChart: array,
+                    claimLabels: claimLabels,
+                    second_data: second_data,
+                    pie_data: pie_data,
+                    complience:complience
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+
+    }
+
+    renderChart(piechart_data) {
+        return (
+            <Pie data={piechart_data}
+                options={{
+                    elements: {
+                        arc: {
+                            borderWidth: 0
+                        }
+                    },
+                    legend: {
+                        display: false,
+                    }
+                }}
+                width={20}
+                height={19} />
+        )
+    }
+
+    renderValues(piechart_data) {
+        let row = []
+        let data = piechart_data.labels
+        let colors = piechart_data.datasets[0].backgroundColor
+        let count = 0
+        data.forEach(item => {
+            row.push(
+                <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item.length > 40 ? (item.substr(0, 40) + '...') : item}</div>
+                </div>
+            )
+            count++
+        })
+        return (
+            <div style={{ marginTop: '16px' }}>
+                {row}
+            </div>
+        )
+    }
+
+    renderPieChart = (header, piechart_data) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let addon = ''
+        let claimStatus = ''
+        let loadStatus = ''
+        let generalStatus = ''
+
+        if (header == 'Top 10 File Level Errors') {
+            addon = '/accept'
+            claimStatus = 'Rejected'
+        } else if (header == 'Top 10 Payment Level Errors') {
+            addon = '/reject'
+            generalStatus = 'Rejected'
+        }
+
+        let sendData = [
+            {
+                flag: addon,
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                status: claimStatus,
+                type: type,
+                gridflag: loadStatus,
+                generalStatus: generalStatus
+            },
+        ]
+
+        return (
+            piechart_data && piechart_data.labels && piechart_data.labels.length > 0
+                ?
+                <div className="row chart-container-full chart clickable" onClick={() => { this.gotoClaimDetails(sendData) }}>
+                    <div className="col-7 nopadding">
+                        <div className="chart-header">{header}</div>
+                        {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
+                    </div>
+                    <div className="col-5 chart-align">
+                        {this.renderChart(piechart_data)}
+                    </div>
+                </div> :
+                <div className="chart-container-full chart" style={{ textAlign: 'center' }}>
+                    No Data Present
+                </div>
+        )
+    }
+
+
+
+    renderAllPieCharts() {
+        return (
+            <div className="chart-div">
+                <div className="row">
+                    <div className="col-6" style={{padding: '6px'}}>
+                        {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
+                    </div>
+                    <div className="col-6" style={{padding: '8px'}}>
+                        {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
+                    </div>
+                </div>
+                </div>
+        )
+    }
+
+    _renderList() {
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={this.state.columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == 'File Name') {
+                                this.setState({
+                                    incoming_fileId: event.data.FileID
+                                }, () => {
+                                    this.gotoClaimDetails()
+                                })
+                            }
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
 
     render() {
 
@@ -1859,6 +2035,8 @@ export class ClaimPaymentDashboard extends React.Component {
                         {this._renderSummaryDetails()}
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
+                        {this.renderAllPieCharts()}
+                        
                         {/* {this.renderMonthlyTrendsChart()} */}
                        {/* <div className="row">
                            <div className="col-4">
@@ -1875,13 +2053,14 @@ export class ClaimPaymentDashboard extends React.Component {
                 </div>
                 <div className="row">
                 <div className="col-8 nopadding">
-                {this.renderGraphs()}  
-                <br></br> 
-                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}    
+              
+                {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
+                {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
+                {/* {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}     */}
                 </div>
-                <div className="col-3 nopadding" style={{marginLeft: '30px'}}>
+                <div className="col-3 nopadding" style={{marginLeft: '60px'}}>
                         {this.renderCharts()}
-                        {this.RenderMainErrorChart()}
+                        
                         {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
                         {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
 
@@ -1900,22 +2079,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 </div>
                 </div> */}
 
-
-
-                <div className="row">
-                    <div className="col-9">
-                        <br></br>
-                       
-                        {/* {this.renderTransactionsNew()} */}
-                    </div>
-                    <div className="col-3 nopadding">
-
-
-                        {/* {this.renderGoogleStackedBarChart()} */}
-
-
-                    </div>
-                </div>
             </div>
         );
     }

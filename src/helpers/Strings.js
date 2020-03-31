@@ -117,7 +117,8 @@ const Strings = {
     CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250
     –––––––––– License Key End–––––––––––––– `,
     Payment_details: 'Payment_details',
-    isDev: 1
+    isDev: 1,
+    AuditSummary835:'AuditSummary835'
 }
 
 export default Strings;
