@@ -25,7 +25,7 @@ export class Tiles extends React.Component {
         let style = this._getstyles()
         return (
             this.props.isClickable ?
-                <Link to={{ pathname: this.props.url, state: { data: this.props._data } }} className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' ? "summary-exception summary-container" : "col summary-container"}>
+                <Link to={{ pathname: this.props.url, state: { data: this.props._data } }} className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
                         {Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
@@ -36,7 +36,7 @@ export class Tiles extends React.Component {
                     </div>
                 </Link>
                 :
-                <div className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' ? "summary-exception summary-container" : "col summary-container"}>
+                <div className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
                         {Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}

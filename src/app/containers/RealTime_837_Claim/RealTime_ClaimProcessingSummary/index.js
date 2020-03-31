@@ -82,9 +82,10 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "Claim Status", field: "ClaimStatus" },
                 { headerName: "	Subscriber Id                ", field: "Subscriber_ID" },
                 { headerName: "HiPaaS Status                ", field: "Transaction_Status" },
-                { headerName: "Adjudication Status                ", field: "adjudication_status" },
+                { headerName: "277CA Status", field: "" },
                 { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "835", field: "F277" },
+                { headerName: "Adjudication Status                ", field: "adjudication_status" },
+                // { headerName: "835", field: "F277" },
             ],
 
             autoGroupColumnDef: {
@@ -448,9 +449,10 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
             { value: 'HiPaaS Status' },
-            { value: 'Adjudication Status' },
+            { value: '277CA Status' },
             { value: '277CA' },
-            { value: '835' },
+            { value: 'Adjudication Status' },
+            // { value: '835' },
         )
 
         rowArray.push(
@@ -463,14 +465,16 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'ClaimStatus' },
             { value: 'Subscriber_ID' },
             { value: 'Transaction_Status' },
-            { value: 'adjudication_status' },
-            { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
-            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
             { value: '' },
+            { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
+            { value: 'adjudication_status' },
+            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
+            // { value: '' },
         )
 
         return (
             <CommonTable
+                overflow={true}
                 headerArray={headerArray}
                 rowArray={rowArray}
                 data={data}

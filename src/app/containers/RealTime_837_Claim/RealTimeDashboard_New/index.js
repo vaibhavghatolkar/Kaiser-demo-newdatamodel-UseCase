@@ -396,7 +396,7 @@ export class RealTimeDashboard_New extends React.Component {
                     'blue',
                     '#5369e7',
                     '#b7bf11',
-                    '#448dce',
+                    '#8459af',
                     '#cb662c',
                 ],
                 hoverBackgroundColor: [
@@ -408,7 +408,7 @@ export class RealTimeDashboard_New extends React.Component {
                     'blue',
                     '#5369e7',
                     '#b7bf11',
-                    '#448dce',
+                    '#8459af',
                     '#cb662c',
                 ]
             }]
@@ -1047,6 +1047,7 @@ export class RealTimeDashboard_New extends React.Component {
                     isClickable={
                         item.name != 'HiPaaS | MCG'
                     }
+                    uniformWidth={true}
                     _data={data}
                     header_text={item.name}
                     value={item.value}
@@ -1261,6 +1262,7 @@ export class RealTimeDashboard_New extends React.Component {
             let loadStatus = ''
             let generalStatus = ''
             let mcgStatus = ''
+            let notSent = ''
             let color = "var(--red)"
 
             if (item.name == 'Accepted') {
@@ -1277,6 +1279,8 @@ export class RealTimeDashboard_New extends React.Component {
                 color = "var(--main-bg-color)"
             } else if (item.name == 'Load Error') {
                 mcgStatus = 'Exception'
+            } else if (item.name == '999 Not Sent') {
+                notSent = 'Y'
             }
 
             let sendData = [
@@ -1290,7 +1294,8 @@ export class RealTimeDashboard_New extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     generalStatus: generalStatus,
-                    mcgStatus: mcgStatus
+                    mcgStatus: mcgStatus,
+                    notSent: notSent
                 },
             ]
             row.push(
@@ -1298,7 +1303,7 @@ export class RealTimeDashboard_New extends React.Component {
                     <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
                     {
                         item.isClick ?
-                            <Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
+                            <Link to={{ pathname: item.url ? item.url : Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
                             :
                             <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
                     }
@@ -1330,7 +1335,7 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         let stage_4 = [
-            { 'name': '999 Not Sent', 'value': this.state.total_999 },
+            { 'name': '999 Not Sent', 'value': this.state.total_999, 'isClick': 1, 'url' : Strings.claimsAudit },
             { 'name': '277CA Not Sent', 'value': (this.state.totalFiles - this.state.rejectedCount) },
         ]
 

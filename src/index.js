@@ -193,12 +193,12 @@ class PrivateRoute extends React.Component {
                     <div className="container-fluid white-background">
                         <Header /> <br /><br /><br /><br /><br />
                         <div className="row">
-                            <div className="sidebar-width nopadding white-background">
+                            <div className="sidebar-width nopadding white-background col-2">
                                 <DynamicSidebar
                                     handleFlag={this.handleFlag}
                                 />
                             </div>
-                            <div className="sidebar-margin container-fluid" style={{ minHeight: '100vh' }}>
+                            <div className="container-fluid col-10" style={{ minHeight: '100vh' }}>
                                 {/* <div className="row border-bottom" style={{marginTop: '-5px', marginBottom: '12px'}}>
                                     <div className="padding-view">
                                         <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
