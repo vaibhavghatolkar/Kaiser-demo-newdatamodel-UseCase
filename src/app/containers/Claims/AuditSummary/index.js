@@ -385,8 +385,8 @@ export class AuditSummary extends React.Component {
                 let acceptedwithErrors = ''
                 let processing = ''
                 let MCGLoadingFiles = ''
-                let Total999 = res.data.Total999Response[0].Total999
-                let Total277CA = res.data.Total277CAResponse[0].Total277CA
+                let Total999 = res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : ''
+                let Total277CA = res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : ''
 
 
                 if (data && data.length > 0) {
@@ -418,7 +418,7 @@ export class AuditSummary extends React.Component {
                     { name: '999', value: Total999 },
                     { name: '277 CA', value: Total277CA }
                 ]
-
+                
                 this.setState({
                     summaryList: summary,
                     totalFiles: totalCount
@@ -430,7 +430,7 @@ export class AuditSummary extends React.Component {
     }
 
 
-    _renderSummaryDetails() {
+    _renderSummaryDetails = () => {
         let row = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag

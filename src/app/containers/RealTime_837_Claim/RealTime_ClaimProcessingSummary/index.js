@@ -161,8 +161,8 @@ export class ClaimProcessingSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    Total999: res.data.Total999Response[0].Total999,
-                    Total277CA: res.data.Total277CAResponse[0].Total277CA,
+                    Total999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : '',
+                    Total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : '',
                 })
             })
             .catch(err => {
@@ -245,7 +245,7 @@ export class ClaimProcessingSummary extends React.Component {
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadingClaims: _data ? data.MCGLoadCount : 0,
+                        LoadingClaims: _data ? _data.LoadingClaims : 0,
                         LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
                     })
                 }
