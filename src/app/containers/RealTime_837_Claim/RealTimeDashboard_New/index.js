@@ -423,12 +423,15 @@ export class RealTimeDashboard_New extends React.Component {
     }
 
     getData = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        
         let chartType = this.state.chartType
         if (!chartType) {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 From
                 MonthNo
                 Year
@@ -438,11 +441,11 @@ export class RealTimeDashboard_New extends React.Component {
                 X_axis
                 Y_axis
             }
-            file_piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "FileErrorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+            file_piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
                 X_axis
                 Y_axis
             }
-            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
                 X_axis
                 Y_axis
             }
@@ -1175,14 +1178,14 @@ export class RealTimeDashboard_New extends React.Component {
                     <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            selected={new Date(this.state.startDate)}
+                            selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleStartChange}
                         />
                     </div>
                     <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            selected={new Date(this.state.endDate)}
+                            selected={new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleEndChange}
                         />
                     </div>
