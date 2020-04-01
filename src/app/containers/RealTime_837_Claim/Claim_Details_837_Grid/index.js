@@ -114,21 +114,7 @@ export class Claim_Details_837_Grid extends React.Component {
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
-            columnDefs: [
-                { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "State", field: "State" },
-                { headerName: "ProcessID", field: "ProcessID" },
-                { headerName: "Type", field: "Type" },
-                { headerName: "File Date", field: "FileDate" },
-                { headerName: "File Status", field: "FileStatus" },
-                { headerName: "Submitter", field: "Sender" },
-
-                { headerName: "Load Status", field: "Status" },
-                { headerName: "MCG Status", field: "MCGStatus" },
-                { headerName: "Total Claims", field: "Claimcount" },
-                { headerName: "Rejected Claims", field: "Rejected" },
-                { headerName: "Error Description", field: "FileLevelError" },
-            ],
+           
 
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -274,6 +260,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 MCGStatus
             }
         }`
+        console.log(query);
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
@@ -1446,14 +1433,53 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     _renderList() {
+        let defaultColDef_AgFirstgrid= {
+            editable: false,
+            enableRowGroup: true,
+            enablePivot: true,
+            enableValue: true,
+            sortable: true,
+            resizable: true,
+            filter: true,
+        }
+       
+        let setwidth=this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? defaultColDef_AgFirstgrid  : this.state.defaultColDef
+       let columnDefs= this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? [
+            { headerName: "File Name",   field: "FileName",width: 100 , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State" , width: 70},
+            { headerName: "ProcessID", field: "ProcessID" , width: 70},
+            { headerName: "Type", field: "Type" , width: 70},
+            { headerName: "File Date", field: "FileDate" , width: 70},
+            { headerName: "File Status", field: "FileStatus" , width: 70},
+            { headerName: "Submitter", field: "Sender" , width: 80  },
+            // { headerName: "Load Status", field: "Status" , width: 70},
+            // { headerName: "MCG Status", field: "MCGStatus" ,    width: 70},
+            { headerName: "Total Claims", field: "Claimcount" , width: 70},
+            { headerName: "Rejected Claims", field: "Rejected" , width:80},
+            { headerName: "Error Description", field: "FileLevelError" ,flex:1 },
+        ]:[
+            { headerName: "File Name",   field: "FileName",width: 100 , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State" , width: 80},
+            { headerName: "ProcessID", field: "ProcessID" , width: 70},
+            { headerName: "Type", field: "Type" , width: 70},
+            { headerName: "File Date", field: "FileDate" , width: 70},
+            { headerName: "File Status", field: "FileStatus" , width: 70},
+            { headerName: "Submitter", field: "Sender" , width: 80  },
+            { headerName: "Load Status", field: "Status" , width: 70},
+            { headerName: "MCG Status", field: "MCGStatus" ,   width: 70},
+            { headerName: "Total Claims", field: "Claimcount" , width: 80},
+            { headerName: "Rejected Claims", field: "Rejected" , width:80},
+            { headerName: "Error Description", field: "FileLevelError" ,flex:1 },
+        ]
         return (
             <div>
+                
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
+                        columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
+                        defaultColDef={setwidth}
                         suppressRowClickSelection={true}
                         groupSelectsChildren={true}
                         debug={true}
@@ -1474,8 +1500,12 @@ export class Claim_Details_837_Grid extends React.Component {
                                 this.setState({
                                     showClaims: true,
                                     showerror: false,
+                                    claims_rowData: [],
+                                    Ag_grid_FileName:'',
+                                    Ag_grid_fileDate:''
+                                }, () => {
+                                    this.getTransactions(event.data.FileID)
                                 })
-                                this.getTransactions(event.data.FileID)
                             }
                         }}
                     >
