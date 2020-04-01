@@ -294,15 +294,17 @@ export class RealTimeDashboard_New extends React.Component {
     }
 
     _getCounts = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let query = `{
-            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 TotalCount
                 Accepted
                 Rejected
                 AcceptedwithErrors
                 Processing
             }
-            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
                 Reconciled
                 ReconciledError
                 Loaded
