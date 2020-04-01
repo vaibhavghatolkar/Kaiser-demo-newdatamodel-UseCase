@@ -16,6 +16,7 @@ import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { MDBProgress } from 'mdbreact';
 
 import {
     Chart,
@@ -105,7 +106,7 @@ export class ClaimPaymentDashboard extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
@@ -1324,15 +1325,12 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Load From QNXT', value: totalCount },
-                    // { name: 'Accepted Files', value: accepted },
-                    { name: 'Vaildated', value: acceptedwithErrors },
-                    { name: 'Error', value: rejected },
-                    { name: 'Send To Availity', value: reconciled },
-                    { name: '999 Received', value: reconciledError },
-                    // { name: 'Load Error', value: loadedError },
-                    // { name: 'Load in MCG', value: loaded },
-                    // { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    { name: 'Received From QNXT', value: 30 },
+                    { name: 'Vaildated', value: 10 },
+                    { name: 'Files in Error', value: 5 },
+                    { name: 'Error Resolved', value: 2 },
+                    { name: 'Total Sent To Availity', value: 6 },
+                    { name: '999 Received', value: 4 },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
@@ -1579,31 +1577,84 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
+    getClaimCounts = async () => {
+        let query = `{
+           
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
+                    let _data = res.data.Claim837RTDashboardTable[0]
+
+                    this.setState({
+                        X12Count: data ? data.X12Count : 0,
+                        HiPaaSCount: data ? data.HiPaaSCount : 0,
+                        LoadingClaims: _data ? _data.LoadingClaims : 0,
+                        Accepted_Claims: _data ? _data.Accepted_Claims : 0,
+                        Rejected_Claims: _data ? _data.Rejected_Claims : 0,
+                        FileReject_Claims: _data ? _data.FileReject_Claims : 0,
+                        Processing_Claims: _data ? _data.Processing_Claims : 0,
+                        ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
+                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
 
     renderClaimDetails = () => {
+        // let stage_1 = [
+        //     { 'name': 'Received From QNXT', 'value': '12K' },
+        //     { 'name': 'In HiPaaS', 'value': '11K' },
+        //     { 'name': 'Error', 'value': 900 },
+        // ]
+        // let stage_2 = [
+        //     { 'name': 'WIP', 'value': 90 },
+        //     { 'name': 'Pending', 'value': 100 },
+        //     { 'name': 'Paid', 'value': 120 },
+        //     { 'name': 'Denied', 'value': 10 },
+            
+        // ]
+        // let stage_3 = [
+        //     { 'name': 'Sent to Availity', 'value': 80 },
+        //     { 'name': '999 Not Sent', 'value': 30 },
+        //     // { 'name': 'Accepted %', 'value': '85%' },
+        //     // { 'name': 'Rejected %', 'value': '15%' }
+        // ]
+
         let stage_1 = [
-            { 'name': 'Received From QNXT', 'value': '12K' },
-            { 'name': 'In HiPaaS', 'value': '11K' },
-            { 'name': 'Error', 'value': 900 },
+            { 'name': 'QNXT Generated', 'value': '12K' },
+            { 'name': 'HiPaaS Received ', 'value': '11K' },
+            { 'name': 'Total Number of Errors', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'WIP', 'value': 90 },
-            { 'name': 'Pending', 'value': 100 },
-            { 'name': 'Paid', 'value': 120 },
-            { 'name': 'Denied', 'value': 10 },
+            { 'name': 'Sent to Availity', 'value': 90 },
+            { 'name': 'Number of Acknowledged 835', 'value': 100 },
+            { 'name': 'Number of Accepted 999’s', 'value': 120 },
+            { 'name': 'Number of Rejected 999’s', 'value': 10 },
             
         ]
         let stage_3 = [
-            { 'name': 'Sent to Availity', 'value': 80 },
-            { 'name': '999 Not Sent', 'value': 30 },
-            // { 'name': 'Accepted %', 'value': '85%' },
+            { 'name': 'EFT', 'value': 80 },
+            { 'name': 'CHK', 'value': 20 },
+            { 'name': '% ERA out of total', 'value': 30 },
+            { 'name': '# Availity rejected', 'value': 85 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
-
-        // let stage_4 = [
-        //     { 'name': '999 Error', 'value': 0 },
-        //     { 'name': '277CA Error', 'value': 12 },
-        // ]
+        
 
         return (
             <div className="row" style={{ marginBottom: '12px' }}>
@@ -1649,12 +1700,12 @@ export class ClaimPaymentDashboard extends React.Component {
                             <option value="15">Wisconsin</option>
                         </select>
                     </div>
-                    <div className="form-group col">
+                    {/* <div className="form-group col">
                         <div className="list-dashboard">Provider</div>
                         <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         />
-                    </div>
+                    </div> */}
                     <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
@@ -1709,23 +1760,23 @@ export class ClaimPaymentDashboard extends React.Component {
                             }}
                         >
                             <option value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
+                            <option value="2" selected="selected">Last 30 days</option>
                             <option value="2">Last 90 days</option>
                             <option value="2">Last 180 days</option>
-                            <option value="2" selected="selected">Last year</option>
+                            <option value="2">Last year</option>
                         </select>
                     </div>
                     <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            // selected={new Date(this.state.startDate)}
+                        selected={this.state.startDate ? new Date(this.state.startDate) : ''}
                             onChange={this.handleStartChange}
                         />
                     </div>
                     <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            // selected={new Date(this.state.endDate)}
+                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
                         />
                     </div>
@@ -2014,6 +2065,18 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
+    progressBar(){
+        let k= 35 + '%'
+        let j =20
+        return(
+<div class="progress">
+        <div class="progress-bar" role="progressbar" style={{width: k }}>{k}</div>
+  <div class="progress-bar bg-success" role="progressbar" style={{width: "35%"}}>35%</div>
+  <div class="progress-bar bg-danger" role="progressbar" style={{width: "30%"}}>30%</div>
+</div>
+        )
+    }
+
 
     render() {
 
@@ -2032,8 +2095,9 @@ export class ClaimPaymentDashboard extends React.Component {
                 <div className="row">
                     <div className="col-12">
                         {this.renderTopbar()}
+                        {this.progressBar()}
                         {/* {this.renderSummaryDetails()} */}
-                        <div className="general-header" style={{ marginBottom: "-6px" }}>File Level</div>
+                        <div className="general-header" style={{ marginBottom: "-6px" }}>Remittance File Level</div>
                         {this._renderSummaryDetails()}
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
