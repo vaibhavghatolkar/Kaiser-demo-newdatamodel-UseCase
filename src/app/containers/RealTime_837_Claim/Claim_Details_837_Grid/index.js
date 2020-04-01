@@ -1474,8 +1474,10 @@ export class Claim_Details_837_Grid extends React.Component {
                                 this.setState({
                                     showClaims: true,
                                     showerror: false,
+                                    claims_rowData: []
+                                }, () => {
+                                    this.getTransactions(event.data.FileID)
                                 })
-                                this.getTransactions(event.data.FileID)
                             }
                         }}
                     >
