@@ -201,13 +201,16 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     getClaimCounts = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+
         let query = `{
-            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
             }
-            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 Accepted_Claims
                 Rejected_Claims
                 FileReject_Claims
@@ -599,7 +602,7 @@ export class ClaimProcessingSummary extends React.Component {
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
                         />
                     </div>
@@ -607,7 +610,7 @@ export class ClaimProcessingSummary extends React.Component {
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
                         />
                     </div>

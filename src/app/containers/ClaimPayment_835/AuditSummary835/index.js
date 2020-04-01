@@ -40,7 +40,7 @@ export class AuditSummary835 extends React.Component {
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: '',
             Accepted: '',
@@ -162,11 +162,14 @@ export class AuditSummary835 extends React.Component {
     }
 
     getClaimCounts = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        
         let query = `{
-            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 HiPaaSCount
             }
-            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
+            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 Accepted_Claims
                 Rejected_Claims
                 LoadingClaims
@@ -395,17 +398,12 @@ export class AuditSummary835 extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Load From QNXT', value: totalCount },
-                    // { name: 'Accepted', value: accepted },
-                    // { name: 'Accepted with Errors', value: acceptedwithErrors },
-                    { name: 'Validated', value: reconciled },
-                    { name: 'Error', value: rejected },
-                    { name: 'Send To Availity', value: reconciledError },
-                    // { name: 'Load Error', value: loadedError },
-                    // { name: 'Load in MCG', value: loaded },
-                    // { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
-                    { name: '999 Received', value: Total999 },
-                    // { name: '277 CA', value: Total277CA }
+                    { name: 'Received From QNXT', value: 30 },
+                    { name: 'Vaildated', value: 10 },
+                    { name: 'Files in Error', value: 5 },
+                    { name: 'Error Resolved', value: 2 },
+                    { name: 'Total Sent To Availity', value: 6 },
+                    { name: '999 Received', value: 4 },
                 ]
 
                 this.setState({
@@ -784,13 +782,13 @@ export class AuditSummary835 extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
@@ -798,8 +796,8 @@ export class AuditSummary835 extends React.Component {
                             onSelected={this.onSelected}
                         />
 
-                    </div>
-                    <div className="form-group col-2">
+                    </div> */}
+                    <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -811,7 +809,7 @@ export class AuditSummary835 extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -819,7 +817,7 @@ export class AuditSummary835 extends React.Component {
                             onChange={this.handleStartChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -827,7 +825,7 @@ export class AuditSummary835 extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    <div className="form-group col">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {

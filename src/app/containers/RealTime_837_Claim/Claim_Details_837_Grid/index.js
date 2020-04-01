@@ -1006,7 +1006,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
                         />
                     </div>
@@ -1014,7 +1014,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
                         />
                     </div>
@@ -1445,31 +1445,31 @@ export class Claim_Details_837_Grid extends React.Component {
        
         let setwidth=this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? defaultColDef_AgFirstgrid  : this.state.defaultColDef
        let columnDefs= this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? [
-            { headerName: "File Name",   field: "FileName",width: 100 , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State" , width: 70},
-            { headerName: "ProcessID", field: "ProcessID" , width: 70},
-            { headerName: "Type", field: "Type" , width: 70},
-            { headerName: "File Date", field: "FileDate" , width: 70},
-            { headerName: "File Status", field: "FileStatus" , width: 70},
-            { headerName: "Submitter", field: "Sender" , width: 80  },
-            // { headerName: "Load Status", field: "Status" , width: 70},
-            // { headerName: "MCG Status", field: "MCGStatus" ,    width: 70},
-            { headerName: "Total Claims", field: "Claimcount" , width: 70},
-            { headerName: "Rejected Claims", field: "Rejected" , width:80},
-            { headerName: "Error Description", field: "FileLevelError" ,flex:1 },
+            { headerName: "File Name",   field: "FileName",flex: 1 , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State" , flex: 1},
+            { headerName: "ProcessID", field: "ProcessID" , flex: 1},
+            { headerName: "Type", field: "Type" , flex: 1},
+            { headerName: "File Date", field: "FileDate" , flex: 1},
+            { headerName: "File Status", field: "FileStatus" , flex: 1},
+            { headerName: "Submitter", field: "Sender" , flex: 1  },
+            // { headerName: "Load Status", field: "Status" , flex: 1},
+            // { headerName: "MCG Status", field: "MCGStatus" ,    flex: 1},
+            { headerName: "Total Claims", field: "Claimcount" , flex: 1},
+            { headerName: "Rejected Claims", field: "Rejected" , flex:1},
+            { headerName: "Error Description", field: "FileLevelError" ,flex: 4},
         ]:[
-            { headerName: "File Name",   field: "FileName",width: 100 , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State" , width: 80},
-            { headerName: "ProcessID", field: "ProcessID" , width: 70},
-            { headerName: "Type", field: "Type" , width: 70},
-            { headerName: "File Date", field: "FileDate" , width: 70},
-            { headerName: "File Status", field: "FileStatus" , width: 70},
-            { headerName: "Submitter", field: "Sender" , width: 80  },
-            { headerName: "Load Status", field: "Status" , width: 70},
-            { headerName: "MCG Status", field: "MCGStatus" ,   width: 70},
-            { headerName: "Total Claims", field: "Claimcount" , width: 80},
-            { headerName: "Rejected Claims", field: "Rejected" , width:80},
-            { headerName: "Error Description", field: "FileLevelError" ,flex:1 },
+            { headerName: "File Name",   field: "FileName" , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State"},
+            { headerName: "ProcessID", field: "ProcessID"},
+            { headerName: "Type", field: "Type"},
+            { headerName: "File Date", field: "FileDate"},
+            { headerName: "File Status", field: "FileStatus"},
+            { headerName: "Submitter", field: "Sender"},
+            { headerName: "Load Status", field: "Status"},
+            { headerName: "MCG Status", field: "MCGStatus"},
+            { headerName: "Total Claims", field: "Claimcount"},
+            { headerName: "Rejected Claims", field: "Rejected"},
+            { headerName: "Error Description", field: "FileLevelError"},
         ]
         return (
             <div>

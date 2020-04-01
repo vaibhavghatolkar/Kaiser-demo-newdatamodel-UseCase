@@ -523,7 +523,7 @@ export class Load_Exception extends React.Component {
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
                         />
                     </div>
@@ -531,7 +531,7 @@ export class Load_Exception extends React.Component {
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
                         />
                     </div>
