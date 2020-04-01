@@ -77,7 +77,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 { headerName: "Process Id", field: "" },
                 { headerName: "State", field: "" },
                 { headerName: "QNXT File Date", field: "FileDate" },
-                { headerName: "QNXT File Status", field: "" },
+                { headerName: "File Status", field: "" },
                 { headerName: "999", field: "", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Claim Id", field: "ClaimID" },
                 { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
@@ -441,7 +441,7 @@ console.log("asjfhsaf" , data)
         headerArray.push(
             { value: ' QNXT File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By n.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
             { value: 'QNXT File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
-            { value: 'QNXT File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
+            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
             { value: '999' },
             { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Claim Received Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
