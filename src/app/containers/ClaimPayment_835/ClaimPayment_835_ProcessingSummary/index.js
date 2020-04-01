@@ -80,12 +80,15 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 { headerName: "File Status", field: "" },
                 { headerName: "999", field: "", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Claim Id", field: "ClaimID" },
+                { headerName: "Days", field: "Days" },
                 { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
                 { headerName: "Check EFT No", field: "CheckEFTNo" },
                 { headerName: "Check EFT Date", field: "CheckEFTDt" },
                 { headerName: "Payment Method                ", field: "CHECKEFTFlag" },
                 { headerName: "Total Charge Amount    ", field: "TotalChargeAmt" },
                 { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt" },
+                { headerName: "Total Bill Amount    ", field: "TotalBillAmount" },
+                { headerName: "Total Adjustment Amount", field: "TotalAdjustmentAmount" },
             
             ],
 
@@ -336,6 +339,9 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
   AccountNo
   CHECKEFTFlag
   Receiver
+  TotalAdjustmentAmount
+TotalBillAmount
+Days
             }
         }`
        console.log("sakhjsaf" , query)
@@ -439,18 +445,22 @@ console.log("asjfhsaf" , data)
         let rowArray = []
 
         headerArray.push(
-            { value: ' QNXT File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By n.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
-            { value: 'QNXT File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
+            { value: ' QNXT File Name' },
+            { value: 'QNXT File Date'},
+            { value: 'File Status' },
             { value: '999' },
-            { value: 'Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
-            { value: 'Claim Received Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
-            { value: 'Check EFT No', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
-            { value: 'Check EFT Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
+            { value: 'Claim Id' },
+            { value: 'Day' },
+            // { value: 'Claim Received Date'},
+            { value: 'Check EFT No'},
+            // { value: 'Check EFT Date'},
             { value: 'Payment Method' },
             { value: 'Total Charge Amount' },
             { value: 'Total Paid Amount' },
-       
+            { value: 'Total Bill Amount' },
+            { value: 'Total Adjustment Amount' },
+            
+        
         )
        
         rowArray.push(
@@ -459,12 +469,15 @@ console.log("asjfhsaf" , data)
             { value: '' },
             { value: ''  },
             { value: 'ClaimID' },
-            { value: 'ClaimReceivedDate', isDate: 1 },
+            { value: 'Days'},
+            // { value: 'ClaimReceivedDate', isDate: 1 },
             { value: 'CheckEFTNo' },
-            { value: 'CheckEFTDt' },
+            // { value: 'CheckEFTDt' },
             { value: 'CheckEFTNo' },
             { value: 'TotalChargeAmt' },
             { value: 'TotalClaimPaymentAmt'  },
+            { value: 'TotalBillAmount' },
+            { value: 'TotalAdjustmentAmount'  },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
         
         )
@@ -762,21 +775,25 @@ console.log("asjfhsaf" , data)
 
     renderClaimDetails = () => {
         let stage_1 = [
-            { 'name': 'Received From QNXT', 'value': '12K' },
-            { 'name': 'In HiPaaS', 'value': '11K' },
-            { 'name': 'Error', 'value': 900 },
+            { 'name': 'QNXT Generated', 'value': '12K' },
+            { 'name': 'HiPaaS Received ', 'value': '11K' },
+            { 'name': 'Total Number of Errors', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'WIP', 'value': 90 },
-            { 'name': 'Pending', 'value': 100 },
-            { 'name': 'Paid', 'value': 120 },
-            { 'name': 'Denied', 'value': 10 },
+            { 'name': 'Sent to Availity', 'value': 90 },
+            { 'name': 'Number of Acknowledged 835', 'value': 100 },
+            { 'name': 'Number of Accepted 999’s', 'value': 120 },
+            { 'name': 'Number of Rejected 999’s', 'value': 10 },
+            
         ]
-        let stage_3 = [ 
-            { 'name': 'Sent to Availity', 'value': 80 },
-            { 'name': '999 Not Sent', 'value': 30 },
+        let stage_3 = [
+            { 'name': 'EFT', 'value': 80 },
+            { 'name': 'CHK', 'value': 20 },
+            { 'name': '% ERA out of total', 'value': 30 },
+            { 'name': '# Availity rejected', 'value': 85 },
+            // { 'name': 'Rejected %', 'value': '15%' }
         ]
-
+        
         let stage_4 = [
        
         ]
@@ -839,7 +856,7 @@ console.log("asjfhsaf" , data)
     render() {
         return (
             <div>
-                <h5 className="headerText">Payment Processing Summary</h5>
+                <h5 className="headerText">835 Payment Processing Summary</h5>
                 {this.renderTopBar()}
                 {/* {this._renderStats()} */}
                 {this.renderClaimDetails()}
