@@ -451,9 +451,9 @@ console.log("asjfhsaf" , data)
             { value: '999' },
             { value: 'Claim Id' },
             { value: 'Day' },
-            { value: 'Claim Received Date'},
+            // { value: 'Claim Received Date'},
             { value: 'Check EFT No'},
-            { value: 'Check EFT Date'},
+            // { value: 'Check EFT Date'},
             { value: 'Payment Method' },
             { value: 'Total Charge Amount' },
             { value: 'Total Paid Amount' },
@@ -470,9 +470,9 @@ console.log("asjfhsaf" , data)
             { value: ''  },
             { value: 'ClaimID' },
             { value: 'Days'},
-            { value: 'ClaimReceivedDate', isDate: 1 },
+            // { value: 'ClaimReceivedDate', isDate: 1 },
             { value: 'CheckEFTNo' },
-            { value: 'CheckEFTDt' },
+            // { value: 'CheckEFTDt' },
             { value: 'CheckEFTNo' },
             { value: 'TotalChargeAmt' },
             { value: 'TotalClaimPaymentAmt'  },
@@ -775,21 +775,25 @@ console.log("asjfhsaf" , data)
 
     renderClaimDetails = () => {
         let stage_1 = [
-            { 'name': 'Received From QNXT', 'value': '12K' },
-            { 'name': 'In HiPaaS', 'value': '11K' },
-            { 'name': 'Error', 'value': 900 },
+            { 'name': 'QNXT Generated', 'value': '12K' },
+            { 'name': 'HiPaaS Received ', 'value': '11K' },
+            { 'name': 'Total Number of Errors', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'WIP', 'value': 90 },
-            { 'name': 'Pending', 'value': 100 },
-            { 'name': 'Paid', 'value': 120 },
-            { 'name': 'Denied', 'value': 10 },
+            { 'name': 'Sent to Availity', 'value': 90 },
+            { 'name': 'Number of Acknowledged 835', 'value': 100 },
+            { 'name': 'Number of Accepted 999’s', 'value': 120 },
+            { 'name': 'Number of Rejected 999’s', 'value': 10 },
+            
         ]
-        let stage_3 = [ 
-            { 'name': 'Sent to Availity', 'value': 80 },
-            { 'name': '999 Not Sent', 'value': 30 },
+        let stage_3 = [
+            { 'name': 'EFT', 'value': 80 },
+            { 'name': 'CHK', 'value': 20 },
+            { 'name': '% ERA out of total', 'value': 30 },
+            { 'name': '# Availity rejected', 'value': 85 },
+            // { 'name': 'Rejected %', 'value': '15%' }
         ]
-
+        
         let stage_4 = [
        
         ]
