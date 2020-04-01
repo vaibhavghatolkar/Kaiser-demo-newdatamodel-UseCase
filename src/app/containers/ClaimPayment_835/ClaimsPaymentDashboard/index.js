@@ -97,7 +97,7 @@ export class ClaimPaymentDashboard extends React.Component {
         this.state = {
             claimsList: [],
             summaryList: [],
-            summaryCount:[],
+            summaryCount: [],
             totalFiles: [],
             second_data: {},
             pie_data: {},
@@ -120,7 +120,7 @@ export class ClaimPaymentDashboard extends React.Component {
             rejected_per: 0,
             ClaimBarChart: [],
             claimLabels: [],
-            complience:[],
+            complience: [],
             data,
             //////////----------table----
             Organization: '',
@@ -146,7 +146,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 { headerName: "Remittance sent date", field: "" },
                 // { headerName: "Compliance vs Submission date", field: "" },
                 { headerName: "# of errors", field: "" },
-                
+
             ],
 
             autoGroupColumnDef: {
@@ -184,7 +184,7 @@ export class ClaimPaymentDashboard extends React.Component {
             pivotPanelShow: 'always',
         }
 
-        
+
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
 
@@ -916,9 +916,9 @@ export class ClaimPaymentDashboard extends React.Component {
 
                     {/* <div className="col-4" style={{ padding: '0' }}>
                         <h6>Top 5 Providers</h6> */}
-                        {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
+                    {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
 
-                        {/* <Bar
+                    {/* <Bar
                             data={this.getBarData(this.state.providerChartLabel, this.state.providerChartData, '#139DC9')}
                             width={100}
                             height={60}
@@ -965,14 +965,14 @@ export class ClaimPaymentDashboard extends React.Component {
                         <hr style={{ borderColor: 'lightgrey' }} /> */}
 
 
-                        {/* <div className ="row">
+                    {/* <div className ="row">
 <div className="col-9"> BCBS </div>
 <div className="col-3"> 16</div>
 </div> */}
-                        {/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
+                    {/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
                     {/* </div> */}
 
-                    <div className="col-5" style={{padding: '0'}}>
+                    <div className="col-5" style={{ padding: '0' }}>
                         <h6> EFT vs CHK </h6>
                         {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
                         <Bar
@@ -1027,7 +1027,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         </div>
                         <hr style={{ borderColor: 'lightgrey' }} />
                     </div>
-                        <div className="col-1"></div>
+                    <div className="col-1"></div>
                     <div className="col-5" style={{ padding: '0' }}>
                         <h6> Average # of Errors </h6>
                         {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
@@ -1109,7 +1109,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div className="row chart-div">
                 <div className="chart-container chart col-12">
-                <div className="chart-header">Compliance</div>
+                    <div className="chart-header">Compliance</div>
                     <Pie data={data}
                         options={{
                             elements: {
@@ -1507,7 +1507,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    // url={Strings.Claim_Details_837_Grid}
+                // url={Strings.Claim_Details_837_Grid}
                 />
 
             )
@@ -1626,7 +1626,7 @@ export class ClaimPaymentDashboard extends React.Component {
         //     { 'name': 'Pending', 'value': 100 },
         //     { 'name': 'Paid', 'value': 120 },
         //     { 'name': 'Denied', 'value': 10 },
-            
+
         // ]
         // let stage_3 = [
         //     { 'name': 'Sent to Availity', 'value': 80 },
@@ -1645,7 +1645,7 @@ export class ClaimPaymentDashboard extends React.Component {
             { 'name': 'Number of Acknowledged 835', 'value': 100 },
             { 'name': 'Number of Accepted 999’s', 'value': 120 },
             { 'name': 'Number of Rejected 999’s', 'value': 10 },
-            
+
         ]
         let stage_3 = [
             { 'name': 'EFT', 'value': 80 },
@@ -1654,7 +1654,7 @@ export class ClaimPaymentDashboard extends React.Component {
             { 'name': '# Availity rejected', 'value': 85 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
-        
+
 
         return (
             <div className="row" style={{ marginBottom: '12px' }}>
@@ -1769,14 +1769,14 @@ export class ClaimPaymentDashboard extends React.Component {
                     <div className="form-group col">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
-                        selected={this.state.startDate ? new Date(this.state.startDate) : ''}
+                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
                         />
                     </div>
                     <div className="form-group col">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
+                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
                         />
                     </div>
@@ -1911,7 +1911,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     claimLabels: claimLabels,
                     second_data: second_data,
                     pie_data: pie_data,
-                    complience:complience
+                    complience: complience
                 })
             })
             .catch(err => {
@@ -2016,14 +2016,14 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div className="chart-div">
                 <div className="row">
-                    <div className="col-6" style={{padding: '6px'}}>
+                    <div className="col-6" style={{ padding: '6px' }}>
                         {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                     </div>
-                    <div className="col-6" style={{padding: '8px'}}>
+                    <div className="col-6" style={{ padding: '8px' }}>
                         {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
                     </div>
                 </div>
-                </div>
+            </div>
         )
     }
 
@@ -2065,15 +2065,15 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-    progressBar(){
-        let k= 35 + '%'
-        let j =20
-        return(
-<div class="progress">
-        <div class="progress-bar" role="progressbar" style={{width: k }}>{k}</div>
-  <div class="progress-bar bg-success" role="progressbar" style={{width: "35%"}}>35%</div>
-  <div class="progress-bar bg-danger" role="progressbar" style={{width: "30%"}}>30%</div>
-</div>
+    progressBar() {
+        let k = 35 + '%'
+        let j = 20
+        return (
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style={{ width: k }}>{k}</div>
+                <div class="progress-bar bg-success" role="progressbar" style={{ width: "35%" }}>35%</div>
+                <div class="progress-bar bg-danger" role="progressbar" style={{ width: "30%" }}>30%</div>
+            </div>
         )
     }
 
@@ -2102,9 +2102,9 @@ export class ClaimPaymentDashboard extends React.Component {
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
                         {this.renderAllPieCharts()}
-                        
+
                         {/* {this.renderMonthlyTrendsChart()} */}
-                       {/* <div className="row">
+                        {/* <div className="row">
                            <div className="col-4">
                            {this.renderCharts()}
                            </div>
@@ -2115,18 +2115,18 @@ export class ClaimPaymentDashboard extends React.Component {
                        </div> */}
                     </div>
 
-                   
+
                 </div>
                 <div className="row">
-                <div className="col-8 nopadding">
-              
-                {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
-                {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
-                {/* {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}     */}
-                </div>
-                <div className="col-3 nopadding" style={{marginLeft: '60px'}}>
+                    <div className="col-8 nopadding">
+
+                        {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
+                        {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
+                        {/* {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}     */}
+                    </div>
+                    <div className="col-3 nopadding" style={{ marginLeft: '60px' }}>
                         {this.renderCharts()}
-                        
+
                         {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
                         {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
 
