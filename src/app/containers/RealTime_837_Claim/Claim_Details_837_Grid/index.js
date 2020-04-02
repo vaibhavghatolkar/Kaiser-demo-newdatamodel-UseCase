@@ -112,7 +112,7 @@ export class Claim_Details_837_Grid extends React.Component {
             page1: 1,
 
             gridType: 1,
-            paginationPageSize: 10,
+            paginationPageSize: 5,
             domLayout: 'autoHeight',
            
 
@@ -132,17 +132,22 @@ export class Claim_Details_837_Grid extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: false,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true,
+                // editable: false,
+                // enableRowGroup: true,
+                // enablePivot: true,
+                // enableValue: true,
+                // sortable: true,
+                // resizable: true,
+                // filter: true,
+                // flex: 1,
+                // minWidth: 100,
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
                 sortable: true,
                 resizable: true,
-                filter: true,
-                flex: 1,
-                minWidth: 100,
 
             },
+           
 
 
             rowSelection: 'multiple',
@@ -1433,43 +1438,36 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     _renderList() {
-        let defaultColDef_AgFirstgrid= {
-            editable: false,
-            enableRowGroup: true,
-            enablePivot: true,
-            enableValue: true,
-            sortable: true,
-            resizable: true,
-            filter: true,
-        }
+     
        
-        let setwidth=this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? defaultColDef_AgFirstgrid  : this.state.defaultColDef
+        // let setwidth=this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? defaultColDef_AgFirstgrid  : this.state.defaultColDef
        let columnDefs= this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? [
-            { headerName: "File Name",   field: "FileName",flex: 1 , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State" , flex: 1},
-            { headerName: "ProcessID", field: "ProcessID" , flex: 1},
-            { headerName: "Type", field: "Type" , flex: 1},
-            { headerName: "File Date", field: "FileDate" , flex: 1},
-            { headerName: "File Status", field: "FileStatus" , flex: 1},
-            { headerName: "Submitter", field: "Sender" , flex: 1  },
-            // { headerName: "Load Status", field: "Status" , flex: 1},
-            // { headerName: "MCG Status", field: "MCGStatus" ,    flex: 1},
-            { headerName: "Total Claims", field: "Claimcount" , flex: 1},
-            { headerName: "Rejected Claims", field: "Rejected" , flex:1},
-            { headerName: "Error Description", field: "FileLevelError" ,flex: 4},
+            { headerName: "File Name",   field: "FileName",width:130, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State" , width:60 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "ProcessID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Type", field: "Type", width:50 ,cellStyle: { wordBreak: 'break-all',  textAlign: 'center',   'white-space': 'normal' }},
+            { headerName: "File Date", field: "FileDate" , width:100},
+            { headerName: "File Status", field: "FileStatus", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Submitter", field: "Sender" , width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },        
+            { headerName: "Total Claims", field: "Claimcount", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Error Description", field: "FileLevelError",  width:340, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }} ,
+            { headerName: "Load Status", field: "Status", width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "MCG Status", field: "MCGStatus" , width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
         ]:[
-            { headerName: "File Name",   field: "FileName" , cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State"},
-            { headerName: "ProcessID", field: "ProcessID"},
-            { headerName: "Type", field: "Type"},
-            { headerName: "File Date", field: "FileDate"},
-            { headerName: "File Status", field: "FileStatus"},
-            { headerName: "Submitter", field: "Sender"},
-            { headerName: "Load Status", field: "Status"},
-            { headerName: "MCG Status", field: "MCGStatus"},
-            { headerName: "Total Claims", field: "Claimcount"},
-            { headerName: "Rejected Claims", field: "Rejected"},
-            { headerName: "Error Description", field: "FileLevelError"},
+
+            { headerName: "File Name",   field: "FileName", cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State" , width:60 ,cellStyle: { wordBreak: 'break-all',  textAlign: 'center', 'white-space': 'normal' } },
+            { headerName: "ProcessID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Type", field: "Type", width:50 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "File Date", field: "FileDate" , width:100},
+            { headerName: "File Status", field: "FileStatus", width:140,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Submitter", field: "Sender" , width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },        
+            { headerName: "Load Status", field: "Status" , width:80},
+            { headerName: "MCG Status", field: "MCGStatus" , width:80},
+            { headerName: "Total Claims", field: "Claimcount", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Error Description", field: "FileLevelError",  flex:1,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }} ,
         ]
         return (
             <div>
@@ -1479,7 +1477,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         modules={this.state.modules}
                         columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={setwidth}
+                        defaultColDef={this.state.defaultColDef}
                         suppressRowClickSelection={true}
                         groupSelectsChildren={true}
                         debug={true}
@@ -1518,17 +1516,17 @@ export class Claim_Details_837_Grid extends React.Component {
     _renderClaims() {
 
         let columnDefs = [
-            { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: {wordBreak: 'break-all',   'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             //            { headerName: "File Name", field: "FileName" },
             // { headerName: "File Date", field: "FileCrDate" },
 
-            { headerName: "X12 Claim Id", field: "ClaimID" },
-            { headerName: "Claim Date", field: "ClaimDate" },
-            { headerName: "Claim Status", field: "ClaimStatus" },
-            { headerName: "Subscriber Id", field: "Subscriber_ID" },
-            { headerName: "HiPaaS Status", field: "Transaction_Status" },
-            { headerName: "Adjudication Status", field: "adjudication_status" },
-            { headerName: "Claim Amount", field: "Claim_Amount" },
+            { headerName: "X12 Claim Id", field: "ClaimID" ,width:140 , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Claim Date", field: "ClaimDate" ,width:100  },
+            { headerName: "Claim Status", field: "ClaimStatus" ,width:140},
+            { headerName: "Subscriber Id", field: "Subscriber_ID" ,width:140},
+            { headerName: "HiPaaS Status", field: "Transaction_Status",width:100 },
+            { headerName: "Adjudication Status", field: "adjudication_status",width:140 },
+            { headerName: "Claim Amount", field: "Claim_Amount",flex:1},
 
 
 
@@ -1605,7 +1603,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
 
 
-            { headerName: "Error Description", field: "ErrorDesc", flex: 1 },
+            { headerName: "Error Description", field: "ErrorDesc" , flex:1 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },
 
 
 
@@ -1619,7 +1617,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         modules={this.state.modules}
                         columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={defaultColDef}
+                        defaultColDef={this.state.defaultColDef}
                         suppressRowClickSelection={true}
                         groupSelectsChildren={true}
                         debug={true}
@@ -1651,7 +1649,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "Service Line No.", field: "ServiceLineCount" },
             { headerName: " Service Date", field: "ServiceDate" },
             { headerName: "Procedure Code", field: "ProcedureDate" },
-            { headerName: "Unit", field: "PaidServiceUnitCount" },
+            { headerName: "Unit", field: "PaidServiceUnitCount" ,flex:1},
 
         ]
 
@@ -1688,22 +1686,22 @@ export class Claim_Details_837_Grid extends React.Component {
     _ClaimView_Info_Table() {
         if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
         let columnDefs = [
-            { headerName: " File Name", field: "FileName" },
-            { headerName: "Receiver", field: "Receiver" },
-            { headerName: " HL20 Count", field: "HL20Count" },
-            { headerName: "HL22 Count", field: "HL22Count" },
-            { headerName: "HL23 Count", field: "HL23Count" },
-            { headerName: "Molina Claim Id", field: "MolinaClaimID" },
-            { headerName: "X12 Claim Id", field: "ClaimID" },
-            { headerName: "Claim Date", field: "ClaimDate" },
-            { headerName: "Subscriber First Name", field: "SubscriberFirstName" },
-            { headerName: "Subscriber Last Name", field: "SubscriberLastName" },
-            { headerName: "Admission Date", field: "AdmissionDate" },
-            { headerName: "Claim Amount", field: "Claim_Amount" },
-            { headerName: "Provider Address", field: "BillingProviderAddress" },
-            { headerName: "Claim Status", field: "ClaimStatus" },
-            { headerName: "ICD Code", field: "ICDCode" },
-            { headerName: "Accident Date", field: "AccidentDate" },
+            { headerName: " File Name", field: "FileName" , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal'}},
+            { headerName: "Receiver", field: "Receiver" ,width:100 },
+            { headerName: " HL20 Count", field: "HL20Count",width:80 },
+            { headerName: "HL22 Count", field: "HL22Count",width:80 },
+            { headerName: "HL23 Count", field: "HL23Count" ,width:80},
+            { headerName: "Molina Claim Id", field: "MolinaClaimID" ,width:120 , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' }  },
+            { headerName: "X12 Claim Id", field: "ClaimID",width:100 },
+            { headerName: "Claim Date", field: "ClaimDate", width:100},
+            { headerName: "Subscriber First Name", field: "SubscriberFirstName",width:100 },
+            { headerName: "Subscriber Last Name", field: "SubscriberLastName",width:100 },
+            { headerName: "Admission Date", field: "AdmissionDate",width:100 },
+            { headerName: "Claim Amount", field: "Claim_Amount",width:100 },
+            { headerName: "Provider Address", field: "BillingProviderAddress",width:140 ,cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Claim Status", field: "ClaimStatus",width:100 },
+            { headerName: "ICD Code", field: "ICDCode",width:100 },
+            { headerName: "Accident Date", field: "AccidentDate",width:120 },
         ]
 
         return (

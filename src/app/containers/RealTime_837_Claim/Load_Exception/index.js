@@ -102,22 +102,22 @@ export class Load_Exception extends React.Component {
             page1: 1,
 
             gridType: 1,
-            paginationPageSize: 10,
+            paginationPageSize: 5,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "State", field: "State" },
-                { headerName: "ProcessID", field: "ProcessID" },
-                { headerName: "Type", field: "Type" },
-                { headerName: "File Date", field: "FileDate" },
-                { headerName: "File Status", field: "FileStatus" },
-                { headerName: "Submitter", field: "Sender" },
+                { headerName: "File Name", field: "FileName",  cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State",width:70 },
+                { headerName: "ProcessID", field: "ProcessID",width:110,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} },
+                { headerName: "Type", field: "Type" ,width:50  },
+                { headerName: "File Date", field: "FileDate",width:100  },
+                { headerName: "File Status", field: "FileStatus" ,width:80},
+                { headerName: "Submitter", field: "Sender",width:80 },
 
-                { headerName: "Load Status", field: "Status" },
-                { headerName: "MCG Status", field: "MCGStatus" },
-                { headerName: "Total Claims", field: "Claimcount" },
-                { headerName: "Rejected Claims", field: "Rejected" },
-                { headerName: "Error Description", field: "FileLevelError" },
+                { headerName: "Load Status", field: "Status" ,width:80},
+                { headerName: "MCG Status", field: "MCGStatus",width:80 },
+                { headerName: "Total Claims", field: "Claimcount" ,width:80 },
+                { headerName: "Rejected Claims", field: "Rejected",width:80 },
+                { headerName: "Error Description", field: "FileLevelError",cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}  },
             ],
 
             autoGroupColumnDef: {
@@ -136,15 +136,10 @@ export class Load_Exception extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: false,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true,
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
                 sortable: true,
                 resizable: true,
-                filter: true,
-                flex: 1,
-                minWidth: 100,
 
             },
 
@@ -213,7 +208,7 @@ export class Load_Exception extends React.Component {
         }
 
         let query = `{            
-            Claim837RTLoadExceptionFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"", Status:"", MCGStatus:"", FileID: "") {
+            Claim837RTLoadExceptionFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"", Status:"", MCGStatus:"${this.state.mcgStatus}", FileID: "") {
                 RecCount
                 FileID
                 FileName
@@ -882,25 +877,15 @@ export class Load_Exception extends React.Component {
 
     _renderClaims() {
       
-        let defaultColDef= {
-            editable: false,
-            enableRowGroup: true,
-            enablePivot: true,
-            enableValue: true,
-            sortable: true,
-            resizable: true,
-            filter: true,
-        }
-
-          let columnDefs = [
-            { headerName: "File Name", field: "FileName",width:200},
-            { headerName: "File Date", field: "FileDate", width:150},
-            { headerName: "Process ID", field: "ProcessID", width:120},
+         let columnDefs = [
+            { headerName: "File Name", field: "FileName",width:200, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} },
+            { headerName: "File Date", field: "FileDate", width:100},
+            { headerName: "Process ID", field: "ProcessID", width:140 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
             { headerName: "Claim Id", field: "ClaimID", width:120},
             { headerName: "Process Name", field: "ProcessName", width:120},
                        
-            { headerName: "State" , field: "State", width:100 },
-            { headerName: "Exception", field: "Exception",flex:1}
+            { headerName: "State" , field: "State", width:70 },
+            { headerName: "Exception", field: "Exception",flex:1 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} }
           ]
 
         return (
@@ -911,7 +896,7 @@ export class Load_Exception extends React.Component {
                         modules={this.state.modules}
                         columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={defaultColDef}
+                        defaultColDef={this.state.defaultColDef}
                         suppressRowClickSelection={true}
                         groupSelectsChildren={true}
                         debug={true}

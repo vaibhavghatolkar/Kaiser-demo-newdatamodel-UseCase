@@ -126,8 +126,8 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "File Name", field: "FileName", cellStyle: {   wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer'  }  },
                 { headerName: "State", field: "State" , width:70 },
                 { headerName: "ProcessID", field: "ProcessID",  width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "Type", field: "Type" ,width:70 },
-                { headerName: "File Date", field: "FileDate" ,width:100 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },
+                { headerName: "Type", field: "Type" ,width:50 },
+                { headerName: "File Date", field: "FileDate" ,width:100},
                 { headerName: "File Status", field: "FileStatus" ,width:80 },
                 { headerName: "Load Status", field: "Status",width:80 },
                 { headerName: "MCG Load Status", field: "MCGStatus" ,width:100 },
@@ -362,7 +362,7 @@ export class RealTimeDashboard_New extends React.Component {
                     { name: 'Rejected Files', value: rejected },
                     { name: 'Reconciled Files', value: reconciled },
                     { name: 'Reconciled Error', value: reconciledError },
-                    { name: 'Load Error', value: loadedError },
+                    { name: 'Load Error', value: loadedError,  },
                     { name: 'Load in MCG', value: loaded },
                     { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                 ]
@@ -1049,6 +1049,7 @@ export class RealTimeDashboard_New extends React.Component {
                     mcgStatus: mcgStatus
                 },
             ]
+            let geturl=mcgStatus=="Exception" ? Strings.Load_Exception :Strings.Claim_Details_837_Grid
             row.push(
                 <Tiles
                     isClickable={
@@ -1059,7 +1060,7 @@ export class RealTimeDashboard_New extends React.Component {
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={Strings.Claim_Details_837_Grid}
+                    url={geturl}
                 />
 
             )
