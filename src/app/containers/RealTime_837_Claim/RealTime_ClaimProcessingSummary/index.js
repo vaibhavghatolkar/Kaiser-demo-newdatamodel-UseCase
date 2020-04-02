@@ -822,6 +822,7 @@ export class ClaimProcessingSummary extends React.Component {
                     paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
+                    enableCellTextSelection={true}    
                     onCellClicked={(event) => {
                         if (event.colDef.headerName == '999') {
                             this.goto999(event.data.FileID)

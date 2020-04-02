@@ -832,21 +832,8 @@ console.log("asjfhsaf" , data)
                     paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
-                    // onCellClicked={(event) => {
-                    //     if (event.colDef.headerName == '999') {
-                    //         this.goto999(event.data.FileID)
-                    //     }
-                    //     if (event.colDef.headerName == '277CA') {
-                    //         this.goto277(event.data.FileID)
-                    //     }
-                    //     if (event.colDef.headerName == 'File Name') {
-                    //         this.setState({
-                    //             incoming_fileId: event.data.FileID
-                    //         }, () => {
-                    //             this.gotoDetails()
-                    //         })
-                    //     }
-                    // }}
+                    enableCellTextSelection={true}    
+                    
                 >
                 </AgGridReact>
             </div>

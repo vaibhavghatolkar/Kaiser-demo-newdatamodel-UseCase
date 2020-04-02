@@ -860,7 +860,7 @@ export class Load_Exception extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                         icons={this.state.icons}
-
+                        enableCellTextSelection={true}    
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
@@ -926,7 +926,7 @@ export class Load_Exception extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.claims_rowData}
 
-                      
+                        enableCellTextSelection={true}    
                     >
                     </AgGridReact>
                 </div>

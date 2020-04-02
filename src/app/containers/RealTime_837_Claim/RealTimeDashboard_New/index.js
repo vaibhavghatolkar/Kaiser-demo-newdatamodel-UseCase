@@ -21,6 +21,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
+
 let val = ''
 const second_data = {
     labels: [
@@ -114,19 +115,25 @@ export class RealTimeDashboard_New extends React.Component {
             gridflag: '',
             paginationPageSize: 10,
             domLayout: 'autoHeight',
-
+            defaultColDef: {
+              
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
+                sortable: true,
+                resizable: true,
+              },          
             columnDefs: [
-                { headerName: "File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "State", field: "State" },
-                { headerName: "ProcessID", field: "ProcessID" },
-                { headerName: "Type", field: "Type" },
-                { headerName: "File Date", field: "FileDate" },
-                { headerName: "File Status", field: "FileStatus" },
-                { headerName: "Load Status", field: "Status" },
-                { headerName: "MCG Load Status", field: "MCGStatus" },
-                { headerName: "Submitter", field: "Sender" },
-                { headerName: "Total Claims", field: "Claimcount" },
-                { headerName: "Rejected Claims", field: "Rejected" },
+                { headerName: "File Name", field: "FileName", cellStyle: {   wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer'  }  },
+                { headerName: "State", field: "State" , width:70 },
+                { headerName: "ProcessID", field: "ProcessID",  width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
+                { headerName: "Type", field: "Type" ,width:70 },
+                { headerName: "File Date", field: "FileDate" ,width:100 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },
+                { headerName: "File Status", field: "FileStatus" ,width:80 },
+                { headerName: "Load Status", field: "Status",width:80 },
+                { headerName: "MCG Load Status", field: "MCGStatus" ,width:100 },
+                { headerName: "Submitter", field: "Sender" ,width:80 },
+                { headerName: "Total Claims", field: "Claimcount" ,width:100 },
+                { headerName: "Rejected Claims", field: "Rejected", flex:1},
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -143,17 +150,7 @@ export class RealTimeDashboard_New extends React.Component {
                 cellRenderer: 'agGroupCellRenderer',
                 cellRendererParams: { checkbox: true },
             },
-            defaultColDef: {
-                editable: false,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true,
-                sortable: true,
-                resizable: true,
-                filter: true,
-                flex: 1,
-                minWidth: 100,
-            },
+       
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
@@ -162,6 +159,7 @@ export class RealTimeDashboard_New extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
         }
+     
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
 
@@ -820,6 +818,7 @@ export class RealTimeDashboard_New extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        enableCellTextSelection={true}                        
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({

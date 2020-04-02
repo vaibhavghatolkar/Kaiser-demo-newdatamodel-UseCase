@@ -480,6 +480,8 @@ export class Outbound_277CAReponse extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}    
                         onCellClicked={(event) => {
                             if(event.colDef.headerName == 'Response File Name'){
                             this.render277CADetails(event.data.id)
