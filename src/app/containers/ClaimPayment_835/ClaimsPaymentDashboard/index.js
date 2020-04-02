@@ -1571,7 +1571,7 @@ export class ClaimPaymentDashboard extends React.Component {
         })
 
         return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px', marginLeft: '16px' }}>
                 {row}
             </div>
         )
@@ -1995,7 +1995,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             piechart_data && piechart_data.labels && piechart_data.labels.length > 0
                 ?
-                <div className="row chart-container-full chart clickable" onClick={() => { this.gotoClaimDetails(sendData) }}>
+                <div className="row chart-container-full chart clickable" style={{marginLeft: '9px'}} onClick={() => { this.gotoClaimDetails(sendData) }}>
                     <div className="col-7 nopadding">
                         <div className="chart-header">{header}</div>
                         {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
@@ -2071,9 +2071,9 @@ export class ClaimPaymentDashboard extends React.Component {
         let j = 20
         return (
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style={{ width: k }}>{k}</div>
-                <div class="progress-bar bg-success" role="progressbar" style={{ width: "35%" }}>35%</div>
-                <div class="progress-bar bg-danger" role="progressbar" style={{ width: "30%" }}>30%</div>
+                <div class="progress-bar" role="progressbar" style={{ width: k }}>Received From QNXT ({k})</div>
+                <div class="progress-bar bg-success" role="progressbar" style={{ width: "35%" }}>Validated (35%)</div>
+                <div class="progress-bar bg-danger" role="progressbar" style={{ width: "30%" }}>Files in Error (30%)</div>
             </div>
         )
     }
@@ -2119,7 +2119,7 @@ export class ClaimPaymentDashboard extends React.Component {
 
                 </div>
                 <div className="row">
-                    <div className="col-8 nopadding">
+                    <div className="col-8">
 
                         {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
                         {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
