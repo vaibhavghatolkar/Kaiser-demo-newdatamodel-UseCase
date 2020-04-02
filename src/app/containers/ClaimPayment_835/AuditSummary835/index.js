@@ -880,6 +880,7 @@ export class AuditSummary835 extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        enableCellTextSelection={true}    
                     >
 
                     </AgGridReact>

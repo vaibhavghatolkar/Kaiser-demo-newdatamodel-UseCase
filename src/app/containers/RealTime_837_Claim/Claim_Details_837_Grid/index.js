@@ -1494,7 +1494,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                         icons={this.state.icons}
-
+   enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
@@ -1558,7 +1558,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.claims_rowData}
-
+                        enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'Molina Claim Id') {
                                 this.setState({
@@ -1633,7 +1633,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.Error_data}
-
+                        enableCellTextSelection={true}
 
 
                     >
@@ -1677,10 +1677,9 @@ export class Claim_Details_837_Grid extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.Aggrid_ClaimLineData}
+                        enableCellTextSelection={true}
 
-
-
-                    >
+                        >
                     </AgGridReact>
                 </div>
             </div>
@@ -1729,10 +1728,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.Aggrid_Claim_Info_data}
-
-
-
-                    >
+                        enableCellTextSelection={true}                    >
                     </AgGridReact>
                 </div>
             </div>

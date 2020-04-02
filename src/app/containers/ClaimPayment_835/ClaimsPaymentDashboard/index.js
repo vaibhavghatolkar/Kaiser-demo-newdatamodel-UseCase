@@ -2049,6 +2049,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        enableCellTextSelection={true}    
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
