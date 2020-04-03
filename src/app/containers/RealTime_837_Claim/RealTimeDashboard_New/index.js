@@ -121,6 +121,7 @@ export class RealTimeDashboard_New extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
+                filter: true,
               },          
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: {   wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer'  }  },

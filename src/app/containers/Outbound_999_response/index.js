@@ -64,7 +64,7 @@ export class Outbound_response_999 extends React.Component {
                 { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Date", field: "ResponseFileDate", width:100, },
                 { headerName: "837 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-                { headerName: "837 File Date", field: "Date", width:100, },
+                { headerName: "837 File Date", field: "Date", flex:1, },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -86,6 +86,7 @@ export class Outbound_response_999 extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
+                filter: true,
             },
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
