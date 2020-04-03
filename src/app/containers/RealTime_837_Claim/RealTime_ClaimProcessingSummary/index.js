@@ -785,7 +785,7 @@ export class ClaimProcessingSummary extends React.Component {
         ]
 
         return (
-            <div className="row" style={{ marginBottom: '12px' }}>
+            <div className="row" style={{ marginBottom: '12px', marginLeft: '-10px' }}>
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}
@@ -799,7 +799,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     _renderTransactions() {
         return (
-            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
+            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px',marginLeft: '1px' }}>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={this.state.columnDefs}
