@@ -263,6 +263,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 ProcessID
                 FileLevelError
                 MCGStatus
+                FileDateTime 
             }
         }`
         console.log(query);
@@ -1013,6 +1014,8 @@ export class Claim_Details_837_Grid extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                          
                         />
                     </div>
                     <div className="form-group col-2">
@@ -1021,6 +1024,7 @@ export class Claim_Details_837_Grid extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -1306,7 +1310,7 @@ export class Claim_Details_837_Grid extends React.Component {
                     <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
                     <div className="col-2 col-small-style small-font" style={{ wordBreak: 'break-all' }}>{data[keys].value.ProcessID}</div>
                     {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment.utc(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment.utc(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-2 col-small-style small-font">{moment.utc(data[keys].value.FileDateTime ).format('MM/DD/YYYY')}<br />{moment.utc(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
@@ -1446,7 +1450,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "State", field: "State" , width:60 ,cellStyle: { 'vertical-align': 'middle' , wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Process ID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
             { headerName: "Type", field: "Type", width:50 ,cellStyle: { wordBreak: 'break-all',  textAlign: 'center',   'white-space': 'normal' }},
-            { headerName: "File Date", field: "FileDate" , width:100},
+            { headerName: "File Date", field: "FileDateTime" , width:100},
             { headerName: "File Status", field: "FileStatus", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Submitter", field: "Sender" , width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },        
             { headerName: "Total Claims", field: "Claimcount", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
@@ -1460,7 +1464,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "State", field: "State" , width:60 ,cellStyle: { wordBreak: 'break-all',  textAlign: 'center', 'white-space': 'normal' } },
             { headerName: "Process ID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
             { headerName: "Type", field: "Type", width:50 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
-            { headerName: "File Date", field: "FileDate" , width:100},
+            { headerName: "File Date", field: "FileDateTime" , width:100},
             { headerName: "File Status", field: "FileStatus", width:140,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Submitter", field: "Sender" , width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },        
             { headerName: "Load Status", field: "Status" , width:80},
