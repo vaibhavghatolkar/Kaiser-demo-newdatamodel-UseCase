@@ -139,7 +139,7 @@ export class Load_Exception extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
-
+                filter: true,
             },
 
 

@@ -103,6 +103,7 @@ export class AuditSummary extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
+                filter: true,
               },    
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',

@@ -145,7 +145,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
-
+                filter: true,
             },
            
 
@@ -1588,16 +1588,6 @@ export class Claim_Details_837_Grid extends React.Component {
     _renderError() {
         if (this.state.Error_data == undefined) { this.state.Error_data = [] }
         process.env.NODE_ENV == 'development' && console.log("_renderError", this.state.Error_data);
-
-        let defaultColDef = {
-            editable: false,
-            enableRowGroup: true,
-            enablePivot: true,
-            enableValue: true,
-            sortable: true,
-            resizable: true,
-            filter: true,
-        }
 
         let columnDefs = [
             // { headerName: "File Name", field: "FileName" },
