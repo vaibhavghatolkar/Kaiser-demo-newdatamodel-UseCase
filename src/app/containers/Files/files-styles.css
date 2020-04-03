@@ -261,3 +261,22 @@
     /* overflow: scroll;
     overflow-y: hidden; */
 }
+.error-dialog{
+    background-color: white;
+    padding: 24px;
+    max-height: 700px;
+}
+.scroll-div{
+    height: 400px;
+    overflow-y: auto !important;
+}
+.close-button{
+    float: right;
+    width: 90px;
+    text-align: center;
+}
+.modal-dialog-error{
+    max-width: 500px;
+    right: -35%;
+    position: relative;
+}
