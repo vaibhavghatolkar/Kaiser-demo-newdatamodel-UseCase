@@ -22,7 +22,6 @@ export class Load_Exception extends React.Component {
 
     constructor(props) {
         super(props);
-       
         let flag = props.location.state.data[0].flag
         if (flag == 'accept') {
             flag = 'Accepted Claims'
