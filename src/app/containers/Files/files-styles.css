@@ -261,3 +261,7 @@
     /* overflow: scroll;
     overflow-y: hidden; */
 }
+.ag-body-horizontal-scroll-viewport
+{
+    margin-top: 2px !important;  
+}

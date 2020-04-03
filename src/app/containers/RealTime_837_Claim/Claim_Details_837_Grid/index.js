@@ -1442,23 +1442,23 @@ export class Claim_Details_837_Grid extends React.Component {
        
         // let setwidth=this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? defaultColDef_AgFirstgrid  : this.state.defaultColDef
        let columnDefs= this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? [
-            { headerName: "File Name",   field: "FileName",width:130, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State" , width:60 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
-            { headerName: "ProcessID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "File Name",   field: "FileName",width:250, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State" , width:60 ,cellStyle: { 'vertical-align': 'middle' , wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Process ID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
             { headerName: "Type", field: "Type", width:50 ,cellStyle: { wordBreak: 'break-all',  textAlign: 'center',   'white-space': 'normal' }},
             { headerName: "File Date", field: "FileDate" , width:100},
             { headerName: "File Status", field: "FileStatus", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Submitter", field: "Sender" , width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }  },        
             { headerName: "Total Claims", field: "Claimcount", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
-            { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
-            { headerName: "Error Description", field: "FileLevelError",  width:340, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }} ,
-            { headerName: "Load Status", field: "Status", width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
-            { headerName: "MCG Status", field: "MCGStatus" , width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            // { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Error Description", field: "FileLevelError", width:900, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }} ,
+            // { headerName: "Load Status", field: "Status", width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            // { headerName: "MCG Status", field: "MCGStatus" , width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
         ]:[
 
             { headerName: "File Name",   field: "FileName", cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
             { headerName: "State", field: "State" , width:60 ,cellStyle: { wordBreak: 'break-all',  textAlign: 'center', 'white-space': 'normal' } },
-            { headerName: "ProcessID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Process ID", field: "ProcessID" , width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
             { headerName: "Type", field: "Type", width:50 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
             { headerName: "File Date", field: "FileDate" , width:100},
             { headerName: "File Status", field: "FileStatus", width:140,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
@@ -1467,7 +1467,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "MCG Status", field: "MCGStatus" , width:80},
             { headerName: "Total Claims", field: "Claimcount", width:80,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
-            { headerName: "Error Description", field: "FileLevelError",  flex:1,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }} ,
+            { headerName: "Error Description", field: "FileLevelError",   width:600,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }} ,
         ]
         return (
             <div>
