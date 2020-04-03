@@ -121,13 +121,14 @@ export class RealTimeDashboard_New extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
+                filter: true,
               },          
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: {   wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer'  }  },
                 { headerName: "State", field: "State" , width:70 },
                 { headerName: "ProcessID", field: "ProcessID",  width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "Type", field: "Type" ,width:50 },
-                { headerName: "File Date", field: "FileDate" ,width:100},
+                { headerName: "File Date", field: "FileDateTime" ,width:100},
                 { headerName: "File Status", field: "FileStatus" ,width:80 },
                 { headerName: "Load Status", field: "Status",width:80 },
                 { headerName: "MCG Load Status", field: "MCGStatus" ,width:100 },
@@ -636,10 +637,10 @@ export class RealTimeDashboard_New extends React.Component {
         return (
             <div className="chart-div">
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col-6" style={{paddingRight: '5px'}}>
                         {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                     </div>
-                    <div className="col-6">
+                    <div className="col-6" style={{paddingRight: '9px'}}>
                         {this.renderPieChart('Top 10 Claim Level Errors', this.state.pie_data)}
                     </div>
                 </div>
@@ -678,7 +679,7 @@ export class RealTimeDashboard_New extends React.Component {
 
     tab() {
         return (
-            <div>
+            <div style={{marginLeft: '2px'}}>
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total</a>
@@ -726,7 +727,7 @@ export class RealTimeDashboard_New extends React.Component {
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.Type}</td>
-                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.FileDateTime).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Status}</td>
                     <td className="list-item-style">{d.MCGStatus}</td>
@@ -859,6 +860,7 @@ export class RealTimeDashboard_New extends React.Component {
                 State
                 ProcessID
                 MCGStatus
+                FileDateTime
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1067,7 +1069,7 @@ export class RealTimeDashboard_New extends React.Component {
         });
 
         return (
-            <div className="row padding-left">
+            <div className="row padding-left" style={{marginLeft: '-14px'}}>
                 {row}
             </div>
         )
@@ -1180,6 +1182,7 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1187,6 +1190,7 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1348,7 +1352,7 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         return (
-            <div className="row" style={{ marginBottom: '12px' }}>
+            <div className="row" style={{ marginBottom: '12px', marginLeft: '-9px' }}>
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}

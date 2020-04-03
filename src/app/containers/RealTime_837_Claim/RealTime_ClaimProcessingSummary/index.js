@@ -108,6 +108,7 @@ export class ClaimProcessingSummary extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
+                filter: true,
             },
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
@@ -599,6 +600,7 @@ export class ClaimProcessingSummary extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -607,6 +609,7 @@ export class ClaimProcessingSummary extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -784,7 +787,7 @@ export class ClaimProcessingSummary extends React.Component {
         ]
 
         return (
-            <div className="row" style={{ marginBottom: '12px' }}>
+            <div className="row" style={{ marginBottom: '12px', marginLeft: '-10px' }}>
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}
@@ -798,7 +801,7 @@ export class ClaimProcessingSummary extends React.Component {
 
     _renderTransactions() {
         return (
-            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
+            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px',marginLeft: '1px' }}>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={this.state.columnDefs}

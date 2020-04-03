@@ -104,19 +104,19 @@ export class Load_Exception extends React.Component {
             paginationPageSize: 5,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName",  cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "File Name", field: "FileName", width:300, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "State", field: "State",width:70 },
                 { headerName: "ProcessID", field: "ProcessID",width:110,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} },
                 { headerName: "Type", field: "Type" ,width:50  },
-                { headerName: "File Date", field: "FileDate",width:100  },
+                { headerName: "File Date", field: "FileDateTime",width:100  },
                 { headerName: "File Status", field: "FileStatus" ,width:80},
                 { headerName: "Submitter", field: "Sender",width:80 },
 
                 { headerName: "Load Status", field: "Status" ,width:80},
                 { headerName: "MCG Status", field: "MCGStatus",width:80 },
                 { headerName: "Total Claims", field: "Claimcount" ,width:80 },
-                { headerName: "Rejected Claims", field: "Rejected",width:80 },
-                { headerName: "Error Description", field: "FileLevelError",cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}  },
+                { headerName: "Rejected Claims", field: "Rejected", flex:1 },
+                // { headerName: "Error Description", field: "FileLevelError",width:700 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}  },
             ],
 
             autoGroupColumnDef: {
@@ -139,7 +139,7 @@ export class Load_Exception extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
-
+                filter: true,
             },
 
 
@@ -222,6 +222,7 @@ export class Load_Exception extends React.Component {
                 ProcessID
                 FileLevelError
                 MCGStatus
+                FileDateTime 
             }
         }`
       
@@ -519,6 +520,7 @@ export class Load_Exception extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -527,6 +529,7 @@ export class Load_Exception extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -710,56 +713,13 @@ export class Load_Exception extends React.Component {
                     <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
                     <div className="col-2 col-small-style small-font" style={{wordBreak: 'break-all'}}>{data[keys].value.ProcessID}</div>
                     {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDateTime ).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
             )
           
-            // {
-            //     col = []
-            //     data[keys].array.forEach((d) => {
-
-            //         col.push(
-            //             <tr>
-            //                 {/* <td className="list-item-style"><a  style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.FileName}</a></td>
-            //                 <td className="list-item-style">{d.FileDate}</td> */}
-            //                 <td className="list-item-style">{d.ProcessID}</td>
-            //                 <td className="style-left"> {d.State}</td>
-            //                 <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.Exception}</td>
-            //             </tr>
-            //         )
-            //     })
-            // }
-
-            // row.push(
-            //     <div id={keys} className="collapse">
-            //         <table id="" className="table table-bordered claim-details" style={{ tableLayout: 'fixed' }}>
-            //             {this.renderClaimsHeader(data[keys].value.FileID)}
-            //             {col}
-            //         </table>
-
-            //         <ReactPaginate
-            //             previousLabel={'previous'}
-            //             nextLabel={'next'}
-            //             breakLabel={'...'}
-            //             breakClassName={'page-link'}
-            //             initialPage={this.state.initialPage}
-            //             pageCount={Math.floor((data[keys].value.Claimcount / 10) + (data[keys].value.Claimcount % 10 > 0 ? 1 : 0))}
-            //             marginPagesDisplayed={2}
-            //             pageRangeDisplayed={5}
-            //             onPageChange={(page) => { this.handlePageClick(page, data[keys].value.FileID) }}
-            //             containerClassName={'pagination'}
-            //             pageClassName={'page-item'}
-            //             previousClassName={'page-link'}
-            //             nextClassName={'page-link'}
-            //             pageLinkClassName={'page-link'}
-            //             subContainerClassName={'pages pagination'}
-            //             activeClassName={'active'}
-            //         />
-
-            //     </div>
-            // )
+            
         });
 
         return (
@@ -879,12 +839,12 @@ export class Load_Exception extends React.Component {
          let columnDefs = [
             { headerName: "File Name", field: "FileName",width:200, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} },
             { headerName: "File Date", field: "FileDate", width:100},
-            { headerName: "Process ID", field: "ProcessID", width:140 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
-            { headerName: "Claim Id", field: "ClaimID", width:120},
-            { headerName: "Process Name", field: "ProcessName", width:120},
+            { headerName: "Process ID", field: "ProcessID", width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
+            { headerName: "Claim Id", field: "ClaimID", width:100,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
+            { headerName: "Process Name", field: "ProcessName", width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
                        
-            { headerName: "State" , field: "State", width:70 },
-            { headerName: "Exception", field: "Exception",flex:1 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} }
+            { headerName: "State" , field: "State", width:60 },
+            { headerName: "Exception", field: "Exception",width:700, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} }
           ]
 
         return (
@@ -946,35 +906,7 @@ export class Load_Exception extends React.Component {
                         {this.state.showDetails ? this.render_load_excaption() : null}
                     </div>
                         
-                            {/* <div className="col-6">
-                                {
-                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                        <div>
-                                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
-                                            <hr />
-                                        </div> : null
-                                }
-                                {
-                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                        <table className="table claim-Details border">
-                                            {this.renderHeader('File #' + this.state.fileid)}
-                                            {this.renderRows(this.state.fileDetails)}
-                                        </table>
-                                        : null
-                                }
-                                {
-                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                        <table className="table claim-Details border">
-                                            {this.renderHeader('Claim #' + this.state.molina_claimId)}
-                                            {this.renderRows(this.state.claimDetails)}
-                                            <br></br>
-                                            {this.state.Icdcodepresent == "Icdcode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
-                                        </table>
-                                        : null
-                                }
-                                {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
-                                {/* {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null} */}
-                            {/* </div> */}
+                         
                         </div> 
                
                 }

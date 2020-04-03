@@ -146,7 +146,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
-
+                filter: true,
             },
 
 
@@ -264,6 +264,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 ProcessID
                 FileLevelError
                 MCGStatus
+                FileDateTime 
             }
         }`
         console.log(query);
@@ -1014,6 +1015,8 @@ export class Claim_Details_837_Grid extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+
                         />
                     </div>
                     <div className="form-group col-2">
@@ -1022,6 +1025,7 @@ export class Claim_Details_837_Grid extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -1307,7 +1311,7 @@ export class Claim_Details_837_Grid extends React.Component {
                     <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
                     <div className="col-2 col-small-style small-font" style={{ wordBreak: 'break-all' }}>{data[keys].value.ProcessID}</div>
                     {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment.utc(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment.utc(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-2 col-small-style small-font">{moment.utc(data[keys].value.FileDateTime).format('MM/DD/YYYY')}<br />{moment.utc(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
@@ -1443,32 +1447,32 @@ export class Claim_Details_837_Grid extends React.Component {
 
         // let setwidth=this.state.generalStatus =="File Rejected" || this.state.claimStatus =="Rejected"? defaultColDef_AgFirstgrid  : this.state.defaultColDef
         let columnDefs = this.state.generalStatus == "File Rejected" || this.state.claimStatus == "Rejected" ? [
-            { headerName: "File Name", field: "FileName", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State", width: 60, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "ProcessID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "File Name", field: "FileName", width: 250, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State", width: 60, cellStyle: { 'vertical-align': 'middle', wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Process ID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Type", field: "Type", width: 50, cellStyle: { wordBreak: 'break-all', textAlign: 'center', 'white-space': 'normal' } },
-            { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "File Date", field: "FileDateTime", width: 100 },
             { headerName: "File Status", field: "FileStatus", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Submitter", field: "Sender", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Total Claims", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Rejected Claims", field: "Rejected", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Error Description", field: "FileLevelError", width: 340 },
-            { headerName: "Load Status", field: "Status", width: 90, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "MCG Status", field: "MCGStatus", width: 90, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            // { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            { headerName: "Error Description", field: "FileLevelError", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            // { headerName: "Load Status", field: "Status", width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
+            // { headerName: "MCG Status", field: "MCGStatus" , width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
         ] : [
 
                 { headerName: "File Name", field: "FileName", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "State", field: "State", width: 60, cellStyle: { wordBreak: 'break-all', textAlign: 'center', 'white-space': 'normal' } },
-                { headerName: "ProcessID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Process ID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Type", field: "Type", width: 50, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "File Date", field: "FileDate", width: 100 },
+                { headerName: "File Date", field: "FileDateTime", width: 100 },
                 { headerName: "File Status", field: "FileStatus", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Submitter", field: "Sender", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Load Status", field: "Status", width: 80 },
                 { headerName: "MCG Status", field: "MCGStatus", width: 80 },
                 { headerName: "Total Claims", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Rejected Claims", field: "Rejected", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Error Description", field: "FileLevelError", width: 340 },
+                { headerName: "Error Description", field: "FileLevelError", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ]
         return (
             <div>
@@ -1526,17 +1530,18 @@ export class Claim_Details_837_Grid extends React.Component {
             <div class="modal" id="error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog-error">
                     <div className="error-dialog">
+                        <div className="error-header">Error Description</div>
                         <div className="scroll-div">
                             {this.state.clickedError}
                         </div>
-                        <br/>
-                        <div className="btnDesign close-button clickable" 
-                        onClick={() => {
-                            $('#error_modal').modal('hide')
-                        }}>
+                        <br />
+                        <div className="btnDesign close-button clickable"
+                            onClick={() => {
+                                $('#error_modal').modal('hide')
+                            }}>
                             Close
                         </div>
-                        <br/>
+                        <br />
                     </div>
                 </div>
             </div>
@@ -1614,16 +1619,6 @@ export class Claim_Details_837_Grid extends React.Component {
     _renderError() {
         if (this.state.Error_data == undefined) { this.state.Error_data = [] }
         process.env.NODE_ENV == 'development' && console.log("_renderError", this.state.Error_data);
-
-        let defaultColDef = {
-            editable: false,
-            enableRowGroup: true,
-            enablePivot: true,
-            enableValue: true,
-            sortable: true,
-            resizable: true,
-            filter: true,
-        }
 
         let columnDefs = [
             // { headerName: "File Name", field: "FileName" },

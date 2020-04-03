@@ -264,10 +264,12 @@
 .error-dialog{
     background-color: white;
     padding: 24px;
+    border-radius: 8px;
     max-height: 700px;
 }
 .scroll-div{
     height: 400px;
+    color: var(--grayBlack);   
     overflow-y: auto !important;
 }
 .close-button{
@@ -276,7 +278,16 @@
     text-align: center;
 }
 .modal-dialog-error{
-    max-width: 500px;
-    right: -35%;
+    max-width: 750px;
+    right: -25%;
     position: relative;
+}
+.ag-body-horizontal-scroll-viewport
+{
+    margin-top: 2px !important;  
+}
+.error-header{
+    font-size: 18px;
+    color: var(--grayBlack);   
+    padding-bottom: 16px;
 }
