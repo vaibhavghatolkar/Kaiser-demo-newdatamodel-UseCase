@@ -127,7 +127,7 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "State", field: "State" , width:70 },
                 { headerName: "ProcessID", field: "ProcessID",  width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "Type", field: "Type" ,width:50 },
-                { headerName: "File Date", field: "FileDate" ,width:100},
+                { headerName: "File Date", field: "FileDateTime" ,width:100},
                 { headerName: "File Status", field: "FileStatus" ,width:80 },
                 { headerName: "Load Status", field: "Status",width:80 },
                 { headerName: "MCG Load Status", field: "MCGStatus" ,width:100 },
@@ -726,7 +726,7 @@ export class RealTimeDashboard_New extends React.Component {
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.Type}</td>
-                    <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{moment(d.FileDateTime).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
                     <td className="list-item-style">{d.Status}</td>
                     <td className="list-item-style">{d.MCGStatus}</td>
@@ -859,6 +859,7 @@ export class RealTimeDashboard_New extends React.Component {
                 State
                 ProcessID
                 MCGStatus
+                FileDateTime
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1180,6 +1181,7 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1187,6 +1189,7 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
