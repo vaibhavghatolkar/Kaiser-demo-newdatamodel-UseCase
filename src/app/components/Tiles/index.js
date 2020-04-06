@@ -45,9 +45,22 @@ export class Tiles extends React.Component {
         )
     }
 
+    renderDualTile = () => {
+        return (
+            <div className={"summary-exception summary-container-uniform"}>
+                <div className="summary-header">{this.props.header_text}</div>
+                <div className="summary-title">
+                    <Link to={{ pathname: this.props.url, state: { data: this.props.first_data } }} className={this.props.first_arg_style}>{Number(this.props.value) ? this.props.value : 0}</Link> <a style={{color:'var(--light-grey-color)'}}>|</a> <Link to={{ pathname: this.props.url, state: { data: this.props.second_data } }} className={this.props.second_arg_style ? this.props.second_arg_style : 'red'}>{this.props.second_val ? (this.props.second_val) : ''}</Link>
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
-            this.renderTiles()
+            this.props.isDualTile ?
+                this.renderDualTile() :
+                this.renderTiles()
         )
     }
 }

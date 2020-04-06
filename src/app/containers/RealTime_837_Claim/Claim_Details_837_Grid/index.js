@@ -267,7 +267,6 @@ export class Claim_Details_837_Grid extends React.Component {
                 FileDateTime 
             }
         }`
-        console.log(query);
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
