@@ -32,7 +32,6 @@ export class Claim_Details_837_Grid extends React.Component {
         } else {
             flag = 'Other'
         }
-
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -60,6 +59,7 @@ export class Claim_Details_837_Grid extends React.Component {
             generalStatus: props.location.state.data[0] && props.location.state.data[0].generalStatus ? props.location.state.data[0].generalStatus : '',
             mcgStatus: props.location.state.data[0] && props.location.state.data[0].mcgStatus ? props.location.state.data[0].mcgStatus : '',
             incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
+            subtitle:props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -1799,8 +1799,8 @@ export class Claim_Details_837_Grid extends React.Component {
     render() {
 
         return (
-            <div>
-                <h5 className="headerText">Claims Details</h5>
+            <div>               
+                <h5 className="headerText">Claims Details {this.state.subtitle ? <label style={{fontSize:"14px"}}>({this.state.subtitle})</label> : ""}  </h5>
                 {this.renderFilters()}
                 {
                     this.state.gridType

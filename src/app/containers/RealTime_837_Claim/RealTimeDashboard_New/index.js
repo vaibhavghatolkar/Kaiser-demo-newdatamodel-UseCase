@@ -790,7 +790,8 @@ export class RealTimeDashboard_New extends React.Component {
                     endDate: endDate,
                     status: "",
                     type: type,
-                    incoming_fileId: this.state.incoming_fileId
+                    incoming_fileId: this.state.incoming_fileId,
+
                 },
             ]
         }
@@ -1064,7 +1065,8 @@ export class RealTimeDashboard_New extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus,
-                    notSent: notSent
+                    subtitle:item.name,
+                    notSent:notSent
                 },
             ]
 
@@ -1079,6 +1081,7 @@ export class RealTimeDashboard_New extends React.Component {
                         status: claimStatus,
                         type: type,
                         gridflag: 'Reconcile Exception',
+                        subtitle:item.name,
                         mcgStatus: mcgStatus,
                         notSent: notSent
                     }]
@@ -1092,6 +1095,7 @@ export class RealTimeDashboard_New extends React.Component {
                         status: claimStatus,
                         type: type,
                         gridflag: loadStatus,
+                        subtitle:item.name,
                         mcgStatus: 'Exception',
                         notSent: notSent
                     }]
@@ -1237,7 +1241,8 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                            
+                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1329,22 +1334,29 @@ export class RealTimeDashboard_New extends React.Component {
             let loadStatus = ''
             let generalStatus = ''
             let mcgStatus = ''
-            let notSent = ''
-            let color = "var(--red)"
+            let notSent = ''   
+            let subtitle=''         
+            let color = "var(--red)"     
 
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
+                subtitle='Accepted Claims'
                 color = "var(--green)"
             } else if (item.name == 'Rejected') {
                 generalStatus = 'Rejected'
+                subtitle="Rejected Claims"
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
+                subtitle=item.name
             } else if (item.name == 'Reconciled Error') {
+                subtitle=item.name
                 loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
+                subtitle=item.name
                 color = "var(--main-bg-color)"
             } else if (item.name == 'Load Error') {
+                subtitle=item.name
                 mcgStatus = 'Exception'
             } else if (item.name == '999 Not Sent') {
                 notSent = 'Y'
@@ -1362,7 +1374,8 @@ export class RealTimeDashboard_New extends React.Component {
                     gridflag: loadStatus,
                     generalStatus: generalStatus,
                     mcgStatus: mcgStatus,
-                    notSent: notSent
+                    notSent: notSent,
+                    subtitle:subtitle
                 },
             ]
             row.push(
