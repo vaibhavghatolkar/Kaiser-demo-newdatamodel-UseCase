@@ -116,25 +116,25 @@ export class RealTimeDashboard_New extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             defaultColDef: {
-              
+
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
                 filter: true,
-              },          
+            },
             columnDefs: [
-                { headerName: "File Name", field: "FileName", cellStyle: {   wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer'  }  },
-                { headerName: "State", field: "State" , width:70 },
-                { headerName: "ProcessID", field: "ProcessID",  width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "Type", field: "Type" ,width:50 },
-                { headerName: "File Date", field: "FileDateTime" ,width:100},
-                { headerName: "File Status", field: "FileStatus" ,width:80 },
-                { headerName: "Load Status", field: "Status",width:80 },
-                { headerName: "MCG Load Status", field: "MCGStatus" ,width:100 },
-                { headerName: "Submitter", field: "Sender" ,width:80 },
-                { headerName: "Total Claims", field: "Claimcount" ,width:100 },
-                { headerName: "Rejected Claims", field: "Rejected", flex:1},
+                { headerName: "File Name", field: "FileName", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State", width: 70 },
+                { headerName: "ProcessID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Type", field: "Type", width: 50 },
+                { headerName: "File Date", field: "FileDateTime", width: 100 },
+                { headerName: "File Status", field: "FileStatus", width: 80 },
+                { headerName: "Load Status", field: "Status", width: 80 },
+                { headerName: "MCG Load Status", field: "MCGStatus", width: 100 },
+                { headerName: "Submitter", field: "Sender", width: 80 },
+                { headerName: "Total Claims", field: "Claimcount", width: 100 },
+                { headerName: "Rejected Claims", field: "Rejected", flex: 1 },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -151,7 +151,7 @@ export class RealTimeDashboard_New extends React.Component {
                 cellRenderer: 'agGroupCellRenderer',
                 cellRendererParams: { checkbox: true },
             },
-       
+
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
@@ -160,7 +160,7 @@ export class RealTimeDashboard_New extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
         }
-     
+
         this.handleStartChange = this.handleStartChange.bind(this);
         this.handleEndChange = this.handleEndChange.bind(this);
 
@@ -182,7 +182,7 @@ export class RealTimeDashboard_New extends React.Component {
     getClaimCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        
+
         let query = `{
             Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 X12Count
@@ -355,7 +355,7 @@ export class RealTimeDashboard_New extends React.Component {
                     processing = _data[0].ProcessingFiles
                     MCGLoadingFiles = _data[0].MCGLoadingFiles
                 }
-                
+
                 summary = [
                     { name: 'Total Files', value: totalCount },
                     { name: 'Accepted Files', value: accepted },
@@ -427,7 +427,7 @@ export class RealTimeDashboard_New extends React.Component {
     getData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        
+
         let chartType = this.state.chartType
         if (!chartType) {
             chartType = "Monthwise"
@@ -640,10 +640,10 @@ export class RealTimeDashboard_New extends React.Component {
         return (
             <div className="chart-div">
                 <div className="row">
-                    <div className="col-6" style={{paddingRight: '5px'}}>
+                    <div className="col-6" style={{ paddingRight: '5px' }}>
                         {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                     </div>
-                    <div className="col-6" style={{paddingRight: '9px'}}>
+                    <div className="col-6" style={{ paddingRight: '9px' }}>
                         {this.renderPieChart('Top 10 Claim Level Errors', this.state.pie_data)}
                     </div>
                 </div>
@@ -682,7 +682,7 @@ export class RealTimeDashboard_New extends React.Component {
 
     tab() {
         return (
-            <div style={{marginLeft: '2px'}}>
+            <div style={{ marginLeft: '2px' }}>
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total</a>
@@ -711,7 +711,7 @@ export class RealTimeDashboard_New extends React.Component {
     renderList() {
         let row = []
         const data = this.state.claimsList;
-        
+
         data.forEach((d) => {
             row.push(
                 <tr>
@@ -790,7 +790,8 @@ export class RealTimeDashboard_New extends React.Component {
                     endDate: endDate,
                     status: "",
                     type: type,
-                    incoming_fileId: this.state.incoming_fileId
+                    incoming_fileId: this.state.incoming_fileId,
+
                 },
             ]
         }
@@ -822,7 +823,7 @@ export class RealTimeDashboard_New extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-                        enableCellTextSelection={true}                        
+                        enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
@@ -849,7 +850,7 @@ export class RealTimeDashboard_New extends React.Component {
         }
 
         let query = `{            
-            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}, LoadStatus:"", Status:"", MCGStatus:"", FileID: "") {
+            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}, LoadStatus:"", Status:"", MCGStatus:"", FileID: "", Status277CA:"") {
                 RecCount
                 FileID
                 FileName
@@ -1019,7 +1020,9 @@ export class RealTimeDashboard_New extends React.Component {
             let loadStatus = ''
             let mcgStatus = ''
             let notSent = ''
+            let isDual = false
             let data = []
+            let _second_data = []
             if (item.name == 'Accepted Files') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
@@ -1041,9 +1044,16 @@ export class RealTimeDashboard_New extends React.Component {
                 mcgStatus = 'Loaded'
             } else if (item.name == '999') {
                 notSent = 'Y'
+            } else if (item.name == 'Reconciled Files | Error') {
+                loadStatus = 'Reconciled'
+                isDual = true
+            } else if (item.name == 'Load in MCG | Error') {
+                mcgStatus = 'Loaded'
+                isDual = true
             } else {
                 addon = '/other'
             }
+
             data = [
                 {
                     flag: addon,
@@ -1055,10 +1065,44 @@ export class RealTimeDashboard_New extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus,
+                    subtitle: (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
                     notSent:notSent
                 },
             ]
-            let geturl=mcgStatus=="Exception" ? Strings.Load_Exception : notSent=='Y'? Strings.claimsAudit :Strings.Claim_Details_837_Grid
+
+            if(isDual){
+                if(item.name == 'Reconciled Files | Error'){
+                    _second_data = [{
+                        flag: addon,
+                        State: State,
+                        selectedTradingPartner: selectedTradingPartner,
+                        startDate: startDate,
+                        endDate: endDate,
+                        status: claimStatus,
+                        type: type,
+                        gridflag: 'Reconcile Exception',
+                        subtitle: 'Reconciled Error',
+                        mcgStatus: mcgStatus,
+                        notSent: notSent
+                    }]
+                } else {
+                    _second_data = [{
+                        flag: addon,
+                        State: State,
+                        selectedTradingPartner: selectedTradingPartner,
+                        startDate: startDate,
+                        endDate: endDate,
+                        status: claimStatus,
+                        type: type,
+                        gridflag: loadStatus,
+                        subtitle: 'Load Error',
+                        mcgStatus: 'Exception',
+                        notSent: notSent
+                    }]
+                }
+            }
+
+            let geturl = mcgStatus == "Exception" ? Strings.Load_Exception : notSent == 'Y' ? Strings.claimsAudit : Strings.Claim_Details_837_Grid
             row.push(
                 <Tiles
                     isClickable={
@@ -1070,6 +1114,13 @@ export class RealTimeDashboard_New extends React.Component {
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
+                    isDualTile={
+                        item.name == 'Reconciled Files | Error' ||
+                        item.name == 'Load in MCG | Error'
+                    }
+                    first_arg_style={item.name == 'Reconciled Files | Error' ? 'blue' : 'green'}
+                    first_data={data}
+                    second_data={_second_data}
                     url={geturl}
                 />
 
@@ -1077,7 +1128,7 @@ export class RealTimeDashboard_New extends React.Component {
         });
 
         return (
-            <div className="row padding-left" style={{marginLeft: '-14px'}}>
+            <div className="row padding-left" style={{ marginLeft: '-14px', marginTop: '16px' }}>
                 {row}
             </div>
         )
@@ -1190,7 +1241,8 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                            
+                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1282,22 +1334,29 @@ export class RealTimeDashboard_New extends React.Component {
             let loadStatus = ''
             let generalStatus = ''
             let mcgStatus = ''
-            let notSent = ''
-            let color = "var(--red)"
+            let notSent = ''   
+            let subtitle=''         
+            let color = "var(--red)"     
 
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
+                subtitle='Accepted Claims'
                 color = "var(--green)"
             } else if (item.name == 'Rejected') {
                 generalStatus = 'Rejected'
+                subtitle="Rejected Claims"
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
+                subtitle=item.name
             } else if (item.name == 'Reconciled Error') {
+                subtitle=item.name
                 loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
+                subtitle=item.name
                 color = "var(--main-bg-color)"
             } else if (item.name == 'Load Error') {
+                subtitle=item.name
                 mcgStatus = 'Exception'
             } else if (item.name == '999 Not Sent') {
                 notSent = 'Y'
@@ -1315,7 +1374,8 @@ export class RealTimeDashboard_New extends React.Component {
                     gridflag: loadStatus,
                     generalStatus: generalStatus,
                     mcgStatus: mcgStatus,
-                    notSent: notSent
+                    notSent: notSent,
+                    subtitle:subtitle
                 },
             ]
             row.push(
@@ -1341,19 +1401,19 @@ export class RealTimeDashboard_New extends React.Component {
 
     renderClaimDetails = () => {
         let stage_1 = [
-            {'header':'HiPaaS Load Status'},
+            { 'header': 'HiPaaS Load Status' },
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
             { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
         ]
         let stage_2 = [
-            {'header':'L1 - L2 Status'},
+            { 'header': 'L1 - L2 Status' },
             { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
             { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
         ]
         let stage_3 = [
-            {'header':'MCG Load Status'},
+            { 'header': 'MCG Load Status' },
             { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
             { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
         ]

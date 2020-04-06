@@ -227,7 +227,7 @@ export class Load_Exception extends React.Component {
                 FileDateTime 
             }
         }`
-        console.log(query)
+        // console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
