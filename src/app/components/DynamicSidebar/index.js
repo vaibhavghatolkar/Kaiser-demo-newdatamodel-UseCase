@@ -228,7 +228,7 @@ export class DynamicSidebar extends React.Component {
 
             } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid ||element.key == Strings.Inbound_EncounterDetails  || element.key==Strings.Load_Exception || element.key==Strings. ClaimPayment_835_Exception) {
                 data = [
-                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n',gridflag:'' },
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n',gridflag:'' , subtitle:'' },
                 ]
             } else if (element.key == Strings.Files_837) {
                 data = [
