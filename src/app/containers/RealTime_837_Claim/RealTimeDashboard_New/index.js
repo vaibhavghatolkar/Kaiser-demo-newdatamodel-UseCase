@@ -1065,7 +1065,7 @@ export class RealTimeDashboard_New extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus,
-                    subtitle:item.name,
+                    subtitle: (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
                     notSent:notSent
                 },
             ]
@@ -1081,7 +1081,7 @@ export class RealTimeDashboard_New extends React.Component {
                         status: claimStatus,
                         type: type,
                         gridflag: 'Reconcile Exception',
-                        subtitle:item.name,
+                        subtitle: 'Reconciled Error',
                         mcgStatus: mcgStatus,
                         notSent: notSent
                     }]
@@ -1095,7 +1095,7 @@ export class RealTimeDashboard_New extends React.Component {
                         status: claimStatus,
                         type: type,
                         gridflag: loadStatus,
-                        subtitle:item.name,
+                        subtitle: 'Load Error',
                         mcgStatus: 'Exception',
                         notSent: notSent
                     }]
