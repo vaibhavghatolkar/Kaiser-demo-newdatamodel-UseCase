@@ -637,10 +637,10 @@ export class RealTimeDashboard_New extends React.Component {
         return (
             <div className="chart-div">
                 <div className="row">
-                    <div className="col-6">
+                    <div className="col-6" style={{paddingRight: '5px'}}>
                         {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                     </div>
-                    <div className="col-6">
+                    <div className="col-6" style={{paddingRight: '9px'}}>
                         {this.renderPieChart('Top 10 Claim Level Errors', this.state.pie_data)}
                     </div>
                 </div>
@@ -679,7 +679,7 @@ export class RealTimeDashboard_New extends React.Component {
 
     tab() {
         return (
-            <div>
+            <div style={{marginLeft: '2px'}}>
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total</a>
@@ -1071,7 +1071,7 @@ export class RealTimeDashboard_New extends React.Component {
         });
 
         return (
-            <div className="row padding-left">
+            <div className="row padding-left" style={{marginLeft: '-14px'}}>
                 {row}
             </div>
         )
@@ -1363,7 +1363,7 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         return (
-            <div className="row" style={{ marginBottom: '12px' }}>
+            <div className="row" style={{ marginBottom: '12px', marginLeft: '-9px' }}>
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}

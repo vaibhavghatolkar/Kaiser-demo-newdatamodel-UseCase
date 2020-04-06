@@ -261,7 +261,33 @@
     /* overflow: scroll;
     overflow-y: hidden; */
 }
-.ag-body-horizontal-scroll-viewport
+.error-dialog{
+    background-color: white;
+    padding: 24px;
+    border-radius: 8px;
+    max-height: 700px;
+}
+.scroll-div{
+    height: 400px;
+    color: var(--grayBlack);   
+    overflow-y: auto !important;
+}
+.close-button{
+    float: right;
+    width: 90px;
+    text-align: center;
+}
+.modal-dialog-error{
+    max-width: 750px;
+    right: -25%;
+    position: relative;
+}
+.ag-body-horizontal-scroll
 {
-    margin-top: 2px !important;  
+    margin-top: 12px;
+}
+.error-header{
+    font-size: 18px;
+    color: var(--grayBlack);   
+    padding-bottom: 16px;
 }
