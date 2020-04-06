@@ -355,17 +355,20 @@ export class RealTimeDashboard_New extends React.Component {
                     processing = _data[0].ProcessingFiles
                     MCGLoadingFiles = _data[0].MCGLoadingFiles
                 }
-
+                
                 summary = [
                     { name: 'Total Files', value: totalCount },
                     { name: 'Accepted Files', value: accepted },
                     { name: 'Accepted with Errors', value: acceptedwithErrors },
                     { name: 'Rejected Files', value: rejected },
-                    { name: 'Reconciled Files', value: reconciled },
-                    { name: 'Reconciled Error', value: reconciledError },
-                    { name: 'Load Error', value: loadedError,  },
-                    { name: 'Load in MCG', value: loaded },
+                    { name: '999', value: this.state.total_999 },
+                    { name: 'Reconciled Files | Error', value: reconciled, second_val: reconciledError },
+                    // { name: 'Reconciled Error', value: reconciledError },
+                    { name: 'Load in MCG | Error', value: loaded, second_val: loadedError },
+                    // { name: 'Load Error', value: loadedError,  },
+                    // { name: 'Load in MCG', value: loaded },
                     { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    { name: '277CA', value: (totalCount - rejected) },
                 ]
 
                 this.setState({
@@ -1015,6 +1018,7 @@ export class RealTimeDashboard_New extends React.Component {
             let claimStatus = ''
             let loadStatus = ''
             let mcgStatus = ''
+            let notSent = ''
             let data = []
             if (item.name == 'Accepted Files') {
                 addon = '/accept'
@@ -1035,6 +1039,8 @@ export class RealTimeDashboard_New extends React.Component {
                 mcgStatus = 'Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
+            } else if (item.name == '999') {
+                notSent = 'Y'
             } else {
                 addon = '/other'
             }
@@ -1048,14 +1054,16 @@ export class RealTimeDashboard_New extends React.Component {
                     status: claimStatus,
                     type: type,
                     gridflag: loadStatus,
-                    mcgStatus: mcgStatus
+                    mcgStatus: mcgStatus,
+                    notSent:notSent
                 },
             ]
-            let geturl=mcgStatus=="Exception" ? Strings.Load_Exception :Strings.Claim_Details_837_Grid
+            let geturl=mcgStatus=="Exception" ? Strings.Load_Exception : notSent=='Y'? Strings.claimsAudit :Strings.Claim_Details_837_Grid
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'HiPaaS | MCG'
+                        item.name != 'HiPaaS | MCG' &&
+                        item.name != '277CA'
                     }
                     uniformWidth={true}
                     _data={data}
@@ -1312,7 +1320,8 @@ export class RealTimeDashboard_New extends React.Component {
             ]
             row.push(
                 <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
+                    <div style={{   fontSize: '16px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
+                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9"> {item.name} </div>
                     {
                         item.isClick ?
                             <Link to={{ pathname: item.url ? item.url : Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
@@ -1332,23 +1341,27 @@ export class RealTimeDashboard_New extends React.Component {
 
     renderClaimDetails = () => {
         let stage_1 = [
+            {'header':'HiPaaS Load Status'},
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
             { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
         ]
         let stage_2 = [
+            {'header':'L1 - L2 Status'},
             { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
             { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
         ]
         let stage_3 = [
+            {'header':'MCG Load Status'},
             { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
             { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
         ]
 
         let stage_4 = [
-            { 'name': '999 Not Sent', 'value': this.state.total_999, 'isClick': 1, 'url' : Strings.claimsAudit },
-            { 'name': '277CA Not Sent', 'value': (this.state.totalFiles - this.state.rejectedCount) },
+            {'header':'L3 - L7 Status'},
+            { 'name': 'Accepted', 'value': this.state.total_999, 'isClick': 1, 'url' : Strings.claimsAudit },
+            { 'name': 'Rejected', 'value': (this.state.totalFiles - this.state.rejectedCount) },
         ]
 
         return (
