@@ -750,12 +750,13 @@ export class ClaimProcessingSummary extends React.Component {
             }
 
             if (item.name == 'Accepted' && item.is277CA) {
+                subtitle = '277CA Accepted Claims'
                 status277CA = 'Accepted'
-                subtitle = item.name
             }
+            
             if (item.name == 'Rejected' && item.is277CA) {
+                subtitle = '277CA Rejected Claims'
                 status277CA = 'Rejected'
-                subtitle = item.name
             }
 
             let sendData = [

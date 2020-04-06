@@ -1370,12 +1370,12 @@ export class RealTimeDashboard_New extends React.Component {
             }
             
             if (item.name == 'Accepted' && item.is277CA) {
-                subtitle = item.name
+                subtitle = '277CA Accepted Claims'
                 status277CA = 'Accepted'
             }
             
             if (item.name == 'Rejected' && item.is277CA) {
-                subtitle = item.name
+                subtitle = '277CA Rejected Claims'
                 status277CA = 'Rejected'
             }
 
