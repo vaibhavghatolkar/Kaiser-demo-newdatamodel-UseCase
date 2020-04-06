@@ -86,6 +86,8 @@ export class RealTimeDashboard_New extends React.Component {
             LoadedErrorClaims: 0,
             total_999: 0,
             rejectedCount: 0,
+            Accepted_277CA: 0,
+            Rejected_277CA: 0,
 
             X12Count: 0,
             HiPaaSCount: 0,
@@ -197,6 +199,8 @@ export class RealTimeDashboard_New extends React.Component {
                 ReconciledError_Claims
                 LoadingClaims
                 LoadedErrorClaims
+                Accepted_277CA
+                Rejected_277CA
             }
         }`
 
@@ -224,7 +228,9 @@ export class RealTimeDashboard_New extends React.Component {
                         FileReject_Claims: _data ? _data.FileReject_Claims : 0,
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
+                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0,
+                        Accepted_277CA: _data ? _data.Accepted_277CA : 0,
+                        Rejected_277CA: _data ? _data.Rejected_277CA : 0,
                     })
                 }
             })
@@ -1066,12 +1072,12 @@ export class RealTimeDashboard_New extends React.Component {
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus,
                     subtitle: (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
-                    notSent:notSent
+                    notSent: notSent
                 },
             ]
 
-            if(isDual){
-                if(item.name == 'Reconciled Files | Error'){
+            if (isDual) {
+                if (item.name == 'Reconciled Files | Error') {
                     _second_data = [{
                         flag: addon,
                         State: State,
@@ -1241,8 +1247,8 @@ export class RealTimeDashboard_New extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
                             onChange={this.handleStartChange}
-                            
-                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1334,32 +1340,43 @@ export class RealTimeDashboard_New extends React.Component {
             let loadStatus = ''
             let generalStatus = ''
             let mcgStatus = ''
-            let notSent = ''   
-            let subtitle=''         
-            let color = "var(--red)"     
+            let notSent = ''
+            let subtitle = ''
+            let status277CA = ''
+            let color = "var(--red)"
 
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
-                subtitle='Accepted Claims'
+                subtitle = 'Accepted Claims'
                 color = "var(--green)"
             } else if (item.name == 'Rejected') {
                 generalStatus = 'Rejected'
-                subtitle="Rejected Claims"
+                subtitle = "Rejected Claims"
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
-                subtitle=item.name
+                subtitle = item.name
             } else if (item.name == 'Reconciled Error') {
-                subtitle=item.name
+                subtitle = item.name
                 loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
-                subtitle=item.name
+                subtitle = item.name
                 color = "var(--main-bg-color)"
             } else if (item.name == 'Load Error') {
-                subtitle=item.name
+                subtitle = item.name
                 mcgStatus = 'Exception'
             } else if (item.name == '999 Not Sent') {
                 notSent = 'Y'
+            }
+            
+            if (item.name == 'Accepted' && item.is277CA) {
+                subtitle = item.name
+                status277CA = 'Accepted'
+            }
+            
+            if (item.name == 'Rejected' && item.is277CA) {
+                subtitle = item.name
+                status277CA = 'Rejected'
             }
 
             let sendData = [
@@ -1375,12 +1392,13 @@ export class RealTimeDashboard_New extends React.Component {
                     generalStatus: generalStatus,
                     mcgStatus: mcgStatus,
                     notSent: notSent,
-                    subtitle:subtitle
+                    subtitle: subtitle,
+                    status277CA: status277CA
                 },
             ]
             row.push(
                 <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{   fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
+                    <div style={{ fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
                     <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9"> {item.name} </div>
                     {
                         item.isClick ?
@@ -1419,10 +1437,9 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         let stage_4 = [
-            {'header':'L3 - L7 Status'},
-            // { 'name': 'Accepted', 'value': 0, 'isClick': 1, 'url' : Strings.claimsAudit },
-            { 'name': 'Accepted', 'value': 0, },
-            { 'name': 'Rejected', 'value': 0 },
+            { 'header': 'L3 - L7 Status' },
+            { 'name': 'Accepted', 'value': this.state.Accepted_277CA, 'isClick': 1, 'is277CA': 1 },
+            { 'name': 'Rejected', 'value': this.state.Rejected_277CA, 'isClick': 1, 'is277CA': 1 },
         ]
 
         return (

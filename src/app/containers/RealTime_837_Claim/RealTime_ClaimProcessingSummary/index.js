@@ -26,11 +26,14 @@ export class ClaimProcessingSummary extends React.Component {
             Claim837RTProcessingSummary: [],
             providers: [],
             incoming_fileId: '',
+            status277CA: '',
             gridType: 1,
             recCount: 0,
             pageCount: 1,
             Months: 0,
             loaded: 0,
+            Accepted_277CA: 0,
+            Rejected_277CA: 0,
             selectedTradingPartner: "",
             State: "",
             type: "",
@@ -52,9 +55,9 @@ export class ClaimProcessingSummary extends React.Component {
             X12Count: 0,
             Accepted_Claims: 0,
             Rejected_Claims: 0,
-            FileReject_Claims:0,
+            FileReject_Claims: 0,
             Processing_Claims: 0,
-            ReconciledError_Claims:0,
+            ReconciledError_Claims: 0,
             LoadingClaims: 0,
             LoadedErrorClaims: 0,
 
@@ -71,10 +74,10 @@ export class ClaimProcessingSummary extends React.Component {
             file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName", cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' }},
-                { headerName: "State", field: "State", width: 80},
-                { headerName: "File Date", field: "FileDateTime", width: 100},
+                { headerName: "File Name", field: "FileName", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "State", field: "State", width: 80 },
+                { headerName: "File Date", field: "FileDateTime", width: 100 },
                 { headerName: "File Status", field: "FileStatus", width: 100 },
                 { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "Claim Date", field: "ClaimDateTime", width:100, },
@@ -84,7 +87,7 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "999", field: "F999", width:240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "277CA", field: "F277", width:100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "HiPaaS Status", field: "Transaction_Status", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-               
+          
                 { headerName: "Adjudication Status", field: "adjudication_status", width: 100 },
                 // { headerName: "835", field: "F277" },
             ],
@@ -215,6 +218,8 @@ export class ClaimProcessingSummary extends React.Component {
                 ReconciledError_Claims
                 LoadingClaims
                 LoadedErrorClaims
+                Accepted_277CA
+                Rejected_277CA
             }
         }`
 
@@ -247,7 +252,9 @@ export class ClaimProcessingSummary extends React.Component {
                         Processing_Claims: _data ? _data.Processing_Claims : 0,
                         ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
                         LoadingClaims: _data ? _data.LoadingClaims : 0,
-                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
+                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0,
+                        Accepted_277CA: _data ? _data.Accepted_277CA : 0,
+                        Rejected_277CA: _data ? _data.Rejected_277CA : 0,
                     })
                 }
             })
@@ -429,7 +436,7 @@ export class ClaimProcessingSummary extends React.Component {
         let type = this.state.type ? this.state.type : ''
 
         let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId : fileId ? fileId : this.state.incoming_fileId },
+            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId: fileId ? fileId : this.state.incoming_fileId },
         ]
 
         this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
@@ -467,12 +474,10 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'ClaimStatus' },
             { value: 'Subscriber_ID' },
             { value: 'Status277CA' },
-            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },
-            
-            // { value: 'Transaction_Status' },
-           
+            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },            
+            // { value: 'Transaction_Status' },           
             { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
-            { value: 'adjudication_status' },
+             { value: 'adjudication_status' },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
             // { value: '' },
         )
@@ -718,22 +723,39 @@ export class ClaimProcessingSummary extends React.Component {
             let loadStatus = ''
             let generalStatus = ''
             let mcgStatus = ''
+            let status277CA = ''
+            let subtitle = ''
             let color = "var(--red)"
 
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
+                subtitle = 'Accepted Claims'
                 color = "var(--green)"
             } else if (item.name == 'Accepted with Errors') {
                 generalStatus = 'Rejected'
+                subtitle = "Rejected Claims"
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
+                subtitle = item.name
             } else if (item.name == 'Reconciled Error') {
                 loadStatus = 'Reconcile Exception'
+                subtitle = item.name
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
+                subtitle = item.name
                 color = "var(--main-bg-color)"
             } else if (item.name == 'Load Error') {
                 mcgStatus = 'Exception'
+                subtitle = item.name
+            }
+
+            if (item.name == 'Accepted' && item.is277CA) {
+                status277CA = 'Accepted'
+                subtitle = item.name
+            }
+            if (item.name == 'Rejected' && item.is277CA) {
+                status277CA = 'Rejected'
+                subtitle = item.name
             }
 
             let sendData = [
@@ -748,11 +770,13 @@ export class ClaimProcessingSummary extends React.Component {
                     gridflag: loadStatus,
                     generalStatus: generalStatus,
                     mcgStatus: mcgStatus,
+                    subtitle: subtitle,
+                    status277CA: status277CA
                 },
             ]
             row.push(
                 <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                   <div style={{   fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
+                    <div style={{ fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
                     <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
                     {
                         item.isClick ?
@@ -774,27 +798,27 @@ export class ClaimProcessingSummary extends React.Component {
 
     renderClaimDetails = () => {
         let stage_1 = [
-            {'header':'HiPaaS Load Status'},
+            { 'header': 'HiPaaS Load Status' },
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
             { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
         ]
         let stage_2 = [
-            {'header':'L1 - L2 Status'},
+            { 'header': 'L1 - L2 Status' },
             { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
             { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
         ]
         let stage_3 = [
-            {'header':'MCG Load Status'},
+            { 'header': 'MCG Load Status' },
             { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
             { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
         ]
 
         let stage_4 = [
-            {'header':'L3 - L7 Status'},
-            { 'name': 'Accepted', 'value': 0 },
-            { 'name': 'Rejected', 'value': 0 },
+            { 'header': 'L3 - L7 Status' },
+            { 'name': 'Accepted', 'value': this.state.Accepted_277CA, 'isClick': 1, 'is277CA': 1 },
+            { 'name': 'Rejected', 'value': this.state.Rejected_277CA, 'isClick': 1, 'is277CA': 1 },
         ]
 
         return (
@@ -808,11 +832,11 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
 
-   
+
 
     _renderTransactions() {
         return (
-            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px',marginLeft: '1px' }}>
+            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px', marginLeft: '1px' }}>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={this.state.columnDefs}
@@ -831,7 +855,7 @@ export class ClaimProcessingSummary extends React.Component {
                     paginationPageSize={this.state.paginationPageSize}
                     onGridReady={this.onGridReady}
                     rowData={this.state.rowData}
-                    enableCellTextSelection={true}    
+                    enableCellTextSelection={true}
                     onCellClicked={(event) => {
                         if (event.colDef.headerName == '999') {
                             this.goto999(event.data.FileID)

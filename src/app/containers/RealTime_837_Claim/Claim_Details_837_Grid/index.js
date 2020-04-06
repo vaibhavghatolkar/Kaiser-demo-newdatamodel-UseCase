@@ -60,6 +60,7 @@ export class Claim_Details_837_Grid extends React.Component {
             mcgStatus: props.location.state.data[0] && props.location.state.data[0].mcgStatus ? props.location.state.data[0].mcgStatus : '',
             incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
             subtitle:props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
+            status277CA:props.location.state.data[0] && props.location.state.data[0].status277CA ? props.location.state.data[0].status277CA : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -249,7 +250,7 @@ export class Claim_Details_837_Grid extends React.Component {
         }
 
         let query = `{            
-            Claim837RTDashboardFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"${this.state.gridflag}", Status:"${this.state.generalStatus}", MCGStatus:"${this.state.mcgStatus}", FileID: "${this.state.incoming_fileId}", Status277CA:"") {
+            Claim837RTDashboardFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"${this.state.gridflag}", Status:"${this.state.generalStatus}", MCGStatus:"${this.state.mcgStatus}", FileID: "${this.state.incoming_fileId}", Status277CA:"${this.state.status277CA}") {
                 RecCount
                 FileID
                 FileName
@@ -409,7 +410,7 @@ export class Claim_Details_837_Grid extends React.Component {
         }
 
         let query = `{            
-        Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"",EndDt:"",Claimstatus:"${this.state.generalStatus}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}, FileStatus : "${this.state.claimStatus ? this.state.claimStatus : ''}", LoadStatus:"${this.state.gridflag}", MCGStatus: "${this.state.mcgStatus}", Status277CA:"") {
+        Claim837RTProcessingSummary (page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"",EndDt:"",Claimstatus:"${this.state.generalStatus}", FileID : "` + fileId + `", Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", RecType: "Inbound", GridType:${this.state.gridType}, FileStatus : "${this.state.claimStatus ? this.state.claimStatus : ''}", LoadStatus:"${this.state.gridflag}", MCGStatus: "${this.state.mcgStatus}", Status277CA:"${this.state.status277CA}") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -1621,16 +1622,21 @@ export class Claim_Details_837_Grid extends React.Component {
     _renderError() {
         if (this.state.Error_data == undefined) { this.state.Error_data = [] }
         process.env.NODE_ENV == 'development' && console.log("_renderError", this.state.Error_data);
-
-        let columnDefs = [
-            // { headerName: "File Name", field: "FileName" },
-            // { headerName: "File Date", field: "FileDate" },
+        
+        let columnDefs = this.state.Status277CA == "Rejected" ?
+          [
+      
             { headerName: "Stage", field: "Stage", width: 100 },
             { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
             { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
-
-            { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+
+        ] :  [
+    
+            { headerName: "Stage", field: "Stage", width: 100 },
+            { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+            { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
+            { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
         ]
 
@@ -1818,7 +1824,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         <div>
                             {this._renderList()}
                             {this.state.showClaims ? this._renderClaims() : null}
-                            {this.state.showerror && this.state.claimError_Status == "Rejected" ? this._renderError() : null}
+                            {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.Status277CA == "Rejected" )? this._renderError() : null}
                             {this.state.showerror ? this._ClaimView_Info_Table() : null}
                             {this.state.showerror ? this._ClaimLineTable() : null}
                             {/* {this.state.showerror ? this._ClaimStage() : null} */}

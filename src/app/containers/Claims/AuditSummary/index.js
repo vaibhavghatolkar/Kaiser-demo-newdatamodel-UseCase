@@ -55,6 +55,7 @@ export class AuditSummary extends React.Component {
             Pending: '',
             page: 1,
             count: 1,
+            total_999: 0,
             nameRotation: 180,
             statusRotation: 180,
             stateRotation: 180,
@@ -131,6 +132,7 @@ export class AuditSummary extends React.Component {
         this._getCounts()
         this._getCountsNew()
         this.getCommonData()
+        this._get999Count1()
     }
 
     _get999Count = async () => {
@@ -175,6 +177,8 @@ export class AuditSummary extends React.Component {
                 Accepted_Claims
                 Rejected_Claims
                 LoadingClaims
+                Accepted_277CA
+                Rejected_277CA
             }
         }`
 
@@ -279,6 +283,40 @@ export class AuditSummary extends React.Component {
         }, 1000);
     }
 
+    _get999Count1 = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
+        let query = `{
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
+              Total999
+              NotSent999
+            }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
+                Total277CA
+                NotSent277CA
+            }
+         }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.claims_837, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+                    total_999: res.data.Total999Response[0].NotSent999,
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
     getData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
@@ -356,10 +394,11 @@ export class AuditSummary extends React.Component {
                 ProcessingFiles
                 MCGLoadingFiles
             }
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
+            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
                 Total999
-            }
-            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
+                NotSent999
+              }
+            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"${this.state.type}") {
                 Total277CA
             }
               FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
@@ -397,7 +436,7 @@ export class AuditSummary extends React.Component {
                 let acceptedwithErrors = ''
                 let processing = ''
                 let MCGLoadingFiles = ''
-                let Total999 = res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : ''
+                let Total999 = res.data.Total999Response[0].NotSent999 
                 let Total277CA = res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : ''
 
 
@@ -419,16 +458,17 @@ export class AuditSummary extends React.Component {
 
                 summary = [
                     { name: 'Total Files', value: totalCount },
-                    { name: 'Accepted', value: accepted },
+                    { name: 'Accepted Files', value: accepted },
                     { name: 'Accepted with Errors', value: acceptedwithErrors },
-                    { name: 'Rejected', value: rejected },
-                    { name: 'Reconciled', value: reconciled },
-                    { name: 'Reconciled Error', value: reconciledError },
-                    { name: 'Load Error', value: loadedError },
-                    { name: 'Load in MCG', value: loaded },
-                    // { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    { name: 'Rejected Files', value: rejected },
                     { name: '999', value: Total999 },
-                    { name: '277 CA', value: Total277CA }
+                    { name: 'Reconciled Files | Error', value: reconciled, second_val: reconciledError },
+                    // { name: 'Reconciled Error', value: reconciledError },
+                    { name: 'Load in MCG | Error', value: loaded, second_val: loadedError },
+                    // { name: 'Load Error', value: loadedError,  },
+                    // { name: 'Load in MCG', value: loaded },
+                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    { name: '277CA', value: (totalCount - rejected) },
                 ]
                 
                 this.setState({
@@ -442,7 +482,7 @@ export class AuditSummary extends React.Component {
     }
 
 
-    _renderSummaryDetails = () => {
+    _renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag
@@ -458,19 +498,22 @@ export class AuditSummary extends React.Component {
             let claimStatus = ''
             let loadStatus = ''
             let mcgStatus = ''
+            let notSent = ''
+            let isDual = false
             let data = []
-            if (item.name == 'Accepted') {
+            let _second_data = []
+            if (item.name == 'Accepted Files') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
             } else if (item.name == 'Accepted with Errors') {
                 addon = '/reject'
                 claimStatus = 'Accepted with Errors'
-            } else if (item.name == 'Processing') {
+            } else if (item.name == 'Processing Files') {
                 addon = '/reject'
                 claimStatus = 'Received'
-            } else if (item.name == 'Rejected') {
+            } else if (item.name == 'Rejected Files') {
                 claimStatus = 'Rejected'
-            } else if (item.name == 'Reconciled') {
+            } else if (item.name == 'Reconciled Files') {
                 loadStatus = 'Reconciled'
             } else if (item.name == 'Reconciled Error') {
                 loadStatus = 'Reconcile Exception'
@@ -478,9 +521,18 @@ export class AuditSummary extends React.Component {
                 mcgStatus = 'Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
+            } else if (item.name == '999') {
+                notSent = 'Y'
+            } else if (item.name == 'Reconciled Files | Error') {
+                loadStatus = 'Reconciled'
+                isDual = true
+            } else if (item.name == 'Load in MCG | Error') {
+                mcgStatus = 'Loaded'
+                isDual = true
             } else {
                 addon = '/other'
             }
+
             data = [
                 {
                     flag: addon,
@@ -491,29 +543,71 @@ export class AuditSummary extends React.Component {
                     status: claimStatus,
                     type: type,
                     gridflag: loadStatus,
-                    mcgStatus: mcgStatus
+                    mcgStatus: mcgStatus,
+                    subtitle: (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
+                    notSent:notSent
                 },
             ]
+
+            if(isDual){
+                if(item.name == 'Reconciled Files | Error'){
+                    _second_data = [{
+                        flag: addon,
+                        State: State,
+                        selectedTradingPartner: selectedTradingPartner,
+                        startDate: startDate,
+                        endDate: endDate,
+                        status: claimStatus,
+                        type: type,
+                        gridflag: 'Reconcile Exception',
+                        subtitle: 'Reconciled Error',
+                        mcgStatus: mcgStatus,
+                        notSent: notSent
+                    }]
+                } else {
+                    _second_data = [{
+                        flag: addon,
+                        State: State,
+                        selectedTradingPartner: selectedTradingPartner,
+                        startDate: startDate,
+                        endDate: endDate,
+                        status: claimStatus,
+                        type: type,
+                        gridflag: loadStatus,
+                        subtitle: 'Load Error',
+                        mcgStatus: 'Exception',
+                        notSent: notSent
+                    }]
+                }
+            }
+
+            let geturl = mcgStatus == "Exception" ? Strings.Load_Exception : notSent == 'Y' ? Strings.claimsAudit : Strings.Claim_Details_837_Grid
             row.push(
                 <Tiles
                     isClickable={
                         item.name != 'HiPaaS | MCG' &&
-                        item.name != '999' &&
-                        item.name != '277 CA'
+                        item.name != '277CA'
                     }
                     // uniformWidth={true}
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={Strings.Claim_Details_837_Grid}
+                    isDualTile={
+                        item.name == 'Reconciled Files | Error' ||
+                        item.name == 'Load in MCG | Error'
+                    }
+                    first_arg_style={item.name == 'Reconciled Files | Error' ? 'blue' : 'green'}
+                    first_data={data}
+                    second_data={_second_data}
+                    url={geturl}
                 />
 
             )
         });
 
         return (
-            <div className="row padding-left">
+            <div className="row padding-left" style={{ marginLeft: '-14px', marginTop: '16px' }}>
                 {row}
             </div>
         )
@@ -686,6 +780,7 @@ export class AuditSummary extends React.Component {
             this.getClaimCounts()
             this._getCounts()
             this._getCountsNew()
+            this._get999Count1()
         }, 50);
     }
 
@@ -765,7 +860,7 @@ export class AuditSummary extends React.Component {
             this.getClaimCounts()
             this._getCounts()
             this._getCountsNew()
-
+            this._get999Count1()
         }, 50);
     }
 
@@ -780,7 +875,7 @@ export class AuditSummary extends React.Component {
             this.getClaimCounts()
             this._getCounts()
             this._getCountsNew()
-
+            this._get999Count1()
         }, 50);
     }
 
@@ -807,7 +902,7 @@ export class AuditSummary extends React.Component {
             this.getClaimCounts()
             this._getCounts()
             this._getCountsNew()
-
+            this._get999Count1()
         })
     }
 
@@ -820,7 +915,7 @@ export class AuditSummary extends React.Component {
             this.getClaimCounts()
             this._getCounts()
             this._getCountsNew()
-
+            this._get999Count1()
         })
     }
 
