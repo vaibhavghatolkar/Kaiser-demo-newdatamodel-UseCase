@@ -18,6 +18,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 
 var val = ''
+const $ = window.$;
 export class Load_Exception extends React.Component {
 
     constructor(props) {
@@ -37,6 +38,7 @@ export class Load_Exception extends React.Component {
             initialPage: 0,
             lineCount: 0,
             showClaims: false,
+            clickedError: '',
             lineData: [],
             file: [],
             fileDetails: [],
@@ -72,7 +74,7 @@ export class Load_Exception extends React.Component {
             status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-             page: 1,
+            page: 1,
             count: 0,
             recount: 0,
             Firstgridpage: 1,
@@ -93,8 +95,8 @@ export class Load_Exception extends React.Component {
             subsciberRotation: 180,
             claimAmountRotation: 180,
             errorRotation: 180,
-            stateRotation : 180,
-            processIdRotation : 180,
+            stateRotation: 180,
+            processIdRotation: 180,
 
             seqID: '',
             fileDataDetails: '',
@@ -104,18 +106,18 @@ export class Load_Exception extends React.Component {
             paginationPageSize: 5,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "File Name", field: "FileName", width:300, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "State", field: "State",width:70 },
-                { headerName: "ProcessID", field: "ProcessID",width:110,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} },
-                { headerName: "Type", field: "Type" ,width:50  },
-                { headerName: "File Date", field: "FileDateTime",width:100  },
-                { headerName: "File Status", field: "FileStatus" ,width:80},
-                { headerName: "Submitter", field: "Sender",width:80 },
+                { headerName: "File Name", field: "FileName", width: 300, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State", width: 70 },
+                { headerName: "ProcessID", field: "ProcessID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Type", field: "Type", width: 50 },
+                { headerName: "File Date", field: "FileDateTime", width: 130 },
+                { headerName: "File Status", field: "FileStatus", width: 80 },
+                { headerName: "Submitter", field: "Sender", width: 80 },
 
-                { headerName: "Load Status", field: "Status" ,width:80},
-                { headerName: "MCG Status", field: "MCGStatus",width:80 },
-                { headerName: "Total Claims", field: "Claimcount" ,width:80 },
-                { headerName: "Rejected Claims", field: "Rejected", flex:1 },
+                { headerName: "Load Status", field: "Status", width: 80 },
+                { headerName: "MCG Status", field: "MCGStatus", width: 80 },
+                { headerName: "Total Claims", field: "Claimcount", width: 80 },
+                // { headerName: "Rejected Claims", field: "Rejected", flex: 1 },
                 // { headerName: "Error Description", field: "FileLevelError",width:700 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}  },
             ],
 
@@ -150,21 +152,21 @@ export class Load_Exception extends React.Component {
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
-            showerror:'',
-          rowData: [],
-          Aggrid_ClaimLineData:''
-        
+            showerror: '',
+            rowData: [],
+            Aggrid_ClaimLineData: ''
+
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
-   
+
     }
 
     componentDidMount() {
         this.getCommonData()
         this.getData()
-    
+
     }
 
     getCommonData() {
@@ -174,7 +176,7 @@ export class Load_Exception extends React.Component {
             }
         }`
 
-   
+
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -192,10 +194,10 @@ export class Load_Exception extends React.Component {
                 }
             })
             .catch(err => {
-           
+
             });
     }
-  
+
 
     getData = () => {
         let count = 1
@@ -225,7 +227,7 @@ export class Load_Exception extends React.Component {
                 FileDateTime 
             }
         }`
-      
+        console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -251,17 +253,17 @@ export class Load_Exception extends React.Component {
                         rowData: this.state.gridType == 1 ? res.data.Claim837RTLoadExceptionFileDetails : [],
                         intakeClaims: res.data.Claim837RTLoadExceptionFileDetails,
                         recount: count,
-                       
-                       
+
+
                     }, () => {
                         this.sortData()
                     })
                 }
             })
             .catch(err => {
-              
+
             });
-    }  
+    }
     sortData(fileId, data) {
         let files = {}
         let intakeClaims = this.state.intakeClaims
@@ -283,7 +285,7 @@ export class Load_Exception extends React.Component {
                 }
             })
         }
-     
+
         this.setState({
             claimsObj: files,
             page: 1
@@ -291,7 +293,7 @@ export class Load_Exception extends React.Component {
     }
 
     getTransactions = (fileId) => {
-        
+
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -325,22 +327,22 @@ export class Load_Exception extends React.Component {
             .then(res => res.json())
             .then(res => {
                 var data = res.data.LoadException
-          
-               
-                    this.setState({
-                        claims_rowData: data,
-                        Ag_grid_FileName:  res.data.LoadException[0].FileName,
-                        Ag_grid_fileDate:res.data.LoadException[0].FileDate,
-                        showDetails:true
-                    })
-                
+
+
+                this.setState({
+                    claims_rowData: data,
+                    Ag_grid_FileName: res.data.LoadException[0].FileName,
+                    Ag_grid_fileDate: res.data.LoadException[0].FileDate,
+                    showDetails: true
+                })
+
 
             })
             .catch(err => {
-        
+
             });
     }
-    
+
 
     handlePageClick = (data, fileId) => {
 
@@ -462,7 +464,7 @@ export class Load_Exception extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                  
+
                 })
         }, 300);
     }
@@ -480,7 +482,7 @@ export class Load_Exception extends React.Component {
             State: event.target.options[event.target.selectedIndex].text,
             showDetails: false,
             showerror: false,
-            showClaims:false
+            showClaims: false
         }, () => {
             this.getData()
         })
@@ -541,8 +543,8 @@ export class Load_Exception extends React.Component {
                                     rowData: [],
                                     claimsAudit: [],
                                     showerror: false,
-                                    showClaims:false,
-                                    showDetails:false,
+                                    showClaims: false,
+                                    showDetails: false,
                                     gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     if (this.state.gridType == 1) {
@@ -562,7 +564,7 @@ export class Load_Exception extends React.Component {
         )
     }
 
- 
+
 
     renderHeader(header) {
         return (
@@ -573,15 +575,15 @@ export class Load_Exception extends React.Component {
     }
 
     renderClaimsHeader(fileId) {
-        
-        
-        
+
+
+
         return (
             <tr className="table-head">
                 {/* <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Process ID</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>State</a></td> */}
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Exception</a></td>
-         
+
             </tr>
         )
     }
@@ -647,26 +649,26 @@ export class Load_Exception extends React.Component {
 
     render_load_excaption() {
         let row = []
-           const data = this.state.claims_rowData ? this.state.claims_rowData : []
+        const data = this.state.claims_rowData ? this.state.claims_rowData : []
 
         data.forEach((d) => {
             row.push(
                 <tr>
                     <td>{d.ClaimID}</td>
-                    <td style={{wordBreak: 'break-all'}}>{d.ProcessName}</td>
-                    <td style={{wordBreak: 'break-all'}}>{d.Exception}</td>
+                    <td style={{ wordBreak: 'break-all' }}>{d.ProcessName}</td>
+                    <td style={{ wordBreak: 'break-all' }}>{d.Exception}</td>
                 </tr>
             )
         })
         return (
             <div className="row">
                 <div className="col-12">
-                  <br></br>
+                    <br></br>
                     <div >
                         <table className="table table-bordered background-color">
                             <thead>
                                 <tr className="table-head">
-                            
+
                                     <td className="table-head-text list-item-style">Claim Id</td>
                                     <td className="table-head-text list-item-style">Process Name</td>
                                     <td className="table-head-text list-item-style">Exception</td>
@@ -676,7 +678,7 @@ export class Load_Exception extends React.Component {
                                 {row}
                             </tbody>
                         </table>
-                     
+
                     </div>
                 </div>
             </div>
@@ -706,20 +708,20 @@ export class Load_Exception extends React.Component {
                     <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.setState({
-                               showDetails:false
+                                showDetails: false
                             })
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
-                    <div className="col-2 col-small-style small-font" style={{wordBreak: 'break-all'}}>{data[keys].value.ProcessID}</div>
+                    <div className="col-2 col-small-style small-font" style={{ wordBreak: 'break-all' }}>{data[keys].value.ProcessID}</div>
                     {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDateTime ).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
+                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDateTime).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
             )
-          
-            
+
+
         });
 
         return (
@@ -814,7 +816,7 @@ export class Load_Exception extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                         icons={this.state.icons}
-                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
@@ -822,9 +824,9 @@ export class Load_Exception extends React.Component {
                                     showerror: false,
                                     claims_rowData: [],
                                     Ag_grid_FileName: '',
-                                    Ag_grid_fileDate:'',
+                                    Ag_grid_fileDate: '',
                                 })
-                                 this.getTransactions(event.data.FileID)
+                                this.getTransactions(event.data.FileID)
                             }
                         }}
                     >
@@ -835,21 +837,21 @@ export class Load_Exception extends React.Component {
     }
 
     _renderClaims() {
-      
-         let columnDefs = [
-            { headerName: "File Name", field: "FileName",width:200, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} },
-            { headerName: "File Date", field: "FileDate", width:100},
-            { headerName: "Process ID", field: "ProcessID", width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
-            { headerName: "Claim Id", field: "ClaimID", width:100,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
-            { headerName: "Process Name", field: "ProcessName", width:100 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}},
-                       
-            { headerName: "State" , field: "State", width:60 },
-            { headerName: "Exception", field: "Exception",width:700, cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'} }
-          ]
+
+        let columnDefs = [
+            { headerName: "File Name", field: "FileName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "Process ID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Id", field: "ClaimID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Process Name", field: "ProcessName", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+
+            { headerName: "State", field: "State", width: 60 },
+            { headerName: "Exception", field: "Exception", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } }
+        ]
 
         return (
             <div>
-                 
+
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
@@ -870,7 +872,16 @@ export class Load_Exception extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.claims_rowData}
 
-                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == "Exception" && event.data.Exception) {
+                                this.setState({
+                                    clickedError: event.data.Exception
+                                }, () => {
+                                    $('#error_modal_load').modal('show')
+                                })
+                            }
+                        }}
                     >
                     </AgGridReact>
                 </div>
@@ -878,7 +889,28 @@ export class Load_Exception extends React.Component {
         )
     }
 
- 
+    errorDialog = () => {
+        return (
+            <div class="modal" id="error_modal_load" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog-error">
+                    <div className="error-dialog">
+                        <div className="error-header">Exception</div>
+                        <div className="scroll-div">
+                            {this.state.clickedError}
+                        </div>
+                        <br />
+                        <div className="btnDesign close-button clickable"
+                            onClick={() => {
+                                $('#error_modal_load').modal('hide')
+                            }}>
+                            Close
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
     render() {
 
@@ -891,10 +923,10 @@ export class Load_Exception extends React.Component {
                         ?
                         <div>
                             {this._renderList()}
-                            {this.state.showClaims ? this._renderClaims() : null}                           
-                           
+                            {this.state.showClaims ? this._renderClaims() : null}
+
                             {/* {this.state.showerror ? this._ClaimStage() : null} */}
-                            
+
                         </div>
                         :
                         <div className="row padding-left">
@@ -902,14 +934,15 @@ export class Load_Exception extends React.Component {
                                 {this.state.claimsObj ? this.renderList() : null}
                             </div>
                             <div className="col-6">
-                            
-                        {this.state.showDetails ? this.render_load_excaption() : null}
-                    </div>
-                        
-                         
-                        </div> 
-               
+
+                                {this.state.showDetails ? this.render_load_excaption() : null}
+                            </div>
+
+
+                        </div>
+
                 }
+                {this.errorDialog()}
             </div>
         );
     }
