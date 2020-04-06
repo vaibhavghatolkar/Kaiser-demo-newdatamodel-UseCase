@@ -73,12 +73,17 @@ export class AuditSummary extends React.Component {
                 { headerName: "File Status", field: "FileStatus", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,}},
                 { headerName: "Load Status", field: "LoadStatus", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,}},
                 { headerName: "MCG Load Status	", field: "MCGStatus", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,}},
-                { headerName: "Submitted", field: "Submitted", width: 90 },
-                { headerName: "Claims In HiPaaS", field: "InHiPaaS", width: 90 },
+                { headerName: "X12 Count", field: "Submitted", width: 90 },
+                { headerName: "HiPaaS Count", field: "InHiPaaS", width: 90 },
                 { headerName: "Accepted PreProcess", field: "Accepted", width: 90 },
                 { headerName: "Rejected PreProcess", field: "Rejected", width: 90 },
-                { headerName: "Error in PreProcess", field: "Error", width: 90 },
-                { headerName: "In MCG	", field: "SentToQNXT", width: 80 },
+                { headerName: "Load in MCG", field: "LoadMCG", width: 90 },
+                { headerName: "Load Error", field: "LoadError", width: 90 },
+
+                { headerName: "277CA Accepted", field: "Accepted_277CA", width: 90 },
+                { headerName: "277CA Rejected", field: "Rejected_277CA", width: 90 },
+                // { headerName: "Error in PreProcess", field: "Error", width: 90 },
+                // { headerName: "In MCG	", field: "SentToQNXT", width: 80 },
                 { headerName: "999", field: "F999", width: 240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',  color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "277CA", field: "F277", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',  color: '#139DC9', cursor: 'pointer' } },
             ],
@@ -227,8 +232,14 @@ export class AuditSummary extends React.Component {
               ProcessID
               LoadStatus
               MCGStatus
+              Accepted_277CA
+              Rejected_277CA
+              LoadMCG
+              LoadError
             }
         }`
+
+   
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
@@ -558,7 +569,7 @@ export class AuditSummary extends React.Component {
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
-
+   
         data.forEach((d) => {
             let count = 0
             try {
@@ -575,8 +586,12 @@ export class AuditSummary extends React.Component {
                     <td className="list-item-style">{d.InHiPaaS ? d.InHiPaaS : 0}</td>
                     <td className="list-item-style">{d.Accepted}</td>
                     <td className="list-item-style">{d.Rejected}</td>
-                    <td className="list-item-style">{count}</td>
-                    <td className="list-item-style">{d.SentToQNXT}</td>
+                    {/* <td className="list-item-style">{count}</td> */}
+                    <td className="list-item-style">{d.LoadMCG}</td>
+                    <td className="list-item-style">{d.LoadError}</td>
+                    <td className="list-item-style">{d.Accepted_277CA}</td>
+                    <td className="list-item-style">{d.Rejected_277CA}</td>
+                    {/* <td className="list-item-style">{d.SentToQNXT}</td> */}
                     <td className="list-item-style">
                         <a style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}
                             onClick={() => {
@@ -593,17 +608,22 @@ export class AuditSummary extends React.Component {
             <div>
                 <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
                     <tr className="table-head">
-                        <td style={{ width: '19%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.filename", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
+                        <td style={{ width: '14%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.filename", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
                         <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.State", this.state.stateRotation, 'stateRotation')}>State</a></td>
                         <td style={{ wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a></td>
-                        <td style={{ width: '13%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                        <td className="table-head-text list-item-style">Submitted </td>
-                        <td className="table-head-text list-item-style">Claims In HiPaaS </td>
+                        <td style={{ width: '6%' ,  wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
+                        <td className="table-head-text list-item-style">X12 Count</td>
+                        <td className="table-head-text list-item-style">HiPaaS Count </td>
                         <td className="table-head-text list-item-style">Accepted PreProcess </td>
                         <td className="table-head-text list-item-style">Rejected PreProcess </td>
-                        <td className="table-head-text list-item-style">Error in PreProcess </td>
+
+                        <td className="table-head-text list-item-style">Load in MCG</td>
+                        <td className="table-head-text list-item-style">Load Error</td>
+                        <td className="table-head-text list-item-style">277CA Accepted</td>
+                        <td className="table-head-text list-item-style">277CA Rejected</td>
+                        {/* <td className="table-head-text list-item-style">Error in PreProcess </td> */}
                         {/* <td className="table-head-text list-item-style">Accepted in Preprocess</td> */}
-                        <td className="table-head-text list-item-style">In MCG </td>
+                        {/* <td className="table-head-text list-item-style">In MCG </td> */}
                         <td className="table-head-text list-item-style">999</td>
                         <td className="table-head-text list-item-style">277 CA</td>
                     </tr>

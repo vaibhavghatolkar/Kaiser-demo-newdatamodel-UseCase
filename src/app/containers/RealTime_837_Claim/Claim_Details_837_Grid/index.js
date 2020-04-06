@@ -1629,10 +1629,8 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
             { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
 
-
-            { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-
-
+            { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
         ]
 
@@ -1659,7 +1657,16 @@ export class Claim_Details_837_Grid extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.Error_data}
                         enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == "Error Description" && event.data.ErrorDesc) {
+                                this.setState({
+                                    clickedError: event.data.ErrorDesc
+                                }, () => {
+                                    $('#error_modal').modal('show')
+                                })
 
+                            }
+                        }}
 
                     >
                     </AgGridReact>

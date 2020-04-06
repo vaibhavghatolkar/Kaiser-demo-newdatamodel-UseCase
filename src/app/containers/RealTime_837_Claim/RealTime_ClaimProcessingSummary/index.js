@@ -76,14 +76,15 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "State", field: "State", width: 80},
                 { headerName: "File Date", field: "FileDateTime", width: 100},
                 { headerName: "File Status", field: "FileStatus", width: 100 },
-                { headerName: "999", field: "F999", width:240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "Claim Date", field: "ClaimDateTime", width:100, },
                 { headerName: "Claim Status", field: "ClaimStatus", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "	Subscriber Id", field: "Subscriber_ID", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "HiPaaS Status", field: "Transaction_Status", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "277CA Status", field: "", width: 100 },
+                { headerName: "277CA Status", field: "Status277CA", width: 100 },              
+                { headerName: "999", field: "F999", width:240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "277CA", field: "F277", width:100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                // { headerName: "HiPaaS Status", field: "Transaction_Status", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
+               
                 { headerName: "Adjudication Status", field: "adjudication_status", width: 100 },
                 // { headerName: "835", field: "F277" },
             ],
@@ -338,6 +339,7 @@ export class ClaimProcessingSummary extends React.Component {
                 State
                 FileDateTime
                 ClaimDateTime
+                Status277CA
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -444,13 +446,13 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By n.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
             { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
             { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
-            { value: '999' },
             { value: 'Molina Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
             { value: 'Claim Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
             { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
             { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
-            { value: 'HiPaaS Status' },
             { value: '277CA Status' },
+            { value: '999' },           
+            // { value: 'HiPaaS Status' },           
             { value: '277CA' },
             { value: 'Adjudication Status' },
             // { value: '835' },
@@ -460,13 +462,15 @@ export class ClaimProcessingSummary extends React.Component {
             { value: 'FileName', method: this.gotoDetails, isClick: 1, key_argument: 'FileID' },
             { value: 'FileCrDate', isDate: 1 },
             { value: 'FileStatus' },
-            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },
             { value: 'MolinaClaimID' },
             { value: 'ClaimDate', isDate: 1 },
             { value: 'ClaimStatus' },
             { value: 'Subscriber_ID' },
-            { value: 'Transaction_Status' },
-            { value: '' },
+            { value: 'Status277CA' },
+            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },
+            
+            // { value: 'Transaction_Status' },
+           
             { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
             { value: 'adjudication_status' },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
