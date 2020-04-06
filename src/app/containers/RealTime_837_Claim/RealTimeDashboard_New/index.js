@@ -1109,7 +1109,7 @@ export class RealTimeDashboard_New extends React.Component {
                         item.name != 'HiPaaS | MCG' &&
                         item.name != '277CA'
                     }
-                    uniformWidth={true}
+                    // uniformWidth={true}
                     _data={data}
                     header_text={item.name}
                     value={item.value}

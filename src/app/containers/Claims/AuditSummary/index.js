@@ -63,7 +63,7 @@ export class AuditSummary extends React.Component {
             accepted_Files: '',
             acceptedwithErrors: '',
             rejected_Files: '',
-            paginationPageSize: 5,
+            paginationPageSize: 10,
             domLayout: 'autoHeight',
             NotSent999: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].notSent ? props.location.state.data[0].notSent : '',
             columnDefs: [
@@ -490,7 +490,7 @@ export class AuditSummary extends React.Component {
                         item.name != '999' &&
                         item.name != '277 CA'
                     }
-                    uniformWidth={true}
+                    // uniformWidth={true}
                     _data={data}
                     header_text={item.name}
                     value={item.value}
