@@ -75,6 +75,7 @@ export class RealTimeDashboard_New extends React.Component {
             incoming_fileId: '',
             totalFiles: 0,
             LoadingClaims: 0,
+            total277CA:0,
             Months: 0,
             accepted: 0,
             rejected: 0,
@@ -374,7 +375,7 @@ export class RealTimeDashboard_New extends React.Component {
                     // { name: 'Load Error', value: loadedError,  },
                     // { name: 'Load in MCG', value: loaded },
                     { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
-                    { name: '277CA', value: (totalCount - rejected) },
+                    { name: '277CA', value: this.state.total277CA },
                 ]
 
                 this.setState({
@@ -951,9 +952,9 @@ export class RealTimeDashboard_New extends React.Component {
     }
 
     _refreshScreen = () => {
+        this._get999Count()
         this.getRejectedFile()
         this.getClaimCounts()
-        this._get999Count()
         this.getData()
         this._getCounts()
         this.getListData()
@@ -985,7 +986,8 @@ export class RealTimeDashboard_New extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    total_999: res.data.Total999Response[0].NotSent999,
+                    total_999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : 0,
+                    total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : 0,
                 })
             })
             .catch(err => {
@@ -1071,7 +1073,7 @@ export class RealTimeDashboard_New extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus,
-                    subtitle: (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
+                    subtitle: (item.name == 'Total Files') ? '' : (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
                     notSent: notSent
                 },
             ]
@@ -1105,6 +1107,7 @@ export class RealTimeDashboard_New extends React.Component {
                         mcgStatus: 'Exception',
                         notSent: notSent
                     }]
+                    mcgStatus = 'Exception'
                 }
             }
 
