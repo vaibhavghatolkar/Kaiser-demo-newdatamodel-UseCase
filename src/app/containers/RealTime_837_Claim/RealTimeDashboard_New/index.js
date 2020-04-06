@@ -1380,7 +1380,7 @@ export class RealTimeDashboard_New extends React.Component {
             ]
             row.push(
                 <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{ fontSize: '16px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
+                    <div style={{   fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
                     <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9"> {item.name} </div>
                     {
                         item.isClick ?
@@ -1419,9 +1419,10 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         let stage_4 = [
-            { 'header': 'L3 - L7 Status' },
-            { 'name': 'Accepted', 'value': this.state.total_999, 'isClick': 1, 'url': Strings.claimsAudit },
-            { 'name': 'Rejected', 'value': (this.state.totalFiles - this.state.rejectedCount) },
+            {'header':'L3 - L7 Status'},
+            // { 'name': 'Accepted', 'value': 0, 'isClick': 1, 'url' : Strings.claimsAudit },
+            { 'name': 'Accepted', 'value': 0, },
+            { 'name': 'Rejected', 'value': 0 },
         ]
 
         return (

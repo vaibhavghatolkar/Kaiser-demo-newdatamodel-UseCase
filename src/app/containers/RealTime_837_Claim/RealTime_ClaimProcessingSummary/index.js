@@ -748,6 +748,7 @@ export class ClaimProcessingSummary extends React.Component {
             ]
             row.push(
                 <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
+                   <div style={{   fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
                     <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
                     {
                         item.isClick ?
@@ -769,23 +770,27 @@ export class ClaimProcessingSummary extends React.Component {
 
     renderClaimDetails = () => {
         let stage_1 = [
+            {'header':'HiPaaS Load Status'},
             { 'name': 'X12 Count', 'value': this.state.X12Count },
             { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
             { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
         ]
         let stage_2 = [
+            {'header':'L1 - L2 Status'},
             { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
-            { 'name': 'Accepted with Errors', 'value': this.state.Rejected_Claims, 'isClick': 1 },
+            { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
         ]
         let stage_3 = [
+            {'header':'MCG Load Status'},
             { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
             { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
         ]
 
         let stage_4 = [
-            { 'name': '999 Not Sent', 'value': 0 },
-            { 'name': '277CA Not Sent', 'value': this.state.totalFiles },
+            {'header':'L3 - L7 Status'},
+            { 'name': 'Accepted', 'value': 0 },
+            { 'name': 'Rejected', 'value': 0 },
         ]
 
         return (
@@ -793,7 +798,7 @@ export class ClaimProcessingSummary extends React.Component {
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}
-                {/* {this._renderClaimTables(stage_4)} */}
+                {this._renderClaimTables(stage_4)}
             </div>
         )
     }
