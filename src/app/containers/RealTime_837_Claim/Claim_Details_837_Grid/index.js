@@ -429,6 +429,8 @@ export class Claim_Details_837_Grid extends React.Component {
                 Transaction_Status
                 FileName
                 FileCrDate
+                FileDateTime
+                ClaimDateTime
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -673,6 +675,7 @@ export class Claim_Details_837_Grid extends React.Component {
               HL22Count
               HL23Count
               Receiver
+              ClaimDateTime
             }
             Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page} , GridType:${this.state.gridType}) {
               ClaimID
@@ -1555,7 +1558,7 @@ export class Claim_Details_837_Grid extends React.Component {
             // { headerName: "File Date", field: "FileCrDate" },
 
             { headerName: "X12 Claim Id", field: "ClaimID", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Claim Date", field: "ClaimDate", width: 100 },
+            { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Claim Status", field: "ClaimStatus", width: 140 },
             { headerName: "Subscriber Id", field: "Subscriber_ID", width: 140 },
             { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
@@ -1717,7 +1720,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "HL23 Count", field: "HL23Count", width: 80 },
             { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "X12 Claim Id", field: "ClaimID", width: 100 },
-            { headerName: "Claim Date", field: "ClaimDate", width: 100 },
+            { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName", width: 100 },
             { headerName: "Subscriber Last Name", field: "SubscriberLastName", width: 100 },
             { headerName: "Admission Date", field: "AdmissionDate", width: 100 },

@@ -74,11 +74,11 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "File Name", field: "FileName", cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' }},
                 { headerName: "State", field: "State", width: 80},
-                { headerName: "File Date", field: "FileCrDate", width: 100},
+                { headerName: "File Date", field: "FileDateTime", width: 100},
                 { headerName: "File Status", field: "FileStatus", width: 100 },
                 { headerName: "999", field: "F999", width:240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "Claim Date", field: "ClaimDate", width:100, },
+                { headerName: "Claim Date", field: "ClaimDateTime", width:100, },
                 { headerName: "Claim Status", field: "ClaimStatus", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "	Subscriber Id", field: "Subscriber_ID", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
                 { headerName: "HiPaaS Status", field: "Transaction_Status", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
@@ -336,6 +336,8 @@ export class ClaimProcessingSummary extends React.Component {
                 MolinaClaimID
                 ProcessID
                 State
+                FileDateTime
+                ClaimDateTime
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
