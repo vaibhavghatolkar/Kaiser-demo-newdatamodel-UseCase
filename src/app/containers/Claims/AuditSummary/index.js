@@ -170,6 +170,8 @@ export class AuditSummary extends React.Component {
                 Accepted_Claims
                 Rejected_Claims
                 LoadingClaims
+                Accepted_277CA
+                Rejected_277CA
             }
         }`
 
