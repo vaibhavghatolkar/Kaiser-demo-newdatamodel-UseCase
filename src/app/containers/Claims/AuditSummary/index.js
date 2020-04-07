@@ -524,6 +524,8 @@ export class AuditSummary extends React.Component {
                 mcgStatus = 'Loaded'
             } else if (item.name == '999') {
                 notSent = 'Y'
+            } else if (item.name == '277CA') {
+                notSent = 'CA'
             } else if (item.name == 'Reconciled Files | Error') {
                 loadStatus = 'Reconciled'
                 isDual = true
@@ -586,13 +588,15 @@ export class AuditSummary extends React.Component {
             if (notSent == 'Y') {
                 geturl = Strings.Outbound_response_999
                 data = []
+            } else if(notSent == 'CA'){
+                geturl = Strings.Outbound_277CAResponse
+                data = []
             }
 
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'HiPaaS | MCG' &&
-                        item.name != '277CA'
+                        item.name != 'HiPaaS | MCG'
                     }
                     // uniformWidth={true}
                     _data={data}
