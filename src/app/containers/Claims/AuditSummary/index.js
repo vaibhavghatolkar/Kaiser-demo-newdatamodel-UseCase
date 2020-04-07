@@ -68,12 +68,12 @@ export class AuditSummary extends React.Component {
             domLayout: 'autoHeight',
             NotSent999: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].notSent ? props.location.state.data[0].notSent : '',
             columnDefs: [
-                { headerName: "File Name", field: "filename", cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "File Name", field: "filename", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "State", field: "State", width: 80 },
-                { headerName: "ProcessID", field: "ProcessID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-                { headerName: "File Status", field: "FileStatus", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,}},
-                { headerName: "Load Status", field: "LoadStatus", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,}},
-                { headerName: "MCG Load Status	", field: "MCGStatus", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,}},
+                { headerName: "ProcessID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "File Status", field: "FileStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "Load Status", field: "LoadStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "MCG Load Status	", field: "MCGStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
                 { headerName: "X12 Count", field: "Submitted", width: 90 },
                 { headerName: "HiPaaS Count", field: "InHiPaaS", width: 90 },
                 { headerName: "Accepted PreProcess", field: "Accepted", width: 90 },
@@ -85,8 +85,8 @@ export class AuditSummary extends React.Component {
                 { headerName: "277CA Rejected", field: "Rejected_277CA", width: 90 },
                 // { headerName: "Error in PreProcess", field: "Error", width: 90 },
                 // { headerName: "In MCG	", field: "SentToQNXT", width: 80 },
-                { headerName: "999", field: "F999", width: 240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',  color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277CA", field: "F277", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',  color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "999", field: "F999", width: 240, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277CA", field: "F277", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -104,13 +104,13 @@ export class AuditSummary extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-              
+
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
                 filter: true,
-              },    
+            },
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
@@ -168,7 +168,7 @@ export class AuditSummary extends React.Component {
     getClaimCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        
+
         let query = `{
             Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 HiPaaSCount
@@ -243,7 +243,7 @@ export class AuditSummary extends React.Component {
             }
         }`
 
-   
+
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claims_837, {
             method: 'POST',
@@ -309,7 +309,8 @@ export class AuditSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    total_999: res.data.Total999Response[0].NotSent999,
+                    total_999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : 0,
+                    total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : 0,
                 })
             })
             .catch(err => {
@@ -436,7 +437,7 @@ export class AuditSummary extends React.Component {
                 let acceptedwithErrors = ''
                 let processing = ''
                 let MCGLoadingFiles = ''
-                let Total999 = res.data.Total999Response[0].NotSent999 
+                let Total999 = res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : 0
                 let Total277CA = res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : ''
 
 
@@ -468,9 +469,9 @@ export class AuditSummary extends React.Component {
                     // { name: 'Load Error', value: loadedError,  },
                     // { name: 'Load in MCG', value: loaded },
                     { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
-                    { name: '277CA', value: (totalCount - rejected) },
+                    { name: '277CA', value: Total277CA },
                 ]
-                
+
                 this.setState({
                     summaryList: summary,
                     totalFiles: totalCount
@@ -523,6 +524,8 @@ export class AuditSummary extends React.Component {
                 mcgStatus = 'Loaded'
             } else if (item.name == '999') {
                 notSent = 'Y'
+            } else if (item.name == '277CA') {
+                notSent = 'CA'
             } else if (item.name == 'Reconciled Files | Error') {
                 loadStatus = 'Reconciled'
                 isDual = true
@@ -544,13 +547,13 @@ export class AuditSummary extends React.Component {
                     type: type,
                     gridflag: loadStatus,
                     mcgStatus: mcgStatus,
-                    subtitle: (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
-                    notSent:notSent
+                    subtitle: (item.name == 'Total Files') ? '' : (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
+                    notSent: notSent
                 },
             ]
 
-            if(isDual){
-                if(item.name == 'Reconciled Files | Error'){
+            if (isDual) {
+                if (item.name == 'Reconciled Files | Error') {
                     _second_data = [{
                         flag: addon,
                         State: State,
@@ -581,12 +584,19 @@ export class AuditSummary extends React.Component {
                 }
             }
 
-            let geturl = mcgStatus == "Exception" ? Strings.Load_Exception : notSent == 'Y' ? Strings.claimsAudit : Strings.Claim_Details_837_Grid
+            let geturl = Strings.Claim_Details_837_Grid
+            if (notSent == 'Y') {
+                geturl = Strings.Outbound_response_999
+                data = []
+            } else if(notSent == 'CA'){
+                geturl = Strings.Outbound_277CAResponse
+                data = []
+            }
+
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'HiPaaS | MCG' &&
-                        item.name != '277CA'
+                        item.name != 'HiPaaS | MCG'
                     }
                     // uniformWidth={true}
                     _data={data}
@@ -601,6 +611,7 @@ export class AuditSummary extends React.Component {
                     first_data={data}
                     second_data={_second_data}
                     url={geturl}
+                    second_url={item.name == 'Load in MCG | Error' ? Strings.Load_Exception : ''}
                 />
 
             )
@@ -663,7 +674,7 @@ export class AuditSummary extends React.Component {
     renderTransactions() {
         let row = []
         const data = this.state.claimsAudit;
-   
+
         data.forEach((d) => {
             let count = 0
             try {
@@ -705,7 +716,7 @@ export class AuditSummary extends React.Component {
                         <td style={{ width: '14%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.filename", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
                         <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.State", this.state.stateRotation, 'stateRotation')}>State</a></td>
                         <td style={{ wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a></td>
-                        <td style={{ width: '6%' ,  wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
+                        <td style={{ width: '6%', wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
                         <td className="table-head-text list-item-style">X12 Count</td>
                         <td className="table-head-text list-item-style">HiPaaS Count </td>
                         <td className="table-head-text list-item-style">Accepted PreProcess </td>
@@ -929,7 +940,7 @@ export class AuditSummary extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
@@ -937,7 +948,7 @@ export class AuditSummary extends React.Component {
                             onSelected={this.onSelected}
                         />
 
-                    </div>
+                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
@@ -1023,7 +1034,7 @@ export class AuditSummary extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == '999') {
                                 this.goto999(event.data.FileID)

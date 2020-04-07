@@ -134,7 +134,12 @@ export class ClaimPaymentDashboard extends React.Component {
             providerChartData: [4, 5, 1, 2, 3],
             ErrorChartLabel: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
             ErrorChartData: [9, 5, 1, 3, 4, 8, 7, 11, 2, 6, 10, 12],
-
+            EFTData: 0,
+            CheckData: 0,
+            Rejected: 0,
+            Accepted: 0,
+            QNXT_Generated: 0,
+            Hipaas_Received: 0,
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -142,6 +147,8 @@ export class ClaimPaymentDashboard extends React.Component {
             columnDefs: [
                 { headerName: "QNXT File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "File Date", field: "FileDate" },
+                { headerName: "State", field: "State" },
+                { headerName: "Process Id", field: "ProcessID" },
                 { headerName: "Remittance sent", field: "" },
                 { headerName: "Remittance sent date", field: "" },
                 // { headerName: "Compliance vs Submission date", field: "" },
@@ -207,6 +214,7 @@ export class ClaimPaymentDashboard extends React.Component {
         this.getListData()
         this._getCounts()
         this._getPieChartData()
+        this._getClaimCounts()
     }
 
     getCommonData() {
@@ -441,6 +449,8 @@ export class ClaimPaymentDashboard extends React.Component {
   CHECKEFTFlag
   CheckEFTDt
   Receiver
+  ProcessID
+  State 
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -526,6 +536,7 @@ export class ClaimPaymentDashboard extends React.Component {
         });
         setTimeout(() => {
             this.getData()
+            this._getClaimCounts()
         }, 50);
     };
 
@@ -535,6 +546,7 @@ export class ClaimPaymentDashboard extends React.Component {
         });
         setTimeout(() => {
             this.getData()
+            this._getClaimCounts()
         }, 50);
     }
 
@@ -1325,12 +1337,12 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Received From QNXT', value: 30 },
-                    { name: 'Vaildated', value: 10 },
-                    { name: 'Files in Error', value: 5 },
-                    { name: 'Error Resolved', value: 2 },
+                    { name: 'Received From QNXT', value: 7 },
+                    { name: 'Vaildated', value: 7 },
+                    { name: 'Files in Error', value: 0 },
+                    { name: 'Error Resolved', value: 0 },
                     { name: 'Total Sent To Availity', value: 6 },
-                    { name: '999 Received', value: 4 },
+                    { name: '999 Received', value: 7 },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
@@ -1577,9 +1589,21 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-    getClaimCounts = async () => {
+    _getClaimCounts = async () => {
+
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        
         let query = `{
-           
+            Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                Check
+                EFT
+                Rejected
+                Accepted
+                QNXT_Generated
+                Hipaas_Received
+              }
+              
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1594,19 +1618,17 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data) {
-                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
-                    let _data = res.data.Claim837RTDashboardTable[0]
+                    let data = res.data.Dashboard835Count[0]
+                    // let _data = res.data.Claim837RTDashboardTable[0]
 
                     this.setState({
-                        X12Count: data ? data.X12Count : 0,
-                        HiPaaSCount: data ? data.HiPaaSCount : 0,
-                        LoadingClaims: _data ? _data.LoadingClaims : 0,
-                        Accepted_Claims: _data ? _data.Accepted_Claims : 0,
-                        Rejected_Claims: _data ? _data.Rejected_Claims : 0,
-                        FileReject_Claims: _data ? _data.FileReject_Claims : 0,
-                        Processing_Claims: _data ? _data.Processing_Claims : 0,
-                        ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
+                        CheckData: data ? data.Check : 0,
+                        EFTData: data ? data.EFT : 0,
+                        Rejected999: data ? data.Rejected : 0,
+                        Accepted999: data ? data.Accepted : 0,
+                        QNXT_Generated: data ? data.QNXT_Generated : 0,
+                        Hipaas_Received: data ? data.Hipaas_Received : 0,
+                       
                     })
                 }
             })
@@ -1616,40 +1638,22 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     renderClaimDetails = () => {
-        // let stage_1 = [
-        //     { 'name': 'Received From QNXT', 'value': '12K' },
-        //     { 'name': 'In HiPaaS', 'value': '11K' },
-        //     { 'name': 'Error', 'value': 900 },
-        // ]
-        // let stage_2 = [
-        //     { 'name': 'WIP', 'value': 90 },
-        //     { 'name': 'Pending', 'value': 100 },
-        //     { 'name': 'Paid', 'value': 120 },
-        //     { 'name': 'Denied', 'value': 10 },
-
-        // ]
-        // let stage_3 = [
-        //     { 'name': 'Sent to Availity', 'value': 80 },
-        //     { 'name': '999 Not Sent', 'value': 30 },
-        //     // { 'name': 'Accepted %', 'value': '85%' },
-        //     // { 'name': 'Rejected %', 'value': '15%' }
-        // ]
 
         let stage_1 = [
-            { 'name': 'QNXT Generated', 'value': '12K' },
-            { 'name': 'HiPaaS Received ', 'value': '11K' },
+            { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
+            { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
             { 'name': 'Total Number of Errors', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'Sent to Availity', 'value': 90 },
-            { 'name': 'Number of Acknowledged 835', 'value': 100 },
-            { 'name': 'Number of Accepted 999’s', 'value': 120 },
-            { 'name': 'Number of Rejected 999’s', 'value': 10 },
+            { 'name': 'Sent to Availity', 'value': 6 },
+            { 'name': 'Number of Acknowledged 835', 'value': 7 },
+            { 'name': 'Number of Accepted 999’s', 'value': this.state.Accepted999 },
+            { 'name': 'Number of Rejected 999’s', 'value': this.state.Rejected999 },
 
         ]
         let stage_3 = [
-            { 'name': 'EFT', 'value': 80 },
-            { 'name': 'CHK', 'value': 20 },
+            { 'name': 'EFT', 'value': this.state.EFTData, },
+            { 'name': 'CHK', 'value': this.state.CheckData,},
             { 'name': '% ERA out of total', 'value': 30 },
             { 'name': '# Availity rejected', 'value': 85 },
             // { 'name': 'Rejected %', 'value': '15%' }
@@ -1679,6 +1683,7 @@ export class ClaimPaymentDashboard extends React.Component {
                                     State: event.target.options[event.target.selectedIndex].text
                                 }, () => {
                                     this.getData()
+                                    this._getClaimCounts()
                                 })
                             }}
                         >
@@ -1706,7 +1711,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             onChange={(e) => this.onHandleChange(e)}
                         />
                     </div> */}
-                    <div className="form-group col">
+                    {/* <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -1715,7 +1720,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             <option value="select"></option>
                             {this.getoptions()}
                         </select>
-                    </div>
+                    </div> */}
                     <div className="form-group col">
                         <div className="list-dashboard">Time Range</div>
                         <select
@@ -1756,6 +1761,7 @@ export class ClaimPaymentDashboard extends React.Component {
 
                                 setTimeout(() => {
                                     this.getData()
+                                    this._getClaimCounts()
                                 }, 50);
                             }}
                         >
@@ -2072,8 +2078,8 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div class="progress">
                 <div class="progress-bar" role="progressbar" style={{ width: k }}>Received From QNXT ({k})</div>
-                <div class="progress-bar bg-success" role="progressbar" style={{ width: "35%" }}>Validated (35%)</div>
-                <div class="progress-bar bg-danger" role="progressbar" style={{ width: "30%" }}>Files in Error (30%)</div>
+                <div class="progress-bar bg-success" role="progressbar" style={{ width: "35%" }}>Error Resolved (35%)</div>
+                <div class="progress-bar bg-danger" role="progressbar" style={{ width: "30%" }}>Validated (30%)</div>
             </div>
         )
     }

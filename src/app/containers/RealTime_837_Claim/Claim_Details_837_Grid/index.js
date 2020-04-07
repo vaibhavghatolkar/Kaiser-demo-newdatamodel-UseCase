@@ -994,14 +994,14 @@ export class Claim_Details_837_Grid extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
                             onHandleChange={this.onHandleChange}
                             onSelected={this.onSelected}
                         />
-                    </div>
+                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
@@ -1623,7 +1623,7 @@ export class Claim_Details_837_Grid extends React.Component {
         if (this.state.Error_data == undefined) { this.state.Error_data = [] }
         process.env.NODE_ENV == 'development' && console.log("_renderError", this.state.Error_data);
         
-        let columnDefs = this.state.Status277CA == "Rejected" ?
+        let columnDefs = this.state.status277CA == "Rejected" ?
           [
       
             { headerName: "Stage", field: "Stage", width: 100 },
@@ -1824,7 +1824,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         <div>
                             {this._renderList()}
                             {this.state.showClaims ? this._renderClaims() : null}
-                            {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.Status277CA == "Rejected" )? this._renderError() : null}
+                            {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.status277CA == "Rejected" )? this._renderError() : null}
                             {this.state.showerror ? this._ClaimView_Info_Table() : null}
                             {this.state.showerror ? this._ClaimLineTable() : null}
                             {/* {this.state.showerror ? this._ClaimStage() : null} */}
