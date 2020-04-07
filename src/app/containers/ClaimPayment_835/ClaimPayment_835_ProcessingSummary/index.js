@@ -579,13 +579,13 @@ console.log("asjfhsaf" , data)
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
@@ -593,8 +593,8 @@ console.log("asjfhsaf" , data)
                             onSelected={this.onSelected}
                         />
 
-                    </div>
-                    <div className="form-group col">
+                    </div> */}
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -604,7 +604,7 @@ console.log("asjfhsaf" , data)
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -612,7 +612,7 @@ console.log("asjfhsaf" , data)
                             onChange={this.handleStartChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -620,7 +620,7 @@ console.log("asjfhsaf" , data)
                             onChange={this.handleEndChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
