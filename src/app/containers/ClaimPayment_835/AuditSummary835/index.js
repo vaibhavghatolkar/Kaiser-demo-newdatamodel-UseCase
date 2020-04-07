@@ -782,7 +782,7 @@ export class AuditSummary835 extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
@@ -797,7 +797,7 @@ export class AuditSummary835 extends React.Component {
                         />
 
                     </div> */}
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -809,7 +809,7 @@ export class AuditSummary835 extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -817,7 +817,7 @@ export class AuditSummary835 extends React.Component {
                             onChange={this.handleStartChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -825,7 +825,7 @@ export class AuditSummary835 extends React.Component {
                             onChange={this.handleEndChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {

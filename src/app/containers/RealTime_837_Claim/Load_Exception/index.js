@@ -227,7 +227,6 @@ export class Load_Exception extends React.Component {
                 FileDateTime 
             }
         }`
-        // console.log(query)
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -498,14 +497,14 @@ export class Load_Exception extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
                             onHandleChange={this.onHandleChange}
                             onSelected={this.onSelected}
                         />
-                    </div>
+                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"

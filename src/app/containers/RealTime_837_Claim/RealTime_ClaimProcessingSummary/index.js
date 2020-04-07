@@ -580,13 +580,13 @@ export class ClaimProcessingSummary extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
@@ -594,8 +594,8 @@ export class ClaimProcessingSummary extends React.Component {
                             onSelected={this.onSelected}
                         />
 
-                    </div>
-                    <div className="form-group col">
+                    </div> */}
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -605,7 +605,7 @@ export class ClaimProcessingSummary extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -614,7 +614,7 @@ export class ClaimProcessingSummary extends React.Component {
                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -623,7 +623,7 @@ export class ClaimProcessingSummary extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -751,11 +751,13 @@ export class ClaimProcessingSummary extends React.Component {
 
             if (item.name == 'Accepted' && item.is277CA) {
                 subtitle = '277CA Accepted Claims'
+                generalStatus = ''
                 status277CA = 'Accepted'
             }
             
             if (item.name == 'Rejected' && item.is277CA) {
                 subtitle = '277CA Rejected Claims'
+                generalStatus = ''
                 status277CA = 'Rejected'
             }
 

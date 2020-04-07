@@ -1052,6 +1052,8 @@ export class RealTimeDashboard_New extends React.Component {
                 mcgStatus = 'Loaded'
             } else if (item.name == '999') {
                 notSent = 'Y'
+            } else if (item.name == '277CA') {
+                notSent = 'CA'
             } else if (item.name == 'Reconciled Files | Error') {
                 loadStatus = 'Reconciled'
                 isDual = true
@@ -1107,16 +1109,22 @@ export class RealTimeDashboard_New extends React.Component {
                         mcgStatus: 'Exception',
                         notSent: notSent
                     }]
-                    mcgStatus = 'Exception'
                 }
             }
 
-            let geturl = mcgStatus == "Exception" ? Strings.Load_Exception : notSent == 'Y' ? Strings.claimsAudit : Strings.Claim_Details_837_Grid
+            let geturl = Strings.Claim_Details_837_Grid
+            if(notSent == 'Y'){
+                geturl = Strings.Outbound_response_999
+                data = []
+            } else if(notSent == 'CA'){
+                geturl = Strings.Outbound_277CAResponse
+                data = []
+            }
+
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'HiPaaS | MCG' &&
-                        item.name != '277CA'
+                        item.name != 'HiPaaS | MCG'
                     }
                     // uniformWidth={true}
                     _data={data}
@@ -1131,6 +1139,7 @@ export class RealTimeDashboard_New extends React.Component {
                     first_data={data}
                     second_data={_second_data}
                     url={geturl}
+                    second_url={item.name == 'Load in MCG | Error' ? Strings.Load_Exception : ''}
                 />
 
             )
@@ -1176,14 +1185,14 @@ export class RealTimeDashboard_New extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-                    <div className="form-group col">
+                    {/* <div className="form-group col">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
                             list={this.state.providers}
                             onHandleChange={this.onHandleChange}
                             onSelected={this.onSelected}
                         />
-                    </div>
+                    </div> */}
 
                     <div className="form-group col">
                         <div className="list-dashboard">Submitter</div>
@@ -1374,11 +1383,13 @@ export class RealTimeDashboard_New extends React.Component {
             
             if (item.name == 'Accepted' && item.is277CA) {
                 subtitle = '277CA Accepted Claims'
+                generalStatus = ''
                 status277CA = 'Accepted'
             }
             
             if (item.name == 'Rejected' && item.is277CA) {
                 subtitle = '277CA Rejected Claims'
+                generalStatus = ''
                 status277CA = 'Rejected'
             }
 
