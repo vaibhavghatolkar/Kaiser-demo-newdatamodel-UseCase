@@ -69,6 +69,12 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             subscriberFirstNameFlag: 180,
             paginationPageSize: 10,
             file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
+            EFTData: 0,
+            CheckData: 0,
+            Rejected: 0,
+            Accepted: 0,
+            QNXT_Generated: 0,
+            Hipaas_Received: 0,
             domLayout: 'autoHeight',
             
             columnDefs: [
@@ -140,6 +146,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         this.getCountData()
         this.getClaimCounts()
         this.getData()
+        this._getClaimCounts()
     }
 
     _get999Count = async () => {
@@ -576,6 +583,7 @@ console.log("asjfhsaf" , data)
             this.getCountData()
             this.getClaimCounts()
             this.getData()
+            this._getClaimCounts()
         })
     }
 
@@ -587,6 +595,7 @@ console.log("asjfhsaf" , data)
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
+                          
                         />
                     </div>
                     {/* <div className="form-group col-2">
@@ -614,6 +623,7 @@ console.log("asjfhsaf" , data)
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -622,6 +632,7 @@ console.log("asjfhsaf" , data)
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -661,6 +672,8 @@ console.log("asjfhsaf" , data)
             this.getCountData()
             this.getClaimCounts()
             this.getData()
+            this._getClaimCounts()
+            
         }, 50);
     }
 
@@ -674,6 +687,7 @@ console.log("asjfhsaf" , data)
             this.getCountData()
             this.getClaimCounts()
             this.getData()
+            this._getClaimCounts()
         }, 50);
     }
 
@@ -776,31 +790,75 @@ console.log("asjfhsaf" , data)
         )
     }
 
+    _getClaimCounts = async () => {
 
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        
+        let query = `{
+            Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                Check
+                EFT
+                Rejected
+                Accepted
+                QNXT_Generated
+                Hipaas_Received
+              }
+              
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let data = res.data.Dashboard835Count[0]
+                    // let _data = res.data.Claim837RTDashboardTable[0]
+
+                    this.setState({
+                        CheckData: data ? data.Check : 0,
+                        EFTData: data ? data.EFT : 0,
+                        Rejected999: data ? data.Rejected : 0,
+                        Accepted999: data ? data.Accepted : 0,
+                        QNXT_Generated: data ? data.QNXT_Generated : 0,
+                        Hipaas_Received: data ? data.Hipaas_Received : 0,
+                       
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
     renderClaimDetails = () => {
+
         let stage_1 = [
-            { 'name': 'QNXT Generated', 'value': '12K' },
-            { 'name': 'HiPaaS Received ', 'value': '11K' },
+            { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
+            { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
             { 'name': 'Total Number of Errors', 'value': 900 },
         ]
         let stage_2 = [
-            { 'name': 'Sent to Availity', 'value': 90 },
-            { 'name': 'Number of Acknowledged 835', 'value': 100 },
-            { 'name': 'Number of Accepted 999’s', 'value': 120 },
-            { 'name': 'Number of Rejected 999’s', 'value': 10 },
-            
+            { 'name': 'Sent to Availity', 'value': 6 },
+            { 'name': 'Number of Acknowledged 835', 'value': 7 },
+            { 'name': 'Number of Accepted 999’s', 'value': this.state.Accepted999 },
+            { 'name': 'Number of Rejected 999’s', 'value': this.state.Rejected999 },
+
         ]
         let stage_3 = [
-            { 'name': 'EFT', 'value': 80 },
-            { 'name': 'CHK', 'value': 20 },
+            { 'name': 'EFT', 'value': this.state.EFTData, },
+            { 'name': 'CHK', 'value': this.state.CheckData,},
             { 'name': '% ERA out of total', 'value': 30 },
             { 'name': '# Availity rejected', 'value': 85 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
-        
-        let stage_4 = [
-       
-        ]
+
 
         return (
             <div className="row" style={{ marginBottom: '12px' }}>
@@ -811,6 +869,41 @@ console.log("asjfhsaf" , data)
             </div>
         )
     }
+
+    // renderClaimDetails = () => {
+    //     let stage_1 = [
+    //         { 'name': 'QNXT Generated', 'value': '12K' },
+    //         { 'name': 'HiPaaS Received ', 'value': '11K' },
+    //         { 'name': 'Total Number of Errors', 'value': 900 },
+    //     ]
+    //     let stage_2 = [
+    //         { 'name': 'Sent to Availity', 'value': 90 },
+    //         { 'name': 'Number of Acknowledged 835', 'value': 100 },
+    //         { 'name': 'Number of Accepted 999’s', 'value': 120 },
+    //         { 'name': 'Number of Rejected 999’s', 'value': 10 },
+            
+    //     ]
+    //     let stage_3 = [
+    //         { 'name': 'EFT', 'value': 80 },
+    //         { 'name': 'CHK', 'value': 20 },
+    //         { 'name': '% ERA out of total', 'value': 30 },
+    //         { 'name': '# Availity rejected', 'value': 85 },
+    //         // { 'name': 'Rejected %', 'value': '15%' }
+    //     ]
+        
+    //     let stage_4 = [
+       
+    //     ]
+
+    //     return (
+    //         <div className="row" style={{ marginBottom: '12px' }}>
+    //             {this._renderClaimTables(stage_1)}
+    //             {this._renderClaimTables(stage_2)}
+    //             {this._renderClaimTables(stage_3)}
+    //             {/* {this._renderClaimTables(stage_4)} */}
+    //         </div>
+    //     )
+    // }
 
 
    
