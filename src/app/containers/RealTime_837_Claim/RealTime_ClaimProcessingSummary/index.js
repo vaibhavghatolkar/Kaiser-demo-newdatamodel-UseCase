@@ -751,11 +751,13 @@ export class ClaimProcessingSummary extends React.Component {
 
             if (item.name == 'Accepted' && item.is277CA) {
                 subtitle = '277CA Accepted Claims'
+                generalStatus = ''
                 status277CA = 'Accepted'
             }
             
             if (item.name == 'Rejected' && item.is277CA) {
                 subtitle = '277CA Rejected Claims'
+                generalStatus = ''
                 status277CA = 'Rejected'
             }
 
