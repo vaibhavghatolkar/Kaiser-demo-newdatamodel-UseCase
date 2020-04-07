@@ -2104,7 +2104,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         {this.renderTopbar()}
                         {this.progressBar()}
                         {/* {this.renderSummaryDetails()} */}
-                        <div className="general-header" style={{ marginBottom: "-6px" }}>Remittance File Level</div>
+                        <div className="general-header" style={{ marginBottom: "10px", marginTop : '12px' }}>Remittance File Level</div>
                         {this._renderSummaryDetails()}
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
