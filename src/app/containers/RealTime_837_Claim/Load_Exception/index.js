@@ -108,7 +108,7 @@ export class Load_Exception extends React.Component {
             columnDefs: [
                 { headerName: "File Name", field: "FileName", width: 300, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "State", field: "State", width: 70 },
-                { headerName: "ProcessID", field: "ProcessID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Process Id", field: "ProcessID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Type", field: "Type", width: 50 },
                 { headerName: "File Date", field: "FileDateTime", width: 130 },
                 { headerName: "File Status", field: "FileStatus", width: 80 },
@@ -628,7 +628,7 @@ export class Load_Exception extends React.Component {
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
                 </div>
                 <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a>
+                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>Process Id</a>
                 </div>
                 {/* <div className="col-1 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
@@ -840,7 +840,7 @@ export class Load_Exception extends React.Component {
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "File Date", field: "FileDate", width: 100 },
-            { headerName: "Process ID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Id", field: "ClaimID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Process Name", field: "ProcessName", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
 

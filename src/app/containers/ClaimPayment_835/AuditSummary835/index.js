@@ -69,7 +69,7 @@ export class AuditSummary835 extends React.Component {
                 { headerName: "QNXT File Name", field: "QNXTFileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "File Date", field: "Date" },
                 { headerName: "State", field: "State" },
-                { headerName: "ProcessID", field: "ProcessID" },
+                { headerName: "Process Id", field: "ProcessID" },
                 { headerName: "File Status", field: "" },
                 { headerName: "Remittance File Name", field: "RemittanceFileName" },
                 { headerName: "Remittance File Date	", field: "RemittanceFileDate" },
@@ -572,7 +572,7 @@ export class AuditSummary835 extends React.Component {
                         <td className="table-head-text list-item-style">QNXT File Name</td>
                         <td className="table-head-text list-item-style">File Date</td>
                         <td className="table-head-text list-item-style">State</td>
-                        <td className="table-head-text list-item-style">ProcessID</td>
+                        <td className="table-head-text list-item-style">Process Id</td>
                         <td className="table-head-text list-item-style">File Status</td>
                         <td className="table-head-text list-item-style">Remittance File Name</td>
                         <td className="table-head-text list-item-style">Remittance File Date	</td>

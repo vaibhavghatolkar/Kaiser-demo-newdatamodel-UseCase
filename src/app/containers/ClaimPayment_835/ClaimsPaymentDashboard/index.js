@@ -14,6 +14,7 @@ import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
+import { StateDropdown } from '../../../components/StateDropdown';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { MDBProgress } from 'mdbreact';
@@ -106,7 +107,7 @@ export class ClaimPaymentDashboard extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
@@ -327,6 +328,8 @@ export class ClaimPaymentDashboard extends React.Component {
             <tr className="table-head">
                 <td className="table-head-text list-item-style">QNXT File Name</td>
                 <td className="table-head-text list-item-style">File Date</td>
+                <td className="table-head-text list-item-style">State</td>
+                <td className="table-head-text list-item-style">Process Id</td>
                 <td className="table-head-text list-item-style">Remittance sent</td>
                 <td className="table-head-text list-item-style">Remittance sent date</td>
                 {/* <td className="table-head-text list-item-style">Compliance vs Submission date</td> */}
@@ -435,22 +438,23 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         let query = `{            
-            RemittanceViewerFileDetails(Sender:"${this.state.Sender}",State:"${this.state.State ? this.state.State : ''}",Organization:"${this.state.Organization}",EFTStartDt:"${Service_startDate}",EFTEndDt:"${ServiceEndDate}",ClaimReceivedStartDt:"${startDate}",ClaimReceivedEndDt:"${endDate}", page: ` + this.state.page + ` , OrderBy:"` + this.state.orderby + `") {
+            
+                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}") {
                 RecCount
-  Sender
-  Organization
-  FileID
-  FileName
-  CheckEFTNo
-  FileDate
-  PayerName
-  PayerID
-  AccountNo
-  CHECKEFTFlag
-  CheckEFTDt
-  Receiver
-  ProcessID
-  State 
+                Sender
+                Organization
+                FileID
+                FileName
+                CheckEFTNo
+                FileDate
+                PayerName
+                PayerID
+                AccountNo
+                CHECKEFTFlag
+                CheckEFTDt
+                Receiver
+                ProcessID
+                State
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -464,20 +468,20 @@ export class ClaimPaymentDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.RemittanceViewerFileDetails) {
+                if (res && res.data && res.data.Dashboard835FileDetails) {
 
-                    if (res.data.RemittanceViewerFileDetails.length > 0) {
+                    if (res.data.Dashboard835FileDetails.length > 0) {
 
-                        count = Math.floor(res.data.RemittanceViewerFileDetails[0].RecCount / 10)
-                        if (res.data.RemittanceViewerFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.Dashboard835FileDetails[0].RecCount / 10)
+                        if (res.data.Dashboard835FileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
                         this.setState.recount = count;
                     }
 
                     this.setState({
-                        claimsList: res.data.RemittanceViewerFileDetails,
-                        rowData: this.state.gridType == 1 ? res.data.RemittanceViewerFileDetails : []
+                        claimsList: res.data.Dashboard835FileDetails,
+                        rowData: this.state.gridType == 1 ? res.data.Dashboard835FileDetails : []
                     })
                 }
             })
@@ -537,6 +541,7 @@ export class ClaimPaymentDashboard extends React.Component {
         setTimeout(() => {
             this.getData()
             this._getClaimCounts()
+            this.getListData()
         }, 50);
     };
 
@@ -547,6 +552,7 @@ export class ClaimPaymentDashboard extends React.Component {
         setTimeout(() => {
             this.getData()
             this._getClaimCounts()
+            this.getListData()
         }, 50);
     }
 
@@ -573,6 +579,14 @@ export class ClaimPaymentDashboard extends React.Component {
         setTimeout(() => {
             this.getData()
         }, 50);
+    }
+    _handleStateChange = (event) => {
+        this.setState({
+            State: event.target.options[event.target.selectedIndex].text
+        }, () => {
+            this._getClaimCounts()
+            this.getListData()
+        })
     }
 
 
@@ -854,6 +868,8 @@ export class ClaimPaymentDashboard extends React.Component {
                 <tr>
                     <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.FileName}</td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
+                    <td className="list-item-style">{d.State}</td>
+                    <td className="list-item-style">{d.ProcessID}</td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style"></td>
                     {/* <td className="list-item-style"></td> */}
@@ -1675,35 +1691,11 @@ export class ClaimPaymentDashboard extends React.Component {
             <div className="form-style" id='filters'>
                 <div className="form-row">
 
-                    <div className="form-group col">
+                <div className="form-group col">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text
-                                }, () => {
-                                    this.getData()
-                                    this._getClaimCounts()
-                                })
-                            }}
-                        >
-                            <option value=""></option>
-                            <option value="1">California</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
-                        </select>
+                        <StateDropdown
+                            method={this._handleStateChange}
+                        />
                     </div>
                     {/* <div className="form-group col">
                         <div className="list-dashboard">Provider</div>
@@ -1762,13 +1754,14 @@ export class ClaimPaymentDashboard extends React.Component {
                                 setTimeout(() => {
                                     this.getData()
                                     this._getClaimCounts()
+                                    this.getListData()
                                 }, 50);
                             }}
                         >
                             <option value="1">Last week</option>
-                            <option value="2" selected="selected">Last 30 days</option>
+                            <option value="2">Last 30 days</option>
                             <option value="2">Last 90 days</option>
-                            <option value="2">Last 180 days</option>
+                            <option value="2" selected="selected">Last 180 days</option>
                             <option value="2">Last year</option>
                         </select>
                     </div>

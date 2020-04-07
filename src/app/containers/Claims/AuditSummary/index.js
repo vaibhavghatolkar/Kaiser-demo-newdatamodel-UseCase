@@ -70,7 +70,7 @@ export class AuditSummary extends React.Component {
             columnDefs: [
                 { headerName: "File Name", field: "filename", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "State", field: "State", width: 80 },
-                { headerName: "ProcessID", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
                 { headerName: "File Status", field: "FileStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
                 { headerName: "Load Status", field: "LoadStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
                 { headerName: "MCG Load Status	", field: "MCGStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
@@ -715,7 +715,7 @@ export class AuditSummary extends React.Component {
                     <tr className="table-head">
                         <td style={{ width: '14%' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.filename", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
                         <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.State", this.state.stateRotation, 'stateRotation')}>State</a></td>
-                        <td style={{ wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.ProcessID", this.state.processIdRotation, 'processIdRotation')}>ProcessID</a></td>
+                        <td style={{ wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.ProcessID", this.state.processIdRotation, 'processIdRotation')}>Process Id</a></td>
                         <td style={{ width: '6%', wordBreak: 'break-all' }} className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "ClaimsDailyAudit.FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
                         <td className="table-head-text list-item-style">X12 Count</td>
                         <td className="table-head-text list-item-style">HiPaaS Count </td>
