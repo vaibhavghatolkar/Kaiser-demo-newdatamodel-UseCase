@@ -73,22 +73,23 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             
             columnDefs: [
       
-                { headerName: "QNXT File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Remittance File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Process Id", field: "" },
                 { headerName: "State", field: "" },
-                { headerName: "QNXT File Date", field: "FileDate" },
-                { headerName: "File Status", field: "" },
-                { headerName: "999", field: "", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Claim Id", field: "ClaimID" },
-                { headerName: "Days", field: "Days" },
-                { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
-                { headerName: "Check EFT No", field: "CheckEFTNo" },
-                { headerName: "Check EFT Date", field: "CheckEFTDt" },
-                { headerName: "Payment Method                ", field: "CHECKEFTFlag" },
-                { headerName: "Total Charge Amount    ", field: "TotalChargeAmt" },
-                { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt" },
-                { headerName: "Total Bill Amount    ", field: "TotalBillAmount" },
-                { headerName: "Total Adjustment Amount", field: "TotalAdjustmentAmount" },
+                { headerName: "Remittance File Date", field: "FileDate" },
+                { headerName: " Remittance File Status", field: "" },
+                { headerName: "999", field: "" },
+                { headerName: "In HiPaaS", field: "" },
+                // { headerName: "Claim Id", field: "ClaimID" },
+                // { headerName: "Days", field: "Days" },
+                // { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
+                // { headerName: "Check EFT No", field: "CheckEFTNo" },
+                // { headerName: "Check EFT Date", field: "CheckEFTDt" },
+                // { headerName: "Payment Method                ", field: "CHECKEFTFlag" },
+                // { headerName: "Total Charge Amount    ", field: "TotalChargeAmt" },
+                // { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt" },
+                // { headerName: "Total Bill Amount    ", field: "TotalBillAmount" },
+                // { headerName: "Total Adjustment Amount", field: "TotalAdjustmentAmount" },
             
             ],
 
@@ -342,6 +343,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
   TotalAdjustmentAmount
 TotalBillAmount
 Days
+
             }
         }`
        console.log("sakhjsaf" , query)
@@ -445,20 +447,21 @@ console.log("asjfhsaf" , data)
         let rowArray = []
 
         headerArray.push(
-            { value: ' QNXT File Name' },
-            { value: 'QNXT File Date'},
-            { value: 'File Status' },
+            { value: ' Remittance  File Name' },
+            { value: 'Remittance  File Date'},
+            { value: 'Remittance  File Status' },
             { value: '999' },
-            { value: 'Claim Id' },
-            { value: 'Day' },
-            // { value: 'Claim Received Date'},
-            { value: 'Check EFT No'},
-            // { value: 'Check EFT Date'},
-            { value: 'Payment Method' },
-            { value: 'Total Charge Amount' },
-            { value: 'Total Paid Amount' },
-            { value: 'Total Bill Amount' },
-            { value: 'Total Adjustment Amount' },
+            { value: 'In HiPaaS' },
+            // { value: 'Claim Id' },
+            // { value: 'Day' },
+            // // { value: 'Claim Received Date'},
+            // { value: 'Check EFT No'},
+            // // { value: 'Check EFT Date'},
+            // { value: 'Payment Method' },
+            // { value: 'Total Charge Amount' },
+            // { value: 'Total Paid Amount' },
+            // { value: 'Total Bill Amount' },
+            // { value: 'Total Adjustment Amount' },
             
         
         )
@@ -468,16 +471,17 @@ console.log("asjfhsaf" , data)
             { value: 'FileDate', isDate: 1 },
             { value: '' },
             { value: ''  },
-            { value: 'ClaimID' },
-            { value: 'Days'},
-            // { value: 'ClaimReceivedDate', isDate: 1 },
-            { value: 'CheckEFTNo' },
-            // { value: 'CheckEFTDt' },
-            { value: 'CheckEFTNo' },
-            { value: 'TotalChargeAmt' },
-            { value: 'TotalClaimPaymentAmt'  },
-            { value: 'TotalBillAmount' },
-            { value: 'TotalAdjustmentAmount'  },
+            { value: ''  },
+            // { value: 'ClaimID' },
+            // { value: 'Days'},
+            // // { value: 'ClaimReceivedDate', isDate: 1 },
+            // { value: 'CheckEFTNo' },
+            // // { value: 'CheckEFTDt' },
+            // { value: 'CheckEFTNo' },
+            // { value: 'TotalChargeAmt' },
+            // { value: 'TotalClaimPaymentAmt'  },
+            // { value: 'TotalBillAmount' },
+            // { value: 'TotalAdjustmentAmount'  },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
         
         )
