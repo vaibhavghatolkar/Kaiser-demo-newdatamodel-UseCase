@@ -377,22 +377,30 @@ export class ClaimPaymentDetails extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Claim Number' ,value: data.ClaimID },
+                            { key: 'Claim Id' ,value: data.ClaimID },
+                            { key: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
+                            { key: 'Patient Name',value: data.PatientName },
+                            { key: '835 Response (RAW)',value: "" },
+                            { key: 'Days Aged',value: "" },
+                            { key: 'Payment Method Code',value: data.CHECKEFTFlag },
+                            { key: 'Total Billed Amount',value: ""},
+                            { key: 'Total Adjusted Amount',value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt},
                             { key: 'Payer Name',value: data.PayerName },
                             { key: 'Payer claim control No.', value: data.PayerClaimControl},
                             { key: 'Claim Status Code',value: data.ClaimStatusCode },
                             { key: 'Claim Filling Indicator',},
-                            { key: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
+                            
                             { key: 'Patient ID', },
-                            { key: 'Patient Name',value: data.PatientName },
+                            
                             { key: 'Provider ID', },
                             { key: 'Provider Name', },
                             { key: 'Rendering Provider ID',},
                             { key: 'Facility Code Value',value: data.FacilityCode },
                             { key: 'Patient Control Number',value: data.PatientControlNo },
-                            { key: 'Payment Method Code',value: data.CHECKEFTFlag },
+                            
                             { key: 'DRG Code',value: data.DigonisCode },                            
                             { key: 'Total Patient Resp',value: data.PatietResAMT },
+                            
                         ]
                     this.setState({
                         showDetails: true,
@@ -419,7 +427,7 @@ export class ClaimPaymentDetails extends React.Component {
 
         dictionary.forEach(item => {
             col.push(
-                <div className="col">
+                <div className="col-4">
                     <div className="header">{item.key}</div>
                     <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
                 </div>
@@ -768,14 +776,14 @@ export class ClaimPaymentDetails extends React.Component {
         return (
    
             <tr className="table-head">
-                   <td  className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.ClaimID", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')} >Claim No.</td>
+                   <td  className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.ClaimID", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')} >Claim Id</td>
                    <td className="table-head-text list-item-style" >Claim Received Date</td>
                 <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.PatientName", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Patient Name</td>
                 
                
                 {/* <td className="table-head-text list-item-style">Check/EFT Date</td>
                 <td className="table-head-text list-item-style">Check/EFT Number</td> */}
-                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalChargeAmt", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Charged Amount</td>
+                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalChargeAmt", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Charge Amount</td>
 
                 <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalClaimPaymentAmt", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Paid Amount</td>
                 {/* <td className="table-head-text list-item-style">Action</td> */}
