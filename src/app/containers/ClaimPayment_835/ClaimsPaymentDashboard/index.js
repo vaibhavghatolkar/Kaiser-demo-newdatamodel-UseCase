@@ -1994,7 +1994,9 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             piechart_data && piechart_data.labels && piechart_data.labels.length > 0
                 ?
-                <div className="row chart-container-full chart clickable" style={{marginLeft: '9px'}} onClick={() => { this.gotoClaimDetails(sendData) }}>
+                <div className="row chart-container-full chart clickable" style={{marginLeft: '9px'}} onClick={() => { 
+                    // this.gotoClaimDetails(sendData) 
+                }}>
                     <div className="col-7 nopadding">
                         <div className="chart-header">{header}</div>
                         {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
@@ -2054,7 +2056,7 @@ export class ClaimPaymentDashboard extends React.Component {
                                 this.setState({
                                     incoming_fileId: event.data.FileID
                                 }, () => {
-                                    this.gotoClaimDetails()
+                                    // this.gotoClaimDetails()
                                 })
                             }
                         }}
