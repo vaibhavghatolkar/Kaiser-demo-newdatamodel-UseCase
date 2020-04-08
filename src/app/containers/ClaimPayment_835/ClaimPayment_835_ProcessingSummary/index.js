@@ -842,7 +842,7 @@ console.log("asjfhsaf" , data)
         let stage_1 = [
             { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'Total Number of Errors', 'value': 900 },
+            { 'name': 'Total Number of Errors', 'value': 0 },
         ]
         let stage_2 = [
             { 'name': 'Sent to Availity', 'value': 6 },

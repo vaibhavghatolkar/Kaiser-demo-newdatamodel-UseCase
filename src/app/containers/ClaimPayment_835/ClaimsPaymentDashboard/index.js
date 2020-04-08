@@ -129,7 +129,7 @@ export class ClaimPaymentDashboard extends React.Component {
             Service_endDate: '',
             Sender: '',
             page: 1,
-            count: 0,
+            count: 1,
             orderby: '',
             providerChartLabel: ['Provider Name 1', 'Provider Name 2', 'Provider Name 3', 'Provider Name 4', 'Provider Name 5'],
             providerChartData: [4, 5, 1, 2, 3],
@@ -141,6 +141,7 @@ export class ClaimPaymentDashboard extends React.Component {
             Accepted: 0,
             QNXT_Generated: 0,
             Hipaas_Received: 0,
+            TotalCountQnxt:0,
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -150,8 +151,8 @@ export class ClaimPaymentDashboard extends React.Component {
                 { headerName: "File Date", field: "FileDate" },
                 { headerName: "State", field: "State" },
                 { headerName: "Process Id", field: "ProcessID" },
-                { headerName: "Remittance sent", field: "" },
-                { headerName: "Remittance sent date", field: "" },
+                { headerName: "Remittance sent", field: "RemittanceFileName" },
+                { headerName: "Remittance sent date", field: "RemittanceSentDate" },
                 // { headerName: "Compliance vs Submission date", field: "" },
                 { headerName: "# of errors", field: "" },
 
@@ -455,6 +456,8 @@ export class ClaimPaymentDashboard extends React.Component {
                 Receiver
                 ProcessID
                 State
+                RemittanceFileName
+                RemittanceSentDate
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -476,12 +479,13 @@ export class ClaimPaymentDashboard extends React.Component {
                         if (res.data.Dashboard835FileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
-                        this.setState.recount = count;
+                        
                     }
 
                     this.setState({
                         claimsList: res.data.Dashboard835FileDetails,
-                        rowData: this.state.gridType == 1 ? res.data.Dashboard835FileDetails : []
+                        rowData: this.state.gridType == 1 ? res.data.Dashboard835FileDetails : [],
+                        count: count
                     })
                 }
             })
@@ -870,8 +874,8 @@ export class ClaimPaymentDashboard extends React.Component {
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style">{d.ProcessID}</td>
-                    <td className="list-item-style"></td>
-                    <td className="list-item-style"></td>
+                    <td className="list-item-style">{d.RemittanceFileName}</td>
+                    <td className="list-item-style">{d.RemittanceSentDate}</td>
                     {/* <td className="list-item-style"></td> */}
                     <td className="list-item-style"></td>
                     {/* <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Receiver}</td> */}
@@ -893,7 +897,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     breakLabel={'...'}
                     breakClassName={'page-link'}
                     initialPage={0}
-                    pageCount={Math.floor(this.state.claimsList[0].RecCount / 5) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0)}
+                    pageCount={this.state.count}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     onPageChange={(page) => { this.handlePageClick(page) }}
@@ -1353,7 +1357,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
 
                 summary = [
-                    { name: 'Received From QNXT', value: 7 },
+                    { name: 'Received From QNXT', value: this.state.TotalCountQnxt },
                     { name: 'Vaildated', value: 7 },
                     { name: 'Files in Error', value: 0 },
                     { name: 'Error Resolved', value: 0 },
@@ -1609,7 +1613,7 @@ export class ClaimPaymentDashboard extends React.Component {
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        
+
         let query = `{
             Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
                 Check
@@ -1618,6 +1622,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 Accepted
                 QNXT_Generated
                 Hipaas_Received
+                TotalCount
               }
               
         }`
@@ -1644,7 +1649,9 @@ export class ClaimPaymentDashboard extends React.Component {
                         Accepted999: data ? data.Accepted : 0,
                         QNXT_Generated: data ? data.QNXT_Generated : 0,
                         Hipaas_Received: data ? data.Hipaas_Received : 0,
-                       
+                        TotalCountQnxt: data ? data.TotalCount: 0
+                    },() =>{
+                       this._getCounts() 
                     })
                 }
             })
@@ -1658,7 +1665,7 @@ export class ClaimPaymentDashboard extends React.Component {
         let stage_1 = [
             { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'Total Number of Errors', 'value': 900 },
+            { 'name': 'Total Number of Errors', 'value': 0 },
         ]
         let stage_2 = [
             { 'name': 'Sent to Availity', 'value': 6 },
@@ -1669,7 +1676,7 @@ export class ClaimPaymentDashboard extends React.Component {
         ]
         let stage_3 = [
             { 'name': 'EFT', 'value': this.state.EFTData, },
-            { 'name': 'CHK', 'value': this.state.CheckData,},
+            { 'name': 'CHK', 'value': this.state.CheckData, },
             { 'name': '% ERA out of total', 'value': 30 },
             { 'name': '# Availity rejected', 'value': 85 },
             // { 'name': 'Rejected %', 'value': '15%' }
@@ -1691,7 +1698,7 @@ export class ClaimPaymentDashboard extends React.Component {
             <div className="form-style" id='filters'>
                 <div className="form-row">
 
-                <div className="form-group col">
+                    <div className="form-group col">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
@@ -2050,7 +2057,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
@@ -2099,7 +2106,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         {this.renderTopbar()}
                         {this.progressBar()}
                         {/* {this.renderSummaryDetails()} */}
-                        <div className="general-header" style={{ marginBottom: "10px", marginTop : '12px' }}>Remittance File Level</div>
+                        <div className="general-header" style={{ marginBottom: "10px", marginTop: '12px' }}>Remittance File Level</div>
                         {this._renderSummaryDetails()}
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
