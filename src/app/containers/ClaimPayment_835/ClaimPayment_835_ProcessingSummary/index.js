@@ -79,13 +79,13 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             
             columnDefs: [
       
-                { headerName: "Remittance File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Process Id", field: "" },
-                { headerName: "State", field: "" },
-                { headerName: "Remittance File Date", field: "FileDate" },
-                { headerName: " Remittance File Status", field: "" },
-                { headerName: "999", field: "" },
-                { headerName: "In HiPaaS", field: "" },
+                { headerName: "Remittance File Name",   suppressMovable: true, field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "" ,   suppressMovable: true, },
+                { headerName: "State", field: "" , suppressMovable: true,},
+                { headerName: "Remittance File Date", field: "FileDate" , suppressMovable: true, },
+                { headerName: " Remittance File Status", field: "" , suppressMovable: true,},
+                { headerName: "999", field: "" , suppressMovable: true,},
+                { headerName: "In HiPaaS", field: "" , suppressMovable: true, },
                 // { headerName: "Claim Id", field: "ClaimID" },
                 // { headerName: "Days", field: "Days" },
                 // { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
@@ -120,9 +120,11 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 enablePivot: true,
                 enableValue: true,
                 sortable: true,
-                resizable: true,
+                resizable: false,
                 filter: true,
                 flex: 1,
+                lockPosition: true,
+                
                 minWidth: 100,
             },
             rowSelection: 'multiple',
@@ -143,45 +145,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     componentDidMount() {
         this.getCommonData()
-        this.getCountData()
-        this.getClaimCounts()
         this.getData()
         this._getClaimCounts()
     }
 
-    _get999Count = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-              Total999
-            }
-            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-                Total277CA
-            }
-            
-         }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    Total999: res.data.Total999Response[0].Total999,
-                    Total277CA: res.data.Total277CAResponse[0].Total277CA,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
 
     getCommonData = async () => {
         let query = `{
@@ -211,114 +178,6 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
-
-    getClaimCounts = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        
-        let query = `{
-            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                X12Count
-                HiPaaSCount
-                MCGLoadCount
-            }
-            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                Accepted_Claims
-                Rejected_Claims
-                FileReject_Claims
-                Processing_Claims
-                ReconciledError_Claims
-                LoadingClaims
-                LoadedErrorClaims
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
-                    let _data = res.data.Claim837RTDashboardTable[0]
-
-                    this.setState({
-                        Accepted: _data ? _data.Accepted_Claims : 0,
-                        Rejected: _data ? _data.Rejected_Claims : 0,
-                        loaded: _data ? _data.LoadingClaims : 0,
-
-
-                        X12Count: data ? data.X12Count : 0,
-                        HiPaaSCount: data ? data.HiPaaSCount : 0,
-                        Accepted_Claims: _data ? _data.Accepted_Claims : 0,
-                        Rejected_Claims: _data ? _data.Rejected_Claims : 0,
-                        FileReject_Claims: _data ? _data.FileReject_Claims : 0,
-                        Processing_Claims: _data ? _data.Processing_Claims : 0,
-                        ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadingClaims: _data ? data.MCGLoadCount : 0,
-                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    getCountData = async () => {
-        setTimeout(() => {
-            this._get999Count()
-        }, 1000);
-
-        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
-            totalFile
-            TotalClaims
-            Accepted
-            Rejected
-            InProgress
-            Total999
-            Total277CA
-            TotalSentToQNXT
-            Paid
-            denied
-            WIP
-            Pending
-          } }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                var data = res.data.FileInCount
-                if (data && data.length > 0) {
-
-                    this.setState({
-                        Paid: data[0].Paid,
-                        Pending: data[0].Pending,
-                        Denide: data[0].denied,
-                        wip90: data[0].WIP,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
     getData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
@@ -390,15 +249,6 @@ console.log("asjfhsaf" , data)
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
-
-    renderSearchBar() {
-        return (
-            <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search" />
-            </div>
-        )
-    }
-
     handlePageClick(data, fileId) {
         let page = data.selected + 1
         this.setState({
@@ -406,48 +256,9 @@ console.log("asjfhsaf" , data)
         })
 
         setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
+                this.getData()
         }, 50);
     }
-
-    goto277 = (fileId) => {
-        // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
-            fileId: fileId
-        })
-        // setTimeout(() => {
-        //     window.location.reload()
-        // }, 50);
-    }
-
-    goto999 = (fileId) => {
-        // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999, {
-            fileId: fileId
-        })
-        // setTimeout(() => {
-        //     window.location.reload()
-        // }, 50);
-    }
-
-    gotoDetails = (fileId) => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId : fileId ? fileId : this.state.incoming_fileId },
-        ]
-
-        this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
-            data: sendData
-        })
-    }
-
     renderTransactionsNew() {
         const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
         let headerArray = []
@@ -516,9 +327,7 @@ console.log("asjfhsaf" , data)
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
+                this.getData()
         }, 50);
     }
 
@@ -534,9 +343,7 @@ console.log("asjfhsaf" , data)
         }
 
         setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
+             this.getData()
         }, 50);
     }
 
@@ -559,9 +366,7 @@ console.log("asjfhsaf" , data)
         this.setState({
             providerName: value
         }, () => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
+              this.getData()
         })
     }
 
@@ -580,8 +385,7 @@ console.log("asjfhsaf" , data)
         this.setState({
             State: event.target.options[event.target.selectedIndex].text
         }, () => {
-            this.getCountData()
-            this.getClaimCounts()
+        
             this.getData()
             this._getClaimCounts()
         })
@@ -684,8 +488,6 @@ console.log("asjfhsaf" , data)
         });
 
         setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
             this.getData()
             this._getClaimCounts()
         }, 50);
@@ -869,45 +671,6 @@ console.log("asjfhsaf" , data)
             </div>
         )
     }
-
-    // renderClaimDetails = () => {
-    //     let stage_1 = [
-    //         { 'name': 'QNXT Generated', 'value': '12K' },
-    //         { 'name': 'HiPaaS Received ', 'value': '11K' },
-    //         { 'name': 'Total Number of Errors', 'value': 900 },
-    //     ]
-    //     let stage_2 = [
-    //         { 'name': 'Sent to Availity', 'value': 90 },
-    //         { 'name': 'Number of Acknowledged 835', 'value': 100 },
-    //         { 'name': 'Number of Accepted 999’s', 'value': 120 },
-    //         { 'name': 'Number of Rejected 999’s', 'value': 10 },
-            
-    //     ]
-    //     let stage_3 = [
-    //         { 'name': 'EFT', 'value': 80 },
-    //         { 'name': 'CHK', 'value': 20 },
-    //         { 'name': '% ERA out of total', 'value': 30 },
-    //         { 'name': '# Availity rejected', 'value': 85 },
-    //         // { 'name': 'Rejected %', 'value': '15%' }
-    //     ]
-        
-    //     let stage_4 = [
-       
-    //     ]
-
-    //     return (
-    //         <div className="row" style={{ marginBottom: '12px' }}>
-    //             {this._renderClaimTables(stage_1)}
-    //             {this._renderClaimTables(stage_2)}
-    //             {this._renderClaimTables(stage_3)}
-    //             {/* {this._renderClaimTables(stage_4)} */}
-    //         </div>
-    //     )
-    // }
-
-
-   
-
     _renderTransactions() {
         return (
             <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
