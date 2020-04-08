@@ -40,7 +40,7 @@ export class AuditSummary835 extends React.Component {
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
-            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: '',
             Accepted: '',
@@ -70,11 +70,11 @@ export class AuditSummary835 extends React.Component {
                 { headerName: "File Date", field: "Date" },
                 { headerName: "State", field: "State" },
                 { headerName: "Process Id", field: "ProcessID" },
-                { headerName: "File Status", field: "" },
+                { headerName: "File Status", field: "Status" },
                 { headerName: "Remittance File Name", field: "RemittanceFileName" },
-                { headerName: "Remittance File Date	", field: "RemittanceFileDate" },
-                { headerName: "Received", field: "" },
-                { headerName: "In HiPaaS", field: "" },
+                { headerName: "Remittance File Date	", field: "RemittanceSentDate" },
+                { headerName: "Received", field: "Received" },
+                { headerName: "In HiPaaS", field: "InHipaas" },
                 { headerName: "Error in PreProcess", field: "" },
                 { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "Accepted PreProcess", field: "Accepted" },
@@ -209,15 +209,19 @@ export class AuditSummary835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            AuditSummary835 {
-                QNXTFileName
-                Date
-                State
-                ProcessID
-                FileStatus
-                F999
-                RemittanceFileName
-                RemittanceFileDate
+                AuditSummary835 {
+                    RecCount
+                    QNXTFileName
+                    Date
+                    State
+                    ProcessID
+                    FileStatus
+                    F999
+                    RemittanceFileName
+                    RemittanceSentDate
+                    Status
+                    Received
+                    InHipaas
               }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -321,30 +325,16 @@ export class AuditSummary835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                TotalCount
-                Accepted
+            Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                Check
+                EFT
                 Rejected
-                AcceptedwithErrors
-                Processing
-            }
-            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                Reconciled
-                ReconciledError
-                Loaded
-                LoadedError
-                ProcessingFiles
-                MCGLoadingFiles
-            }
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-                Total999
-            }
-            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-                Total277CA
-            }
-              FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
-                Total277CA  
-            }
+                Accepted
+                QNXT_Generated
+                Hipaas_Received
+                TotalCount
+              }
+              
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
@@ -357,58 +347,26 @@ export class AuditSummary835 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                // let data = res.data.Claim837RTDashboardCountNew
+                 let data = res.data.Dashboard835Count[0]
                 // this.setState({
                 //     totalCount: data[0].TotalCount,
                 //     accepted_Files: data[0].Accepted,
                 //     acceptedwithErrors: data[0].AcceptedwithErrors,
                 //     rejected_Files: data[0].Rejected
                 // })
-                let summary = []
-                let data = res.data.Claim837RTDashboardCountNew
-                let _data = res.data.Claim837RTDashboardCountFileStatuswise
-                let reconciled = ''
-                let reconciledError = ''
-                let loaded = ''
-                let loadedError = ''
-                let totalCount = ''
-                let accepted = ''
-                let rejected = ''
-                let acceptedwithErrors = ''
-                let processing = ''
-                let MCGLoadingFiles = ''
-                let Total999 = res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : ''
-                let Total277CA = res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : ''
-
-
-                if (data && data.length > 0) {
-                    totalCount = data[0].TotalCount
-                    accepted = data[0].Accepted
-                    rejected = data[0].Rejected
-                    acceptedwithErrors = data[0].AcceptedwithErrors
-                }
-
-                if (_data && _data.length > 0) {
-                    reconciled = _data[0].Reconciled
-                    reconciledError = _data[0].ReconciledError
-                    loaded = _data[0].Loaded
-                    loadedError = _data[0].LoadedError
-                    processing = _data[0].ProcessingFiles
-                    MCGLoadingFiles = _data[0].MCGLoadingFiles
-                }
-
+                let summary= []
+              
                 summary = [
-                    { name: 'Received From QNXT', value: 30 },
-                    { name: 'Vaildated', value: 10 },
-                    { name: 'Files in Error', value: 5 },
-                    { name: 'Error Resolved', value: 2 },
+                    { name: 'Received From QNXT', value: data.TotalCount },
+                    { name: 'Vaildated', value: 7 },
+                    { name: 'Files in Error', value: 0 },
+                    { name: 'Error Resolved', value: 0 },
                     { name: 'Total Sent To Availity', value: 6 },
-                    { name: '999 Received', value: 4 },
+                    { name: '999 Received', value: 7 },
                 ]
 
                 this.setState({
                     summaryList: summary,
-                    totalFiles: totalCount
                 })
             })
             .catch(err => {
@@ -480,7 +438,7 @@ export class AuditSummary835 extends React.Component {
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={Strings.Claim_Details_837_Grid}
+                    // url={Strings.Claim_Details_837_Grid}
                 />
 
             )
@@ -555,11 +513,11 @@ export class AuditSummary835 extends React.Component {
                     <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Date}</td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style">{d.ProcessID}</td>
-                    <td className="list-item-style"></td>
+                    <td className="list-item-style">{d.Status}</td>
                     <td className="list-item-style">{d.RemittanceFileName}</td>
-                    <td className="list-item-style">{d.RemittanceFileDate}</td>
-                    <td className="list-item-style"></td>
-                    <td className="list-item-style"></td>
+                    <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.RemittanceSentDate}</td>
+                    <td className="list-item-style">{d.Received}</td>
+                    <td className="list-item-style">{d.InHipaas}</td>
                     <td className="list-item-style"></td>
                     <td className="list-item-style">{d.F999}</td>
                 </tr>
