@@ -71,7 +71,6 @@ export class Header extends React.Component {
             <div>
                 <div className="header_container">
                     <h2 className="header_text"><b>EDIVAL</b>
-                    <span style={{fontsize:"50px" , marginLeft:"80px" , cursor:"pointer"}}>&#9776; </span>
                     </h2>
                     <label style={{ color: "white", marginLeft: "20px", fontSize: "11px" }}>Powered by HiPaaS</label>
                   
