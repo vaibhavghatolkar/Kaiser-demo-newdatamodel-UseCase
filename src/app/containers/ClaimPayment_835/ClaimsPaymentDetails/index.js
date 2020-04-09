@@ -1264,7 +1264,7 @@ export class ClaimPaymentDetails extends React.Component {
      
         return (
             <div>
-                <h5 className="headerText">Remittance Viewer</h5>
+                <h5 className="headerText">835 Details</h5>
                 {this.renderFilters()}
                 {
                 this.state.gridType
