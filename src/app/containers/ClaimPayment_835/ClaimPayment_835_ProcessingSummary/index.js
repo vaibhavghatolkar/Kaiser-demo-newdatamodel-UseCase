@@ -592,11 +592,12 @@ console.log("asjfhsaf" , data)
         )
     }
 
+
     _getClaimCounts = async () => {
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        
+
         let query = `{
             Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
                 Check
@@ -605,6 +606,25 @@ console.log("asjfhsaf" , data)
                 Accepted
                 QNXT_Generated
                 Hipaas_Received
+                TotalCount
+              }
+
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                X12Count
+                HiPaaSCount
+                MCGLoadCount
+              }
+
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                  Accepted
+                  Rejected
+                  FileReject
+                  Processing
+                  ReconciledError
+                  Loading
+                  LoadedError
+                  Accepted_277CA
+                  Rejected_277CA
               }
               
         }`
@@ -622,16 +642,18 @@ console.log("asjfhsaf" , data)
             .then(res => {
                 if (res.data) {
                     let data = res.data.Dashboard835Count[0]
+                    let _data = res.data.ERA835DashboardCountPaymentStatus[0]
+                    let data2 = res.data.ERA835DashboardTable[0]
                     // let _data = res.data.Claim837RTDashboardTable[0]
 
                     this.setState({
                         CheckData: data ? data.Check : 0,
                         EFTData: data ? data.EFT : 0,
-                        Rejected999: data ? data.Rejected : 0,
-                        Accepted999: data ? data.Accepted : 0,
-                        QNXT_Generated: data ? data.QNXT_Generated : 0,
-                        Hipaas_Received: data ? data.Hipaas_Received : 0,
-                       
+                        Rejected999: data2 ? data2.Rejected : 0,
+                        Accepted999: data2 ? data2.Accepted : 0,
+                        QNXT_Generated: _data ? _data.X12Count : 0,
+                        Hipaas_Received: _data ? _data.HiPaaSCount : 0,
+                        // TotalCountQnxt: data ? data.TotalCount: 0
                     })
                 }
             })

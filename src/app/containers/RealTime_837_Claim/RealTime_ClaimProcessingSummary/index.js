@@ -15,6 +15,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Link } from 'react-router-dom'
+import { TableTiles } from '../../../components/TableTiles';
 
 let val = ''
 export class ClaimProcessingSummary extends React.Component {
@@ -29,6 +30,7 @@ export class ClaimProcessingSummary extends React.Component {
             status277CA: '',
             gridType: 1,
             recCount: 0,
+            HiPaaSCount:0,
             pageCount: 1,
             Months: 0,
             loaded: 0,
@@ -421,7 +423,10 @@ export class ClaimProcessingSummary extends React.Component {
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
-            fileId: fileId
+            fileId: fileId,
+            data : [
+                { flag999: '1' },
+            ]
         })
         // setTimeout(() => {
         //     window.location.reload()
@@ -778,16 +783,12 @@ export class ClaimProcessingSummary extends React.Component {
                 },
             ]
             row.push(
-                <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{ fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
-                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
-                    {
-                        item.isClick ?
-                            <Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
-                            :
-                            <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
-                    }
-                </div>
+                <TableTiles
+                    item={item}
+                    url={Strings.Claim_Details_837_Grid}
+                    data={sendData}
+                    color={color}
+                />
             )
         })
 
