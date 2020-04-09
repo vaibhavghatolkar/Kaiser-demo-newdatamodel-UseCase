@@ -712,7 +712,7 @@ export class ClaimPaymentDetails extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -731,7 +731,7 @@ export class ClaimPaymentDetails extends React.Component {
                             <option value="select">Default</option>
                             <option selected value="select">Classic</option>
                         </select>
-                    </div>
+                    </div> */}
 
 
                 </div>
@@ -1052,7 +1052,7 @@ export class ClaimPaymentDetails extends React.Component {
                { headerName: "File Date", field: "FileDate" ,width:200  ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                { headerName: "Organization", field:"Organization", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                { headerName: "Check/EFT No.", field: "CheckEFTNo"  ,width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-               { headerName: "Check/EFT Date", field: "CheckEFTDt" ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+               { headerName: "Check/EFT Date", field: "CheckEFTDt", flex: 1 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
        
                 
            ]
