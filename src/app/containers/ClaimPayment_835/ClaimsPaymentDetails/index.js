@@ -10,6 +10,9 @@ import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import Strings from '../../../../helpers/Strings';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
 export class ClaimPaymentDetails extends React.Component {
@@ -83,6 +86,16 @@ export class ClaimPaymentDetails extends React.Component {
             Sender:'',
             Servicelinepage:1,
             nested_orderby:'',
+            gridType: 1,
+            domLayout: 'autoHeight',
+            defaultColDef: {
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+               
+            },
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
@@ -183,6 +196,7 @@ export class ClaimPaymentDetails extends React.Component {
 
                     this.setState({
                         intakeClaims: res.data.RemittanceViewerFileDetails,
+                        rowData:res.data.RemittanceViewerFileDetails
                     }, () => {
                         this.sortData()
                     })
@@ -265,10 +279,18 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => {
                  
                 var data = res.data.RemittanceViewerPatientDetails
+            
                 if (data && data.length > 0) {
                     this.sortData(fileId, data)
                 }
-            })
+
+                this.setState({
+                    claims_rowData:res.data.RemittanceViewerPatientDetails,
+                    Ag_grid_FileName: res.data.RemittanceViewerPatientDetails[0].FileName,
+                    Ag_grid_fileDate: res.data.RemittanceViewerPatientDetails[0].FileDate
+                });
+        
+                  })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
@@ -294,7 +316,7 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     getDetails(claimId, fileId, fileData ,page) {
-            let url = Urls.real_time_claim_details
+       let url = Urls.real_time_claim_details
         let query = `{
             RemittanceViewerClaimDetails (ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
                 FileID
@@ -406,6 +428,8 @@ export class ClaimPaymentDetails extends React.Component {
                         showDetails: true,
                         claimDetails: claimDetails,
                          claimLineDetails: res.data.RemittanceViewerClaimServiceDetails,
+                         Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
+                         Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
                         fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
@@ -487,7 +511,9 @@ export class ClaimPaymentDetails extends React.Component {
     handleStartChange(date) {
         this.setState({
             startDate: date,
-            showDetails: false
+            showDetails: false,
+            showerror: false,
+            showClaims: false
         });
 
         setTimeout(() => {
@@ -498,7 +524,9 @@ export class ClaimPaymentDetails extends React.Component {
     handleEndChange(date) {
         this.setState({
             endDate: date,
-            showDetails: false
+            showDetails: false,
+            showerror: false,
+            showClaims: false
         });
 
         setTimeout(() => {
@@ -509,7 +537,9 @@ export class ClaimPaymentDetails extends React.Component {
     Service_StartChange(date) {
         this.setState({
             Service_startDate: date,
-            showDetails: false
+            showDetails: false,
+            showerror: false,
+            showClaims: false
         });
 
         setTimeout(() => {
@@ -519,7 +549,9 @@ export class ClaimPaymentDetails extends React.Component {
     Service_EndChange(date) {
         this.setState({
             Service_endDate: date,
-            showDetails: false
+            showDetails: false,
+            showerror: false,
+            showClaims: false
         });
 
         setTimeout(() => {
@@ -581,6 +613,9 @@ export class ClaimPaymentDetails extends React.Component {
 
         this.setState({
             [key]: event.target.options[event.target.selectedIndex].text,
+            showDetails: false,
+            showerror: false,
+            showClaims: false
         })
         setTimeout(() => {
             this.getData()
@@ -598,7 +633,9 @@ export class ClaimPaymentDetails extends React.Component {
                                                     clearTimeout(val)
                                                     let value = e.target.value
                                                     val = setTimeout(() => {
-                                                        this.setState({ Organization: value, showDetails: false })
+                                                        this.setState({ Organization: value,  showDetails: false,
+                                                            showerror: false,
+                                                            showClaims: false })
                                                         setTimeout(() => {
                                                             this.getData()
                                                         }, 50);
@@ -644,6 +681,8 @@ export class ClaimPaymentDetails extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.Service_startDate ? new Date(this.state.Service_startDate) : ''}
                             onChange={this.Service_StartChange}
+                            maxDate={this.state.Service_endDate ? new Date(moment(this.state.Service_endDate).format('YYYY-MM-DD hh:mm')) : ''}
+
                         />
                     </div>
                     <div className="form-group col-2">
@@ -652,6 +691,7 @@ export class ClaimPaymentDetails extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.Service_endDate ? new Date(this.state.Service_endDate) : ''}
                             onChange={this.Service_EndChange}
+                            minDate={this.state.Service_startDate ? new Date(moment(this.state.Service_startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -660,6 +700,7 @@ export class ClaimPaymentDetails extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(this.state.startDate) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -668,7 +709,28 @@ export class ClaimPaymentDetails extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
+                    </div>
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Grid Type</div>
+                        <select className="form-control list-dashboard" id="TradingPartner"
+                            onChange={(event) => {
+                                this.setState({
+                                    page: 1,
+                                    rowData: [],
+                                    showerror: false,
+                                    showClaims: false,
+                                    showDetails: false,
+                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+                                }, () => {
+                                    this.getData()
+                                })
+                            }}
+                        >
+                            <option value="select">Default</option>
+                            <option selected value="select">Classic</option>
+                        </select>
                     </div>
 
 
@@ -983,13 +1045,238 @@ export class ClaimPaymentDetails extends React.Component {
             this.getData()
         }, 50);
     }
+    _renderList = () => {
+        let  columnDefs= [
+     
+               { headerName: "File Name" , field: "FileName", width:300,  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+               { headerName: "File Date", field: "FileDate" ,width:200  ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+               { headerName: "Organization", field:"Organization", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+               { headerName: "Check/EFT No.", field: "CheckEFTNo"  ,width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+               { headerName: "Check/EFT Date", field: "CheckEFTDt" ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+       
+                
+           ]
+
+           return (
+               <div>
    
-    render() {
+                   <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                       <AgGridReact
+                           modules={this.state.modules}
+                           columnDefs={columnDefs}
+                           autoGroupColumnDef={this.state.autoGroupColumnDef}
+                           defaultColDef={this.state.defaultColDef}
+                           suppressRowClickSelection={true}
+                           groupSelectsChildren={true}
+                           debug={true}
+                           rowSelection={this.state.rowSelection}
+                           rowGroupPanelShow={this.state.rowGroupPanelShow}
+                           pivotPanelShow={this.state.pivotPanelShow}
+                           enableRangeSelection={true}
+                           paginationAutoPageSize={false}
+                           pagination={true}
+                           domLayout={this.state.domLayout}
+                           paginationPageSize={this.state.paginationPageSize}
+                           onGridReady={this.onGridReady}
+                           rowData={this.state.rowData}
+                           icons={this.state.icons}
+                           enableCellTextSelection={true}
+                           onCellClicked={(event) => {
+                               if (event.colDef.headerName == 'File Name') {
+                                   this.setState({
+                                    showClaims: true,
+                                    showerror: false,
+                                    claims_rowData: [],
+                                    Ag_grid_FileName: '',
+                                    Ag_grid_fileDate: ''
+                                   }, () => {
+                                       this.getTransactions(event.data.FileID)
+                                   })
+                               }  
+                               
+                           }}
+                       >
+                       </AgGridReact>
+                   </div>
+               </div>
+           )
+       }
+       _renderClaims() {
+
+        let columnDefs = [
+            { headerName: "Claim Id	", field: "ClaimID", width:230,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Received Date	", field: "ClaimReceivedDate",width:210, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Patient Name	", field: "PatientName" ,width:230 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Charge Amount", field: "TotalChargeAmt",width:210 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", flex:1,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+             ]
 
         return (
             <div>
-                <h5 className="headerText">Remittance Viewer</h5>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <h6 className="font-size">Remittance Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.claims_rowData}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            // if (event.colDef.headerName == 'Claim Id') {
+                                this.setState({
+
+                                    showerror: true,
+                                     Error_data: [],
+                                    Aggrid_ClaimLineData: [],
+                                    Aggrid_Claim_Info_data: [],
+                                    Aggrid_Service_Line_Info: [],
+
+                                })
+                                this.getDetails(event.data.ClaimID, event.data.FileID, "", 1)
+                            // }
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }    
+  
+    _ClaimView_Info_Table() {
+        if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
+        let columnDefs = [
+            { headerName: "Claim Id", field: "ClaimID" , width:230, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 120 },
+            { headerName: "Patient Name", field: "PatientName", width: 200 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Days Aged", field: "", width: 100 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Payment Method Code", field: "CHECKEFTFlag", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Billed Amount", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Adjusted Amount", field: "AdjAmt", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Payer Name", field: "PayerName", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Payer claim control No.", field: "PayerClaimControl", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Claim Status Code", field: "ClaimStatusCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Filling Indicator", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Patient ID", field: "", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Provider ID", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Provider Name", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Rendering Provider ID", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Facility Code Value", field: "FacilityCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Patient Control Number", field: "PatientControlNo", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "DRG Code", field: "DigonisCode", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Patient Resp", field: "PatietResAMT", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Aggrid_Claim_Info_data}
+                        enableCellTextSelection={true}                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+   								
+    _ClaimServiceLineInfo() {
+      if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
+        let columnDefs = [
+            { headerName: "Service Start Date" , width: 120, field: "ServiceStartDate" },
+            { headerName: "Service End Date" , width: 120, field: "ServiceEndDate" },
+            { headerName: "Line Item Control #", width: 120, field: "LineControlNo" },
+            { headerName: "Adjudicated CPT", width: 120, field: "AdjudicatedCPT" },
+            { headerName: "	Submitted CPT", width: 120, field: "SubmittedCPT" },
+            { headerName: "Submitted Units", width: 120, field: "" },
+            { headerName: "Allowed Actual", width: 120, field: "" },
+            { headerName: "Paid Units", width: 120, field: "" },
+            { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
+            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
+            { headerName: "Paid Amount", field: "PaidAmt" },
+           
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <h6 className="font-size">Service Line Information</h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Aggrid_Service_Line_Info}
+
+
+
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+
+    render() {
+     
+        return (
+            <div>
+                <h5 className="headerText">835 Details</h5>
                 {this.renderFilters()}
+                {
+                this.state.gridType
+                        ?
+                        <div>
+                            {this._renderList()}
+                            {this.state.showClaims ? this._renderClaims() : null}
+                            {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                            {this.state.showerror ? this._ClaimServiceLineInfo() : null}
+
+                        </div>
+                        :
                 <div className="row padding-left">
                     <div className="col-6 claim-list file-table">
                         {this.state.claimsObj ? this.renderList() : null}
@@ -1021,7 +1308,8 @@ export class ClaimPaymentDetails extends React.Component {
                         {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
                     </div>
                 </div>
-            </div>
+    }
+         </div>
         );
     }
 }

@@ -70,8 +70,10 @@ export class Header extends React.Component {
         return (
             <div>
                 <div className="header_container">
-                    <h2 className="header_text"><b>EDIVAL</b></h2>
+                    <h2 className="header_text"><b>EDIVAL</b>
+                    </h2>
                     <label style={{ color: "white", marginLeft: "20px", fontSize: "11px" }}>Powered by HiPaaS</label>
+                  
                     {
                         localStorage.getItem('UserId') ?
                             <div class="dropdown" style={{ float: 'right', marginTop: '-16px' }}>
