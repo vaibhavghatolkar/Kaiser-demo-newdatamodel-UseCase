@@ -1299,21 +1299,14 @@ export class ClaimPaymentDashboard extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let query = `{
-            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                TotalCount
-                Accepted
-                Rejected
-                AcceptedwithErrors
-                Processing
-            }
-            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                Reconciled
-                ReconciledError
-                Loaded
-                LoadedError
-                ProcessingFiles
-                MCGLoadingFiles
-            }
+            
+                ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                  TotalCount
+                  Rejected
+                  Accepted
+                }
+              
+              
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim, {
@@ -1327,39 +1320,12 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let summary = []
-                let data = res.data.Claim837RTDashboardCountNew
-                let _data = res.data.Claim837RTDashboardCountFileStatuswise
-                let reconciled = ''
-                let reconciledError = ''
-                let loaded = ''
-                let loadedError = ''
-                let totalCount = ''
-                let accepted = ''
-                let rejected = ''
-                let acceptedwithErrors = ''
-                let processing = ''
-                let MCGLoadingFiles = ''
-
-                if (data && data.length > 0) {
-                    totalCount = data[0].TotalCount
-                    accepted = data[0].Accepted
-                    rejected = data[0].Rejected
-                    acceptedwithErrors = data[0].AcceptedwithErrors
-                }
-
-                if (_data && _data.length > 0) {
-                    reconciled = _data[0].Reconciled
-                    reconciledError = _data[0].ReconciledError
-                    loaded = _data[0].Loaded
-                    loadedError = _data[0].LoadedError
-                    processing = _data[0].ProcessingFiles
-                    MCGLoadingFiles = _data[0].MCGLoadingFiles
-                }
-
+                let data = res.data.ERA835DashboardCountNew[0]
+                
                 summary = [
-                    { name: 'Received From QNXT', value: this.state.TotalCountQnxt },
-                    { name: 'Vaildated', value: 7 },
-                    { name: 'Files in Error', value: 0 },
+                    { name: 'Received From QNXT', value: data.TotalCount },
+                    { name: 'Vaildated', value: data.Accepted },
+                    { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
                     { name: 'Total Sent To Availity', value: 6 },
                     { name: '999 Received', value: 7 },
@@ -1367,7 +1333,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
                     summaryCount: summary,
-                    totalFiles: totalCount
+                    // totalFiles: totalCount
                 })
             })
             .catch(err => {
@@ -1624,6 +1590,24 @@ export class ClaimPaymentDashboard extends React.Component {
                 Hipaas_Received
                 TotalCount
               }
+
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                X12Count
+                HiPaaSCount
+                MCGLoadCount
+              }
+
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                  Accepted
+                  Rejected
+                  FileReject
+                  Processing
+                  ReconciledError
+                  Loading
+                  LoadedError
+                  Accepted_277CA
+                  Rejected_277CA
+              }
               
         }`
 
@@ -1640,16 +1624,18 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => {
                 if (res.data) {
                     let data = res.data.Dashboard835Count[0]
+                    let _data = res.data.ERA835DashboardCountPaymentStatus[0]
+                    let data2 = res.data.ERA835DashboardTable[0]
                     // let _data = res.data.Claim837RTDashboardTable[0]
 
                     this.setState({
                         CheckData: data ? data.Check : 0,
                         EFTData: data ? data.EFT : 0,
-                        Rejected999: data ? data.Rejected : 0,
-                        Accepted999: data ? data.Accepted : 0,
-                        QNXT_Generated: data ? data.QNXT_Generated : 0,
-                        Hipaas_Received: data ? data.Hipaas_Received : 0,
-                        TotalCountQnxt: data ? data.TotalCount: 0
+                        Rejected999: data2 ? data2.Rejected : 0,
+                        Accepted999: data2 ? data2.Accepted : 0,
+                        QNXT_Generated: _data ? _data.X12Count : 0,
+                        Hipaas_Received: _data ? _data.HiPaaSCount : 0,
+                        // TotalCountQnxt: data ? data.TotalCount: 0
                     },() =>{
                        this._getCounts() 
                     })
@@ -1777,6 +1763,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">
@@ -1784,6 +1771,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         <DatePicker className="form-control list-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col">

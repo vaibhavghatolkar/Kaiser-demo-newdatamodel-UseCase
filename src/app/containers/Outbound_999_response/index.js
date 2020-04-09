@@ -50,6 +50,7 @@ export class Outbound_response_999 extends React.Component {
             apiflag: 0,
             Response: '',
             initialPage: null,
+            flag999: this.props.location.state.data[0].flag999,
 
             pieArray: [],
             labelArray: [],
@@ -60,12 +61,7 @@ export class Outbound_response_999 extends React.Component {
             gridType:1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
-            columnDefs: [
-                { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Date", field: "ResponseFileDateTime", width:100, },
-                { headerName: "X12 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-                { headerName: "X12 File Date", field: "FileDateTime", flex:1, },
-            ],
+         
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,
@@ -330,7 +326,7 @@ export class Outbound_response_999 extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-
+                    {this.state.flag999==1 ? 
                     <div className="form-group col-2">
                         <div className="list-dashboard">
                             Transaction Type
@@ -345,6 +341,20 @@ export class Outbound_response_999 extends React.Component {
                             <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
                         </select>
                     </div>
+                    :  <div className="form-group col-2">
+                    <div className="list-dashboard">
+                        Transaction Type
+                    </div>
+                    <select className="form-control list-dashboard"
+                        onChange={(event) => {
+                            this.onSelect(event, 'transactionType')
+                        }}
+                    >
+                        <option value="1"></option>
+                        <option selected={this.state.transactionType == "837" ? "selected" : ""} value="837">835</option>
+                        <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">835 Encounter</option>
+                    </select>
+                </div>}
 
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
@@ -458,12 +468,28 @@ export class Outbound_response_999 extends React.Component {
     }
 
     _renderTransactions() {
+        let columnDefs= []
+        this.state.flag999 ==1 ?
+        columnDefs = [
+            { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Date", field: "ResponseFileDateTime", width:100, },
+            { headerName: "X12 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
+            { headerName: "X12 File Date", field: "FileDateTime", flex:1, },
+        ] : 
+        columnDefs= [
+            { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Date", field: "ResponseFileDate", width:100, },
+            { headerName: "835 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
+            { headerName: "835 File Date", field: "Date", flex:1, },
+        ]
+
+
         return (
             <div style={{ width: '100%', height: '100%' }}>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '17px' }}>
                     <AgGridReact
                         modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
+                        columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
                         defaultColDef={this.state.defaultColDef}
                         suppressRowClickSelection={true}
@@ -498,9 +524,10 @@ export class Outbound_response_999 extends React.Component {
 
 
     render() {
+        // alert(isclick)
         return (
             <div>
-                <h5 className="headerText">999 Acknowledgement (Outbound)</h5>
+                <h5 className="headerText">{this.state.flag999==1 ? '999 Acknowledgement (Outbound)': '999 Acknowledgement (Inbound)' }</h5>
                 {this.renderFilters()}
                 <div className="row">
                     <div className="col-7 margin-top">

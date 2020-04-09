@@ -120,7 +120,8 @@ const Strings = {
     –––––––––– License Key End–––––––––––––– `,
     Payment_details: 'Payment_details',
     isDev: 1,
-    AuditSummary835:'AuditSummary835'
+    AuditSummary835:'AuditSummary835',
+    Inbound_response_999:'Inbound_response_999'
 }
 
 export default Strings;
