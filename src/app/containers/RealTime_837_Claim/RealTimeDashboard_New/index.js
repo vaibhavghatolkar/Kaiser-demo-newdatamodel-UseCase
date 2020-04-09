@@ -20,6 +20,8 @@ import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { TableTiles } from '../../../components/TableTiles';
+import { PieChart } from '../../../components/PieChart';
 
 
 let val = ''
@@ -75,7 +77,7 @@ export class RealTimeDashboard_New extends React.Component {
             incoming_fileId: '',
             totalFiles: 0,
             LoadingClaims: 0,
-            total277CA:0,
+            total277CA: 0,
             Months: 0,
             accepted: 0,
             rejected: 0,
@@ -626,20 +628,12 @@ export class RealTimeDashboard_New extends React.Component {
         ]
 
         return (
-            piechart_data && piechart_data.labels && piechart_data.labels.length > 0
-                ?
-                <div className="row chart-container-full chart clickable" onClick={() => { this.gotoClaimDetails(sendData) }}>
-                    <div className="col-7 nopadding">
-                        <div className="chart-header">{header}</div>
-                        {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
-                    </div>
-                    <div className="col-5 chart-align">
-                        {this.renderChart(piechart_data)}
-                    </div>
-                </div> :
-                <div className="chart-container-full chart" style={{ textAlign: 'center' }}>
-                    No Data Present
-                </div>
+            <PieChart
+                header={header}
+                piechart_data={piechart_data}
+                data={sendData}
+                onClick={this.gotoClaimDetails}
+            />
         )
     }
 
@@ -1113,10 +1107,10 @@ export class RealTimeDashboard_New extends React.Component {
             }
 
             let geturl = Strings.Claim_Details_837_Grid
-            if(notSent == 'Y'){
+            if (notSent == 'Y') {
                 geturl = Strings.Outbound_response_999
                 data = []
-            } else if(notSent == 'CA'){
+            } else if (notSent == 'CA') {
                 geturl = Strings.Outbound_277CAResponse
                 data = []
             }
@@ -1300,44 +1294,6 @@ export class RealTimeDashboard_New extends React.Component {
         })
     }
 
-    renderChart(piechart_data) {
-        return (
-            <Pie data={piechart_data}
-                options={{
-                    elements: {
-                        arc: {
-                            borderWidth: 0
-                        }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                }}
-                width={20}
-                height={19} />
-        )
-    }
-
-    renderValues(piechart_data) {
-        let row = []
-        let data = piechart_data.labels
-        let colors = piechart_data.datasets[0].backgroundColor
-        let count = 0
-        data.forEach(item => {
-            row.push(
-                <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item.length > 40 ? (item.substr(0, 40) + '...') : item}</div>
-                </div>
-            )
-            count++
-        })
-        return (
-            <div style={{ marginTop: '16px' }}>
-                {row}
-            </div>
-        )
-    }
-
     _renderClaimTables = (array) => {
         let row = []
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
@@ -1380,13 +1336,13 @@ export class RealTimeDashboard_New extends React.Component {
             } else if (item.name == '999 Not Sent') {
                 notSent = 'Y'
             }
-            
+
             if (item.name == 'Accepted' && item.is277CA) {
                 subtitle = '277CA Accepted Claims'
                 generalStatus = ''
                 status277CA = 'Accepted'
             }
-            
+
             if (item.name == 'Rejected' && item.is277CA) {
                 subtitle = '277CA Rejected Claims'
                 generalStatus = ''
@@ -1411,16 +1367,12 @@ export class RealTimeDashboard_New extends React.Component {
                 },
             ]
             row.push(
-                <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{ fontSize: '15px', color: "var(--grayBlack)", fontWeight: '500', }} className="col-12">{item.header}</div>
-                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9"> {item.name} </div>
-                    {
-                        item.isClick ?
-                            <Link to={{ pathname: item.url ? item.url : Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
-                            :
-                            <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
-                    }
-                </div>
+                <TableTiles
+                    item={item}
+                    url={Strings.Claim_Details_837_Grid}
+                    data={sendData}
+                    color={color}
+                />
             )
         })
 

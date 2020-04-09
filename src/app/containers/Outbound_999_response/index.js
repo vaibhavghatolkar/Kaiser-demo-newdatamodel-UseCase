@@ -62,9 +62,9 @@ export class Outbound_response_999 extends React.Component {
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Date", field: "ResponseFileDate", width:100, },
-                { headerName: "837 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-                { headerName: "837 File Date", field: "Date", flex:1, },
+                { headerName: "Date", field: "ResponseFileDateTime", width:100, },
+                { headerName: "X12 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
+                { headerName: "X12 File Date", field: "FileDateTime", flex:1, },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -126,6 +126,8 @@ export class Outbound_response_999 extends React.Component {
               RecCount
               ResponseFileName
               ResponseFileDate
+              ResponseFileDateTime
+              FileDateTime
             }
           }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
