@@ -1115,7 +1115,9 @@ export class RealTimeDashboard_New extends React.Component {
             let geturl = Strings.Claim_Details_837_Grid
             if(notSent == 'Y'){
                 geturl = Strings.Outbound_response_999
-                data = []
+                data = [
+                    { flag999: '1' },
+                ]
             } else if(notSent == 'CA'){
                 geturl = Strings.Outbound_277CAResponse
                 data = []

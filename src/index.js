@@ -330,7 +330,7 @@ class PrivateRoute extends React.Component {
                                     
                                 <Route path={'/' + Strings.ClaimPayment_835_Exception} component={ClaimPayment_835_Exception} />
                                 <Route path={'/' + Strings.ClaimPayment_835_ProcessingSummary} component={ClaimPayment_835_ProcessingSummary} />
-                                
+                                <Route path={'/' + Strings.Inbound_response_999} component={Outbound_response_999} />
                                 {/* <Route path={'/'+ Strings.Files_837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'}  component={Files_837} /> */}
 
                                 

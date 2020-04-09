@@ -209,20 +209,21 @@ export class AuditSummary835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-                AuditSummary835 {
-                    RecCount
-                    QNXTFileName
-                    Date
-                    State
-                    ProcessID
-                    FileStatus
-                    F999
-                    RemittanceFileName
-                    RemittanceSentDate
-                    Status
-                    Received
-                    InHipaas
-              }
+            
+                AuditSummary835(StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}") {
+                  RecCount
+                  QNXTFileName
+                  Date
+                  State
+                  ProcessID
+                  F999
+                  RemittanceFileName
+                  RemittanceSentDate
+                  Status
+                  Received
+                  InHipaas
+                }
+              
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.base_url, {
@@ -325,14 +326,10 @@ export class AuditSummary835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
-                Check
-                EFT
+            ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                TotalCount
                 Rejected
                 Accepted
-                QNXT_Generated
-                Hipaas_Received
-                TotalCount
               }
               
         }`
@@ -347,7 +344,7 @@ export class AuditSummary835 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                 let data = res.data.Dashboard835Count[0]
+                 let data = res.data.ERA835DashboardCountNew[0]
                 // this.setState({
                 //     totalCount: data[0].TotalCount,
                 //     accepted_Files: data[0].Accepted,
@@ -358,8 +355,8 @@ export class AuditSummary835 extends React.Component {
               
                 summary = [
                     { name: 'Received From QNXT', value: data.TotalCount },
-                    { name: 'Vaildated', value: 7 },
-                    { name: 'Files in Error', value: 0 },
+                    { name: 'Vaildated', value: data.Accepted },
+                    { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
                     { name: 'Total Sent To Availity', value: 6 },
                     { name: '999 Received', value: 7 },
@@ -773,6 +770,7 @@ export class AuditSummary835 extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
+                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
@@ -781,6 +779,7 @@ export class AuditSummary835 extends React.Component {
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
+                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">

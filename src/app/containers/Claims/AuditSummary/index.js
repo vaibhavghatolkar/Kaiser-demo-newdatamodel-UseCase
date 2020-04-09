@@ -587,7 +587,9 @@ export class AuditSummary extends React.Component {
             let geturl = Strings.Claim_Details_837_Grid
             if (notSent == 'Y') {
                 geturl = Strings.Outbound_response_999
-                data = []
+                data = [
+                    { flag999: '1' },
+                ]
             } else if(notSent == 'CA'){
                 geturl = Strings.Outbound_277CAResponse
                 data = []
@@ -645,7 +647,10 @@ export class AuditSummary extends React.Component {
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
-            fileId: fileId
+            fileId: fileId,
+            data : [
+                { flag999: '1' },
+            ]
         })
         // setTimeout(() => {
         //     window.location.reload()

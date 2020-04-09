@@ -421,7 +421,10 @@ export class ClaimProcessingSummary extends React.Component {
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
-            fileId: fileId
+            fileId: fileId,
+            data : [
+                { flag999: '1' },
+            ]
         })
         // setTimeout(() => {
         //     window.location.reload()
