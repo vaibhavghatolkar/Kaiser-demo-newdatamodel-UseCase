@@ -331,6 +331,9 @@ export class AuditSummary835 extends React.Component {
                 Rejected
                 Accepted
               }
+              Total999Response835(State: "${this.state.State}") {
+                Total999
+              }
               
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -359,7 +362,7 @@ export class AuditSummary835 extends React.Component {
                     { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
                     { name: 'Total Sent To Availity', value: 6 },
-                    { name: '999 Received', value: 7 },
+                    { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
 
                 this.setState({

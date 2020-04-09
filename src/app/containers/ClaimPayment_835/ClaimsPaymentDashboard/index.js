@@ -147,14 +147,16 @@ export class ClaimPaymentDashboard extends React.Component {
             domLayout: 'autoHeight',
 
             columnDefs: [
-                { headerName: "QNXT File Name", field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "File Date", field: "FileDate" },
-                { headerName: "State", field: "State" },
-                { headerName: "Process Id", field: "ProcessID" },
-                { headerName: "Remittance sent", field: "RemittanceFileName" },
-                { headerName: "Remittance sent date", field: "RemittanceSentDate" },
+                { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "File Date", field: "FileDate", width: 100 },
+                { headerName: "State", field: "State", width: 75 },
+                { headerName: "Process Id", field: "ProcessID", width: 100 },
+                { headerName: "Total", field: "TotalClaim", width: 75 },
+                { headerName: "Rejected", field: "Rejected", width: 90 },
+                { headerName: "Remittance sent", field: "RemittanceFileName", width: 100 },
+                { headerName: "Remittance sent date", field: "RemittanceSentDate", width: 100 },
                 // { headerName: "Compliance vs Submission date", field: "" },
-                { headerName: "# of errors", field: "" },
+                { headerName: "# of errors", field: "", width: 130 },
 
             ],
 
@@ -181,8 +183,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 sortable: true,
                 resizable: true,
                 filter: true,
-                flex: 1,
-                minWidth: 100,
             },
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
@@ -441,23 +441,25 @@ export class ClaimPaymentDashboard extends React.Component {
         let query = `{            
             
                 Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}") {
-                RecCount
-                Sender
-                Organization
-                FileID
-                FileName
-                CheckEFTNo
-                FileDate
-                PayerName
-                PayerID
-                AccountNo
-                CHECKEFTFlag
-                CheckEFTDt
-                Receiver
-                ProcessID
-                State
-                RemittanceFileName
-                RemittanceSentDate
+                    RecCount
+                    Sender
+                    Organization
+                    FileID
+                    FileName
+                    CheckEFTNo
+                    FileDate
+                    PayerName
+                    PayerID
+                    AccountNo
+                    CHECKEFTFlag
+                    CheckEFTDt
+                    Receiver
+                    ProcessID
+                    State
+                    RemittanceFileName
+                    RemittanceSentDate
+                    TotalClaim
+                    Rejected
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1305,7 +1307,9 @@ export class ClaimPaymentDashboard extends React.Component {
                   Rejected
                   Accepted
                 }
-              
+                Total999Response835(State: "${this.state.State}") {
+                    Total999
+                  }
               
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1328,7 +1332,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
                     { name: 'Total Sent To Availity', value: 6 },
-                    { name: '999 Received', value: 7 },
+                    { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
@@ -1663,8 +1667,8 @@ export class ClaimPaymentDashboard extends React.Component {
         let stage_3 = [
             { 'name': 'EFT', 'value': this.state.EFTData, },
             { 'name': 'CHK', 'value': this.state.CheckData, },
-            { 'name': '% ERA out of total', 'value': 30 },
-            { 'name': '# Availity rejected', 'value': 85 },
+            { 'name': '% ERA out of total', 'value': '100%' },
+            { 'name': '# Availity rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
 

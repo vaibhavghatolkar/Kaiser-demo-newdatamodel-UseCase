@@ -876,8 +876,8 @@ console.log("asjfhsaf" , data)
         let stage_3 = [
             { 'name': 'EFT', 'value': this.state.EFTData, },
             { 'name': 'CHK', 'value': this.state.CheckData,},
-            { 'name': '% ERA out of total', 'value': 30 },
-            { 'name': '# Availity rejected', 'value': 85 },
+            { 'name': '% ERA out of total', 'value': '100%' },
+            { 'name': '# Availity rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
 
