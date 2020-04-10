@@ -14,6 +14,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Strings from '../../../helpers/Strings';
+import { Filters } from '../../components/Filters';
 
 var val = ''
 export class Outbound_response_999 extends React.Component {
@@ -94,8 +95,6 @@ export class Outbound_response_999 extends React.Component {
 
         }
 
-        this.handleStartChange = this.handleStartChange.bind(this)
-        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
@@ -244,158 +243,12 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
-    getoptions() {
-        let row = []
-        this.state.tradingpartner.forEach(element => {
-            row.push(<option value="" selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""}>{element.Trading_Partner_Name}</option>)
-        })
-        return row
-    }
-
     getErrorOptions() {
         let row = []
         this.state.errorList.forEach(element => {
             row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
         })
         return row
-    }
-
-    onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
-            this.setState({
-                [key]: '',
-                showDetails: false
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text,
-                showDetails: false
-            })
-        }
-
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
-
-    handleStartChange(date) {
-        this.setState({
-            startDate: date,
-            showDetails: false,
-            initialPage: 0,
-            page: 1
-        });
-
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
-
-    handleEndChange(date) {
-        this.setState({
-            endDate: date,
-            showDetails: false,
-            initialPage: 0,
-            page: 1
-        });
-
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
-
-    _handleStateChange = (event) => {
-        this.setState({
-            State: event.target.options[event.target.selectedIndex].text,
-            showDetails: false,
-            initialPage: 0,
-            page: 1
-        }, () => {
-            this.getTransactions()
-        })
-    }
-
-    renderFilters() {
-        return (
-            <form className="form-style" id='filters'>
-                <div className="form-row">
-
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    {this.state.flag999==1 ? 
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">
-                            Transaction Type
-                        </div>
-                        <select className="form-control list-dashboard"
-                            onChange={(event) => {
-                                this.onSelect(event, 'transactionType')
-                            }}
-                        >
-                            <option value="1"></option>
-                            <option selected={this.state.transactionType == "837" ? "selected" : ""} value="837">837</option>
-                            <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
-                        </select>
-                    </div>
-                    :  <div className="form-group col-2">
-                    <div className="list-dashboard">
-                        Transaction Type
-                    </div>
-                    <select className="form-control list-dashboard"
-                        onChange={(event) => {
-                            this.onSelect(event, 'transactionType')
-                        }}
-                    >
-                        <option value="1"></option>
-                        <option selected={this.state.transactionType == "837" ? "selected" : ""} value="837">835</option>
-                        <option selected={this.state.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">835 Encounter</option>
-                    </select>
-                </div>}
-
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker
-                            className="form-control list-dashboard"
-                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker
-                            className="form-control list-dashboard"
-                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData : [],
-                                    showDetails: false,
-                                    files_list: [],
-                                    gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this.getTransactions()
-                                })
-                            }}
-                        >
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-        )
     }
 
     renderTableHeader() {
@@ -522,13 +375,54 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
+    _refreshScreen = () => {
+        this.getTransactions()
+    }
+
+    onGridChange = (event) => {
+        this.setState({
+            page: 1,
+            rowData : [],
+            showDetails: false,
+            files_list: [],
+            gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+        }, () => {
+            this.getTransactions()
+        })
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value,
+            showDetails: false,
+            initialPage: 0,
+            page: 1
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                setData={this.setData}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                isDiffSubmitter={true}
+                transactionType={this.state.transactionType}
+            />
+        )
+    }
 
     render() {
         // alert(isclick)
         return (
             <div>
                 <h5 className="headerText">{this.state.flag999==1 ? '999 Acknowledgement (Outbound)': '999 Acknowledgement (Inbound)' }</h5>
-                {this.renderFilters()}
+                {this._renderTopbar()}
                 <div className="row">
                     <div className="col-7 margin-top">
                         {/* {this.renderTransactionsNew()} */}

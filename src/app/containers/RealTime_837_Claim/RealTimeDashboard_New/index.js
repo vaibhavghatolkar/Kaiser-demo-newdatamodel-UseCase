@@ -22,41 +22,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
-
-
-let val = ''
-const second_data = {
-    labels: [
-        'ICD Code not found',
-        'Accident Date not present',
-        'Member Not Found',
-        'Newborn Setup Pending',
-        'Provider Setup Pending',
-        'Misdirected Claims'
-    ],
-    datasets: [{
-        data: [100, 100, 70, 20, 50, 20],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ]
-    }],
-    flag: ''
-};
-
-
+import { Filters } from '../../../components/Filters';
 
 export class RealTimeDashboard_New extends React.Component {
 
@@ -67,7 +33,6 @@ export class RealTimeDashboard_New extends React.Component {
             summaryList: [],
             type: "",
             apiflag: this.props.apiflag,
-            tradingpartner: [],
             startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
@@ -166,9 +131,6 @@ export class RealTimeDashboard_New extends React.Component {
             pivotPanelShow: 'always',
         }
 
-        this.handleStartChange = this.handleStartChange.bind(this);
-        this.handleEndChange = this.handleEndChange.bind(this);
-
         this.showFile = this.showFile.bind(this)
         this.getData = this.getData.bind(this)
     }
@@ -180,7 +142,6 @@ export class RealTimeDashboard_New extends React.Component {
     }
 
     componentDidMount() {
-        this.getCommonData()
         this._refreshScreen()
     }
 
@@ -267,35 +228,6 @@ export class RealTimeDashboard_New extends React.Component {
                     this.setState({
                         rejectedFileCount: data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : '',
                         acceptedFileCount: data.Claim837RTRejectedFile[0].TotalAcceptedFiles ? data.Claim837RTRejectedFile[0].TotalAcceptedFiles : '',
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    getCommonData() {
-        let query = `{
-            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
-                Trading_Partner_Name 
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    this.setState({
-                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
                     })
                 }
             })
@@ -907,44 +839,7 @@ export class RealTimeDashboard_New extends React.Component {
             flag: name
         })
     }
-
-    getoptions() {
-        let row = []
-        this.state.tradingpartner.forEach(element => {
-            if (!element) {
-                return
-            }
-            row.push(<option value="">{element.Trading_Partner_Name}</option>)
-        })
-        return row
-    }
-
-    _handleStateChange = (event) => {
-        this.setState({
-            State: event.target.options[event.target.selectedIndex].text
-        }, () => {
-            this._refreshScreen()
-        })
-    }
-
-    handleStartChange(date) {
-        this.setState({
-            startDate: date
-        });
-        setTimeout(() => {
-            this._refreshScreen()
-        }, 50);
-    };
-
-    handleEndChange(date) {
-        this.setState({
-            endDate: date
-        });
-        setTimeout(() => {
-            this._refreshScreen()
-        }, 50);
-    }
-
+    
     _refreshScreen = () => {
         this._get999Count()
         this.getRejectedFile()
@@ -987,22 +882,6 @@ export class RealTimeDashboard_New extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-    }
-
-    onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.setState({
-                [key]: ''
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text
-            })
-        }
-
-        setTimeout(() => {
-            this._refreshScreen()
-        }, 50);
     }
 
     _renderSummaryDetails() {
@@ -1112,7 +991,7 @@ export class RealTimeDashboard_New extends React.Component {
                 data = [
                     { flag999: '1' },
                 ]
-            } else if(notSent == 'CA'){
+            } else if (notSent == 'CA') {
                 geturl = Strings.Outbound_277CAResponse
                 data = []
             }
@@ -1146,154 +1025,6 @@ export class RealTimeDashboard_New extends React.Component {
                 {row}
             </div>
         )
-    }
-
-    onHandleChange = (e) => {
-        clearTimeout(val)
-        let providerName = e.target.value
-        val = setTimeout(() => {
-            getProviders("Inbound", providerName)
-                .then(list => {
-                    this.setState({
-                        providers: list
-                    })
-                }).catch(error => {
-                    process.env.NODE_ENV == 'development' && console.log(error)
-                })
-        }, 300);
-    }
-
-    onSelected = (value) => {
-        this.setState({
-            providerName: value
-        }, () => {
-            this._refreshScreen()
-        })
-    }
-
-    renderTopbar = () => {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-                    <div className="form-group col">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    {/* <div className="form-group col">
-                        <div className="list-dashboard">Provider</div>
-                        <AutoComplete
-                            list={this.state.providers}
-                            onHandleChange={this.onHandleChange}
-                            onSelected={this.onSelected}
-                        />
-                    </div> */}
-
-                    <div className="form-group col">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
-                    <div className="form-group col">
-                        <div className="list-dashboard">Time Range</div>
-                        <select
-                            className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                let day = 0
-                                let chartType = ''
-                                let selected_val = event.target.options[event.target.selectedIndex].text
-
-                                if (selected_val == 'Last week') {
-                                    day = 7
-                                    chartType = 'Datewise'
-                                } else if (selected_val == 'Last 30 days') {
-                                    day = 30
-                                    chartType = 'Weekwise'
-                                } else if (selected_val == 'Last 90 days') {
-                                    day = 90
-                                } else if (selected_val == 'Last 180 days') {
-                                    day = 180
-                                } else if (selected_val == 'Last year') {
-                                    day = 365
-                                }
-
-                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
-                                let endDate = moment().format('YYYY-MM-DD')
-
-                                if (!selected_val) {
-                                    startDate = ''
-                                    endDate = ''
-                                }
-
-                                this.setState({
-                                    startDate: startDate,
-                                    endDate: endDate,
-                                    selected_val: selected_val,
-                                    chartType: chartType
-                                })
-
-                                setTimeout(() => {
-                                    this._refreshScreen()
-                                }, 50);
-                            }}
-                        >
-                            <option value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
-                            <option value="2">Last 90 days</option>
-                            <option value="2">Last 180 days</option>
-                            <option selected="selected" value="2">Last year</option>
-                        </select>
-                    </div>
-                    <div className="form-group col">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker className="form-control list-dashboard"
-                            selected={new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm'))}
-                            onChange={this.handleStartChange}
-
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker className="form-control list-dashboard"
-                            selected={new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm'))}
-                            onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="Grid"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData: [],
-                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this.getListData()
-                                })
-                            }}>
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    setData = (startDate, endDate, selected_val) => {
-        this.setState({
-            startDate,
-            endDate,
-            selected_val
-        })
     }
 
     _renderClaimTables = (array) => {
@@ -1420,11 +1151,53 @@ export class RealTimeDashboard_New extends React.Component {
         )
     }
 
+    setData = (startDate, endDate, selected_val, chartType) => {
+        this.setState({
+            startDate,
+            endDate,
+            selected_val,
+            chartType
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    onGridChange = (event) => {
+        this.setState({
+            page: 1,
+            rowData: [],
+            gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+        }, () => {
+            this.getListData()
+        })
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={true}
+                setData={this.setData}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
+
     render() {
         return (
             <div>
                 <h5 className="headerText">Claims Dashboard</h5>
-                {this.renderTopbar()}
+                {this._renderTopbar()}
                 {this.tab()}
                 <div className="general-header" style={{ marginBottom: "-6px" }}>File Status</div>
                 {this._renderSummaryDetails()}

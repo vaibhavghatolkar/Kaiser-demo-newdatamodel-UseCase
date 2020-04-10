@@ -249,19 +249,32 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            RemittanceViewerPatientDetails  (page:${this.state.page},Sender:"${this.state.Sender}",State:"${this.state.State ? this.state.State : ''}",Organization:"",EFTStartDt:"",EFTEndDt:"",  ClaimReceivedStartDt:"" ,ClaimReceivedEndDt:"" , FileID : "` + fileId + `", OrderBy:"` + this.state.nested_orderby + `") {
+            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"") {
+                RefID
                 RecCount
-                RefId
                 FileID
                 FileName
-                ClaimID
                 FileDate
+                ClaimID
                 ClaimReceivedDate
                 PatientName
                 PatientControlNo
                 PayerName
                 TotalChargeAmt
                 TotalClaimPaymentAmt
+                Sender
+                Organization
+                TransactionType
+                CheckEFTNo
+                TRN03
+                PayerID
+                CheckEFTDt
+                AccountNo
+                CHECKEFTFlag
+                Receiver
+                TotalAdjustmentAmount
+                TotalBillAmount
+                Days
                 
             }
         }`
@@ -277,16 +290,16 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => res.json())
             .then(res => {
                  
-                var data = res.data.RemittanceViewerPatientDetails
+                var data = res.data.PaymentProcessingSummary
             
                 if (data && data.length > 0) {
                     this.sortData(fileId, data)
                 }
 
                 this.setState({
-                    claims_rowData:res.data.RemittanceViewerPatientDetails,
-                    Ag_grid_FileName: res.data.RemittanceViewerPatientDetails[0].FileName,
-                    Ag_grid_fileDate: res.data.RemittanceViewerPatientDetails[0].FileDate
+                    claims_rowData:res.data.PaymentProcessingSummary,
+                    Ag_grid_FileName: res.data.PaymentProcessingSummary[0].FileName,
+                    Ag_grid_fileDate: res.data.PaymentProcessingSummary[0].FileDate
                 });
         
                   })
@@ -314,10 +327,10 @@ export class ClaimPaymentDetails extends React.Component {
         })
     }
 
-    getDetails(claimId, fileId, fileData ,page) {
+    getDetails(claimId, fileId,RefID ,fileData ,page) {
        let url = Urls.real_time_claim_details
         let query = `{
-            RemittanceViewerClaimDetails (ClaimID:"`+ claimId + `", FileID: "` + fileId + `") {
+            RemittanceViewerClaimDetails (RefID:`+ RefID + `, FileID: "` + fileId + `") {
                 FileID
                 FileName
                 FileDate
@@ -378,6 +391,13 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => {
                 let count = 1
                 let data = res.data
+                this.setState({
+                     showDetails: true,
+                     Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
+                     Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
+                   
+                  
+                })
                 if (data && data.RemittanceViewerClaimServiceDetails[0].length > 0) {
 
                     count = Math.floor(data.RemittanceViewerClaimServiceDetails[0].RecCount / 10)
@@ -401,7 +421,7 @@ export class ClaimPaymentDetails extends React.Component {
                             { key: 'Claim Id' ,value: data.ClaimID },
                             { key: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
                             { key: 'Patient Name',value: data.PatientName },
-                            { key: '835 Response (RAW)',value: "" },
+                            // { key: '835 Response (RAW)',value: "" },
                             { key: 'Days Aged',value: "" },
                             { key: 'Payment Method Code',value: data.CHECKEFTFlag },
                             { key: 'Total Billed Amount',value: ""},
@@ -424,12 +444,10 @@ export class ClaimPaymentDetails extends React.Component {
                             
                         ]
                     this.setState({
-                        showDetails: true,
-                        claimDetails: claimDetails,
+                         showDetails: true,
+                         claimDetails: claimDetails,
                          claimLineDetails: res.data.RemittanceViewerClaimServiceDetails,
-                         Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
-                         Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
-                        fileDetails: fileDetails,
+                         fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
                         count: count,
@@ -472,12 +490,6 @@ export class ClaimPaymentDetails extends React.Component {
             </div>
         )
     }
-
-
-
-
-
-
     onSelect(event, key) {
         if (event.target.options[event.target.selectedIndex].text == 'Organization' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
             this.setState({
@@ -495,7 +507,6 @@ export class ClaimPaymentDetails extends React.Component {
             this.getData()
         }, 50);
     }
-
     handleStartChange(date) {
         this.setState({
             startDate: date,
@@ -508,7 +519,6 @@ export class ClaimPaymentDetails extends React.Component {
             this.getData()
         }, 50);
     }
-
     handleEndChange(date) {
         this.setState({
             endDate: date,
@@ -546,9 +556,6 @@ export class ClaimPaymentDetails extends React.Component {
             this.getData()
         }, 50);
     }
-
-   
-
     onHandleChange(e) {
         let providerName = e.target.value
         clearTimeout(val)
@@ -596,7 +603,6 @@ export class ClaimPaymentDetails extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
-
     ChangeVal(event, key) {
 
         this.setState({
@@ -1090,13 +1096,17 @@ export class ClaimPaymentDetails extends React.Component {
            )
        }
        _renderClaims() {
-
+        
+        
         let columnDefs = [
-            { headerName: "Claim Id	", field: "ClaimID", width:230,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Claim Received Date	", field: "ClaimReceivedDate",width:210, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Patient Name	", field: "PatientName" ,width:230 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Charge Amount", field: "TotalChargeAmt",width:210 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", flex:1,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Claim Id", field: "ClaimID", width:150,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate",width:140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Patient Name", field: "PatientName" ,width:200 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Charge Amount", field: "TotalChargeAmt",width:120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width:120 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Days", field: "Days", flex:1,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
              ]
 
         return (
@@ -1124,7 +1134,7 @@ export class ClaimPaymentDetails extends React.Component {
                         rowData={this.state.claims_rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            // if (event.colDef.headerName == 'Claim Id') {
+                             if (event.colDef.headerName == 'Claim Id') {
                                 this.setState({
 
                                     showerror: true,
@@ -1134,8 +1144,8 @@ export class ClaimPaymentDetails extends React.Component {
                                     Aggrid_Service_Line_Info: [],
 
                                 })
-                                this.getDetails(event.data.ClaimID, event.data.FileID, "", 1)
-                            // }
+                                this.getDetails(event.data.ClaimID, event.data.FileID,event.data.RefID ,"", 1)
+                            }
                         }}
                     >
                     </AgGridReact>
@@ -1147,16 +1157,16 @@ export class ClaimPaymentDetails extends React.Component {
     _ClaimView_Info_Table() {
         if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
         let columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID" , width:230, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Id", field: "ClaimID" , width:150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 120 },
             { headerName: "Patient Name", field: "PatientName", width: 200 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Days Aged", field: "", width: 100 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            // { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            // { headerName: "Days Aged", field: "", width: 100 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Payment Method Code", field: "CHECKEFTFlag", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Billed Amount", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Adjusted Amount", field: "AdjAmt", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Payer Name", field: "PayerName", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Payer claim control No.", field: "PayerClaimControl", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Patient Control Number", field: "PatientControlNo", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Total Patient Resp", field: "PatietResAMT", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Payer Name", field: "PayerName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Payer claim control No.", field: "PayerClaimControl", width: 150 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Claim Status Code", field: "ClaimStatusCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Filling Indicator", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Patient ID", field: "", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -1164,9 +1174,9 @@ export class ClaimPaymentDetails extends React.Component {
             { headerName: "Provider Name", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Rendering Provider ID", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Patient Control Number", field: "PatientControlNo", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+           
             { headerName: "DRG Code", field: "DigonisCode", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Patient Resp", field: "PatietResAMT", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+           
         ]
 
         return (
