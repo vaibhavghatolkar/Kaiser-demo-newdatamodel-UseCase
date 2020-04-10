@@ -19,16 +19,7 @@ export class ClaimPaymentDetails extends React.Component {
 
     constructor(props) {
         super(props);
-
         let flag = props.location.state.data[0].flag
-        if (flag == 'accept') {
-            flag = 'Accepted Claims'
-        } else if (flag == 'reject') {
-            flag = 'Rejected Claims'
-        } else {
-            flag = 'Other'
-        }
-
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -44,9 +35,10 @@ export class ClaimPaymentDetails extends React.Component {
             plan_code: '',
             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
+            subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
             Service_startDate: '',
             Service_endDate: '',
-            flag: flag,
             coverage_data: [],
             tradingpartner: [],
             claimsList: [],
@@ -59,9 +51,7 @@ export class ClaimPaymentDetails extends React.Component {
             claimLineDetails: [],
             Transaction_Compliance: '',
             Organization: '',
-
             State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
@@ -154,19 +144,26 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            RemittanceViewerFileDetails(Sender:"${this.state.Sender}",State:"${this.state.State ? this.state.State : ''}",Organization:"${this.state.Organization}",EFTStartDt:"${Service_startDate}",EFTEndDt:"${ServiceEndDate}",ClaimReceivedStartDt:"${startDate}",ClaimReceivedEndDt:"${endDate}", page: ` + this.state.Firstgridpage + ` , OrderBy:"` + this.state.orderby + `") {
+            Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,RecType:"Outbound") {
                 RecCount
-  Sender
-  Organization
-  FileID
-  FileName
-  CheckEFTNo
-  FileDate
-  PayerName
-  PayerID
-  AccountNo
-  CHECKEFTFlag
-  CheckEFTDt
+                Sender
+                Organization
+                FileID
+                FileName
+                CheckEFTNo
+                FileDate
+                PayerName
+                PayerID
+                AccountNo
+                CHECKEFTFlag
+                CheckEFTDt
+                Receiver
+                ProcessID
+                State
+                RemittanceFileName
+                RemittanceSentDate
+                TotalClaim
+                Rejected
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -180,13 +177,15 @@ export class ClaimPaymentDetails extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-             
-                if (res && res.data && res.data.RemittanceViewerFileDetails) {
+                this.setState({
+                    rowData:res.data.Dashboard835FileDetails
+                })
+                if (res && res.data && res.data.Dashboard835FileDetails) {
+                 
+                    if (res.data.Dashboard835FileDetails.length > 0) {
 
-                    if (res.data.RemittanceViewerFileDetails.length > 0) {
-
-                        count = Math.floor(res.data.RemittanceViewerFileDetails[0].RecCount / 10)
-                        if (res.data.RemittanceViewerFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.Dashboard835FileDetails[0].RecCount / 10)
+                        if (res.data.Dashboard835FileDetails[0].RecCount % 10 > 0) {
                             
                             count = count + 1
                         }
@@ -195,8 +194,8 @@ export class ClaimPaymentDetails extends React.Component {
                     }
 
                     this.setState({
-                        intakeClaims: res.data.RemittanceViewerFileDetails,
-                        rowData:res.data.RemittanceViewerFileDetails
+                        intakeClaims: res.data.Dashboard835FileDetails,
+                        // rowData:res.data.RemittanceViewerFileDetails
                     }, () => {
                         this.sortData()
                     })
@@ -250,7 +249,7 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            RemittanceViewerPatientDetails  (page:${this.state.page},Sender:"${this.state.Sender}",State:"${this.state.State ? this.state.State : ''}",Organization:"${this.state.Organization}",EFTStartDt:"${Service_startDate}",EFTEndDt:"${ServiceEndDate}",  ClaimReceivedStartDt:"${startDate}" ,ClaimReceivedEndDt:"${endDate}" , FileID : "` + fileId + `", OrderBy:"` + this.state.nested_orderby + `") {
+            RemittanceViewerPatientDetails  (page:${this.state.page},Sender:"${this.state.Sender}",State:"${this.state.State ? this.state.State : ''}",Organization:"",EFTStartDt:"",EFTEndDt:"",  ClaimReceivedStartDt:"" ,ClaimReceivedEndDt:"" , FileID : "` + fileId + `", OrderBy:"` + this.state.nested_orderby + `") {
                 RecCount
                 RefId
                 FileID
@@ -475,17 +474,6 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
 
-    renderDetails(flag) {
-        return (
-            <div className="row">
-                {this.state.status != 'n' ? <div className="col-1"></div> : null}
-                <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
-                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
-                </div>
-            </div>
-        )
-    }
 
 
 
@@ -626,7 +614,7 @@ export class ClaimPaymentDetails extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                <div className="form-group col-2">
+                {/* <div className="form-group col-2">
                         <div className="list-dashboard">Organization</div>
                       <input className="form-control" 
                                                 onChange={(e) => {
@@ -643,8 +631,8 @@ export class ClaimPaymentDetails extends React.Component {
                                                 }}
                                             />
                     </div>
-            
-                    <div className="form-group col-sm-2">
+             */}
+                    <div className="form-group col-sm-3">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-header-dashboard" va id="fao1"
                                                 onChange={(event) => {
@@ -675,7 +663,7 @@ export class ClaimPaymentDetails extends React.Component {
                                             />
                     </div> */}
                   
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Check/EFT Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -693,9 +681,9 @@ export class ClaimPaymentDetails extends React.Component {
                             onChange={this.Service_EndChange}
                             minDate={this.state.Service_startDate ? new Date(moment(this.state.Service_startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Claim Received - Start Date</div>
+                    </div> */}
+                    <div className="form-group col-3">
+                        <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
                             selected={this.state.startDate ? new Date(this.state.startDate) : ''}
@@ -703,8 +691,8 @@ export class ClaimPaymentDetails extends React.Component {
                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Claim Received - End Date</div>
+                    <div className="form-group col-3">
+                        <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
                             selected={this.state.endDate ? new Date(this.state.endDate) : ''}
@@ -1264,7 +1252,7 @@ export class ClaimPaymentDetails extends React.Component {
      
         return (
             <div>
-                <h5 className="headerText">835 Details</h5>
+                <h5 className="headerText">835 Details {this.state.subtitle ? <label style={{fontSize:"14px"}}>({this.state.subtitle})</label> : ""}</h5>
                 {this.renderFilters()}
                 {
                 this.state.gridType
