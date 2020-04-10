@@ -361,7 +361,7 @@ export class AuditSummary835 extends React.Component {
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
-                    { name: 'Total Sent To Availity', value: 6 },
+                    { name: 'Total Sent To Availity', value: data.Accepted },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
 
