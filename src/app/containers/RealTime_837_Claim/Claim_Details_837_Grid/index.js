@@ -432,6 +432,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 FileCrDate
                 FileDateTime
                 ClaimDateTime
+                Status277CA
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1562,6 +1563,7 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Claim Status", field: "ClaimStatus", width: 140 },
             { headerName: "Subscriber Id", field: "Subscriber_ID", width: 140 },
+            { headerName: "277CA Status", field: "Status277CA", width: 100 },
             { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
             { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
             { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },

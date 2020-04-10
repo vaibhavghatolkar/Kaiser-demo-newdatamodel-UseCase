@@ -442,7 +442,7 @@ export class ClaimPaymentDashboard extends React.Component {
 
         let query = `{            
             
-                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}", Status:"", FileID:"") {
+                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound") {
                     RecCount
                     Sender
                     Organization
@@ -1475,44 +1475,38 @@ export class ClaimPaymentDashboard extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
+            let subtitle=''
             let loadStatus = ''
             let data = []
-            if (item.name == 'Accepted Files') {
+            if (item.name == 'Vaildated') {
                 addon = '/accept'
                 claimStatus = 'Accepted'
-            } else if (item.name == 'Accepted with Errors') {
-                addon = '/reject'
-                claimStatus = 'Accepted with Errors'
-            } else if (item.name == 'Processing Files') {
-                addon = '/reject'
-                claimStatus = 'Received'
-            } else if (item.name == 'Rejected Files') {
+                subtitle="Accepted Files"
+            } else if (item.name == 'Files in Error') {
                 claimStatus = 'Rejected'
-            } else if (item.name == 'Reconciled Files') {
-                loadStatus = 'Reconciled'
-            } else {
+                subtitle="Rejected Files"
+            }  else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: claimStatus, type: type, gridflag: loadStatus },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus,type:type , subtitle:subtitle},
             ]
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Reconciled Error' &&
-                        item.name != 'Load Error' &&
-                        item.name != 'Load in MCG' &&
-                        item.name != 'HiPaaS | MCG'
-                    }
+                        item.name != 'Received From QNXT' &&
+                         item.name != 'Error Resolved' &&
+                         item.name != 'Total Sent To Availity' &&
+                         item.name != '999 Received'
+                      }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                // url={Strings.Claim_Details_837_Grid}
+                url={Strings.claimPayment_835_details}
                 />
 
             )
@@ -2107,11 +2101,11 @@ export class ClaimPaymentDashboard extends React.Component {
                         rowData={this.state.rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'File Name') {
+                            if (event.colDef.headerName == 'QNXT File Name') {
                                 this.setState({
                                     incoming_fileId: event.data.FileID
                                 }, () => {
-                                    // this.gotoClaimDetails()
+                                    this.gotoClaimDetails()
                                 })
                             }
                         }}
@@ -2121,7 +2115,37 @@ export class ClaimPaymentDashboard extends React.Component {
             </div>
         )
     }
+    gotoClaimDetails = (data) => {
+       
+        let sendData = []
+        if (data && data.length > 0) {
+            sendData = data
+        } else {
+            let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+            let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+            let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+            let State = this.state.State ? this.state.State : 'n'
+            let type = this.state.type ? this.state.type : ''
+      
+            sendData = [
+                {
+                    flag: '',
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: "",
+                    type: type,
+                    incoming_fileId: this.state.incoming_fileId,
 
+                },
+            ]
+        }
+
+        this.props.history.push('/' + Strings.claimPayment_835_details, {
+            data: sendData
+        })
+    }
     progressBar() {
         let k = 35 + '%'
         let j = 20
