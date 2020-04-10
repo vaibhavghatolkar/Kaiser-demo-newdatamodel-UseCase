@@ -1480,10 +1480,10 @@ export class ClaimPaymentDashboard extends React.Component {
             let data = []
             if (item.name == 'Vaildated') {
                 addon = '/accept'
-                claimStatus = 'Accepted'
+                claimStatus = 'Validated'
                 subtitle="Accepted Files"
             } else if (item.name == 'Files in Error') {
-                claimStatus = 'Rejected'
+                claimStatus = 'Error'
                 subtitle="Rejected Files"
             }  else {
                 addon = '/other'
