@@ -160,7 +160,7 @@ export class StatewiseTradingPartner extends React.Component {
         let query = `{
                   StateList  (UserId:0 Flag:0) {
                   State
-                StateCode
+                  StateCode
             }
        }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -205,7 +205,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.StateList.forEach(element => {
-            row.push(<option selected={this.state.State == element.StateCode ? element.StateCode : ''} value={element.StateCode}>{element.State}</option>)
+            row.push(<option selected={this.state.State == element.StateCode ? element.StateCode : ''} value={element.StateCode}>{element.StateCode}</option>)
         })
         return row
 
@@ -214,7 +214,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.StateList.forEach(element => {
-            row.push(<option value={element.StateCode}>{element.State}</option>)
+            row.push(<option value={element.StateCode}>{element.StateCode}</option>)
         })
         return row
 
