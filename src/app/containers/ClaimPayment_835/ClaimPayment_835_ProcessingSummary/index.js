@@ -183,36 +183,35 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            PaymentProcessingSummary   {
+            PaymentProcessingSummary(State:"",StartDt:"",EndDt:"",FileID:"",Status:"",RecType:"") {
                 RefID
-  RecCount
-  FileID
-  FileName
-  FileDate
-  ClaimID
-  ClaimReceivedDate
-  PatientName
-  PatientControlNo
-  PayerName
-  TotalChargeAmt
-  TotalClaimPaymentAmt
-  Sender
-  Organization
-  TransactionType
-  CheckEFTNo
-  TRN03
-  PayerID
-  CheckEFTDt
-  AccountNo
-  CHECKEFTFlag
-  Receiver
-  TotalAdjustmentAmount
-TotalBillAmount
-Days
-
+                RecCount
+                FileID
+                FileName
+                FileDate
+                ClaimID
+                ClaimReceivedDate
+                PatientName
+                PatientControlNo
+                PayerName
+                TotalChargeAmt
+                TotalClaimPaymentAmt
+                Sender
+                Organization
+                TransactionType
+                CheckEFTNo
+                TRN03
+                PayerID
+                CheckEFTDt
+                AccountNo
+                CHECKEFTFlag
+                Receiver
+                TotalAdjustmentAmount
+                TotalBillAmount
+                Days
+              }
             }
-        }`
-       console.log("sakhjsaf" , query)
+              `
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -609,13 +608,13 @@ console.log("asjfhsaf" , data)
                 TotalCount
               }
 
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
 
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                   Accepted
                   Rejected
                   FileReject
