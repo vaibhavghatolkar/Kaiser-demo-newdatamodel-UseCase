@@ -17,6 +17,8 @@ import { AgGridReact } from 'ag-grid-react';
 import { StateDropdown } from '../../../components/StateDropdown';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { PieChart } from '../../../components/PieChart';
+import { TableTiles } from '../../../components/TableTiles';
 import { MDBProgress } from 'mdbreact';
 
 import {
@@ -460,6 +462,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     RemittanceSentDate
                     TotalClaim
                     Rejected
+                    Status
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1302,7 +1305,7 @@ export class ClaimPaymentDashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let query = `{
             
-                ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}",RecType:"Outbound") {
+                ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                   TotalCount
                   Rejected
                   Accepted
@@ -1529,15 +1532,46 @@ export class ClaimPaymentDashboard extends React.Component {
             let claimStatus = ''
             let loadStatus = ''
             let generalStatus = ''
+            let mcgStatus = ''
+            let notSent = ''
+            let subtitle = ''
+            let status277CA = ''
             let color = "var(--red)"
 
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
+                subtitle = 'Accepted Claims'
                 color = "var(--green)"
-            } else if (item.name == 'Accepted with Errors') {
+            } else if (item.name == 'Rejected') {
                 generalStatus = 'Rejected'
+                subtitle = "Rejected Claims"
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
+                subtitle = item.name
+            } else if (item.name == 'Reconciled Error') {
+                subtitle = item.name
+                loadStatus = 'Reconcile Exception'
+            } else if (item.name == 'Load in MCG') {
+                mcgStatus = 'Loaded'
+                subtitle = item.name
+                color = "var(--main-bg-color)"
+            } else if (item.name == 'Load Error') {
+                subtitle = item.name
+                mcgStatus = 'Exception'
+            } else if (item.name == '999 Not Sent') {
+                notSent = 'Y'
+            }
+
+            if (item.name == 'Accepted' && item.is277CA) {
+                subtitle = '277CA Accepted Claims'
+                generalStatus = ''
+                status277CA = 'Accepted'
+            }
+
+            if (item.name == 'Rejected' && item.is277CA) {
+                subtitle = '277CA Rejected Claims'
+                generalStatus = ''
+                status277CA = 'Rejected'
             }
 
             let sendData = [
@@ -1550,29 +1584,29 @@ export class ClaimPaymentDashboard extends React.Component {
                     status: claimStatus,
                     type: type,
                     gridflag: loadStatus,
-                    generalStatus: generalStatus
+                    generalStatus: generalStatus,
+                    mcgStatus: mcgStatus,
+                    notSent: notSent,
+                    subtitle: subtitle,
+                    status277CA: status277CA
                 },
             ]
             row.push(
-                <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
-                    {
-                        item.isClick ?
-                            <Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
-                            :
-                            <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
-                    }
-                </div>
+                <TableTiles
+                    item={item}
+                    url={Strings.Claim_Details_837_Grid}
+                    data={sendData}
+                    color={color}
+                />
             )
         })
 
         return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px', marginLeft: '16px' }}>
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )
     }
-
     _getClaimCounts = async () => {
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -1589,13 +1623,13 @@ export class ClaimPaymentDashboard extends React.Component {
                 TotalCount
               }
 
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}",RecType:"Outbound") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
 
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}",RecType:"Outbound") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                   Accepted
                   Rejected
                   FileReject
@@ -1965,7 +1999,7 @@ export class ClaimPaymentDashboard extends React.Component {
         if (header == 'Top 10 File Level Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
-        } else if (header == 'Top 10 Payment Level Errors') {
+        } else if (header == 'Top 10 Claim Level Errors') {
             addon = '/reject'
             generalStatus = 'Rejected'
         }
@@ -1985,24 +2019,15 @@ export class ClaimPaymentDashboard extends React.Component {
         ]
 
         return (
-            piechart_data && piechart_data.labels && piechart_data.labels.length > 0
-                ?
-                <div className="row chart-container-full chart clickable" style={{marginLeft: '9px'}} onClick={() => { 
-                    // this.gotoClaimDetails(sendData) 
-                }}>
-                    <div className="col-7 nopadding">
-                        <div className="chart-header">{header}</div>
-                        {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
-                    </div>
-                    <div className="col-5 chart-align">
-                        {this.renderChart(piechart_data)}
-                    </div>
-                </div> :
-                <div className="chart-container-full chart" style={{ textAlign: 'center' }}>
-                    No Data Present
-                </div>
+            <PieChart
+                header={header}
+                piechart_data={piechart_data}
+                data={sendData}
+                onClick={this.gotoClaimDetails}
+            />
         )
     }
+
 
 
 
@@ -2019,6 +2044,37 @@ export class ClaimPaymentDashboard extends React.Component {
                 </div>
             </div>
         )
+    }
+
+    gotoClaimDetails = (data) => {
+        let sendData = []
+        if (data && data.length > 0) {
+            sendData = data
+        } else {
+            let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+            let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+            let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+            let State = this.state.State ? this.state.State : 'n'
+            let type = this.state.type ? this.state.type : ''
+
+            sendData = [
+                {
+                    flag: '',
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: "",
+                    type: type,
+                    incoming_fileId: this.state.incoming_fileId,
+
+                },
+            ]
+        }
+
+        // this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
+        //     data: sendData
+        // })
     }
 
     _renderList() {

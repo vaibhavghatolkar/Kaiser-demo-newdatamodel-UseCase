@@ -210,7 +210,7 @@ export class AuditSummary835 extends React.Component {
 
         let query = `{
             
-                AuditSummary835(StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}") {
+                AuditSummary835(StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", FileID:"",Status:"",RecType:"Outbound") {
                   RecCount
                   QNXTFileName
                   Date
@@ -326,7 +326,7 @@ export class AuditSummary835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
+            ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 TotalCount
                 Rejected
                 Accepted
