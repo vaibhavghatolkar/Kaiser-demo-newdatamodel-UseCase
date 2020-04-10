@@ -16,6 +16,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Link } from 'react-router-dom'
 import { TableTiles } from '../../../components/TableTiles';
+import { Filters } from '../../../components/Filters';
 
 let val = ''
 export class ClaimProcessingSummary extends React.Component {
@@ -126,17 +127,11 @@ export class ClaimProcessingSummary extends React.Component {
         }
 
         this.getData = this.getData.bind(this)
-        this.onSelect = this.onSelect.bind(this)
         this.handlePageClick = this.handlePageClick.bind(this)
-        this.handleStartChange = this.handleStartChange.bind(this)
-        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
-        this.getCommonData()
-        this.getCountData()
-        this.getClaimCounts()
-        this.getData()
+        this._refreshScreen()
     }
 
     _get999Count = async () => {
@@ -167,35 +162,6 @@ export class ClaimProcessingSummary extends React.Component {
                     Total999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : '',
                     Total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : '',
                 })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    getCommonData = async () => {
-        let query = `{
-            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
-                Trading_Partner_Name 
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    this.setState({
-                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                    })
-                }
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -517,170 +483,6 @@ export class ClaimProcessingSummary extends React.Component {
         }, 50);
     }
 
-    onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.setState({
-                [key]: ''
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text
-            })
-        }
-
-        setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
-        }, 50);
-    }
-
-    onHandleChange = (e) => {
-        clearTimeout(val)
-        let providerName = e.target.value
-        val = setTimeout(() => {
-            getProviders("Inbound", providerName)
-                .then(list => {
-                    this.setState({
-                        providers: list
-                    })
-                }).catch(error => {
-                    process.env.NODE_ENV == 'development' && console.log(error)
-                })
-        }, 300);
-    }
-
-    onSelected = (value) => {
-        this.setState({
-            providerName: value
-        }, () => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
-        })
-    }
-
-    getoptions() {
-        let row = []
-        this.state.tradingpartner.forEach(element => {
-            if (!element) {
-                return
-            }
-            row.push(<option value="">{element.Trading_Partner_Name}</option>)
-        })
-        return row
-    }
-
-    _handleStateChange = (event) => {
-        this.setState({
-            State: event.target.options[event.target.selectedIndex].text
-        }, () => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
-        })
-    }
-
-    renderTopBar() {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        <AutoComplete
-                            list={this.state.providers}
-                            onHandleChange={this.onHandleChange}
-                            onSelected={this.onSelected}
-                        />
-
-                    </div> */}
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData: [],
-                                    Claim837RTProcessingSummary: [],
-                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this.getData()
-                                })
-                            }}
-                        >
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div>
-                    {/* <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
-                        <div className="summary-header">WIP > 90 Days</div>
-                        <div className="blue summary-title">{this.state.wip90}</div>
-                    </div> */}
-                </div>
-            </div>
-        )
-    }
-
-    handleStartChange(date) {
-        this.setState({
-            startDate: date,
-            showDetails: false
-        });
-
-        setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
-        }, 50);
-    }
-
-    handleEndChange(date) {
-        this.setState({
-            endDate: date,
-            showDetails: false
-        });
-
-        setTimeout(() => {
-            this.getCountData()
-            this.getClaimCounts()
-            this.getData()
-        }, 50);
-    }
-
     _renderStats() {
         let _summary = [
             { header: 'Accepted Claims', value: this.state.Accepted },
@@ -835,9 +637,6 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
-
-
-
     _renderTransactions() {
         return (
             <div className="ag-theme-balham" style={{ height: '400px', padding: '0px', marginLeft: '1px' }}>
@@ -881,11 +680,49 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
+    _refreshScreen = () => {
+        this.getCountData()
+        this.getClaimCounts()
+        this.getData()
+    }
+
+    onGridChange = (event) => {
+        this.setState({
+            page: 1,
+            rowData: [],
+            Claim837RTProcessingSummary: [],
+            gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+        }, () => {
+            this.getData()
+        })
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                setData={this.setData}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
+
     render() {
         return (
             <div>
                 <h5 className="headerText">Claim Processing Summary</h5>
-                {this.renderTopBar()}
+                {this._renderTopbar()}
                 {/* {this._renderStats()} */}
                 {this.renderClaimDetails()}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && this.state.gridType ? this._renderTransactions() : null}
