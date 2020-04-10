@@ -24,11 +24,11 @@ export class Filters extends React.Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getCommonData()
     }
 
-    getCommonData = async() => {
+    getCommonData = async () => {
         let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
         let query = `{
             Trading_PartnerList(RecType :"${isOutbound ? "Outbound" : "Inbound"}", Transaction:"Claim837RT") {
@@ -136,16 +136,33 @@ export class Filters extends React.Component {
                         />
                     </div> */}
 
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
+                    {
+                        this.props.isDiffSubmitter ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">
+                                    Transaction Type
+                                </div>
+                                <select className="form-control list-dashboard"
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'transactionType')
+                                    }}
+                                >
+                                    <option value="1"></option>
+                                    <option selected={this.props.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                                    <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option>
+                                </select>
+                            </div>
+                            :
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Submitter</div>
+                                <select className="form-control list-dashboard" id="TradingPartner"
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'selectedTradingPartner')
+                                    }}>
+                                    <option value="select"></option>
+                                    {this.getoptions()}
+                                </select>
+                            </div>}
                     {
                         this.props.isTimeRange ?
                             <div className="form-group col-2">
