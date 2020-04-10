@@ -144,6 +144,8 @@ export class ClaimPaymentDashboard extends React.Component {
             QNXT_Generated: 0,
             Hipaas_Received: 0,
             TotalCountQnxt:0,
+            progress_Validated: 0,
+            progress_Error: 0, 
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -1312,7 +1314,11 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
                 Total999Response835(State: "${this.state.State}") {
                     Total999
-                  }
+                }
+                ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
+                    Rejected
+                    Accepted
+                  }       
               
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1328,18 +1334,22 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => {
                 let summary = []
                 let data = res.data.ERA835DashboardCountNew[0]
+                let Validated = Number(res.data.ERA835DashboardProgressBar[0].Accepted).toFixed(2)
+                let Error = Number(res.data.ERA835DashboardProgressBar[0].Rejected).toFixed(2)
                 
                 summary = [
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
-                    { name: 'Total Sent To Availity', value: 6 },
+                    { name: 'Total Sent To Availity', value: data.Accepted },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
                     summaryCount: summary,
+                    progress_Validated: Validated,
+                    progress_Error: Error
                     // totalFiles: totalCount
                 })
             })
@@ -2046,37 +2056,6 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-    gotoClaimDetails = (data) => {
-        let sendData = []
-        if (data && data.length > 0) {
-            sendData = data
-        } else {
-            let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-            let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-            let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-            let State = this.state.State ? this.state.State : 'n'
-            let type = this.state.type ? this.state.type : ''
-
-            sendData = [
-                {
-                    flag: '',
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: "",
-                    type: type,
-                    incoming_fileId: this.state.incoming_fileId,
-
-                },
-            ]
-        }
-
-        // this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
-        //     data: sendData
-        // })
-    }
-
     _renderList() {
         return (
             <div>
@@ -2147,13 +2126,14 @@ export class ClaimPaymentDashboard extends React.Component {
         })
     }
     progressBar() {
-        let k = 35 + '%'
-        let j = 20
+         
+        let Validated = this.state.progress_Validated + "%"
+        let Error = this.state.progress_Error + "%"
         return (
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style={{ width: k }}>Received From QNXT ({k})</div>
-                <div class="progress-bar bg-success" role="progressbar" style={{ width: "35%" }}>Error Resolved (35%)</div>
-                <div class="progress-bar bg-danger" role="progressbar" style={{ width: "30%" }}>Validated (30%)</div>
+                {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
+                <div class="progress-bar bg-success" role="progressbar" style={{ width: Validated }}>Vaildated ({Validated})</div>
+                <div class="progress-bar bg-danger" role="progressbar" style={{ width: Error }}>Files in Error ({Error})</div>
             </div>
         )
     }
