@@ -104,6 +104,7 @@ export class ClaimPaymentDashboard extends React.Component {
             totalFiles: [],
             second_data: {},
             pie_data: {},
+            complaince_data: {},
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
@@ -146,9 +147,9 @@ export class ClaimPaymentDashboard extends React.Component {
             Hipaas_Received: 0,
             TotalCountQnxt: 0,
             progress_Validated: 0,
-            progress_Error: 0, 
-            AvailitySent:0,
-            TotalError:0,
+            progress_Error: 0,
+            AvailitySent: 0,
+            TotalError: 0,
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -794,7 +795,7 @@ export class ClaimPaymentDashboard extends React.Component {
             row.push(
                 <tr>
                     <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>
-                    <a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                        <a style={{ color: "#6AA2B8", cursor: "pointer" }}
                             onClick={() => {
                                 this.setState({
                                     incoming_fileId: d.FileID
@@ -1620,7 +1621,7 @@ export class ClaimPaymentDashboard extends React.Component {
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
             { 'name': 'EFT', 'value': this.state.EFTData, },
             { 'name': 'CHK', 'value': this.state.CheckData, },
-            
+
         ]
         let stage_2 = [
             { 'header': 'L1 - L2 Status' },
@@ -1860,7 +1861,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 let second_data = ""
                 let pie_data = ""
                 let complience = res.data.CompliancePieChart835 ? res.data.CompliancePieChart835 : []
-
+                let complaince_data = res.data.CompliancePieChart835 ? this.getComplianceChartData(res.data.CompliancePieChart835) : {}
                 let count = 0
                 // ClaimBarChart.forEach((d) => {
                 //     count++;
@@ -1879,13 +1880,40 @@ export class ClaimPaymentDashboard extends React.Component {
                     claimLabels: claimLabels,
                     second_data: second_data,
                     pie_data: pie_data,
-                    complience: complience
+                    complience: complience,
+                    complaince_data: complaince_data
                 })
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
 
+    }
+
+    getComplianceChartData = (pieChart) => {
+        let pieLabel = []
+        let pieData = []
+        pieChart.forEach((d) => {
+            pieLabel.push(d.Type)
+            pieData.push(d.TotalCount)
+        })
+        let data = {
+            labels: pieLabel,
+            datasets: [{
+                data: pieData,
+                backgroundColor: [
+                    '#139DC9',
+                    '#daea00',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#daea00',
+                ]
+            }],
+            flag: ''
+        }
+
+        return data
     }
 
     renderChart(piechart_data) {
@@ -1970,9 +1998,6 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-
-
-
     renderAllPieCharts() {
         return (
             <div className="chart-div">
@@ -1988,13 +2013,26 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
+    renderCompliance = () => {
+        return (
+            this.state.complience && this.state.complience.length > 0 ?
+                <div className="chart-div">
+                    <div className="row">
+                        <div className="col-6" style={{ padding: '6px' }}>
+                            {this.renderPieChart('Compliance Ratio', this.state.complaince_data)}
+                        </div>
+                    </div>
+                </div> : null
+        )
+    }
+
     _renderList() {
-        let columnDefs= [
+        let columnDefs = [
             // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Process Id", field: "FileID", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Received Date", field: "FileDate", flex: 1 },
             { headerName: "State", field: "State", flex: 1 },
-            
+
             { headerName: "Total", field: "TotalClaim", flex: 1 },
             { headerName: "Rejected", field: "Rejected", flex: 1 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", flex: 1 },
@@ -2003,24 +2041,7 @@ export class ClaimPaymentDashboard extends React.Component {
             { headerName: "# of Errors", field: "", flex: 1 },
 
         ]
-
-        if (this.state.complience && this.state.complience.length > 0) {
-            columnDefs= [
-                // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Process Id", field: "FileID", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Received Date", field: "FileDate", width: 100 },
-                { headerName: "State", field: "State", width: 75 },
-                
-                { headerName: "Total", field: "TotalClaim", width: 75 },
-                { headerName: "Rejected", field: "Rejected", width: 90 },
-                { headerName: "Remittance File Name", field: "RemittanceFileName", width: 100 },
-                { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
-                // { headerName: "Compliance vs Submission date", field: "" },
-                { headerName: "# of Errors", field: "", width: 130 },
-
-            ]
-
-        }
+        
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
@@ -2126,7 +2147,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
                         {this.renderAllPieCharts()}
-
+                        {this.renderCompliance()}
                         {/* {this.renderMonthlyTrendsChart()} */}
                         {/* <div className="row">
                            <div className="col-4">
@@ -2142,20 +2163,11 @@ export class ClaimPaymentDashboard extends React.Component {
 
                 </div>
                 <div className="row">
-                    <div className={this.state.complience && this.state.complience.length > 0 ? "col-8" : "col-12"}>
-
+                    <div className="col-12">
                         {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
                         {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
                         {/* {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}     */}
                     </div>
-                    {
-                        this.state.complience && this.state.complience.length > 0 ?
-                            <div className="col-3 nopadding" style={{ marginLeft: '60px' }}>
-                                {this.renderCharts()}
-                                {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
-                                {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
-                            </div> : null
-                    }
                 </div>
 
 

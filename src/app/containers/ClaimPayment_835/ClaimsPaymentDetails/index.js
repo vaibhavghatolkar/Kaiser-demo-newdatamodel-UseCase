@@ -1044,8 +1044,9 @@ export class ClaimPaymentDetails extends React.Component {
     _renderList = () => {
         let columnDefs = [
             { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "File Date", field: "FileDate", width: 100},
+            { headerName: "Received Date", field: "FileDate", width: 100},
+            { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100},
             { headerName: "Organization", field: "Organization", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100},
