@@ -73,12 +73,12 @@ export class AuditSummary835 extends React.Component {
                 { headerName: "File Status", field: "Status" },
                 { headerName: "Remittance File Name", field: "RemittanceFileName" },
                 { headerName: "Remittance File Date	", field: "RemittanceSentDate" },
-                { headerName: "Received", field: "Received" },
+                { headerName: "QNXT Received", field: "Received" },
                 { headerName: "In HiPaaS", field: "InHipaas" },
-                { headerName: "Error in PreProcess", field: "" },
+                // { headerName: "Error in PreProcess", field: "" },
+                { headerName: "Accepted", field: "Accepted" },
+                { headerName: "Rejected", field: "Rejected" },
                 { headerName: "999", field: "F999", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                // { headerName: "Accepted PreProcess", field: "Accepted" },
-                // { headerName: "Rejected PreProcess", field: "Rejected" },
                 // { headerName: "In MCG	", field: "SentToQNXT" },
                 // { headerName: "277CA", field: "F277", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
@@ -222,6 +222,8 @@ export class AuditSummary835 extends React.Component {
                   Status
                   Received
                   InHipaas
+                  Accepted
+                  Rejected
                 }
               
         }`
@@ -755,7 +757,7 @@ export class AuditSummary835 extends React.Component {
                         />
 
                     </div> */}
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -766,7 +768,7 @@ export class AuditSummary835 extends React.Component {
                             <option value="select"></option>
                             {this.getoptions()}
                         </select>
-                    </div>
+                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker

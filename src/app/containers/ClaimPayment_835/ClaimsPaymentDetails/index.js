@@ -72,10 +72,10 @@ export class ClaimPaymentDetails extends React.Component {
             statusRotation: 180,
             submitterRotation: 180,
             StateList: [],
-            Statecode:'',
-            Sender:'',
-            Servicelinepage:1,
-            nested_orderby:'',
+            Statecode: '',
+            Sender: '',
+            Servicelinepage: 1,
+            nested_orderby: '',
             gridType: 1,
             domLayout: 'autoHeight',
             defaultColDef: {
@@ -84,7 +84,7 @@ export class ClaimPaymentDetails extends React.Component {
                 sortable: true,
                 resizable: true,
                 filter: true,
-               
+
             },
         }
 
@@ -132,7 +132,7 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     getData = () => {
-      
+
         let count = 1
         let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
         let ServiceEndDate = this.state.Service_endDate ? moment(this.state.Service_endDate).format('YYYY-MM-DD') : ""
@@ -178,15 +178,15 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    rowData:res.data.Dashboard835FileDetails
+                    rowData: res.data.Dashboard835FileDetails
                 })
                 if (res && res.data && res.data.Dashboard835FileDetails) {
-                 
+
                     if (res.data.Dashboard835FileDetails.length > 0) {
 
                         count = Math.floor(res.data.Dashboard835FileDetails[0].RecCount / 10)
                         if (res.data.Dashboard835FileDetails[0].RecCount % 10 > 0) {
-                            
+
                             count = count + 1
                         }
                         this.setState.recount = count;
@@ -237,9 +237,9 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     getTransactions = (fileId) => {
-   
 
-         let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
+
+        let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
         let ServiceEndDate = this.state.ServiceEndDate ? moment(this.state.ServiceEndDate).format('YYYY-MM-DD') : ""
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
@@ -275,7 +275,8 @@ export class ClaimPaymentDetails extends React.Component {
                 TotalAdjustmentAmount
                 TotalBillAmount
                 Days
-                
+                RemittanceFileName
+                RemittanceSentDate
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -289,20 +290,20 @@ export class ClaimPaymentDetails extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                 
+
                 var data = res.data.PaymentProcessingSummary
-            
+
                 if (data && data.length > 0) {
                     this.sortData(fileId, data)
                 }
 
                 this.setState({
-                    claims_rowData:res.data.PaymentProcessingSummary,
-                    Ag_grid_FileName: res.data.PaymentProcessingSummary[0].FileName,
-                    Ag_grid_fileDate: res.data.PaymentProcessingSummary[0].FileDate
+                    claims_rowData: res.data.PaymentProcessingSummary,
+                    Ag_grid_FileName: res.data.PaymentProcessingSummary[0].RemittanceFileName,
+                    Ag_grid_fileDate: res.data.PaymentProcessingSummary[0].RemittanceSentDate
                 });
-        
-                  })
+
+            })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
@@ -313,7 +314,7 @@ export class ClaimPaymentDetails extends React.Component {
     showDetails() {
         this.setState({
             showDetails: true,
-            orderby:''
+            orderby: ''
         })
     }
 
@@ -327,8 +328,8 @@ export class ClaimPaymentDetails extends React.Component {
         })
     }
 
-    getDetails(claimId, fileId,RefID ,fileData ,page) {
-       let url = Urls.real_time_claim_details
+    getDetails(claimId, fileId, RefID, fileData, page) {
+        let url = Urls.real_time_claim_details
         let query = `{
             RemittanceViewerClaimDetails (RefID:`+ RefID + `, FileID: "` + fileId + `") {
                 FileID
@@ -392,11 +393,11 @@ export class ClaimPaymentDetails extends React.Component {
                 let count = 1
                 let data = res.data
                 this.setState({
-                     showDetails: true,
-                     Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
-                     Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
-                   
-                  
+                    showDetails: true,
+                    Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
+                    Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
+
+
                 })
                 if (data && data.RemittanceViewerClaimServiceDetails[0].length > 0) {
 
@@ -405,7 +406,7 @@ export class ClaimPaymentDetails extends React.Component {
                         count = count + 1
                     }
                 }
-                let fileDetails=[]
+                let fileDetails = []
                 if (res.data.RemittanceViewerClaimDetails && res.data.RemittanceViewerClaimDetails.length > 0) {
 
                     let data = res.data.RemittanceViewerClaimDetails[0]
@@ -418,43 +419,43 @@ export class ClaimPaymentDetails extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Claim Id' ,value: data.ClaimID },
+                            { key: 'Claim Id', value: data.ClaimID },
                             { key: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
-                            { key: 'Patient Name',value: data.PatientName },
+                            { key: 'Patient Name', value: data.PatientName },
                             // { key: '835 Response (RAW)',value: "" },
-                            { key: 'Days Aged',value: "" },
-                            { key: 'Payment Method Code',value: data.CHECKEFTFlag },
-                            { key: 'Total Billed Amount',value: ""},
-                            { key: 'Total Adjusted Amount',value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt},
-                            { key: 'Payer Name',value: data.PayerName },
-                            { key: 'Payer claim control No.', value: data.PayerClaimControl},
-                            { key: 'Claim Status Code',value: data.ClaimStatusCode },
-                            { key: 'Claim Filling Indicator',},
-                            
+                            { key: 'Days Aged', value: "" },
+                            { key: 'Payment Method Code', value: data.CHECKEFTFlag },
+                            { key: 'Total Billed Amount', value: "" },
+                            { key: 'Total Adjusted Amount', value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt },
+                            { key: 'Payer Name', value: data.PayerName },
+                            { key: 'Payer claim control No.', value: data.PayerClaimControl },
+                            { key: 'Claim Status Code', value: data.ClaimStatusCode },
+                            { key: 'Claim Filling Indicator', },
+
                             { key: 'Patient ID', },
-                            
+
                             { key: 'Provider ID', },
                             { key: 'Provider Name', },
-                            { key: 'Rendering Provider ID',},
-                            { key: 'Facility Code Value',value: data.FacilityCode },
-                            { key: 'Patient Control Number',value: data.PatientControlNo },
-                            
-                            { key: 'DRG Code',value: data.DigonisCode },                            
-                            { key: 'Total Patient Resp',value: data.PatietResAMT },
-                            
+                            { key: 'Rendering Provider ID', },
+                            { key: 'Facility Code Value', value: data.FacilityCode },
+                            { key: 'Patient Control Number', value: data.PatientControlNo },
+
+                            { key: 'DRG Code', value: data.DigonisCode },
+                            { key: 'Total Patient Resp', value: data.PatietResAMT },
+
                         ]
                     this.setState({
-                         showDetails: true,
-                         claimDetails: claimDetails,
-                         claimLineDetails: res.data.RemittanceViewerClaimServiceDetails,
-                         fileDetails: fileDetails,
+                        showDetails: true,
+                        claimDetails: claimDetails,
+                        claimLineDetails: res.data.RemittanceViewerClaimServiceDetails,
+                        fileDetails: fileDetails,
                         fileid: data.FileID,
                         claimid: data.ClaimID,
                         count: count,
-                      
+
                     })
-                 }
-                 process.env.NODE_ENV == 'development' && console.log("sdnsajhsfjf" , this.state. claimLineDetails)
+                }
+                process.env.NODE_ENV == 'development' && console.log("sdnsajhsfjf", this.state.claimLineDetails)
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -620,7 +621,7 @@ export class ClaimPaymentDetails extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                {/* <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Organization</div>
                       <input className="form-control" 
                                                 onChange={(e) => {
@@ -638,20 +639,20 @@ export class ClaimPaymentDetails extends React.Component {
                                             />
                     </div>
              */}
-                    <div className="form-group col-sm-3">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <select className="form-control list-header-dashboard" va id="fao1"
-                                                onChange={(event) => {
-                                                    this.ChangeVal(event, 'State')
-                                                    setTimeout(() => {
-                                                        this.getData()
-                                                    }, 50);
-                                                }} >>
+                            onChange={(event) => {
+                                this.ChangeVal(event, 'State')
+                                setTimeout(() => {
+                                    this.getData()
+                                }, 50);
+                            }} >>
                                             <option value="" ></option>
-                                                {this.getoptions()}
+                            {this.getoptions()}
 
-                                            </select>
-                      
+                        </select>
+
                     </div>
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Sender</div>
@@ -668,7 +669,7 @@ export class ClaimPaymentDetails extends React.Component {
                                                 }}
                                             />
                     </div> */}
-                  
+
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Check/EFT Start Date</div>
                         <DatePicker
@@ -688,7 +689,7 @@ export class ClaimPaymentDetails extends React.Component {
                             minDate={this.state.Service_startDate ? new Date(moment(this.state.Service_startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div> */}
-                    <div className="form-group col-3">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -697,7 +698,7 @@ export class ClaimPaymentDetails extends React.Component {
                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col-3">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker
                             className="form-control list-header-dashboard"
@@ -734,9 +735,9 @@ export class ClaimPaymentDetails extends React.Component {
     }
     handlePageClickLine = (data) => {
         let page = data.selected + 1
-     
-            this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
-        
+
+        this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
+
     }
 
 
@@ -745,27 +746,27 @@ export class ClaimPaymentDetails extends React.Component {
         const data = this.state.claimLineDetails ? this.state.claimLineDetails : []
         data.forEach((d) => {
             row.push(
-               
+
                 <tr>
-                    <td> { moment((d.ServiceStartDate)).format("MM/DD/YYYY")}-{moment((d.ServiceEndDate)).format("MM/DD/YYYY")} </td>
+                    <td> {moment((d.ServiceStartDate)).format("MM/DD/YYYY")}-{moment((d.ServiceEndDate)).format("MM/DD/YYYY")} </td>
                     {/* <td>  </td> */}
                     <td>{d.LineControlNo}</td>
                     <td>{d.AdjudicatedCPT}</td>
                     <td>{d.SubmittedCPT}</td>
-            <td></td><td></td><td></td>
-                 <td>${d.ChargeAmount}</td>
-                 <td>${d.AdjAmt}</td><td>${d.PaidAmt}</td>
-                                   
-                                
+                    <td></td><td></td><td></td>
+                    <td>${d.ChargeAmount}</td>
+                    <td>${d.AdjAmt}</td><td>${d.PaidAmt}</td>
+
+
                     {/* <td>{d.ServiceSupplementalAmount}</td>
                     <td>{d.OriginalUnitsofServiceCount}</td>
                     <td>{d.UnitsofServicePaidCount}</td> */}
                     {/* To be filled with approproate data */}
-                 
-                </tr>
-                 
 
-      
+                </tr>
+
+
+
             )
         })
         return (
@@ -796,24 +797,24 @@ export class ClaimPaymentDetails extends React.Component {
                                 {row}
                             </tbody>
                         </table>
-                         <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.state.count}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={2}
-                    onPageChange={(page) => { this.handlePageClickLine(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
+                        <ReactPaginate
+                            previousLabel={'previous'}
+                            nextLabel={'next'}
+                            breakLabel={'...'}
+                            breakClassName={'page-link'}
+                            initialPage={0}
+                            pageCount={this.state.count}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={2}
+                            onPageChange={(page) => { this.handlePageClickLine(page) }}
+                            containerClassName={'pagination'}
+                            pageClassName={'page-item'}
+                            previousClassName={'page-link'}
+                            nextClassName={'page-link'}
+                            pageLinkClassName={'page-link'}
+                            subContainerClassName={'pages pagination'}
+                            activeClassName={'active'}
+                        />
                     </div>
                 </div>
             </div>
@@ -830,24 +831,24 @@ export class ClaimPaymentDetails extends React.Component {
 
     renderClaimsHeader(fileId) {
         return (
-   
+
             <tr className="table-head">
-                   <td  className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.ClaimID", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')} >Claim Id</td>
-                   <td className="table-head-text list-item-style" >Claim Received Date</td>
-                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.PatientName", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Patient Name</td>
-                
-               
+                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.ClaimID", this.state.nameRotation, 'nameRotation', fileId)} src={require('../../../components/Images/up_arrow.png')} >Claim Id</td>
+                <td className="table-head-text list-item-style" >Claim Received Date</td>
+                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.PatientName", this.state.nameRotation, 'nameRotation', fileId)} src={require('../../../components/Images/up_arrow.png')}>Patient Name</td>
+
+
                 {/* <td className="table-head-text list-item-style">Check/EFT Date</td>
                 <td className="table-head-text list-item-style">Check/EFT Number</td> */}
-                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalChargeAmt", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Charge Amount</td>
+                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalChargeAmt", this.state.nameRotation, 'nameRotation', fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Charge Amount</td>
 
-                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalClaimPaymentAmt", this.state.nameRotation, 'nameRotation' , fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Paid Amount</td>
+                <td className="table-head-text list-item-style clickable" onClick={() => this.handleSortNestedTable((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerPatientDetails.TotalClaimPaymentAmt", this.state.nameRotation, 'nameRotation', fileId)} src={require('../../../components/Images/up_arrow.png')}>Total Paid Amount</td>
                 {/* <td className="table-head-text list-item-style">Action</td> */}
                 {/* <td className="table-head-text list-item-style">Error</td> */}
             </tr>
-            
+
         )
-        
+
     }
     handleSort(e, rotation, key) {
         let addOn = " asc"
@@ -865,7 +866,7 @@ export class ClaimPaymentDetails extends React.Component {
         }, 50);
     }
 
-    handleSortNestedTable(e, rotation, key , fileId) {
+    handleSortNestedTable(e, rotation, key, fileId) {
         let addOn = " asc"
         if (rotation == 0) {
             addOn = " desc"
@@ -883,28 +884,28 @@ export class ClaimPaymentDetails extends React.Component {
     renderTableHeader() {
         return (
             <div className="row">
-               
+
                 <div className="col-3 col-header justify-align">
-                   
+
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
                 </div>
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.FileDate", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
-                 
+
                 </div>
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.Organization", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Organization</a>
-                    
+
                 </div>
                 <div className="col-2 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.CheckEFTNo", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Check/EFT No.</a>
-                   
+
                 </div>
                 <div className="col-3 col-header justify-align">
                     <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By RemittanceViewerFileDetails.CheckEFTDt", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>Check/EFT Date</a>
-                  
+
                 </div>
-                
+
             </div>
         )
     }
@@ -915,7 +916,7 @@ export class ClaimPaymentDetails extends React.Component {
         let data = this.state.claimsObj;
         let count = 0
 
-        
+
         try {
             count = data[Object.keys(data)[0]].value.RecCount / 10
             if (data[Object.keys(data)[0]].value.RecCount % 10 > 0) {
@@ -927,43 +928,43 @@ export class ClaimPaymentDetails extends React.Component {
 
 
         Object.keys(data).map((keys) => {
-          
+
             row.push(
                 <div className="row">
-                    
+
                     <div className="col-3 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-small-style small-font">{ moment((data[keys].value.FileDate)).format("MM/DD/YYYY hh:mm A")}</div>
+                    <div className="col-2 col-small-style small-font">{moment((data[keys].value.FileDate)).format("MM/DD/YYYY hh:mm A")}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.Organization}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.CheckEFTNo}</div>
-                    <div className="col-3 col-small-style small-font">{ moment((data[keys].value.CheckEFTDt)).format("MM/DD/YYYY")}</div>
-                    
+                    <div className="col-3 col-small-style small-font">{moment((data[keys].value.CheckEFTDt)).format("MM/DD/YYYY")}</div>
+
                 </div>
             )
 
             {
                 col = []
                 data[keys].array.forEach((d) => {
-                    
+
                     col.push(
                         <tr>
                             <td className="list-item-style"><a className="clickable" onClick={() => {
                                 this.setState({
                                     claimId: d.ClaimID
                                 }, () => {
-                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value ,1)
+                                    this.getDetails(d.ClaimID, d.FileID, data[keys].value, 1)
                                 })
                             }} style={{ color: "var(--light-blue)" }}>{d.ClaimID}</a></td>
-                            <td className="list-item-style">  { moment(d.ClaimReceivedDate).format('MM/DD/YYYY')}</td>
+                            <td className="list-item-style">  {moment(d.ClaimReceivedDate).format('MM/DD/YYYY')}</td>
                             {/* <td className="list-item-style">{moment(d.ClaimDate).format('MM/DD/YYYY') != "Invalid date" ? moment(d.ClaimDate).format('MM/DD/YYYY') : d.ClaimDate}</td> */}
                             <td className="list-item-style">{d.PatientName}</td>
-                            
-                            
-                            
+
+
+
                             <td className="style-left">${d.TotalChargeAmt} </td>
-                        <td className="list-item-style">${d.TotalClaimPaymentAmt}</td>
+                            <td className="list-item-style">${d.TotalClaimPaymentAmt}</td>
 
 
                         </tr>
@@ -1040,80 +1041,79 @@ export class ClaimPaymentDetails extends React.Component {
         }, 50);
     }
     _renderList = () => {
-        let  columnDefs= [
-     
-               { headerName: "File Name" , field: "FileName", width:300,  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-               { headerName: "File Date", field: "FileDate" ,width:200  ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-               { headerName: "Organization", field:"Organization", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-               { headerName: "Check/EFT No.", field: "CheckEFTNo"  ,width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-               { headerName: "Check/EFT Date", field: "CheckEFTDt", flex: 1 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-       
-                
-           ]
-
-           return (
-               <div>
-   
-                   <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                       <AgGridReact
-                           modules={this.state.modules}
-                           columnDefs={columnDefs}
-                           autoGroupColumnDef={this.state.autoGroupColumnDef}
-                           defaultColDef={this.state.defaultColDef}
-                           suppressRowClickSelection={true}
-                           groupSelectsChildren={true}
-                           debug={true}
-                           rowSelection={this.state.rowSelection}
-                           rowGroupPanelShow={this.state.rowGroupPanelShow}
-                           pivotPanelShow={this.state.pivotPanelShow}
-                           enableRangeSelection={true}
-                           paginationAutoPageSize={false}
-                           pagination={true}
-                           domLayout={this.state.domLayout}
-                           paginationPageSize={this.state.paginationPageSize}
-                           onGridReady={this.onGridReady}
-                           rowData={this.state.rowData}
-                           icons={this.state.icons}
-                           enableCellTextSelection={true}
-                           onCellClicked={(event) => {
-                               if (event.colDef.headerName == 'File Name') {
-                                   this.setState({
-                                    showClaims: true,
-                                    showerror: false,
-                                    claims_rowData: [],
-                                    Ag_grid_FileName: '',
-                                    Ag_grid_fileDate: ''
-                                   }, () => {
-                                       this.getTransactions(event.data.FileID)
-                                   })
-                               }  
-                               
-                           }}
-                       >
-                       </AgGridReact>
-                   </div>
-               </div>
-           )
-       }
-       _renderClaims() {
-        
-        
         let columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID", width:150,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Claim Received Date", field: "ClaimReceivedDate",width:140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Patient Name", field: "PatientName" ,width:200 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Charge Amount", field: "TotalChargeAmt",width:120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width:120 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Days", field: "Days", flex:1,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-             ]
+            { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "File Date", field: "FileDate", width: 100},
+            { headerName: "Organization", field: "Organization", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100},
+            { headerName: "Error Description", field: "", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        ]
 
         return (
             <div>
 
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Remittance Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                        icons={this.state.icons}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == 'Process Id') {
+                                this.setState({
+                                    showClaims: true,
+                                    showerror: false,
+                                    claims_rowData: [],
+                                    Ag_grid_FileName: '',
+                                    Ag_grid_fileDate: ''
+                                }, () => {
+                                    this.getTransactions(event.data.FileID)
+                                })
+                            }
+
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+    _renderClaims() {
+
+
+        let columnDefs = [
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Days Aged", field: "Days", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        ]
+
+        return (
+            <div>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <h6 className="font-size">Remittance Information For <label style={{ color: 'var(--main-bg-color)' }}>(Remittance File Name:-{this.state.Ag_grid_FileName} , Remittance Sent Date:-{this.state.Ag_grid_fileDate})</label></h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1134,17 +1134,17 @@ export class ClaimPaymentDetails extends React.Component {
                         rowData={this.state.claims_rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                             if (event.colDef.headerName == 'Claim Id') {
+                            if (event.colDef.headerName == 'Claim Id') {
                                 this.setState({
 
                                     showerror: true,
-                                     Error_data: [],
+                                    Error_data: [],
                                     Aggrid_ClaimLineData: [],
                                     Aggrid_Claim_Info_data: [],
                                     Aggrid_Service_Line_Info: [],
 
                                 })
-                                this.getDetails(event.data.ClaimID, event.data.FileID,event.data.RefID ,"", 1)
+                                this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1)
                             }
                         }}
                     >
@@ -1152,31 +1152,31 @@ export class ClaimPaymentDetails extends React.Component {
                 </div>
             </div>
         )
-    }    
-  
+    }
+
     _ClaimView_Info_Table() {
         if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
         let columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID" , width:150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 120 },
-            { headerName: "Patient Name", field: "PatientName", width: 200 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             // { headerName: "Days Aged", field: "", width: 100 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Payment Method Code", field: "CHECKEFTFlag", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Patient Control Number", field: "PatientControlNo", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Patient Control Number", field: "PatientControlNo", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Total Patient Resp", field: "PatietResAMT", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Payer Name", field: "PayerName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Payer claim control No.", field: "PayerClaimControl", width: 150 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Payer claim control No.", field: "PayerClaimControl", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Status Code", field: "ClaimStatusCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Filling Indicator", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Patient ID", field: "", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Provider ID", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Provider Name", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Rendering Provider ID", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Provider Name", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Rendering Provider ID", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-           
-            { headerName: "DRG Code", field: "DigonisCode", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-           
+
+            { headerName: "DRG Code", field: "DigonisCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+
         ]
 
         return (
@@ -1207,12 +1207,12 @@ export class ClaimPaymentDetails extends React.Component {
             </div>
         )
     }
-   								
+
     _ClaimServiceLineInfo() {
-      if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
+        if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
         let columnDefs = [
-            { headerName: "Service Start Date" , width: 120, field: "ServiceStartDate" },
-            { headerName: "Service End Date" , width: 120, field: "ServiceEndDate" },
+            { headerName: "Service Start Date", width: 120, field: "ServiceStartDate" },
+            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },
             { headerName: "Line Item Control #", width: 120, field: "LineControlNo" },
             { headerName: "Adjudicated CPT", width: 120, field: "AdjudicatedCPT" },
             { headerName: "	Submitted CPT", width: 120, field: "SubmittedCPT" },
@@ -1222,7 +1222,7 @@ export class ClaimPaymentDetails extends React.Component {
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
             { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
             { headerName: "Paid Amount", field: "PaidAmt" },
-           
+
         ]
 
         return (
@@ -1259,13 +1259,13 @@ export class ClaimPaymentDetails extends React.Component {
 
 
     render() {
-     
+
         return (
             <div>
-                <h5 className="headerText">835 Details {this.state.subtitle ? <label style={{fontSize:"14px"}}>({this.state.subtitle})</label> : ""}</h5>
+                <h5 className="headerText">835 Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {this.renderFilters()}
                 {
-                this.state.gridType
+                    this.state.gridType
                         ?
                         <div>
                             {this._renderList()}
@@ -1275,39 +1275,39 @@ export class ClaimPaymentDetails extends React.Component {
 
                         </div>
                         :
-                <div className="row padding-left">
-                    <div className="col-6 claim-list file-table">
-                        {this.state.claimsObj ? this.renderList() : null}
-                        {/* {this.state.claimsObj ? this.renderTable() : null} */}
-                    </div>
+                        <div className="row padding-left">
+                            <div className="col-6 claim-list file-table">
+                                {this.state.claimsObj ? this.renderList() : null}
+                                {/* {this.state.claimsObj ? this.renderTable() : null} */}
+                            </div>
 
-                    <div className="col-6">
-                        {
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                            <div>
-                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Remittance Information</h6>
-                            <hr />
-                        </div> : null
-                        }
-                        {
-                            
-                            this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                            <table className="table claim-Details border">
-                            {this.renderHeader('Claim #' + this.state.claimId)}
-                            {/* {this.renderHeader('Claim Information ')} */}
-                            {this.renderRows(this.state.claimDetails)}
-                           
-                         
-                        </table>
-                                 
-                                : null
-                        }
-                         
-                        {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
-                    </div>
-                </div>
-    }
-         </div>
+                            <div className="col-6">
+                                {
+                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                        <div>
+                                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Remittance Information</h6>
+                                            <hr />
+                                        </div> : null
+                                }
+                                {
+
+                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
+                                        <table className="table claim-Details border">
+                                            {this.renderHeader('Claim #' + this.state.claimId)}
+                                            {/* {this.renderHeader('Claim Information ')} */}
+                                            {this.renderRows(this.state.claimDetails)}
+
+
+                                        </table>
+
+                                        : null
+                                }
+
+                                {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
+                            </div>
+                        </div>
+                }
+            </div>
         );
     }
 }

@@ -52,9 +52,9 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             X12Count: 0,
             Accepted_Claims: 0,
             Rejected_Claims: 0,
-            FileReject_Claims:0,
+            FileReject_Claims: 0,
             Processing_Claims: 0,
-            ReconciledError_Claims:0,
+            ReconciledError_Claims: 0,
             LoadingClaims: 0,
             LoadedErrorClaims: 0,
 
@@ -76,16 +76,16 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             QNXT_Generated: 0,
             Hipaas_Received: 0,
             domLayout: 'autoHeight',
-            
+
             columnDefs: [
-      
-                { headerName: "Remittance File Name",   suppressMovable: true, field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Process Id", field: "" ,   suppressMovable: true, },
-                { headerName: "State", field: "" , suppressMovable: true,},
-                { headerName: "Remittance File Date", field: "FileDate" , suppressMovable: true, },
-                { headerName: " Remittance File Status", field: "" , suppressMovable: true,},
-                { headerName: "999", field: "" , suppressMovable: true,},
-                { headerName: "In HiPaaS", field: "" , suppressMovable: true, },
+
+                { headerName: "Remittance File Name", suppressMovable: true, field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "", suppressMovable: true, },
+                { headerName: "State", field: "", suppressMovable: true, },
+                { headerName: "Remittance File Date", field: "FileDate", suppressMovable: true, },
+                { headerName: " Remittance File Status", field: "", suppressMovable: true, },
+                { headerName: "999", field: "", suppressMovable: true, },
+                { headerName: "In HiPaaS", field: "", suppressMovable: true, },
                 // { headerName: "Claim Id", field: "ClaimID" },
                 // { headerName: "Days", field: "Days" },
                 // { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
@@ -96,7 +96,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 // { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt" },
                 // { headerName: "Total Bill Amount    ", field: "TotalBillAmount" },
                 // { headerName: "Total Adjustment Amount", field: "TotalAdjustmentAmount" },
-            
+
             ],
 
             autoGroupColumnDef: {
@@ -120,11 +120,11 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 enablePivot: true,
                 enableValue: true,
                 sortable: true,
-                resizable: false,
+                resizable: true,
                 filter: true,
                 flex: 1,
                 lockPosition: true,
-                
+
                 minWidth: 100,
             },
             rowSelection: 'multiple',
@@ -209,9 +209,13 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 TotalAdjustmentAmount
                 TotalBillAmount
                 Days
+                RemittanceFileName
+                RemittanceSentDate
               }
             }
               `
+
+        console.log('Query ', query)
         fetch(Urls.claim_processing, {
             method: 'POST',
             headers: {
@@ -222,7 +226,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                var data = res.data.PaymentProcessingSummary 
+                var data = res.data.PaymentProcessingSummary
                 let count = 0
                 // if (data && data.length > 0) {
                 //     let recCount = data[0].RecCount
@@ -237,7 +241,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 //     }
 
                 // }
-console.log("asjfhsaf" , data)
+                console.log("asjfhsaf", data)
                 this.setState({
                     Claim837RTProcessingSummary: data,
                     rowData: this.state.gridType == 1 ? data : [],
@@ -255,7 +259,7 @@ console.log("asjfhsaf" , data)
         })
 
         setTimeout(() => {
-                this.getData()
+            this.getData()
         }, 50);
     }
     renderTransactionsNew() {
@@ -265,7 +269,7 @@ console.log("asjfhsaf" , data)
 
         headerArray.push(
             { value: ' Remittance  File Name' },
-            { value: 'Remittance  File Date'},
+            { value: 'Remittance  File Date' },
             { value: 'Remittance  File Status' },
             { value: '999' },
             { value: 'In HiPaaS' },
@@ -279,16 +283,16 @@ console.log("asjfhsaf" , data)
             // { value: 'Total Paid Amount' },
             // { value: 'Total Bill Amount' },
             // { value: 'Total Adjustment Amount' },
-            
-        
+
+
         )
-       
+
         rowArray.push(
             { value: 'FileName', method: this.gotoDetails, isClick: 1, key_argument: 'FileID' },
             { value: 'FileDate', isDate: 1 },
             { value: '' },
-            { value: ''  },
-            { value: ''  },
+            { value: '' },
+            { value: '' },
             // { value: 'ClaimID' },
             // { value: 'Days'},
             // // { value: 'ClaimReceivedDate', isDate: 1 },
@@ -300,7 +304,7 @@ console.log("asjfhsaf" , data)
             // { value: 'TotalBillAmount' },
             // { value: 'TotalAdjustmentAmount'  },
             // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
-        
+
         )
 
         return (
@@ -326,7 +330,7 @@ console.log("asjfhsaf" , data)
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-                this.getData()
+            this.getData()
         }, 50);
     }
 
@@ -342,7 +346,7 @@ console.log("asjfhsaf" , data)
         }
 
         setTimeout(() => {
-             this.getData()
+            this.getData()
         }, 50);
     }
 
@@ -365,7 +369,7 @@ console.log("asjfhsaf" , data)
         this.setState({
             providerName: value
         }, () => {
-              this.getData()
+            this.getData()
         })
     }
 
@@ -384,7 +388,7 @@ console.log("asjfhsaf" , data)
         this.setState({
             State: event.target.options[event.target.selectedIndex].text
         }, () => {
-        
+
             this.getData()
             this._getClaimCounts()
         })
@@ -398,7 +402,7 @@ console.log("asjfhsaf" , data)
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
-                          
+
                         />
                     </div>
                     {/* <div className="form-group col-2">
@@ -410,7 +414,7 @@ console.log("asjfhsaf" , data)
                         />
 
                     </div> */}
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -419,7 +423,7 @@ console.log("asjfhsaf" , data)
                             <option value="select"></option>
                             {this.getoptions()}
                         </select>
-                    </div>
+                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker
@@ -476,7 +480,7 @@ console.log("asjfhsaf" , data)
             this.getClaimCounts()
             this.getData()
             this._getClaimCounts()
-            
+
         }, 50);
     }
 
@@ -676,7 +680,7 @@ console.log("asjfhsaf" , data)
         ]
         let stage_3 = [
             { 'name': 'EFT', 'value': this.state.EFTData, },
-            { 'name': 'CHK', 'value': this.state.CheckData,},
+            { 'name': 'CHK', 'value': this.state.CheckData, },
             { 'name': '% ERA out of total', 'value': '100%' },
             { 'name': '# Availity rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
@@ -692,34 +696,79 @@ console.log("asjfhsaf" , data)
             </div>
         )
     }
+
     _renderTransactions() {
+        let columnDefs = [
+            { headerName: "Process Id", field: "FileID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150 },
+            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 150 },
+            { headerName: "Claim Id", field: "ClaimID", width: 150 },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140 },
+            { headerName: "Patient Name", field: "PatientName", width: 200 },
+            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
+            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
+            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
+            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
+            { headerName: "Days Aged", field: "Days", flex: 1 },
+        ]
+
         return (
-            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
-                <AgGridReact
-                    modules={this.state.modules}
-                    columnDefs={this.state.columnDefs}
-                    autoGroupColumnDef={this.state.autoGroupColumnDef}
-                    defaultColDef={this.state.defaultColDef}
-                    suppressRowClickSelection={true}
-                    groupSelectsChildren={true}
-                    debug={true}
-                    rowSelection={this.state.rowSelection}
-                    rowGroupPanelShow={this.state.rowGroupPanelShow}
-                    pivotPanelShow={this.state.pivotPanelShow}
-                    enableRangeSelection={true}
-                    paginationAutoPageSize={false}
-                    pagination={true}
-                    domLayout={this.state.domLayout}
-                    paginationPageSize={this.state.paginationPageSize}
-                    onGridReady={this.onGridReady}
-                    rowData={this.state.rowData}
-                    enableCellTextSelection={true}    
-                    
-                >
-                </AgGridReact>
+            <div>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.rowData}
+                        enableCellTextSelection={true}
+                    >
+                    </AgGridReact>
+                </div>
             </div>
         )
     }
+    // _renderTransactions() {
+    //     return (
+    //         <div className="ag-theme-balham" style={{ height: '400px', padding: '0px' }}>
+    //             <AgGridReact
+    //                 modules={this.state.modules}
+    //                 columnDefs={this.state.columnDefs}
+    //                 autoGroupColumnDef={this.state.autoGroupColumnDef}
+    //                 defaultColDef={this.state.defaultColDef}
+    //                 suppressRowClickSelection={true}
+    //                 groupSelectsChildren={true}
+    //                 debug={true}
+    //                 rowSelection={this.state.rowSelection}
+    //                 rowGroupPanelShow={this.state.rowGroupPanelShow}
+    //                 pivotPanelShow={this.state.pivotPanelShow}
+    //                 enableRangeSelection={true}
+    //                 paginationAutoPageSize={false}
+    //                 pagination={true}
+    //                 domLayout={this.state.domLayout}
+    //                 paginationPageSize={this.state.paginationPageSize}
+    //                 onGridReady={this.onGridReady}
+    //                 rowData={this.state.rowData}
+    //                 enableCellTextSelection={true}    
+
+    //             >
+    //             </AgGridReact>
+    //         </div>
+    //     )
+    // }
 
     render() {
         return (
