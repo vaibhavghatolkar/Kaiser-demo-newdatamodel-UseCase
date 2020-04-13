@@ -144,7 +144,7 @@ export class ClaimPaymentDashboard extends React.Component {
             Accepted: 0,
             QNXT_Generated: 0,
             Hipaas_Received: 0,
-            TotalCountQnxt:0,
+            TotalCountQnxt: 0,
             progress_Validated: 0,
             progress_Error: 0, 
             AvailitySent:0,
@@ -152,21 +152,6 @@ export class ClaimPaymentDashboard extends React.Component {
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
-
-            columnDefs: [
-                // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Process Id", field: "FileID", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Received Date", field: "FileDate", width: 100 },
-                { headerName: "State", field: "State", width: 75 },
-                
-                { headerName: "Total", field: "TotalClaim", width: 75 },
-                { headerName: "Rejected", field: "Rejected", width: 90 },
-                { headerName: "Remittance File Name", field: "RemittanceFileName", width: 100 },
-                { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
-                // { headerName: "Compliance vs Submission date", field: "" },
-                { headerName: "# of Errors", field: "", width: 130 },
-
-            ],
 
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -491,7 +476,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         if (res.data.Dashboard835FileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
-                        
+
                     }
 
                     this.setState({
@@ -1354,7 +1339,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 let data = res.data.ERA835DashboardCountNew[0]
                 let Validated = Number(res.data.ERA835DashboardProgressBar[0].Accepted).toFixed(2)
                 let Error = Number(res.data.ERA835DashboardProgressBar[0].Rejected).toFixed(2)
-                
+
                 summary = [
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
@@ -1506,35 +1491,35 @@ export class ClaimPaymentDashboard extends React.Component {
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
-            let subtitle=''
+            let subtitle = ''
             let loadStatus = ''
             let data = []
             if (item.name == 'Vaildated') {
                 addon = '/accept'
                 claimStatus = 'Validated'
-                subtitle="Validated Files"
+                subtitle = "Validated Files"
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
-                subtitle="Files in Error"
-            }  else {
+                subtitle = "Files in Error"
+            } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus,type:type , subtitle:subtitle},
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle },
             ]
             row.push(
                 <Tiles
                     isClickable={
                         item.name != 'Received From QNXT' &&
-                         item.name != 'Error Resolved' &&
-                         item.name != 'Total Sent To Availity' &&
-                         item.name != '999 Received'
-                      }
+                        item.name != 'Error Resolved' &&
+                        item.name != 'Total Sent To Availity' &&
+                        item.name != '999 Received'
+                    }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                url={Strings.claimPayment_835_details}
+                    url={Strings.claimPayment_835_details}
                 />
 
             )
@@ -1691,8 +1676,8 @@ export class ClaimPaymentDashboard extends React.Component {
                         AvailitySent: data2 ? data2.AvailitySent : 0,
                         TotalError: data2 ? data2.TotalError : 0,
                         // TotalCountQnxt: data ? data.TotalCount: 0
-                    },() =>{
-                       this._getCounts() 
+                    }, () => {
+                        this._getCounts()
                     })
                 }
             })
@@ -1948,7 +1933,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 // let pie_data = this.getPieChartData(res.data.piechart)
                 let second_data = ""
                 let pie_data = ""
-                let complience = res.data.CompliancePieChart835
+                let complience = res.data.CompliancePieChart835 ? res.data.CompliancePieChart835 : []
 
                 let count = 0
                 // ClaimBarChart.forEach((d) => {
@@ -2078,12 +2063,44 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     _renderList() {
+        let columnDefs= [
+            // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Process Id", field: "FileID", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Received Date", field: "FileDate", flex: 1 },
+            { headerName: "State", field: "State", flex: 1 },
+            
+            { headerName: "Total", field: "TotalClaim", flex: 1 },
+            { headerName: "Rejected", field: "Rejected", flex: 1 },
+            { headerName: "Remittance File Name", field: "RemittanceFileName", flex: 1 },
+            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", flex: 1 },
+            // { headerName: "Compliance vs Submission date", field: "" },
+            { headerName: "# of Errors", field: "", flex: 1 },
+
+        ]
+
+        if (this.state.complience && this.state.complience.length > 0) {
+            columnDefs= [
+                // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "FileID", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Received Date", field: "FileDate", width: 100 },
+                { headerName: "State", field: "State", width: 75 },
+                
+                { headerName: "Total", field: "TotalClaim", width: 75 },
+                { headerName: "Rejected", field: "Rejected", width: 90 },
+                { headerName: "Remittance File Name", field: "RemittanceFileName", width: 100 },
+                { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
+                // { headerName: "Compliance vs Submission date", field: "" },
+                { headerName: "# of Errors", field: "", width: 130 },
+
+            ]
+
+        }
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
+                        columnDefs={columnDefs}
                         autoGroupColumnDef={this.state.autoGroupColumnDef}
                         defaultColDef={this.state.defaultColDef}
                         suppressRowClickSelection={true}
@@ -2116,7 +2133,7 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
     gotoClaimDetails = (data) => {
-       
+
         let sendData = []
         if (data && data.length > 0) {
             sendData = data
@@ -2126,7 +2143,7 @@ export class ClaimPaymentDashboard extends React.Component {
             let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
             let State = this.state.State ? this.state.State : 'n'
             let type = this.state.type ? this.state.type : ''
-      
+
             sendData = [
                 {
                     flag: '',
@@ -2147,7 +2164,7 @@ export class ClaimPaymentDashboard extends React.Component {
         })
     }
     progressBar() {
-         
+
         let Validated = this.state.progress_Validated + "%"
         let Error = this.state.progress_Error + "%"
         return (
@@ -2200,19 +2217,20 @@ export class ClaimPaymentDashboard extends React.Component {
 
                 </div>
                 <div className="row">
-                    <div className="col-8">
+                    <div className={this.state.complience && this.state.complience.length > 0 ? "col-8" : "col-12"}>
 
                         {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
                         {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
                         {/* {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}     */}
                     </div>
-                    <div className="col-3 nopadding" style={{ marginLeft: '60px' }}>
-                        {this.renderCharts()}
-
-                        {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
-                        {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
-
-                    </div>
+                    {
+                        this.state.complience && this.state.complience.length > 0 ?
+                            <div className="col-3 nopadding" style={{ marginLeft: '60px' }}>
+                                {this.renderCharts()}
+                                {/* {this.renderGooglePieChart('Compliance',lables1,data1,data1)} */}
+                                {/* {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)} */}
+                            </div> : null
+                    }
                 </div>
 
 
