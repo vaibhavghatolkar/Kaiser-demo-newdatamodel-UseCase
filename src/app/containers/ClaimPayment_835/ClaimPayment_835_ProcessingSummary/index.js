@@ -12,6 +12,7 @@ import { getProviders } from '../../../../helpers/getDetails';
 import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
+import { TableTiles } from '../../../components/TableTiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Link } from 'react-router-dom'
@@ -75,6 +76,8 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             Accepted: 0,
             QNXT_Generated: 0,
             Hipaas_Received: 0,
+            AvailitySent: 0,
+            TotalError: 0,
             domLayout: 'autoHeight',
 
             columnDefs: [
@@ -183,7 +186,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            PaymentProcessingSummary(State:"",StartDt:"",EndDt:"",FileID:"",Status:"",RecType:"") {
+            PaymentProcessingSummary(State:"",StartDt:"",EndDt:"",FileID:"${this.state.file_id}",Status:"",RecType:"") {
                 RefID
                 RecCount
                 FileID
@@ -442,7 +445,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -459,7 +462,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                             <option value="select">Default</option>
                             <option selected value="select">Classic</option>
                         </select>
-                    </div>
+                    </div> */}
                     {/* <div className="col summary-container" style={{ marginTop: '-10px', paddingLeft: '16px' }}>
                         <div className="summary-header">WIP > 90 Days</div>
                         <div className="blue summary-title">{this.state.wip90}</div>
@@ -543,22 +546,45 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             let loadStatus = ''
             let generalStatus = ''
             let mcgStatus = ''
+            let notSent = ''
+            let subtitle = ''
+            let status277CA = ''
             let color = "var(--red)"
 
             if (item.name == 'Accepted') {
                 generalStatus = 'Accepted'
+                subtitle = 'Accepted Claims'
                 color = "var(--green)"
-            } else if (item.name == 'Accepted with Errors') {
+            } else if (item.name == 'Rejected') {
                 generalStatus = 'Rejected'
+                subtitle = "Rejected Claims"
             } else if (item.name == 'File Rejected') {
                 generalStatus = 'File Rejected'
+                subtitle = item.name
             } else if (item.name == 'Reconciled Error') {
+                subtitle = item.name
                 loadStatus = 'Reconcile Exception'
             } else if (item.name == 'Load in MCG') {
                 mcgStatus = 'Loaded'
+                subtitle = item.name
                 color = "var(--main-bg-color)"
             } else if (item.name == 'Load Error') {
+                subtitle = item.name
                 mcgStatus = 'Exception'
+            } else if (item.name == '999 Not Sent') {
+                notSent = 'Y'
+            }
+
+            if (item.name == 'Accepted' && item.is277CA) {
+                subtitle = '277CA Accepted Claims'
+                generalStatus = ''
+                status277CA = 'Accepted'
+            }
+
+            if (item.name == 'Rejected' && item.is277CA) {
+                subtitle = '277CA Rejected Claims'
+                generalStatus = ''
+                status277CA = 'Rejected'
             }
 
             let sendData = [
@@ -573,18 +599,18 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                     gridflag: loadStatus,
                     generalStatus: generalStatus,
                     mcgStatus: mcgStatus,
+                    notSent: notSent,
+                    subtitle: subtitle,
+                    status277CA: status277CA
                 },
             ]
             row.push(
-                <div className="row" style={{ paddingTop: '2px', paddingBottom: '2px' }}>
-                    <div style={{ alignSelf: 'center', fontSize: '12px', color: "var(--grayBlack)" }} className="col-9" style={{ alignSelf: 'center' }}> {item.name} </div>
-                    {
-                        item.isClick ?
-                            <Link to={{ pathname: Strings.Claim_Details_837_Grid, state: { data: sendData } }} style={{ alignSelf: 'center', fontSize: '16px', color: color }}>{item.value}</Link>
-                            :
-                            <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
-                    }
-                </div>
+                <TableTiles
+                    item={item}
+                    url={Strings.Claim_Details_837_Grid}
+                    data={sendData}
+                    color={color}
+                />
             )
         })
 
@@ -602,16 +628,6 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
-                Check
-                EFT
-                Rejected
-                Accepted
-                QNXT_Generated
-                Hipaas_Received
-                TotalCount
-              }
-
               ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 X12Count
                 HiPaaSCount
@@ -628,6 +644,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                   LoadedError
                   Accepted_277CA
                   Rejected_277CA
+                  EFT
+                  Check
+                  AvailitySent
+                  TotalError
               }
               
         }`
@@ -644,18 +664,19 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data) {
-                    let data = res.data.Dashboard835Count[0]
                     let _data = res.data.ERA835DashboardCountPaymentStatus[0]
                     let data2 = res.data.ERA835DashboardTable[0]
                     // let _data = res.data.Claim837RTDashboardTable[0]
 
                     this.setState({
-                        CheckData: data ? data.Check : 0,
-                        EFTData: data ? data.EFT : 0,
+                        CheckData: data2 ? data2.Check : 0,
+                        EFTData: data2 ? data2.EFT : 0,
                         Rejected999: data2 ? data2.Rejected : 0,
                         Accepted999: data2 ? data2.Accepted : 0,
                         QNXT_Generated: _data ? _data.X12Count : 0,
                         Hipaas_Received: _data ? _data.HiPaaSCount : 0,
+                        AvailitySent: data2 ? data2.AvailitySent : 0,
+                        TotalError: data2 ? data2.TotalError : 0,
                         // TotalCountQnxt: data ? data.TotalCount: 0
                     })
                 }
@@ -667,22 +688,26 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     renderClaimDetails = () => {
 
         let stage_1 = [
+            { 'header': 'HiPaaS Received Status' },
             { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'Total Number of Errors', 'value': 0 },
+            { 'name': 'EFT', 'value': this.state.EFTData, },
+            { 'name': 'CHK', 'value': this.state.CheckData, },
+
         ]
         let stage_2 = [
-            { 'name': 'Sent to Availity', 'value': 6 },
-            { 'name': 'Number of Acknowledged 835', 'value': 7 },
-            { 'name': 'Number of Accepted 999’s', 'value': this.state.Accepted999 },
-            { 'name': 'Number of Rejected 999’s', 'value': this.state.Rejected999 },
+            { 'header': 'L1 - L2 Status' },
+            { 'name': 'Total Number of Errors', 'value': this.state.TotalError },
+            // { 'name': 'Number of Acknowledged 835', 'value': 7 },
+            { 'name': 'Accepted', 'value': this.state.Accepted999 },
+            { 'name': 'Rejected', 'value': this.state.Rejected999 },
 
         ]
         let stage_3 = [
-            { 'name': 'EFT', 'value': this.state.EFTData, },
-            { 'name': 'CHK', 'value': this.state.CheckData, },
-            { 'name': '% ERA out of total', 'value': '100%' },
-            { 'name': '# Availity rejected', 'value': 0 },
+            { 'header': 'Availity Status' },
+            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent },
+            { 'name': '% ERA Out of Total', 'value': '100%' },
+            { 'name': '# Availity Rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
 
@@ -697,19 +722,47 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         )
     }
 
+    gotoDetails = (fileId) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let sendData = [
+            {
+                flag: '',
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                status: "",
+                type: type,
+                incoming_fileId: fileId ? fileId : this.state.incoming_fileId
+            },
+        ]
+
+        this.props.history.push('/' + Strings.claimPayment_835_details, {
+            data: sendData
+        })
+    }
+
     _renderTransactions() {
         let columnDefs = [
-            { headerName: "Process Id", field: "FileID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Process Id", field: "FileID", width: 300, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Received Date", field: "FileDate", width: 150 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150 },
             { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 150 },
             { headerName: "Claim Id", field: "ClaimID", width: 150 },
-            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140 },
+            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
+            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
+            { headerName: "Days Aged", field: "Days", width : 70 },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
             { headerName: "Patient Name", field: "PatientName", width: 200 },
             { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
             { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
             { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
-            { headerName: "Days Aged", field: "Days", flex: 1 },
         ]
 
         return (
@@ -735,6 +788,18 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
                         enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == '999') {
+                                // this.goto999(event.data.FileID)
+                            }
+                            if (event.colDef.headerName == 'Process Id') {
+                                this.setState({
+                                    incoming_fileId: event.data.FileID
+                                }, () => {
+                                    this.gotoDetails()
+                                })
+                            }
+                        }}
                     >
                     </AgGridReact>
                 </div>

@@ -114,6 +114,7 @@ export class ClaimPaymentDashboard extends React.Component {
             providerName: '',
             chartType: 'Monthwise',
             selectedTradingPartner: '',
+            incoming_fileId: '',
             State: '',
             Months: 0,
             accepted: 0,
@@ -145,7 +146,9 @@ export class ClaimPaymentDashboard extends React.Component {
             Hipaas_Received: 0,
             TotalCountQnxt: 0,
             progress_Validated: 0,
-            progress_Error: 0,
+            progress_Error: 0, 
+            AvailitySent:0,
+            TotalError:0,
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -317,14 +320,15 @@ export class ClaimPaymentDashboard extends React.Component {
 
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style">QNXT File Name</td>
-                <td className="table-head-text list-item-style">File Date</td>
-                <td className="table-head-text list-item-style">State</td>
                 <td className="table-head-text list-item-style">Process Id</td>
-                <td className="table-head-text list-item-style">Remittance sent</td>
-                <td className="table-head-text list-item-style">Remittance sent date</td>
+                <td className="table-head-text list-item-style">Received Date</td>
+                <td className="table-head-text list-item-style">State</td>
+                <td className="table-head-text list-item-style">Total</td>
+                <td className="table-head-text list-item-style">Rejected</td>
+                <td className="table-head-text list-item-style">Remittance File Name</td>
+                <td className="table-head-text list-item-style">Remittance Sent Date</td>
                 {/* <td className="table-head-text list-item-style">Compliance vs Submission date</td> */}
-                <td className="table-head-text list-item-style"># of errors</td>
+                <td className="table-head-text list-item-style"># of Errors</td>
                 {/* <td className="table-head-text list-item-style">Receiver</td> */}
             </tr>
         )
@@ -863,12 +867,24 @@ export class ClaimPaymentDashboard extends React.Component {
         data.forEach((d) => {
             row.push(
                 <tr>
-                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.FileName}</td>
+                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>
+                    <a style={{ color: "#6AA2B8", cursor: "pointer" }}
+                            onClick={() => {
+                                this.setState({
+                                    incoming_fileId: d.FileID
+                                }, () => {
+                                    this.gotoClaimDetails()
+                                })
+                            }}>
+                            {d.FileID}
+                        </a>
+                    </td>
                     <td className="list-item-style">{moment(d.FileDate).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
                     <td className="list-item-style">{d.State}</td>
-                    <td className="list-item-style">{d.ProcessID}</td>
+                    <td className="list-item-style">{d.TotalClaim}</td>
+                    <td className="list-item-style">{d.Rejected}</td>
                     <td className="list-item-style">{d.RemittanceFileName}</td>
-                    <td className="list-item-style">{d.RemittanceSentDate}</td>
+                    <td className="list-item-style">{moment(d.RemittanceSentDate).format('MM/DD/YYYY ')}<br />{moment(d.RemittanceSentDate).format('hh:mm a')}</td>
                     {/* <td className="list-item-style"></td> */}
                     <td className="list-item-style"></td>
                     {/* <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.Receiver}</td> */}
@@ -1297,6 +1313,7 @@ export class ClaimPaymentDashboard extends React.Component {
                   TotalCount
                   Rejected
                   Accepted
+                  AvailitySent
                 }
                 Total999Response835(State: "${this.state.State}") {
                     Total999
@@ -1328,7 +1345,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
-                    { name: 'Total Sent To Availity', value: data.Accepted },
+                    { name: 'Total Sent To Availity', value: data.AvailitySent },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
@@ -1609,16 +1626,6 @@ export class ClaimPaymentDashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
 
         let query = `{
-            Dashboard835Count(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}") {
-                Check
-                EFT
-                Rejected
-                Accepted
-                QNXT_Generated
-                Hipaas_Received
-                TotalCount
-              }
-
               ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 X12Count
                 HiPaaSCount
@@ -1635,6 +1642,10 @@ export class ClaimPaymentDashboard extends React.Component {
                   LoadedError
                   Accepted_277CA
                   Rejected_277CA
+                  EFT
+                  Check
+                  AvailitySent
+                  TotalError
               }
               
         }`
@@ -1651,18 +1662,19 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => res.json())
             .then(res => {
                 if (res.data) {
-                    let data = res.data.Dashboard835Count[0]
                     let _data = res.data.ERA835DashboardCountPaymentStatus[0]
                     let data2 = res.data.ERA835DashboardTable[0]
                     // let _data = res.data.Claim837RTDashboardTable[0]
 
                     this.setState({
-                        CheckData: data ? data.Check : 0,
-                        EFTData: data ? data.EFT : 0,
+                        CheckData: data2 ? data2.Check : 0,
+                        EFTData: data2 ? data2.EFT : 0,
                         Rejected999: data2 ? data2.Rejected : 0,
                         Accepted999: data2 ? data2.Accepted : 0,
                         QNXT_Generated: _data ? _data.X12Count : 0,
                         Hipaas_Received: _data ? _data.HiPaaSCount : 0,
+                        AvailitySent: data2 ? data2.AvailitySent : 0,
+                        TotalError: data2 ? data2.TotalError : 0,
                         // TotalCountQnxt: data ? data.TotalCount: 0
                     }, () => {
                         this._getCounts()
@@ -1677,22 +1689,26 @@ export class ClaimPaymentDashboard extends React.Component {
     renderClaimDetails = () => {
 
         let stage_1 = [
+            { 'header': 'HiPaaS Received Status' },
             { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'Total Number of Errors', 'value': 0 },
+            { 'name': 'EFT', 'value': this.state.EFTData, },
+            { 'name': 'CHK', 'value': this.state.CheckData, },
+            
         ]
         let stage_2 = [
-            { 'name': 'Sent to Availity', 'value': 6 },
-            { 'name': 'Number of Acknowledged 835', 'value': 7 },
-            { 'name': 'Number of Accepted 999’s', 'value': this.state.Accepted999 },
-            { 'name': 'Number of Rejected 999’s', 'value': this.state.Rejected999 },
+            { 'header': 'L1 - L2 Status' },
+            { 'name': 'Total Number of Errors', 'value': this.state.TotalError },
+            // { 'name': 'Number of Acknowledged 835', 'value': 7 },
+            { 'name': 'Accepted', 'value': this.state.Accepted999 },
+            { 'name': 'Rejected', 'value': this.state.Rejected999 },
 
         ]
         let stage_3 = [
-            { 'name': 'EFT', 'value': this.state.EFTData, },
-            { 'name': 'CHK', 'value': this.state.CheckData, },
-            { 'name': '% ERA out of total', 'value': '100%' },
-            { 'name': '# Availity rejected', 'value': 0 },
+            { 'header': 'Availity Status' },
+            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent },
+            { 'name': '% ERA Out of Total', 'value': '100%' },
+            { 'name': '# Availity Rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
 
@@ -1712,19 +1728,19 @@ export class ClaimPaymentDashboard extends React.Component {
             <div className="form-style" id='filters'>
                 <div className="form-row">
 
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
                             method={this._handleStateChange}
                         />
                     </div>
-                    {/* <div className="form-group col">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         />
                     </div> */}
-                    {/* <div className="form-group col">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Submitter</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -1734,7 +1750,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             {this.getoptions()}
                         </select>
                     </div> */}
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
                         <select
                             className="form-control list-dashboard" id="state"
@@ -1786,7 +1802,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             <option value="2">Last year</option>
                         </select>
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
@@ -1794,7 +1810,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
@@ -1802,7 +1818,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="Grid"
                             onChange={(event) => {
@@ -1817,7 +1833,7 @@ export class ClaimPaymentDashboard extends React.Component {
                             <option value="select">Default</option>
                             <option selected value="select">Classic</option>
                         </select>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
@@ -1868,6 +1884,8 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     _getPieChartData = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartType = this.state.chartType
         if (!chartType) {
             chartType = "Monthwise"
@@ -1891,7 +1909,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835 {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"") {
                 Type
                 TotalCount
               }
@@ -1909,24 +1927,26 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => {
                 console.log(res)
                 let array = []
-                let ClaimBarChart = res.data.barchart
+                // let ClaimBarChart = res.data.barchart
                 let claimLabels = []
-                let second_data = this.getPieChartData(res.data.file_piechart)
-                let pie_data = this.getPieChartData(res.data.piechart)
+                // let second_data = this.getPieChartData(res.data.file_piechart)
+                // let pie_data = this.getPieChartData(res.data.piechart)
+                let second_data = ""
+                let pie_data = ""
                 let complience = res.data.CompliancePieChart835 ? res.data.CompliancePieChart835 : []
 
                 let count = 0
-                ClaimBarChart.forEach((d) => {
-                    count++;
-                    array.push(
-                        d.Y_axis ? parseFloat(d.Y_axis) : 0
-                    )
-                    if (chartType == 'Weekwise') {
-                        claimLabels.push('week' + count)
-                    } else {
-                        claimLabels.push(d.X_axis)
-                    }
-                })
+                // ClaimBarChart.forEach((d) => {
+                //     count++;
+                //     array.push(
+                //         d.Y_axis ? parseFloat(d.Y_axis) : 0
+                //     )
+                //     if (chartType == 'Weekwise') {
+                //         claimLabels.push('week' + count)
+                //     } else {
+                //         claimLabels.push(d.X_axis)
+                //     }
+                // })
 
                 this.setState({
                     ClaimBarChart: array,
@@ -2043,32 +2063,37 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     _renderList() {
-        let columnDefs = [
-            { headerName: "QNXT File Name", field: "FileName", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "File Date", field: "FileDate", flex: 1 },
+        let columnDefs= [
+            // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Process Id", field: "FileID", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Received Date", field: "FileDate", flex: 1 },
             { headerName: "State", field: "State", flex: 1 },
-            { headerName: "Process Id", field: "ProcessID", flex: 1 },
+            
             { headerName: "Total", field: "TotalClaim", flex: 1 },
             { headerName: "Rejected", field: "Rejected", flex: 1 },
-            { headerName: "Remittance sent", field: "RemittanceFileName", flex: 1 },
-            { headerName: "Remittance sent date", field: "RemittanceSentDate", flex: 1 },
+            { headerName: "Remittance File Name", field: "RemittanceFileName", flex: 1 },
+            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", flex: 1 },
             // { headerName: "Compliance vs Submission date", field: "" },
-            { headerName: "# of errors", field: "", flex: 1 },
+            { headerName: "# of Errors", field: "", flex: 1 },
+
         ]
 
         if (this.state.complience && this.state.complience.length > 0) {
-            columnDefs = [
-                { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "File Date", field: "FileDate", width: 100 },
+            columnDefs= [
+                // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "FileID", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Received Date", field: "FileDate", width: 100 },
                 { headerName: "State", field: "State", width: 75 },
-                { headerName: "Process Id", field: "ProcessID", width: 100 },
+                
                 { headerName: "Total", field: "TotalClaim", width: 75 },
                 { headerName: "Rejected", field: "Rejected", width: 90 },
-                { headerName: "Remittance sent", field: "RemittanceFileName", width: 100 },
-                { headerName: "Remittance sent date", field: "RemittanceSentDate", width: 100 },
+                { headerName: "Remittance File Name", field: "RemittanceFileName", width: 100 },
+                { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
                 // { headerName: "Compliance vs Submission date", field: "" },
-                { headerName: "# of errors", field: "", width: 130 },
+                { headerName: "# of Errors", field: "", width: 130 },
+
             ]
+
         }
         return (
             <div>
@@ -2093,7 +2118,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         rowData={this.state.rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'QNXT File Name') {
+                            if (event.colDef.headerName == 'Process Id') {
                                 this.setState({
                                     incoming_fileId: event.data.FileID
                                 }, () => {

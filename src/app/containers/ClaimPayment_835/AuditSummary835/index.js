@@ -66,15 +66,15 @@ export class AuditSummary835 extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "QNXT File Name", field: "QNXTFileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "File Date", field: "Date" },
+                { headerName: "Process Id", field: "FileID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                // { headerName: "QNXT File Name", field: "QNXTFileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Received Date", field: "Date" },
                 { headerName: "State", field: "State" },
-                { headerName: "Process Id", field: "ProcessID" },
                 { headerName: "File Status", field: "Status" },
                 { headerName: "Remittance File Name", field: "RemittanceFileName" },
                 { headerName: "Remittance File Date	", field: "RemittanceSentDate" },
-                { headerName: "QNXT Received", field: "Received" },
-                { headerName: "In HiPaaS", field: "InHipaas" },
+                { headerName: "QNXT Generated", field: "Received" },
+                { headerName: "HiPaaS Received", field: "InHipaas" },
                 // { headerName: "Error in PreProcess", field: "" },
                 { headerName: "Accepted", field: "Accepted" },
                 { headerName: "Rejected", field: "Rejected" },
@@ -164,7 +164,7 @@ export class AuditSummary835 extends React.Component {
     getClaimCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        
+
         let query = `{
             Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
                 HiPaaSCount
@@ -211,6 +211,7 @@ export class AuditSummary835 extends React.Component {
         let query = `{
             
                 AuditSummary835(StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", FileID:"",Status:"",RecType:"Outbound") {
+                  FileID
                   RecCount
                   QNXTFileName
                   Date
@@ -332,6 +333,7 @@ export class AuditSummary835 extends React.Component {
                 TotalCount
                 Rejected
                 Accepted
+                AvailitySent
               }
               Total999Response835(State: "${this.state.State}") {
                 Total999
@@ -349,21 +351,21 @@ export class AuditSummary835 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                 let data = res.data.ERA835DashboardCountNew[0]
+                let data = res.data.ERA835DashboardCountNew[0]
                 // this.setState({
                 //     totalCount: data[0].TotalCount,
                 //     accepted_Files: data[0].Accepted,
                 //     acceptedwithErrors: data[0].AcceptedwithErrors,
                 //     rejected_Files: data[0].Rejected
                 // })
-                let summary= []
-              
+                let summary = []
+
                 summary = [
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
                     { name: 'Error Resolved', value: 0 },
-                    { name: 'Total Sent To Availity', value: data.Accepted },
+                    { name: 'Total Sent To Availity', value: data.AvailitySent },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
 
@@ -381,66 +383,42 @@ export class AuditSummary835 extends React.Component {
         let row = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
-            let loadStatus = ''
-            let mcgStatus = ''
+            let subtitle = ''
             let data = []
-            if (item.name == 'Accepted') {
+            if (item.name == 'Vaildated') {
                 addon = '/accept'
-                claimStatus = 'Accepted'
-            } else if (item.name == 'Accepted with Errors') {
-                addon = '/reject'
-                claimStatus = 'Accepted with Errors'
-            } else if (item.name == 'Processing') {
-                addon = '/reject'
-                claimStatus = 'Received'
-            } else if (item.name == 'Rejected') {
-                claimStatus = 'Rejected'
-            } else if (item.name == 'Reconciled') {
-                loadStatus = 'Reconciled'
-            } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconcile Exception'
-            } else if (item.name == 'Load Error') {
-                mcgStatus = 'Exception'
-            } else if (item.name == 'Load in MCG') {
-                mcgStatus = 'Loaded'
+                claimStatus = 'Validated'
+                subtitle = "Validated Files"
+            } else if (item.name == 'Files in Error') {
+                claimStatus = 'Error'
+                subtitle = "Files in Error"
             } else {
                 addon = '/other'
             }
             data = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: claimStatus,
-                    type: type,
-                    gridflag: loadStatus,
-                    mcgStatus: mcgStatus
-                },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle },
             ]
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'HiPaaS | MCG' &&
-                        item.name != '999' &&
-                        item.name != '277 CA'
+                        item.name != 'Received From QNXT' &&
+                        item.name != 'Error Resolved' &&
+                        item.name != 'Total Sent To Availity' &&
+                        item.name != '999 Received'
                     }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    // url={Strings.Claim_Details_837_Grid}
+                    url={Strings.claimPayment_835_details}
                 />
 
             )
@@ -787,7 +765,7 @@ export class AuditSummary835 extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Grid Type</div>
                         <select className="form-control list-dashboard" id="TradingPartner"
                             onChange={(event) => {
@@ -804,7 +782,7 @@ export class AuditSummary835 extends React.Component {
                             <option value="select">Default</option>
                             <option selected value="select">Classic</option>
                         </select>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
@@ -842,7 +820,18 @@ export class AuditSummary835 extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == '999') {
+                                // this.goto999(event.data.FileID)
+                            }
+                            if (event.colDef.headerName == 'Process Id') {
+                                this.props.history.push('/' + Strings.ClaimPayment_835_ProcessingSummary, {
+                                    file_id: event.data.FileID
+                                })
+                            }
+
+                        }}
                     >
 
                     </AgGridReact>

@@ -78,6 +78,7 @@ export class ClaimPaymentDetails extends React.Component {
             nested_orderby: '',
             gridType: 1,
             domLayout: 'autoHeight',
+            paginationPageSize:5,
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
