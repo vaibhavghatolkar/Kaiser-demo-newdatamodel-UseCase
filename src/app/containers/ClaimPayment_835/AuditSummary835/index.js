@@ -335,7 +335,7 @@ export class AuditSummary835 extends React.Component {
                 Accepted
                 AvailitySent
               }
-              Total999Response835(State: "${this.state.State}") {
+              Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 Total999
               }
               

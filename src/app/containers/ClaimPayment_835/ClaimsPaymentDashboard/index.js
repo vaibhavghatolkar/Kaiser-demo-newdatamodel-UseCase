@@ -248,11 +248,6 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         let query = `{
-            Claim835Dashboard {
-              Claims837
-              Claims835
-              PendingClaims835
-            }
             chart1:Claim835Status(ChartType: "PaymenttypeWise") {
                 X_axis
                 Y_axis
@@ -274,19 +269,10 @@ export class ClaimPaymentDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                let summary = []
                 let data = res.data
                 let claimLabels = []
                 let pielabels = []
                 let pievalues = []
-
-                if (data.Claim835Dashboard && data.Claim835Dashboard.length > 0) {
-                    summary = [
-                        { name: '837 Claims', value: data.Claim835Dashboard[0].Claims837 ? data.Claim835Dashboard[0].Claims837 : '' },
-                        { name: '835 Claims', value: data.Claim835Dashboard[0].Claims835 ? data.Claim835Dashboard[0].Claims835 : '' },
-                        { name: 'Pending Claims', value: data.Claim835Dashboard[0].PendingClaims835 ? data.Claim835Dashboard[0].PendingClaims835 : '' },
-                    ]
-                }
 
                 if (data.Claim835Status && data.Claim835Status.length > 0) {
                     data.Claim835Status.forEach(element => {
@@ -296,7 +282,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 }
 
                 this.setState({
-                    summaryList: summary,
                     claimLabels: claimLabels,
                     pielabels: pielabels,
                     pievalues: pievalues,
@@ -602,65 +587,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 this.getData()
             })
         }, 300);
-    }
-
-    renderSummaryDetails() {
-        let row = []
-        let array = this.state.summaryList
-        let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-
-
-
-        return (
-
-
-            <div className="row padding-left">
-
-
-                {/* <div className="col-2 summary-container">
-            <div className="summary-header"> # of claims</div>
-            <div  className= 'blue summary-title' >
-            449k
-            </div>
-        </div> */}
-
-                <div className="col summary-container">
-                    <div className="summary-header">   Total # of 835</div>
-                    <div className='green summary-title' >
-                        426k
-        </div>
-                </div>
-
-                <div className="col summary-container">
-                    <div className="summary-header">  Partial</div>
-                    <div className='blue summary-title' >
-                        33k
-        </div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">  Denied</div>
-                    <div className='red summary-title' >
-                        2k
-        </div>
-                </div>
-                <div className="col summary-container">
-                    <div className="summary-header">  Pending</div>
-                    <div className='orange summary-title' >
-                        1k
-        </div>
-                </div>
-            </div>
-
-
-
-        )
     }
 
     setData = (startDate, endDate, selected_val) => {
@@ -1315,7 +1241,7 @@ export class ClaimPaymentDashboard extends React.Component {
                   Accepted
                   AvailitySent
                 }
-                Total999Response835(State: "${this.state.State}") {
+                Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                     Total999
                 }
                 ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
@@ -1478,7 +1404,7 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
 
-    _renderSummaryDetails() {
+    _renderSummaryDetails = () => {
         let row = []
         let array = this.state.summaryCount
         let apiflag = this.state.apiflag
@@ -2195,7 +2121,6 @@ export class ClaimPaymentDashboard extends React.Component {
                     <div className="col-12">
                         {this.renderTopbar()}
                         {this.progressBar()}
-                        {/* {this.renderSummaryDetails()} */}
                         <div className="general-header" style={{ marginBottom: "10px", marginTop: '12px' }}>Remittance File Level</div>
                         {this._renderSummaryDetails()}
                         <div className="general-header">Payment Level</div>
