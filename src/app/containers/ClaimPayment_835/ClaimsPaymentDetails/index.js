@@ -78,6 +78,7 @@ export class ClaimPaymentDetails extends React.Component {
             nested_orderby:'',
             gridType: 1,
             domLayout: 'autoHeight',
+            paginationPageSize:5,
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
@@ -1106,7 +1107,7 @@ export class ClaimPaymentDetails extends React.Component {
             { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width:120 ,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
-            { headerName: "Days", field: "Days", flex:1,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+            { headerName: "Days Aged", field: "Days", flex:1,cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
              ]
 
         return (
