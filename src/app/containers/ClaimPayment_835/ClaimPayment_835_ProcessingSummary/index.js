@@ -838,7 +838,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">835 Payment Processing Summary</h5>
+                <h5 className="headerText">Payment Processing Summary</h5>
                 {this.renderTopBar()}
                 {/* {this._renderStats()} */}
                 {this.renderClaimDetails()}

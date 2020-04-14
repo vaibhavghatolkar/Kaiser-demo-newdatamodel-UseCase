@@ -1295,7 +1295,7 @@ export class ClaimPaymentDetails extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">835 Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
+                <h5 className="headerText">Payment Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {this.renderFilters()}
                 {
                     this.state.gridType

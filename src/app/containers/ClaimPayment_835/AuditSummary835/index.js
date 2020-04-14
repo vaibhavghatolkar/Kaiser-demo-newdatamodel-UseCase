@@ -674,7 +674,7 @@ export class AuditSummary835 extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">835 Audit Summary</h5>
+                <h5 className="headerText">Payment Audit Summary</h5>
                 {this.renderTopBar()}
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
