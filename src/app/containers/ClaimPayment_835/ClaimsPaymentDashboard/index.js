@@ -192,7 +192,6 @@ export class ClaimPaymentDashboard extends React.Component {
         this.handleEndChange = this.handleEndChange.bind(this);
 
         this.showFile = this.showFile.bind(this)
-        this.getData = this.getData.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -200,13 +199,13 @@ export class ClaimPaymentDashboard extends React.Component {
             apiflag: this.props.apiflag
         })
         setTimeout(() => {
-            this.getData()
+            
         }, 50);
     }
 
     componentDidMount() {
         this.getCommonData()
-        this.getData()
+        
         this.getListData()
         this._getCounts()
         this._getPieChartData()
@@ -241,58 +240,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
-
-    getData() {
-        let chartType = this.state.chartType
-        if (!chartType) {
-            chartType = "Monthwise"
-        }
-
-        let query = `{
-            chart1:Claim835Status(ChartType: "PaymenttypeWise") {
-                X_axis
-                Y_axis
-            }
-            chart2:Claim835Status(ChartType: "StatusWise") {
-                X_axis
-                Y_axis
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data
-                let claimLabels = []
-                let pielabels = []
-                let pievalues = []
-
-                if (data.Claim835Status && data.Claim835Status.length > 0) {
-                    data.Claim835Status.forEach(element => {
-                        pielabels.push(element.X_axis)
-                        pievalues.push(element.Y_axis)
-                    });
-                }
-
-                this.setState({
-                    claimLabels: claimLabels,
-                    pielabels: pielabels,
-                    pievalues: pievalues,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            })
-    }
-
 
     renderSearchBar() {
         return (
@@ -402,7 +349,7 @@ export class ClaimPaymentDashboard extends React.Component {
             type: e
         })
         setTimeout(() => {
-            this.getData()
+            
         }, 50);
     }
 
@@ -444,7 +391,7 @@ export class ClaimPaymentDashboard extends React.Component {
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim_details, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -526,7 +473,7 @@ export class ClaimPaymentDashboard extends React.Component {
             startDate: date
         });
         setTimeout(() => {
-            this.getData()
+            
             this._getClaimCounts()
             this.getListData()
         }, 50);
@@ -537,7 +484,7 @@ export class ClaimPaymentDashboard extends React.Component {
             endDate: date
         });
         setTimeout(() => {
-            this.getData()
+            
             this._getClaimCounts()
             this.getListData()
         }, 50);
@@ -555,7 +502,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         setTimeout(() => {
-            this.getData()
+            
         }, 50);
     }
 
@@ -564,7 +511,7 @@ export class ClaimPaymentDashboard extends React.Component {
             [key]: event.target.options[event.target.selectedIndex].value
         })
         setTimeout(() => {
-            this.getData()
+            
         }, 50);
     }
     _handleStateChange = (event) => {
@@ -585,7 +532,7 @@ export class ClaimPaymentDashboard extends React.Component {
             this.setState({
                 providerName: providerName
             }, () => {
-                this.getData()
+                
             })
         }, 300);
     }
@@ -1252,7 +1199,7 @@ export class ClaimPaymentDashboard extends React.Component {
               
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1578,7 +1525,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1716,7 +1663,7 @@ export class ClaimPaymentDashboard extends React.Component {
                                 })
 
                                 setTimeout(() => {
-                                    this.getData()
+                                    
                                     this._getClaimCounts()
                                     this.getListData()
                                 }, 50);
@@ -1818,21 +1765,11 @@ export class ClaimPaymentDashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                From
-                MonthNo
-                Year
-                To
-                Amount
-                TotalClaims
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "FileErrorwise", RecType: "Outbound") {
                 X_axis
                 Y_axis
             }
-            file_piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "FileErrorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
-                X_axis
-                Y_axis
-            }
-            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+            piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "Errorwise", RecType: "Outbound") {
                 X_axis
                 Y_axis
             }
@@ -1842,7 +1779,7 @@ export class ClaimPaymentDashboard extends React.Component {
               }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1856,10 +1793,10 @@ export class ClaimPaymentDashboard extends React.Component {
                 let array = []
                 // let ClaimBarChart = res.data.barchart
                 let claimLabels = []
-                // let second_data = this.getPieChartData(res.data.file_piechart)
-                // let pie_data = this.getPieChartData(res.data.piechart)
-                let second_data = ""
-                let pie_data = ""
+                let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
+                let pie_data = res.data.piechart && res.data.piechart.length > 0 ? this.getPieChartData(res.data.piechart) : ''
+                // let second_data = ""
+                // let pie_data = ""
                 let complience = res.data.CompliancePieChart835 ? res.data.CompliancePieChart835 : []
                 let complaince_data = res.data.CompliancePieChart835 ? this.getComplianceChartData(res.data.CompliancePieChart835) : {}
                 let count = 0
@@ -2026,24 +1963,22 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-    _renderList() {
+    _renderList = () => {
         let columnDefs = [
-            // { headerName: "QNXT File Name", field: "FileName", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Process Id", field: "FileID", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Received Date", field: "FileDate", flex: 1 },
-            { headerName: "State", field: "State", flex: 1 },
-
-            { headerName: "Total", field: "TotalClaim", flex: 1 },
+            { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Received Date", field: "FileDate", width: 100 },
+            { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
+            { headerName: "Organization", field: "Organization", width: 150 },
+            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
+            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
+            { headerName: "Total", field: "TotalClaim", width: 100 },
             { headerName: "Rejected", field: "Rejected", flex: 1 },
-            { headerName: "Remittance File Name", field: "RemittanceFileName", flex: 1 },
-            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", flex: 1 },
-            // { headerName: "Compliance vs Submission date", field: "" },
-            { headerName: "# of Errors", field: "", flex: 1 },
-
         ]
-        
+
         return (
             <div>
+
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
@@ -2063,6 +1998,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
+                        icons={this.state.icons}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'Process Id') {
@@ -2079,6 +2015,7 @@ export class ClaimPaymentDashboard extends React.Component {
             </div>
         )
     }
+
     gotoClaimDetails = (data) => {
 
         let sendData = []

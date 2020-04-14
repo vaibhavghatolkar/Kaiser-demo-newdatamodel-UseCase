@@ -34,7 +34,7 @@ export class PieChart extends React.Component {
         data.forEach(item => {
             row.push(
                 <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item.length > 40 ? (item.substr(0, 40) + '...') : item}</div>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item && item !='null' ? (item.length > 40 ? (item.substr(0, 40) + '...') : item) : ''}</div>
                 </div>
             )
             count++

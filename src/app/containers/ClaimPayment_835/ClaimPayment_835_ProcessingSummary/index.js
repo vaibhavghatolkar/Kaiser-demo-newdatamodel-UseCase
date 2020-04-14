@@ -219,7 +219,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
               `
 
         console.log('Query ', query)
-        fetch(Urls.claim_processing, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -653,7 +653,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

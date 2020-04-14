@@ -15,6 +15,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
+const $ = window.$;
 export class ClaimPaymentDetails extends React.Component {
 
     constructor(props) {
@@ -29,6 +30,7 @@ export class ClaimPaymentDetails extends React.Component {
             fileDetails: [],
             memberInfo: {},
             subscriberNo: '',
+            clickedError: '',
             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type: '',
@@ -78,7 +80,7 @@ export class ClaimPaymentDetails extends React.Component {
             nested_orderby: '',
             gridType: 1,
             domLayout: 'autoHeight',
-            paginationPageSize:5,
+            paginationPageSize: 5,
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
@@ -168,7 +170,7 @@ export class ClaimPaymentDetails extends React.Component {
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim_details, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -281,7 +283,7 @@ export class ClaimPaymentDetails extends React.Component {
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim_details, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -381,7 +383,7 @@ export class ClaimPaymentDetails extends React.Component {
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
-        fetch(Urls.real_time_claim_details, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1044,13 +1046,13 @@ export class ClaimPaymentDetails extends React.Component {
     _renderList = () => {
         let columnDefs = [
             { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Received Date", field: "FileDate", width: 100},
+            { headerName: "Received Date", field: "FileDate", width: 100 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100},
+            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
             { headerName: "Organization", field: "Organization", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100},
-            { headerName: "Error Description", field: "", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
+            { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
         ]
 
         return (
@@ -1088,6 +1090,13 @@ export class ClaimPaymentDetails extends React.Component {
                                 }, () => {
                                     this.getTransactions(event.data.FileID)
                                 })
+                            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
+                                this.setState({
+                                    clickedError: event.data.ErrorDescription
+                                }, () => {
+                                    $('#payment_error_modal').modal('show')
+                                })
+
                             }
 
                         }}
@@ -1097,9 +1106,31 @@ export class ClaimPaymentDetails extends React.Component {
             </div>
         )
     }
+
+    errorDialog = () => {
+        return (
+            <div class="modal" id="payment_error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog-error">
+                    <div className="error-dialog">
+                        <div className="error-header">Error Description</div>
+                        <div className="scroll-div">
+                            {this.state.clickedError}
+                        </div>
+                        <br />
+                        <div className="btnDesign close-button clickable"
+                            onClick={() => {
+                                $('#payment_error_modal').modal('hide')
+                            }}>
+                            Close
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    
     _renderClaims() {
-
-
         let columnDefs = [
             { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -1309,6 +1340,7 @@ export class ClaimPaymentDetails extends React.Component {
                             </div>
                         </div>
                 }
+                {this.errorDialog()}
             </div>
         );
     }

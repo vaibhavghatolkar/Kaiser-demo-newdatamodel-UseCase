@@ -117,91 +117,15 @@ export class AuditSummary835 extends React.Component {
             pivotPanelShow: 'always',
         }
 
-        this.getData = this.getData.bind(this)
         this.onSelect = this.onSelect.bind(this)
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
-        this.getData()
-        this.getClaimCounts()
         this._getCounts()
         this._getCountsNew()
         this.getCommonData()
-    }
-
-    _get999Count = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-
-            Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
-                TotalAcceptedFiles
-            }
-         }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    acceptedFiles: res.data.Claim837RTRejectedFile[0].TotalAcceptedFiles,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    getClaimCounts = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-
-        let query = `{
-            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                HiPaaSCount
-            }
-            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                Accepted_Claims
-                Rejected_Claims
-                LoadingClaims
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
-                    let _data = res.data.Claim837RTDashboardTable[0]
-
-                    this.setState({
-                        HiPaaSCount: data ? data.HiPaaSCount : 0,
-                        Accepted: _data ? _data.Accepted_Claims : 0,
-                        Rejected: _data ? _data.Rejected_Claims : 0,
-                        loaded: _data ? _data.LoadingClaims : 0,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
     }
 
     _getCounts = async () => {
@@ -229,7 +153,7 @@ export class AuditSummary835 extends React.Component {
               
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -261,67 +185,6 @@ export class AuditSummary835 extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-
-        setTimeout(() => {
-            this._get999Count()
-        }, 1000);
-    }
-
-    getData = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            FileInCount(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `",RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}"){
-                totalFile
-                TotalClaims 
-                Accepted
-                Rejected
-                InProgress           
-                Total999 
-                Total277CA  
-                TotalSentToQNXT  
-                Paid 
-                denied   
-                WIP
-                Pending
-            }
-        }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data
-                if (res.data) {
-                    let totalFile = 0
-                    try {
-                        totalFile = res.data.FileInCount[0].totalFile
-                    } catch (error) {
-
-                    }
-
-                    this.setState({
-                        totalFile: totalFile,
-                        TotalClaims: res.data.FileInCount[0].TotalClaims,
-                        InProgress: res.data.FileInCount[0].InProgress,
-                        Total277CA: res.data.FileInCount[0].Total277CA,
-                        Paid: res.data.FileInCount[0].Paid,
-                        denied: res.data.FileInCount[0].denied,
-                        WIP: res.data.FileInCount[0].WIP,
-                        Pending: res.data.FileInCount[0].Pending,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
     }
 
     _getCountsNew = async () => {
@@ -341,7 +204,7 @@ export class AuditSummary835 extends React.Component {
               
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -471,8 +334,8 @@ export class AuditSummary835 extends React.Component {
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
 
         }, 50);
@@ -555,8 +418,8 @@ export class AuditSummary835 extends React.Component {
         })
 
         setTimeout(() => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
 
         }, 50);
@@ -574,8 +437,8 @@ export class AuditSummary835 extends React.Component {
         }
 
         setTimeout(() => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
             this._getCountsNew()
         }, 50);
@@ -611,41 +474,6 @@ export class AuditSummary835 extends React.Component {
             });
     }
 
-    _renderStats() {
-        let _summary = [
-            // { header: 'Total Accepted Files', value: this.state.acceptedFiles, style: "green summary-title" },
-
-            // { header: 'Total Files', value: this.state.totalCount },
-            { header: 'Accepted Files', value: this.state.accepted_Files },
-            { header: 'Accepted with Errors', value: this.state.acceptedwithErrors },
-            { header: 'Rejected Files', value: this.state.rejected_Files },
-            { header: 'Claims In HiPaaS', value: this.state.HiPaaSCount },
-            { header: 'Accepted Claims', value: this.state.Accepted },
-            { header: 'Rejected Claims', value: this.state.Rejected },
-            { header: '999', value: this.state.Total999, style: "green summary-title" },
-            { header: 'Load in MCG', value: this.state.loaded, style: "green summary-title" },
-            { header: '277 CA', value: this.state.Total277CA, style: "orange summary-title" }
-        ]
-        let row = []
-
-        _summary.forEach(item => {
-            row.push(
-                <Tiles
-                    header_text={item.header}
-                    value={item.value}
-                    isClickable={false}
-                    _style={item.style}
-                />
-            )
-        })
-
-        return (
-            <div className="row padding-left" >
-                {row}
-            </div>
-
-        )
-    }
     handleStartChange(date) {
         this.setState({
             startDate: date,
@@ -653,8 +481,8 @@ export class AuditSummary835 extends React.Component {
         });
 
         setTimeout(() => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
             this._getCountsNew()
 
@@ -668,8 +496,8 @@ export class AuditSummary835 extends React.Component {
         });
 
         setTimeout(() => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
             this._getCountsNew()
 
@@ -695,8 +523,8 @@ export class AuditSummary835 extends React.Component {
         this.setState({
             providerName: value
         }, () => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
             this._getCountsNew()
 
@@ -708,8 +536,8 @@ export class AuditSummary835 extends React.Component {
             State: event.target.options[event.target.selectedIndex].text,
             showDetails: false
         }, () => {
-            this.getData()
-            this.getClaimCounts()
+            
+            
             this._getCounts()
             this._getCountsNew()
 
@@ -848,7 +676,6 @@ export class AuditSummary835 extends React.Component {
             <div>
                 <h5 className="headerText">835 Audit Summary</h5>
                 {this.renderTopBar()}
-                {/* {this._renderStats()} */}
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}
