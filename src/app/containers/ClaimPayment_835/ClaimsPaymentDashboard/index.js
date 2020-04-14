@@ -2059,8 +2059,8 @@ export class ClaimPaymentDashboard extends React.Component {
         let data3 = [20, 60, 30];
 
         return (
-            <div><br />
-                <h5 style={{ color: 'var(--main-bg-color)', fontsize: "20px" }}> 835 Dashboard</h5><br></br>
+            <div>
+                <h5 className="headerText"> Payment Dashboard</h5>
 
                 <div className="row">
                     <div className="col-12">
