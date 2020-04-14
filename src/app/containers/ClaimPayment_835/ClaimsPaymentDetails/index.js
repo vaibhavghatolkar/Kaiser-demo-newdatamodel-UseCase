@@ -39,6 +39,7 @@ export class ClaimPaymentDetails extends React.Component {
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
             subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
+            availitySent: props.location.state && props.location.state.data[0] && props.location.state.data[0].availitySent ? props.location.state.data[0].availitySent : '',
             Service_startDate: '',
             Service_endDate: '',
             coverage_data: [],
@@ -147,13 +148,14 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,RecType:"Outbound") {
+            Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}") {
                 RecCount
                 Sender
                 Organization
                 FileID
                 FileName
                 CheckEFTNo
+                Status
                 FileDate
                 PayerName
                 PayerID
@@ -167,6 +169,7 @@ export class ClaimPaymentDetails extends React.Component {
                 RemittanceSentDate
                 TotalClaim
                 Rejected
+                ErrorDescription
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -252,7 +255,7 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"") {
+            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"", AvailitySent:"${this.state.availitySent}") {
                 RefID
                 RecCount
                 FileID
@@ -1047,12 +1050,14 @@ export class ClaimPaymentDetails extends React.Component {
         let columnDefs = [
             { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Received Date", field: "FileDate", width: 100 },
+            { headerName: "State", field: "State", width: 70 },
+            { headerName: "File Status", field: "Status", width: 100 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
             { headerName: "Organization", field: "Organization", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-            { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Error Description", field: "ErrorDescription", width: 400, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
 
         return (

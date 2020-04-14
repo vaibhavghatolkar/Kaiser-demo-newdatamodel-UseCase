@@ -46,7 +46,7 @@ export class DynamicSidebar extends React.Component {
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-     
+
         fetch(Urls.users, {
             method: 'POST',
             headers: {
@@ -58,15 +58,15 @@ export class DynamicSidebar extends React.Component {
             .then(res => res.json())
             .then(
                 res => {
-                if (res.data) {
-                    this.setState({
-                        menuList: res.data.UserwiseMenu
-                        
-                    }, () => {
-                        this.sortData()
-                    })
-                }
-            })
+                    if (res.data) {
+                        this.setState({
+                            menuList: res.data.UserwiseMenu
+
+                        }, () => {
+                            this.sortData()
+                        })
+                    }
+                })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
@@ -104,8 +104,8 @@ export class DynamicSidebar extends React.Component {
         else if (key == 29) { name = Strings.RealTimeDashboard }
         else if (key == 30) { name = Strings.claimsAudit }
         else if (key == 31) { name = Strings.Claim_Details_837_Grid }
-     else if (key == 31) { name = Strings.Load_Exception }
-        
+        else if (key == 31) { name = Strings.Load_Exception }
+
         // else if (key == 31) { name = Strings.ClaimDetails837 }
         else if (key == 32) { name = Strings.claimsError }
         else if (key == 33 || key == 98) { name = Strings.researchQueue }
@@ -113,13 +113,13 @@ export class DynamicSidebar extends React.Component {
         else if (key == 99) { name = Strings.outbound_matchClaims }
         else if (key == 35 || key == 100) { name = Strings.submitClaims }
 
-        else if (key == 37  ){ name = Strings.tradingPartnerConfiguration }
-        else if (key == 38 ){ name = Strings.transactionSetup }
-        else if (key == 39 ) { name = Strings.editConfiguration }
+        else if (key == 37) { name = Strings.tradingPartnerConfiguration }
+        else if (key == 38) { name = Strings.transactionSetup }
+        else if (key == 39) { name = Strings.editConfiguration }
         else if (key == 40) { name = Strings.View_CustomEditsNew }
         else if (key == 41) { name = Strings.covered }
-        else if (key == 42 ) { name = Strings.noncovered }
-        else if (key == 43 ) { name = Strings.companionGuide }
+        else if (key == 42) { name = Strings.noncovered }
+        else if (key == 43) { name = Strings.companionGuide }
 
         else if (key == 45) { name = Strings.UserList }
         else if (key == 46) { name = Strings.MenuCreate }
@@ -127,50 +127,51 @@ export class DynamicSidebar extends React.Component {
         else if (key == 48) { name = Strings.MenuManagement }
         // else if (key == 53) { name = Strings.EncounterDashboard }
         // else if (key == 54) { name = Strings.EncounterDetails }
-        
+
         else if (key == 65) { name = Strings.Inbound_EncounterDashboard }
         else if (key == 66) { name = Strings.Inbound_EncounterDetails }
 
         else if (key == 50) { name = Strings.claimPayment_835 }
         else if (key == 51) { name = Strings.claimPayment_835_details }
-      
-        else if(key == 120 ) { name = Strings.tradingPartnerDetails}
-        else if(key ==116){name = Strings.healthCare278}
-        else if(key ==117){name = Strings.serviceDetails278}
-        else if(key ==122){name = Strings.ClaimProcessingSummary}
-        else if (key == 124) { name = Strings.response_999 }
+
+        else if (key == 120) { name = Strings.tradingPartnerDetails }
+        else if (key == 116) { name = Strings.healthCare278 }
+        else if (key == 117) { name = Strings.serviceDetails278 }
+        else if (key == 122) { name = Strings.ClaimProcessingSummary }
+        else if (key == 124) { name = Strings.Inbound_response_999 }
         else if (key == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
-        else if(key ==123){name = Strings.Outbound_ClaimProcessingSummary}
-        else if(key ==94){name = Strings.Outbound_RealTimeDashboard}
-        else if(key ==96){name = Strings.Outbound_ClaimDetails837}
-        else if(key ==126){name = Strings._277CAResponse}
-        else if(key ==97){name = Strings.Outbound_ClaimsError}
-        else if(key ==128){name = Strings.Inbound_Encounter_Audit}        
-        else if(key ==95){name = Strings.Outbound_AuditSummary}
-        else if(key ==125){name = Strings.Outbound_response_999}
-        else if(key ==130){name = Strings.Outbound_Encounter_Audit}
-        else if(key ==131){name = Strings.Outbound_Encounter_ClaimProcessingSummary}
-        else if(key ==127){name = Strings.Outbound_277CAResponse}     
+        else if (key == 123) { name = Strings.Outbound_ClaimProcessingSummary }
+        else if (key == 94) { name = Strings.Outbound_RealTimeDashboard }
+        else if (key == 96) { name = Strings.Outbound_ClaimDetails837 }
+        else if (key == 126) { name = Strings._277CAResponse }
+        else if (key == 97) { name = Strings.Outbound_ClaimsError }
+        else if (key == 128) { name = Strings.Inbound_Encounter_Audit }
+        else if (key == 95) { name = Strings.Outbound_AuditSummary }
+        else if (key == 125) { name = Strings.Outbound_response_999 }
+        else if (key == 130) { name = Strings.Outbound_Encounter_Audit }
+        else if (key == 131) { name = Strings.Outbound_Encounter_ClaimProcessingSummary }
+        else if (key == 127) { name = Strings.Outbound_277CAResponse }
         else if (key == 109) { name = Strings.Outbound_TradingPartnerConfiguration }
         else if (key == 110) { name = Strings.Outbound_TransactionSetup }
-        else if ( key == 111) { name = Strings.Outbound_EditConfigurations }
+        else if (key == 111) { name = Strings.Outbound_EditConfigurations }
         else if (key == 112) { name = Strings.Outbound_View_customEditNew }
         else if (key == 113) { name = Strings.Outbound_Covered }
         else if (key == 114) { name = Strings.Outbound_NonCovered }
         else if (key == 115) { name = Strings.Outbound_CompanionGuide }
-        else if (key == 121) { name = Strings.Outbound_StatewiseTradingPartner}
-        else if(key ==53){name = Strings.Outbound_Encounter_RealTimeDashboard}
-        else if(key ==54){name = Strings.Outbound_Encounter_ClaimDetails837}   
-        else if(key ==133){name = Strings.NPILook_Up}  
-        else if(key ==134){name = Strings.Outbound_NPILook_Up}  
-        else if(key ==135){name = Strings.Outbound_BatchDetails837}  
-        else if(key ==136){name = Strings.Outbound_Encounter_BatchDetails837}  
+        else if (key == 121) { name = Strings.Outbound_StatewiseTradingPartner }
+        else if (key == 53) { name = Strings.Outbound_Encounter_RealTimeDashboard }
+        else if (key == 54) { name = Strings.Outbound_Encounter_ClaimDetails837 }
+        else if (key == 133) { name = Strings.NPILook_Up }
+        else if (key == 134) { name = Strings.Outbound_NPILook_Up }
+        else if (key == 135) { name = Strings.Outbound_BatchDetails837 }
+        else if (key == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
         // else if(key ==137){name = Strings.Payment_details}
-        else if(key ==138){name = Strings.Outbound_response_999}
-        else if(key ==139){name = Strings.Outbound_277CAResponse}
-        else if(key ==140){name = Strings.Load_Exception}
-        else if(key ==141){name = Strings.AuditSummary835}
-        else if(key ==142){name = Strings.ClaimPayment_835_ProcessingSummary}
+        else if (key == 138) { name = Strings.Outbound_response_999 }
+        else if (key == 139) { name = Strings.Outbound_277CAResponse }
+        else if (key == 140) { name = Strings.Load_Exception }
+        else if (key == 141) { name = Strings.AuditSummary835 }
+        else if (key == 142) { name = Strings.ClaimPayment_835_ProcessingSummary }
+        else if (key == 143) { name = Strings.Inbound_response_999 }
         return name
     }
 
@@ -225,9 +226,9 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid ||element.key == Strings.Inbound_EncounterDetails  || element.key==Strings.Load_Exception || element.key==Strings. ClaimPayment_835_Exception) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid || element.key == Strings.Inbound_EncounterDetails || element.key == Strings.Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
                 data = [
-                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n',gridflag:'' , subtitle:'' },
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n', gridflag: '', subtitle: '' },
                 ]
             } else if (element.key == Strings.Files_837) {
                 data = [
@@ -238,7 +239,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { Total: 'total' },
                 ]
-               
+
             } else if (element.key == Strings.EnrollmentError) {
                 data = [
                     { Total: 'error' },
@@ -263,21 +264,21 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
-            } 
+            }
             else if (element.key === Strings.claimPayment_835_details) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
-            }else if (element.key == Strings.Outbound_response_999) {
+            } else if (element.key == Strings.Outbound_response_999) {
                 data = [
                     { flag999: '1' },
                 ]
-            }else if (element.key == Strings.Inbound_response_999) {
+            } else if (element.key == Strings.Inbound_response_999) {
                 data = [
                     { flag999: '0' },
                 ]
             }
-             else {
+            else {
                 addon = ''
             }
 
@@ -324,7 +325,7 @@ export class DynamicSidebar extends React.Component {
                                     window.location.reload()
                                 }, 50);
                             }}
-                            >
+                        >
                             <p className="p smaller-font">Inbound</p>
                             {!isOutbound ? <hr className="underline p" /> : null}
                         </a>
@@ -339,7 +340,7 @@ export class DynamicSidebar extends React.Component {
                                     window.location.reload()
                                 }, 50);
                             }}
-                            >
+                        >
                             <p className="p smaller-font">Outbound</p>
                             {isOutbound ? <hr className="underline p" /> : null}
                         </a>
@@ -351,16 +352,16 @@ export class DynamicSidebar extends React.Component {
 
     renderCopyright = () => {
         // fixed-bottom
-        return(
-            <div className="copyright"><br/>
-                © 2020 Powered by HiPaaS,<br/> All rights reserved.
+        return (
+            <div className="copyright"><br />
+                © 2020 Powered by HiPaaS,<br /> All rights reserved.
             </div>
         )
     }
 
     render() {
         return (
-            <nav id="sidebar" style={{marginTop: '-17px'}}>
+            <nav id="sidebar" style={{ marginTop: '-17px' }}>
                 <ul className="list-unstyled components">
                     {this.renderTabs()}
                     {this.renderSidebarItems()}

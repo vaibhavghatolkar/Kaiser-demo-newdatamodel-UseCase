@@ -148,7 +148,11 @@ export class Filters extends React.Component {
                                     }}
                                 >
                                     <option value="1"></option>
-                                    <option selected={this.props.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                                    {
+                                        this.props._is835 ?
+                                            <option selected={this.props.transactionType == "835" ? "selected" : ""} value="835">835</option> :
+                                            <option selected={this.props.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                                    }
                                     {/* <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option> */}
                                 </select>
                             </div>

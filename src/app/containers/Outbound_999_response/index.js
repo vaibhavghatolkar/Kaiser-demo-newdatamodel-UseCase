@@ -31,8 +31,8 @@ export class Outbound_response_999 extends React.Component {
             submitterRotation: 180,
             errorRotation: 180,
             rotation: 180,
-            fileNameRotation : 180,
-            dateRotation : 180,
+            fileNameRotation: 180,
+            dateRotation: 180,
             files_list: [],
             tradingpartner: [],
             errorList: [],
@@ -44,7 +44,7 @@ export class Outbound_response_999 extends React.Component {
             endDate: "",
             transactionId: "",
             errorcode: "",
-            transactionType: this.props.location.state ? (this.props.location.state.flag ? '837 Encounter' : '837') : "837",
+            transactionType: this.props.location.state ? (this.props.location.state.data[0].flag999 == 0 ? '835' : (this.props.location.state.flag ? '837 Encounter' : '837')) : "837",
 
             page: 1,
             count: 0,
@@ -59,10 +59,10 @@ export class Outbound_response_999 extends React.Component {
             fileRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
-            gridType:1,
+            gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
-         
+
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,
@@ -108,8 +108,13 @@ export class Outbound_response_999 extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
+        let recType = 'Inbound'
+        if(this.state.flag999 == 0){
+            recType = 'Outbound'
+        }
+
         query = `{
-            Data999(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}) {
+            Data999(RecType: "${recType}", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}) {
               FileId
               FileName
               Date
@@ -145,7 +150,7 @@ export class Outbound_response_999 extends React.Component {
                         count = count + 1
                     }
                 }
-                
+
                 if (res.data) {
                     this.setState({
                         files_list: res.data.Data999,
@@ -237,7 +242,7 @@ export class Outbound_response_999 extends React.Component {
             <div className="row">
                 <div className={"col-12"}>
                     <div className="top-padding"><a  >{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div style={{height:"200px" ,overflow: "auto"}} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
+                    <div style={{ height: "200px", overflow: "auto" }} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
                 </div>
             </div>
         )
@@ -321,20 +326,20 @@ export class Outbound_response_999 extends React.Component {
     }
 
     _renderTransactions() {
-        let columnDefs= []
-        this.state.flag999 ==1 ?
-        columnDefs = [
-            { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Date", field: "ResponseFileDateTime", width:100, },
-            { headerName: "X12 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-            { headerName: "X12 File Date", field: "FileDateTime", flex:1, },
-        ] : 
-        columnDefs= [
-            { headerName: "Response File Name", field: "ResponseFileName" , width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Date", field: "ResponseFileDate", width:100, },
-            { headerName: "835 File Name", field: "FileName",width: 220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-            { headerName: "835 File Date", field: "Date", flex:1, },
-        ]
+        let columnDefs = []
+        this.state.flag999 == 1 ?
+            columnDefs = [
+                { headerName: "Response File Name", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Date", field: "ResponseFileDateTime", width: 100, },
+                { headerName: "X12 File Name", field: "FileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "X12 File Date", field: "FileDateTime", flex: 1, },
+            ] :
+            columnDefs = [
+                { headerName: "Response File Name", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Date", field: "ResponseFileDate", width: 100, },
+                { headerName: "835 File Name", field: "FileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "835 File Date", field: "Date", flex: 1, },
+            ]
 
 
         return (
@@ -358,10 +363,10 @@ export class Outbound_response_999 extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-                        enableCellTextSelection={true}    
+                        enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if(event.colDef.headerName == 'Response File Name'){
-                            this.render999Details(event.data.id)
+                            if (event.colDef.headerName == 'Response File Name') {
+                                this.render999Details(event.data.id)
                             }
                         }}
                     >
@@ -382,10 +387,10 @@ export class Outbound_response_999 extends React.Component {
     onGridChange = (event) => {
         this.setState({
             page: 1,
-            rowData : [],
+            rowData: [],
             showDetails: false,
             files_list: [],
-            gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+            gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
             this.getTransactions()
         })
@@ -412,6 +417,7 @@ export class Outbound_response_999 extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 isDiffSubmitter={true}
+                _is835={this.state.flag999 == 1 ? false : true}
                 transactionType={this.state.transactionType}
             />
         )
@@ -421,14 +427,14 @@ export class Outbound_response_999 extends React.Component {
         // alert(isclick)
         return (
             <div>
-                <h5 className="headerText">{this.state.flag999==1 ? '999 Acknowledgement (Outbound)': '999 Acknowledgement (Inbound)' }</h5>
+                <h5 className="headerText">{this.state.flag999 == 1 ? '999 Acknowledgement (Outbound)' : '999 Acknowledgement (Inbound)'}</h5>
                 {this._renderTopbar()}
                 <div className="row">
                     <div className="col-7 margin-top">
                         {/* {this.renderTransactionsNew()} */}
 
-                    {this.state.files_list && this.state.files_list.length > 0 && this.state.gridType ? this._renderTransactions() : null}
-                    {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
+                        {this.state.files_list && this.state.files_list.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                        {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
                     </div>
                     <div className="col-5 margin-top">
                         {this.state.showDetails ? this.renderDetails(1) : null}

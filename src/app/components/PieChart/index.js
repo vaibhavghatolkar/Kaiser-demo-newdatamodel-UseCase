@@ -34,7 +34,7 @@ export class PieChart extends React.Component {
         data.forEach(item => {
             row.push(
                 <div className="row" style={{ paddingLeft: '12px', fontSize: '11px', marginTop: '4px', color: '#8598aa', alignItems: 'center' }}>
-                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item && item !='null' ? (item.length > 40 ? (item.substr(0, 40) + '...') : item) : ''}</div>
+                    <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '6px' }}></div><div>{item && item != 'null' ? (item.length > 40 ? (item.substr(0, 40) + '...') : item) : ''}</div>
                 </div>
             )
             count++
@@ -51,7 +51,7 @@ export class PieChart extends React.Component {
         return (
             piechart_data && piechart_data.labels && piechart_data.labels.length > 0
                 ?
-                <div className="row chart-container-full chart clickable" onClick={() => { this.props.onClick(this.props.data) }}>
+                <div className="row chart-container-full chart clickable" onClick={() => { if (this.props.onClick) { this.props.onClick(this.props.data) } }}>
                     <div className="col-7 nopadding">
                         <div className="chart-header">{this.props.header}</div>
                         {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}

@@ -105,6 +105,7 @@ export class ClaimPaymentDashboard extends React.Component {
             second_data: {},
             pie_data: {},
             complaince_data: {},
+            availitySent: '',
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
@@ -199,13 +200,13 @@ export class ClaimPaymentDashboard extends React.Component {
             apiflag: this.props.apiflag
         })
         setTimeout(() => {
-            
+
         }, 50);
     }
 
     componentDidMount() {
         this.getCommonData()
-        
+
         this.getListData()
         this._getCounts()
         this._getPieChartData()
@@ -349,7 +350,7 @@ export class ClaimPaymentDashboard extends React.Component {
             type: e
         })
         setTimeout(() => {
-            
+
         }, 50);
     }
 
@@ -366,8 +367,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         let query = `{            
-            
-                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound") {
+                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}") {
                     RecCount
                     Sender
                     Organization
@@ -473,7 +473,7 @@ export class ClaimPaymentDashboard extends React.Component {
             startDate: date
         });
         setTimeout(() => {
-            
+
             this._getClaimCounts()
             this.getListData()
         }, 50);
@@ -484,7 +484,7 @@ export class ClaimPaymentDashboard extends React.Component {
             endDate: date
         });
         setTimeout(() => {
-            
+
             this._getClaimCounts()
             this.getListData()
         }, 50);
@@ -502,7 +502,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         setTimeout(() => {
-            
+
         }, 50);
     }
 
@@ -511,7 +511,7 @@ export class ClaimPaymentDashboard extends React.Component {
             [key]: event.target.options[event.target.selectedIndex].value
         })
         setTimeout(() => {
-            
+
         }, 50);
     }
     _handleStateChange = (event) => {
@@ -532,7 +532,7 @@ export class ClaimPaymentDashboard extends React.Component {
             this.setState({
                 providerName: providerName
             }, () => {
-                
+
             })
         }, 300);
     }
@@ -1366,7 +1366,9 @@ export class ClaimPaymentDashboard extends React.Component {
             let addon = ''
             let claimStatus = ''
             let subtitle = ''
+            let availitySent = ''
             let loadStatus = ''
+            let url = ''
             let data = []
             if (item.name == 'Vaildated') {
                 addon = '/accept'
@@ -1375,25 +1377,42 @@ export class ClaimPaymentDashboard extends React.Component {
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
                 subtitle = "Files in Error"
+            } else if (item.name == 'Total Sent To Availity') {
+                availitySent = 'Y'
+                subtitle = "Sent to Availity"
             } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle },
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    transactionId: 'n',
+                    status: claimStatus,
+                    type: type,
+                    subtitle: subtitle,
+                    availitySent: availitySent
+                },
             ]
+
+            if (item.name == '999 Received') {
+                data = [{ flag999: '0' }]
+                url = Strings.Inbound_response_999
+            }
             row.push(
                 <Tiles
                     isClickable={
                         item.name != 'Received From QNXT' &&
-                        item.name != 'Error Resolved' &&
-                        item.name != 'Total Sent To Availity' &&
-                        item.name != '999 Received'
+                        item.name != 'Error Resolved'
                     }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={Strings.claimPayment_835_details}
+                    url={url ? url : Strings.claimPayment_835_details}
                 />
 
             )
@@ -1417,48 +1436,17 @@ export class ClaimPaymentDashboard extends React.Component {
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
-            let loadStatus = ''
-            let generalStatus = ''
-            let mcgStatus = ''
-            let notSent = ''
             let subtitle = ''
-            let status277CA = ''
+            let availitySent = ''
             let color = "var(--red)"
 
-            if (item.name == 'Accepted') {
-                generalStatus = 'Accepted'
-                subtitle = 'Accepted Claims'
+            if (item.name == 'Total Number of Errors') {
+                claimStatus = 'Error'
+                subtitle = "Files in Error"
+            } else if (item.name == 'Sent to Availity') {
+                availitySent = 'Y'
+                subtitle = "Sent to Availity"
                 color = "var(--green)"
-            } else if (item.name == 'Rejected') {
-                generalStatus = 'Rejected'
-                subtitle = "Rejected Claims"
-            } else if (item.name == 'File Rejected') {
-                generalStatus = 'File Rejected'
-                subtitle = item.name
-            } else if (item.name == 'Reconciled Error') {
-                subtitle = item.name
-                loadStatus = 'Reconcile Exception'
-            } else if (item.name == 'Load in MCG') {
-                mcgStatus = 'Loaded'
-                subtitle = item.name
-                color = "var(--main-bg-color)"
-            } else if (item.name == 'Load Error') {
-                subtitle = item.name
-                mcgStatus = 'Exception'
-            } else if (item.name == '999 Not Sent') {
-                notSent = 'Y'
-            }
-
-            if (item.name == 'Accepted' && item.is277CA) {
-                subtitle = '277CA Accepted Claims'
-                generalStatus = ''
-                status277CA = 'Accepted'
-            }
-
-            if (item.name == 'Rejected' && item.is277CA) {
-                subtitle = '277CA Rejected Claims'
-                generalStatus = ''
-                status277CA = 'Rejected'
             }
 
             let sendData = [
@@ -1468,20 +1456,18 @@ export class ClaimPaymentDashboard extends React.Component {
                     selectedTradingPartner: selectedTradingPartner,
                     startDate: startDate,
                     endDate: endDate,
+                    transactionId: 'n',
                     status: claimStatus,
                     type: type,
-                    gridflag: loadStatus,
-                    generalStatus: generalStatus,
-                    mcgStatus: mcgStatus,
-                    notSent: notSent,
                     subtitle: subtitle,
-                    status277CA: status277CA
+                    availitySent: availitySent,
                 },
             ]
+
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Claim_Details_837_Grid}
+                    url={Strings.claimPayment_835_details}
                     data={sendData}
                     color={color}
                 />
@@ -1572,7 +1558,7 @@ export class ClaimPaymentDashboard extends React.Component {
         ]
         let stage_2 = [
             { 'header': 'L1 - L2 Status' },
-            { 'name': 'Total Number of Errors', 'value': this.state.TotalError },
+            { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
             { 'name': 'Accepted', 'value': this.state.Accepted999 },
             { 'name': 'Rejected', 'value': this.state.Rejected999 },
@@ -1580,7 +1566,7 @@ export class ClaimPaymentDashboard extends React.Component {
         ]
         let stage_3 = [
             { 'header': 'Availity Status' },
-            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent },
+            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true },
             { 'name': '% ERA Out of Total', 'value': '100%' },
             { 'name': '# Availity Rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
@@ -1663,7 +1649,7 @@ export class ClaimPaymentDashboard extends React.Component {
                                 })
 
                                 setTimeout(() => {
-                                    
+
                                     this._getClaimCounts()
                                     this.getListData()
                                 }, 50);
@@ -1902,10 +1888,10 @@ export class ClaimPaymentDashboard extends React.Component {
         let claimStatus = ''
         let loadStatus = ''
         let generalStatus = ''
-
+        let subtitle = ''
         if (header == 'Top 10 File Level Errors') {
-            addon = '/accept'
-            claimStatus = 'Rejected'
+            claimStatus = 'Error'
+            subtitle = "Files in Error"
         } else if (header == 'Top 10 Claim Level Errors') {
             addon = '/reject'
             generalStatus = 'Rejected'
@@ -1918,10 +1904,10 @@ export class ClaimPaymentDashboard extends React.Component {
                 selectedTradingPartner: selectedTradingPartner,
                 startDate: startDate,
                 endDate: endDate,
+                transactionId: 'n',
                 status: claimStatus,
                 type: type,
-                gridflag: loadStatus,
-                generalStatus: generalStatus
+                subtitle: subtitle
             },
         ]
 
@@ -1930,7 +1916,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 header={header}
                 piechart_data={piechart_data}
                 data={sendData}
-                onClick={this.gotoClaimDetails}
+                onClick={header == 'Top 10 File Level Errors' ? this.gotoClaimDetails : ''}
             />
         )
     }
@@ -1967,6 +1953,8 @@ export class ClaimPaymentDashboard extends React.Component {
         let columnDefs = [
             { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Received Date", field: "FileDate", width: 100 },
+            { headerName: "State", field: "State", width: 70 },
+            { headerName: "File Status", field: "Status", width: 100 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
             { headerName: "Organization", field: "Organization", width: 150 },
@@ -2038,7 +2026,6 @@ export class ClaimPaymentDashboard extends React.Component {
                     status: "",
                     type: type,
                     incoming_fileId: this.state.incoming_fileId,
-
                 },
             ]
         }

@@ -36,7 +36,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             State: "",
             type: "",
             providerName: "",
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
@@ -49,6 +49,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
+            availitySent: '',
 
             X12Count: 0,
             Accepted_Claims: 0,
@@ -186,7 +187,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            PaymentProcessingSummary(State:"",StartDt:"",EndDt:"",FileID:"${this.state.file_id}",Status:"",RecType:"") {
+            PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}") {
                 RefID
                 RecCount
                 FileID
@@ -214,6 +215,8 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 Days
                 RemittanceFileName
                 RemittanceSentDate
+                State
+                Status
               }
             }
               `
@@ -543,48 +546,17 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
-            let loadStatus = ''
-            let generalStatus = ''
-            let mcgStatus = ''
-            let notSent = ''
             let subtitle = ''
-            let status277CA = ''
+            let availitySent = ''
             let color = "var(--red)"
 
-            if (item.name == 'Accepted') {
-                generalStatus = 'Accepted'
-                subtitle = 'Accepted Claims'
+            if (item.name == 'Total Number of Errors') {
+                claimStatus = 'Error'
+                subtitle = "Files in Error"
+            } else if (item.name == 'Sent to Availity') {
+                availitySent = 'Y'
+                subtitle = "Sent to Availity"
                 color = "var(--green)"
-            } else if (item.name == 'Rejected') {
-                generalStatus = 'Rejected'
-                subtitle = "Rejected Claims"
-            } else if (item.name == 'File Rejected') {
-                generalStatus = 'File Rejected'
-                subtitle = item.name
-            } else if (item.name == 'Reconciled Error') {
-                subtitle = item.name
-                loadStatus = 'Reconcile Exception'
-            } else if (item.name == 'Load in MCG') {
-                mcgStatus = 'Loaded'
-                subtitle = item.name
-                color = "var(--main-bg-color)"
-            } else if (item.name == 'Load Error') {
-                subtitle = item.name
-                mcgStatus = 'Exception'
-            } else if (item.name == '999 Not Sent') {
-                notSent = 'Y'
-            }
-
-            if (item.name == 'Accepted' && item.is277CA) {
-                subtitle = '277CA Accepted Claims'
-                generalStatus = ''
-                status277CA = 'Accepted'
-            }
-
-            if (item.name == 'Rejected' && item.is277CA) {
-                subtitle = '277CA Rejected Claims'
-                generalStatus = ''
-                status277CA = 'Rejected'
             }
 
             let sendData = [
@@ -594,20 +566,17 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                     selectedTradingPartner: selectedTradingPartner,
                     startDate: startDate,
                     endDate: endDate,
+                    transactionId: 'n',
                     status: claimStatus,
                     type: type,
-                    gridflag: loadStatus,
-                    generalStatus: generalStatus,
-                    mcgStatus: mcgStatus,
-                    notSent: notSent,
                     subtitle: subtitle,
-                    status277CA: status277CA
+                    availitySent: availitySent,
                 },
             ]
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Claim_Details_837_Grid}
+                    url={Strings.claimPayment_835_details}
                     data={sendData}
                     color={color}
                 />
@@ -697,7 +666,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         ]
         let stage_2 = [
             { 'header': 'L1 - L2 Status' },
-            { 'name': 'Total Number of Errors', 'value': this.state.TotalError },
+            { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
             { 'name': 'Accepted', 'value': this.state.Accepted999 },
             { 'name': 'Rejected', 'value': this.state.Rejected999 },
@@ -705,7 +674,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         ]
         let stage_3 = [
             { 'header': 'Availity Status' },
-            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent },
+            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true  },
             { 'name': '% ERA Out of Total', 'value': '100%' },
             { 'name': '# Availity Rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
@@ -751,13 +720,15 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let columnDefs = [
             { headerName: "Process Id", field: "FileID", width: 300, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Received Date", field: "FileDate", width: 150 },
+            { headerName: "State", field: "State", width: 150 },
+            { headerName: "File Status", field: "Status", width: 150 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150 },
             { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 150 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
             { headerName: "Claim Id", field: "ClaimID", width: 150 },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
-            { headerName: "Days Aged", field: "Days", width : 70 },
+            { headerName: "Days Aged", field: "Days", width: 70 },
             { headerName: "Patient Name", field: "PatientName", width: 200 },
             { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
             { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },

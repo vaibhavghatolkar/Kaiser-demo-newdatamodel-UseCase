@@ -246,6 +246,7 @@ export class AuditSummary835 extends React.Component {
         let row = []
         let array = this.state.summaryList
         let apiflag = this.state.apiflag
+        let availitySent = ''
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -255,6 +256,7 @@ export class AuditSummary835 extends React.Component {
             let addon = ''
             let claimStatus = ''
             let subtitle = ''
+            let url = ''
             let data = []
             if (item.name == 'Vaildated') {
                 addon = '/accept'
@@ -263,25 +265,31 @@ export class AuditSummary835 extends React.Component {
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
                 subtitle = "Files in Error"
+            } else if (item.name == 'Total Sent To Availity') {
+                availitySent = 'Y'
+                subtitle = "Sent to Availity"
             } else {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle, availitySent: availitySent },
             ]
+
+            if (item.name == '999 Received') {
+                data = [{ flag999: '0' }]
+                url = Strings.Inbound_response_999
+            }
             row.push(
                 <Tiles
                     isClickable={
                         item.name != 'Received From QNXT' &&
-                        item.name != 'Error Resolved' &&
-                        item.name != 'Total Sent To Availity' &&
-                        item.name != '999 Received'
+                        item.name != 'Error Resolved'
                     }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={Strings.claimPayment_835_details}
+                    url={url ? url : Strings.claimPayment_835_details}
                 />
 
             )
@@ -314,8 +322,9 @@ export class AuditSummary835 extends React.Component {
 
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999, {
-            fileId: fileId
+        this.props.history.push('/' + Strings.Inbound_response_999, {
+            fileId: fileId,
+            data:[{flag999: '0'}]
         })
         // setTimeout(() => {
         //     window.location.reload()
@@ -334,8 +343,8 @@ export class AuditSummary835 extends React.Component {
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            
-            
+
+
             this._getCounts()
 
         }, 50);
@@ -418,8 +427,8 @@ export class AuditSummary835 extends React.Component {
         })
 
         setTimeout(() => {
-            
-            
+
+
             this._getCounts()
 
         }, 50);
@@ -437,8 +446,8 @@ export class AuditSummary835 extends React.Component {
         }
 
         setTimeout(() => {
-            
-            
+
+
             this._getCounts()
             this._getCountsNew()
         }, 50);
@@ -481,8 +490,8 @@ export class AuditSummary835 extends React.Component {
         });
 
         setTimeout(() => {
-            
-            
+
+
             this._getCounts()
             this._getCountsNew()
 
@@ -496,8 +505,8 @@ export class AuditSummary835 extends React.Component {
         });
 
         setTimeout(() => {
-            
-            
+
+
             this._getCounts()
             this._getCountsNew()
 
@@ -523,8 +532,8 @@ export class AuditSummary835 extends React.Component {
         this.setState({
             providerName: value
         }, () => {
-            
-            
+
+
             this._getCounts()
             this._getCountsNew()
 
@@ -536,8 +545,8 @@ export class AuditSummary835 extends React.Component {
             State: event.target.options[event.target.selectedIndex].text,
             showDetails: false
         }, () => {
-            
-            
+
+
             this._getCounts()
             this._getCountsNew()
 
@@ -650,8 +659,8 @@ export class AuditSummary835 extends React.Component {
                         rowData={this.state.rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == '999') {
-                                // this.goto999(event.data.FileID)
+                            if (event.colDef.headerName == '999' && event.data.F999) {
+                                this.goto999(event.data.FileID)
                             }
                             if (event.colDef.headerName == 'Process Id') {
                                 this.props.history.push('/' + Strings.ClaimPayment_835_ProcessingSummary, {
