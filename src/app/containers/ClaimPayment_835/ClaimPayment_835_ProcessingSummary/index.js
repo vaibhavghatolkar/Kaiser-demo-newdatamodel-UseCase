@@ -188,7 +188,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}") {
+            PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"") {
                 RefID
                 RecCount
                 FileID
@@ -549,6 +549,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             let subtitle = ''
             let availitySent = ''
             let color = "var(--red)"
+            let EFTCHK = ''
 
             if (item.name == 'Total Number of Errors') {
                 claimStatus = 'Error'
@@ -557,11 +558,13 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
                 color = "var(--green)"
-            } else if (item.name == 'Total Number of Exceptions') {
-                subtitle = "Exception"
-                claimStatus = 'Exception'
-                color = "var(--orange)"
-            }
+            } else if (item.name == 'EFT') {
+                EFTCHK = 'ACH'
+                color = "var(--main-bg-color)"
+            } else if (item.name == 'CHK') {
+                EFTCHK = 'CHK'
+                color = "var(--main-bg-color)"
+            } 
 
             let sendData = [
                 {
@@ -575,6 +578,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent,
+                    EFTCHK: EFTCHK
                 },
             ]
             row.push(
@@ -666,14 +670,13 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             { 'header': 'HiPaaS Received Status' },
             { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'EFT', 'value': this.state.EFTData, },
-            { 'name': 'CHK', 'value': this.state.CheckData, },
+            { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
+            { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
 
         ]
         let stage_2 = [
             { 'header': 'HiPaaS Validation Status' },
             { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
-            { 'name': 'Total Number of Exceptions', 'value': this.state.TotalException, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
             
         ]
@@ -731,6 +734,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             { headerName: "File Status", field: "Status", width: 150 },
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150 },
             { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 150 },
+            { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
             { headerName: "Claim Id", field: "ClaimID", width: 150 },

@@ -13,10 +13,11 @@ export class Tiles extends React.Component {
 
     _getstyles = () => {
         let style =
-            this.props.header_text.toLowerCase().indexOf('total') != -1 ? 'blue summary-title' :
-                this.props.header_text.toLowerCase().indexOf('exception') != -1 ? 'orange summary-title' :
-                    this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 || this.props.header_text.toLowerCase().indexOf('error resolved') != -1 ? 'green summary-title' :
-                        (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) ? 'red summary-title' : 'blue summary-title'
+            this.props.header_text.toLowerCase().indexOf('total sent to availity') != -1 ? 'green summary-title' :
+                this.props.header_text.toLowerCase().indexOf('total') != -1 ? 'blue summary-title' :
+                    this.props.header_text.toLowerCase().indexOf('exception') != -1 ? 'orange summary-title' :
+                        this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 || this.props.header_text.toLowerCase().indexOf('error resolved') != -1 ? 'green summary-title' :
+                            (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) ? 'red summary-title' : 'blue summary-title'
         return style
     }
 

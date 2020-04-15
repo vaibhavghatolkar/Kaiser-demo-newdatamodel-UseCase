@@ -198,6 +198,8 @@ export class AuditSummary835 extends React.Component {
                 Accepted
                 AvailitySent
                 Exception
+                EFT
+                CHK
               }
               Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 Total999
@@ -228,7 +230,8 @@ export class AuditSummary835 extends React.Component {
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
-                    { name: 'Exception', value: data.Exception },
+                    { name: 'EFT', value: data.EFT },
+                    { name: 'Check', value: data.CHK },
                     { name: 'Total Sent To Availity', value: data.AvailitySent },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
@@ -258,6 +261,7 @@ export class AuditSummary835 extends React.Component {
             let claimStatus = ''
             let subtitle = ''
             let url = ''
+            let EFTCHK = ''
             let data = []
             if (item.name == 'Vaildated') {
                 addon = '/accept'
@@ -266,9 +270,10 @@ export class AuditSummary835 extends React.Component {
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
                 subtitle = "Files in Error"
-            } else if (item.name == 'Exception') {
-                claimStatus = 'Exception'
-                subtitle = "Exception"
+            } else if (item.name == 'EFT') {
+                EFTCHK = 'ACH'
+            } else if (item.name == 'Check') {
+                EFTCHK = 'CHK'
             } else if (item.name == 'Total Sent To Availity') {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
@@ -276,7 +281,7 @@ export class AuditSummary835 extends React.Component {
                 addon = '/other'
             }
             data = [
-                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle, availitySent: availitySent },
+                { flag: addon, State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, transactionId: 'n', status: claimStatus, type: type, subtitle: subtitle, availitySent: availitySent, EFTCHK: EFTCHK },
             ]
 
             if (item.name == '999 Received') {

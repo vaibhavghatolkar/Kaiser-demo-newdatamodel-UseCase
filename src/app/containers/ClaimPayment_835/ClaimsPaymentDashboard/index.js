@@ -369,7 +369,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         let query = `{            
-                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}") {
+                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"") {
                     RecCount
                     Sender
                     Organization
@@ -1191,6 +1191,8 @@ export class ClaimPaymentDashboard extends React.Component {
                   Accepted
                   AvailitySent
                   Exception
+                  EFT
+                  CHK
                 }
                 Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                     Total999
@@ -1223,7 +1225,8 @@ export class ClaimPaymentDashboard extends React.Component {
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
-                    { name: 'Exception', value: data.Exception },
+                    { name: 'EFT', value: data.EFT },
+                    { name: 'Check', value: data.CHK },
                     { name: 'Total Sent To Availity', value: data.AvailitySent },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
@@ -1373,6 +1376,7 @@ export class ClaimPaymentDashboard extends React.Component {
             let claimStatus = ''
             let subtitle = ''
             let availitySent = ''
+            let EFTCHK = ''
             let loadStatus = ''
             let url = ''
             let data = []
@@ -1383,9 +1387,10 @@ export class ClaimPaymentDashboard extends React.Component {
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
                 subtitle = "Files in Error"
-            } else if (item.name == 'Exception') {
-                claimStatus = 'Exception'
-                subtitle = "Exception"
+            } else if (item.name == 'EFT') {
+                EFTCHK = 'ACH'
+            } else if (item.name == 'Check') {
+                EFTCHK = 'CHK'
             } else if (item.name == 'Total Sent To Availity') {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
@@ -1403,7 +1408,8 @@ export class ClaimPaymentDashboard extends React.Component {
                     status: claimStatus,
                     type: type,
                     subtitle: subtitle,
-                    availitySent: availitySent
+                    availitySent: availitySent,
+                    EFTCHK: EFTCHK
                 },
             ]
 
@@ -1447,6 +1453,7 @@ export class ClaimPaymentDashboard extends React.Component {
             let subtitle = ''
             let availitySent = ''
             let color = "var(--red)"
+            let EFTCHK = ''
 
             if (item.name == 'Total Number of Errors') {
                 claimStatus = 'Error'
@@ -1455,10 +1462,12 @@ export class ClaimPaymentDashboard extends React.Component {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
                 color = "var(--green)"
-            } else if (item.name == 'Total Number of Exceptions') {
-                subtitle = "Exceptions"
-                claimStatus = 'Exception'
-                color = "var(--orange)"
+            } else if (item.name == 'EFT') {
+                EFTCHK = 'ACH'
+                color = "var(--main-bg-color)"
+            } else if (item.name == 'CHK') {
+                EFTCHK = 'CHK'
+                color = "var(--main-bg-color)"
             }
 
             let sendData = [
@@ -1473,6 +1482,7 @@ export class ClaimPaymentDashboard extends React.Component {
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent,
+                    EFTCHK: EFTCHK
                 },
             ]
 
@@ -1566,14 +1576,13 @@ export class ClaimPaymentDashboard extends React.Component {
             { 'header': 'HiPaaS Received Status' },
             { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'EFT', 'value': this.state.EFTData, },
-            { 'name': 'CHK', 'value': this.state.CheckData, },
+            { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
+            { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
 
         ]
         let stage_2 = [
             { 'header': 'HiPaaS Validation Status' },
             { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
-            { 'name': 'Total Number of Exceptions', 'value': this.state.TotalException, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
         ]
         let stage_3 = [
@@ -1967,6 +1976,7 @@ export class ClaimPaymentDashboard extends React.Component {
             { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
             { headerName: "Organization", field: "Organization", width: 150 },
+            { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
             { headerName: "Total", field: "TotalClaim", width: 100 },
