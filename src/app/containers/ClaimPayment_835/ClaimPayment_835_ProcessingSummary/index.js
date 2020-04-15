@@ -32,6 +32,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             pageCount: 1,
             Months: 0,
             loaded: 0,
+            TotalException: 0,
             selectedTradingPartner: "",
             State: "",
             type: "",
@@ -217,11 +218,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 RemittanceSentDate
                 State
                 Status
+                ProcessID
               }
             }
               `
-
-        console.log('Query ', query)
         fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
@@ -557,6 +557,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
                 color = "var(--green)"
+            } else if (item.name == 'Total Number of Exceptions') {
+                subtitle = "Exception"
+                claimStatus = 'Exception'
+                color = "var(--orange)"
             }
 
             let sendData = [
@@ -617,6 +621,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                   Check
                   AvailitySent
                   TotalError
+                  TotalException
               }
               
         }`
@@ -646,6 +651,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                         Hipaas_Received: _data ? _data.HiPaaSCount : 0,
                         AvailitySent: data2 ? data2.AvailitySent : 0,
                         TotalError: data2 ? data2.TotalError : 0,
+                        TotalException: data2 ? data2.TotalException : 0,
                         // TotalCountQnxt: data ? data.TotalCount: 0
                     })
                 }
@@ -665,18 +671,19 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
         ]
         let stage_2 = [
-            { 'header': 'L1 - L2 Status' },
+            { 'header': 'HiPaaS Validation Status' },
             { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
+            { 'name': 'Total Number of Exceptions', 'value': this.state.TotalException, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
-            { 'name': 'Accepted', 'value': this.state.Accepted999 },
-            { 'name': 'Rejected', 'value': this.state.Rejected999 },
-
+            
         ]
         let stage_3 = [
             { 'header': 'Availity Status' },
             { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true  },
-            { 'name': '% ERA Out of Total', 'value': '100%' },
-            { 'name': '# Availity Rejected', 'value': 0 },
+            { 'name': 'Accepted', 'value': this.state.Accepted999 },
+            { 'name': 'Rejected', 'value': this.state.Rejected999 },
+            // { 'name': '% ERA Out of Total', 'value': '100%' },
+            // { 'name': '# Availity Rejected', 'value': 0 },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
 
@@ -718,7 +725,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     _renderTransactions() {
         let columnDefs = [
-            { headerName: "Process Id", field: "FileID", width: 300, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Process Id", field: "ProcessID", width: 300, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Received Date", field: "FileDate", width: 150 },
             { headerName: "State", field: "State", width: 150 },
             { headerName: "File Status", field: "Status", width: 150 },

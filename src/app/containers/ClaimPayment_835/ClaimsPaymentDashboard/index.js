@@ -106,6 +106,8 @@ export class ClaimPaymentDashboard extends React.Component {
             pie_data: {},
             complaince_data: {},
             availitySent: '',
+            progress_exception: 0,
+            TotalException: 0,
             type: "",
             apiflag: this.props.apiflag,
             tradingpartner: [],
@@ -1188,6 +1190,7 @@ export class ClaimPaymentDashboard extends React.Component {
                   Rejected
                   Accepted
                   AvailitySent
+                  Exception
                 }
                 Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                     Total999
@@ -1195,6 +1198,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                     Rejected
                     Accepted
+                    Exception
                   }       
               
         }`
@@ -1213,12 +1217,13 @@ export class ClaimPaymentDashboard extends React.Component {
                 let data = res.data.ERA835DashboardCountNew[0]
                 let Validated = Number(res.data.ERA835DashboardProgressBar[0].Accepted).toFixed(2)
                 let Error = Number(res.data.ERA835DashboardProgressBar[0].Rejected).toFixed(2)
+                let exception = Number(res.data.ERA835DashboardProgressBar[0].Exception).toFixed(2)
 
                 summary = [
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
-                    { name: 'Error Resolved', value: 0 },
+                    { name: 'Exception', value: data.Exception },
                     { name: 'Total Sent To Availity', value: data.AvailitySent },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
@@ -1226,7 +1231,8 @@ export class ClaimPaymentDashboard extends React.Component {
                 this.setState({
                     summaryCount: summary,
                     progress_Validated: Validated,
-                    progress_Error: Error
+                    progress_Error: Error,
+                    progress_exception: exception
                     // totalFiles: totalCount
                 })
             })
@@ -1377,6 +1383,9 @@ export class ClaimPaymentDashboard extends React.Component {
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
                 subtitle = "Files in Error"
+            } else if (item.name == 'Exception') {
+                claimStatus = 'Exception'
+                subtitle = "Exception"
             } else if (item.name == 'Total Sent To Availity') {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
@@ -1405,7 +1414,6 @@ export class ClaimPaymentDashboard extends React.Component {
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Received From QNXT' &&
                         item.name != 'Error Resolved'
                     }
                     _data={data}
@@ -1447,6 +1455,10 @@ export class ClaimPaymentDashboard extends React.Component {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
                 color = "var(--green)"
+            } else if (item.name == 'Total Number of Exceptions') {
+                subtitle = "Exceptions"
+                claimStatus = 'Exception'
+                color = "var(--orange)"
             }
 
             let sendData = [
@@ -1506,6 +1518,7 @@ export class ClaimPaymentDashboard extends React.Component {
                   Check
                   AvailitySent
                   TotalError
+                  TotalException
               }
               
         }`
@@ -1535,6 +1548,7 @@ export class ClaimPaymentDashboard extends React.Component {
                         Hipaas_Received: _data ? _data.HiPaaSCount : 0,
                         AvailitySent: data2 ? data2.AvailitySent : 0,
                         TotalError: data2 ? data2.TotalError : 0,
+                        TotalException: data2 ? data2.TotalException : 0,
                         // TotalCountQnxt: data ? data.TotalCount: 0
                     }, () => {
                         this._getCounts()
@@ -1557,18 +1571,17 @@ export class ClaimPaymentDashboard extends React.Component {
 
         ]
         let stage_2 = [
-            { 'header': 'L1 - L2 Status' },
+            { 'header': 'HiPaaS Validation Status' },
             { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
+            { 'name': 'Total Number of Exceptions', 'value': this.state.TotalException, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
-            { 'name': 'Accepted', 'value': this.state.Accepted999 },
-            { 'name': 'Rejected', 'value': this.state.Rejected999 },
-
         ]
         let stage_3 = [
             { 'header': 'Availity Status' },
             { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true },
-            { 'name': '% ERA Out of Total', 'value': '100%' },
-            { 'name': '# Availity Rejected', 'value': 0 },
+            { 'name': 'Availity Accepted', 'value': this.state.Accepted999 },
+            { 'name': 'Availity Rejected', 'value': this.state.Rejected999 },
+            // { 'name': '% ERA Out of Total', 'value': '100%' },
             // { 'name': 'Rejected %', 'value': '15%' }
         ]
 
@@ -1928,9 +1941,10 @@ export class ClaimPaymentDashboard extends React.Component {
                     <div className="col-6" style={{ padding: '6px' }}>
                         {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                     </div>
-                    <div className="col-6" style={{ padding: '8px' }}>
+                    {this.renderCompliance()}
+                    {/* <div className="col-6" style={{ padding: '8px' }}>
                         {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
-                    </div>
+                    </div> */}
                 </div>
             </div>
         )
@@ -1938,20 +1952,15 @@ export class ClaimPaymentDashboard extends React.Component {
 
     renderCompliance = () => {
         return (
-            this.state.complience && this.state.complience.length > 0 ?
-                <div className="chart-div">
-                    <div className="row">
-                        <div className="col-6" style={{ padding: '6px' }}>
-                            {this.renderPieChart('Compliance Ratio', this.state.complaince_data)}
-                        </div>
-                    </div>
-                </div> : null
+            <div className="col-6" style={{ padding: '6px' }}>
+                {this.renderPieChart('Compliance Ratio', this.state.complaince_data)}
+            </div>
         )
     }
 
     _renderList = () => {
         let columnDefs = [
-            { headerName: "Process Id", field: "FileID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Process Id", field: "ProcessID", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Received Date", field: "FileDate", width: 100 },
             { headerName: "State", field: "State", width: 70 },
             { headerName: "File Status", field: "Status", width: 100 },
@@ -2038,11 +2047,13 @@ export class ClaimPaymentDashboard extends React.Component {
 
         let Validated = this.state.progress_Validated + "%"
         let Error = this.state.progress_Error + "%"
+        let exception = this.state.progress_exception + "%"
         return (
             <div class="progress">
                 {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
                 <div class="progress-bar bg-success" role="progressbar" style={{ width: Validated }}>Vaildated ({Validated})</div>
                 <div class="progress-bar bg-danger" role="progressbar" style={{ width: Error }}>Files in Error ({Error})</div>
+                <div class="progress-bar bg-warning" role="progressbar" style={{ width: exception }}>Exception ({exception})</div>
             </div>
         )
     }
@@ -2071,7 +2082,6 @@ export class ClaimPaymentDashboard extends React.Component {
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
                         {this.renderAllPieCharts()}
-                        {this.renderCompliance()}
                         {/* {this.renderMonthlyTrendsChart()} */}
                         {/* <div className="row">
                            <div className="col-4">

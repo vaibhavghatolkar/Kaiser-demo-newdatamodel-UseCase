@@ -14,8 +14,9 @@ export class Tiles extends React.Component {
     _getstyles = () => {
         let style =
             this.props.header_text.toLowerCase().indexOf('total') != -1 ? 'blue summary-title' :
-                this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 || this.props.header_text.toLowerCase().indexOf('error resolved') != -1 ? 'green summary-title' :
-                    (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) ? 'red summary-title' : 'blue summary-title'
+                this.props.header_text.toLowerCase().indexOf('exception') != -1 ? 'orange summary-title' :
+                    this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 || this.props.header_text.toLowerCase().indexOf('error resolved') != -1 ? 'green summary-title' :
+                        (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) ? 'red summary-title' : 'blue summary-title'
         return style
     }
 
@@ -50,7 +51,7 @@ export class Tiles extends React.Component {
             <div className={this.props.header_text == 'Reconciled Files | Error' || this.props.header_text == 'Load in MCG | Error' ? "summary-exception summary-container-uniform" : "col summary-container"}>
                 <div className="summary-header">{this.props.header_text}</div>
                 <div className="summary-title">
-                    <Link to={{ pathname: this.props.url, state: { data: this.props.first_data } }} className={this.props.first_arg_style}>{Number(this.props.value) ? this.props.value : 0}</Link> <a style={{color:'var(--light-grey-color)'}}>|</a> <Link to={{ pathname: this.props.second_url ? this.props.second_url : this.props.url , state: { data: this.props.second_data } }} className={this.props.second_arg_style ? this.props.second_arg_style : 'red'}>{this.props.second_val ? (this.props.second_val) : ''}</Link>
+                    <Link to={{ pathname: this.props.url, state: { data: this.props.first_data } }} className={this.props.first_arg_style}>{Number(this.props.value) ? this.props.value : 0}</Link> <a style={{ color: 'var(--light-grey-color)' }}>|</a> <Link to={{ pathname: this.props.second_url ? this.props.second_url : this.props.url, state: { data: this.props.second_data } }} className={this.props.second_arg_style ? this.props.second_arg_style : 'red'}>{this.props.second_val ? (this.props.second_val) : ''}</Link>
                 </div>
             </div>
         )

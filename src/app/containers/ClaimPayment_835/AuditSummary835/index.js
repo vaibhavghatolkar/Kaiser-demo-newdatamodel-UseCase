@@ -66,7 +66,7 @@ export class AuditSummary835 extends React.Component {
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "Process Id", field: "FileID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "ProcessID", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "QNXT File Name", field: "QNXTFileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Received Date", field: "Date" },
                 { headerName: "State", field: "State" },
@@ -197,6 +197,7 @@ export class AuditSummary835 extends React.Component {
                 Rejected
                 Accepted
                 AvailitySent
+                Exception
               }
               Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 Total999
@@ -227,7 +228,7 @@ export class AuditSummary835 extends React.Component {
                     { name: 'Received From QNXT', value: data.TotalCount },
                     { name: 'Vaildated', value: data.Accepted },
                     { name: 'Files in Error', value: data.Rejected },
-                    { name: 'Error Resolved', value: 0 },
+                    { name: 'Exception', value: data.Exception },
                     { name: 'Total Sent To Availity', value: data.AvailitySent },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
@@ -265,6 +266,9 @@ export class AuditSummary835 extends React.Component {
             } else if (item.name == 'Files in Error') {
                 claimStatus = 'Error'
                 subtitle = "Files in Error"
+            } else if (item.name == 'Exception') {
+                claimStatus = 'Exception'
+                subtitle = "Exception"
             } else if (item.name == 'Total Sent To Availity') {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
