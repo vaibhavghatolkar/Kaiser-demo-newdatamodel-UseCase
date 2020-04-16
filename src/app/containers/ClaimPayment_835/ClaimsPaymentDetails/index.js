@@ -13,6 +13,7 @@ import Strings from '../../../../helpers/Strings';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { Filters } from '../../../components/Filters';
 
 var val = ''
 const $ = window.$;
@@ -92,9 +93,6 @@ export class ClaimPaymentDetails extends React.Component {
 
             },
         }
-
-        this.handleStartChange = this.handleStartChange.bind(this)
-        this.handleEndChange = this.handleEndChange.bind(this)
         this.Service_StartChange = this.Service_StartChange.bind(this)
         this.Service_EndChange = this.Service_EndChange.bind(this)
 
@@ -103,7 +101,6 @@ export class ClaimPaymentDetails extends React.Component {
     componentDidMount() {
         this.getCommonData()
         this.getData()
-        this.getState()
 
     }
 
@@ -498,47 +495,6 @@ export class ClaimPaymentDetails extends React.Component {
             </div>
         )
     }
-    onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Organization' || event.target.options[event.target.selectedIndex].text == 'Submitter') {
-            this.setState({
-                [key]: '',
-                showDetails: false
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text,
-                showDetails: false
-            })
-        }
-
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    }
-    handleStartChange(date) {
-        this.setState({
-            startDate: date,
-            showDetails: false,
-            showerror: false,
-            showClaims: false
-        });
-
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    }
-    handleEndChange(date) {
-        this.setState({
-            endDate: date,
-            showDetails: false,
-            showerror: false,
-            showClaims: false
-        });
-
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    }
 
     Service_StartChange(date) {
         this.setState({
@@ -583,163 +539,7 @@ export class ClaimPaymentDetails extends React.Component {
         return row
 
     }
-    getState() {
-        let query = `{
-                  StateList  (UserId:0 Flag:0) {
-                  State
-                StateCode
-            }
-       }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    StateList: res.data.StateList
-
-                })
-            })
-
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            })
-    }
-    ChangeVal(event, key) {
-
-        this.setState({
-            [key]: event.target.options[event.target.selectedIndex].text,
-            showDetails: false,
-            showerror: false,
-            showClaims: false
-        })
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    }
-
-    renderFilters() {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Organization</div>
-                      <input className="form-control" 
-                                                onChange={(e) => {
-                                                    clearTimeout(val)
-                                                    let value = e.target.value
-                                                    val = setTimeout(() => {
-                                                        this.setState({ Organization: value,  showDetails: false,
-                                                            showerror: false,
-                                                            showClaims: false })
-                                                        setTimeout(() => {
-                                                            this.getData()
-                                                        }, 50);
-                                                    }, 300);
-                                                }}
-                                            />
-                    </div>
-             */}
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <select className="form-control list-header-dashboard" va id="fao1"
-                            onChange={(event) => {
-                                this.ChangeVal(event, 'State')
-                                setTimeout(() => {
-                                    this.getData()
-                                }, 50);
-                            }} >>
-                                            <option value="" ></option>
-                            {this.getoptions()}
-
-                        </select>
-
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                               <input className="form-control" 
-                                                onChange={(e) => {
-                                                    clearTimeout(val)
-                                                    let value = e.target.value
-                                                    val = setTimeout(() => {
-                                                        this.setState({ Sender: value, showDetails: false })
-                                                        setTimeout(() => {
-                                                            this.getData()
-                                                        }, 50);
-                                                    }, 300);
-                                                }}
-                                            />
-                    </div> */}
-
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Check/EFT Start Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.Service_startDate ? new Date(this.state.Service_startDate) : ''}
-                            onChange={this.Service_StartChange}
-                            maxDate={this.state.Service_endDate ? new Date(moment(this.state.Service_endDate).format('YYYY-MM-DD hh:mm')) : ''}
-
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Check/EFT End Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.Service_endDate ? new Date(this.state.Service_endDate) : ''}
-                            onChange={this.Service_EndChange}
-                            minDate={this.state.Service_startDate ? new Date(moment(this.state.Service_startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div> */}
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
-                            onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
-                            onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData: [],
-                                    showerror: false,
-                                    showClaims: false,
-                                    showDetails: false,
-                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this.getData()
-                                })
-                            }}
-                        >
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div> */}
-
-
-                </div>
-            </div>
-        )
-    }
+    
     handlePageClickLine = (data) => {
         let page = data.selected + 1
 
@@ -1297,13 +1097,42 @@ export class ClaimPaymentDetails extends React.Component {
         )
     }
 
+    _refreshScreen = () => {
+        this.getData()
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value,
+            showDetails: false,
+            showerror: false,
+            showClaims: false
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                isSubmitter={false}
+                removeGrid={true}
+                changeDefault={true}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
+
 
     render() {
 
         return (
             <div>
                 <h5 className="headerText">Payment Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
-                {this.renderFilters()}
+                {this._renderTopbar()}
                 {
                     this.state.gridType
                         ?
