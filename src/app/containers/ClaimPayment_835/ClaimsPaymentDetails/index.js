@@ -253,7 +253,7 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}") {
+            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}") {
                 RefID
                 RecCount
                 FileID
