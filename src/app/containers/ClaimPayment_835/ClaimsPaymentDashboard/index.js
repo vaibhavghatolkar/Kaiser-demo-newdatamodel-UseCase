@@ -37,6 +37,7 @@ import {
     area,
 } from 'd3-shape';
 import { scalePoint } from 'd3-scale';
+import { Filters } from '../../../components/Filters';
 
 const data = [
     { month: 'Jan', appStore: 101, googlePlay: 13 },
@@ -189,11 +190,6 @@ export class ClaimPaymentDashboard extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
         }
-
-
-        this.handleStartChange = this.handleStartChange.bind(this);
-        this.handleEndChange = this.handleEndChange.bind(this);
-
         this.showFile = this.showFile.bind(this)
     }
 
@@ -207,41 +203,10 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     componentDidMount() {
-        this.getCommonData()
-
         this.getListData()
         this._getCounts()
         this._getPieChartData()
         this._getClaimCounts()
-    }
-
-    getCommonData() {
-        let query = `{
-            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
-                Trading_Partner_Name 
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    this.setState({
-                        tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
     }
 
     renderSearchBar() {
@@ -459,273 +424,6 @@ export class ClaimPaymentDashboard extends React.Component {
         })
     }
 
-    getoptions() {
-        let row = []
-        this.state.tradingpartner.forEach(element => {
-            if (!element) {
-                return
-            }
-            row.push(<option value="">{element.Trading_Partner_Name}</option>)
-        })
-        return row
-    }
-
-    handleStartChange(date) {
-        this.setState({
-            startDate: date
-        });
-        setTimeout(() => {
-
-            this._getClaimCounts()
-            this.getListData()
-        }, 50);
-    };
-
-    handleEndChange(date) {
-        this.setState({
-            endDate: date
-        });
-        setTimeout(() => {
-
-            this._getClaimCounts()
-            this.getListData()
-        }, 50);
-    }
-
-    onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.setState({
-                [key]: ''
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text
-            })
-        }
-
-        setTimeout(() => {
-
-        }, 50);
-    }
-
-    MonthsEvent(event, key) {
-        this.setState({
-            [key]: event.target.options[event.target.selectedIndex].value
-        })
-        setTimeout(() => {
-
-        }, 50);
-    }
-    _handleStateChange = (event) => {
-        this.setState({
-            State: event.target.options[event.target.selectedIndex].text
-        }, () => {
-            this._getClaimCounts()
-            this.getListData()
-        })
-    }
-
-
-
-    onHandleChange(e) {
-        clearTimeout(val)
-        let providerName = e.target.value
-        val = setTimeout(() => {
-            this.setState({
-                providerName: providerName
-            }, () => {
-
-            })
-        }, 300);
-    }
-
-    setData = (startDate, endDate, selected_val) => {
-        this.setState({
-            startDate,
-            endDate,
-            selected_val
-        })
-    }
-
-    renderTransactionsNew(flag) {
-
-
-        let data = this.state.files_list ? this.state.files_list : []
-        let headerArray = []
-        let rowArray = []
-        headerArray.push(
-            { value: 'File Generated/Created', upScale: 1 },
-            { value: 'File Created Date' },
-            { value: 'Remittance sent' },
-            { value: 'Remittance sent date' },
-            { value: 'Compliance vs Submission date' },
-            { value: '# of errors' },
-            { value: 'Receiver' }
-        )
-
-
-
-        rowArray.push(
-            { value: 'File_Generated', upScale: 1 },
-            { value: 'File_Created_Date', isDate: 1, isNottime: 1 },
-            { value: 'Remittance_sent' },
-            { value: 'Remittance_sent_date' },
-            { value: 'Compliance_vs_Submission_date' },
-            { value: 'no_of_errors' },
-            { value: 'Receiver' }
-
-        )
-
-        data = [
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-
-            },
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-
-            },
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-
-            },
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-
-            },
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-            },
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-            },
-
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-            },
-
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-            },
-
-            {
-                File_Generated: '99090023232.txt',
-                File_Created_Date: 1582810469000,
-                Remittance_sent: '99090023232.txt',
-                Remittance_sent_date: 1582810469000,
-                Compliance_vs_Submission_date: 1582810469000,
-
-                no_of_errors: 2,
-                Receiver: 'TRICARE FOR LIFE'
-
-            }
-
-
-
-
-
-        ]
-
-        if (flag) {
-
-            return (
-                <CommonTable
-                    headerArray={headerArray}
-                    rowArray={rowArray}
-                    data={data}
-                    count={this.state.count}
-                    handlePageClick={this.handlePageClick}
-                    onClickKey={'HiPaaSUniqueID'}
-                    onClick={this.onClick1}
-                />
-            )
-        }
-        else {
-
-            return (
-                <CommonTable
-                    headerArray={headerArray}
-                    rowArray={rowArray}
-                    data={data}
-                    count={this.state.count}
-                    handlePageClick={this.handlePageClick}
-                    onClickKey={'HiPaaSUniqueID'}
-                    onClick={this.onClick}
-                />
-            )
-
-        }
-    }
-
     handlePageClick = (data) => {
         let page = data.selected + 1
         this.setState({
@@ -798,7 +496,6 @@ export class ClaimPaymentDashboard extends React.Component {
         );
     }
     renderGraphs() {
-
         const data = [
             ["Year", "Avg days for submission", { role: "style" }],
             ["2010", 10, "color: grey"],
@@ -1217,9 +914,11 @@ export class ClaimPaymentDashboard extends React.Component {
             .then(res => {
                 let summary = []
                 let data = res.data.ERA835DashboardCountNew[0]
-                let Validated = Number(res.data.ERA835DashboardProgressBar[0].Accepted).toFixed(2)
-                let Error = Number(res.data.ERA835DashboardProgressBar[0].Rejected).toFixed(2)
-                let exception = Number(res.data.ERA835DashboardProgressBar[0].Exception).toFixed(2)
+                let progress_data = res.data.ERA835DashboardProgressBar
+                let progress_condition = progress_data && progress_data.length > 0
+                let Validated = progress_condition ? Number(progress_data[0].Accepted).toFixed(2) : 0
+                let Error = progress_condition ? Number(res.data.ERA835DashboardProgressBar[0].Rejected).toFixed(2) : 0
+                let exception = progress_condition ? Number(res.data.ERA835DashboardProgressBar[0].Exception).toFixed(2) : 0
 
                 summary = [
                     { name: 'Received From QNXT', value: data.TotalCount },
@@ -1236,7 +935,6 @@ export class ClaimPaymentDashboard extends React.Component {
                     progress_Validated: Validated,
                     progress_Error: Error,
                     progress_exception: exception
-                    // totalFiles: totalCount
                 })
             })
             .catch(err => {
@@ -1559,9 +1257,6 @@ export class ClaimPaymentDashboard extends React.Component {
                         AvailitySent: data2 ? data2.AvailitySent : 0,
                         TotalError: data2 ? data2.TotalError : 0,
                         TotalException: data2 ? data2.TotalException : 0,
-                        // TotalCountQnxt: data ? data.TotalCount: 0
-                    }, () => {
-                        this._getCounts()
                     })
                 }
             })
@@ -1600,123 +1295,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}
-                {/* {this._renderClaimTables(stage_4)} */}
-            </div>
-        )
-    }
-
-    renderTopbar() {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        />
-                    </div> */}
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div> */}
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Time Range</div>
-                        <select
-                            className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                let day = 0
-                                let chartType = ''
-                                let selected_val = event.target.options[event.target.selectedIndex].text
-
-                                if (selected_val == 'Last week') {
-                                    day = 7
-                                    chartType = 'Datewise'
-                                } else if (selected_val == 'Last 30 days') {
-                                    day = 30
-                                    chartType = 'Weekwise'
-                                } else if (selected_val == 'Last 90 days') {
-                                    day = 90
-                                } else if (selected_val == 'Last 180 days') {
-                                    day = 180
-                                } else if (selected_val == 'Last year') {
-                                    day = 365
-                                }
-
-                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
-                                let endDate = moment().format('YYYY-MM-DD')
-
-                                if (!selected_val) {
-                                    startDate = ''
-                                    endDate = ''
-                                }
-
-                                this.setState({
-                                    startDate: startDate,
-                                    endDate: endDate,
-                                    selected_val: selected_val,
-                                    chartType: chartType
-                                })
-
-                                setTimeout(() => {
-
-                                    this._getClaimCounts()
-                                    this.getListData()
-                                }, 50);
-                            }}
-                        >
-                            <option value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
-                            <option value="2">Last 90 days</option>
-                            <option value="2" selected="selected">Last 180 days</option>
-                            <option value="2">Last year</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker className="form-control list-dashboard"
-                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker className="form-control list-dashboard"
-                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="Grid"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData: [],
-                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this.getListData()
-                                })
-                            }}>
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div> */}
-                </div>
             </div>
         )
     }
@@ -1773,18 +1351,18 @@ export class ClaimPaymentDashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "FileErrorwise", RecType: "Outbound") {
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "Outbound") {
                 X_axis
                 Y_axis
             }
-            piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "Errorwise", RecType: "Outbound") {
+            piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "Errorwise", RecType: "Outbound") {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"") {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"Outbound") {
                 Type
                 TotalCount
-              }
+            }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.transaction835, {
@@ -2068,40 +1646,62 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
+    _refreshScreen = () => {
+        this.getListData()
+        this._getCounts()
+        this._getPieChartData()
+        this._getClaimCounts()
+    }
+
+    setData = (startDate, endDate, selected_val, chartType) => {
+        this.setState({
+            startDate,
+            endDate,
+            selected_val,
+            chartType
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={true}
+                isSubmitter={false}
+                removeGrid={true}
+                setData={this.setData}
+                changeDefault={true}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
 
     render() {
-
-        let lables1 = ['Not Compliant', 'Compliant'];
-        let lables2 = ['Member not eligible', 'Dependent not covered', 'Provider not authorized'];
-        let lables3 = ['Negative number', 'Not valid CARC', 'Missing'];
-
-        let data1 = [20, 60];
-        let data2 = [20, 60, 30];
-        let data3 = [20, 60, 30];
-
         return (
             <div>
                 <h5 className="headerText"> Payment Dashboard</h5>
 
                 <div className="row">
                     <div className="col-12">
-                        {this.renderTopbar()}
-                        {this.progressBar()}
+                        {this._renderTopbar()}
+                        {this.state.progress_Validated || this.state.progress_Error || this.state.progress_exception ? this.progressBar() : null}
                         <div className="general-header" style={{ marginBottom: "10px", marginTop: '12px' }}>Remittance File Level</div>
                         {this._renderSummaryDetails()}
                         <div className="general-header">Payment Level</div>
                         {this.renderClaimDetails()}
                         {this.renderAllPieCharts()}
-                        {/* {this.renderMonthlyTrendsChart()} */}
-                        {/* <div className="row">
-                           <div className="col-4">
-                           {this.renderCharts()}
-                           </div>
-                           <div className="col-1"></div>
-                           <div className="col-4">
-                        {this.RenderMainErrorChart()}
-                           </div>
-                       </div> */}
                     </div>
 
 
@@ -2110,22 +1710,8 @@ export class ClaimPaymentDashboard extends React.Component {
                     <div className="col-12">
                         {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
                         {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
-                        {/* {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderList() : null}     */}
                     </div>
                 </div>
-
-
-                {/* <div className="row">
-                <div className="col-9">
-                {this.renderGraphs()}
-                </div>
-                <div className="col-3 nopadding">
-            
-                {this.renderGooglePieChart('Top Denial Reason codes',lables2,data2)}
-              
-                </div>
-                </div> */}
-
             </div>
         );
     }

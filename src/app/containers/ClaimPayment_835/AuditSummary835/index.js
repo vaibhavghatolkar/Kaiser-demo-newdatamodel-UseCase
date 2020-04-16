@@ -14,6 +14,7 @@ import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { Filters } from '../../../components/Filters';
 
 let val = ''
 export class AuditSummary835 extends React.Component {
@@ -116,16 +117,11 @@ export class AuditSummary835 extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
         }
-
-        this.onSelect = this.onSelect.bind(this)
-        this.handleStartChange = this.handleStartChange.bind(this)
-        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
         this._getCounts()
         this._getCountsNew()
-        this.getCommonData()
     }
 
     _getCounts = async () => {
@@ -432,216 +428,11 @@ export class AuditSummary835 extends React.Component {
         let page = data.selected + 1
         this.setState({
             page: page,
-
         })
 
         setTimeout(() => {
-
-
             this._getCounts()
-
         }, 50);
-    }
-
-    onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.setState({
-                [key]: ''
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text
-            })
-        }
-
-        setTimeout(() => {
-
-
-            this._getCounts()
-            this._getCountsNew()
-        }, 50);
-    }
-
-    getCommonData() {
-        let query = `{
-            Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
-                Trading_Partner_Name 
-            }
-        }`
-
-
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-
-                    this.setState({
-                        tradingpartne837: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    handleStartChange(date) {
-        this.setState({
-            startDate: date,
-            showDetails: false
-        });
-
-        setTimeout(() => {
-
-
-            this._getCounts()
-            this._getCountsNew()
-
-        }, 50);
-    }
-
-    handleEndChange(date) {
-        this.setState({
-            endDate: date,
-            showDetails: false
-        });
-
-        setTimeout(() => {
-
-
-            this._getCounts()
-            this._getCountsNew()
-
-        }, 50);
-    }
-
-    onHandleChange = (e) => {
-        clearTimeout(val)
-        let providerName = e.target.value
-        val = setTimeout(() => {
-            getProviders("Inbound", providerName)
-                .then(list => {
-                    this.setState({
-                        providers: list
-                    })
-                }).catch(error => {
-                    process.env.NODE_ENV == 'development' && console.log(error)
-                })
-        }, 300);
-    }
-
-    onSelected = (value) => {
-        this.setState({
-            providerName: value
-        }, () => {
-
-
-            this._getCounts()
-            this._getCountsNew()
-
-        })
-    }
-
-    _handleStateChange = (event) => {
-        this.setState({
-            State: event.target.options[event.target.selectedIndex].text,
-            showDetails: false
-        }, () => {
-
-
-            this._getCounts()
-            this._getCountsNew()
-
-        })
-    }
-
-    renderTopBar() {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        <AutoComplete
-                            list={this.state.providers}
-                            onHandleChange={this.onHandleChange}
-                            onSelected={this.onSelected}
-                        />
-
-                    </div> */}
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}
-                        >
-
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div> */}
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker
-                            className="form-control list-header-dashboard"
-                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData: [],
-                                    claimsAudit: [],
-                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this._getCounts()
-                                })
-                            }}
-                        >
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div> */}
-                </div>
-            </div>
-        )
-    }
-    getoptions() {
-        let row = []
-        this.state.tradingpartne837.forEach(element => {
-            if (!element) {
-                return
-            }
-            row.push(<option value="">{element.Trading_Partner_Name}</option>)
-        })
-        return row
     }
 
     _renderTransactions() {
@@ -689,11 +480,37 @@ export class AuditSummary835 extends React.Component {
         )
     }
 
+    _refreshScreen = () => {
+        this._getCounts()
+        this._getCountsNew()
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isSubmitter={false}
+                removeGrid={true}
+                changeDefault={true}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
+
     render() {
         return (
             <div>
                 <h5 className="headerText">Payment Audit Summary</h5>
-                {this.renderTopBar()}
+                {this._renderTopbar()}
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}

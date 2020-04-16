@@ -137,36 +137,39 @@ export class Filters extends React.Component {
                     </div> */}
 
                     {
-                        this.props.isDiffSubmitter ?
-                            <div className="form-group col-2">
-                                <div className="list-dashboard">
-                                    Transaction Type
+                        this.props.isSubmitter ?
+                            (this.props.isDiffSubmitter ?
+                                <div className="form-group col-2">
+                                    <div className="list-dashboard">
+                                        Transaction Type
                                 </div>
-                                <select className="form-control list-dashboard"
-                                    onChange={(event) => {
-                                        this.onSelect(event, 'transactionType')
-                                    }}
-                                >
-                                    <option value="1"></option>
-                                    {
-                                        this.props._is835 ?
-                                            <option selected={this.props.transactionType == "835" ? "selected" : ""} value="835">835</option> :
-                                            <option selected={this.props.transactionType == "837" ? "selected" : ""} value="837">837</option>
-                                    }
-                                    {/* <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option> */}
-                                </select>
-                            </div>
-                            :
-                            <div className="form-group col-2">
-                                <div className="list-dashboard">Submitter</div>
-                                <select className="form-control list-dashboard" id="TradingPartner"
-                                    onChange={(event) => {
-                                        this.onSelect(event, 'selectedTradingPartner')
-                                    }}>
-                                    <option value="select"></option>
-                                    {this.getoptions()}
-                                </select>
-                            </div>}
+                                    <select className="form-control list-dashboard"
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'transactionType')
+                                        }}
+                                    >
+                                        <option value="1"></option>
+                                        {
+                                            this.props._is835 ?
+                                                <option selected={this.props.transactionType == "835" ? "selected" : ""} value="835">835</option> :
+                                                <option selected={this.props.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                                        }
+                                        {/* <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option> */}
+                                    </select>
+                                </div>
+                                :
+                                <div className="form-group col-2">
+                                    <div className="list-dashboard">Submitter</div>
+                                    <select className="form-control list-dashboard" id="TradingPartner"
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'selectedTradingPartner')
+                                        }}>
+                                        <option value="select"></option>
+                                        {this.getoptions()}
+                                    </select>
+                                </div>)
+                            : null
+                    }
                     {
                         this.props.isTimeRange ?
                             <div className="form-group col-2">
@@ -205,8 +208,8 @@ export class Filters extends React.Component {
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>
                                     <option value="2">Last 90 days</option>
-                                    <option value="2">Last 180 days</option>
-                                    <option selected="selected" value="2">Last year</option>
+                                    <option selected={this.props.changeDefault ? "selected" : ''} value="2">Last 180 days</option>
+                                    <option selected={!this.props.changeDefault ? "selected" : ''} value="2">Last year</option>
                                 </select>
                             </div> : null
                     }
@@ -226,16 +229,19 @@ export class Filters extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="Grid"
-                            onChange={(event) => {
-                                this.props.onGridChange(event)
-                            }}>
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div>
+                    {
+                        !this.props.removeGrid ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Grid Type</div>
+                                <select className="form-control list-dashboard" id="Grid"
+                                    onChange={(event) => {
+                                        this.props.onGridChange(event)
+                                    }}>
+                                    <option value="select">Default</option>
+                                    <option selected value="select">Classic</option>
+                                </select>
+                            </div> : null
+                    }
                 </div>
             </div>
         )
