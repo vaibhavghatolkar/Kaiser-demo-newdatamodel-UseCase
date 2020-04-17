@@ -18,7 +18,7 @@ export class Filters extends React.Component {
             startDate: this.props.startDate,
             endDate: this.props.endDate,
             selectedTradingPartner: '',
-            State: '',
+            State: this.props.State ? this.props.State : '',
             tradingpartner: [],
             providers: [],
         }
@@ -66,7 +66,7 @@ export class Filters extends React.Component {
         this.setState({
             startDate: date
         }, () => {
-            this.props.update('startDate', this.state.startDate)
+            this.props.update('startDate', date)
         })
     };
 
@@ -74,7 +74,7 @@ export class Filters extends React.Component {
         this.setState({
             endDate: date
         }, () => {
-            this.props.update('endDate', this.state.endDate)
+            this.props.update('endDate', date)
         })
     }
 
@@ -96,7 +96,7 @@ export class Filters extends React.Component {
             if (!element) {
                 return
             }
-            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+            row.push(<option selected={this.props.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""} value="">{element.Trading_Partner_Name}</option>)
         })
         return row
     }
@@ -124,6 +124,7 @@ export class Filters extends React.Component {
                     <div className="form-group col-2">
                         <div className="list-dashboard">State</div>
                         <StateDropdown
+                            selected_state={this.props.State}
                             method={this._handleStateChange}
                         />
                     </div>
@@ -216,17 +217,17 @@ export class Filters extends React.Component {
                     <div className="form-group col-2">
                         <div className="list-dashboard">Start Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            selected={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
+                            selected={this.props.startDate ? new Date(moment(this.props.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleStartChange}
-                            maxDate={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                            maxDate={this.props.endDate ? new Date(moment(this.props.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">End Date</div>
                         <DatePicker className="form-control list-dashboard"
-                            selected={this.state.endDate ? new Date(moment(this.state.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                            selected={this.props.endDate ? new Date(moment(this.props.endDate).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handleEndChange}
-                            minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
+                            minDate={this.props.startDate ? new Date(moment(this.props.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
                     {

@@ -1661,6 +1661,8 @@ export class Claim_Details_837_Grid extends React.Component {
             <Filters
                 isTimeRange={false}
                 setData={this.setData}
+                State={this.state.State}
+                selectedTradingPartner={this.state.selectedTradingPartner}
                 onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
