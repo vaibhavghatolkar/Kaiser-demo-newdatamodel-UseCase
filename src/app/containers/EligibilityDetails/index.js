@@ -110,7 +110,7 @@ export class EligibilityDetails extends React.Component {
 
         process.env.NODE_ENV == 'development' && console.log(query)
 
-        fetch(Urls.common_data, {
+        fetch(Urls.transaction270, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ export class EligibilityDetails extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
-        let url = Urls.claimstatus
+        let url = Urls.transaction270
         let loginflag = localStorage.getItem("DbTech");
 
         if (this.state.apiflag == 1 && this.state.status != 'Pass') {
@@ -171,7 +171,7 @@ export class EligibilityDetails extends React.Component {
         }`
 
         if (this.state.apiflag == 1) {
-            url = Urls.eligibility_url
+            url = Urls.transaction270
             query = `{
                 EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
                     RecCount
@@ -271,7 +271,7 @@ export class EligibilityDetails extends React.Component {
     }
 
     getDetails(uuid) {
-        let url = Urls.claimstatus
+        let url = Urls.transaction270
 
         let query = `{
             ClaimRequest(HiPaaSUniqueID:"`+ uuid + `") {
@@ -283,7 +283,7 @@ export class EligibilityDetails extends React.Component {
         }`
 
         if (this.state.apiflag == 1) {
-            url = Urls.eligibility_url
+            url = Urls.transaction270
             query = `{
                 Eligibilty270Request(HiPaaSUniqueID:"`+ uuid + `") {
                   Message

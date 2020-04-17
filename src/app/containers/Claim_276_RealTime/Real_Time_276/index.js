@@ -123,7 +123,7 @@ export class RealTime276 extends React.Component {
 
         process.env.NODE_ENV == 'development' && console.log(query)
 
-        fetch(Urls.common_data, {
+        fetch(Urls.transaction270, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export class RealTime276 extends React.Component {
     getData(chartType) {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let url = Urls.claimstatus
+        let url = Urls.transaction270
 
         let query = `{
             ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
@@ -174,7 +174,7 @@ export class RealTime276 extends React.Component {
 
 
         if (this.state.apiflag == 1) {
-            url = Urls.eligibility_url
+            url = Urls.transaction270
             query = `{
                 Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                     AvgResTime
