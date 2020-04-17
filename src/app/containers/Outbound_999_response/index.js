@@ -109,7 +109,7 @@ export class Outbound_response_999 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
         let recType = 'Inbound'
-        if(this.state.flag999 == 0){
+        if (this.state.flag999 == 0) {
             recType = 'Outbound'
         }
 
@@ -206,8 +206,14 @@ export class Outbound_response_999 extends React.Component {
     }
 
     render999Details(refId) {
+        let transaction = ''
+        if (this.state.flag999 == 1) {
+            transaction = '837'
+        } else {
+            transaction = '835'
+        }
         let query = `{
-            Data999_Response (RefId:${refId}) {
+            Data999_Response (RefId:${refId}, Transaction: "${transaction}") {
               FileId
               RefId
               Response
@@ -335,10 +341,11 @@ export class Outbound_response_999 extends React.Component {
                 { headerName: "X12 File Date", field: "FileDateTime", flex: 1, },
             ] :
             columnDefs = [
-                { headerName: "Response File Name", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Process Id", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Date", field: "ResponseFileDate", width: 100, },
-                { headerName: "835 File Name", field: "FileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
-                { headerName: "835 File Date", field: "Date", flex: 1, },
+                { headerName: "835 File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                // { headerName: "835 File Date", field: "Date", width: 220 },
+                { headerName: "Status", field: "status", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
             ]
 
 
@@ -365,7 +372,10 @@ export class Outbound_response_999 extends React.Component {
                         rowData={this.state.rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Response File Name') {
+                            if (
+                                (this.state.flag999 == 1 && event.colDef.headerName == 'Response File Name') ||
+                                (this.state.flag999 == 0 && event.colDef.headerName == 'Process Id')
+                            ) {
                                 this.render999Details(event.data.id)
                             }
                         }}

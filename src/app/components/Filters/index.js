@@ -137,7 +137,7 @@ export class Filters extends React.Component {
                     </div> */}
 
                     {
-                        this.props.isSubmitter ?
+                        !this.props.removeSubmitter ?
                             (this.props.isDiffSubmitter ?
                                 <div className="form-group col-2">
                                     <div className="list-dashboard">

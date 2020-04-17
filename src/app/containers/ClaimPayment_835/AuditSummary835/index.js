@@ -329,7 +329,7 @@ export class AuditSummary835 extends React.Component {
         // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Inbound_response_999, {
             fileId: fileId,
-            data:[{flag999: '0'}]
+            data: [{ flag999: '0' }]
         })
         // setTimeout(() => {
         //     window.location.reload()
@@ -496,7 +496,7 @@ export class AuditSummary835 extends React.Component {
     _renderTopbar = () => {
         return (
             <Filters
-                isSubmitter={false}
+                removeSubmitter={true}
                 removeGrid={true}
                 changeDefault={true}
                 update={this.update}

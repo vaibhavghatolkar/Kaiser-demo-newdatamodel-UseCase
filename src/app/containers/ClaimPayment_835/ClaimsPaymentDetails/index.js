@@ -1116,7 +1116,7 @@ export class ClaimPaymentDetails extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
-                isSubmitter={false}
+                removeSubmitter={true}
                 removeGrid={true}
                 changeDefault={true}
                 update={this.update}
