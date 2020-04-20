@@ -11,6 +11,13 @@ import { Link } from 'react-router-dom';
 import DatePicker from "react-datepicker";
 import Images from '../../../../theme/Images';
 import { StateDropdown } from '../../../components/StateDropdown';
+import { Filters } from '../../../components/Filters';
+import { TableTiles } from '../../../components/TableTiles';
+import { PieChart } from '../../../components/PieChart';
+import { AgGridReact } from 'ag-grid-react';
+import { Tiles } from '../../../components/Tiles';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 let val = ''
 export class RealTime276 extends React.Component {
@@ -28,6 +35,7 @@ export class RealTime276 extends React.Component {
             showDetails: false,
             files_list: [],
             tradingpartner: [],
+            summaryCount: [],
             pieArray: [],
             pieLabels: [],
             tradingChartLabel: [],
@@ -51,7 +59,11 @@ export class RealTime276 extends React.Component {
             selected_val: '',
             averageResponseTime: '',
             selectedTradingPartner: '',
+            progress_valid : 0,
+            progress_invalid : 0,
+            progress_noResponse : 0,
             noResponsePercent: '',
+            second_data: [],
             chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
             colorArray: [
                 'var(--main-bg-color)',
@@ -63,7 +75,42 @@ export class RealTime276 extends React.Component {
                 'var(--hex-color)',
                 'var(--pacific-blue-color)',
             ],
-            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 0)
+            apiflag: Number(this.props.location.state.data[0].apiflag == 1 ? this.props.location.state.data[0].apiflag : 0),
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
+
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+             
         }
 
         this.getData = this.getData.bind(this)
@@ -77,6 +124,14 @@ export class RealTime276 extends React.Component {
     componentDidMount() {
         this.getData()
         this.getCommonData()
+        this.getTransactions()
+    }
+
+
+    _refreshScreen = () => {
+        this.getData()
+        this.getCommonData()
+        this.getTransactions()
     }
 
     getCommonData(chartType) {
@@ -118,6 +173,10 @@ export class RealTime276 extends React.Component {
                     X_axis
                     Y_axis
                 }
+                ErrorDescriptionPieChart(State: "", Sender: "", StartDt: "", EndDt: "") {
+                    ErrorDescription
+                    Transactions
+                }
             }`
         }
 
@@ -132,10 +191,18 @@ export class RealTime276 extends React.Component {
             body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
-            .then(res => {
+            .then(res => { 
+
+                let pieData = res.data.ErrorDescriptionPieChart
+                    
+                let second_data = res.data.ErrorDescriptionPieChart && res.data.ErrorDescriptionPieChart.length > 0 ? this.getPieChartData(pieData): ''
                 if (res.data) {
                     this.performCommonOperations(res, chartType)
+                    
                 }
+                this.setState({
+                    second_data: second_data
+                })
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -192,12 +259,18 @@ export class RealTime276 extends React.Component {
                     NoResponse_Per
                     RealTime_Per
                     Invalid_Trans
+                    Total_NoResponse
                 }
                 Eligibilty271ErrorwiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
                     ErrorType
                     RecCount
                     Percentage
                 }
+                ProgressBar270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                    Valid_Per
+                    InValid_Per
+                    NoResponse_Per
+                  }
             }`
         }
 
@@ -213,9 +286,31 @@ export class RealTime276 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
+                let data = res.data.Eligibilty270[0]
                 if (res.data) {
                     this.performOperations(res, chartType)
                 }
+                let progress_data= res.data.ProgressBar270
+                let progress_condition= progress_data && progress_data.length > 0
+                let Valid_Per = progress_condition ? Number(progress_data[0].Valid_Per).toFixed(2) : 0
+                let InValid_Per = progress_condition ? Number(progress_data[0].InValid_Per).toFixed(2) : 0
+                let NoResponse_Per =progress_condition ? Number(progress_data[0].NoResponse_Per).toFixed(2) : 0
+
+               let summary = [
+                    { name: 'Total Transaction', value: data.TotalNumOfReq },
+                    { name: 'Valid Transaction', value: data.Success },
+                    { name: 'Invalid Transaction', value: data.Error },
+                    { name: 'No Response', value: data.Total_NoResponse },
+                    { name: 'Avg Response Time (sec)', value: data.AvgResTime },
+                    // { name: 'Error Percentage', value: data.EFT },
+                ]
+
+                this.setState({
+                    summaryCount: summary,
+                    progress_valid : Valid_Per,
+                    progress_invalid : InValid_Per,
+                    progress_noResponse : NoResponse_Per,
+                })
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -435,7 +530,7 @@ export class RealTime276 extends React.Component {
     renderPieChart() {
         return (
             <div className="row chart">
-                <div className="col-12" style={{ paddingTop: "0px" }}>
+                <div className="col-6" style={{ paddingTop: "0px" }}>
                     <Pie data={this.getPieData}
                         options={{
                             elements: {
@@ -463,8 +558,8 @@ export class RealTime276 extends React.Component {
                                 animateRotate: true
                             }
                         }}
-                        width={800}
-                        height={800} />
+                        width={200}
+                        height={200} />
                 </div>
             </div>
         );
@@ -963,42 +1058,12 @@ export class RealTime276 extends React.Component {
         return (
             <div>
                 <div className="row chart-div">
-                    {
-                        this.state.tradingChartLabel && this.state.tradingChartLabel.length > 0
-                            ?
-                            <div className="chart-container chart">
-                                {this.renderTabs()}
-                                {/* <label className="chart-header">{this.state.type == 'Providerwise' ? 'Provider (Top 5)' : 'Submitter volume (Top 5)'}</label> */}
-                                <Bar
-                                    data={this.getBarData(this.state.type == 'Provider' ? this.state.providerChartLabel : this.state.tradingChartLabel, this.state.type == 'Provider' ? this.state.providerChartData : this.state.tradingChartData, '#139DC9')}
-                                    width={100}
-                                    height={60}
-                                    options={{
-                                        legend: {
-                                            display: false,
-                                        },
-                                        scales: {
-                                            yAxes: [{
-                                                ticks: {
-                                                    beginAtZero: true,
-                                                    userCallback: function (label, index, labels) {
-                                                        // when the floored value is the same as the value we have a whole number
-                                                        if (Math.floor(label) === label) {
-                                                            return label;
-                                                        }
-
-                                                    },
-                                                }
-                                            }],
-                                        },
-                                    }} />
-                            </div> : null
-                    }
+                   
                     {
                         this.state.dateChartLabel && this.state.dateChartLabel.length > 0
                             ?
-                            <div className="chart-container chart">
-                                {this.renderTabs(1)}
+                            <div className="chart-container chart col-11">
+                                {/* {this.renderTabs(1)} */}
                                 {/* <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label> */}
                                 {/* <Bar
                                     data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
@@ -1025,9 +1090,8 @@ export class RealTime276 extends React.Component {
                                     }} /> */}
                                 <Line
                                     data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#139DC9')}
-                                    style={{ width: '100%', marginLeft: '-2px' }}
                                     width={100}
-                                    height={64}
+                                    height={35}
                                     options={{
                                         legend: {
                                             display: false,
@@ -1037,15 +1101,121 @@ export class RealTime276 extends React.Component {
                                 {/* <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', marginLeft: '-2px' }}></img> */}
                             </div> : null
                     }
+                    
                 </div>
-                <div className="row chart-div">
-                    {
-                        this.dateviewtabledata()
-                    }
+                    
+            </div>
+        )
+    }
+    getPieChartData = (pieChart) => {
+        let pieLabel = []
+        let pieData = []
+        pieChart.forEach((d) => {
+            pieLabel.push(d.ErrorDescription)
+            pieData.push(d.Transactions)
+        })
+        console.log(pieLabel)
+
+        let second_data = {
+            labels: pieLabel,
+            datasets: [{
+                data: pieData,
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DC913',
+                    '#EC6236',
+                    '#C9139D',
+                    'blue',
+                    '#5369e7',
+                    '#b7bf11',
+                    '#448dce',
+                    '#cb662c',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DC913',
+                    '#EC6236',
+                    '#C9139D',
+                    'blue',
+                    '#5369e7',
+                    '#b7bf11',
+                    '#448dce',
+                    '#cb662c',
+                ]
+            }]
+        }
+
+
+
+        return second_data
+    }
+
+
+    renderPieChart = (header, piechart_data) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let addon = ''
+        let claimStatus = ''
+        let loadStatus = ''
+        let generalStatus = ''
+        let subtitle = ''
+        if (header == 'Top 10 File Level Errors') {
+            claimStatus = 'Error'
+            subtitle = "Files in Error"
+        } else if (header == 'Top 10 Claim Level Errors') {
+            addon = '/reject'
+            generalStatus = 'Rejected'
+        }
+
+        let sendData = [
+            {
+                flag: addon,
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                transactionId: 'n',
+                status: claimStatus,
+                type: type,
+                subtitle: subtitle
+            },
+        ]
+
+        return (
+            <PieChart
+                header={header}
+                piechart_data={piechart_data}
+                data={sendData}
+                // onClick={header == 'Top 10 File Level Errors' ? this.gotoClaimDetails : ''}
+            />
+        )
+    }
+
+    _renderAllPieCharts() {
+        return (
+            <div className="chart-div">
+                <div className="row">
+                    <div className="col-6" style={{ padding: '6px' }}>
+                        {this.renderPieChart('Top 10 Transaction Level Errors', this.state.second_data)}
+                    </div>
+                    <div className="col-6" style={{ padding: '6px' }}>
+                    {this.renderCharts()}
+                    </div>
                 </div>
             </div>
         )
     }
+
+
+
+
+
 
     gotoRealTimeTransactions(key) {
         this.setState({
@@ -1394,20 +1564,390 @@ export class RealTime276 extends React.Component {
         );
     }
 
+
+
+    _renderSummaryDetails = () => {
+        let row = []
+        let array = this.state.summaryCount
+        let apiflag = this.state.apiflag
+        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let subtitle = ''
+            let availitySent = ''
+            let EFTCHK = ''
+            let loadStatus = ''
+            let url = ''
+            let data = []
+            if (item.name == 'Vaildated') {
+                addon = '/accept'
+                claimStatus = 'Validated'
+                subtitle = "Validated Files"
+            } else if (item.name == 'Files in Error') {
+                claimStatus = 'Error'
+                subtitle = "Files in Error"
+            } else if (item.name == 'EFT') {
+                EFTCHK = 'ACH'
+            } else if (item.name == 'Check') {
+                EFTCHK = 'CHK'
+            } else if (item.name == 'Total Sent To Availity') {
+                availitySent = 'Y'
+                subtitle = "Sent to Availity"
+            } else {
+                addon = '/other'
+            }
+            data = [
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    transactionId: 'n',
+                    status: claimStatus,
+                    type: type,
+                    subtitle: subtitle,
+                    availitySent: availitySent,
+                    EFTCHK: EFTCHK
+                },
+            ]
+
+            if (item.name == '999 Received') {
+                data = [{ flag999: '0' }]
+                url = Strings.Inbound_response_999
+            }
+            row.push(
+                <Tiles
+                    isClickable={
+                        item.name != 'Error Resolved'
+                    }
+                    _data={data}
+                    header_text={item.name}
+                    value={item.value}
+                    second_val={item.second_val}
+                    // url={url ? url : Strings.claimPayment_835_details}
+                />
+
+            )
+        });
+
+        return (
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
+    }
+
+    _renderClaimTables = (array) => {
+        let row = []
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let subtitle = ''
+            let availitySent = ''
+            let color = "var(--red)"
+            let Status=''
+            if (item.name == 'In Compliance') {
+                // claimStatus = 'Error'
+                // subtitle = "Files in Error"
+                color = "var(--main-bg-color)"
+            } else if (item.name == 'Out of Compliance') {
+                // availitySent = 'Y'
+                // subtitle = "Sent to Availity"
+                color = "var(--orange)"
+            }else if (item.name == 'No Response') {
+                // availitySent = 'Y'
+                // subtitle = "Sent to Availity"
+                color = "var(--red)"
+            }else if (item.name == 'This Month') {
+                // availitySent = 'Y'
+                // subtitle = "Sent to Availity"
+                color = "var(--main-bg-color)"
+            }
+            
+            let sendData = [
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    transactionId: 'n',
+                    status: Status,
+                    MaintenanceCode:claimStatus,
+                    type: type,
+                    subtitle: subtitle,
+                    availitySent: availitySent,
+                },
+            ]
+
+            row.push(
+                <TableTiles
+                    item={item}
+                    // url={Strings.claimsDashboard_834_details}
+                    data={sendData}
+                    color={color}
+                />
+            )
+        })
+        return (
+            <div className="col-3 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+                {row}
+            </div>
+        )
+    }
+
+
+    _renderTableTiles = () => {
+
+        let stage_1 = [
+            { 'header': 'Real - Time Volume' },
+            { 'name': 'Last Month', 'value': this.state.lastMonth },
+            { 'name': 'This Month', 'value': this.state.thisMonth, 'isClick': true },
+           ]
+           let stage_2= [
+            { 'header': 'Compliance Ratio' },
+            { 'name': 'In Compliance', 'value': this.state.inComplaince + ' %', 'isClick': true },
+            { 'name': 'Out of Compliance', 'value': this.state.outComplaince + ' %', 'isClick': true },
+            { 'name': 'No Response', 'value': this.state.noResponsePercent + ' %', 'isClick': true },
+  
+        ]
+       
+
+        return (
+            <div className="row" style={{ marginBottom: '12px' }}>
+                {this._renderClaimTables(stage_1)}                
+                {this._renderClaimTables(stage_2)}
+             </div>
+        )
+    }
+
+
+    getTransactions() {
+
+        let query = ''
+        let typeId = this.state.status
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let chartQuery = ''
+        let url = Urls.transaction270
+        let loginflag = localStorage.getItem("DbTech");
+
+        if (this.state.apiflag == 1 && this.state.status != 'Pass') {
+            chartQuery = `Eligibilty271ErrorwiseCount(State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
+                                ErrorType
+                                RecCount
+                            }`
+        }
+
+        query = `{
+            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
+                RecCount
+                HiPaaSUniqueID
+                Date
+                Trans_type
+                Submiter
+                Trans_ID
+                Error_Type
+                Error_Code
+                ErrorDescription
+            }`+ chartQuery + `
+        }`
+
+        if (this.state.apiflag == 1) {
+            url = Urls.transaction270
+            query = `{
+                EligibilityAllDtlTypewise(TypeID:"" page: 1  State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"" ) {
+                    HiPaaSUniqueID
+                    Date
+                    Trans_type
+                    Submiter
+                    Trans_ID
+                    Error_Type
+                    Error_Code
+                    ErrorDescription
+                }`+ chartQuery + `
+            }`
+        }
+
+        console.log(query)
+        process.env.NODE_ENV == 'development' && console.log(query)
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let count = 1
+                    let data = []
+                    let pieArray = []
+                    let labelArray = []
+
+                    if (this.state.apiflag == 1) {
+                        data = res.data.EligibilityAllDtlTypewise
+                    } else {
+                        data = res.data.ClaimRequest_Datewise
+                    }
+
+                    if (this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount) {
+                        res.data.Eligibilty271ErrorwiseCount.forEach(item => {
+                            pieArray.push(item.RecCount)
+                            labelArray.push(item.ErrorType)
+                        })
+                    }
+
+                    // if (data && data.length > 0) {
+                    //     count = Math.floor(data[0].RecCount / 10)
+                    //     if (data[0].RecCount % 10 > 0) {
+                    //         count = count + 1
+                    //     }
+                    // }
+
+                    console.log(data)
+
+                    this.setState({
+                        files_list: data,
+                        count: count,
+                        pieArray: pieArray,
+                        labelArray: labelArray,
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
+    _renderList = () => {
+        let columnDefs = [
+            { headerName: "Transaction Id", field: "Trans_ID",  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Transaction Date", field: "Date" },
+            { headerName: "Status", field: "Trans_type" },
+            { headerName: "Submitter", field: "Submiter", flex:1 },
+            // { headerName: "Error Type", field: "Error_Type", width: 150 },
+            // { headerName: "Error Code", field: "Error_Code", width: 150 },
+            // { headerName: "Error Description", field: "ErrorDescription", flex: 1 },
+        ]
+
+        return (
+            <div>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.files_list}
+                        icons={this.state.icons}
+                        enableCellTextSelection={true}
+                        
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+    progressBar() {
+
+        let valid = this.state.progress_valid + "%"
+        let invalid = this.state.progress_invalid + "%"
+        let noResponse = this.state.progress_noResponse + "%"
+        return (
+            <div class="progress">
+                {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
+                <div class="progress-bar bg-success" role="progressbar" style={{ width: valid }}>Vaild Transaction ({valid})</div>
+                <div class="progress-bar bg-danger" role="progressbar" style={{ width: invalid }}>Invalid Transaction ({invalid})</div>
+                <div class="progress-bar bg-info" role="progressbar" style={{ width: noResponse }}>No Response ({noResponse})</div>
+            </div>
+        )
+    }
+
+
+    setData = (startDate, endDate, selected_val, chartType) => {
+        this.setState({
+            startDate,
+            endDate,
+            selected_val,
+            chartType
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={true}
+                isSubmitter={true}
+                removeGrid={true}
+                setData={this.setData}
+                // onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
+
+   
+
+
     render() {
         return (
             <div>
-                <div className="row">
-                    <div className="col-9">
-                        <h5 className="headerText">{this.state.apiflag == 0 ? '276 Real Time' : 'Eligibility Real Time'}</h5>
-                        {this.renderTopbar()}
-                        {this.renderSummaryDetails()}
-                    </div>
-                    <div className="col-3 nopadding">
+                <h5 className="headerText">{this.state.apiflag == 0 ? '276 Real Time' : 'Eligibility Real Time'}</h5>
+                   
+                        
+                        {this._renderTopbar()}
+                        {this.progressBar()}
+                        {this._renderSummaryDetails()}
+                 
+                    {/* <div className="col-3 nopadding">
                         {this.renderVolumeSummary('Real - Time Volume', 'Last Month', this.state.lastMonth, 'This Month', this.state.thisMonth, this.state.realTimePercent + ' %')}
-                    </div>
-                </div>
-                <div className="row">
+                    </div> */}
+                {this._renderTableTiles()}
+                {this._renderAllPieCharts()}
+                {this._renderList()}
+                {/* <div className="row">
                     <div className="col-9">
                         {this.renderCharts()}
                     </div>
@@ -1416,7 +1956,7 @@ export class RealTime276 extends React.Component {
                         {this.renderVolumeSummary('Compliance Ratio', 'In Compliance', this.state.inComplaince + ' %', 'Out of Compliance', this.state.outComplaince + ' %')}
                         {this.renderPieChart()}
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }

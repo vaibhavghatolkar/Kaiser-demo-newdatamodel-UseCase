@@ -10,6 +10,10 @@ import { Pie } from 'react-chartjs-2';
 import '../Files/files-styles.css';
 import { CommonTable } from '../../components/CommonTable';
 import { StateDropdown } from '../../components/StateDropdown';
+import { Filters } from '../../components/Filters';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
 export class EligibilityDetails extends React.Component {
@@ -48,6 +52,40 @@ export class EligibilityDetails extends React.Component {
             pieArray: [],
             labelArray: [],
             orderby: '',
+            paginationPageSize: 5,
+            domLayout: 'autoHeight',
+
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                editable: false,
+                enableRowGroup: true,
+                enablePivot: true,
+                enableValue: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
         }
 
         this.getData = this.getData.bind(this)
@@ -56,6 +94,11 @@ export class EligibilityDetails extends React.Component {
     }
 
     componentDidMount() {
+        this.getData()
+        this.getTransactions()
+    }
+
+    _refreshScreen = () => {
         this.getData()
         this.getTransactions()
     }
@@ -174,7 +217,6 @@ export class EligibilityDetails extends React.Component {
             url = Urls.transaction270
             query = `{
                 EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
-                    RecCount
                     HiPaaSUniqueID
                     Date
                     Trans_type
@@ -218,12 +260,6 @@ export class EligibilityDetails extends React.Component {
                         })
                     }
 
-                    if (data && data.length > 0) {
-                        count = Math.floor(data[0].RecCount / 10)
-                        if (data[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                    }
 
                     this.setState({
                         files_list: data,
@@ -408,6 +444,60 @@ export class EligibilityDetails extends React.Component {
             </div>
         )
     }
+
+    _renderList = () => {
+        let columnDefs = [
+            { headerName: "Transaction Id", field: "Trans_ID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Transaction Date", field: "Date", width: 150 },
+            { headerName: "Status", field: "Trans_type", width: 150 },
+            { headerName: "Submitter", field: "Submiter", width: 150 },
+            { headerName: "Error Type", field: "Error_Type", width: 150 },
+            { headerName: "Error Code", field: "Error_Code", width: 150 },
+            { headerName: "Error Description", field: "ErrorDescription", flex: 1 },
+        ]
+
+        return (
+            <div>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.files_list}
+                        icons={this.state.icons}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == 'Transaction Id') {
+                                this.setState({
+                                    showDetails: true
+                                },() =>{
+                                    this.getData(event.data.HiPaaSUniqueID)
+                                    this.getDetails(event.data.HiPaaSUniqueID)   
+                                })
+                                  
+                            }
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
 
     handleSort = (e, rotation, key) => {
         let addOn = " asc"
@@ -653,9 +743,9 @@ export class EligibilityDetails extends React.Component {
                         <table className="table table-bordered background-color">
                             <thead>
                                 <tr className="table-head" style={{ fontSize: "9px" }}>
-                                    <td className="table-head-text list-item-style">Stage</td>
-                                    <td className="table-head-text list-item-style">Execution Time</td>
-                                    <td className="table-head-text list-item-style">Exception</td>
+                                    <td className="table-head-text list-item-style" width='33.33%'>Stage</td>
+                                    <td className="table-head-text list-item-style" width='33.33%'>Execution Time</td>
+                                    <td className="table-head-text list-item-style" width='33.33%'>Exception</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -799,16 +889,53 @@ export class EligibilityDetails extends React.Component {
             </div>
         )
     }
+
+    setData = (startDate, endDate, selected_val, chartType) => {
+        this.setState({
+            startDate,
+            endDate,
+            selected_val,
+            chartType
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                isSubmitter={true}
+                removeGrid={true}
+                errorType = {true}
+                setData={this.setData}
+                // onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+            />
+        )
+    }
     
     render() {
         return (
             <div>
                 <h5 className="headerText">{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</h5>
-                {this.renderFilters()}
-                <div className="row">
+                {/* {this.renderFilters()} */}
+                {this._renderTopbar()}
+                {this._renderList()}
+                {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
+                {this.state.showDetails ? this.renderDetails() : null}
+                {this.state.showDetails ? this.renderDetails(1) : null}
+                {/* <div className="row">
                     <div className="col-7 margin-top">
-                        {/* {this.renderMaterialTable()} */}
-                        {/* {this.renderEnhancedTable()} */}
                         {this.renderTransactionsNew()}
                     </div>
                     <div className="col-5">
@@ -816,7 +943,7 @@ export class EligibilityDetails extends React.Component {
                         {this.state.showDetails ? this.renderDetails() : null}
                         {this.state.showDetails ? this.renderDetails(1) : null}
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     }

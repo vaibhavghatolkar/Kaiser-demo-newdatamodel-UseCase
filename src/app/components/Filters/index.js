@@ -242,6 +242,20 @@ export class Filters extends React.Component {
                                 </select>
                             </div> : null
                     }
+                    {    
+                         this.props.errorType ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Error Type</div>
+                                <select className="form-control list-dashboard" id="TradingPartner"
+                                     onChange={(event) => {
+                                        this.onSelect(event, 'error_Type')
+                                    }}>
+                                >
+                                    <option value="select"></option>
+                                    {/* {this.getErrorOptions()} */}
+                                </select>
+                            </div> : null
+                            }
                 </div>
             </div>
         )
