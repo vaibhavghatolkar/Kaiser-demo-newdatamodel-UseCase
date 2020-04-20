@@ -309,7 +309,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             this.getData()
         }, 50);
     }
-    
+
     _renderStats() {
         let _summary = [
             { header: 'Accepted Claims', value: this.state.Accepted },
@@ -372,7 +372,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             } else if (item.name == 'CHK') {
                 EFTCHK = 'CHK'
                 color = "var(--main-bg-color)"
-            } 
+            }
 
             let sendData = [
                 {
@@ -486,11 +486,11 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             { 'header': 'HiPaaS Validation Status' },
             { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
             // { 'name': 'Number of Acknowledged 835', 'value': 7 },
-            
+
         ]
         let stage_3 = [
             { 'header': 'Availity Status' },
-            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true  },
+            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true },
             { 'name': 'Accepted', 'value': this.state.Accepted999 },
             { 'name': 'Rejected', 'value': this.state.Rejected999 },
             // { 'name': '% ERA Out of Total', 'value': '100%' },
@@ -613,7 +613,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     _renderTopbar = () => {
         return (
             <Filters
-                isSubmitter={false}
+                removeSubmitter={true}
                 removeGrid={true}
                 changeDefault={true}
                 update={this.update}

@@ -1676,7 +1676,7 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <Filters
                 isTimeRange={true}
-                isSubmitter={false}
+                removeSubmitter={true}
                 removeGrid={true}
                 setData={this.setData}
                 changeDefault={true}
