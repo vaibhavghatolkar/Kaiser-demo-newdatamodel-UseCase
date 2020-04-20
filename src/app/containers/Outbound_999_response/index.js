@@ -344,8 +344,8 @@ export class Outbound_response_999 extends React.Component {
                 { headerName: "Process Id", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Date", field: "ResponseFileDate", width: 100, },
                 { headerName: "835 File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
-                // { headerName: "835 File Date", field: "Date", width: 220 },
-                { headerName: "Status", field: "status", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "835 File Date", field: "Date", width: 220 },
+                // { headerName: "Status", field: "status", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
             ]
 
 
