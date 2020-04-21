@@ -150,11 +150,11 @@ export class RealTime276 extends React.Component {
             Trading_PartnerList(RecType :"Inbound", Transaction:"ClaimRequest") {
                 Trading_Partner_Name 
             }
-            tradingPartnerwise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "ClaimRequestTradingPartner") {
+            tradingPartnerwise : DashboardBarChartData276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "ClaimRequestTradingPartner") {
                 X_axis
                 Y_axis
             }
-            datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
+            datewise : DashboardBarChartData276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
                 X_axis
                 Y_axis
             }
@@ -193,17 +193,19 @@ export class RealTime276 extends React.Component {
         })
             .then(res => res.json())
             .then(res => { 
-
-                let pieData = res.data.ErrorDescriptionPieChart
-                    
-                let second_data = res.data.ErrorDescriptionPieChart && res.data.ErrorDescriptionPieChart.length > 0 ? this.getPieChartData(pieData): ''
+                    if(this.state.apiflag == 1){
+                    let pieData = res.data.ErrorDescriptionPieChart
+                    let second_data = res.data.ErrorDescriptionPieChart && res.data.ErrorDescriptionPieChart.length > 0 ? this.getPieChartData(pieData): ''
+                    this.setState({
+                        second_data: second_data
+                    })
+                    }
+                
                 if (res.data) {
                     this.performCommonOperations(res, chartType)
                     
                 }
-                this.setState({
-                    second_data: second_data
-                })
+               
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -214,7 +216,6 @@ export class RealTime276 extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.transaction270
-
         let query = `{
             ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 AvgResTime
@@ -233,11 +234,17 @@ export class RealTime276 extends React.Component {
                 RealTime_Per
                 Invalid_Trans
                 Total_Paid
+                Total_NoResponse
             }
             ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
                 ClaimStatus
                 Total
             }
+            ProgressBar276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                Valid_Per
+                InValid_Per
+                NoResponse_Per
+              }
         }`
 
 
@@ -287,11 +294,19 @@ export class RealTime276 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                let data = res.data.Eligibilty270[0]
+                let data = ""
+                let progress_data=""
+                if (this.state.apiflag == 1) {
+                    data = res.data.Eligibilty270[0]
+                    progress_data= res.data.ProgressBar270
+                }else{
+                    data = res.data.ClaimRequest276[0]
+                    progress_data= res.data.ProgressBar276
+                }
                 if (res.data) {
                     this.performOperations(res, chartType)
                 }
-                let progress_data= res.data.ProgressBar270
+                
                 let progress_condition= progress_data && progress_data.length > 0
                 let Valid_Per = progress_condition ? Number(progress_data[0].Valid_Per).toFixed(2) : 0
                 let InValid_Per = progress_condition ? Number(progress_data[0].InValid_Per).toFixed(2) : 0
@@ -1752,8 +1767,7 @@ export class RealTime276 extends React.Component {
         }
 
         query = `{
-            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
-                RecCount
+            ClaimRequest_Datewise(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"" ) {
                 HiPaaSUniqueID
                 Date
                 Trans_type

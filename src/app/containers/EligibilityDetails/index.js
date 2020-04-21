@@ -204,7 +204,6 @@ export class EligibilityDetails extends React.Component {
 
         query = `{
             ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
-                RecCount
                 HiPaaSUniqueID
                 Date
                 Trans_type
@@ -929,7 +928,7 @@ export class EligibilityDetails extends React.Component {
     
     render() {
         return (
-            <div style={{width: '100%'}}>
+            <div>
                 <h5 className="headerText">{(this.state.apiflag == 0 ?  'Claim Status Details ' : 'Eligibility Details ')}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {/* {this.renderFilters()} */}
                 {this._renderTopbar()}
