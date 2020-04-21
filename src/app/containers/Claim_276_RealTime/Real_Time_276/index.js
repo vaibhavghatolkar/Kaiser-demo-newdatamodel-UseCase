@@ -62,6 +62,7 @@ export class RealTime276 extends React.Component {
             progress_valid : 0,
             progress_invalid : 0,
             progress_noResponse : 0,
+            incoming_fileId:'',
             noResponsePercent: '',
             second_data: [],
             chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
@@ -1114,7 +1115,6 @@ export class RealTime276 extends React.Component {
             pieLabel.push(d.ErrorDescription)
             pieData.push(d.Transactions)
         })
-        console.log(pieLabel)
 
         let second_data = {
             labels: pieLabel,
@@ -1159,6 +1159,7 @@ export class RealTime276 extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
+        let apiflag = this.state.apiflag
 
         let addon = ''
         let claimStatus = ''
@@ -1166,12 +1167,9 @@ export class RealTime276 extends React.Component {
         let generalStatus = ''
         let subtitle = ''
         if (header == 'Top 10 File Level Errors') {
-            claimStatus = 'Error'
-            subtitle = "Files in Error"
-        } else if (header == 'Top 10 Claim Level Errors') {
-            addon = '/reject'
-            generalStatus = 'Rejected'
-        }
+            claimStatus = 'Fail'
+            subtitle = "Invalid Transaction"
+        } 
 
         let sendData = [
             {
@@ -1181,9 +1179,10 @@ export class RealTime276 extends React.Component {
                 startDate: startDate,
                 endDate: endDate,
                 transactionId: 'n',
-                status: claimStatus,
+                transactionStatus: claimStatus,
                 type: type,
-                subtitle: subtitle
+                subtitle: subtitle,
+                apiflag : apiflag
             },
         ]
 
@@ -1192,7 +1191,7 @@ export class RealTime276 extends React.Component {
                 header={header}
                 piechart_data={piechart_data}
                 data={sendData}
-                // onClick={header == 'Top 10 File Level Errors' ? this.gotoClaimDetails : ''}
+                onClick={header == 'Top 10 Transaction Level Errors' ? this.gotoTransactionDetails : ''}
             />
         )
     }
@@ -1582,23 +1581,26 @@ export class RealTime276 extends React.Component {
             let subtitle = ''
             let availitySent = ''
             let EFTCHK = ''
+            let apiflag = ''
             let loadStatus = ''
             let url = ''
             let data = []
-            if (item.name == 'Vaildated') {
-                addon = '/accept'
-                claimStatus = 'Validated'
-                subtitle = "Validated Files"
-            } else if (item.name == 'Files in Error') {
-                claimStatus = 'Error'
-                subtitle = "Files in Error"
-            } else if (item.name == 'EFT') {
-                EFTCHK = 'ACH'
-            } else if (item.name == 'Check') {
-                EFTCHK = 'CHK'
-            } else if (item.name == 'Total Sent To Availity') {
-                availitySent = 'Y'
-                subtitle = "Sent to Availity"
+            if (item.name == 'Total Transaction') {
+                claimStatus = ''
+                subtitle = ""
+                apiflag = this.state.apiflag
+            } else if (item.name == 'Valid Transaction') {
+                claimStatus = 'Pass'
+                subtitle = "Valid Transaction"
+                apiflag = this.state.apiflag
+            } else if (item.name == 'Invalid Transaction') {
+                claimStatus = 'Fail'
+                subtitle = "Invalid Transaction"
+                apiflag = this.state.apiflag
+            } else if (item.name == 'No Response') {
+                claimStatus = 'No'
+                subtitle = "No Response"
+                apiflag = this.state.apiflag
             } else {
                 addon = '/other'
             }
@@ -1610,28 +1612,25 @@ export class RealTime276 extends React.Component {
                     startDate: startDate,
                     endDate: endDate,
                     transactionId: 'n',
-                    status: claimStatus,
+                    transactionStatus: claimStatus,
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent,
-                    EFTCHK: EFTCHK
+                    EFTCHK: EFTCHK,
+                    apiflag : apiflag
                 },
             ]
 
-            if (item.name == '999 Received') {
-                data = [{ flag999: '0' }]
-                url = Strings.Inbound_response_999
-            }
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Error Resolved'
+                        item.name != 'Avg Response Time (sec)'
                     }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    // url={url ? url : Strings.claimPayment_835_details}
+                    url={url ? url : Strings.ElilgibilityDetails270}
                 />
 
             )
@@ -1769,7 +1768,7 @@ export class RealTime276 extends React.Component {
         if (this.state.apiflag == 1) {
             url = Urls.transaction270
             query = `{
-                EligibilityAllDtlTypewise(TypeID:"" page: 1  State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"" ) {
+                EligibilityAllDtlTypewise(TypeID:"" page: 1  State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {
                     HiPaaSUniqueID
                     Date
                     Trans_type
@@ -1782,7 +1781,6 @@ export class RealTime276 extends React.Component {
             }`
         }
 
-        console.log(query)
         process.env.NODE_ENV == 'development' && console.log(query)
 
         fetch(url, {
@@ -1820,8 +1818,6 @@ export class RealTime276 extends React.Component {
                     //         count = count + 1
                     //     }
                     // }
-
-                    console.log(data)
 
                     this.setState({
                         files_list: data,
@@ -1871,13 +1867,57 @@ export class RealTime276 extends React.Component {
                         rowData={this.state.files_list}
                         icons={this.state.icons}
                         enableCellTextSelection={true}
-                        
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == 'Transaction Id') {
+                                this.setState({
+                                    incoming_fileId: event.data.HiPaaSUniqueID
+                                }, () => {
+                                    this.gotoTransactionDetails()
+                                })
+                            }
+                        }}
                     >
                     </AgGridReact>
                 </div>
             </div>
         )
     }
+
+
+    gotoTransactionDetails = (data) => {
+
+        let sendData = []
+        if (data && data.length > 0) {
+            sendData = data
+        } else {
+            let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+            let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+            let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+            let State = this.state.State ? this.state.State : 'n'
+            let type = this.state.type ? this.state.type : ''
+            let apiflag = this.state.apiflag
+
+            sendData = [
+                {
+                    flag: '',
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: "",
+                    type: type,
+                    HiPaaSID: this.state.incoming_fileId,
+                    apiflag: apiflag,
+                    transactionId:''
+                },
+            ]
+        }
+
+        this.props.history.push('/' + Strings.ElilgibilityDetails270, {
+            data: sendData
+        })
+    }
+
 
     progressBar() {
 

@@ -48,6 +48,9 @@ export class EligibilityDetails extends React.Component {
             page: 1,
             count: 0,
             apiflag: props.location.state.data[0].apiflag,
+            transactionStatus:props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
+            HiPaaSID:props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
+            subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
 
             pieArray: [],
             labelArray: [],
@@ -183,16 +186,16 @@ export class EligibilityDetails extends React.Component {
     }
 
     getTransactions() {
-
+         
         let query = ''
-        let typeId = this.state.status
+        let typeId = this.state.transactionStatus
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
         let url = Urls.transaction270
         let loginflag = localStorage.getItem("DbTech");
 
-        if (this.state.apiflag == 1 && this.state.status != 'Pass') {
+        if (this.state.apiflag == 1 && this.state.transactionStatus != 'Pass') {
             chartQuery = `Eligibilty271ErrorwiseCount(State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `") {
                                 ErrorType
                                 RecCount
@@ -216,7 +219,7 @@ export class EligibilityDetails extends React.Component {
         if (this.state.apiflag == 1) {
             url = Urls.transaction270
             query = `{
-                EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
+                EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID:"${this.state.HiPaaSID}" ) {
                     HiPaaSUniqueID
                     Date
                     Trans_type
@@ -926,8 +929,8 @@ export class EligibilityDetails extends React.Component {
     
     render() {
         return (
-            <div>
-                <h5 className="headerText">{this.state.apiflag == 0 ? (this.state.status == 'Fail' ? 'Claim Errors' : 'Claim Status Details') : (this.state.status == 'Fail' ? 'Eligibility Errors' : 'Eligibility Details')}</h5>
+            <div style={{width: '100%'}}>
+                <h5 className="headerText">{(this.state.apiflag == 0 ?  'Claim Status Details ' : 'Eligibility Details ')}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {/* {this.renderFilters()} */}
                 {this._renderTopbar()}
                 {this._renderList()}
