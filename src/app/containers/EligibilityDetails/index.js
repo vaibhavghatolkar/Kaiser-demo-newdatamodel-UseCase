@@ -111,25 +111,25 @@ export class EligibilityDetails extends React.Component {
         if (uuid) {
             if (this.state.apiflag == 1) {
                 query = `{
-                EventLogData(Transaction:"Eligibility" HiPaaS_UUID:"`+ uuid + `") {
-                    HiPaaS_UUID
-                    EventName
-                    EventCreationDateTime
-                    Exception
-                    ErrorMessage
-                    Transaction_Compliance
-                }
+                    EventLogData270( HiPaaS_UUID: "${uuid}") {
+                        HiPaaS_UUID
+                        EventName
+                        EventCreationDateTime
+                        Exception
+                        ErrorMessage
+                        Transaction_Compliance
+                      }
             }`
             } else {
                 query = `{
-                EventLogData(Transaction:"ClaimRequest" HiPaaS_UUID:"`+ uuid + `") {
-                    HiPaaS_UUID
-                    EventName
-                    EventCreationDateTime
-                    Exception
-                    ErrorMessage
-                    Transaction_Compliance
-                }
+                    EventLogData276( HiPaaS_UUID: "${uuid}") {
+                        HiPaaS_UUID
+                        EventName
+                        EventCreationDateTime
+                        Exception
+                        ErrorMessage
+                        Transaction_Compliance
+                      }
             }`
             }
         } else {
@@ -168,8 +168,15 @@ export class EligibilityDetails extends React.Component {
             .then(res => {
                 if (res.data) {
                     if (uuid) {
+                        let eventLog = ""
+                        if(this.state.apiflag == 1){
+                            eventLog = res.data.EventLogData270
+                        }else{
+                            eventLog = res.data.EventLogData276
+                        }
+
                         this.setState({
-                            eventLog: res.data.EventLogData,
+                            eventLog: eventLog,
                             Transaction_Compliance: res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
                         })
                     } else {

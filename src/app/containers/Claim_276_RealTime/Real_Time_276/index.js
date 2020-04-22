@@ -124,6 +124,7 @@ export class RealTime276 extends React.Component {
 
     componentDidMount() {
         this.getData()
+        this.gettableTilesData()
         this.getCommonData()
         this.getTransactions()
     }
@@ -131,6 +132,7 @@ export class RealTime276 extends React.Component {
 
     _refreshScreen = () => {
         this.getData()
+        this.gettableTilesData()
         this.getCommonData()
         this.getTransactions()
     }
@@ -158,6 +160,10 @@ export class RealTime276 extends React.Component {
                 X_axis
                 Y_axis
             }
+            ErrorDescriptionPieChart276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                ErrorDescription
+                Transactions
+              }
         }`
 
 
@@ -244,7 +250,14 @@ export class RealTime276 extends React.Component {
                 Valid_Per
                 InValid_Per
                 NoResponse_Per
-              }
+                TotalNumOfReq
+                Success
+                Error
+                Total_NoResponse
+            }
+            AverageResponseTime276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                AvgResTime
+            }
         }`
 
 
@@ -278,7 +291,15 @@ export class RealTime276 extends React.Component {
                     Valid_Per
                     InValid_Per
                     NoResponse_Per
-                  }
+                    TotalNumOfReq
+                    Success
+                    Error
+                    Total_NoResponse
+                }
+                AverageResponseTime270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                    AvgResTime
+                }
+                  
             }`
         }
 
@@ -296,41 +317,123 @@ export class RealTime276 extends React.Component {
             .then(res => {
                 let data = ""
                 let progress_data=""
+
                 if (this.state.apiflag == 1) {
-                    data = res.data.Eligibilty270[0]
-                    progress_data= res.data.ProgressBar270
+                    data = res.data.AverageResponseTime270
+                    progress_data= res.data.ProgressBar270 && res.data.ProgressBar270.length>0 ? res.data.ProgressBar270: []
                 }else{
-                    data = res.data.ClaimRequest276[0]
+                    data = res.data.AverageResponseTime270
                     progress_data= res.data.ProgressBar276
                 }
+
                 if (res.data) {
                     this.performOperations(res, chartType)
                 }
-                
+               
                 let progress_condition= progress_data && progress_data.length > 0
                 let Valid_Per = progress_condition ? Number(progress_data[0].Valid_Per).toFixed(2) : 0
                 let InValid_Per = progress_condition ? Number(progress_data[0].InValid_Per).toFixed(2) : 0
                 let NoResponse_Per =progress_condition ? Number(progress_data[0].NoResponse_Per).toFixed(2) : 0
 
                let summary = [
-                    { name: 'Total Transaction', value: data.TotalNumOfReq },
-                    { name: 'Valid Transaction', value: data.Success },
-                    { name: 'Invalid Transaction', value: data.Error },
-                    { name: 'No Response', value: data.Total_NoResponse },
-                    { name: 'Avg Response Time (sec)', value: data.AvgResTime },
-                    // { name: 'Error Percentage', value: data.EFT },
+                    { name: 'Total Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].TotalNumOfReq : 0 },
+                    { name: 'Valid Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].Success : 0 },
+                    { name: 'Invalid Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].Error : 0},
+                    { name: 'No Response', value: progress_data && progress_data.length > 0 ? progress_data[0].Total_NoResponse : 0},
+                    { name: 'Avg Response Time (sec)', value: data && data.length>0 ? data[0].AvgResTime : 0 },
                 ]
+               
 
                 this.setState({
                     summaryCount: summary,
                     progress_valid : Valid_Per,
                     progress_invalid : InValid_Per,
                     progress_noResponse : NoResponse_Per,
+                    noResponsePercent: NoResponse_Per,
                 })
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
+    }
+
+    gettableTilesData(){
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let url = Urls.transaction270
+        let query = `{
+            DashboardComplianceRatio276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                In_Compliance_Per
+                out_of_Compliance_per
+            }
+            DashboardMonthCount276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                ThisMonth_Volume
+                LastMonth_Volume
+              }
+        }`
+
+        if (this.state.apiflag == 1) {
+            url = Urls.transaction270
+            query = `{
+                DashboardComplianceRatio270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                    In_Compliance_Per
+                    out_of_Compliance_per
+                }
+                DashboardMonthCount270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+                    ThisMonth_Volume
+                    LastMonth_Volume
+                  }
+                  
+            }`
+        }
+
+        process.env.NODE_ENV == 'development' && console.log(query)
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let complianceRatioData = []
+                let DashboardMonthCount = []
+                let In_Compliance_Per = 0
+                let out_of_Compliance_per = 0
+                let lastMonth= 0
+                let thisMonth = 0
+
+                if (this.state.apiflag == 1) {
+                    complianceRatioData = res.data.DashboardComplianceRatio270
+                    DashboardMonthCount = res.data.DashboardMonthCount270
+                }else{
+                    complianceRatioData = res.data.DashboardComplianceRatio276
+                    DashboardMonthCount = res.data.DashboardMonthCount276
+                }
+               
+                if(complianceRatioData && complianceRatioData.length> 0){
+                    In_Compliance_Per = complianceRatioData[0].In_Compliance_Per
+                    out_of_Compliance_per = complianceRatioData[0].out_of_Compliance_per
+                }
+                if(DashboardMonthCount && DashboardMonthCount.length> 0){
+                    thisMonth = DashboardMonthCount[0].ThisMonth_Volume
+                    lastMonth = DashboardMonthCount[0].LastMonth_Volume
+                }
+                
+                this.setState({
+                    inComplaince: In_Compliance_Per,
+                    outComplaince: out_of_Compliance_per,
+                    thisMonth: thisMonth,
+                    lastMonth: lastMonth ,
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+
     }
 
     async performCommonOperations(res, flag) {
@@ -424,12 +527,12 @@ export class RealTime276 extends React.Component {
             pieLabels: pieLabels,
             errorPieArray: errorPieArray,
             errorLabelArray: errorLabelArray,
-            inComplaince: data.In_Compliance_Per,
-            outComplaince: data.out_of_Compliance_per,
+            // inComplaince: data.In_Compliance_Per,
+            // outComplaince: data.out_of_Compliance_per,
             thisMonth: data.ThisMonth_Volume,
-            lastMonth: data.LastMonth_Volume,
-            averageResponseTime: data.AvgResTime,
-            noResponsePercent: data.NoResponse_Per,
+            // lastMonth: data.LastMonth_Volume,
+            // averageResponseTime: data.AvgResTime,
+            // noResponsePercent: data.NoResponse_Per,
             errorCount: data.Error,
             errorArray: errorArray,
             realTimePercent: data.RealTime_Per
@@ -1072,55 +1175,53 @@ export class RealTime276 extends React.Component {
         minimumValue = (minimumValue == 0 ? 0 : (minimumValue - (minimumValue * 10 / 100)))
         minimumValue = Math.ceil(minimumValue)
         return (
-            <div>
-                <div className="row chart-div">
+                <div className="row chart-div col-12">
                    
                     {
                         this.state.dateChartLabel && this.state.dateChartLabel.length > 0
                             ?
-                            <div className="chart-container chart col-11">
-                                {/* {this.renderTabs(1)} */}
-                                {/* <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label> */}
-                                {/* <Bar
-                                    data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
-                                    width={100}
-                                    height={60}
-                                    options={{
-                                        legend: {
-                                            display: false,
-                                        },
-                                        scales: {
-                                            yAxes: [{
-                                                ticks: {
-                                                    min: minimumValue,
-                                                    userCallback: function (label, index, labels) {
-                                                        // when the floored value is the same as the value we have a whole number
-                                                        if (Math.floor(label) === label) {
-                                                            return label;
-                                                        }
+                            <Line
+                            data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#139DC9')}
+                            width={100}
+                            height={35}
+                            options={{
+                                legend: {
+                                    display: false,
+                                },
+                            }}
+                        /> : null
+                            // <div className="chart-container chart col-11">
+                            //     {this.renderTabs(1)}
+                            //     <label className="chart-header">Real - Time Volume {this.state.selected_val ? '(' + this.state.selected_val + ')': '(Monthly)'}</label>
+                            //     { <Bar
+                            //         data={this.getBarData(this.state.dateChartLabel, this.state.dateChartData, '#83D3B4')}
+                            //         width={100}
+                            //         height={60}
+                            //         options={{
+                            //             legend: {
+                            //                 display: false,
+                            //             },
+                            //             scales: {
+                            //                 yAxes: [{
+                            //                     ticks: {
+                            //                         min: minimumValue,
+                            //                         userCallback: function (label, index, labels) {
+                            //                             // when the floored value is the same as the value we have a whole number
+                            //                             if (Math.floor(label) === label) {
+                            //                                 return label;
+                            //                             }
 
-                                                    }
-                                                }
-                                            }]
-                                        }
-                                    }} /> */}
-                                <Line
-                                    data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#139DC9')}
-                                    width={100}
-                                    height={35}
-                                    options={{
-                                        legend: {
-                                            display: false,
-                                        },
-                                    }}
-                                />
-                                {/* <img src={require('../../../components/Images/chart.png')} style={{ width: '100%', marginLeft: '-2px' }}></img> */}
-                            </div> : null
+                            //                         }
+                            //                     }
+                            //                 }]
+                            //             }
+                            //         }} /> }
+                            // </div>
                     }
                     
                 </div>
                     
-            </div>
+            
         )
     }
     getPieChartData = (pieChart) => {
@@ -1257,7 +1358,7 @@ export class RealTime276 extends React.Component {
         });
         setTimeout(() => {
             this.getCommonData()
-            this.getData()
+            this._refreshScreen()
         }, 50);
     };
 
@@ -1267,7 +1368,7 @@ export class RealTime276 extends React.Component {
         });
         setTimeout(() => {
             this.getCommonData()
-            this.getData()
+            this._refreshScreen()
         }, 50);
     }
 
@@ -1284,7 +1385,7 @@ export class RealTime276 extends React.Component {
 
         setTimeout(() => {
             this.getCommonData()
-            this.getData()
+            this._refreshScreen()
         }, 50);
     }
 
@@ -1296,15 +1397,13 @@ export class RealTime276 extends React.Component {
                 this.setState({
                     selectedTradingPartner: providerName
                 }, () => {
-                    this.getCommonData()
-                    this.getData()
+                    this._refreshScreen()
                 })
             } else {
                 this.setState({
                     providerName: providerName
                 }, () => {
-                    this.getCommonData()
-                    this.getData()
+                    this._refreshScreen()
                 })
             }
         }, 300);
@@ -1314,8 +1413,7 @@ export class RealTime276 extends React.Component {
         this.setState({
             State: event.target.options[event.target.selectedIndex].text
         }, () => {
-            this.getCommonData()
-            this.getData()
+            this._refreshScreen()
         })
     }
 
@@ -1364,6 +1462,7 @@ export class RealTime276 extends React.Component {
                                 setTimeout(() => {
                                     this.getCommonData(chartType)
                                     this.getData(chartType)
+                                    this.gettableTilesData()
                                 }, 50);
                             }}
                         >
@@ -1941,9 +2040,9 @@ export class RealTime276 extends React.Component {
         return (
             <div class="progress">
                 {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
-                <div class="progress-bar bg-success" role="progressbar" style={{ width: valid }}>Vaild Transaction ({valid})</div>
-                <div class="progress-bar bg-danger" role="progressbar" style={{ width: invalid }}>Invalid Transaction ({invalid})</div>
-                <div class="progress-bar bg-info" role="progressbar" style={{ width: noResponse }}>No Response ({noResponse})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: valid, }}>Vaild Transaction ({valid})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: invalid }}>Invalid Transaction ({invalid})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: noResponse }}>No Response ({noResponse})</div>
             </div>
         )
     }
