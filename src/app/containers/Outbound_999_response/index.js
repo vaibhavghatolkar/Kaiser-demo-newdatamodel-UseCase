@@ -21,6 +21,12 @@ export class Outbound_response_999 extends React.Component {
 
     constructor(props) {
         super(props);
+        let pagination_length = 10
+        try {
+            pagination_length = this.props.location.state && this.props.location.state.data && this.props.location.state.data.length > 0 ? (this.props.location.state.data[0].flag999 == 0 ? 5 : 10) : 10
+        } catch (error) {
+            
+        }
         this.state = {
             claimsList: [],
             summaryList: [],
@@ -37,6 +43,10 @@ export class Outbound_response_999 extends React.Component {
             tradingpartner: [],
             errorList: [],
             eventLog: [],
+            errorSummaryArray: [],
+            transactionArray: [],
+            errorDetailArray: [],
+            errorContextDetailArray: [],
             Transaction_Compliance: '',
             State: "",
             status: "",
@@ -60,7 +70,7 @@ export class Outbound_response_999 extends React.Component {
             dateRotation: 180,
             statusRotation: 180,
             gridType: 1,
-            paginationPageSize: 10,
+            paginationPageSize: pagination_length,
             domLayout: 'autoHeight',
 
             autoGroupColumnDef: {
@@ -102,7 +112,6 @@ export class Outbound_response_999 extends React.Component {
     }
 
     getTransactions() {
-
         let query = ''
         let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -156,6 +165,86 @@ export class Outbound_response_999 extends React.Component {
                         files_list: res.data.Data999,
                         rowData: this.state.gridType == 1 ? res.data.Data999 : [],
                         count: count
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
+    getFileDetails = async (fileId) => {
+        let query = `{
+            ErrSummary_999(FileID: "${fileId}") {
+              DocId
+              ProcessID
+              FileID
+              TrnSetAckCode
+              ST02
+              CreateDateTime
+              TrnSetCtlNo
+            }
+            Transaction_999(FileID: "${fileId}") {
+              DocId
+              ProcessID
+              FileID
+              VersionCode
+              FnIdCode
+              ST02
+              FnGrpAckCode
+              NoTrnSets
+              NoAccTrnSets
+              NoRcvTrnSets
+              CreateDateTime
+              GrpCtlNo
+            }
+            ErrDetail_999(FileID: "${fileId}") {
+              DocId
+              ProcessID
+              FileID
+              SegPosTrnSet
+              SegSynErrCode
+              ST02
+              SegIdCode
+              TrnSetCtlNo
+              CreateDateTime
+            }
+            ErrContextDetail_999(FileID: "${fileId}") {
+              DocId
+              ProcessID
+              FileID
+              ContextRef
+              ContextName
+              ST02
+              TrnSetCtlNo
+              CreateDateTime
+              ElePosSeg
+              SegIdCode
+              DataEleRefNo
+              CompDataElePos
+              CompDataEleRefNo
+              SegPosTrnSet
+            }
+          }
+          `
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.transaction835, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        errorSummaryArray: res.data.ErrSummary_999,
+                        transactionArray: res.data.Transaction_999,
+                        errorDetailArray: res.data.ErrDetail_999,
+                        errorContextDetailArray: res.data.ErrContextDetail_999,
                     })
                 }
             })
@@ -247,8 +336,8 @@ export class Outbound_response_999 extends React.Component {
         return (
             <div className="row">
                 <div className={"col-12"}>
-                    <div className="top-padding"><a  >{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div style={{ height: "200px", overflow: "auto" }} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
+                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? '999 Acknowledgement' : 'Transaction Request'}</a></div>
+                    <div style={{ height: this.state.flag999 == 1 ? "200px" : "100px", overflow: "auto" }} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
                 </div>
             </div>
         )
@@ -341,10 +430,10 @@ export class Outbound_response_999 extends React.Component {
                 { headerName: "X12 File Date", field: "FileDateTime", flex: 1, },
             ] :
             columnDefs = [
-                { headerName: "Process Id", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Date", field: "ResponseFileDate", width: 100, },
-                { headerName: "835 File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
-                { headerName: "835 File Date", field: "Date", width: 220 },
+                { headerName: "Process Id", field: "ResponseFileName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Date", field: "ResponseFileDate", flex: 1, },
+                { headerName: "835 File Name", field: "FileName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "835 File Date", field: "Date", flex: 1, },
                 // { headerName: "Status", field: "status", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
             ]
 
@@ -377,15 +466,107 @@ export class Outbound_response_999 extends React.Component {
                                 (this.state.flag999 == 0 && event.colDef.headerName == 'Process Id')
                             ) {
                                 this.render999Details(event.data.id)
+                                if (this.state.flag999 != 1) {
+                                    this.getFileDetails(event.data.FileId)
+                                }
                             }
                         }}
                     >
-
                     </AgGridReact>
-
                 </div>
+            </div>
+        )
+    }
 
+    _renderGrid = (columnDefs, array, header) => {
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '17px' }}>
+                    <h6 className="font-size">{header}</h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={array}
+                        enableCellTextSelection={true}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
 
+    renderFileDetails = () => {
+        let columnDefs_1 = [
+            // { headerName: "DocId", field: "DocId" },
+            // { headerName: "ProcessID", field: "ProcessID" },
+            { headerName: "ProcessID", field: "FileID", flex: 1 },
+            { headerName: "Transaction Set Acknowledgment Code", field: "TrnSetAckCode", flex: 1 },
+            { headerName: "ST02", field: "ST02", flex: 1 },
+            { headerName: "CreateDateTime", field: "CreateDateTime", flex: 1 },
+            { headerName: "Transaction Set Control Number", field: "TrnSetCtlNo", flex: 1 },
+        ]
+        let columnDefs_2 = [
+            // { headerName: "DocId", field: "DocId" },
+            // { headerName: "ProcessID", field: "ProcessID" },
+            { headerName: "ProcessID", field: "FileID" },
+            { headerName: "VersionCode", field: "VersionCode" },
+            { headerName: "Functional Identifier Code", field: "FnIdCode" },
+            { headerName: "Transaction Set Control Number", field: "ST02" },
+            { headerName: "Functional Group Acknowledge Code", field: "FnGrpAckCode" },
+            { headerName: "Number of Transaction Sets Included", field: "NoTrnSets" },
+            { headerName: "Number of Accepted Transaction Sets", field: "NoAccTrnSets" },
+            { headerName: "Number of Received Transaction Sets", field: "NoRcvTrnSets" },
+            { headerName: "CreateDateTime", field: "CreateDateTime" },
+            { headerName: "Group Control Number", field: "GrpCtlNo" },
+        ]
+        let columnDefs_3 = [
+            // { headerName: "DocId", field: "DocId" },
+            // { headerName: "ProcessID", field: "ProcessID" },
+            { headerName: "ProcessID", field: "FileID" },
+            { headerName: "ST02", field: "ST02" },
+            { headerName: "Transaction Set Control Number", field: "TrnSetCtlNo" },
+            { headerName: "CreateDateTime", field: "CreateDateTime" },
+            { headerName: "Segment Position in Transaction Set", field: "SegPosTrnSet" },
+            { headerName: "Segment Syntax Error Code", field: "SegSynErrCode" },
+            { headerName: "Segment ID Code", field: "SegIdCode" },
+        ]
+        let columnDefs_4 = [
+            // { headerName: "DocId", field: "DocId" },
+            // { headerName: "ProcessID", field: "ProcessID" },
+            { headerName: "ProcessID", field: "FileID" },
+            { headerName: "ContextRef", field: "ContextRef" },
+            { headerName: "ContextName", field: "ContextName" },
+            { headerName: "ST02", field: "ST02" },
+            { headerName: "TrnSetCtlNo", field: "TrnSetCtlNo" },
+            { headerName: "CreateDateTime", field: "CreateDateTime" },
+            { headerName: "ElePosSeg", field: "ElePosSeg" },
+            { headerName: "SegIdCode", field: "SegIdCode" },
+            { headerName: "DataEleRefNo", field: "DataEleRefNo" },
+            { headerName: "CompDataElePos", field: "CompDataElePos" },
+            { headerName: "CompDataEleRefNo", field: "CompDataEleRefNo" },
+            { headerName: "SegPosTrnSet", field: "SegPosTrnSet" },
+        ]
+
+        return (
+            <div>
+                {this._renderGrid(columnDefs_2, this.state.transactionArray, 'Transactions Details')}
+                {this._renderGrid(columnDefs_1, this.state.errorSummaryArray, 'Error Summary')}
+                {this._renderGrid(columnDefs_3, this.state.errorDetailArray, 'Error Details')}
+                {this._renderGrid(columnDefs_4, this.state.errorContextDetailArray, 'Error Context Details')}
             </div>
         )
     }
@@ -421,6 +602,7 @@ export class Outbound_response_999 extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
+                removeGrid={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
@@ -439,15 +621,14 @@ export class Outbound_response_999 extends React.Component {
             <div>
                 <h5 className="headerText">{this.state.flag999 == 1 ? '999 Acknowledgement (Outbound)' : '999 Acknowledgement (Inbound)'}</h5>
                 {this._renderTopbar()}
-                <div className="row">
-                    <div className="col-7 margin-top">
-                        {/* {this.renderTransactionsNew()} */}
-
+                <div className={this.state.flag999 == 1 ? "row" : ""}>
+                    <div className={this.state.flag999 == 1 ? "col-7 margin-top" : "margin-top"}>
                         {this.state.files_list && this.state.files_list.length > 0 && this.state.gridType ? this._renderTransactions() : null}
                         {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
                     </div>
-                    <div className="col-5 margin-top">
+                    <div className={this.state.flag999 == 1 ? "col-5 margin-top" : "margin-top"}>
                         {this.state.showDetails ? this.renderDetails(1) : null}
+                        {this.state.showDetails && this.state.flag999 != 1 ? this.renderFileDetails() : null}
                     </div>
                 </div>
             </div>
