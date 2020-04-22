@@ -538,7 +538,7 @@ export class Outbound_response_999 extends React.Component {
             // { headerName: "ProcessID", field: "ProcessID" },
             { headerName: "ProcessID", field: "FileID" },
             { headerName: "ST02", field: "ST02" },
-            { headerName: "TrnSetCtlNo", field: "TrnSetCtlNo" },
+            { headerName: "Transaction Set Control Number", field: "TrnSetCtlNo" },
             { headerName: "CreateDateTime", field: "CreateDateTime" },
             { headerName: "Segment Position in Transaction Set", field: "SegPosTrnSet" },
             { headerName: "Segment Syntax Error Code", field: "SegSynErrCode" },
