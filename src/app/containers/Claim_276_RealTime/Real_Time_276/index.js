@@ -96,10 +96,8 @@ export class RealTime276 extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: false,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true,
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
                 sortable: true,
                 resizable: true,
                 filter: true,
@@ -1693,6 +1691,9 @@ export class RealTime276 extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
+        let mainUrl = apiflag ==1 ? Strings.ElilgibilityDetails270:Strings.ElilgibilityDetails276
+
+
         array.forEach(item => {
             let addon = ''
             let claimStatus = ''
@@ -1722,6 +1723,7 @@ export class RealTime276 extends React.Component {
             } else {
                 addon = '/other'
             }
+
             data = [
                 {
                     flag: addon,
@@ -1748,7 +1750,7 @@ export class RealTime276 extends React.Component {
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={url ? url : Strings.ElilgibilityDetails270}
+                    url={mainUrl}
                 />
 
             )
@@ -1870,7 +1872,7 @@ export class RealTime276 extends React.Component {
         }
 
         query = `{
-            ClaimRequest_Datewise(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"" ) {
+            ClaimRequest_Datewise(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {
                 HiPaaSUniqueID
                 Date
                 Trans_type
@@ -2040,13 +2042,22 @@ export class RealTime276 extends React.Component {
 
         let valid = this.state.progress_valid + "%"
         let invalid = this.state.progress_invalid + "%"
-        let noResponse = this.state.progress_noResponse + "%"
+        let noResponse = this.state.progress_noResponse + "%" 
+
         return (
             <div class="progress">
                 {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: valid, }}>Vaild Transaction ({valid})</div>
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: invalid }}>Invalid Transaction ({invalid})</div>
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: noResponse }}>No Response ({noResponse})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: valid, cursor: 'pointer' }}
+                data-placement="top" data-toggle="tooltip" title={"Vaild Transaction ("+valid + ")"}
+                >Vaild Transaction ({valid})
+                </div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: invalid, cursor: 'pointer' }}
+                 data-placement="top" data-toggle="tooltip" title={"Invalid Transaction ("+ invalid + ")"}
+                >Invalid Transaction ({invalid})
+                </div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: noResponse, cursor: 'pointer' }}
+                data-placement="top" data-toggle="tooltip" title={"No Response ("+ noResponse + ")"}
+                >No Response ({noResponse})</div>
             </div>
         )
     }

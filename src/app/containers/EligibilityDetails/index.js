@@ -74,10 +74,8 @@ export class EligibilityDetails extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: false,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true,
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
                 sortable: true,
                 resizable: true,
                 filter: true,
@@ -177,7 +175,7 @@ export class EligibilityDetails extends React.Component {
 
                         this.setState({
                             eventLog: eventLog,
-                            Transaction_Compliance: res.data.EventLogData && res.data.EventLogData.length > 0 ? res.data.EventLogData[0].Transaction_Compliance : ''
+                            Transaction_Compliance: eventLog && eventLog.length > 0 ? eventLog[0].Transaction_Compliance : ''
                         })
                     } else {
                         this.setState({
@@ -210,7 +208,7 @@ export class EligibilityDetails extends React.Component {
         }
 
         query = `{
-            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `" ) {
+            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID: "${this.state.HiPaaSID}" ) {
                 HiPaaSUniqueID
                 Date
                 Trans_type

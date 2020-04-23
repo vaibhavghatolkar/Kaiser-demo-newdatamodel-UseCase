@@ -174,10 +174,8 @@ export class ClaimPaymentDashboard extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                editable: false,
-                enableRowGroup: true,
-                enablePivot: true,
-                enableValue: true,
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
                 sortable: true,
                 resizable: true,
                 filter: true,
@@ -1558,7 +1556,7 @@ export class ClaimPaymentDashboard extends React.Component {
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
             { headerName: "Total", field: "TotalClaim", width: 100 },
-            { headerName: "Rejected", field: "Rejected", flex: 1 },
+            { headerName: "Rejected", field: "Rejected", width: 100 },
         ]
 
         return (
@@ -1639,9 +1637,15 @@ export class ClaimPaymentDashboard extends React.Component {
         return (
             <div class="progress">
                 {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
-                <div class="progress-bar bg-success" role="progressbar" style={{ width: Validated }}>Vaildated ({Validated})</div>
-                <div class="progress-bar bg-danger" role="progressbar" style={{ width: Error }}>Files in Error ({Error})</div>
-                <div class="progress-bar bg-warning" role="progressbar" style={{ width: exception }}>Exception ({exception})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: Validated, cursor: 'pointer' }}
+                data-placement="top" data-toggle="tooltip" title={"Vaildated ("+Validated + ")"}
+                >Vaildated ({Validated})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: Error, cursor: 'pointer' }}
+                data-placement="top" data-toggle="tooltip" title={"Files in Error ("+Error + ")"}
+                >Files in Error ({Error})</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style={{ width: exception, cursor: 'pointer' }}
+                data-placement="top" data-toggle="tooltip" title={"Exception ("+exception + ")"}
+                >Exception ({exception})</div>
             </div>
         )
     }
