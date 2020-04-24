@@ -220,31 +220,31 @@ export class RealTime276 extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.transaction270
-        let query = `{
-            ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-                AvgResTime
-                TotalNumOfReq
-                Success
-                Error
-                Daily_Volume
-                LastMonth_Volume
-                ThisMonth_Volume
-                In_Compliance
-                out_of_Compliance
-                Error_Per
-                In_Compliance_Per
-                out_of_Compliance_per
-                NoResponse_Per
-                RealTime_Per
-                Invalid_Trans
-                Total_Paid
-                Total_NoResponse
-            }
-            ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-                ClaimStatus
-                Total
-            }
-            ProgressBar276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+        // let query = `{
+        //     ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
+        //         AvgResTime
+        //         TotalNumOfReq
+        //         Success
+        //         Error
+        //         Daily_Volume
+        //         LastMonth_Volume
+        //         ThisMonth_Volume
+        //         In_Compliance
+        //         out_of_Compliance
+        //         Error_Per
+        //         In_Compliance_Per
+        //         out_of_Compliance_per
+        //         NoResponse_Per
+        //         RealTime_Per
+        //         Invalid_Trans
+        //         Total_Paid
+        //         Total_NoResponse
+        //     }
+            //  ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
+            //     ClaimStatus
+            //     Total
+            // }
+            let query = `{   ProgressBar276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                 Valid_Per
                 InValid_Per
                 NoResponse_Per
@@ -261,31 +261,31 @@ export class RealTime276 extends React.Component {
 
         if (this.state.apiflag == 1) {
             url = Urls.transaction270
-            query = `{
-                Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-                    AvgResTime
-                    TotalNumOfReq
-                    Success
-                    Error
-                    Daily_Volume
-                    LastMonth_Volume
-                    ThisMonth_Volume
-                    In_Compliance
-                    out_of_Compliance
-                    Error_Per
-                    In_Compliance_Per
-                    out_of_Compliance_per
-                    NoResponse_Per
-                    RealTime_Per
-                    Invalid_Trans
-                    Total_NoResponse
-                }
-                Eligibilty271ErrorwiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
-                    ErrorType
-                    RecCount
-                    Percentage
-                }
-                ProgressBar270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+            // query = `{
+            //     Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
+            //         AvgResTime
+            //         TotalNumOfReq
+            //         Success
+            //         Error
+            //         Daily_Volume
+            //         LastMonth_Volume
+            //         ThisMonth_Volume
+            //         In_Compliance
+            //         out_of_Compliance
+            //         Error_Per
+            //         In_Compliance_Per
+            //         out_of_Compliance_per
+            //         NoResponse_Per
+            //         RealTime_Per
+            //         Invalid_Trans
+            //         Total_NoResponse
+            //     }
+            //     Eligibilty271ErrorwiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
+            //         ErrorType
+            //         RecCount
+            //         Percentage
+            //     }
+                query = `{   ProgressBar270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                     Valid_Per
                     InValid_Per
                     NoResponse_Per
@@ -324,9 +324,9 @@ export class RealTime276 extends React.Component {
                     progress_data = res.data.ProgressBar276
                 }
 
-                if (res.data) {
-                    this.performOperations(res, chartType)
-                }
+                // if (res.data) {
+                //     this.performOperations(res, chartType)
+                // }
 
                 let progress_condition = progress_data && progress_data.length > 0
                 let Valid_Per = progress_condition ? Number(progress_data[0].Valid_Per).toFixed(2) : 0
@@ -1863,13 +1863,6 @@ export class RealTime276 extends React.Component {
         let chartQuery = ''
         let url = Urls.transaction270
         let loginflag = localStorage.getItem("DbTech");
-
-        if (this.state.apiflag == 1 && this.state.status != 'Pass') {
-            chartQuery = `Eligibilty271ErrorwiseCount(State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
-                                ErrorType
-                                RecCount
-                            }`
-        }
 
         query = `{
             ClaimRequest_Datewise(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {

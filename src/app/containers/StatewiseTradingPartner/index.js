@@ -3,6 +3,11 @@ import './style.css';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
 import Strings from '../../../helpers/Strings';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 var val = ''
 export class StatewiseTradingPartner extends React.Component {
 
@@ -40,6 +45,41 @@ export class StatewiseTradingPartner extends React.Component {
             ISA08_ID_Rotation : 180,
             State_Rotation : 180,
             Transaction_Code_Rotation : 180,
+            incoming_fileId:"",
+
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
+
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+            },
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+            rowData: [],
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            pivotPanelShow: 'always',
+
         };
 
         this.displaydata = this.displaydata.bind(this)
@@ -309,13 +349,15 @@ export class StatewiseTradingPartner extends React.Component {
                 <td className="table-head-text"><a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "TradingPartnerlist.Transaction_Code", this.state.Transaction_Code_Rotation, 'Transaction_Code_Rotation')}>Transaction Type</a></td>
                 <td style={{ width: "10px" }}></td>
                 <td style={{ width: "10px" }}></td>
+                <td style={{ width: "10px" }}></td>
             </tr>
         )
     }
 
     Inactive(event) {
+        let id = this.state.incoming_fileId
         var query = 'mutation{' +
-            'InActiveTradingPartner(ID : ' + event.target.dataset.value +
+            'InActiveTradingPartner(ID : ' + id +
             'Is_Active : 0)' +
 
             '}'
@@ -339,8 +381,9 @@ export class StatewiseTradingPartner extends React.Component {
 
     }
     displaydata(event) {
+        let id = this.state.incoming_fileId
         let query =
-            '{TradingPartnerlist(ID:' + event.target.dataset.value + ` page:` + this.state.page + ` OrderBy:"" Transaction:"" State:"" PayerID:"" PayerName:"" ISA06_ID:"" ISA06_Name:"" ISA08_ID:"" ISA08_Name:"")
+            '{TradingPartnerlist(ID:' + id + ` page:` + this.state.page + ` OrderBy:"" Transaction:"" State:"" PayerID:"" PayerName:"" ISA06_ID:"" ISA06_Name:"" ISA08_ID:"" ISA08_Name:"")
               {
                 Rcount
                 ID
@@ -410,6 +453,7 @@ export class StatewiseTradingPartner extends React.Component {
 
                     <td className="clickable"><img src={require('../../components/Images/pencil.png')} onClick={this.displaydata} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
                     <td className="clickable"><img src={require('../../components/Images/trash.png')} onClick={this.Inactive} data-value={d.ID} style={{ width: '14px', marginLeft: '10px' }}></img></td>
+                    {/* <td> <MDBIcon icon="bars" color="white"/></td> */}
                 </tr>
             )
         });
@@ -439,10 +483,80 @@ export class StatewiseTradingPartner extends React.Component {
                     pageLinkClassName={'page-link'}
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
+                   
                 />
             </div>
 
         );
+    }
+
+    _renderList = () => {
+        // <i class="fas fa-pencil-alt"></i>
+
+        let columnDefs = [
+            { headerName: "Sender Name", field: "ISA06_Name", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Sender Id(ISA06)", field: "ISA06_ID", width: 110 },
+            { headerName: "Payer Name", field: "PayerName", width: 200 },
+            { headerName: "Payer ID", field: "PayerID", width: 100  },
+            { headerName: "Receiver Name", field: "ISA08_Name", width: 150 },
+            { headerName: "Receiver Id(ISA08)", field: "ISA08_ID", width: 130 },
+            { headerName: "State", field: "state", width: 90 },
+            { headerName: "Transaction Type", field: "Transaction_Code", width: 110 },
+            { headerName: "", field: "pencil", width: 50,  cellRenderer: (data) => {
+                return '<i class="fas fa-pencil-alt"></i>'
+            },cellStyle: {cursor: 'pointer' },  pinned: 'right' },
+            { headerName: "", field: "trash", width: 50,cellRenderer: (data) => {
+                return '<i class="far fa-trash-alt"></i>'
+            },cellStyle: {cursor: 'pointer' },  pinned: 'right' },
+            // { headerName: "Error Type", field: "Error_Type", width: 150 },
+            // { headerName: "Error Code", field: "Error_Code", width: 150 },
+            // { headerName: "Error Description", field: "ErrorDescription", flex: 1 },
+        ]
+
+        return (
+            <div className="text-center" style={{width: '94%', marginLeft:'3%'}}>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.TradingPartnerList}
+                        icons={this.state.icons}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.column.colId == "pencil") {
+                                this.setState({
+                                    incoming_fileId: event.data.ID
+                                }, () => {
+                                    this.displaydata()
+                                })
+                            }else if (event.column.colId == "trash") {
+                                this.setState({
+                                    incoming_fileId: event.data.ID
+                                }, () => {
+                                    this.Inactive()
+                                })
+                            }
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
     }
 
     Headerview() {
@@ -615,7 +729,9 @@ export class StatewiseTradingPartner extends React.Component {
                                     </div>
 
                                 </div>
-                                {this.renderList()}
+                                <div>
+                                {this._renderList()}
+                                </div>
                             </div>
                             </div>
 

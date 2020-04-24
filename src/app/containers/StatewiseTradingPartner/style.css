@@ -81,3 +81,12 @@ td a {
 .overall-padding{
     padding : 24px
 }
+.fas{
+    font-size: 16px;
+}
+.far{
+    font-size: 16px;
+}
+.ag-theme-balham .ag-cell.ag-cell-first-right-pinned:not(.ag-cell-range-left):not(.ag-cell-range-single-cell) {
+    border-left: none;
+}

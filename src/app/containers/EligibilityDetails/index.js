@@ -200,13 +200,6 @@ export class EligibilityDetails extends React.Component {
         let url = Urls.transaction270
         let loginflag = localStorage.getItem("DbTech");
 
-        if (this.state.apiflag == 1 && this.state.transactionStatus != 'Pass') {
-            chartQuery = `Eligibilty271ErrorwiseCount(State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `") {
-                                ErrorType
-                                RecCount
-                            }`
-        }
-
         query = `{
             ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID: "${this.state.HiPaaSID}" ) {
                 HiPaaSUniqueID
