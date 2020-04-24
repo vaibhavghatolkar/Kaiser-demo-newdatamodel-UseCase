@@ -631,11 +631,11 @@ export class StatewiseTradingPartner extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className="clickable" data-toggle="collapse" href="#BasicX12Options1">
+                                {/* <div className="clickable" data-toggle="collapse" href="#BasicX12Options1">
                                     <span style={{ fontSize: "15px", color: "#139DC9", fontWeight: "700", marginLeft: "30px" }}>
                                         Search
        </span>
-                                </div>
+                                </div> */}
                                 <div id="BasicX12Options1" className="collapse" >
                                     <div className="row" style={{ marginLeft: "2px" }}>
                                         {/* <div className="form-group col-sm-2">
