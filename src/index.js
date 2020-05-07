@@ -201,7 +201,7 @@ class PrivateRoute extends React.Component {
                                     handleFlag={this.handleFlag}
                                 />
                             </div>
-                            <div className="container-fluid col-10" style={{ minHeight: '100vh' }}>
+                            <div id="Col-12" className="col-10" style={{ minHeight: '100vh' }}>
                                 {/* <div className="row border-bottom" style={{marginTop: '-5px', marginBottom: '12px'}}>
                                     <div className="padding-view">
                                         <img src={require('./app/components/Images/search.png')} style={{width: '14px', margin : '8px', marginTop: '12px'}}></img>
