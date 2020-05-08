@@ -159,8 +159,8 @@ export class RealTime276 extends React.Component {
                 Y_axis
             }
             ErrorDescriptionPieChart276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                ErrorDescription
-                Transactions
+                X_Axis
+                Y_Axis
               }
         }`
 
@@ -179,8 +179,8 @@ export class RealTime276 extends React.Component {
                     Y_axis
                 }
                 ErrorDescriptionPieChart(State: "", Sender: "", StartDt: "", EndDt: "") {
-                    ErrorDescription
-                    Transactions
+                    X_Axis
+                    Y_Axis
                 }
             }`
         }
@@ -1230,8 +1230,8 @@ export class RealTime276 extends React.Component {
         let pieLabel = []
         let pieData = []
         pieChart.forEach((d) => {
-            pieLabel.push(d.ErrorDescription)
-            pieData.push(d.Transactions)
+            pieLabel.push(d.X_Axis)
+            pieData.push(d.Y_Axis)
         })
 
         let second_data = {

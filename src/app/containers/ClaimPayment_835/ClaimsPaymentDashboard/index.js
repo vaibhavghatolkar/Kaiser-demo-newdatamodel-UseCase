@@ -919,14 +919,15 @@ export class ClaimPaymentDashboard extends React.Component {
                 let exception = progress_condition ? Number(res.data.ERA835DashboardProgressBar[0].Exception).toFixed(2) : 0
 
                 summary = [
-                    { name: 'Received From QNXT', value: data.TotalCount },
-                    { name: 'Vaildated', value: data.Accepted },
-                    { name: 'Files in Error', value: data.Rejected },
-                    { name: 'EFT', value: data.EFT },
-                    { name: 'Check', value: data.CHK },
-                    { name: 'Total Sent To Availity', value: data.AvailitySent },
+                    { name: 'Received From QNXT', value: data ? data.TotalCount : 0 },
+                    { name: 'Vaildated', value: data ? data.Accepted : 0 },
+                    { name: 'Files in Error', value: data ? data.Rejected : 0 },
+                    { name: 'EFT', value: data ? data.EFT : 0 },
+                    { name: 'Check', value: data ? data.CHK : 0 },
+                    { name: 'Total Sent To Availity', value: data ? data.AvailitySent : 0 },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
+
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
                     summaryCount: summary,
@@ -1638,13 +1639,13 @@ export class ClaimPaymentDashboard extends React.Component {
             <div class="progress">
                 {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: Validated, cursor: 'pointer' }}
-                data-placement="top" data-toggle="tooltip" title={"Vaildated ("+Validated + ")"}
+                    data-placement="top" data-toggle="tooltip" title={"Vaildated (" + Validated + ")"}
                 >Vaildated ({Validated})</div>
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: Error, cursor: 'pointer' }}
-                data-placement="top" data-toggle="tooltip" title={"Files in Error ("+Error + ")"}
+                    data-placement="top" data-toggle="tooltip" title={"Files in Error (" + Error + ")"}
                 >Files in Error ({Error})</div>
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style={{ width: exception, cursor: 'pointer' }}
-                data-placement="top" data-toggle="tooltip" title={"Exception ("+exception + ")"}
+                    data-placement="top" data-toggle="tooltip" title={"Exception (" + exception + ")"}
                 >Exception ({exception})</div>
             </div>
         )
