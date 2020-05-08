@@ -431,9 +431,9 @@ export class Outbound_response_999 extends React.Component {
             ] :
             columnDefs = [
                 { headerName: "Process Id", field: "ResponseFileName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Date", field: "ResponseFileDate", flex: 1, },
+                { headerName: "Date", field: "ResponseFileDateTime", flex: 1, },
                 { headerName: "835 File Name", field: "FileName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
-                { headerName: "835 File Date", field: "Date", flex: 1, },
+                { headerName: "835 File Date", field: "FileDateTime", flex: 1, },
                 // { headerName: "Status", field: "status", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
             ]
 

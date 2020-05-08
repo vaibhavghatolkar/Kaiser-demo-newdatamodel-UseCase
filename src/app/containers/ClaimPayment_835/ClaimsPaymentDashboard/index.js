@@ -1354,10 +1354,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 X_axis
                 Y_axis
             }
-            piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "Errorwise", RecType: "Outbound") {
-                X_axis
-                Y_axis
-            }
             CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"Outbound") {
                 Type
                 TotalCount
@@ -1379,7 +1375,6 @@ export class ClaimPaymentDashboard extends React.Component {
                 // let ClaimBarChart = res.data.barchart
                 let claimLabels = []
                 let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
-                let pie_data = res.data.piechart && res.data.piechart.length > 0 ? this.getPieChartData(res.data.piechart) : ''
                 // let second_data = ""
                 // let pie_data = ""
                 let complience = res.data.CompliancePieChart835 ? res.data.CompliancePieChart835 : []
@@ -1401,7 +1396,6 @@ export class ClaimPaymentDashboard extends React.Component {
                     ClaimBarChart: array,
                     claimLabels: claimLabels,
                     second_data: second_data,
-                    pie_data: pie_data,
                     complience: complience,
                     complaince_data: complaince_data
                 })
