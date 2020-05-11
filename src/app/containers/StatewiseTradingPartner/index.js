@@ -494,14 +494,14 @@ export class StatewiseTradingPartner extends React.Component {
         // <i class="fas fa-pencil-alt"></i>
 
         let columnDefs = [
-            { headerName: "Sender Name", field: "ISA06_Name", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Sender Id(ISA06)", field: "ISA06_ID", width: 110 },
-            { headerName: "Payer Name", field: "PayerName", width: 200 },
-            { headerName: "Payer ID", field: "PayerID", width: 100  },
-            { headerName: "Receiver Name", field: "ISA08_Name", width: 150 },
-            { headerName: "Receiver Id(ISA08)", field: "ISA08_ID", width: 130 },
+            { headerName: "Sender Name", field: "ISA06_Name",flex:1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Sender Id(ISA06)", field: "ISA06_ID",flex:1, },
+            { headerName: "Payer Name", field: "PayerName", flex:1, },
+            { headerName: "Payer ID", field: "PayerID", flex:1,  },
+            { headerName: "Receiver Name", field: "ISA08_Name", flex:1, },
+            { headerName: "Receiver Id(ISA08)", field: "ISA08_ID", flex:1, },
             { headerName: "State", field: "state", width: 90 },
-            { headerName: "Transaction Type", field: "Transaction_Code", width: 110 },
+            { headerName: "Transaction Type", field: "Transaction_Code",flex:1, },
             { headerName: "", field: "pencil", width: 50,  cellRenderer: (data) => {
                 return '<i class="fas fa-pencil-alt"></i>'
             },cellStyle: {cursor: 'pointer' },  pinned: 'right' },
@@ -564,7 +564,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 className="headerText">Trading Partner Details</h5><br />
+                    <h5 className="headerText">Trading Partner Details</h5>
                 </div>
                 <div>
                     <div className="panel-group">

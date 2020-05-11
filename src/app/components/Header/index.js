@@ -64,6 +64,18 @@ export class Header extends React.Component {
         sessionStorage.clear();
         window.location.reload()
     }
+    siderbar() {
+     
+        $('#sidebar').toggleClass('active');
+        if($('#sidebar').attr('class')=="active")
+        {
+           $('#Col-12').removeClass("col-10");        
+          $('#Col-12').addClass('col-12'); 
+        }
+        else 
+        { $('#Col-12').removeClass("col-12");  $('#Col-12').addClass('col-10');}
+    }
+
 
 
     render() {
@@ -71,6 +83,7 @@ export class Header extends React.Component {
             <div>
                 <div className="header_container">
                     <h2 className="header_text"><b>EDIVAL</b>
+                    <span class="Sidebar_drawer" onClick={this.siderbar} id="sidebarCollapse">&#9776; </span>
                     </h2>
                     <label style={{ color: "white", marginLeft: "20px", fontSize: "11px" }}>Powered by HiPaaS</label>
                   

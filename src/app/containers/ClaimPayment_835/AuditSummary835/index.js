@@ -223,12 +223,12 @@ export class AuditSummary835 extends React.Component {
                 let summary = []
 
                 summary = [
-                    { name: 'Received From QNXT', value: data.TotalCount },
-                    { name: 'Vaildated', value: data.Accepted },
-                    { name: 'Files in Error', value: data.Rejected },
-                    { name: 'EFT', value: data.EFT },
-                    { name: 'Check', value: data.CHK },
-                    { name: 'Total Sent To Availity', value: data.AvailitySent },
+                    { name: 'Received From QNXT', value: data ? data.TotalCount : 0 },
+                    { name: 'Vaildated', value: data ? data.Accepted : 0 },
+                    { name: 'Files in Error', value: data ? data.Rejected : 0 },
+                    { name: 'EFT', value: data ? data.EFT : 0 },
+                    { name: 'Check', value: data ? data.CHK : 0 },
+                    { name: 'Total Sent To Availity', value: data ? data.AvailitySent : 0 },
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ]
 

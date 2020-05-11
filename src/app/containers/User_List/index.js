@@ -262,7 +262,7 @@ export class UserList extends React.Component {
     UserList() {
 
         return (
-            <div>
+            <div style={{padding:"10px"}}>
                 <div className="row">
                     <h5 className="headerText">HiPaaS User List</h5>
                     <button type="button" class="btn btn-design" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">

@@ -398,6 +398,7 @@ export class Outbound_277CAReponse extends React.Component {
                 onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
+                removeGrid={true}
                 endDate={this.state.endDate}
                 isDiffSubmitter={true}
                 transactionType={this.state.transactionType}

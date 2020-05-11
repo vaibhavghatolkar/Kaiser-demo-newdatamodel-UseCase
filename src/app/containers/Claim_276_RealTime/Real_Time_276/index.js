@@ -159,8 +159,8 @@ export class RealTime276 extends React.Component {
                 Y_axis
             }
             ErrorDescriptionPieChart276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                ErrorDescription
-                Transactions
+                X_Axis
+                Y_Axis
               }
         }`
 
@@ -179,8 +179,8 @@ export class RealTime276 extends React.Component {
                     Y_axis
                 }
                 ErrorDescriptionPieChart(State: "", Sender: "", StartDt: "", EndDt: "") {
-                    ErrorDescription
-                    Transactions
+                    X_Axis
+                    Y_Axis
                 }
             }`
         }
@@ -240,11 +240,11 @@ export class RealTime276 extends React.Component {
         //         Total_Paid
         //         Total_NoResponse
         //     }
-            //  ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-            //     ClaimStatus
-            //     Total
-            // }
-            let query = `{   ProgressBar276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+        //  ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
+        //     ClaimStatus
+        //     Total
+        // }
+        let query = `{   ProgressBar276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                 Valid_Per
                 InValid_Per
                 NoResponse_Per
@@ -285,7 +285,7 @@ export class RealTime276 extends React.Component {
             //         RecCount
             //         Percentage
             //     }
-                query = `{   ProgressBar270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
+            query = `{   ProgressBar270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                     Valid_Per
                     InValid_Per
                     NoResponse_Per
@@ -1230,8 +1230,8 @@ export class RealTime276 extends React.Component {
         let pieLabel = []
         let pieData = []
         pieChart.forEach((d) => {
-            pieLabel.push(d.ErrorDescription)
-            pieData.push(d.Transactions)
+            pieLabel.push(d.X_Axis)
+            pieData.push(d.Y_Axis)
         })
 
         let second_data = {
@@ -1691,7 +1691,7 @@ export class RealTime276 extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-        let mainUrl = apiflag ==1 ? Strings.ElilgibilityDetails270:Strings.ElilgibilityDetails276
+        let mainUrl = apiflag == 1 ? Strings.ElilgibilityDetails270 : Strings.ElilgibilityDetails276
 
 
         array.forEach(item => {
@@ -1946,9 +1946,9 @@ export class RealTime276 extends React.Component {
 
     _renderList = () => {
         let columnDefs = [
-            { headerName: "Transaction Id", field: "Trans_ID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Transaction Date", field: "Date" },
-            { headerName: "Status", field: "Trans_type" },
+            { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Transaction Date", field: "Date", flex: 1 },
+            { headerName: "Status", field: "Trans_type", flex: 1 },
             { headerName: "Submitter", field: "Submiter", flex: 1 },
             // { headerName: "Error Type", field: "Error_Type", width: 150 },
             // { headerName: "Error Code", field: "Error_Code", width: 150 },
@@ -2035,21 +2035,21 @@ export class RealTime276 extends React.Component {
 
         let valid = this.state.progress_valid + "%"
         let invalid = this.state.progress_invalid + "%"
-        let noResponse = this.state.progress_noResponse + "%" 
+        let noResponse = this.state.progress_noResponse + "%"
 
         return (
             <div class="progress">
                 {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: valid, cursor: 'pointer' }}
-                data-placement="top" data-toggle="tooltip" title={"Vaild Transaction ("+valid + ")"}
+                    data-placement="top" data-toggle="tooltip" title={"Vaild Transaction (" + valid + ")"}
                 >Vaild Transaction ({valid})
                 </div>
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: invalid, cursor: 'pointer' }}
-                 data-placement="top" data-toggle="tooltip" title={"Invalid Transaction ("+ invalid + ")"}
+                    data-placement="top" data-toggle="tooltip" title={"Invalid Transaction (" + invalid + ")"}
                 >Invalid Transaction ({invalid})
                 </div>
                 <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: noResponse, cursor: 'pointer' }}
-                data-placement="top" data-toggle="tooltip" title={"No Response ("+ noResponse + ")"}
+                    data-placement="top" data-toggle="tooltip" title={"No Response (" + noResponse + ")"}
                 >No Response ({noResponse})</div>
             </div>
         )
