@@ -139,7 +139,7 @@ export class View_CustomEditsNew extends React.Component {
     getData() {
 
         let query = `{
-            Trading_PartnerList (Transaction:"TradingPartner") { 
+            Trading_PartnerList (Transaction:"TradingPartner", RecType:"Inbound") { 
                  
                 Trading_Partner_Name 
             }

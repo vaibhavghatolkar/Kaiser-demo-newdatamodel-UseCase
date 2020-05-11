@@ -118,7 +118,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
-        fetch(Urls.common_data, {
+        fetch(Urls.tradingPartnerAdmin, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export class StatewiseTradingPartner extends React.Component {
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls.tradingPartnerAdmin, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ export class StatewiseTradingPartner extends React.Component {
             }
        }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls.tradingPartnerAdmin, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -294,7 +294,7 @@ export class StatewiseTradingPartner extends React.Component {
 
 
             if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-            fetch(Urls.base_url, {
+            fetch(Urls.tradingPartnerAdmin, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -362,7 +362,7 @@ export class StatewiseTradingPartner extends React.Component {
 
             '}'
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls.tradingPartnerAdmin, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -403,7 +403,7 @@ export class StatewiseTradingPartner extends React.Component {
 
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls.tradingPartnerAdmin, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
