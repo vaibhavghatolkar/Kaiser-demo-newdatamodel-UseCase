@@ -131,6 +131,7 @@ export class ClaimPaymentDashboard extends React.Component {
             claimLabels: [],
             complience: [],
             data,
+            Filter_ClaimId:'',
             //////////----------table----
             Organization: '',
             Service_startDate: '',
@@ -332,7 +333,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }
 
         let query = `{            
-                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"") {
+                Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"") {
                     RecCount
                     Sender
                     Organization
@@ -1683,6 +1684,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+               
             />
         )
     }

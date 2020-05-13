@@ -23,7 +23,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+          this.state = {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             providers: [],
@@ -36,6 +36,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             TotalException: 0,
             selectedTradingPartner: "",
             State: "",
+            Filter_ClaimId:"",
             type: "",
             providerName: "",
             startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
@@ -154,9 +155,9 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     getData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-
+        
         let query = `{            
-            PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"") {
+            PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}") {
                 RefID
                 RecCount
                 FileID
@@ -190,6 +191,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
               }
             }
               `
+              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
@@ -619,6 +621,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                showclaimId={true}
             />
         )
     }

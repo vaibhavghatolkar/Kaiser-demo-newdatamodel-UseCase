@@ -21,6 +21,7 @@ export class Filters extends React.Component {
             State: this.props.State ? this.props.State : '',
             tradingpartner: [],
             providers: [],
+            Filter_ClaimId:this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
         }
     }
 
@@ -86,10 +87,13 @@ export class Filters extends React.Component {
         }
     }
 
+ 
     onSelected = (value) => {
         this.props.update('providerName', value)
     }
-
+    onChangeName(event, key) {
+         this.props.update(key,event.target.value)
+    }
     getoptions = () => {
         let row = []
         this.state.tradingpartner.forEach(element => {
@@ -255,6 +259,13 @@ export class Filters extends React.Component {
                                     <option value="select"></option>
                                     {/* {this.getErrorOptions()} */}
                                 </select>
+                            </div> : null
+                            }
+                            {    
+                          this.props.showclaimId ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Claim Id</div>
+                                <input className="form-control list-dashboard"    onChange={(e) => this.onChangeName(e, 'Filter_ClaimId')}></input>
                             </div> : null
                             }
                 </div>

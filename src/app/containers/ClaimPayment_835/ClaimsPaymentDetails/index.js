@@ -60,7 +60,7 @@ export class ClaimPaymentDetails extends React.Component {
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
-
+            Filter_ClaimId:'',
             page: 1,
             count: 0,
             recount: 0,
@@ -146,7 +146,7 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}") {
+            Dashboard835FileDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",page:${this.state.page},OrderBy:"${this.state.orderby}" ,Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}") {
                 RecCount
                 Sender
                 Organization
@@ -253,7 +253,7 @@ export class ClaimPaymentDetails extends React.Component {
         }
 
         let query = `{            
-            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}") {
+            PaymentProcessingSummary  (State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}", FileID : "` + fileId + `" ,Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}") {
                 RefID
                 RecCount
                 FileID
@@ -1123,6 +1123,7 @@ export class ClaimPaymentDetails extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                showclaimId={true}
             />
         )
     }
