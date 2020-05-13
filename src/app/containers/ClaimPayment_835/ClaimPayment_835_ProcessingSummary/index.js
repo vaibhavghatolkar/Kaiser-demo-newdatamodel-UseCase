@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom'
 import { Filters } from '../../../components/Filters';
 
 let val = ''
+let controller = new AbortController()
 export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     constructor(props) {
@@ -153,9 +154,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     }
 
     getData = async () => {
+        controller.abort()
+        controller = new AbortController()
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        
         let query = `{            
             PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}") {
                 RefID
@@ -191,9 +193,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
               }
             }
               `
-              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.transaction835, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -600,7 +603,9 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     }
 
     _refreshScreen = () => {
-        this.getData()
+        setTimeout(() => {
+            this.getData()
+        }, 500);
         this._getClaimCounts()
     }
 
