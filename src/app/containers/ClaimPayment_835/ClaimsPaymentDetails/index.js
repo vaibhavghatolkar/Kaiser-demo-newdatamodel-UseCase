@@ -60,7 +60,7 @@ export class ClaimPaymentDetails extends React.Component {
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
-            Filter_ClaimId:'',
+            Filter_ClaimId: '',
             page: 1,
             count: 0,
             recount: 0,
@@ -182,7 +182,12 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => res.json())
             .then(res => {
                 this.setState({
-                    rowData: res.data.Dashboard835FileDetails
+                    rowData: res.data.Dashboard835FileDetails,
+                    showClaims: res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0 ? true : this.state.showClaims
+                }, () => {
+                    if (res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0) {
+                        this.getTransactions(res.data.Dashboard835FileDetails[0].FileID)
+                    }
                 })
                 if (res && res.data && res.data.Dashboard835FileDetails) {
 
@@ -539,7 +544,7 @@ export class ClaimPaymentDetails extends React.Component {
         return row
 
     }
-    
+
     handlePageClickLine = (data) => {
         let page = data.selected + 1
 
@@ -936,7 +941,7 @@ export class ClaimPaymentDetails extends React.Component {
             </div>
         )
     }
-    
+
     _renderClaims() {
         let columnDefs = [
             { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
