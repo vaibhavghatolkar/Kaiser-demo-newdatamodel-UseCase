@@ -11,6 +11,7 @@ import { getProviders } from '../../../helpers/getDetails';
 import { AutoComplete } from '../AutoComplete';
 
 let val = ''
+let val_in = ''
 export class Filters extends React.Component {
     constructor(props) {
         super(props);
@@ -91,8 +92,8 @@ export class Filters extends React.Component {
     onSelected = (value) => {
         this.props.update('providerName', value)
     }
-    onChangeName(event, key) {
-         this.props.update(key,event.target.value)
+    onChangeName = (value, key) => {
+         this.props.update(key,value)
     }
     getoptions = () => {
         let row = []
@@ -265,7 +266,14 @@ export class Filters extends React.Component {
                           this.props.showclaimId ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Claim Id</div>
-                                <input className="form-control list-dashboard"    onChange={(e) => this.onChangeName(e, 'Filter_ClaimId')}></input>
+                                <input className="form-control list-dashboard"    
+                                    onChange={(event) => {
+                                        clearTimeout(val_in)
+                                        let passing_val = event.target.value
+                                        val_in = setTimeout(() => {
+                                            this.onChangeName(passing_val, 'Filter_ClaimId')
+                                        }, 300);
+                                    }}></input>
                             </div> : null
                             }
                 </div>
