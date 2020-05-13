@@ -16,6 +16,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
 
 var val = ''
+let controller = new AbortController()
 const $ = window.$;
 export class ClaimPaymentDetails extends React.Component {
 
@@ -133,8 +134,9 @@ export class ClaimPaymentDetails extends React.Component {
             });
     }
 
-    getData = () => {
-
+    getData = async() => {
+        controller.abort()
+        controller = new AbortController()
         let count = 1
         let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
         let ServiceEndDate = this.state.Service_endDate ? moment(this.state.Service_endDate).format('YYYY-MM-DD') : ""
@@ -173,6 +175,7 @@ export class ClaimPaymentDetails extends React.Component {
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.transaction835, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -183,7 +186,7 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => {
                 this.setState({
                     rowData: res.data.Dashboard835FileDetails,
-                    showClaims: res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0 ? true : this.state.showClaims
+                    showClaims: res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0 ? true : false
                 }, () => {
                     if (res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0) {
                         this.getTransactions(res.data.Dashboard835FileDetails[0].FileID)
