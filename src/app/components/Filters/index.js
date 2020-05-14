@@ -12,6 +12,7 @@ import { AutoComplete } from '../AutoComplete';
 
 let val = ''
 let val_in = ''
+let val_trans = ''
 export class Filters extends React.Component {
     constructor(props) {
         super(props);
@@ -22,8 +23,8 @@ export class Filters extends React.Component {
             State: this.props.State ? this.props.State : '',
             tradingpartner: [],
             providers: [],
-            Filter_ClaimId:this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
-            transactionId:this.props.transactionId ? this.props.transactionId : '',
+            Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
+            transactionId: this.props.transactionId ? this.props.transactionId : '',
         }
     }
 
@@ -89,12 +90,12 @@ export class Filters extends React.Component {
         }
     }
 
- 
+
     onSelected = (value) => {
         this.props.update('providerName', value)
     }
     onChangeName = (value, key) => {
-         this.props.update(key,value)
+        this.props.update(key, value)
     }
     getoptions = () => {
         let row = []
@@ -249,25 +250,25 @@ export class Filters extends React.Component {
                                 </select>
                             </div> : null
                     }
-                    {    
-                         this.props.errorType ?
+                    {
+                        this.props.errorType ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Error Type</div>
                                 <select className="form-control list-dashboard" id="TradingPartner"
-                                     onChange={(event) => {
+                                    onChange={(event) => {
                                         this.onSelect(event, 'error_Type')
                                     }}>
-                                >
+                                    >
                                     <option value="select"></option>
                                     {/* {this.getErrorOptions()} */}
                                 </select>
                             </div> : null
-                            }
-                            {    
-                          this.props.showclaimId ?
+                    }
+                    {
+                        this.props.showclaimId ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Claim Id</div>
-                                <input className="form-control list-dashboard"    
+                                <input className="form-control list-dashboard"
                                     onChange={(event) => {
                                         clearTimeout(val_in)
                                         let passing_val = event.target.value
@@ -276,21 +277,21 @@ export class Filters extends React.Component {
                                         }, 300);
                                     }}></input>
                             </div> : null
-                            }
-                               {    
-                          this.props.TransactionId ?
+                    }
+                    {
+                        this.props.TransactionId ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Transaction Id</div>
-                                <input className="form-control list-dashboard"    
+                                <input className="form-control list-dashboard"
                                     onChange={(event) => {
-                                        clearTimeout(val_in)
+                                        clearTimeout(val_trans)
                                         let passing_val = event.target.value
-                                        val_in = setTimeout(() => {
+                                        val_trans = setTimeout(() => {
                                             this.onChangeName(passing_val, 'transactionId')
                                         }, 300);
                                     }}></input>
                             </div> : null
-                            }
+                    }
                 </div>
             </div>
         )
