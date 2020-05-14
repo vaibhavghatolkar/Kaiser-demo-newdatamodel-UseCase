@@ -65,7 +65,7 @@ export class RealTime276 extends React.Component {
             incoming_fileId: '',
             noResponsePercent: '',
             second_data: [],
-            chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
+             chartType: this.props.location.state.data[0].apiflag == 1 ? 'Eligibilitymonthwise' : 'ClaimRequestMonthwise',
             colorArray: [
                 'var(--main-bg-color)',
                 'var(--cyan-color)'
@@ -174,7 +174,7 @@ export class RealTime276 extends React.Component {
                     X_axis
                     Y_axis
                 }
-                datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
+                datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.Filter_TransactionId + `", ChartType: "` + chartType + `") {
                     X_axis
                     Y_axis
                 }
@@ -2085,6 +2085,7 @@ export class RealTime276 extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                TransactionId={true}
             />
         )
     }

@@ -36,8 +36,7 @@ export class EligibilityDetails extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
-
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+             State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             startDate: props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
@@ -51,7 +50,6 @@ export class EligibilityDetails extends React.Component {
             transactionStatus:props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
             HiPaaSID:props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
             subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
-
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -920,6 +918,7 @@ export class EligibilityDetails extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                TransactionId={true}
             />
         )
     }

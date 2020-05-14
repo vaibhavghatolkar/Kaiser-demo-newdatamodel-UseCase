@@ -23,6 +23,7 @@ export class Filters extends React.Component {
             tradingpartner: [],
             providers: [],
             Filter_ClaimId:this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
+            transactionId:this.props.transactionId ? this.props.transactionId : '',
         }
     }
 
@@ -272,6 +273,20 @@ export class Filters extends React.Component {
                                         let passing_val = event.target.value
                                         val_in = setTimeout(() => {
                                             this.onChangeName(passing_val, 'Filter_ClaimId')
+                                        }, 300);
+                                    }}></input>
+                            </div> : null
+                            }
+                               {    
+                          this.props.TransactionId ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Transaction Id</div>
+                                <input className="form-control list-dashboard"    
+                                    onChange={(event) => {
+                                        clearTimeout(val_in)
+                                        let passing_val = event.target.value
+                                        val_in = setTimeout(() => {
+                                            this.onChangeName(passing_val, 'transactionId')
                                         }, 300);
                                     }}></input>
                             </div> : null
