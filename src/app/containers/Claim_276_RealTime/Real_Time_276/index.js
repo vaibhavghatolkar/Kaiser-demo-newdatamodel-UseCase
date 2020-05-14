@@ -174,7 +174,7 @@ export class RealTime276 extends React.Component {
                     X_axis
                     Y_axis
                 }
-                datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.Filter_TransactionId + `", ChartType: "` + chartType + `") {
+                datewise : DashboardBarChartData(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `", ChartType: "` + chartType + `") {
                     X_axis
                     Y_axis
                 }
@@ -2020,7 +2020,7 @@ export class RealTime276 extends React.Component {
                     type: type,
                     HiPaaSID: this.state.incoming_fileId,
                     apiflag: apiflag,
-                    transactionId: ''
+                    transactionId: this.state.transactionId
                 },
             ]
         }
@@ -2081,11 +2081,9 @@ export class RealTime276 extends React.Component {
                 isSubmitter={true}
                 removeGrid={true}
                 setData={this.setData}
-                // onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                TransactionId={true}
             />
         )
     }

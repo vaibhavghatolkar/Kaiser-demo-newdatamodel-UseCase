@@ -16,6 +16,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
+let controller = new AbortController()
 export class EligibilityDetails extends React.Component {
 
     constructor(props) {
@@ -189,7 +190,8 @@ export class EligibilityDetails extends React.Component {
     }
 
     getTransactions() {
-         
+        controller.abort()
+        controller = new AbortController()
         let query = ''
         let typeId = this.state.transactionStatus
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -231,6 +233,7 @@ export class EligibilityDetails extends React.Component {
 
         fetch(url, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
