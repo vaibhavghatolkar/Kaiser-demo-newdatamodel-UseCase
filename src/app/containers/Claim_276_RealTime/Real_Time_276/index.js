@@ -2025,7 +2025,14 @@ export class RealTime276 extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.ElilgibilityDetails270, {
+        let url = ''
+        if(this.state.apiflag == 1){
+            url = Strings.ElilgibilityDetails270
+        } else {
+            url = Strings.ElilgibilityDetails276
+        }
+
+        this.props.history.push('/' + url, {
             data: sendData
         })
     }
