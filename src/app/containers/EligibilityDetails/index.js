@@ -518,7 +518,7 @@ export class EligibilityDetails extends React.Component {
         return (
             <div className="row">
                 <div className={"col-12"}>
-                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
+                    <div className="top-padding clickable" href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</div>
                     <div className="border-view collapse breakword" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
                 </div>
             </div>
@@ -738,7 +738,7 @@ export class EligibilityDetails extends React.Component {
         return (
             <div className="row">
                 <div className={"col-12"}>
-                    <div className="top-padding"><a href={'#' + 'event'} data-toggle="collapse">Stage Details ({this.state.Transaction_Compliance})</a></div>
+                    <div className="top-padding clickable" href={'#' + 'event'} data-toggle="collapse">Stage Details ({this.state.Transaction_Compliance})</div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
@@ -914,13 +914,13 @@ export class EligibilityDetails extends React.Component {
                 isTimeRange={false}
                 isSubmitter={true}
                 removeGrid={true}
-                errorType = {true}
                 setData={this.setData}
                 // onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 TransactionId={true}
+                submitter_key={this.state.apiflag == 1 ? "EligibilityStatus" : "ClaimRequest"}
             />
         )
     }
