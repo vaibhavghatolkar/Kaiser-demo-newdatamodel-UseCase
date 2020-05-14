@@ -178,7 +178,7 @@ export class RealTime276 extends React.Component {
                     X_axis
                     Y_axis
                 }
-                ErrorDescriptionPieChart(State: "", Sender: "", StartDt: "", EndDt: "") {
+                ErrorDescriptionPieChart(State: "${this.state.State}", Sender: "${this.state.selectedTradingPartner}", StartDt: "${startDate}", EndDt: "${endDate}") {
                     X_Axis
                     Y_Axis
                 }
