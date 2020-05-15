@@ -914,21 +914,13 @@ export class EligibilityDetails extends React.Component {
                 isTimeRange={false}
                 isSubmitter={true}
                 removeGrid={true}
-<<<<<<< HEAD
-                errorType = {false}
-=======
->>>>>>> f10f04c2f1307c55137848338767375e4b3f5f19
                 setData={this.setData}
                 // onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 TransactionId={true}
-<<<<<<< HEAD
-               
-=======
                 submitter_key={this.state.apiflag == 1 ? "EligibilityStatus" : "ClaimRequest"}
->>>>>>> f10f04c2f1307c55137848338767375e4b3f5f19
             />
         )
     }
