@@ -76,7 +76,7 @@ a, a:hover, a:focus {
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
     color: var(--black-color);
-    background: var(--white-color);
+    /* background: var(--white-color); */
 }
 ul ul a {
     font-size: 12px !important;

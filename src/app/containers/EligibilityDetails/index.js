@@ -914,13 +914,14 @@ export class EligibilityDetails extends React.Component {
                 isTimeRange={false}
                 isSubmitter={true}
                 removeGrid={true}
-                errorType = {true}
+                errorType = {false}
                 setData={this.setData}
                 // onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 TransactionId={true}
+               
             />
         )
     }
