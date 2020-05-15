@@ -34,8 +34,12 @@ export class Filters extends React.Component {
 
     getCommonData = async () => {
         let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+        let submitter_key = "Claim837RT"
+        if (this.props.submitter_key) {
+            submitter_key = this.props.submitter_key
+        }
         let query = `{
-            Trading_PartnerList(RecType :"${isOutbound ? "Outbound" : "Inbound"}", Transaction:"Claim837RT") {
+            Trading_PartnerList(RecType :"${isOutbound ? "Outbound" : "Inbound"}", Transaction:"${submitter_key}") {
                 Trading_Partner_Name 
             }
         }`

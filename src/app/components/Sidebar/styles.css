@@ -200,3 +200,7 @@ a[data-toggle="collapse"] {
     color: white;
     padding-left: 70px;
 }
+
+#top-bar a[aria-expanded="true"]{
+    color: var(--white) !important;
+}

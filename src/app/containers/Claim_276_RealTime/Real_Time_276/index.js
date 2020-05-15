@@ -2091,6 +2091,7 @@ export class RealTime276 extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                submitter_key={this.state.apiflag == 1 ? "EligibilityStatus" : "ClaimRequest"}
             />
         )
     }
