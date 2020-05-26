@@ -447,15 +447,26 @@ export class EligibilityDetails extends React.Component {
     }
 
     _renderList = () => {
-        let columnDefs = [
-            { headerName: "Transaction Id", field: "Trans_ID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Transaction Date", field: "Date", width: 150 },
-            { headerName: "Status", field: "Trans_type", width: 150 },
-            { headerName: "Submitter", field: "Submiter", width: 150 },
-            { headerName: "Error Type", field: "Error_Type", width: 150 },
-            { headerName: "Error Code", field: "Error_Code", width: 150 },
-            { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-        ]
+        let columnDefs;
+        if(this.state.transactionStatus == 'Pass' || this.state.transactionStatus == 'No'){
+            columnDefs = [
+                { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Transaction Date", field: "Date", flex: 1 },
+                { headerName: "Status", field: "Trans_type", flex: 1 },
+                { headerName: "Submitter", field: "Submiter", flex: 1 },
+            ] 
+        }else{
+            columnDefs = [
+                { headerName: "Transaction Id", field: "Trans_ID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Transaction Date", field: "Date", width: 150 },
+                { headerName: "Status", field: "Trans_type", width: 150 },
+                { headerName: "Submitter", field: "Submiter", width: 150 },
+                { headerName: "Error Type", field: "Error_Type", width: 150 },
+                { headerName: "Error Code", field: "Error_Code", width: 150 },
+                { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            ]
+        }
+        
 
         return (
             <div>
