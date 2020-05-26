@@ -1793,7 +1793,7 @@ export class RealTime276 extends React.Component {
             } else if (item.name == 'This Month') {
                 // availitySent = 'Y'
                 // subtitle = "Sent to Availity"
-                color = "var(--main-bg-color)"
+                // color = "var(--main-bg-color)"
             }
 
             let sendData = [
@@ -1834,7 +1834,7 @@ export class RealTime276 extends React.Component {
         let stage_1 = [
             { 'header': 'Real - Time Volume' },
             { 'name': 'Last Month', 'value': this.state.lastMonth },
-            { 'name': 'This Month', 'value': this.state.thisMonth, 'isClick': true },
+            { 'name': 'This Month', 'value': this.state.thisMonth },
         ]
         let stage_2 = [
             { 'header': 'Compliance Ratio' },

@@ -16,6 +16,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 var val = ''
+const $ = window.$;
 let controller = new AbortController()
 export class EligibilityDetails extends React.Component {
 
@@ -453,7 +454,7 @@ export class EligibilityDetails extends React.Component {
             { headerName: "Submitter", field: "Submiter", width: 150 },
             { headerName: "Error Type", field: "Error_Type", width: 150 },
             { headerName: "Error Code", field: "Error_Code", width: 150 },
-            { headerName: "Error Description", field: "ErrorDescription", flex: 1 },
+            { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
 
         return (
@@ -489,7 +490,16 @@ export class EligibilityDetails extends React.Component {
                                     this.getDetails(event.data.HiPaaSUniqueID)   
                                 })
                                   
-                            }
+                            }else if (event.colDef.headerName == "Error Description" && event.data.ErrorDesc) {
+                                    this.setState({
+                                        clickedError: event.data.ErrorDesc
+                                    }, () => {
+                                        $('#error_modal').modal('show')
+                                    })
+    
+                                }
+                            
+    
                         }}
                     >
                     </AgGridReact>
@@ -497,6 +507,30 @@ export class EligibilityDetails extends React.Component {
             </div>
         )
     }
+
+    errorDialog = () => {
+        return (
+            <div class="modal" id="error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog-error">
+                    <div className="error-dialog">
+                        <div className="error-header">Error Description</div>
+                        <div className="scroll-div">
+                            {this.state.clickedError}
+                        </div>
+                        <br />
+                        <div className="btnDesign close-button clickable"
+                            onClick={() => {
+                                $('#error_modal').modal('hide')
+                            }}>
+                            Close
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
 
 
     handleSort = (e, rotation, key) => {
@@ -935,6 +969,7 @@ export class EligibilityDetails extends React.Component {
                 {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
                 {this.state.showDetails ? this.renderDetails() : null}
                 {this.state.showDetails ? this.renderDetails(1) : null}
+                {this.errorDialog()}
                 {/* <div className="row">
                     <div className="col-7 margin-top">
                         {this.renderTransactionsNew()}
