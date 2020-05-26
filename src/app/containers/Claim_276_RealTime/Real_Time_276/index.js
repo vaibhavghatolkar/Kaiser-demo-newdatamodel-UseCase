@@ -1776,7 +1776,7 @@ export class RealTime276 extends React.Component {
             let claimStatus = ''
             let subtitle = ''
             let availitySent = ''
-            let color = "var(--red)"
+            let color = "var(--grayBlack)"
             let Status = ''
             if (item.name == 'In Compliance') {
                 // claimStatus = 'Error'
@@ -1838,9 +1838,9 @@ export class RealTime276 extends React.Component {
         ]
         let stage_2 = [
             { 'header': 'Compliance Ratio' },
-            { 'name': 'In Compliance', 'value': this.state.inComplaince + ' %', 'isClick': true },
-            { 'name': 'Out of Compliance', 'value': this.state.outComplaince + ' %', 'isClick': true },
-            { 'name': 'No Response', 'value': this.state.noResponsePercent + ' %', 'isClick': true },
+            { 'name': 'In Compliance', 'value': this.state.inComplaince + ' %' },
+            { 'name': 'Out of Compliance', 'value': this.state.outComplaince + ' %' },
+            { 'name': 'No Response', 'value': this.state.noResponsePercent + ' %' },
 
         ]
 
