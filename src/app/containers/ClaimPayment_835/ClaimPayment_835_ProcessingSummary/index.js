@@ -530,6 +530,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 endDate: endDate,
                 status: "",
                 type: type,
+                Filter_ClaimId: this.state.Filter_ClaimId,
                 incoming_fileId: fileId ? fileId : this.state.incoming_fileId
             },
         ]
