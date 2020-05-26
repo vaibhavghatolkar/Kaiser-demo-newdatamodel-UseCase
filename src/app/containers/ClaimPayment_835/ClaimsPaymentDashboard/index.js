@@ -1087,12 +1087,18 @@ export class ClaimPaymentDashboard extends React.Component {
                 subtitle = "Files in Error"
             } else if (item.name == 'EFT') {
                 EFTCHK = 'ACH'
+                subtitle = "EFT"
             } else if (item.name == 'Check') {
                 EFTCHK = 'CHK'
+                subtitle = "Check"
             } else if (item.name == 'Total Sent To Availity') {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
-            } else {
+            }
+            else if (item.name == 'Received From QNXT') {
+                subtitle = "Received From QNXT"
+           } 
+            else {
                 addon = '/other'
             }
             data = [
@@ -1162,9 +1168,12 @@ export class ClaimPaymentDashboard extends React.Component {
                 color = "var(--green)"
             } else if (item.name == 'EFT') {
                 EFTCHK = 'ACH'
+                subtitle = "EFT"
                 color = "var(--main-bg-color)"
+                
             } else if (item.name == 'CHK') {
                 EFTCHK = 'CHK'
+                subtitle = "CHK"
                 color = "var(--main-bg-color)"
             }
 
