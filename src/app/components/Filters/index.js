@@ -99,7 +99,11 @@ export class Filters extends React.Component {
         this.props.update('providerName', value)
     }
     onChangeName = (value, key) => {
-        this.props.update(key, value)
+        this.setState({
+            Filter_ClaimId: value
+        }, () => {
+            this.props.update(key, value)
+        })
     }
     getoptions = () => {
         let row = []
@@ -273,6 +277,7 @@ export class Filters extends React.Component {
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Claim Id</div>
                                 <input className="form-control list-dashboard"
+                                    value={this.state.Filter_ClaimId}
                                     onChange={(event) => {
                                         clearTimeout(val_in)
                                         let passing_val = event.target.value

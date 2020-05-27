@@ -61,7 +61,7 @@ export class ClaimPaymentDetails extends React.Component {
             transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
-            Filter_ClaimId: '',
+            Filter_ClaimId: props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
             page: 1,
             count: 0,
             recount: 0,
@@ -1128,6 +1128,7 @@ export class ClaimPaymentDetails extends React.Component {
                 State={this.state.State}
                 removeGrid={true}
                 changeDefault={true}
+                Filter_ClaimId={this.state.Filter_ClaimId}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
