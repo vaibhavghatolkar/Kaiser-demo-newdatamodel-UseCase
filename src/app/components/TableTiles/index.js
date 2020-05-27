@@ -21,7 +21,7 @@ export class TableTiles extends React.Component {
                     item.isClick ?
                         <Link to={{ pathname: item.url ? item.url : this.props.url, state: { data: this.props.data } }} style={{ alignSelf: 'center', fontSize: '16px', color: this.props.color }}>{item.value}</Link>
                         :
-                        <div style={{ alignSelf: 'center', fontSize: '16px', color: "var(--grayBlack)" }}>{item.value}</div>
+                        <div style={{ alignSelf: 'center', fontSize: '16px', color: this.props.unclick ? this.props.unclick : "var(--grayBlack)" }}>{item.value}</div>
                 }
             </div>
         )

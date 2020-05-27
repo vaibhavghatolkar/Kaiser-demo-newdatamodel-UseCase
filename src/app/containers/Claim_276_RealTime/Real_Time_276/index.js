@@ -1817,7 +1817,7 @@ export class RealTime276 extends React.Component {
                     item={item}
                     // url={Strings.claimsDashboard_834_details}
                     data={sendData}
-                    color={color}
+                    unclick={color}
                 />
             )
         })
