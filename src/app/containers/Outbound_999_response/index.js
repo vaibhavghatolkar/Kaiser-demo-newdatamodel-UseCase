@@ -21,6 +21,7 @@ export class Outbound_response_999 extends React.Component {
 
     constructor(props) {
         super(props);
+    
         let pagination_length = 10
         try {
             pagination_length = this.props.location.state && this.props.location.state.data && this.props.location.state.data.length > 0 ? (this.props.location.state.data[0].flag999 == 0 ? 5 : 10) : 10
@@ -62,7 +63,7 @@ export class Outbound_response_999 extends React.Component {
             Response: '',
             initialPage: null,
             flag999: this.props.location.state.data[0].flag999,
-            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
+            type: props.location.state.data[1] && props.location.state.data[1].type ? props.location.state.data[1].type : "",
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -123,7 +124,7 @@ export class Outbound_response_999 extends React.Component {
         }
 
         query = `{
-            Data999(RecType: "${recType}", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType} ,type:${this.state.type}) {
+            Data999(RecType: "${recType}", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType} ,Type: "${this.state.type}",) {
               FileId
               FileName
               Date
