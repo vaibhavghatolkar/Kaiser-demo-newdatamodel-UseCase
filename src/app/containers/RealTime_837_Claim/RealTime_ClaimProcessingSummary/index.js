@@ -134,40 +134,6 @@ export class ClaimProcessingSummary extends React.Component {
         this._refreshScreen()
     }
 
-    _get999Count = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-              Total999
-            }
-            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type:"") {
-                Total277CA
-            }
-            
-         }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    Total999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : '',
-                    Total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : '',
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
     getClaimCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
@@ -223,54 +189,6 @@ export class ClaimProcessingSummary extends React.Component {
                         LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0,
                         Accepted_277CA: _data ? _data.Accepted_277CA : 0,
                         Rejected_277CA: _data ? _data.Rejected_277CA : 0,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    getCountData = async () => {
-        setTimeout(() => {
-            this._get999Count()
-        }, 1000);
-
-        let query = `{FileInCount(submitter:"${this.state.selectedTradingPartner}"  fromDt:"${this.state.startDate}" ToDt:"${this.state.endDate}" RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}") {
-            totalFile
-            TotalClaims
-            Accepted
-            Rejected
-            InProgress
-            Total999
-            Total277CA
-            TotalSentToQNXT
-            Paid
-            denied
-            WIP
-            Pending
-          } }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                var data = res.data.FileInCount
-                if (data && data.length > 0) {
-
-                    this.setState({
-                        Paid: data[0].Paid,
-                        Pending: data[0].Pending,
-                        Denide: data[0].denied,
-                        wip90: data[0].WIP,
                     })
                 }
             })
@@ -370,7 +288,7 @@ export class ClaimProcessingSummary extends React.Component {
         })
 
         setTimeout(() => {
-            this.getCountData()
+            
             this.getClaimCounts()
             this.getData()
         }, 50);
@@ -477,7 +395,7 @@ export class ClaimProcessingSummary extends React.Component {
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            this.getCountData()
+            
             this.getClaimCounts()
             this.getData()
         }, 50);
@@ -681,7 +599,6 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     _refreshScreen = () => {
-        this.getCountData()
         this.getClaimCounts()
         this.getData()
     }

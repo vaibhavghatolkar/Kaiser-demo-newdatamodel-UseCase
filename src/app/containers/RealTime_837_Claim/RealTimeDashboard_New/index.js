@@ -203,39 +203,6 @@ export class RealTimeDashboard_New extends React.Component {
             });
     }
 
-    getRejectedFile = async () => {
-
-        let query = `{
-            Claim837RTRejectedFile (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"",EndDt:"",Type:"${this.state.type}", RecType: "Inbound") {
-              TotalRejectedFiles
-              TotalAcceptedFiles
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let data = res.data
-                    this.setState({
-                        rejectedFileCount: data.Claim837RTRejectedFile[0].TotalRejectedFiles ? data.Claim837RTRejectedFile[0].TotalRejectedFiles : '',
-                        acceptedFileCount: data.Claim837RTRejectedFile[0].TotalAcceptedFiles ? data.Claim837RTRejectedFile[0].TotalAcceptedFiles : '',
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
     _getCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
@@ -842,7 +809,6 @@ export class RealTimeDashboard_New extends React.Component {
     
     _refreshScreen = () => {
         this._get999Count()
-        this.getRejectedFile()
         this.getClaimCounts()
         this.getData()
         this._getCounts()

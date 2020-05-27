@@ -1,5 +1,3 @@
-import { Inbound_Encounter_ClaimDetails837 } from "../app/containers/InboundEncounter/Inbound_Encounter_Claim_Details_837";
-
 const Strings = {
     CLAIMS : 'claimsManagement',
     REALTIME_837_CLAIM: 'REALTIME_837_CLAIM',
