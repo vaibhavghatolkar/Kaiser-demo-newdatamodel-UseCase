@@ -36,8 +36,7 @@ import { Outbound_dashboard } from './app/containers/Outbound_dashboard';
 // import { CustomDBDetails } from './app/containers/CustomDB_Details'
 // import { EnrollmentDetails } from './app/containers/Enrollment_details';
 import { OutboundDetails } from './app/containers/Outbound_details'
-import { ClaimDetails837 } from './app/containers/RealTime_837_Claim/Claim_Details_837'
-import { RealTimeDashboard } from './app/containers/RealTime_837_Claim/RealTimeDashboard'
+// import { RealTimeDashboard } from './app/containers/RealTime_837_Claim/RealTimeDashboard'
 import { ClaimProcessingSummary } from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
 import { Files_837 } from './app/containers/Files_837'
 import { MenuManagement } from './app/containers/Menu_Management'
@@ -251,7 +250,7 @@ class PrivateRoute extends React.Component {
 
                                 <Route path={'/' + Strings.OutboundDetails} component={OutboundDetails} />
                                 {/* <Route path={'/'+ Strings.ClaimDetails837 + '/:flag/:selectedTradingPartner/:startDate/:endDate'} component={ClaimDetails837} /> */}
-                                <Route path={'/' + Strings.ClaimDetails837} component={ClaimDetails837} />
+                                {/* <Route path={'/' + Strings.ClaimDetails837} component={ClaimDetails837} /> */}
                                 {/* <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard} /> */}
                                 <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard_New} />
                                 <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
