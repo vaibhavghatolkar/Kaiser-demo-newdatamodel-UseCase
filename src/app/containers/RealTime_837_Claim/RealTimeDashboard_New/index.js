@@ -990,6 +990,7 @@ export class RealTimeDashboard_New extends React.Component {
                 geturl = Strings.Outbound_response_999
                 data = [
                     { flag999: '1' },
+                    { type: type },
                 ]
             } else if (notSent == 'CA') {
                 geturl = Strings.Outbound_277CAResponse

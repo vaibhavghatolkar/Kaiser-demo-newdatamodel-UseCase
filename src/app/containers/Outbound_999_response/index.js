@@ -62,7 +62,7 @@ export class Outbound_response_999 extends React.Component {
             Response: '',
             initialPage: null,
             flag999: this.props.location.state.data[0].flag999,
-
+            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -123,7 +123,7 @@ export class Outbound_response_999 extends React.Component {
         }
 
         query = `{
-            Data999(RecType: "${recType}", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}) {
+            Data999(RecType: "${recType}", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType} ,type:${this.state.type}) {
               FileId
               FileName
               Date
