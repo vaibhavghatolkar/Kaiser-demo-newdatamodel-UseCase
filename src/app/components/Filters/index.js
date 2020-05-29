@@ -100,7 +100,6 @@ export class Filters extends React.Component {
         this.props.update('providerName', value)
     }
     onChangeName = (value, key) => {
-        console.log("this is called", value)
         this.props.update(key, value)
     }
     getoptions = () => {
