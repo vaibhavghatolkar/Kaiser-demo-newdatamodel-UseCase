@@ -54,7 +54,7 @@ export class ClaimProcessingSummary extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
-
+            Filter_ClaimId:"",
             X12Count: 0,
             Accepted_Claims: 0,
             Rejected_Claims: 0,
@@ -63,7 +63,6 @@ export class ClaimProcessingSummary extends React.Component {
             ReconciledError_Claims: 0,
             LoadingClaims: 0,
             LoadedErrorClaims: 0,
-
             fileNameFlag: 180,
             fileDateFlag: 180,
             extraField2Flag: 180,
@@ -202,7 +201,7 @@ export class ClaimProcessingSummary extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"", Status277CA:"") {
+            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"", Status277CA:"",ClaimID:"${this.state.Filter_ClaimId}") {
                 RecCount
                 ClaimID
                 ClaimDate
@@ -325,7 +324,7 @@ export class ClaimProcessingSummary extends React.Component {
         let type = this.state.type ? this.state.type : ''
 
         let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId: fileId ? fileId : this.state.incoming_fileId },
+            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId: fileId ? fileId : this.state.incoming_fileId,Filter_ClaimId: this.state.Filter_ClaimId, },
         ]
 
         this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
@@ -631,6 +630,7 @@ export class ClaimProcessingSummary extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                showclaimId={true}
             />
         )
     }
