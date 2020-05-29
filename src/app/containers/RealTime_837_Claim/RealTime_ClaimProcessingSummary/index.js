@@ -19,6 +19,7 @@ import { TableTiles } from '../../../components/TableTiles';
 import { Filters } from '../../../components/Filters';
 
 let val = ''
+let controller = new AbortController()
 export class ClaimProcessingSummary extends React.Component {
 
     constructor(props) {
@@ -197,6 +198,8 @@ export class ClaimProcessingSummary extends React.Component {
     }
 
     getData = async () => {
+        controller.abort()
+        controller = new AbortController()
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
@@ -237,6 +240,7 @@ export class ClaimProcessingSummary extends React.Component {
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -631,6 +635,7 @@ export class ClaimProcessingSummary extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 showclaimId={true}
+                isMolina={true}
             />
         )
     }

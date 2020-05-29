@@ -13,6 +13,7 @@ import { AutoComplete } from '../AutoComplete';
 let val = ''
 let val_in = ''
 let val_trans = ''
+let filterClaimId = ''
 export class Filters extends React.Component {
     constructor(props) {
         super(props);
@@ -99,11 +100,8 @@ export class Filters extends React.Component {
         this.props.update('providerName', value)
     }
     onChangeName = (value, key) => {
-        this.setState({
-            Filter_ClaimId: value
-        }, () => {
-            this.props.update(key, value)
-        })
+        console.log("this is called", value)
+        this.props.update(key, value)
     }
     getoptions = () => {
         let row = []
@@ -275,15 +273,20 @@ export class Filters extends React.Component {
                     {
                         this.props.showclaimId ?
                             <div className="form-group col-2">
-                                <div className="list-dashboard">Claim Id</div>
-                                <input className="form-control list-dashboard"
+                                <div className="list-dashboard">{this.props.isMolina ? 'Molina Claim Id' : 'Claim Id'}</div>
+                                <input
+                                    className="form-control list-dashboard"
                                     value={this.state.Filter_ClaimId}
                                     onChange={(event) => {
-                                        clearTimeout(val_in)
                                         let passing_val = event.target.value
-                                        val_in = setTimeout(() => {
-                                            this.onChangeName(passing_val, 'Filter_ClaimId')
-                                        }, 300);
+                                        this.setState({
+                                            Filter_ClaimId: passing_val
+                                        }, () => {
+                                            clearTimeout(val_in)
+                                            val_in = setTimeout(() => {
+                                                this.onChangeName(passing_val, 'Filter_ClaimId')
+                                            }, 300);
+                                        })
                                     }}></input>
                             </div> : null
                     }

@@ -133,7 +133,7 @@ export class ClaimPaymentDetails extends React.Component {
             });
     }
 
-    getData = async() => {
+    getData = async () => {
         controller.abort()
         controller = new AbortController()
         let count = 1
@@ -185,6 +185,7 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => {
                 this.setState({
                     rowData: res.data.Dashboard835FileDetails,
+                    claims_rowData: [],
                     showClaims: res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0 ? true : false
                 }, () => {
                     if (res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0) {

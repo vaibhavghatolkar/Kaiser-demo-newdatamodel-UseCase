@@ -20,6 +20,8 @@ import { Filters } from '../../../components/Filters';
 
 var val = ''
 const $ = window.$;
+let controller = new AbortController()
+let controllerTransaction = new AbortController()
 export class Claim_Details_837_Grid extends React.Component {
 
     constructor(props) {
@@ -209,7 +211,9 @@ export class Claim_Details_837_Grid extends React.Component {
             });
     }
 
-    getData = () => {
+    getData = async() => {
+        controller.abort()
+        controller = new AbortController()
         let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
@@ -240,6 +244,7 @@ export class Claim_Details_837_Grid extends React.Component {
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
+            signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -312,6 +317,8 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     getTransactions = (fileId) => {
+        controllerTransaction.abort()
+        controllerTransaction = new AbortController()
         let providerName = this.state.providerName
         if (!providerName) {
             providerName = ''
@@ -346,6 +353,7 @@ export class Claim_Details_837_Grid extends React.Component {
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.claim_processing, {
             method: 'POST',
+            signal: controllerTransaction.signal,
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -1581,6 +1589,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 endDate={this.state.endDate}
                 Filter_ClaimId={this.state.Filter_ClaimId}
                 showclaimId={true}
+                isMolina={true}
             />
         )
     }
