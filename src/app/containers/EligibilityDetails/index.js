@@ -37,7 +37,7 @@ export class EligibilityDetails extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
-             State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             startDate: props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
@@ -48,8 +48,8 @@ export class EligibilityDetails extends React.Component {
             page: 1,
             count: 0,
             apiflag: props.location.state.data[0].apiflag,
-            transactionStatus:props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
-            HiPaaSID:props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
+            transactionStatus: props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
+            HiPaaSID: props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
             subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
             pieArray: [],
             labelArray: [],
@@ -166,9 +166,9 @@ export class EligibilityDetails extends React.Component {
                 if (res.data) {
                     if (uuid) {
                         let eventLog = ""
-                        if(this.state.apiflag == 1){
+                        if (this.state.apiflag == 1) {
                             eventLog = res.data.EventLogData270
-                        }else{
+                        } else {
                             eventLog = res.data.EventLogData276
                         }
 
@@ -292,7 +292,7 @@ export class EligibilityDetails extends React.Component {
     handlePageClick = (data) => {
         let page = data.selected + 1
         let flag = false
-        if(page != this.state.page){
+        if (page != this.state.page) {
             flag = true
         }
 
@@ -300,7 +300,7 @@ export class EligibilityDetails extends React.Component {
             page: page
         })
 
-        if(flag){
+        if (flag) {
             setTimeout(() => {
                 this.getTransactions()
             }, 50)
@@ -448,14 +448,14 @@ export class EligibilityDetails extends React.Component {
 
     _renderList = () => {
         let columnDefs;
-        if(this.state.transactionStatus == 'Pass' || this.state.transactionStatus == 'No'){
+        if (this.state.transactionStatus == 'Pass' || this.state.transactionStatus == 'No') {
             columnDefs = [
                 { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Transaction Date", field: "Date", flex: 1 },
                 { headerName: "Status", field: "Trans_type", flex: 1 },
                 { headerName: "Submitter", field: "Submiter", flex: 1 },
-            ] 
-        }else{
+            ]
+        } else {
             columnDefs = [
                 { headerName: "Transaction Id", field: "Trans_ID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Transaction Date", field: "Date", width: 150 },
@@ -466,7 +466,7 @@ export class EligibilityDetails extends React.Component {
                 { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ]
         }
-        
+
 
         return (
             <div>
@@ -496,21 +496,21 @@ export class EligibilityDetails extends React.Component {
                             if (event.colDef.headerName == 'Transaction Id') {
                                 this.setState({
                                     showDetails: true
-                                },() =>{
+                                }, () => {
                                     this.getData(event.data.HiPaaSUniqueID)
-                                    this.getDetails(event.data.HiPaaSUniqueID)   
+                                    this.getDetails(event.data.HiPaaSUniqueID)
                                 })
-                                  
-                            }else if (event.colDef.headerName == "Error Description" && event.data.ErrorDesc) {
-                                    this.setState({
-                                        clickedError: event.data.ErrorDesc
-                                    }, () => {
-                                        $('#error_modal').modal('show')
-                                    })
-    
-                                }
-                            
-    
+
+                            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDesc) {
+                                this.setState({
+                                    clickedError: event.data.ErrorDesc
+                                }, () => {
+                                    $('#error_modal').modal('show')
+                                })
+
+                            }
+
+
                         }}
                     >
                     </AgGridReact>
@@ -876,11 +876,11 @@ export class EligibilityDetails extends React.Component {
             />
         )
     }
-    
+
     render() {
         return (
             <div>
-                <h5 className="headerText">{(this.state.apiflag == 0 ?  'Claim Status Details ' : 'Eligibility Details ')}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
+                <h5 className="headerText">{(this.state.apiflag == 0 ? 'Claim Status Details ' : 'Eligibility Details ')}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {this._renderTopbar()}
                 {this._renderList()}
                 {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
