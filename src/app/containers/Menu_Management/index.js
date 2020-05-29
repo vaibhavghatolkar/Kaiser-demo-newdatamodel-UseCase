@@ -72,10 +72,10 @@ export class MenuManagement extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
-    onHandleChange(e, key) {
+    onHandleChange(event, key) {
 
         this.setState({
-            [key]: e.target.value
+            [key]: event.target.value
         });
     }
 
@@ -283,8 +283,8 @@ export class MenuManagement extends React.Component {
                         {d.loopid}
                     </td>
 
-                    <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
-                        d.isChecked = e.target.checked
+                    <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(event) => {
+                        d.isChecked = event.target.checked
                         let parent = d.parent_node
                         let menuId = d.menu_id
                         let data2 = [...data]
@@ -314,7 +314,7 @@ export class MenuManagement extends React.Component {
 
                             }
                             else if (menuId == item.parent_node) {
-                                item.isChecked = e.target.checked
+                                item.isChecked = event.target.checked
                             }
 
                         })
@@ -323,8 +323,8 @@ export class MenuManagement extends React.Component {
                             customList: [...data]
                         })
                     }} /></td>
-                    <td className="list-item-style">{<input checked={d.is_editable} type="checkbox" onChange={(e) => {
-                        d.is_editable = e.target.checked
+                    <td className="list-item-style">{<input checked={d.is_editable} type="checkbox" onChange={(event) => {
+                        d.is_editable = event.target.checked
                         d.isChecked = true
                         this.setState({
                             customList: [...data]
@@ -376,9 +376,9 @@ export class MenuManagement extends React.Component {
         })
     }
 
-    ChangeVal(e, key) {
+    ChangeVal(event, key) {
         this.setState({
-            [key]: e.target.value
+            [key]: event.target.value
         });
         setTimeout(() => {
             this.getData()

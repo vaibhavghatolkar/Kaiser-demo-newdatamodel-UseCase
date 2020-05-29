@@ -67,8 +67,8 @@ export class CoveredICDCode extends React.Component {
             })
     }
 
-    onChange(e) {
-        var files = e.target.files;
+    onChange(event) {
+        var files = event.target.files;
         process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
         process.env.NODE_ENV == 'development' && console.log(filesArr);

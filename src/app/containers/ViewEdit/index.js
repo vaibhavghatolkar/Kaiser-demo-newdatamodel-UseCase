@@ -1,6 +1,5 @@
 import React from 'react';
 import '../Files/files-styles.css';
-import { Topbar } from '../../components/Topbar';
 import Urls from '../../../helpers/Urls';
 
 export class ViewEdit extends React.Component {
@@ -107,7 +106,6 @@ export class ViewEdit extends React.Component {
     render() {
         return (
             <div className="container">
-                <Topbar flag={1} onSelect={this.onSelect}/>
                 {this.state.buildin_rules && this.state.buildin_rules.length > 0 ? <h3 className="top-padding-table">Build In Edits</h3> : ''}
                 {this.renderView()}
                 {this.state.custom_rules && this.state.custom_rules.length > 0 ? <h3 className="top-padding-table">Custom Edits</h3> : ''}

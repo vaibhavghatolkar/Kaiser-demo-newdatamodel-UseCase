@@ -45,7 +45,8 @@ export class Header extends React.Component {
             })
                 .then(res => res.json())
                 .then(res => {
-                    alert(res.data.ChangePassword);
+                    let message = res.data.ChangePassword 
+                    alert(message);
                     window.location.reload()
                 }).catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
@@ -53,9 +54,9 @@ export class Header extends React.Component {
         }
     }
 
-    onHandleChange(e, key) {
+    onHandleChange(event, key) {
         this.setState({
-            [key]: e.target.value
+            [key]: event.target.value
         });
     }
 

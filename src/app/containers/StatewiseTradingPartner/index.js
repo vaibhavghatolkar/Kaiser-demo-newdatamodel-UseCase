@@ -610,14 +610,14 @@ export class StatewiseTradingPartner extends React.Component {
                                     </div>
                                     <div className="form-group col-sm-2">
                                         <label className="list-header1">State</label>
-                                        <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'State')}>
+                                        <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'State')}>
                                             <option value="0"></option>
                                             {this.getoptions()}
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-2">
                                         <label className="list-header1">Transaction Type</label>
-                                        <select className="form-control list-header1" va id="fao1" onChange={(e) => this.ChangeVal(e, 'Transaction_Type')}>
+                                        <select className="form-control list-header1" va id="fao1" onChange={(event) => this.ChangeVal(event, 'Transaction_Type')}>
                                             <option value="0" ></option>
                                             {this.gettrans()}
                                             {/* <option selected={this.state.Transaction_Type == '270' ? "selected" : ''} value="270" >270</option>
@@ -656,9 +656,9 @@ export class StatewiseTradingPartner extends React.Component {
                                         <div className="form-group col-sm-2">
                                             <label className="list-header1">Sender Id(ISA06)</label>
                                             <input className="form-control list-header1" id="state"
-                                                onChange={(e) => {
+                                                onChange={(event) => {
                                                     clearTimeout(val)
-                                                    let value = e.target.value
+                                                    let value = event.target.value
                                                     val = setTimeout(() => {
                                                         this.setState({ Search_Senderid: value, showDetails: false })
                                                         setTimeout(() => {
@@ -685,9 +685,9 @@ export class StatewiseTradingPartner extends React.Component {
                                         <div className="form-group col-sm-2">
                                             <label className="list-header1">Payer Id</label>
                                             <input className="form-control list-header1" id="state"
-                                                onChange={(e) => {
+                                                onChange={(event) => {
                                                     clearTimeout(val)
-                                                    let value = e.target.value
+                                                    let value = event.target.value
                                                     val = setTimeout(() => {
                                                         this.setState({ Search_PayerID: value, showDetails: false })
                                                         setTimeout(() => {

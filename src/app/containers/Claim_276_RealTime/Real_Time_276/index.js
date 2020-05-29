@@ -1391,9 +1391,9 @@ export class RealTime276 extends React.Component {
         }, 50);
     }
 
-    onHandleChange(e, flag) {
+    onHandleChange(event, flag) {
         clearTimeout(val)
-        let providerName = e.target.value
+        let providerName = event.target.value
         val = setTimeout(() => {
             if (flag) {
                 this.setState({

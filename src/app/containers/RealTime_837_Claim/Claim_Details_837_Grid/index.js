@@ -8,7 +8,6 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
-import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
@@ -643,18 +642,18 @@ export class Claim_Details_837_Grid extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'X12 Claim Id', value: data.ClaimID },
-                            { key: 'Claim Date', value: data.ClaimDate },
-                            { key: 'Subscriber First Name', value: data.SubscriberFirstName },
-                            { key: 'Subscriber Last Name', value: data.SubscriberLastName },
-                            { key: 'Admission Date', value: data.AdmissionDate },
-                            { key: 'Claim Amount', value: data.Claim_Amount },
-                            { key: 'Provider Address', value: data.BillingProviderAddress },
-                            { key: 'Claim Status', value: data.ClaimStatus },
-                            { key: 'ICD Code', value: Claim_Icdcode },
-                            { key: 'Accident Date', value: isDate ? "" : AccidentDate, isDate: isDate },
-                            { key: '', },
-                            { key: '', },
+                            { field_name: 'X12 Claim Id', value: data.ClaimID },
+                            { field_name: 'Claim Date', value: data.ClaimDate },
+                            { field_name: 'Subscriber First Name', value: data.SubscriberFirstName },
+                            { field_name: 'Subscriber Last Name', value: data.SubscriberLastName },
+                            { field_name: 'Admission Date', value: data.AdmissionDate },
+                            { field_name: 'Claim Amount', value: data.Claim_Amount },
+                            { field_name: 'Provider Address', value: data.BillingProviderAddress },
+                            { field_name: 'Claim Status', value: data.ClaimStatus },
+                            { field_name: 'ICD Code', value: Claim_Icdcode },
+                            { field_name: 'Accident Date', value: isDate ? "" : AccidentDate, isDate: isDate },
+                            { field_name: '', },
+                            { field_name: '', },
                         ]
                     this.setState({
                         showDetails: true,
@@ -719,7 +718,7 @@ export class Claim_Details_837_Grid extends React.Component {
         dictionary.forEach(item => {
             col.push(
                 <div className="col">
-                    <div className="header">{item.key}</div>
+                    <div className="header">{item.field_name}</div>
                     {item.isDate ? this.getDatePicker() : <div>{(moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
                 </div>
             )
@@ -1011,14 +1010,14 @@ export class Claim_Details_837_Grid extends React.Component {
                 if (res.data && res.data.Claim837RTHLCount && res.data.Claim837RTHLCount.length > 0) {
                     let fileData = this.state.fileDataDetails
                     let fileDetails = [
-                        { key: 'File Name', value: fileData.FileName },
-                        { key: 'File Date', value: moment.utc(fileData.FileDate).format('MM/DD/YYYY') + moment.utc(fileData.FileDate).format(' h:m A') },
-                        { key: 'Receiver', value: fileData.Receiver },
-                        { key: 'HL20 Count', value: this.state.HL20 },
-                        { key: 'HL22 Count', value: this.state.HL22 },
-                        { key: 'HL23 Count', value: this.state.HL23 },
-                        { key: '', value: '' },
-                        { key: '', value: '' },
+                        { field_name: 'File Name', value: fileData.FileName },
+                        { field_name: 'File Date', value: moment.utc(fileData.FileDate).format('MM/DD/YYYY') + moment.utc(fileData.FileDate).format(' h:m A') },
+                        { field_name: 'Receiver', value: fileData.Receiver },
+                        { field_name: 'HL20 Count', value: this.state.HL20 },
+                        { field_name: 'HL22 Count', value: this.state.HL22 },
+                        { field_name: 'HL23 Count', value: this.state.HL23 },
+                        { field_name: '', value: '' },
+                        { field_name: '', value: '' },
                     ]
                     this.setState({
                         HL20: res.data.Claim837RTHLCount[0].HL20,
@@ -1161,33 +1160,6 @@ export class Claim_Details_837_Grid extends React.Component {
         setTimeout(() => {
             this.getData()
         }, 50);
-    }
-
-    renderTable() {
-        const data = this.state.claimsObj
-        let headerArray = []
-        let rowArray = []
-        headerArray.push(
-            { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-            { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
-            { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-        )
-
-        rowArray.push(
-            { value: 'FileName' },
-            { value: 'FileDate' },
-            { value: 'FileStatus' },
-            { value: 'Sender' }
-        )
-
-        return (
-            <CommonNestedTable
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-            />
-        )
     }
 
     _renderList = () => {

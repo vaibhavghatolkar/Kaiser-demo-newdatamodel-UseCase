@@ -1,7 +1,6 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
-import { Topbar } from '../../../components/Topbar';
 import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'
@@ -273,6 +272,8 @@ export class AuditSummary835 extends React.Component {
             } else if (item.name == 'Total Sent To Availity') {
                 availitySent = 'Y'
                 subtitle = "Sent to Availity"
+            } else if (item.name == 'Received From QNXT') {
+                subtitle = "Received From QNXT"
             } else {
                 addon = '/other'
             }
@@ -287,7 +288,6 @@ export class AuditSummary835 extends React.Component {
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Received From QNXT' &&
                         item.name != 'Error Resolved'
                     }
                     _data={data}

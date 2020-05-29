@@ -265,14 +265,14 @@ export class View_CustomEditsNew extends React.Component {
                   
                   
                     <td className="list-item-style">{d.severity}</td>
-                    <td className="list-item-style"><input type="checkbox" checked={d.isChecked} onChange={(e) => { 
-                        d.isChecked = e.target.checked
+                    <td className="list-item-style"><input type="checkbox" checked={d.isChecked} onChange={(event) => { 
+                        d.isChecked = event.target.checked
                         this.setState({
                             customList: [...data]
                         })
                         }} value={d.seqid} /></td>
-                     <td className="list-item-style"><input type="checkbox" checked={d.Post_Processing} onChange={(e) => { 
-                        d.Post_Processing = e.target.checked
+                     <td className="list-item-style"><input type="checkbox" checked={d.Post_Processing} onChange={(event) => { 
+                        d.Post_Processing = event.target.checked
                         this.setState({
                             customList: [...data]
                         })

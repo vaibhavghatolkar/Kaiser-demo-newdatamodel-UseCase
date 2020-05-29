@@ -1,6 +1,5 @@
 import React from 'react';
 import '../TradingPartnerConfiguration/style.css';
-import { Topbar } from '../../components/Topbar';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import Strings from '../../../helpers/Strings';
@@ -228,8 +227,8 @@ export class EditConfiguration extends React.Component {
             .then(data => process.env.NODE_ENV == 'development' && console.log('data returned:', data));
     }
 
-    onChange(e) {
-        var files = e.target.files;
+    onChange(event) {
+        var files = event.target.files;
         process.env.NODE_ENV == 'development' && console.log(files);
         var filesArr = Array.prototype.slice.call(files);
         process.env.NODE_ENV == 'development' && console.log(filesArr);

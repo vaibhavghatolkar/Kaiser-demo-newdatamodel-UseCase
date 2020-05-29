@@ -352,27 +352,12 @@ export class Payment_details  extends React.Component {
                                             </select>
                       
                     </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Sender</div>
-                               <input className="form-control" 
-                                                onChange={(e) => {
-                                                    clearTimeout(val)
-                                                    let value = e.target.value
-                                                    val = setTimeout(() => {
-                                                        this.setState({ Sender: value, showDetails: false })
-                                                        setTimeout(() => {
-                                                            this.getData()
-                                                        }, 50);
-                                                    }, 300);
-                                                }}
-                                            />
-                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Organization</div>
                       <input className="form-control" 
-                                                onChange={(e) => {
+                                                onChange={(event) => {
                                                     clearTimeout(val)
-                                                    let value = e.target.value
+                                                    let value = event.target.value
                                                     val = setTimeout(() => {
                                                         this.setState({ Organization: value, showDetails: false })
                                                         setTimeout(() => {

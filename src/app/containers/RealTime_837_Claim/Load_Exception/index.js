@@ -8,7 +8,6 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
-import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
@@ -561,33 +560,6 @@ export class Load_Exception extends React.Component {
         setTimeout(() => {
             this.getData()
         }, 50);
-    }
-
-    renderTable() {
-        const data = this.state.claimsObj
-        let headerArray = []
-        let rowArray = []
-        headerArray.push(
-            { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-            { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
-            { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-        )
-
-        rowArray.push(
-            { value: 'FileName' },
-            { value: 'FileDate' },
-            { value: 'FileStatus' },
-            { value: 'Sender' }
-        )
-
-        return (
-            <CommonNestedTable
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-            />
-        )
     }
 
     _renderList() {

@@ -231,8 +231,8 @@ export class TradingPartnerConfiguration extends React.Component {
         // process.env.NODE_ENV == 'development' && console.log(event.target.options[event.target.selectedIndex].text)
     }
 
-    onChange(e) {
-        var files = e.target.files;
+    onChange(event) {
+        var files = event.target.files;
         var filesArr = Array.prototype.slice.call(files);
         this.setState({ files: [...this.state.files, ...filesArr] });
     }

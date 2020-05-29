@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles.css'
+import '../Sidebar/styles.css'
 import Strings from '../../../helpers/Strings';
 import { Link } from 'react-router-dom'
 import Urls from '../../../helpers/Urls';
@@ -72,106 +72,106 @@ export class DynamicSidebar extends React.Component {
             });
     }
 
-    getkeys(key) {
+    getkeys(index) {
         let name = ''
-        if (key == 2) { name = Strings.claimsDashboard_834 }
-        else if (key == 3) { name = Strings.claimsDashboard_834_details }
-        else if (key == 4) { name = Strings.EnrollmentError }
+        if (index == 2) { name = Strings.claimsDashboard_834 }
+        else if (index == 3) { name = Strings.claimsDashboard_834_details }
+        else if (index == 4) { name = Strings.EnrollmentError }
 
-        else if (key == 6) { name = Strings.FullComparsion_dashboard }
-        else if (key == 7) { name = Strings.EnrollmentDetails }
-        else if (key == 8) { name = Strings.EnrollmentErrors }
-        else if (key == 9) { name = Strings.HistoryEligibilityErrorsDelta }
-        else if (key == 10) { name = Strings.CustomDBDetails }
-        else if (key == 11) { name = Strings.EligibilityErrorsDuplicate }
-        else if (key == 12) { name = Strings.OutboundDetails }
-        else if (key == 13) { name = Strings.RateCodeDelta }
-        else if (key == 14) { name = Strings.Eligibility_Errors }
-        else if (key == 15) { name = Strings.HistoryEligibilityErrorsDelta }
-        else if (key == 16) { name = Strings.PlanIntegrationEligibilityErrors }
-        else if (key == 17) { name = '' }
-        else if (key == 18) { name = Strings.MedicalMonthly_Metrics }
-        else if (key == 19) { name = Strings.Eligibility_Reconcile_Search }
-        else if (key == 20) { name = Strings.Outbound_dashboard }
+        else if (index == 6) { name = Strings.FullComparsion_dashboard }
+        else if (index == 7) { name = Strings.EnrollmentDetails }
+        else if (index == 8) { name = Strings.EnrollmentErrors }
+        else if (index == 9) { name = Strings.HistoryEligibilityErrorsDelta }
+        else if (index == 10) { name = Strings.CustomDBDetails }
+        else if (index == 11) { name = Strings.EligibilityErrorsDuplicate }
+        else if (index == 12) { name = Strings.OutboundDetails }
+        else if (index == 13) { name = Strings.RateCodeDelta }
+        else if (index == 14) { name = Strings.Eligibility_Errors }
+        else if (index == 15) { name = Strings.HistoryEligibilityErrorsDelta }
+        else if (index == 16) { name = Strings.PlanIntegrationEligibilityErrors }
+        else if (index == 17) { name = '' }
+        else if (index == 18) { name = Strings.MedicalMonthly_Metrics }
+        else if (index == 19) { name = Strings.Eligibility_Reconcile_Search }
+        else if (index == 20) { name = Strings.Outbound_dashboard }
 
-        else if (key == 22) { name = Strings.RealTime270 }
-        else if (key == 23) { name = Strings.ElilgibilityDetails270 }
-        else if (key == 24) { name = Strings.AuditSummary270 }
+        else if (index == 22) { name = Strings.RealTime270 }
+        else if (index == 23) { name = Strings.ElilgibilityDetails270 }
+        else if (index == 24) { name = Strings.AuditSummary270 }
 
-        else if (key == 26) { name = Strings.RealTime276 }
-        else if (key == 27) { name = Strings.ElilgibilityDetails276 }
+        else if (index == 26) { name = Strings.RealTime276 }
+        else if (index == 27) { name = Strings.ElilgibilityDetails276 }
 
-        else if (key == 29) { name = Strings.RealTimeDashboard }
-        else if (key == 30) { name = Strings.claimsAudit }
-        else if (key == 31) { name = Strings.Claim_Details_837_Grid }
-        else if (key == 31) { name = Strings.Load_Exception }
+        else if (index == 29) { name = Strings.RealTimeDashboard }
+        else if (index == 30) { name = Strings.claimsAudit }
+        else if (index == 31) { name = Strings.Claim_Details_837_Grid }
+        else if (index == 31) { name = Strings.Load_Exception }
 
-        // else if (key == 31) { name = Strings.ClaimDetails837 }
-        else if (key == 32) { name = Strings.claimsError }
-        else if (key == 33 || key == 98) { name = Strings.researchQueue }
-        else if (key == 34) { name = Strings.matchClaims }
-        else if (key == 99) { name = Strings.outbound_matchClaims }
-        else if (key == 35 || key == 100) { name = Strings.submitClaims }
+        // else if (index == 31) { name = Strings.ClaimDetails837 }
+        else if (index == 32) { name = Strings.claimsError }
+        else if (index == 33 || index == 98) { name = Strings.researchQueue }
+        else if (index == 34) { name = Strings.matchClaims }
+        else if (index == 99) { name = Strings.outbound_matchClaims }
+        else if (index == 35 || index == 100) { name = Strings.submitClaims }
 
-        else if (key == 37) { name = Strings.tradingPartnerConfiguration }
-        else if (key == 38) { name = Strings.transactionSetup }
-        else if (key == 39) { name = Strings.editConfiguration }
-        else if (key == 40) { name = Strings.View_CustomEditsNew }
-        else if (key == 41) { name = Strings.covered }
-        else if (key == 42) { name = Strings.noncovered }
-        else if (key == 43) { name = Strings.companionGuide }
+        else if (index == 37) { name = Strings.tradingPartnerConfiguration }
+        else if (index == 38) { name = Strings.transactionSetup }
+        else if (index == 39) { name = Strings.editConfiguration }
+        else if (index == 40) { name = Strings.View_CustomEditsNew }
+        else if (index == 41) { name = Strings.covered }
+        else if (index == 42) { name = Strings.noncovered }
+        else if (index == 43) { name = Strings.companionGuide }
 
-        else if (key == 45) { name = Strings.UserList }
-        else if (key == 46) { name = Strings.MenuCreate }
-        else if (key == 47) { name = Strings.ChangePassword }
-        else if (key == 48) { name = Strings.MenuManagement }
-        // else if (key == 53) { name = Strings.EncounterDashboard }
-        // else if (key == 54) { name = Strings.EncounterDetails }
+        else if (index == 45) { name = Strings.UserList }
+        else if (index == 46) { name = Strings.MenuCreate }
+        else if (index == 47) { name = Strings.ChangePassword }
+        else if (index == 48) { name = Strings.MenuManagement }
+        // else if (index == 53) { name = Strings.EncounterDashboard }
+        // else if (index == 54) { name = Strings.EncounterDetails }
 
-        else if (key == 65) { name = Strings.Inbound_EncounterDashboard }
-        else if (key == 66) { name = Strings.Inbound_EncounterDetails }
+        else if (index == 65) { name = Strings.Inbound_EncounterDashboard }
+        else if (index == 66) { name = Strings.Inbound_EncounterDetails }
 
-        else if (key == 50) { name = Strings.claimPayment_835 }
-        else if (key == 51) { name = Strings.claimPayment_835_details }
+        else if (index == 50) { name = Strings.claimPayment_835 }
+        else if (index == 51) { name = Strings.claimPayment_835_details }
 
-        else if (key == 120) { name = Strings.tradingPartnerDetails }
-        else if (key == 116) { name = Strings.healthCare278 }
-        else if (key == 117) { name = Strings.serviceDetails278 }
-        else if (key == 122) { name = Strings.ClaimProcessingSummary }
-        else if (key == 124) { name = Strings.Inbound_response_999 }
-        else if (key == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
-        else if (key == 123) { name = Strings.Outbound_ClaimProcessingSummary }
-        else if (key == 94) { name = Strings.Outbound_RealTimeDashboard }
-        else if (key == 96) { name = Strings.Outbound_ClaimDetails837 }
-        else if (key == 126) { name = Strings._277CAResponse }
-        else if (key == 97) { name = Strings.Outbound_ClaimsError }
-        else if (key == 128) { name = Strings.Inbound_Encounter_Audit }
-        else if (key == 95) { name = Strings.Outbound_AuditSummary }
-        else if (key == 125) { name = Strings.Outbound_response_999 }
-        else if (key == 130) { name = Strings.Outbound_Encounter_Audit }
-        else if (key == 131) { name = Strings.Outbound_Encounter_ClaimProcessingSummary }
-        else if (key == 127) { name = Strings.Outbound_277CAResponse }
-        else if (key == 109) { name = Strings.Outbound_TradingPartnerConfiguration }
-        else if (key == 110) { name = Strings.Outbound_TransactionSetup }
-        else if (key == 111) { name = Strings.Outbound_EditConfigurations }
-        else if (key == 112) { name = Strings.Outbound_View_customEditNew }
-        else if (key == 113) { name = Strings.Outbound_Covered }
-        else if (key == 114) { name = Strings.Outbound_NonCovered }
-        else if (key == 115) { name = Strings.Outbound_CompanionGuide }
-        else if (key == 121) { name = Strings.Outbound_StatewiseTradingPartner }
-        else if (key == 53) { name = Strings.Outbound_Encounter_RealTimeDashboard }
-        else if (key == 54) { name = Strings.Outbound_Encounter_ClaimDetails837 }
-        else if (key == 133) { name = Strings.NPILook_Up }
-        else if (key == 134) { name = Strings.Outbound_NPILook_Up }
-        else if (key == 135) { name = Strings.Outbound_BatchDetails837 }
-        else if (key == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
-        // else if(key ==137){name = Strings.Payment_details}
-        else if (key == 138) { name = Strings.Outbound_response_999 }
-        else if (key == 139) { name = Strings.Outbound_277CAResponse }
-        else if (key == 140) { name = Strings.Load_Exception }
-        else if (key == 141) { name = Strings.AuditSummary835 }
-        else if (key == 142) { name = Strings.ClaimPayment_835_ProcessingSummary }
-        else if (key == 143) { name = Strings.Inbound_response_999 }
+        else if (index == 120) { name = Strings.tradingPartnerDetails }
+        else if (index == 116) { name = Strings.healthCare278 }
+        else if (index == 117) { name = Strings.serviceDetails278 }
+        else if (index == 122) { name = Strings.ClaimProcessingSummary }
+        else if (index == 124) { name = Strings.Inbound_response_999 }
+        else if (index == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
+        else if (index == 123) { name = Strings.Outbound_ClaimProcessingSummary }
+        else if (index == 94) { name = Strings.Outbound_RealTimeDashboard }
+        else if (index == 96) { name = Strings.Outbound_ClaimDetails837 }
+        else if (index == 126) { name = Strings._277CAResponse }
+        else if (index == 97) { name = Strings.Outbound_ClaimsError }
+        else if (index == 128) { name = Strings.Inbound_Encounter_Audit }
+        else if (index == 95) { name = Strings.Outbound_AuditSummary }
+        else if (index == 125) { name = Strings.Outbound_response_999 }
+        else if (index == 130) { name = Strings.Outbound_Encounter_Audit }
+        else if (index == 131) { name = Strings.Outbound_Encounter_ClaimProcessingSummary }
+        else if (index == 127) { name = Strings.Outbound_277CAResponse }
+        else if (index == 109) { name = Strings.Outbound_TradingPartnerConfiguration }
+        else if (index == 110) { name = Strings.Outbound_TransactionSetup }
+        else if (index == 111) { name = Strings.Outbound_EditConfigurations }
+        else if (index == 112) { name = Strings.Outbound_View_customEditNew }
+        else if (index == 113) { name = Strings.Outbound_Covered }
+        else if (index == 114) { name = Strings.Outbound_NonCovered }
+        else if (index == 115) { name = Strings.Outbound_CompanionGuide }
+        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
+        else if (index == 53) { name = Strings.Outbound_Encounter_RealTimeDashboard }
+        else if (index == 54) { name = Strings.Outbound_Encounter_ClaimDetails837 }
+        else if (index == 133) { name = Strings.NPILook_Up }
+        else if (index == 134) { name = Strings.Outbound_NPILook_Up }
+        else if (index == 135) { name = Strings.Outbound_BatchDetails837 }
+        else if (index == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
+        // else if(index ==137){name = Strings.Payment_details}
+        else if (index == 138) { name = Strings.Outbound_response_999 }
+        else if (index == 139) { name = Strings.Outbound_277CAResponse }
+        else if (index == 140) { name = Strings.Load_Exception }
+        else if (index == 141) { name = Strings.AuditSummary835 }
+        else if (index == 142) { name = Strings.ClaimPayment_835_ProcessingSummary }
+        else if (index == 143) { name = Strings.Inbound_response_999 }
         return name
     }
 
@@ -210,20 +210,20 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '1' },
                 ]
             } else if (element.key == Strings.ElilgibilityDetails270 || element.key == Strings.elilgibilityErrors270) {
-                let key = 'n'
+                let index_val = 'n'
                 if (element.key == Strings.elilgibilityErrors270) {
-                    key = 'Fail'
+                    index_val = 'Fail'
                 }
                 data = [
-                    { apiflag: '1', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
+                    { apiflag: '1', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: index_val, count: 'n' },
                 ]
             } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276 || element.key == Strings._277CAResponse) {
-                let key = 'n'
+                let index_val = 'n'
                 if (element.key == Strings.elilgibilityErrors276) {
-                    key = 'Fail'
+                    index_val = 'Fail'
                 }
                 data = [
-                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: key, count: 'n' },
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: index_val, count: 'n' },
                 ]
 
             } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid || element.key == Strings.Inbound_EncounterDetails || element.key == Strings.Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {

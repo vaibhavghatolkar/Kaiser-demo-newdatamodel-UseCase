@@ -116,9 +116,9 @@ export class Filters extends React.Component {
         return row
     }
 
-    onHandleChange = (e) => {
+    onHandleChange = (event) => {
         clearTimeout(val)
-        let providerName = e.target.value
+        let providerName = event.target.value
         let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
         val = setTimeout(() => {
             getProviders(isOutbound ? 'Outbound' : 'Inbound', providerName)

@@ -8,7 +8,6 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
-import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
@@ -318,39 +317,6 @@ export class ClaimPayment_835_Exception extends React.Component {
         })
     }
 
- 
-    renderRows(dictionary) {
-        let row = []
-        let col = []
-        let count = 0
-
-        dictionary.forEach(item => {
-            col.push(
-                <div className="col">
-                    <div className="header">{item.key}</div>
-                    {item.isDate ? this.getDatePicker() : <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
-                </div>
-            )
-
-            if (col.length % 4 == 0) {
-                row.push(<div className="row">{col}</div>)
-                col = []
-            }
-            count++
-            if (count == dictionary.length && col.length > 0) {
-                row.push(<div className="row">{col}</div>)
-            }
-        });
-
-        return (
-            <div className="summary-style">
-                {row}
-            </div>
-        )
-    }
-
-
-
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
@@ -412,9 +378,9 @@ export class ClaimPayment_835_Exception extends React.Component {
 
 
 
-    onHandleChange = (e) => {
+    onHandleChange = (event) => {
         clearTimeout(val)
-        let providerName = e.target.value
+        let providerName = event.target.value
         val = setTimeout(() => {
             getProviders("Inbound", providerName)
                 .then(list => {
@@ -744,33 +710,6 @@ export class ClaimPayment_835_Exception extends React.Component {
         setTimeout(() => {
             this.getData()
         }, 50);
-    }
-
-    renderTable() {
-        const data = this.state.claimsObj
-        let headerArray = []
-        let rowArray = []
-        headerArray.push(
-            { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-            { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
-            { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-        )
-
-        rowArray.push(
-            { value: 'FileName' },
-            { value: 'FileDate' },
-            { value: 'FileStatus' },
-            { value: 'Sender' }
-        )
-
-        return (
-            <CommonNestedTable
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-            />
-        )
     }
 
     _renderList() {

@@ -674,99 +674,6 @@ export class EligibilityDetails extends React.Component {
         })
     }
 
-    renderFilters() {
-        return (
-            <form className="form-style" id='filters'>
-                <div className="form-row">
-                    <div className="form-group col">
-                        <div className="list-dashboard">Transaction Id</div>
-                        <input className="form-control list-dashboard"
-                            id="state"
-                            onChange={(e) => {
-                                clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ transactionId: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.getTransactions()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                    </div>
-                    <div className="form-group col">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            method={this._handleStateChange}
-                        />
-                    </div>
-
-                    <div className="form-group col">
-                        <div className="list-dashboard">Submitte </div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                                setTimeout(() => {
-                                    this.getTransactions()
-                                }, 50);
-                            }}
-                        >
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
-
-                    {
-                        this.state.status != 'Pass'
-                            ?
-                            <div className="form-group col">
-                                <div className="list-dashboard">Error Type</div>
-                                <select className="form-control list-dashboard" id="TradingPartner"
-                                    onChange={(event) => {
-                                        this.onSelect(event, 'errorcode')
-                                        setTimeout(() => {
-                                            this.getTransactions()
-                                        }, 50);
-                                    }}
-                                >
-                                    <option value="select"></option>
-                                    {this.getErrorOptions()}
-                                </select>
-                            </div>
-                            : null
-                    }
-                    <div className="form-group col">
-                        <div className="list-dashboard">
-                            Provider Name
-   
-                        </div>
-                        <select className="form-control list-dashboard"><option value=""></option>
-                            <option selected="selected" value="1">Provider Name 1</option>
-                            <option value="2">Provider Name 2</option>
-                        </select>
-                    </div>
-
-                    <div className="form-group col">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker
-                            className="form-control list-dashboard"
-                            selected={this.state.startDate ? new Date(this.state.startDate) : ''}
-                            onChange={this.handleStartChange}
-                        />
-                    </div>
-                    <div className="form-group col">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker
-                            className="form-control list-dashboard"
-                            selected={this.state.endDate ? new Date(this.state.endDate) : ''}
-                            onChange={this.handleEndChange}
-                        />
-                    </div>
-                </div>
-            </form>
-        )
-    }
-
     renderEventLog() {
         let row = []
         const data = this.state.eventLog ? this.state.eventLog : []
@@ -974,7 +881,6 @@ export class EligibilityDetails extends React.Component {
         return (
             <div>
                 <h5 className="headerText">{(this.state.apiflag == 0 ?  'Claim Status Details ' : 'Eligibility Details ')}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
-                {/* {this.renderFilters()} */}
                 {this._renderTopbar()}
                 {this._renderList()}
                 {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}

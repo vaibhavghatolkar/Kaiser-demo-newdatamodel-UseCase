@@ -76,10 +76,10 @@ export class MenuCreate extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
-    onHandleChange(e, key) {
+    onHandleChange(event, key) {
 
         this.setState({
-            [key]: e.target.value
+            [key]: event.target.value
         });
     }
 
@@ -292,8 +292,8 @@ export class MenuCreate extends React.Component {
                         {d.loopid}
                     </td>
 
-                    <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(e) => {
-                        d.isChecked = e.target.checked
+                    <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(event) => {
+                        d.isChecked = event.target.checked
                         let parent = d.parent_node
                         let menuId = d.menu_id
                         let data2 = [...data]
@@ -323,7 +323,7 @@ export class MenuCreate extends React.Component {
 
                             }
                             else if (menuId == item.parent_node) {
-                                item.isChecked = e.target.checked
+                                item.isChecked = event.target.checked
                             }
 
                         })
@@ -331,9 +331,9 @@ export class MenuCreate extends React.Component {
                             customList: [...data]
                         })
                     }} /></td>
-                    <td className="list-item-style">{d.is_editable == false ? '' : <input checked={d.isAccessValue} type="checkbox" onChange={(e) => {
-                        d.isAccessValue = e.target.checked
-                        d.isChecked = e.target.checked
+                    <td className="list-item-style">{d.is_editable == false ? '' : <input checked={d.isAccessValue} type="checkbox" onChange={(event) => {
+                        d.isAccessValue = event.target.checked
+                        d.isChecked = event.target.checked
                         this.setState({
                             customList: [...data]
                         })

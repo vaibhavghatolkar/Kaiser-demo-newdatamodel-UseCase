@@ -1,7 +1,6 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
-import { Topbar } from '../../../components/Topbar';
 import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import { Link } from 'react-router-dom'

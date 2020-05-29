@@ -15,12 +15,12 @@ export class AutoComplete extends React.Component {
         return (
             <input className="form-control input-style-autocomplete" type="text"
                 value={this.state.selected_item}
-                onChange={(e) => {
+                onChange={(event) => {
                     this.setState({
-                        selected_item: e.target.value,
-                        showDialog: e.target.value ? true : false
+                        selected_item: event.target.value,
+                        showDialog: event.target.value ? true : false
                     })
-                    this.props.onHandleChange(e)
+                    this.props.onHandleChange(event)
                 }}
             />
         )

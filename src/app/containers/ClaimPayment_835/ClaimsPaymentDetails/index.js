@@ -8,7 +8,6 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
-import { CommonNestedTable } from '../../../components/CommonNestedTable';
 import Strings from '../../../../helpers/Strings';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -424,36 +423,36 @@ export class ClaimPaymentDetails extends React.Component {
                     let data = res.data.RemittanceViewerClaimDetails[0]
 
                     let fileDetails = [
-                        { key: 'File Name', value: fileData.FileName },
-                        { key: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
-                        { key: 'Receiver', value: fileData.Receiver }
+                        { field_name: 'File Name', value: fileData.FileName },
+                        { field_name: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
+                        { field_name: 'Receiver', value: fileData.Receiver }
                     ]
 
                     let claimDetails =
                         [
-                            { key: 'Claim Id', value: data.ClaimID },
-                            { key: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
-                            { key: 'Patient Name', value: data.PatientName },
-                            // { key: '835 Response (RAW)',value: "" },
-                            { key: 'Days Aged', value: "" },
-                            { key: 'Payment Method Code', value: data.CHECKEFTFlag },
-                            { key: 'Total Billed Amount', value: "" },
-                            { key: 'Total Adjusted Amount', value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt },
-                            { key: 'Payer Name', value: data.PayerName },
-                            { key: 'Payer claim control No.', value: data.PayerClaimControl },
-                            { key: 'Claim Status Code', value: data.ClaimStatusCode },
-                            { key: 'Claim Filling Indicator', },
+                            { field_name: 'Claim Id', value: data.ClaimID },
+                            { field_name: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
+                            { field_name: 'Patient Name', value: data.PatientName },
+                            // { field_name: '835 Response (RAW)',value: "" },
+                            { field_name: 'Days Aged', value: "" },
+                            { field_name: 'Payment Method Code', value: data.CHECKEFTFlag },
+                            { field_name: 'Total Billed Amount', value: "" },
+                            { field_name: 'Total Adjusted Amount', value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt },
+                            { field_name: 'Payer Name', value: data.PayerName },
+                            { field_name: 'Payer claim control No.', value: data.PayerClaimControl },
+                            { field_name: 'Claim Status Code', value: data.ClaimStatusCode },
+                            { field_name: 'Claim Filling Indicator', },
 
-                            { key: 'Patient ID', },
+                            { field_name: 'Patient ID', },
 
-                            { key: 'Provider ID', },
-                            { key: 'Provider Name', },
-                            { key: 'Rendering Provider ID', },
-                            { key: 'Facility Code Value', value: data.FacilityCode },
-                            { key: 'Patient Control Number', value: data.PatientControlNo },
+                            { field_name: 'Provider ID', },
+                            { field_name: 'Provider Name', },
+                            { field_name: 'Rendering Provider ID', },
+                            { field_name: 'Facility Code Value', value: data.FacilityCode },
+                            { field_name: 'Patient Control Number', value: data.PatientControlNo },
 
-                            { key: 'DRG Code', value: data.DigonisCode },
-                            { key: 'Total Patient Resp', value: data.PatietResAMT },
+                            { field_name: 'DRG Code', value: data.DigonisCode },
+                            { field_name: 'Total Patient Resp', value: data.PatietResAMT },
 
                         ]
                     this.setState({
@@ -482,7 +481,7 @@ export class ClaimPaymentDetails extends React.Component {
         dictionary.forEach(item => {
             col.push(
                 <div className="col-4">
-                    <div className="header">{item.key}</div>
+                    <div className="header">{item.field_name}</div>
                     <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
                 </div>
             )
@@ -528,8 +527,8 @@ export class ClaimPaymentDetails extends React.Component {
             this.getData()
         }, 50);
     }
-    onHandleChange(e) {
-        let providerName = e.target.value
+    onHandleChange(event) {
+        let providerName = event.target.value
         clearTimeout(val)
         val = setTimeout(() => {
             this.setState({

@@ -60,9 +60,9 @@ export class Login extends React.Component {
             })
     }
 
-    onHandleChange(e, key) {
+    onHandleChange(event, key) {
         this.setState({
-            [key]: e.target.value
+            [key]: event.target.value
         });
     }
 
