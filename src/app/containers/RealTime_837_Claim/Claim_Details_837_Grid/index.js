@@ -1590,6 +1590,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 Filter_ClaimId={this.state.Filter_ClaimId}
                 showclaimId={true}
                 isMolina={true}
+                removeGrid={true}
             />
         )
     }

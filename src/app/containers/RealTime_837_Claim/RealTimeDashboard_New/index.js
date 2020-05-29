@@ -1148,6 +1148,7 @@ export class RealTimeDashboard_New extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                removeGrid={true}
             />
         )
     }

@@ -636,6 +636,7 @@ export class ClaimProcessingSummary extends React.Component {
                 endDate={this.state.endDate}
                 showclaimId={true}
                 isMolina={true}
+                removeGrid={true}
             />
         )
     }
