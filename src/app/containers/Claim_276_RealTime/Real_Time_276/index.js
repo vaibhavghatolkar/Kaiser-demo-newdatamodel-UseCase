@@ -185,11 +185,16 @@ export class RealTime276 extends React.Component {
                     this.setState({
                         second_data: second_data
                     })
+                } else {
+                    let pieData = res.data.ErrorDescriptionPieChart276
+                    let second_data = res.data.ErrorDescriptionPieChart276 && res.data.ErrorDescriptionPieChart276.length > 0 ? this.getPieChartData(pieData) : ''
+                    this.setState({
+                        second_data: second_data
+                    })
                 }
 
                 if (res.data) {
                     this.performCommonOperations(res, chartType)
-
                 }
 
             })
