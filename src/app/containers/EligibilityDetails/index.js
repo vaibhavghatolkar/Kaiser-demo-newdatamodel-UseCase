@@ -512,9 +512,9 @@ export class EligibilityDetails extends React.Component {
                                     this.getDetails(event.data.HiPaaSUniqueID)
                                 })
 
-                            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDesc) {
+                            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
                                 this.setState({
-                                    clickedError: event.data.ErrorDesc
+                                    clickedError: event.data.ErrorDescription
                                 }, () => {
                                     $('#error_modal').modal('show')
                                 })
