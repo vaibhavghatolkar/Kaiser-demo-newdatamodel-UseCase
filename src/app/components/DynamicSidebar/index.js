@@ -95,16 +95,16 @@ export class DynamicSidebar extends React.Component {
         else if (index == 20) { name = Strings.Outbound_dashboard }
 
         else if (index == 22) { name = Strings.RealTime270 }
-        else if (index == 23) { name = Strings.ElilgibilityDetails270 }
+        else if (index == 23) { name = Strings._ElilgibilityDetails270 }
         else if (index == 24) { name = Strings.AuditSummary270 }
 
         else if (index == 26) { name = Strings.RealTime276 }
-        else if (index == 27) { name = Strings.ElilgibilityDetails276 }
+        else if (index == 27) { name = Strings._ElilgibilityDetails276 }
 
         else if (index == 29) { name = Strings.RealTimeDashboard }
         else if (index == 30) { name = Strings.claimsAudit }
-        else if (index == 31) { name = Strings.Claim_Details_837_Grid }
-        else if (index == 31) { name = Strings.Load_Exception }
+        else if (index == 31) { name = Strings._Claim_Details_837_Grid }
+        else if (index == 31) { name = Strings._Load_Exception }
 
         // else if (index == 31) { name = Strings.ClaimDetails837 }
         else if (index == 32) { name = Strings.claimsError }
@@ -132,13 +132,13 @@ export class DynamicSidebar extends React.Component {
         else if (index == 66) { name = Strings.Inbound_EncounterDetails }
 
         else if (index == 50) { name = Strings.claimPayment_835 }
-        else if (index == 51) { name = Strings.claimPayment_835_details }
+        else if (index == 51) { name = Strings._claimPayment_835_details }
 
         else if (index == 120) { name = Strings.tradingPartnerDetails }
         else if (index == 116) { name = Strings.healthCare278 }
         else if (index == 117) { name = Strings.serviceDetails278 }
         else if (index == 122) { name = Strings.ClaimProcessingSummary }
-        else if (index == 124) { name = Strings.Inbound_response_999 }
+        else if (index == 124) { name = Strings._Inbound_response_999 }
         else if (index == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
         else if (index == 123) { name = Strings.Outbound_ClaimProcessingSummary }
         else if (index == 94) { name = Strings.Outbound_RealTimeDashboard }
@@ -147,10 +147,10 @@ export class DynamicSidebar extends React.Component {
         else if (index == 97) { name = Strings.Outbound_ClaimsError }
         else if (index == 128) { name = Strings.Inbound_Encounter_Audit }
         else if (index == 95) { name = Strings.Outbound_AuditSummary }
-        else if (index == 125) { name = Strings.Outbound_response_999 }
+        else if (index == 125) { name = Strings._Outbound_response_999 }
         else if (index == 130) { name = Strings.Outbound_Encounter_Audit }
         else if (index == 131) { name = Strings.Outbound_Encounter_ClaimProcessingSummary }
-        else if (index == 127) { name = Strings.Outbound_277CAResponse }
+        else if (index == 127) { name = Strings._Outbound_277CAResponse }
         else if (index == 109) { name = Strings.Outbound_TradingPartnerConfiguration }
         else if (index == 110) { name = Strings.Outbound_TransactionSetup }
         else if (index == 111) { name = Strings.Outbound_EditConfigurations }
@@ -166,12 +166,12 @@ export class DynamicSidebar extends React.Component {
         else if (index == 135) { name = Strings.Outbound_BatchDetails837 }
         else if (index == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
         // else if(index ==137){name = Strings.Payment_details}
-        else if (index == 138) { name = Strings.Outbound_response_999 }
-        else if (index == 139) { name = Strings.Outbound_277CAResponse }
-        else if (index == 140) { name = Strings.Load_Exception }
+        else if (index == 138) { name = Strings._Outbound_response_999 }
+        else if (index == 139) { name = Strings._Outbound_277CAResponse }
+        else if (index == 140) { name = Strings._Load_Exception }
         else if (index == 141) { name = Strings.AuditSummary835 }
         else if (index == 142) { name = Strings.ClaimPayment_835_ProcessingSummary }
-        else if (index == 143) { name = Strings.Inbound_response_999 }
+        else if (index == 143) { name = Strings._Inbound_response_999 }
         return name
     }
 
@@ -209,7 +209,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { apiflag: '1' },
                 ]
-            } else if (element.key == Strings.ElilgibilityDetails270 || element.key == Strings.elilgibilityErrors270) {
+            } else if (element.key == Strings._ElilgibilityDetails270 || element.key == Strings.elilgibilityErrors270) {
                 let index_val = 'n'
                 if (element.key == Strings.elilgibilityErrors270) {
                     index_val = 'Fail'
@@ -217,7 +217,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { apiflag: '1', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: index_val, count: 'n' },
                 ]
-            } else if (element.key == Strings.ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276 || element.key == Strings._277CAResponse) {
+            } else if (element.key == Strings._ElilgibilityDetails276 || element.key == Strings.elilgibilityErrors276 || element.key == Strings._277CAResponse) {
                 let index_val = 'n'
                 if (element.key == Strings.elilgibilityErrors276) {
                     index_val = 'Fail'
@@ -226,7 +226,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: index_val, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings.Claim_Details_837_Grid || element.key == Strings.Inbound_EncounterDetails || element.key == Strings.Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings._Claim_Details_837_Grid || element.key == Strings.Inbound_EncounterDetails || element.key == Strings._Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n', gridflag: '', subtitle: '' },
                 ]
@@ -265,15 +265,15 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
             }
-            else if (element.key === Strings.claimPayment_835_details) {
+            else if (element.key === Strings._claimPayment_835_details) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
-            } else if (element.key == Strings.Outbound_response_999) {
+            } else if (element.key == Strings._Outbound_response_999) {
                 data = [
                     { flag999: '1' },
                 ]
-            } else if (element.key == Strings.Inbound_response_999) {
+            } else if (element.key == Strings._Inbound_response_999) {
                 data = [
                     { flag999: '0' },
                 ]

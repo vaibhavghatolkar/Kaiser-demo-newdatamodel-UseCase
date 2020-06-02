@@ -885,6 +885,8 @@ export class EligibilityDetails extends React.Component {
                 endDate={this.state.endDate}
                 TransactionId={true}
                 submitter_key={this.state.apiflag == 1 ? "EligibilityStatus" : "ClaimRequest"}
+                State={this.state.State}
+                selectedTradingPartner={this.state.selectedTradingPartner}
             />
         )
     }
