@@ -120,6 +120,7 @@ const Strings = {
     isDev: 1,
     AuditSummary835:'AuditSummary835',
     Inbound_response_999:'Inbound_response_999',
+
     _ElilgibilityDetails270:'_ElilgibilityDetails270',
     _ElilgibilityDetails276: '_ElilgibilityDetails276',
     _Claim_Details_837_Grid:'_Claim_Details_837_Grid',
@@ -128,6 +129,8 @@ const Strings = {
     _claimPayment_835_details : '_claimPayment_835_details',
     _Inbound_response_999:'_Inbound_response_999',
     _Load_Exception:'_Load_Exception',
+    _ClaimProcessingSummary: '_claimProcessingSummary',
+    _ClaimPayment_835_ProcessingSummary:'_ClaimPayment_835_ProcessingSummary',
 }
 
 export default Strings;

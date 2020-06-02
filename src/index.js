@@ -175,6 +175,7 @@ class PrivateRoute extends React.Component {
 
                                 <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard_New} />
                                 <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
+                                <Route path={'/'+ Strings._ClaimProcessingSummary} component={ClaimProcessingSummary} />
                                 <Route path={'/' + Strings.MenuManagement} component={MenuManagement} />
 
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
@@ -192,6 +193,7 @@ class PrivateRoute extends React.Component {
                                     
                                 <Route path={'/' + Strings.ClaimPayment_835_Exception} component={ClaimPayment_835_Exception} />
                                 <Route path={'/' + Strings.ClaimPayment_835_ProcessingSummary} component={ClaimPayment_835_ProcessingSummary} />
+                                <Route path={'/' + Strings._ClaimPayment_835_ProcessingSummary} component={ClaimPayment_835_ProcessingSummary} />
                                 <Route path={'/' + Strings.Inbound_response_999} component={Outbound_response_999} />
                                 <Route path={'/' + Strings._ElilgibilityDetails270} component={EligibilityDetails} />
                                 <Route path={'/' + Strings._ElilgibilityDetails276} component={EligibilityDetails} />
