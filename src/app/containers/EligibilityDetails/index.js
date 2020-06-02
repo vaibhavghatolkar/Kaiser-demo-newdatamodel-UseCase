@@ -847,14 +847,15 @@ export class EligibilityDetails extends React.Component {
             startDate,
             endDate,
             selected_val,
-            chartType
+            chartType,
         }, () => {
             this._refreshScreen()
         })
     }
     update = (key, value) => {
         this.setState({
-            [key]: value
+            [key]: value,
+            showDetails: false
         }, () => {
             this._refreshScreen()
         })
