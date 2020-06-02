@@ -91,7 +91,11 @@ export class Filters extends React.Component {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.props.update(key, '')
         } else {
-            this.props.update(key, event.target.options[event.target.selectedIndex].text)
+            if(key == 'selectedTradingPartner'){
+                this.props.update(key, event.target.options[event.target.selectedIndex].value)
+            } else {
+                this.props.update(key, event.target.options[event.target.selectedIndex].text)
+            }
         }
     }
 
@@ -108,7 +112,7 @@ export class Filters extends React.Component {
             if (!element) {
                 return
             }
-            row.push(<option selected={this.props.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""} value="">{element.Trading_Partner_Name}</option>)
+            row.push(<option selected={this.props.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""} value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
         })
         return row
     }
@@ -177,7 +181,7 @@ export class Filters extends React.Component {
                                         onChange={(event) => {
                                             this.onSelect(event, 'selectedTradingPartner')
                                         }}>
-                                        <option value="select"></option>
+                                        <option value=""></option>
                                         {this.getoptions()}
                                     </select>
                                 </div>)
@@ -264,7 +268,7 @@ export class Filters extends React.Component {
                                         this.onSelect(event, 'error_Type')
                                     }}>
                                     >
-                                    <option value="select"></option>
+                                    <option value=""></option>
                                     {/* {this.getErrorOptions()} */}
                                 </select>
                             </div> : null
