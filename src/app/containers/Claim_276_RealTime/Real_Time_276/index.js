@@ -759,7 +759,7 @@ export class RealTime276 extends React.Component {
         let loadStatus = ''
         let generalStatus = ''
         let subtitle = ''
-        if (header == 'Top 10 File Level Errors') {
+        if (header == 'Top 10 Transaction Level Errors') {
             claimStatus = 'Fail'
             subtitle = "Invalid Transaction"
         }
