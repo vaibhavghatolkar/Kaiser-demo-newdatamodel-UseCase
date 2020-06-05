@@ -76,15 +76,12 @@ export class StatewiseTradingPartner extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
-
-        };
+             };
 
         this.displaydata = this.displaydata.bind(this)
         this.ChangeVal = this.ChangeVal.bind(this)
         this.handleClick = this.handleClick.bind(this)
+        this.Inactive=this.Inactive.bind(this)
     }
 
     componentDidMount() {
@@ -150,7 +147,7 @@ export class StatewiseTradingPartner extends React.Component {
                 })
 
 
-                if (data && data.TradingPartnerlist.length > 0) {
+                if (data!="" && data.TradingPartnerlist.length > 0) {
 
                     count = Math.floor(data.TradingPartnerlist[0].Rcount / 10)
                     if (data.TradingPartnerlist[0].Rcount % 10 > 0) {
@@ -245,7 +242,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.StateList.forEach(element => {
-            row.push(<option selected={this.state.State == element.StateCode ? element.StateCode : ''} value={element.StateCode}>{element.StateCode}</option>)
+            row.push(<option  value={element.StateCode}>{element.StateCode}</option>)
         })
         return row
 
@@ -272,7 +269,8 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.TransactionMasterList.forEach(element => {
-            row.push(<option selected={this.state.Transaction_Type == element.Trans_Code ? element.Trans_Code : ''} value={element.Trans_Code}>{element.Trans_Code}</option>)
+            row.push(<option 
+                 value={element.Trans_Code}>{element.Trans_Code}</option>)
         })
         return row
 
@@ -304,9 +302,9 @@ export class StatewiseTradingPartner extends React.Component {
                     query
 
                 })
-            })
-                .then(r => r.json())
-                .then(data => alert(data.data.TradingPartnerSave[0].Msg))
+            })            
+                .then(r => r.json())            
+                .then(data =>alert(data.data.TradingPartnerSave[0].Msg))
             setTimeout(() => {
                 window.location.reload()
             }, 1000)
@@ -461,7 +459,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div className="overall-padding">
                 <table className="table table-bordered claim-list" align="center">
-                    {this.state.TradingPartnerList && this.state.TradingPartnerList.length > 0 ? this.renderTableHeader() : null}
+                    {this.state.TradingPartnerList!="" && this.state.TradingPartnerList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
                     </tbody>
@@ -610,14 +608,14 @@ export class StatewiseTradingPartner extends React.Component {
                                     </div>
                                     <div className="form-group col-sm-2">
                                         <label className="list-header1">State</label>
-                                        <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'State')}>
+                                        <select className="form-control list-header1" value={this.state.State} onChange={(event) => this.ChangeVal(event, 'State')}>
                                             <option value="0"></option>
                                             {this.getoptions()}
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-2">
                                         <label className="list-header1">Transaction Type</label>
-                                        <select className="form-control list-header1" va id="fao1" onChange={(event) => this.ChangeVal(event, 'Transaction_Type')}>
+                                        <select className="form-control list-header1" va id="fao1"  value={this.state.Transaction_Type} onChange={(event) => this.ChangeVal(event, 'Transaction_Type')} >
                                             <option value="0" ></option>
                                             {this.gettrans()}
                                             {/* <option selected={this.state.Transaction_Type == '270' ? "selected" : ''} value="270" >270</option>
@@ -711,7 +709,7 @@ export class StatewiseTradingPartner extends React.Component {
                                         </div>
                                         <div className="form-group col-sm-2">
                                             <label className="list-header1">Transaction Type</label>
-                                            <select className="form-control list-header1" va id="fao1"
+                                            <select className="form-control list-header1" va id="fao1"     
                                                 onChange={(event) => {
                                                     this.ChangeVal(event, 'Search_Tran_Type')
                                                     setTimeout(() => {

@@ -253,29 +253,49 @@ export class TransactionSetup extends React.Component {
 
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">Transaction</label>
-                                                <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Transaction_Type')}>
+                                                <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Transaction_Type')} 
+                                                defaultValue={
+                                                    this.state.Transaction_Type == 'Claims 837P Medicaid' ? "Claims 837P Medicaid" :
+                                                        this.state.Transaction_Type == 'Claims 837I Medicaid' ? "Claims 837I Medicaid" :
+                                                            this.state.Transaction_Type == 'Enrollments 834 Medicare' ? "Enrollments 834 Medicare" :
+                                                                this.state.Transaction_Type == 'Encounter 837I' ? "Encounter 837I" :
+                                                                    this.state.Transaction_Type == 'Encounter 837P' ? "Encounter 837P" : '0'
+                                                }
+                                                >
                                                     <option value="0" >Select Transaction</option>
-                                                    <option selected={this.state.Transaction_Type == 'Claims 837P Medicaid' ? 'selected' : ''} value="Claims 837P Medicaid">Claims 837P Medicaid</option>
-                                                    <option selected={this.state.Transaction_Type == 'Claims 837I Medicaid' ? 'selected' : ''} value="Claims 837I Medicaid">Claims 837I Medicaid</option>
-                                                    <option selected={this.state.Transaction_Type == 'Enrollments 834 Medicare' ? 'selected' : ''} value="Enrollments 834 Medicare">Enrollments 834 Medicare</option>
-                                                    <option selected={this.state.Transaction_Type == 'Encounter 837I' ? 'selected' : ''} value="Encounter 837I">Encounter 837I</option>
-                                                    <option selected={this.state.Transaction_Type == 'Encounter 837P' ? 'selected' : ''} value="Encounter 837P">Encounter 837P</option>
+                                                    <option  value="Claims 837P Medicaid">Claims 837P Medicaid</option>
+                                                    <option value="Claims 837I Medicaid">Claims 837I Medicaid</option>
+                                                    <option value="Enrollments 834 Medicare">Enrollments 834 Medicare</option>
+                                                    <option  value="Encounter 837I">Encounter 837I</option>
+                                                    <option value="Encounter 837P">Encounter 837P</option>
                                                 </select>
                                             </div>
 
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">File Acceptance Criteria</label>
-                                                <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Acceptance_Criteria')}>
+                                                <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Acceptance_Criteria')}
+                                                  defaultValue={
+                                                    this.state.Acceptance_Criteria == 'Partially Accept' ? "Partially Accept" :
+                                                        this.state.Acceptance_Criteria == 'Full Reject' ? "Full Reject" :
+                                                          '0'
+                                                }
+                                                >
                                                     <option value="0">Select File Criteria</option>
-                                                    <option selected={this.state.Acceptance_Criteria == 'Partially Accept' ? 'selected' : ''} value="Partially Accept">Partially Accept</option>
-                                                    <option selected={this.state.Acceptance_Criteria == 'Full Reject' ? 'selected' : ''} value="Full Reject">Full Reject</option>
+                                                    <option value="Partially Accept">Partially Accept</option>
+                                                    <option  value="Full Reject">Full Reject</option>
                                                 </select>
                                             </div>
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">Communication Type</label>
-                                                <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}>
-                                                    <option selected={this.state.Communication_Type == "1" ? "selected" : ''} value="1">SFTP</option>
-                                                    <option selected={this.state.Communication_Type == "2" ? "selected" : ''} value="2">Disk</option>
+                                                <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal(e, 'Communication_Type')}
+                                                 defaultValue={
+                                                    this.state.Communication_Type == '1' ? "1" :
+                                                        this.state.Communication_Type == '2' ? "2" :
+                                                          '1'
+                                                }
+                                                >
+                                                    <option  value="1">SFTP</option>
+                                                    <option  value="2">Disk</option>
                                                 </select>
                                             </div>
                                             {
@@ -327,11 +347,20 @@ export class TransactionSetup extends React.Component {
                                                     </div>
                                                     <div className="form-group col-sm-3">
                                                         <label className="list-header1">File Naming Options</label>
-                                                        <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal1(e, 'file_naming_option')}>
-                                                            <option selected={this.state.file_naming_option == "Error if file exists" ? "selected" : ''} value="Error if file exists">Error if file exists</option>
-                                                            <option selected={this.state.file_naming_option == "Append if file exists" ? "selected" : ''} value="Append if file exists">Append if file exists</option>
-                                                            <option selected={this.state.file_naming_option == "Overwrite if file exists" ? "selected" : ''} value="Overwrite if file exists">Overwrite if file exists</option>
-                                                            <option selected={this.state.file_naming_option == "Create unique name if file exists" ? "selected" : ''} value="Create unique name if file exists">Create unique name if file exists</option>
+                                                        <select className="form-control list-header1" id="testIndicator" onChange={(e) => this.ChangeVal1(e, 'file_naming_option')}
+                                                          defaultValue={
+                                                            this.state.file_naming_option == 'Error if file exists' ? "Error if file exists" :
+                                                                this.state.file_naming_option == 'Append if file exists' ? "Append if file exists" :
+                                                                this.state.file_naming_option == 'Overwrite if file exists' ? "Overwrite if file exists" :
+                                                                this.state.file_naming_option == 'Create unique name if file exists' ? "Create unique name if file exists" :
+                                                                  '0'
+                                                        }
+                                                        >
+                                                            <option value="0">Select File Naming</option>
+                                                            <option  value="Error if file exists">Error if file exists</option>
+                                                            <option  value="Append if file exists">Append if file exists</option>
+                                                            <option  value="Overwrite if file exists">Overwrite if file exists</option>
+                                                            <option value="Create unique name if file exists">Create unique name if file exists</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -341,23 +370,36 @@ export class TransactionSetup extends React.Component {
                                         <div className="row">
                                             <div className="form-group col-sm-3">
                                                 <label className="list-header1">Companion Guide</label>
-                                                <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Companion_Guide')}>
+                                                <select className="form-control list-header1" id="fao1" onChange={(e) => this.ChangeVal(e, 'Companion_Guide')}
+                                                  defaultValue={
+                                                    this.state.Companion_Guide == '834 Medicare' ? "834 Medicare" :
+                                                        this.state.Companion_Guide == '837I Medicaid CA' ? "837I Medicaid CA" :
+                                                        this.state.Companion_Guide == '837P Medicaid CA' ? "837P Medicaid CA" :
+                                                        this.state.Companion_Guide == 'Encounters 837I Medicaid CA' ? "Encounters 837I Medicaid CA" :
+                                                        this.state.Companion_Guide == 'Encounters 837P Medicaid CA' ? "Encounters 837P Medicaid CA" :
+                                                        this.state.Companion_Guide == '270 Medicare' ? "270 Medicare" :
+                                                        this.state.Companion_Guide == '270 Medicaid CA' ? "270 Medicaid CA" :
+                                                        this.state.Companion_Guide == '276 Medicare' ? "276 Medicare" :
+                                                        this.state.Companion_Guide == '276 Medicaid CA' ? "276 Medicaid CA" :
+                                                          '0'
+                                                }
+                                                >
                                                     <option value="0">Select Companion Guide</option>
-                                                    <option selected={this.state.Companion_Guide == '834 Medicare' ? 'selected' : ''}>834 Medicare</option>
-                                                    <option selected={this.state.Companion_Guide == '837I Medicaid CA' ? 'selected' : ''}>837I Medicaid CA</option>
-                                                    <option selected={this.state.Companion_Guide == '837P Medicaid CA' ? 'selected' : ''}>837P Medicaid CA</option>
-                                                    <option selected={this.state.Companion_Guide == 'Encounters 837I Medicaid CA' ? 'selected' : ''}>Encounters 837I Medicaid CA</option>
-                                                    <option selected={this.state.Companion_Guide == 'Encounters 837P Medicaid CA' ? 'selected' : ''}>Encounters 837P Medicaid CA</option>
-                                                    <option selected={this.state.Companion_Guide == '270 Medicare' ? 'selected' : ''}>270 Medicare</option>
-                                                    <option selected={this.state.Companion_Guide == '270 Medicaid CA' ? 'selected' : ''}>270 Medicaid CA</option>
-                                                    <option selected={this.state.Companion_Guide == '276 Medicare' ? 'selected' : ''}>276 Medicare</option>
-                                                    <option selected={this.state.Companion_Guide == '276 Medicaid CA' ? 'selected' : ''}>276 Medicaid CA</option>
+                                                    <option>834 Medicare</option>
+                                                    <option>837I Medicaid CA</option>
+                                                    <option >837P Medicaid CA</option>
+                                                    <option>Encounters 837I Medicaid CA</option>
+                                                    <option >Encounters 837P Medicaid CA</option>
+                                                    <option >270 Medicare</option>
+                                                    <option >270 Medicaid CA</option>
+                                                    <option >276 Medicare</option>
+                                                    <option >276 Medicaid CA</option>
                                                 </select>
                                             </div>
                                             <div className="pull-right col-sm-1">
-                                                <p class="form">
+                                                <p className="form">
 
-                                                    <label class="add-photo-btn">Add New<span><input type="file" id="myfile" name="myfile" /></span>
+                                                    <label className="add-photo-btn">Add New<span><input type="file" id="myfile" name="myfile" /></span>
                                                     </label>
                                                 </p>
                                             </div>

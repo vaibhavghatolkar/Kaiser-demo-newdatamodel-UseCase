@@ -3,18 +3,12 @@ import '../../Claims/Dashboard/styles.css'
 import '../../color.css'
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
-import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
 import Strings from '../../../../helpers/Strings'
 import { CommonTable } from '../../../components/CommonTable';
-import { AutoComplete } from '../../../components/AutoComplete';
-import { getProviders } from '../../../../helpers/getDetails';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { Link } from 'react-router-dom'
 import { TableTiles } from '../../../components/TableTiles';
 import { Filters } from '../../../components/Filters';
 
@@ -121,13 +115,10 @@ export class ClaimProcessingSummary extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+         
         }
 
-        this.getData = this.getData.bind(this)
-        this.handlePageClick = this.handlePageClick.bind(this)
+         this.handlePageClick = this.handlePageClick.bind(this)
     }
 
     componentDidMount() {
