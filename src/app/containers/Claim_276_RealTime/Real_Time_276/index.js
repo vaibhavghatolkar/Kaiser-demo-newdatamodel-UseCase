@@ -2,15 +2,11 @@ import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import './style.css'
 import '../../color.css'
-import { Pie, Bar, Line } from 'react-chartjs-2';
+import { Pie, Line } from 'react-chartjs-2';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
-import { EligibilityDetails } from '../../EligibilityDetails';
 import Strings from '../../../../helpers/Strings';
 import { Link } from 'react-router-dom';
-import DatePicker from "react-datepicker";
-import Images from '../../../../theme/Images';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { Filters } from '../../../components/Filters';
 import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
@@ -102,14 +98,10 @@ export class RealTime276 extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
-
         }
 
         this.getData = this.getData.bind(this)
@@ -179,21 +171,20 @@ export class RealTime276 extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (this.state.apiflag == 1) {
-                    let pieData = res.data.ErrorDescriptionPieChart
-                    let second_data = res.data.ErrorDescriptionPieChart && res.data.ErrorDescriptionPieChart.length > 0 ? this.getPieChartData(pieData) : ''
-                    this.setState({
-                        second_data: second_data
-                    })
-                } else {
-                    let pieData = res.data.ErrorDescriptionPieChart276
-                    let second_data = res.data.ErrorDescriptionPieChart276 && res.data.ErrorDescriptionPieChart276.length > 0 ? this.getPieChartData(pieData) : ''
-                    this.setState({
-                        second_data: second_data
-                    })
-                }
-
                 if (res.data) {
+                    if (this.state.apiflag == 1) {
+                        let pieData = res.data.ErrorDescriptionPieChart
+                        let second_data = res.data.ErrorDescriptionPieChart && res.data.ErrorDescriptionPieChart.length > 0 ? this.getPieChartData(pieData) : ''
+                        this.setState({
+                            second_data: second_data
+                        })
+                    } else {
+                        let pieData = res.data.ErrorDescriptionPieChart276
+                        let second_data = res.data.ErrorDescriptionPieChart276 && res.data.ErrorDescriptionPieChart276.length > 0 ? this.getPieChartData(pieData) : ''
+                        this.setState({
+                            second_data: second_data
+                        })
+                    }
                     this.performCommonOperations(res, chartType)
                 }
 
@@ -207,30 +198,6 @@ export class RealTime276 extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.transaction270
-        // let query = `{
-        //     ClaimRequest276(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-        //         AvgResTime
-        //         TotalNumOfReq
-        //         Success
-        //         Error
-        //         Daily_Volume
-        //         LastMonth_Volume
-        //         ThisMonth_Volume
-        //         In_Compliance
-        //         out_of_Compliance
-        //         Error_Per
-        //         In_Compliance_Per
-        //         out_of_Compliance_per
-        //         NoResponse_Per
-        //         RealTime_Per
-        //         Invalid_Trans
-        //         Total_Paid
-        //         Total_NoResponse
-        //     }
-        //  ClaimStatuswiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-        //     ClaimStatus
-        //     Total
-        // }
         let query = `{   ProgressBar276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                 Valid_Per
                 InValid_Per
@@ -245,33 +212,7 @@ export class RealTime276 extends React.Component {
             }
         }`
 
-
         if (this.state.apiflag == 1) {
-            url = Urls.transaction270
-            // query = `{
-            //     Eligibilty270(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `") {
-            //         AvgResTime
-            //         TotalNumOfReq
-            //         Success
-            //         Error
-            //         Daily_Volume
-            //         LastMonth_Volume
-            //         ThisMonth_Volume
-            //         In_Compliance
-            //         out_of_Compliance
-            //         Error_Per
-            //         In_Compliance_Per
-            //         out_of_Compliance_per
-            //         NoResponse_Per
-            //         RealTime_Per
-            //         Invalid_Trans
-            //         Total_NoResponse
-            //     }
-            //     Eligibilty271ErrorwiseCount(State:"`+ this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"") {
-            //         ErrorType
-            //         RecCount
-            //         Percentage
-            //     }
             query = `{   ProgressBar270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                     Valid_Per
                     InValid_Per
@@ -358,7 +299,6 @@ export class RealTime276 extends React.Component {
         }`
 
         if (this.state.apiflag == 1) {
-            url = Urls.transaction270
             query = `{
                 DashboardComplianceRatio270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
                     In_Compliance_Per
@@ -440,8 +380,6 @@ export class RealTime276 extends React.Component {
                 try {
                     if (flag == 'Weekwise') {
                         dateChartLabel.push('week ' + count)
-                    } else if (flag == 'Datewise') {
-                        dateChartLabel.push(item.X_axis)
                     } else {
                         dateChartLabel.push(item.X_axis)
                     }
@@ -618,13 +556,13 @@ export class RealTime276 extends React.Component {
             <nav>
                 {
                     flag ?
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
 
                         </div>
                         :
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('Submitter')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submitter (top 5)</a>
-                            <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('Provider')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Provider (top 5)</a>
+                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a className="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('Submitter')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submitter (top 5)</a>
+                            <a className="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('Provider')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Provider (top 5)</a>
                         </div>
                 }
             </nav>
@@ -641,9 +579,6 @@ export class RealTime276 extends React.Component {
                                 arc: {
                                     borderWidth: 0
                                 }
-                            },
-                            legend: {
-                                position: 'bottom'
                             },
                             tooltips: {
                                 enabled: false
@@ -670,9 +605,6 @@ export class RealTime276 extends React.Component {
     }
 
     renderCharts() {
-        let minimumValue = Math.min(...this.state.dateChartData)
-        minimumValue = (minimumValue == 0 ? 0 : (minimumValue - (minimumValue * 10 / 100)))
-        minimumValue = Math.ceil(minimumValue)
         return (
             <div className="row chart-div col-12">
                 {
@@ -908,52 +840,16 @@ export class RealTime276 extends React.Component {
         )
     }
 
-    renderSummary() {
-        let row = []
-        const data = this.state.errorArray
-        var check = this.state.apiflag;
-        data.forEach((d) => {
-
-            row.push(
-
-                <tr>
-                    <td style={{ fontSize: "11px" }}><a style={{ cursor: "pointer" }} >{this.state.apiflag == 1 ? d.ErrorType : d.ClaimStatus}</a></td>
-                    <td >{this.state.apiflag == 1 ? d.RecCount : d.Total}</td>
-                    {this.state.apiflag == 1 ? <td >{this.state.apiflag == 1 ? d.Percentage : ''}</td> : ""}
-
-
-                </tr>
-            )
-        });
-
-        return (
-            <table className="table table-bordered claim-list summary-list chart-container chart">
-                <thead>
-                    <th style={{ fontSize: "11px" }}>{this.state.apiflag == 1 ? "Error Description" : "Claim Status"}</th>     <th style={{ fontSize: "11px" }}>{this.state.apiflag == 1 ? "Total Errors" : "Total Claims"}</th>
-                    {this.state.apiflag == 1 ? <th style={{ fontSize: "11px" }}>Error %</th> : ""}
-
-                </thead>
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
-        );
-    }
-
-
-
     _renderSummaryDetails = () => {
         let row = []
         let array = this.state.summaryCount
         let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
         let mainUrl = apiflag == 1 ? Strings.ElilgibilityDetails270 : Strings.ElilgibilityDetails276
-
 
         array.forEach(item => {
             let addon = ''
@@ -1118,12 +1014,10 @@ export class RealTime276 extends React.Component {
     getTransactions() {
 
         let query = ''
-        let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
         let url = Urls.transaction270
-        let loginflag = localStorage.getItem("DbTech");
 
         query = `{
             ClaimRequest_Datewise(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {
@@ -1139,7 +1033,6 @@ export class RealTime276 extends React.Component {
         }`
 
         if (this.state.apiflag == 1) {
-            url = Urls.transaction270
             query = `{
                 EligibilityAllDtlTypewise(TypeID:"" page: 1  State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {
                     HiPaaSUniqueID
@@ -1306,17 +1199,17 @@ export class RealTime276 extends React.Component {
         let noResponse = this.state.progress_noResponse + "%"
 
         return (
-            <div class="progress">
-                {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: valid, cursor: 'pointer' }}
+            <div className="progress">
+                {/* <div className="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: valid, cursor: 'pointer' }}
                     data-placement="top" data-toggle="tooltip" title={"Vaild Transaction (" + valid + ")"}
                 >Vaild Transaction ({valid})
                 </div>
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: invalid, cursor: 'pointer' }}
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: invalid, cursor: 'pointer' }}
                     data-placement="top" data-toggle="tooltip" title={"Invalid Transaction (" + invalid + ")"}
                 >Invalid Transaction ({invalid})
                 </div>
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: noResponse, cursor: 'pointer' }}
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style={{ width: noResponse, cursor: 'pointer' }}
                     data-placement="top" data-toggle="tooltip" title={"No Response (" + noResponse + ")"}
                 >No Response ({noResponse})</div>
             </div>

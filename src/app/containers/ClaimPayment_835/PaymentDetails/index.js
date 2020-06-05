@@ -7,7 +7,6 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import '../../Files/files-styles.css';
-import { StateDropdown } from '../../../components/StateDropdown';
 import Strings from '../../../../helpers/Strings';
 
 var val = ''
@@ -21,13 +20,10 @@ export class Payment_details  extends React.Component {
             showDetails: false,
             nameRotation: 180,
             transactionRotation: 180,
-            dateRotation: 180,
-            statusRotation: 180,
             submitterRotation: 180,
             errorRotation: 180,
             rotation: 180,
             fileNameRotation : 180,
-            dateRotation : 180,
             files_list: [],
             tradingpartner: [],
             errorList: [],
@@ -57,10 +53,7 @@ export class Payment_details  extends React.Component {
             Organization:'',
             Service_startDate: '',
             Service_endDate:'',
-            startDate:'',
-            endDate:'',
             Firstgridpage:1,
-            orderby:'', 
             intakeClaims:[],
             StateList:[]
         }
@@ -77,8 +70,6 @@ export class Payment_details  extends React.Component {
     }
 
     getTransactions() {
-
-        let count = 1
         let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
         let ServiceEndDate = this.state.Service_endDate ? moment(this.state.Service_endDate).format('YYYY-MM-DD') : ""
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -207,7 +198,7 @@ export class Payment_details  extends React.Component {
 
         let row = []
         this.state.StateList.forEach(element => {
-            row.push(<option selected={this.state.Statecode == element.StateCode ? element.StateCode : ''} value={element.StateCode}>{element.State}</option>)
+            row.push(<option value={element.StateCode}>{element.State}</option>)
         })
         return row
 
@@ -250,14 +241,6 @@ export class Payment_details  extends React.Component {
         setTimeout(() => {
             this.getTransactions()
         }, 50);
-    }
-
-    getErrorOptions() {
-        let row = []
-        this.state.errorList.forEach(element => {
-            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
-        })
-        return row
     }
 
     onSelect(event, key) {
@@ -339,13 +322,13 @@ export class Payment_details  extends React.Component {
                 <div className="form-row">
                     <div className="form-group col-sm-2">
                         <div className="list-dashboard">State</div>
-                        <select className="form-control list-header-dashboard" va id="fao1"
+                        <select className="form-control list-header-dashboard"
                                                 onChange={(event) => {
                                                     this.ChangeVal(event, 'State')
                                                     setTimeout(() => {
                                                         this.getTransactions()
                                                     }, 50);
-                                                }} >>
+                                                }} value={this.state.Statecode}>
                                             <option value="" ></option>
                                                 {this.getoptions()}
 

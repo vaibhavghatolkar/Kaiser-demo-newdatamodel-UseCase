@@ -54,7 +54,7 @@ export class PieChart extends React.Component {
                 <div className="row chart-container-full chart clickable" onClick={() => { if (this.props.onClick) { this.props.onClick(this.props.data) } }}>
                     <div className="col-7 nopadding">
                         <div className="chart-header">{this.props.header}</div>
-                        {piechart_data && piechart_data.labels && piechart_data.labels.length > 0 ? this.renderValues(piechart_data) : null}
+                        {this.renderValues(piechart_data)}
                     </div>
                     <div className="col-5 chart-align">
                         {this.renderChart(piechart_data)}

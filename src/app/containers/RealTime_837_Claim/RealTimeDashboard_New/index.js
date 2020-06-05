@@ -646,7 +646,7 @@ export class RealTimeDashboard_New extends React.Component {
                     breakLabel={'...'}
                     breakClassName={'page-link'}
                     initialPage={0}
-                    pageCount={Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0)}
+                    pageCount={this.state.claimsList && this.state.claimsList.length > 0 ? Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0) : 1}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     onPageChange={(page) => { this.handlePageClick(page) }}

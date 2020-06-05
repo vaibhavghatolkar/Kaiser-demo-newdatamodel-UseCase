@@ -3,19 +3,13 @@ import '../../Claims/Dashboard/styles.css'
 import '../../color.css'
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
-import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
 import Strings from '../../../../helpers/Strings'
 import { CommonTable } from '../../../components/CommonTable';
-import { AutoComplete } from '../../../components/AutoComplete';
-import { getProviders } from '../../../../helpers/getDetails';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import { TableTiles } from '../../../components/TableTiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { Link } from 'react-router-dom'
 import { Filters } from '../../../components/Filters';
 
 let val = ''
@@ -77,8 +71,6 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             EFTData: 0,
             CheckData: 0,
-            Rejected: 0,
-            Accepted: 0,
             QNXT_Generated: 0,
             Hipaas_Received: 0,
             AvailitySent: 0,
@@ -135,16 +127,12 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
                 minWidth: 100,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
 
-        this.getData = this.getData.bind(this)
         this.handlePageClick = this.handlePageClick.bind(this)
     }
 

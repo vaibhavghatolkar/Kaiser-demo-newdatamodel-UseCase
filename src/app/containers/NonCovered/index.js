@@ -1,5 +1,4 @@
 import React from 'react';
-import { MDBDataTable } from 'mdbreact';
 import './style.css';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
@@ -59,7 +58,7 @@ export class NonCovered extends React.Component {
                 }
 
                 this.setState({
-                    claimsList: data.NonCoveredList,
+                    claimsList: data && data.NonCoveredList.length > 0 ? data.NonCoveredList : [],
                     count: count
                 })
             })
@@ -88,15 +87,12 @@ export class NonCovered extends React.Component {
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 
-    displayFile() {
-        this.setState({ files: this.state.files });
-    }
 
     renderRows() {
 
 
         let row = []
-        let array = this.state.claimsList
+        let array = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList : []
 
 
         array.forEach(item => {
@@ -164,8 +160,8 @@ export class NonCovered extends React.Component {
                     <label className="btn" style={{ backgroundColor: "#139DC9", marginLeft: '15px', color: 'white' }}>Add File
                     <input type="file" name="filename" onChange={this.onChange} style={{ display: "none" }} />
                     </label>
-                    {this.state.files.map(x =>
-                        <div className="file-preview" style={{ marginTop: '10px', marginLeft: '10px' }} onClick={this.displayFile.bind()}>{x.name}</div>
+                    {this.state.files.forEach(x =>
+                        <div className="file-preview" style={{ marginTop: '10px', marginLeft: '10px' }}>{x.name}</div>
                     )}
                 </div>
                 <br />

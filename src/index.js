@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app/App';
 import { Redirect } from 'react-router-dom'
 import IdleTimer from 'react-idle-timer';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, BrowserRouter as Router } from 'react-router-dom'
 import { TradingPartnerConfiguration } from './app/containers/TradingPartnerConfiguration';
 import { RealTime276 } from './app/containers/Claim_276_RealTime/Real_Time_276';
 import { EditConfiguration } from './app/containers/EditConfigurations';
@@ -23,7 +22,6 @@ import { Login } from './app/containers/login'
 import { ClaimProcessingSummary } from './app/containers/RealTime_837_Claim/RealTime_ClaimProcessingSummary'
 import { MenuManagement } from './app/containers/Menu_Management'
 import { StatewiseTradingPartner } from './app/containers/StatewiseTradingPartner'
-import styles from './app/containers/Files/files-styles.css'
 
 import { DynamicSidebar } from './app/components/DynamicSidebar'
 import { ClaimPaymentDashboard } from './app/containers/ClaimPayment_835/ClaimsPaymentDashboard';
@@ -49,7 +47,6 @@ import { ClaimPayment_835_ProcessingSummary } from './app/containers/ClaimPaymen
 // import {LicenseManager} from "ag-grid-enterprise";
 // LicenseManager.setLicenseKey(Strings.license_key);
 
-const $ = window.$;
 class PrivateRoute extends React.Component {
     constructor(props) {
         super(props);

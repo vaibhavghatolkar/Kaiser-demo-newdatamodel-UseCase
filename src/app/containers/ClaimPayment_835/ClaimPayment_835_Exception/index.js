@@ -7,7 +7,6 @@ import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
-import { Pie } from 'react-chartjs-2';
 import { getProviders } from '../../../../helpers/getDetails';
 import { AutoComplete } from '../../../components/AutoComplete';
 import { StateDropdown } from '../../../components/StateDropdown';
@@ -21,16 +20,16 @@ export class ClaimPayment_835_Exception extends React.Component {
 
     constructor(props) {
         super(props);
-       
+
         this.state = {
             intakeClaims: [],
             page: 1,
             initialPage: 0,
             file: [],
             fileDetails: [],
-             type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
+            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
-             startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
             fileStatus: props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
@@ -39,13 +38,12 @@ export class ClaimPayment_835_Exception extends React.Component {
             incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
             tradingpartner: [],
             showDetails: false,
-             errorList: [],
-             providerName: '',
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
-            claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-             page: 1,
+            errorList: [],
+            providerName: '',
+            State: props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            status: props.location.state.data[0] && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            transactionId: props.location.state.data[0] && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            claimStatus: props.location.state.data[0] && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             count: 0,
             recount: 0,
             Firstgridpage: 1,
@@ -61,8 +59,8 @@ export class ClaimPayment_835_Exception extends React.Component {
             subsciberRotation: 180,
             claimAmountRotation: 180,
             errorRotation: 180,
-            stateRotation : 180,
-            processIdRotation : 180,
+            stateRotation: 180,
+            processIdRotation: 180,
             page1: 1,
             gridType: 1,
             paginationPageSize: 10,
@@ -112,28 +110,24 @@ export class ClaimPayment_835_Exception extends React.Component {
             },
 
 
-            rowSelection: 'multiple',
+            rowSelection: 'never',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
-            showerror:'',
-          rowData: [],
-          Aggrid_ClaimLineData:''
-        
+            showerror: '',
+            Aggrid_ClaimLineData: ''
+
         }
 
         this.handleStartChange = this.handleStartChange.bind(this)
         this.handleEndChange = this.handleEndChange.bind(this)
-   
+
     }
 
     componentDidMount() {
         this.getCommonData()
         this.getData()
-    
+
     }
 
     getCommonData() {
@@ -143,7 +137,7 @@ export class ClaimPayment_835_Exception extends React.Component {
             }
         }`
 
-   
+
         fetch(Urls.common_data, {
             method: 'POST',
             headers: {
@@ -161,10 +155,10 @@ export class ClaimPayment_835_Exception extends React.Component {
                 }
             })
             .catch(err => {
-           
+
             });
     }
-  
+
 
     getData = () => {
         let count = 1
@@ -194,7 +188,7 @@ export class ClaimPayment_835_Exception extends React.Component {
             }
         }`
 
-      
+
         fetch(Urls.real_time_claim_details, {
             method: 'POST',
             headers: {
@@ -220,17 +214,17 @@ export class ClaimPayment_835_Exception extends React.Component {
                         rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : [],
                         intakeClaims: res.data.Claim837RTDashboardFileDetails,
                         recount: count,
-                       
-                       
+
+
                     }, () => {
                         this.sortData()
                     })
                 }
             })
             .catch(err => {
-              
+
             });
-    }  
+    }
     sortData(fileId, data) {
         let files = {}
         let intakeClaims = this.state.intakeClaims
@@ -252,7 +246,7 @@ export class ClaimPayment_835_Exception extends React.Component {
                 }
             })
         }
-     
+
         this.setState({
             claimsObj: files,
             page: 1
@@ -260,9 +254,6 @@ export class ClaimPayment_835_Exception extends React.Component {
     }
 
     getTransactions = (fileId) => {
-        
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
         if (!providerName) {
             providerName = ''
@@ -290,22 +281,22 @@ export class ClaimPayment_835_Exception extends React.Component {
             .then(res => res.json())
             .then(res => {
                 var data = res.data.LoadException
-          
-               
-                    this.setState({
-                        claims_rowData: data,
-                        Ag_grid_FileName:  res.data.LoadException[0].FileName,
-                        Ag_grid_fileDate:res.data.LoadException[0].FileDate,
-                        showDetails:true
-                    })
-                
+
+
+                this.setState({
+                    claims_rowData: data,
+                    Ag_grid_FileName: res.data.LoadException[0].FileName,
+                    Ag_grid_fileDate: res.data.LoadException[0].FileDate,
+                    showDetails: true
+                })
+
 
             })
             .catch(err => {
-        
+
             });
     }
-    
+
 
     handlePageClick = (data, fileId) => {
 
@@ -388,7 +379,7 @@ export class ClaimPayment_835_Exception extends React.Component {
                         providers: list
                     })
                 }).catch(error => {
-                  
+
                 })
         }, 300);
     }
@@ -406,7 +397,7 @@ export class ClaimPayment_835_Exception extends React.Component {
             State: event.target.options[event.target.selectedIndex].text,
             showDetails: false,
             showerror: false,
-            showClaims:false
+            showClaims: false
         }, () => {
             this.getData()
         })
@@ -465,8 +456,8 @@ export class ClaimPayment_835_Exception extends React.Component {
                                     rowData: [],
                                     claimsAudit: [],
                                     showerror: false,
-                                    showClaims:false,
-                                    showDetails:false,
+                                    showClaims: false,
+                                    showDetails: false,
                                     gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
                                     if (this.state.gridType == 1) {
@@ -486,7 +477,7 @@ export class ClaimPayment_835_Exception extends React.Component {
         )
     }
 
- 
+
 
     renderHeader(header) {
         return (
@@ -497,15 +488,15 @@ export class ClaimPayment_835_Exception extends React.Component {
     }
 
     renderClaimsHeader(fileId) {
-        
-        
-        
+
+
+
         return (
             <tr className="table-head">
                 {/* <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Process ID</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>State</a></td> */}
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Exception</a></td>
-         
+
             </tr>
         )
     }
@@ -554,34 +545,34 @@ export class ClaimPayment_835_Exception extends React.Component {
 
     render_load_excaption() {
         let row = []
-           const data = this.state.claims_rowData ? this.state.claims_rowData : []
+        const data = this.state.claims_rowData ? this.state.claims_rowData : []
 
         data.forEach((d) => {
             row.push(
                 <tr>
                     <td>{d.Exception}</td>
-                  
+
                 </tr>
             )
         })
         return (
             <div className="row">
                 <div className="col-12">
-                  <br></br>
+                    <br></br>
                     <div >
                         <table className="table table-bordered background-color">
                             <thead>
                                 <tr className="table-head">
-                            
+
                                     <td className="table-head-text list-item-style">Exception</td>
-                               
+
                                 </tr>
                             </thead>
                             <tbody>
                                 {row}
                             </tbody>
                         </table>
-                     
+
                     </div>
                 </div>
             </div>
@@ -611,19 +602,19 @@ export class ClaimPayment_835_Exception extends React.Component {
                     <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.setState({
-                               showDetails:false
+                                showDetails: false
                             })
                             this.getTransactions(data[keys].value.FileID)
                         }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
-                    <div className="col-2 col-small-style small-font" style={{wordBreak: 'break-all'}}>{data[keys].value.ProcessID}</div>
+                    <div className="col-2 col-small-style small-font" style={{ wordBreak: 'break-all' }}>{data[keys].value.ProcessID}</div>
                     {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
                     <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDate).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
                 </div>
             )
-          
+
             // {
             //     col = []
             //     data[keys].array.forEach((d) => {
@@ -743,9 +734,9 @@ export class ClaimPayment_835_Exception extends React.Component {
                                     showerror: false,
                                     claims_rowData: [],
                                     Ag_grid_FileName: '',
-                                    Ag_grid_fileDate:'',
+                                    Ag_grid_fileDate: '',
                                 })
-                                 this.getTransactions(event.data.FileID)
+                                this.getTransactions(event.data.FileID)
                             }
                         }}
                     >
@@ -756,8 +747,8 @@ export class ClaimPayment_835_Exception extends React.Component {
     }
 
     _renderClaims() {
-      
-        let defaultColDef= {
+
+        let defaultColDef = {
             editable: false,
             enableRowGroup: true,
             enablePivot: true,
@@ -767,18 +758,18 @@ export class ClaimPayment_835_Exception extends React.Component {
             filter: true,
         }
 
-          let columnDefs = [
-            { headerName: "File Name", field: "FileName",width:200},
-            { headerName: "File Date", field: "FileDate", width:150},
-            { headerName: "Process ID", field: "ProcessID", width:120},
-                       
-            { headerName: "State" , field: "State", width:100 },
-            { headerName: "Exception", field: "Exception",flex:1}
-          ]
+        let columnDefs = [
+            { headerName: "File Name", field: "FileName", width: 200 },
+            { headerName: "File Date", field: "FileDate", width: 150 },
+            { headerName: "Process ID", field: "ProcessID", width: 120 },
+
+            { headerName: "State", field: "State", width: 100 },
+            { headerName: "Exception", field: "Exception", flex: 1 }
+        ]
 
         return (
             <div>
-                 
+
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
@@ -799,7 +790,7 @@ export class ClaimPayment_835_Exception extends React.Component {
                         onGridReady={this.onGridReady}
                         rowData={this.state.claims_rowData}
 
-                      
+
                     >
                     </AgGridReact>
                 </div>
@@ -807,7 +798,7 @@ export class ClaimPayment_835_Exception extends React.Component {
         )
     }
 
- 
+
 
     render() {
 
@@ -820,9 +811,9 @@ export class ClaimPayment_835_Exception extends React.Component {
                         ?
                         <div>
                             {this._renderList()}
-                            {this.state.showClaims ? this._renderClaims() : null}                           
-                           
-                            
+                            {this.state.showClaims ? this._renderClaims() : null}
+
+
                         </div>
                         :
                         <div className="row padding-left">
@@ -830,13 +821,13 @@ export class ClaimPayment_835_Exception extends React.Component {
                                 {this.state.claimsObj ? this.renderList() : null}
                             </div>
                             <div className="col-6">
-                            
-                        {this.state.showDetails ? this.render_load_excaption() : null}
-                    </div>
-                        
-                            
-                        </div> 
-               
+
+                                {this.state.showDetails ? this.render_load_excaption() : null}
+                            </div>
+
+
+                        </div>
+
                 }
             </div>
         );

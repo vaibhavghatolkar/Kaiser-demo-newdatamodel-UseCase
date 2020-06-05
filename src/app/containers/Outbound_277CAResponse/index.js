@@ -5,11 +5,7 @@ import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
-import { Pie } from 'react-chartjs-2';
 import '../Files/files-styles.css';
-import { CommonTable } from '../../components/CommonTable';
-import { StateDropdown } from '../../components/StateDropdown';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -26,13 +22,10 @@ export class Outbound_277CAReponse extends React.Component {
             summaryList: [],
             showDetails: false,
             transactionRotation: 180,
-            dateRotation: 180,
-            statusRotation: 180,
             submitterRotation: 180,
             errorRotation: 180,
             rotation: 180,
             fileNameRotation : 180,
-            dateRotation : 180,
             files_list: [],
             tradingpartner: [],
             errorList: [],
@@ -89,13 +82,10 @@ export class Outbound_277CAReponse extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
 
         }
     }
@@ -107,7 +97,6 @@ export class Outbound_277CAReponse extends React.Component {
     getTransactions() {
 
         let query = ''
-        let typeId = this.state.status
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
@@ -245,14 +234,6 @@ export class Outbound_277CAReponse extends React.Component {
         )
     }
 
-    getErrorOptions() {
-        let row = []
-        this.state.errorList.forEach(element => {
-            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
-        })
-        return row
-    }
-
     renderTableHeader() {
         return (
             <tr className="table-head">
@@ -345,7 +326,6 @@ export class Outbound_277CAReponse extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.rowData}
-                        enableCellTextSelection={true}    
                         enableCellTextSelection={true}    
                         onCellClicked={(event) => {
                             if(event.colDef.headerName == 'Response File Name'){
