@@ -6,11 +6,6 @@ import '../../Files/files-styles.css';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
-import { Pie } from 'react-chartjs-2';
-import { getProviders } from '../../../../helpers/getDetails';
-import { AutoComplete } from '../../../components/AutoComplete';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -23,18 +18,8 @@ export class Load_Exception extends React.Component {
 
     constructor(props) {
         super(props);
-        let flag = props.location.state.data[0].flag
-        if (flag == 'accept') {
-            flag = 'Accepted Claims'
-        } else if (flag == 'reject') {
-            flag = 'Rejected Claims'
-        } else {
-            flag = 'Other'
-        }
-
-        this.state = {
+            this.state = {
             intakeClaims: [],
-            page: 1,
             initialPage: 0,
             lineCount: 0,
             showClaims: false,
@@ -46,19 +31,18 @@ export class Load_Exception extends React.Component {
             memberInfo: {},
             subscriberNo: '',
             molina_claimId: '',
-            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
-            selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            type: props.location.state && props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
+            selectedTradingPartner: props.location.state && props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type: '',
             plan_code: '',
-            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
-            endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
-            fileStatus: props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
-            generalStatus: props.location.state.data[0] && props.location.state.data[0].generalStatus ? props.location.state.data[0].generalStatus : '',
-            mcgStatus: props.location.state.data[0] && props.location.state.data[0].mcgStatus ? props.location.state.data[0].mcgStatus : '',
-            incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
-            flag: flag,
-            coverage_data: [],
+            startDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            gridflag: props.location.state && props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
+            fileStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
+            generalStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].generalStatus ? props.location.state.data[0].generalStatus : '',
+            mcgStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].mcgStatus ? props.location.state.data[0].mcgStatus : '',
+            incoming_fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
+             coverage_data: [],
             tradingpartner: [],
             claimsList: [],
             summaryList: [],
@@ -70,15 +54,15 @@ export class Load_Exception extends React.Component {
             claimLineDetails: [],
             Transaction_Compliance: '',
             providerName: '',
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
-            claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            State:props.location.state && props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            status:props.location.state && props.location.state.data[0] && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            transactionId:props.location.state && props.location.state.data[0] && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            claimStatus:props.location.state && props.location.state.data[0] && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             page: 1,
             count: 0,
             recount: 0,
             Firstgridpage: 1,
-            apiflag: props.location.state.data[0].apiflag,
+            apiflag:props.location.state && props.location.state.data[0] ? props.location.state.data[0].apiflag:'',
 
             pieArray: [],
             labelArray: [],
@@ -149,11 +133,7 @@ export class Load_Exception extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
             showerror: '',
-            rowData: [],
             Aggrid_ClaimLineData: ''
 
         }
@@ -258,8 +238,8 @@ export class Load_Exception extends React.Component {
 
     getTransactions = (fileId) => {
 
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        // let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        // let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
         if (!providerName) {
             providerName = ''
@@ -355,13 +335,7 @@ export class Load_Exception extends React.Component {
         )
     }
 
-    getErrorOptions() {
-        let row = []
-        this.state.errorList.forEach(element => {
-            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
-        })
-        return row
-    }
+  
 
     renderHeader(header) {
         return (
@@ -485,19 +459,8 @@ export class Load_Exception extends React.Component {
         let row = []
         let col = []
         let data = this.state.claimsObj;
-        let count = 0
-
-        try {
-            count = data[Object.keys(data)[0]].value.Claimcount / 10
-            if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
-                count = count + 1
-            }
-        } catch (error) {
-
-        }
-
-
-        Object.keys(data).map((keys) => {
+      
+        Object.keys(data).forEach((keys) => {
             row.push(
                 <div className="row">
                     <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}
@@ -660,8 +623,8 @@ export class Load_Exception extends React.Component {
 
     errorDialog = () => {
         return (
-            <div class="modal" id="error_modal_load" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog-error">
+            <div className="modal" id="error_modal_load" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div className="modal-dialog-error">
                     <div className="error-dialog">
                         <div className="error-header">Exception</div>
                         <div className="scroll-div">
@@ -695,11 +658,9 @@ export class Load_Exception extends React.Component {
             showDetails: false,
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            if (this.state.gridType == 1) {
+            
                 this.getData()
-            } else {
-                this.getData()
-            }
+            
         })
     }
 

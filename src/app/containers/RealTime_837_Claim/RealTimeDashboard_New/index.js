@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 import '../../Files/files-styles.css';
-import { Pie, Bar, Line } from 'react-chartjs-2';
+import {Line } from 'react-chartjs-2';
 import '../../color.css'
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
@@ -118,13 +118,11 @@ export class RealTimeDashboard_New extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+ 
         }
 
         this.showFile = this.showFile.bind(this)
-        this.getData = this.getData.bind(this)
+      
     }
 
     componentWillReceiveProps() {
@@ -576,16 +574,16 @@ export class RealTimeDashboard_New extends React.Component {
         return (
             <div style={{ marginLeft: '2px' }}>
                 <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a class="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('I')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Institutional</a>
-                        <a class="nav-item nav-link" id="nav-contact-tab" onClick={() => this.handleSort('P')} data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Professional</a>
+                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a className="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Total</a>
+                        <a className="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('I')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Institutional</a>
+                        <a className="nav-item nav-link" id="nav-contact-tab" onClick={() => this.handleSort('P')} data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Professional</a>
                     </div>
                 </nav>
-                <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"></div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
-                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"></div>
+                <div className="tab-content" id="nav-tabContent">
+                    <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"></div>
+                    <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
+                    <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"></div>
                 </div>
             </div>
         )
@@ -602,7 +600,7 @@ export class RealTimeDashboard_New extends React.Component {
 
     renderList() {
         let row = []
-        const data = this.state.claimsList;
+        const data = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList:[]
 
         data.forEach((d) => {
             row.push(
@@ -646,7 +644,7 @@ export class RealTimeDashboard_New extends React.Component {
                     breakLabel={'...'}
                     breakClassName={'page-link'}
                     initialPage={0}
-                    pageCount={Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0)}
+                    pageCount={this.state.claimsList && this.state.claimsList.length > 0 ? Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0) : 1}
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     onPageChange={(page) => { this.handlePageClick(page) }}
@@ -845,8 +843,8 @@ export class RealTimeDashboard_New extends React.Component {
     _renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
-        let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
+        // let apiflag = this.state.apiflag
+        // let url = Strings.ElilgibilityDetails270 + '/' + apiflag
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'

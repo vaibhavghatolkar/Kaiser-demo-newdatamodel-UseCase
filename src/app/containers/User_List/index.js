@@ -265,7 +265,7 @@ export class UserList extends React.Component {
             <div style={{padding:"10px"}}>
                 <div className="row">
                     <h5 className="headerText">HiPaaS User List</h5>
-                    <button type="button" class="btn btn-design" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
+                    <button type="button" className="btn btn-design" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
                         Add New
                     </button>
                 </div>
@@ -276,56 +276,56 @@ export class UserList extends React.Component {
                 </div>
 
 
-                <div class="modal right fade widthHandling" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>{this.state.UserStatus}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "10px" }}>&times;</span></button>
+                <div className="modal right fade widthHandling" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="myModalLabel2" style={{ color: 'white' }}>{this.state.UserStatus}</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "10px" }}>&times;</span></button>
 
                             </div>
 
-                            <div class="modal-body">
+                            <div className="modal-body">
                                 <div className="row">
-                                    <div class="form-group col-6">
-                                        <label for="FirstName">First Name</label>
+                                    <div className="form-group col-6">
+                                        <label>First Name</label>
                                         <input onChange={(e) => this.onHandleChange(e, 'firstName')} type="text" className="form-control width1" name="firstName" id="FirstName"
                                             placeholder="Enter First Name" value={this.state.firstName} />
                                     </div>
-                                    <div class="form-group col-6">
-                                        <label for="LastName">Last Name</label>
+                                    <div className="form-group col-6">
+                                        <label>Last Name</label>
                                         <input onChange={(e) => this.onHandleChange(e, 'lastName')} name="lastName" type="text" className="form-control width1" id="LastName"
                                             placeholder="Enter Last Name" value={this.state.lastName} />
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="Email">Email address</label>
+                                <div className="form-group">
+                                    <label>Email address</label>
                                     <input onChange={(e) => this.onHandleChange(e, 'email')} name="email" type="text" className="form-control width1" id="Email"
                                         disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter email" value={this.state.email} />
                                 </div>
                                 <br/><br/>
 
-                                <div class="form-group">
-                                    <label for="Password">Password</label>
+                                <div className="form-group">
+                                    <label >Password</label>
                                     <input onChange={(e) => this.onHandleChange(e, 'password')} name="password" type="password" className="form-control width1" id="Password"
                                         disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter Password" value={this.state.password} />
                                 </div>
-                                <div class="form-group">
-                                    <label for="PhoneNo">Phone No.</label>
+                                <div className="form-group">
+                                    <label >Phone No.</label>
                                     <input onChange={(e) => this.onHandleChange(e, 'phoneNo')} name="phoneNo" type="text" className="form-control width1" id="phoneno"
                                         placeholder="Enter Phone Number" value={this.state.phoneNo} />
                                 </div>
                                 <br/><br/>
-                                <div class="form-group">
-                                    <label for="UserRole">User Role</label>
+                                <div className="form-group">
+                                    <label >User Role</label>
                                     <select className="form-control width1" name="userRole" onChange={(e) => this.onHandleChange(e, 'userRole')} value={this.state.userRole}>
                                         <option value="0">Select User Role</option>
                                         {this.getoptions()}
                                     </select>
                                 </div>
 
-                                <button type="submit" class="btn btn-display" style={{ marginLeft: '0px' }} data-value={this.state.id} onClick={this.saveUser} >{this.state.UserStatus}</button>
+                                <button type="submit" className="btn btn-display" style={{ marginLeft: '0px' }} data-value={this.state.id} onClick={this.saveUser} >{this.state.UserStatus}</button>
 
                             </div>
                         </div>
@@ -333,16 +333,16 @@ export class UserList extends React.Component {
                 </div>
 
 
-                <div class="modal fade" id="myModal" role="dialog">
-                    <div class="modal-dialog">
+                <div className="modal fade" id="myModal" role="dialog">
+                    <div className="modal-dialog">
 
-                        <div class="modal-content">
-                            <div class="modal-body">
+                        <div className="modal-content">
+                            <div className="modal-body">
                                 <p>Are you sure you want to Inactivate this user!</p>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-display" data-dismiss="modal" onClick={this.deleteUser} >Ok</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-display" data-dismiss="modal" onClick={this.deleteUser} >Ok</button>
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
 
