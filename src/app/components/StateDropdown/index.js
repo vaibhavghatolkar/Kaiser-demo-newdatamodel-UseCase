@@ -29,7 +29,7 @@ export class StateDropdown extends React.Component {
             if (!element) {
                 return
             }
-            row.push(<option value="">{element}</option>)
+            row.push(<option value={element}>{element}</option>)
         })
         return row
     }
