@@ -352,7 +352,7 @@ export class StatewiseTradingPartner extends React.Component {
         )
     }
 
-    Inactive(event) {
+    Inactive = (event) => {
         let id = this.state.incoming_fileId
         var query = 'mutation{' +
             'InActiveTradingPartner(ID : ' + id +
@@ -434,7 +434,7 @@ export class StatewiseTradingPartner extends React.Component {
 
     }
 
-    renderList() {
+    renderList = () => {
         let row = []
         const data = this.state.TradingPartnerList;
         data.forEach((d) => {
