@@ -305,38 +305,6 @@ export class Load_Exception extends React.Component {
 
     }
 
-    renderRows(dictionary) {
-        let row = []
-        let col = []
-        let count = 0
-
-        dictionary.forEach(item => {
-            col.push(
-                <div className="col">
-                    <div className="header">{item.key}</div>
-                    {item.isDate ? this.getDatePicker() : <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
-                </div>
-            )
-
-            if (col.length % 4 == 0) {
-                row.push(<div className="row">{col}</div>)
-                col = []
-            }
-            count++
-            if (count == dictionary.length && col.length > 0) {
-                row.push(<div className="row">{col}</div>)
-            }
-        });
-
-        return (
-            <div className="summary-style">
-                {row}
-            </div>
-        )
-    }
-
-  
-
     renderHeader(header) {
         return (
             <tr className="table-head">

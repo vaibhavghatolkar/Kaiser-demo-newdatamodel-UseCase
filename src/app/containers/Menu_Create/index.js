@@ -502,7 +502,7 @@ export class MenuCreate extends React.Component {
                 </div>
                 <div className="form-group col-3" >
                     <div className="list-header-dashboard">Select Menu Type</div>
-                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')} value={'I'}>
+                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')} defaultValue={'I'}>
                         <option value="I">Inbound</option>
                         <option value="O">Outbound</option>
                         <option value="B">Both</option>

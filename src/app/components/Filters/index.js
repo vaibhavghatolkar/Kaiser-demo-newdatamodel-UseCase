@@ -133,6 +133,18 @@ export class Filters extends React.Component {
         }, 300);
     }
 
+    changeFilterInput = (event) => {
+        let passing_val = event.target.value
+        this.setState({
+            Filter_ClaimId: passing_val
+        }, () => {
+            clearTimeout(val_in)
+            val_in = setTimeout(() => {
+                this.onChangeName(passing_val, 'Filter_ClaimId')
+            }, 300);
+        })
+    }
+
     renderFilters = () => {
         return (
             <div className="form-style" id='filters'>
@@ -224,7 +236,7 @@ export class Filters extends React.Component {
                                         this.props.setData(startDate, endDate, selected_val, chartType)
                                     }}
 
-                                    value={this.props.changeDefault ? 'halfYear': 'year'}
+                                    defaultValue={this.props.changeDefault ? 'halfYear': 'year'}
                                 >
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>
@@ -286,15 +298,7 @@ export class Filters extends React.Component {
                                     className="form-control list-dashboard"
                                     value={this.state.Filter_ClaimId}
                                     onChange={(event) => {
-                                        let passing_val = event.target.value
-                                        this.setState({
-                                            Filter_ClaimId: passing_val
-                                        }, () => {
-                                            clearTimeout(val_in)
-                                            val_in = setTimeout(() => {
-                                                this.onChangeName(passing_val, 'Filter_ClaimId')
-                                            }, 300);
-                                        })
+                                        this.changeFilterInput(event)
                                     }}></input>
                             </div> : null
                     }

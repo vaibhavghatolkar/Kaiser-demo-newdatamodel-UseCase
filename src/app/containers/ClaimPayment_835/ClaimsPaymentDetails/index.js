@@ -473,7 +473,7 @@ export class ClaimPaymentDetails extends React.Component {
             col.push(
                 <div className="col-4">
                     <div className="header">{item.field_name}</div>
-                    <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
+                    <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.field_name == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
                 </div>
             )
 

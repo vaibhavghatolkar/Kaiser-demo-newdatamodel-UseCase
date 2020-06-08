@@ -113,17 +113,17 @@ export class Header extends React.Component {
 
                                 <div className="form-group col-12">
                                     <label className="list-header2">Old Password</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'oldPassword')} name="OldPassword" type="password" className="form-control textInput" id="OldPassword"
+                                    <input onChange={(event) => this.onHandleChange(event, 'oldPassword')} name="OldPassword" type="password" className="form-control textInput" id="OldPassword"
                                         placeholder="Enter Old Password" autoComplete="new-password" value={this.state.oldPassword} />
                                 </div>
                                 <div className="form-group col-12">
                                     <label className="list-header2">New Password</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'newPassword')} name="OldPassword" type="password" className="form-control textInput" id="Password"
+                                    <input onChange={(event) => this.onHandleChange(event, 'newPassword')} name="OldPassword" type="password" className="form-control textInput" id="Password"
                                         placeholder="Enter New Password" autoComplete="off" value={this.state.newPassword} />
                                 </div>
                                 <div className="form-group col-12">
                                     <label className="list-header2">Confirm New Password</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'confirmNewPassword')} name="OldPassword" type="password" className="form-control textInput" id="Password1"
+                                    <input onChange={(event) => this.onHandleChange(event, 'confirmNewPassword')} name="OldPassword" type="password" className="form-control textInput" id="Password1"
                                         placeholder="Confirm New Password" autoComplete="off" value={this.state.confirmNewPassword} />
                                 </div>
 
