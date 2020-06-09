@@ -11,28 +11,28 @@ export class Header extends React.Component {
         super(props);
 
         this.state = {
-            oldPassword: '',
-            newPassword: '',
-            confirmNewPassword: ''
+            oldPwd: '',
+            newPwd: '',
+            confirmNewPwd: ''
 
         };
-        this.updatePassword = this.updatePassword.bind(this);
+        this.updatePwd = this.updatePwd.bind(this);
 
 
     }
 
-    updatePassword() {
+    updatePwd() {
         let userId = localStorage.getItem("UserId")
-        let { newPassword, oldPassword, confirmNewPassword } = this.state;
+        let { newPwd, oldPwd, confirmNewPwd } = this.state;
         // perform all neccassary validations
-        if (!oldPassword || !newPassword || !confirmNewPassword) {
+        if (!oldPwd || !newPwd || !confirmNewPwd) {
             alert("Please enter the fields");
-        } else if (newPassword !== confirmNewPassword) {
+        } else if (newPwd !== confirmNewPwd) {
             alert("Passwords don't match");
         } else {
             $("#myModal10").modal("hide");
             let query = `mutation{
-            ChangePassword(Id:`+ userId + ` OldPassword:"` + this.state.oldPassword + `" NewPassword:"` + this.state.newPassword + `" ForgotOrNot:0)
+            ChangePassword(Id:`+ userId + ` OldPassword:"` + this.state.oldPwd + `" NewPassword:"` + this.state.newPwd + `" ForgotOrNot:0)
           }`
           if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             fetch(Urls.base_url, {
@@ -54,9 +54,9 @@ export class Header extends React.Component {
         }
     }
 
-    onHandleChange(event, key) {
+    onHandleChange(event, name) {
         this.setState({
-            [key]: event.target.value
+            [name]: event.target.value
         });
     }
 
@@ -93,7 +93,7 @@ export class Header extends React.Component {
                             <div className="dropdown" style={{ float: 'right', marginTop: '-16px' }}>
                                 <img src={require('../Images/user.png')} style={{ width: '25px' }} />
                                 <div className="dropdown-content">
-                                    <a onClick={this.changePassword} data-toggle="modal" data-target="#myModal10">Change Password</a>
+                                    <a onClick={this.changePwd} data-toggle="modal" data-target="#myModal10">Change Password</a>
                                     <a onClick={this.logout}>Logout</a>
                                 </div>
                             </div>
@@ -113,25 +113,25 @@ export class Header extends React.Component {
 
                                 <div className="form-group col-12">
                                     <label className="list-header2">Old Password</label>
-                                    <input onChange={(event) => this.onHandleChange(event, 'oldPassword')} name="OldPassword" type="password" className="form-control textInput" id="OldPassword"
-                                        placeholder="Enter Old Password" autoComplete="new-password" value={this.state.oldPassword} />
+                                    <input onChange={(event) => this.onHandleChange(event, 'oldPwd')} name="OldPassword" type="password" className="form-control textInput"
+                                        placeholder="Enter Old Password" autoComplete="new-password" value={this.state.oldPwd} />
                                 </div>
                                 <div className="form-group col-12">
                                     <label className="list-header2">New Password</label>
-                                    <input onChange={(event) => this.onHandleChange(event, 'newPassword')} name="OldPassword" type="password" className="form-control textInput" id="Password"
-                                        placeholder="Enter New Password" autoComplete="off" value={this.state.newPassword} />
+                                    <input onChange={(event) => this.onHandleChange(event, 'newPwd')} name="OldPassword" type="password" className="form-control textInput" 
+                                        placeholder="Enter New Password" autoComplete="off" value={this.state.newPwd} />
                                 </div>
                                 <div className="form-group col-12">
                                     <label className="list-header2">Confirm New Password</label>
-                                    <input onChange={(event) => this.onHandleChange(event, 'confirmNewPassword')} name="OldPassword" type="password" className="form-control textInput" id="Password1"
-                                        placeholder="Confirm New Password" autoComplete="off" value={this.state.confirmNewPassword} />
+                                    <input onChange={(event) => this.onHandleChange(event, 'confirmNewPwd')} name="OldPassword" type="password" className="form-control textInput"
+                                        placeholder="Confirm New Password" autoComplete="off" value={this.state.confirmNewPwd} />
                                 </div>
 
 
 
                                 <div className="row">
                                     <div className="col" style={{ marginLeft: '25%' }}>
-                                        <button className="btn btn-display" onClick={this.updatePassword} >Update</button>
+                                        <button className="btn btn-display" onClick={this.updatePwd} >Update</button>
                                         <button className="btn btn-display" style={{ marginLeft: '20px' }} data-dismiss="modal">Close</button>
                                     </div>
                                 </div>

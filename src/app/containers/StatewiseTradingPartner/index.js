@@ -644,40 +644,22 @@ export class StatewiseTradingPartner extends React.Component {
                                         <select className="form-control list-header1" va id="fao1" value={this.state.Transaction_Type} onChange={(event) => this.ChangeVal(event, 'Transaction_Type')} >
                                             <option value="0" ></option>
                                             {this.gettrans()}
-                                            {/* <option selected={this.state.Transaction_Type == '270' ? "selected" : ''} value="270" >270</option>
-                                    <option selected={this.state.Transaction_Type == '834' ? "selected" : ''} value="834" >834</option>
-                                    <option selected={this.state.Transaction_Type == '837P' ? "selected" : ''} value="837P" >837P</option>
-                                    <option selected={this.state.Transaction_Type == '837I' ? "selected" : ''} value="837I" >834</option> */}
+                                  
                                         </select>
                                     </div>
                                     <div className="pull-right col-sm-2">
                                         <button type="submit" className="btn light_blue1 btn-xs" style={{ marginRight: "120px" }} onClick={this.handleClick}>Save</button>
                                     </div>
                                 </div>
-
+{/*----- Search Code Hide------- */}
                                 {/* <div className="clickable" data-toggle="collapse" href="#BasicX12Options1">
                                     <span style={{ fontSize: "15px", color: "#139DC9", fontWeight: "700", marginLeft: "30px" }}>
                                         Search
        </span>
-                                </div> */}
+                                </div>
                                 <div id="BasicX12Options1" className="collapse" >
                                     <div className="row" style={{ marginLeft: "2px" }}>
-                                        {/* <div className="form-group col-sm-2">
-                                        <label className="list-header1">Sender Name</label>
-                                        <input className="form-control list-dashboard"  id="state"
-                            onChange={(e) => {clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ Search_Sendername: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.gettranaction()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                        
-                                    </div> */}
-                                        <div className="form-group col-sm-2">
+                                                                     <div className="form-group col-sm-2">
                                             <label className="list-header1">Sender Id(ISA06)</label>
                                             <input className="form-control list-header1" id="state"
                                                 onChange={(event) => {
@@ -685,21 +667,7 @@ export class StatewiseTradingPartner extends React.Component {
                                                 }}
                                             />
                                         </div>
-                                        {/* <div className="form-group col-sm-2">
-                                        <label className="list-header1">Payer Name</label>
-                                        <input className="form-control list-dashboard"  id="state"
-                            onChange={(e) => {clearTimeout(val)
-                                let value = e.target.value
-                                val = setTimeout(() => {
-                                    this.setState({ Search_PayerName: value, showDetails: false })
-                                    setTimeout(() => {
-                                        this.gettranaction()
-                                    }, 50);
-                                }, 300);
-                            }}
-                        />
-                                    </div> */}
-                                        <div className="form-group col-sm-2">
+                                           <div className="form-group col-sm-2">
                                             <label className="list-header1">Payer Id</label>
                                             <input className="form-control list-header1" id="state"
                                                 onChange={(event) => {
@@ -738,8 +706,8 @@ export class StatewiseTradingPartner extends React.Component {
 
                                     </div>
 
-                                </div>
-                                <div>
+                                </div>*/}
+                                <div> 
                                     {this._renderList()}
                                 </div>
                             </div>

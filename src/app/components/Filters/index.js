@@ -121,14 +121,14 @@ export class Filters extends React.Component {
         })
     }
 
-    onSelect = (event, key) => {
+    onSelect = (event, name) => {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.props.update(key, '')
+            this.props.update(name, '')
         } else {
-            if (key == 'selectedTradingPartner') {
-                this.props.update(key, event.target.options[event.target.selectedIndex].value)
+            if (name == 'selectedTradingPartner') {
+                this.props.update(name, event.target.options[event.target.selectedIndex].value)
             } else {
-                this.props.update(key, event.target.options[event.target.selectedIndex].text)
+                this.props.update(name, event.target.options[event.target.selectedIndex].text)
             }
         }
     }
@@ -137,8 +137,8 @@ export class Filters extends React.Component {
     onSelected = (value) => {
         this.props.update('providerName', value)
     }
-    onChangeName = (value, key) => {
-        this.props.update(key, value)
+    onChangeName = (value, name) => {
+        this.props.update(name, value)
     }
     getoptions = () => {
         let row = []
@@ -189,6 +189,14 @@ export class Filters extends React.Component {
                 this.onChangeName(passing_val, 'Filter_ClaimId')
             }, 750);
         })
+    }
+
+    changeTransaction =(event) =>{
+        clearTimeout(val_trans)
+        let passing_val = event.target.value
+        val_trans = setTimeout(() => {
+            this.onChangeName(passing_val, 'transactionId')
+        }, 300);
     }
 
     renderFilters = () => {
@@ -362,11 +370,7 @@ export class Filters extends React.Component {
                                 <div className="list-dashboard">Transaction Id</div>
                                 <input className="form-control list-dashboard"
                                     onChange={(event) => {
-                                        clearTimeout(val_trans)
-                                        let passing_val = event.target.value
-                                        val_trans = setTimeout(() => {
-                                            this.onChangeName(passing_val, 'transactionId')
-                                        }, 300);
+                                        this.changeTransaction(event)
                                     }}></input>
                             </div> : null
                     }
