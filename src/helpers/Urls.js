@@ -26,6 +26,7 @@ const Urls = {
     transaction835: base_url + '/transaction835',
     transaction270: base_url + '/transaction270',
     tradingPartnerAdmin: base_url + '/tradingPartnerAdmin',
+    CustomConfiguration: base_url + '/CustomConfiguration'
 }
 
 export default Urls;

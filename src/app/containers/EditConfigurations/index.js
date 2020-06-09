@@ -3,7 +3,7 @@ import '../TradingPartnerConfiguration/style.css';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import Strings from '../../../helpers/Strings';
-const $ = window.$;
+import { StateDropdown } from '../../components/StateDropdown';
 
 export class EditConfiguration extends React.Component {
 
@@ -56,14 +56,16 @@ export class EditConfiguration extends React.Component {
             mainloop: '',
             mainloop2: '',
             TransactionMasterList:[],
-            transactionSelect:'Encounter 837P',
+            transactionSelect:'837P',
             GetCustomEdits:[],
-            is_mandatory: 'Required'
+            is_mandatory: 'Required',
+            selected_state:'',
+            State: 'CA',
 
         };
 
         this.onChange = this.onChange.bind(this);
-        this.operation = this.operation.bind(this)
+        // this.operation = this.operation.bind(this)
         this.clicked = this.clicked.bind(this)
         this.getData = this.getData.bind(this)
         this.onSelect = this.onSelect.bind(this)
@@ -84,16 +86,17 @@ export class EditConfiguration extends React.Component {
         this.getData( `{SP_GetMainloop(TransactionType:"${this.state.transactionSelect}"){Mainloop}}`, 0, 0)
     }
 
+
     operator() {
 
         let query = `{
-            OperatorMaster   { 
+            OperatorMaster {
                 Operator
-                ID 
-            }
+                ID
+              }
              
         }`
-        fetch(Urls.tradingPartner, {
+        fetch(Urls.CustomConfiguration, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,6 +136,7 @@ export class EditConfiguration extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
+
                 this.setState({
                     TransactionMasterList: res.data.TransactionMaster
 
@@ -147,10 +151,10 @@ export class EditConfiguration extends React.Component {
     gettradingpatner() {
 
         let query = `{
-            Trading_PartnerList (Transaction:"TradingPartner" RecType:"Inbound") { 
-                 
-                Trading_Partner_Name 
-            }
+                Trading_PartnerList(RecType :"Inbound", Transaction:"Claim837RT") {
+                    Trading_Partner_Name 
+                }
+            
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) };
         fetch(Urls.common_data, {
@@ -172,15 +176,12 @@ export class EditConfiguration extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
 
-
-
-
     }
 
     getData(query, flag, iter) {
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.customEdits, {
+        fetch(Urls.CustomConfiguration, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -242,7 +243,7 @@ export class EditConfiguration extends React.Component {
 
         let row = []
         this.state.TransactionMasterList.forEach(element => {
-            row.push(<option selected={this.state.transactionSelect == element.Trans_Code ? element.Trans_Code : ''} value={element.Trans_Code}>{element.Trans_Code}</option>)
+            row.push(<option value={element.Trans_Code}>{element.Trans_Code}</option>)
         })
         return row
 
@@ -348,6 +349,7 @@ export class EditConfiguration extends React.Component {
 
     renderOptions(array, flag) {
         let row = []
+            // row.push(<option value=""></option>);
         array.forEach(element => {
             row.push(<option value={flag == 0 ? element.Mainloop :flag == 1 ? element.SubLoop : flag == 2 ? element.Segment : element.Field}>{flag == 0 ? element.Mainloop :flag == 1 ? element.SubLoop : flag == 2 ? element.Segment : element.Field}</option>)
         });
@@ -366,13 +368,17 @@ export class EditConfiguration extends React.Component {
         }, 50);
     }
 
+    _handleStateChange = (event) => {
+       this.setState({
+        State: event.target.options[event.target.selectedIndex].text,
+       })
+    }
+
     renderView() {
         let row = []
         let options = this.state.options
-        let SegmentItem = this.state.SegmentItem;
-        let segementcheck = this.state.SegmentCompYesno + this.state.SegmentItem;
 
-        Object.keys(options).map(item => {
+        Object.keys(options).forEach(item => {
 
             row.push(
 
@@ -386,57 +392,45 @@ export class EditConfiguration extends React.Component {
                                 <div className="panel-body">
                                     <div className="row">
                                         <div className="form-group col-3">
-                                            <div className="list-header">State</div>
-                                            <select className="form-control list-header" id="state" onChange={(e) => this.ChangeVal(e, 'state')}>
-                                                <option value="">State</option>
-                                                <option selected="selected" value="1">California</option>
-                                                <option value="2">Michigan</option>
-                                                <option value="3">Florida</option>
-                                                <option value="4">New York</option>
-                                                <option value="5">Idaho</option>
-                                                <option value="6">Ohio</option>
-                                                <option value="7">Illinois</option>
-                                                <option value="8">Texas</option>
-                                                <option value="9">Mississippi</option>
-                                                <option value="10">South Carolina</option>
-                                                <option value="11">New Mexico</option>
-                                                <option value="12">Puerto Rico</option>
-                                                <option value="13">Washington</option>
-                                                <option value="14">Utah</option>
-                                                <option value="15">Wisconsin</option>
-                                            </select>
+                                            <div className="list-header1">State</div>
+                                            <StateDropdown
+                                                    selected_state={this.state.State}
+                                                    method={this._handleStateChange}
+                                                    customConfig = {true}
+                                                />
                                         </div>
 
                                         <div className="form-group col-3">
-                                            <div className="list-header">Select Transaction</div>
-                                            <select className="form-control list-header" id="option"
+                                            <div className="list-header1">Select Transaction</div>
+                                            <select className="form-control list-header1" id="option"
                                                onChange={(e) => this.ChangeVal1(e, 'transactionSelect')}
-                                            >
+                                            value={this.state.transactionSelect}>
                                                 {this.gettrans()}
                                             </select>
                                         </div>
 
                                         <div className="form-group col-3">
-                                            <div className="list-header">Trading Partner </div>
-                                            <select className="form-control list-header" id="TradingPartner" onChange={(e) => this.ChangeVal(e, 'TradingPartner')} >
+                                            <div className="list-header1">Trading Partner </div>
+                                            <select className="form-control list-header1" value={this.state.TradingPartner} id="TradingPartner" onChange={(e) => this.ChangeVal(e, 'TradingPartner')} >
                                                 <option value="select">Trading partner</option>
-                                                <option selected="selected">AVAILITY</option>
+                                                {/* <option selected="selected">AVAILITY</option> */}
+                                                {this.getoptions()}
                                             </select>
                                         </div>
-                                        <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                        <div className="form-group col-3">
+                                            <div className="list-header1">
                                             Rule Description
-                                        </label>
-                                            <textarea type="text" className="list-header form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(e) => this.onChangeName(e, 'Rule_Desc')} />
+                                        </div>
+                                            <textarea type="text" className="list-header1 form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(e) => this.onChangeName(e, 'Rule_Desc')} />
                                         </div>
                                     </div>
                                     <div className="row">
                                     
-                                        <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                        <div className="form-group col-3">
+                                            <div className="list-header1">
                                                 Validation Level
-                                        </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Validationlevel')}>
+                                        </div>
+                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'Validationlevel')}>
                                                 <option value=""></option>
                                                 <option value="4">SNIP Level 4</option>
                                                 <option value="5">SNIP Level 5</option>
@@ -449,8 +443,8 @@ export class EditConfiguration extends React.Component {
                                         </div>
 
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">Severity</label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'Severity')}>
+                                            <div className="list-header1">Severity</div>
+                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'Severity')}>
                                                 <option value=""></option>
                                                 <option value="0">Fail</option>
                                                 <option value="1">Warning</option>
@@ -459,59 +453,59 @@ export class EditConfiguration extends React.Component {
                                         </div>
                                     
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">Error Type</label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
+                                            <div className="list-header1">Error Type</div>
+                                            <select className="form-control list-header1" value="1" onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
                                                 <option value=""></option>
                                                 <option value="0">TA1</option>
-                                                <option selected="selected" value="1">999</option>
+                                                <option value="1">999</option>
 
                                             </select>
                                         </div>
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                            <div className="list-header1">
                                                 Error Description
-                                        </label>
-                                            <textarea type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'ErrorDescription')} />
+                                        </div>
+                                            <textarea type="text" className="list-header1 form-control" onChange={(e) => this.onChangeName(e, 'ErrorDescription')} />
                                         </div>
                                         </div>
                                     
 
                                     <div className="row">
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                            <div className="list-header1">
                                                 Main Loop Id
-                                        </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'mainLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop').value, item, 0) }}>
+                                        </div>
+                                            <select className="form-control list-header1" id={item + 'mainLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop').value, item, 0) }}>
                                                 <option value=""></option>
                                                 {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                             </select>
                                         </div>
 
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                            <div className="list-header1">
                                                 Sub Loop Id
-                                        </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'subLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop').value, item, 1, options[item].selected_mainloopid) }}>
+                                        </div>
+                                            <select className="form-control list-header1" id={item + 'subLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop').value, item, 1, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].subLoopidArray ? this.renderOptions(options[item].subLoopidArray, 1) : null}
                                             </select>
                                         </div>
 
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                            <div className="list-header1">
                                                 Segment
-                                        </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
+                                        </div>
+                                            <select className="form-control list-header1" id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].segmentArray ? this.renderOptions(options[item].segmentArray, 2) : null}
                                             </select>
                                         </div>
 
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                            <div className="list-header1">
                                                 Field
-                                        </label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'FieldId')}>
+                                        </div>
+                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'FieldId')}>
                                                 <option value=""></option>
                                                 {options[item].elementArray ? this.renderOptions(options[item].elementArray, 3) : null}
                                             </select>
@@ -520,8 +514,8 @@ export class EditConfiguration extends React.Component {
                                     <div className="row">
 
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">Usage Req.</label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'is_mandatory')}>
+                                            <div className="list-header1">Usage Req.</div>
+                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'is_mandatory')}>
                                                 {/* <option value=""></option> */}
                                                 <option value="0">Required</option>
                                                 <option value="1">Absent</option>
@@ -529,18 +523,18 @@ export class EditConfiguration extends React.Component {
                                             </select>
                                         </div>
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">
+                                            <div className="list-header1">
                                                 Min/Max length
-                                            </label>
-                                            <div className="row" style={{ marginLeft: "12px" }}>
+                                            </div>
+                                            <div className="row" style={{ marginLeft: "16px" }}>
                                                 <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{ width: "100px" }} />
                                                 <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{ width: "100px" }} />
                                             </div>
                                         </div>
 
                                         <div className="form-group col-sm-3">
-                                            <label className="list-header">Operator</label>
-                                            <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeText(e, 'OperatorId')}>
+                                            <div className="list-header1">Operator</div>
+                                            <select className="form-control list-header1" onChange={(e) => this.ChangeText(e, 'OperatorId')}>
                                                 <option value=""></option>
                                                 {this.getOperatorMaster()}
                                             </select>
@@ -550,22 +544,22 @@ export class EditConfiguration extends React.Component {
                                             this.state.valuerange == 1 ?
 
                                                 <div className="form-group col-sm-3">
-                                                    <label className="list-header">Min/Max Value</label>
-                                                    <div className="row" style={{ marginLeft: "12px" }}>
+                                                    <div className="list-header1">Min/Max Value</div>
+                                                    <div className="row" style={{ marginLeft: "16px" }}>
                                                         <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'MinValue')} style={{ width: "100px" }} />
                                                         <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'MaxValue')} style={{ width: "100px" }} />
                                                     </div>
                                                 </div> :
-                                                <div className="form-group col-sm-3" style={{ marginLeft: '-5px' }}>
-                                                    <label className="list-header">Value</label>
-                                                    <input type="text" className="form-control list-header" onChange={(e) => this.onChangeName(e, 'Value')} />
+                                                <div className="form-group col-sm-3">
+                                                    <div className="list-header1">Value</div>
+                                                    <input type="text" className="form-control list-header1" onChange={(e) => this.onChangeName(e, 'Value')} />
                                                 </div>
                                         }
                                     </div>
                                 </div>
 
                                 <div className="form-group col-sm-3" style={{ padding: '0' }}>
-                                    <label className="list-header clickable" onClick={() => this.setState({ compareDetailsFlag: !this.state.compareDetailsFlag })} style={{ color: '#139DC9', fontWeight: '700' }}>AND / OR</label>
+                                    <div className="list-header1 clickable" onClick={() => this.setState({ compareDetailsFlag: !this.state.compareDetailsFlag })} style={{ color: '#139DC9', fontWeight: '800', fontSize: '14px' }}>AND / OR</div>
                                     {/* <select className="form-control list-header" onChange={this.SegmentCompYesno} style={{ marginLeft: "10px" }} >
                                                     <option value=""></option>
 
@@ -623,20 +617,20 @@ export class EditConfiguration extends React.Component {
                                     <div>
                                         <div className="row">
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">
+                                                <div className="list-header1">
                                                     Main Loop Id
-                                 </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'mainLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop2').value, item, 6) }}>
+                                 </div>
+                                                <select className="form-control list-header1" id={item + 'mainLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop2').value, item, 6) }}>
                                                     <option value=""></option>
                                                     {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                                 </select>
                                             </div>
 
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">
+                                                <div className="list-header1">
                                                     Sub Loop Id
-                                 </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'subLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop2').value, item, 4,options[item].selected_mainloopid) }}>
+                                 </div>
+                                                <select className="form-control list-header1" id={item + 'subLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop2').value, item, 4,options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].subLoopidArray1 ? this.renderOptions(options[item].subLoopidArray1, 1) : null}
                                                     {/* {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null} */}
@@ -644,20 +638,20 @@ export class EditConfiguration extends React.Component {
                                             </div>
 
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">
+                                                <div className="list-header1">
                                                     Segment
-                                 </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
+                                 </div>
+                                                <select className="form-control list-header1" id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
                                                 </select>
                                             </div>
 
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">
+                                                <div className="list-header1">
                                                     Field
-                                 </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'FieldId1')}>
+                                 </div>
+                                                <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'FieldId1')}>
                                                     <option value=""></option>
                                                     {options[item].elementArray1 ? this.renderOptions(options[item].elementArray1, 3) : null}
                                                 </select>
@@ -666,8 +660,8 @@ export class EditConfiguration extends React.Component {
                                         <div className="row">
 
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">Usage Req.</label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeVal(e, 'is_mandatory2')}>
+                                                <div className="list-header1">Usage Req.</div>
+                                                <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'is_mandatory2')}>
                                                     {/* <option value=""></option> */}
                                                     <option value="0">Required</option>
                                                     <option value="1">Absent</option>
@@ -675,18 +669,18 @@ export class EditConfiguration extends React.Component {
                                                 </select>
                                             </div>
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">
+                                                <div className="list-header1">
                                                     Min/Max length
-                                     </label>
-                                                <div className="row" style={{ marginLeft: "12px" }}>
+                                     </div>
+                                                <div className="row" style={{ marginLeft: "16px" }}>
                                                     <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length2')} style={{ width: "100px" }} />
                                                     <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'max_length2')} style={{ width: "100px" }} />
                                                 </div>
                                             </div>
 
                                             <div className="form-group col-sm-3">
-                                                <label className="list-header">Operator</label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} onChange={(e) => this.ChangeText(e, 'Oprator_Id2')}>
+                                                <div className="list-header1">Operator</div>
+                                                <select className="form-control list-header1" onChange={(e) => this.ChangeText(e, 'Oprator_Id2')}>
                                                     <option value=""></option>
                                                     {this.getOperatorMaster()}
                                                 </select>
@@ -696,15 +690,15 @@ export class EditConfiguration extends React.Component {
                                                 this.state.valuerange == 1 ?
 
                                                     <div className="form-group col-sm-3">
-                                                        <label className="list-header">Min/Max Value</label>
-                                                        <div className="row" style={{ marginLeft: "12px" }}>
+                                                        <div className="list-header1">Min/Max Value</div>
+                                                        <div className="row" style={{ marginLeft: "16px" }}>
                                                             <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Value2')} style={{ width: "100px" }} />
                                                             <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Max_Value2')} style={{ width: "100px" }} />
                                                         </div>
                                                     </div> :
-                                                    <div className="form-group col-sm-3" style={{ marginLeft: '-5px' }}>
-                                                        <label className="list-header">Value</label>
-                                                        <input type="text" className="list-header form-control" onChange={(e) => this.onChangeName(e, 'Value2')} />
+                                                    <div className="form-group col-sm-3">
+                                                        <div className="list-header1">Value</div>
+                                                        <input type="text" className="list-header1 form-control" onChange={(e) => this.onChangeName(e, 'Value2')} />
                                                     </div>
                                             }
                                         </div>
@@ -731,34 +725,34 @@ export class EditConfiguration extends React.Component {
         )
     }
 
-    operation(isOr) {
-        let array = this.state.operation
-        array.push(isOr ? 2 : 1)
+    // operation(isOr) {
+    //     let array = this.state.operation
+    //     array.push(isOr ? 2 : 1)
 
-        this.setState({
-            count: ++this.state.count,
-            operation: array
-        })
+    //     this.setState({
+    //         count: ++this.state.count,
+    //         operation: array
+    //     })
 
-        setTimeout(() => {
-            this.getData('{loopid(flag:"c" transaction:' + '"' + this.state.transaction + '"' + ') { loopid }}', 1, array.length)
-        }, 50);
-    }
+    //     setTimeout(() => {
+    //         this.getData('{loopid(flag:"c" transaction:' + '"' + this.state.transaction + '"' + ') { loopid }}', 1, array.length)
+    //     }, 50);
+    // }
 
-    renderAddView(iter) {
-        process.env.NODE_ENV == 'development' && console.log("this is iter " + JSON.stringify(this.state.operation), ' askjdf : ', iter)
-        return (
-            <div className="pull-left" style={{ margin: 12 }}>
-                {
-                    iter == 1 ? <a href={"#"} style={{ color: "#6AA2B8" }}>AND</a> :
-                        iter == 2 ? <a href={"#"} style={{ color: "#6AA2B8" }}>OR</a> :
-                            <div>
-                                <a href={"#"} style={{ color: "#6AA2B8", fontWeight: "bold" }} onClick={() => { this.operation() }}>AND</a> /  <a href={"#"} onClick={() => { this.operation(1) }} style={{ color: "#6AA2B8", fontWeight: "bold" }}>OR</a>
-                            </div>
-                }
-            </div>
-        )
-    }
+    // renderAddView(iter) {
+    //     process.env.NODE_ENV == 'development' && console.log("this is iter " + JSON.stringify(this.state.operation), ' askjdf : ', iter)
+    //     return (
+    //         <div className="pull-left" style={{ margin: 12 }}>
+    //             {
+    //                 iter == 1 ? <a href={"#"} style={{ color: "#6AA2B8" }}>AND</a> :
+    //                     iter == 2 ? <a href={"#"} style={{ color: "#6AA2B8" }}>OR</a> :
+    //                         <div>
+    //                             <a href={"#"} style={{ color: "#6AA2B8", fontWeight: "bold" }} onClick={() => { this.operation() }}>AND</a> /  <a href={"#"} onClick={() => { this.operation(1) }} style={{ color: "#6AA2B8", fontWeight: "bold" }}>OR</a>
+    //                         </div>
+    //             }
+    //         </div>
+    //     )
+    // }
 
     onSelect(event) {
 
@@ -779,8 +773,8 @@ export class EditConfiguration extends React.Component {
         let is_mandatory = this.state.is_mandatory  == "Required" ? true : false
 
         var query = 'mutation{' +
-            'SP_ConfigureCustomEdits(ID : 0 ' +
-            'State  :"' + this.state.state + '" ' +
+            'Save_ConfigureCustomEdits(ID : 0 ' +
+            'State  :"' + this.state.State + '" ' +
             'TransactionID  : "'+ this.state.transactionSelect+'" ' +
             'Trading_Partner  : "AVAILITY" ' +
             'RuleName  : "' + this.state.RuleName + '" ' +
@@ -820,7 +814,7 @@ export class EditConfiguration extends React.Component {
 
             '}'
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) };
-        fetch(Urls.base_url, {
+        fetch(Urls.CustomConfiguration, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -832,7 +826,7 @@ export class EditConfiguration extends React.Component {
         })
             .then(r => r.json())
             .then(data =>
-                alert(data.data.SP_ConfigureCustomEdits),
+                alert(data.data.Save_ConfigureCustomEdits),
                 setTimeout(() => {
                     window.location.reload();
                 }, 2000)
@@ -877,66 +871,66 @@ export class EditConfiguration extends React.Component {
     }
 
     getviewdetails() {
-        let query = `{
+        // let query = `{
               
-                   Rules(transaction:"`+ this.state.transaction + `") {
-                       seqid
-                       loopid
-                       segment
-                       element
-                       opert
-                       value
-                       flag
-                       severity
-                       condition
-                       Ignore
-                     }
+        //            Rules(transaction:"`+ this.state.transaction + `") {
+        //                seqid
+        //                loopid
+        //                segment
+        //                element
+        //                opert
+        //                value
+        //                flag
+        //                severity
+        //                condition
+        //                Ignore
+        //              }
                    
-               }`
+        //        }`
 
-        process.env.NODE_ENV == 'development' && console.log('dcdvbnvbnvdskjdg ', query)
+        // process.env.NODE_ENV == 'development' && console.log('dcdvbnvbnvdskjdg ', query)
 
-        fetch(Urls.tradingPartner, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let array = []
-                let summary = []
-                let data = res.data
-                let iterator = data.Rules
-                iterator.forEach(item => {
-                    array.push({
-                        loopid: item.loopid,
-                        segment: item.segment,
-                        element: item.element,
-                        condition: item.condition,
-                        value: item.value,
-                        severity: item.severity,
-                        Ignore: item.Ignore,
-                        seqid: item.seqid
-                    })
-                })
+        // fetch(Urls.CustomConfiguration, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json',
+        //     },
+        //     body: JSON.stringify({ query: query })
+        // })
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         let array = []
+        //         let summary = []
+        //         let data = res.data
+        //         let iterator = data.Rules
+        //         iterator.forEach(item => {
+        //             array.push({
+        //                 loopid: item.loopid,
+        //                 segment: item.segment,
+        //                 element: item.element,
+        //                 condition: item.condition,
+        //                 value: item.value,
+        //                 severity: item.severity,
+        //                 Ignore: item.Ignore,
+        //                 seqid: item.seqid
+        //             })
+        //         })
 
-                this.setState({
-                    customList: array,
-                    // tradingpartner: res.data.Trading_PartnerList
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            })
+        //         this.setState({
+        //             customList: array,
+        //             // tradingpartner: res.data.Trading_PartnerList
+        //         })
+        //     })
+        //     .catch(err => {
+        //         process.env.NODE_ENV == 'development' && console.log(err)
+        //     })
     }
 
     getoptions() {
         let row = []
         this.state.tradingpartner.forEach(element => {
-            row.push(<option value="">{element.Trading_Partner_Name}</option>)
+            row.push(<option value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
         })
         return row
     }
@@ -961,7 +955,7 @@ export class EditConfiguration extends React.Component {
         this.setState({
             [key]: event.target.options[event.target.selectedIndex].text,
         })
-        if (key == "OperatorId" || key == "FieldId" || key == "FieldId1") {
+        if (key == "OperatorId" || key == "FieldId" || key == "FieldId1" || key=="TradingPartner") {
             this.setState({
                 [key]: event.target.options[event.target.selectedIndex].value,
             })
@@ -1008,48 +1002,48 @@ export class EditConfiguration extends React.Component {
     }
 
     getTableCustomEdits(){
-        let query = `{
+        // let query = `{
             
-                GetCustomEdits(page: ${this.state.page}){
-                  ID,
-                  RecCount,
-                  Validation_Level,
-                  RuleName,
-                  Rule_Desc,
-                  Error_Type,
-                  Error_Description,
-                  Severity
-                }
+        //         GetCustomEdits(page: ${this.state.page}){
+        //           ID,
+        //           RecCount,
+        //           Validation_Level,
+        //           RuleName,
+        //           Rule_Desc,
+        //           Error_Type,
+        //           Error_Description,
+        //           Severity
+        //         }
 
-        }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.customEdits, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data
-                let count1 = 1
-                if (data && data.GetCustomEdits.length > 0) {
+        // }`
+        // if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        // fetch(Urls.CustomConfiguration, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Accept': 'application/json',
+        //     },
+        //     body: JSON.stringify({ query: query })
+        // })
+        //     .then(res => res.json())
+        //     .then(res => {
+        //         let data = res.data
+        //         let count1 = 1
+        //         if (data && data.GetCustomEdits.length > 0) {
 
-                    count1 = Math.floor(data.GetCustomEdits[0].RecCount / 10)
-                    if (data.GetCustomEdits[0].RecCount % 10 > 0) {
-                        count1 = count1 + 1
-                    }
-                }
-                this.setState({
-                    GetCustomEdits: res.data.GetCustomEdits,
-                    page: count1
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            })
+        //             count1 = Math.floor(data.GetCustomEdits[0].RecCount / 10)
+        //             if (data.GetCustomEdits[0].RecCount % 10 > 0) {
+        //                 count1 = count1 + 1
+        //             }
+        //         }
+        //         this.setState({
+        //             GetCustomEdits: res.data.GetCustomEdits,
+        //             page: count1
+        //         })
+        //     })
+        //     .catch(err => {
+        //         process.env.NODE_ENV == 'development' && console.log(err)
+        //     })
     }
     
     handlePageClick(data) {
@@ -1065,7 +1059,7 @@ export class EditConfiguration extends React.Component {
     }
     renderTableList() {
         let row = []
-        const data = this.state.GetCustomEdits;
+        const data = this.state.GetCustomEdits && this.state.GetCustomEdits.length > 0 ? this.state.GetCustomEdits: [];
     
         data.forEach((d) => {
             row.push(
@@ -1118,60 +1112,9 @@ export class EditConfiguration extends React.Component {
         );
     }
 
-    renderTopbar() {
-        return (
-            <div className="row">
-                <div className="form-group col-3">
-                    <div className="list-header-dashboard">State</div>
-                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'state')}>
-                        <option value="">State</option>
-                        <option selected="selected" value="1">California</option>
-                        <option value="2">Michigan</option>
-                        <option value="3">Florida</option>
-                        <option value="4">New York</option>
-                        <option value="5">Idaho</option>
-                        <option value="6">Ohio</option>
-                        <option value="7">Illinois</option>
-                        <option value="8">Texas</option>
-                        <option value="9">Mississippi</option>
-                        <option value="10">South Carolina</option>
-                        <option value="11">New Mexico</option>
-                        <option value="12">Puerto Rico</option>
-                        <option value="13">Washington</option>
-                        <option value="14">Utah</option>
-                        <option value="15">Wisconsin</option>
-                    </select>
-                </div>
-
-                <div className="form-group col-3">
-                    <div className="list-header-dashboard">Select Transaction</div>
-                    <select className="form-control list-header-dashboard" id="option"
-                        onChange={(event) => {
-                            this.onSelect(event, 'transactionSelect')
-                        }}
-                    >
-                         {this.gettrans()}
-                    </select>
-                </div>
-
-                <div className="form-group col-3">
-                    <div className="list-header-dashboard">Trading partner </div>
-                    <select className="form-control list-header-dashboard" id="TradingPartner" onChange={(e) => this.ChangeVal(e, 'TradingPartner')} >
-                        <option value="select">Trading partner</option>
-                        {this.getoptions()}
-                    </select>
-                </div>
-                <div className="form-group col-sm-1">
-                    <button type="submit" className="btn light_blue" onClick={this.clicked}>Save</button>
-                </div>
-
-            </div>
-        )
-    }
     render() {
         return (
-            <div>
-                <div className="container">
+                <div>
                     <h5 className="headerText">Configure Custom Edits</h5>
                     {/* {this.renderTopbar()} */}
                     {this.renderView()}
@@ -1179,8 +1122,6 @@ export class EditConfiguration extends React.Component {
                         {/* {this.renderTableList()} */}
                     
                 </div>
-
-            </div>
         );
     }
 }

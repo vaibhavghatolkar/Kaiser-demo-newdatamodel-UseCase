@@ -36,7 +36,7 @@ export class StateDropdown extends React.Component {
 
     renderDropdown = () => {
         return (
-            <select className="form-control list-dashboard" style={{maxHeight: '100px'}} id="state"
+              <select className={this.props.customConfig ? "form-control list-header1" : "form-control list-dashboard"} style={{maxHeight: '100px'}} id="state"
                 onChange={(event) => {
                     this.props.method(event)
                 }}

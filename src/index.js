@@ -40,6 +40,7 @@ import { Load_Exception } from './app/containers/RealTime_837_Claim/Load_Excepti
 import {AuditSummary835} from './app/containers/ClaimPayment_835/AuditSummary835'
 import { ClaimPayment_835_Exception } from './app/containers/ClaimPayment_835/ClaimPayment_835_Exception';
 import { ClaimPayment_835_ProcessingSummary } from './app/containers/ClaimPayment_835/ClaimPayment_835_ProcessingSummary';
+import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
 
 
 
@@ -203,6 +204,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._claimPayment_835_details} component={ClaimPaymentDetails} />
                                 <Route path={'/' + Strings._Inbound_response_999} component={Outbound_response_999} />
                                 <Route path={'/' + Strings._Load_Exception} component={Load_Exception} />
+                                <Route path={'/' + Strings.viewCustomEdit_New} component={viewCustomEdit_New} />
                                 
                                 
                             </div>

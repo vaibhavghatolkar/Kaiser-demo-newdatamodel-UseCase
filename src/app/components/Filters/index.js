@@ -26,11 +26,13 @@ export class Filters extends React.Component {
             providers: [],
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
+            TransactionMasterList: [],
         }
     }
 
     componentDidMount() {
         this.getCommonData()
+        this.getTransactiondata()
     }
 
     getCommonData = async () => {
@@ -67,6 +69,38 @@ export class Filters extends React.Component {
             });
     }
 
+    getTransactiondata() {
+        let query = `{      
+            TransactionMaster  {                  
+                Trans_Code
+                Transaction_Type
+            }           
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.common_data, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                this.setState({
+                    TransactionMasterList: res.data.TransactionMaster
+
+                })
+            })
+
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+    }
+
+
     _handleStateChange = (event) => {
         this.props.update('State', event.target.options[event.target.selectedIndex].text)
     }
@@ -91,7 +125,7 @@ export class Filters extends React.Component {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.props.update(key, '')
         } else {
-            if(key == 'selectedTradingPartner'){
+            if (key == 'selectedTradingPartner') {
                 this.props.update(key, event.target.options[event.target.selectedIndex].value)
             } else {
                 this.props.update(key, event.target.options[event.target.selectedIndex].text)
@@ -115,6 +149,18 @@ export class Filters extends React.Component {
             row.push(<option selected={this.props.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""} value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
         })
         return row
+    }
+
+    getTransData = () => {
+        let row = []
+        this.state.TransactionMasterList.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option value={element.Trans_Code}>{element.Trans_Code}</option>)
+        })
+        return row
+
     }
 
     onHandleChange = (event) => {
@@ -229,23 +275,31 @@ export class Filters extends React.Component {
                                     <option selected={!this.props.changeDefault ? "selected" : ''} value="2">Last year</option>
                                 </select>
                             </div> : null
+                    }{
+                        !this.props.removeStartDate ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Start Date</div>
+                                <DatePicker className="form-control list-dashboard"
+                                    selected={this.props.startDate ? new Date(moment(this.props.startDate).format('YYYY-MM-DD hh:mm')) : ''}
+                                    onChange={this.handleStartChange}
+                                    maxDate={this.props.endDate ? new Date(moment(this.props.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                                />
+                            </div>
+                            : null
                     }
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Start Date</div>
-                        <DatePicker className="form-control list-dashboard"
-                            selected={this.props.startDate ? new Date(moment(this.props.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleStartChange}
-                            maxDate={this.props.endDate ? new Date(moment(this.props.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">End Date</div>
-                        <DatePicker className="form-control list-dashboard"
-                            selected={this.props.endDate ? new Date(moment(this.props.endDate).format('YYYY-MM-DD hh:mm')) : ''}
-                            onChange={this.handleEndChange}
-                            minDate={this.props.startDate ? new Date(moment(this.props.startDate).format('YYYY-MM-DD hh:mm')) : ''}
-                        />
-                    </div>
+                    {
+                        !this.props.removeEndDate ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">End Date</div>
+                                <DatePicker className="form-control list-dashboard"
+                                    selected={this.props.endDate ? new Date(moment(this.props.endDate).format('YYYY-MM-DD hh:mm')) : ''}
+                                    onChange={this.handleEndChange}
+                                    minDate={this.props.startDate ? new Date(moment(this.props.startDate).format('YYYY-MM-DD hh:mm')) : ''}
+                                />
+                            </div>
+
+                            : null
+                    }
                     {
                         !this.props.removeGrid ?
                             <div className="form-group col-2">
@@ -307,6 +361,21 @@ export class Filters extends React.Component {
                                     }}></input>
                             </div> : null
                     }
+                    {
+                        this.props.TransactionFlag ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Transaction</div>
+                                <select className="form-control list-dashboard" id="TradingPartner"
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'selectedTransaction')
+                                    }}>
+                                    <option value=""></option>
+                                    {this.getTransData()}
+                                </select>
+                            </div>
+                            : null
+                    }
+
                 </div>
             </div>
         )

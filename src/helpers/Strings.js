@@ -131,6 +131,7 @@ const Strings = {
     _Load_Exception:'_Load_Exception',
     _ClaimProcessingSummary: '_claimProcessingSummary',
     _ClaimPayment_835_ProcessingSummary:'_ClaimPayment_835_ProcessingSummary',
+    viewCustomEdit_New:'viewCustomEdit_New'
 }
 
 export default Strings;
