@@ -1,3 +1,29 @@
+@import "../../containers/color.css"; 
+
 .cursor-value{
     cursor: pointer;
+}
+.ag-filter-condition{
+    display: none !important;
+}
+.ag-filter-select {
+    display: none;
+}
+.ag-filter-body-wrapper{
+    height: 27px;
+    overflow: hidden;
+}
+.ag-loading-icon{
+    color: white !important;
+}
+.ag-loading-text{
+    color: white !important;
+}
+.ag-overlay-loading-center{
+    /* padding : 6px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important; */
+}
+.spinner-border{
+    color: var(--main-bg-color);
 }

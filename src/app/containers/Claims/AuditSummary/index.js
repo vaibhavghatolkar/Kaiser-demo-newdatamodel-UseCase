@@ -9,6 +9,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
 let val = ''
 export class AuditSummary extends React.Component {
@@ -116,74 +117,6 @@ export class AuditSummary extends React.Component {
 
     componentDidMount() {
         this._refreshScreen()
-    }
-
-    _getCounts = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            ClaimsDailyAudit(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}" OrderBy:"${this.state.orderby}", State:"${this.state.State}", GridType:${this.state.gridType}, NotSent999:"${this.state.NotSent999}"){
-              FileID
-              filename
-              Submitted
-              Accepted
-              Rejected
-              SentToQNXT
-              Paid
-              denied
-              WIP
-              Pending
-              F277
-              F999
-              FileStatus
-              RecCount
-              Error
-              InHiPaaS
-              State
-              ProcessID
-              LoadStatus
-              MCGStatus
-              Accepted_277CA
-              Rejected_277CA
-              LoadMCG
-              LoadError
-            }
-        }`
-
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data
-                if (res.data) {
-                    let count = 1
-                    if (data.ClaimsDailyAudit.length > 0) {
-
-                        count = Math.floor(data.ClaimsDailyAudit[0].RecCount / 10)
-                        if (data.ClaimsDailyAudit[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                    }
-
-                    this.setState({
-                        claimsAudit: res.data.ClaimsDailyAudit,
-                        rowData: this.state.gridType == 1 ? res.data.ClaimsDailyAudit : [],
-                        count: count
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
     }
 
     _getCountsNew = async () => {
@@ -469,8 +402,6 @@ export class AuditSummary extends React.Component {
         })
         setTimeout(() => {
             this.getClaimCounts()
-            this._getCounts()
-
         }, 50);
     }
 
@@ -567,61 +498,92 @@ export class AuditSummary extends React.Component {
 
         setTimeout(() => {
             this.getClaimCounts()
-            this._getCounts()
-
         }, 50);
     }
 
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == '999') {
+            this.goto999(event.data.FileID)
+        }
+        if (event.colDef.headerName == '277CA') {
+            this.goto277(event.data.FileID)
+        }
+        if (event.colDef.headerName == 'File Name') {
+            this.props.history.push('/' + Strings.ClaimProcessingSummary, {
+                file_id: event.data.FileID
+            })
+        }
+    }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
+    }
+
     _renderTransactions() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let query = `{
+            ClaimsDailyAuditNew(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+                    
+                    submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  
+                    RecType:"Inbound", page: ${this.state.page}, Provider:"${this.state.providerName}", 
+                    OrderBy:"${this.state.orderby}", State:"${this.state.State}", GridType:${this.state.gridType}, NotSent999:"${this.state.NotSent999}"
+            ) {
+                  FileID
+                  filename
+                  Submitted
+                  Accepted
+                  Rejected
+                  SentToQNXT
+                  Paid
+                  denied
+                  WIP
+                  Pending
+                  F277
+                  F999
+                  FileStatus
+                  RecCount
+                  Error
+                  InHiPaaS
+                  State
+                  ProcessID
+                  LoadStatus
+                  MCGStatus
+                  Accepted_277CA
+                  Rejected_277CA
+                  LoadMCG
+                  LoadError
+                }
+              }`
         return (
-            <div style={{ width: '100%', height: '100%' }}>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == '999') {
-                                this.goto999(event.data.FileID)
-                            }
-                            if (event.colDef.headerName == '277CA') {
-                                this.goto277(event.data.FileID)
-                            }
-                            if (event.colDef.headerName == 'File Name') {
-                                this.props.history.push('/' + Strings.ClaimProcessingSummary, {
-                                    file_id: event.data.FileID
-                                })
-                            }
-
-                        }}
-                    >
-
-                    </AgGridReact>
-
-                </div>
-
-
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={this.state.columnDefs}
+                    query={query}
+                    url={Urls.claims_837}
+                    fieldType={'FileDate'}
+                    index={'ClaimsDailyAuditNew'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
     }
 
     _refreshScreen = () => {
-        this._getCounts()
         this._getCountsNew()
     }
 
@@ -632,7 +594,7 @@ export class AuditSummary extends React.Component {
             claimsAudit: [],
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            this._getCounts()
+            // this._getCounts()
         })
     }
 
@@ -666,7 +628,7 @@ export class AuditSummary extends React.Component {
                 {/* {this._renderStats()} */}
                 {this._renderSummaryDetails()}
                 <div className="col-12" style={{ padding: "0px" }}>
-                    {this.state.claimsAudit && this.state.claimsAudit.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                    {this._renderTransactions()}
                     {this.state.claimsAudit && this.state.claimsAudit.length > 0 && !this.state.gridType ? this.renderTransactions() : null}
                 </div>
             </div>

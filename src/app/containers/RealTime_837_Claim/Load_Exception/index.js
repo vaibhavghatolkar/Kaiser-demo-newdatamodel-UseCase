@@ -10,6 +10,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
 
 var val = ''
@@ -129,83 +130,14 @@ export class Load_Exception extends React.Component {
             },
 
 
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
             showerror: '',
             Aggrid_ClaimLineData: ''
 
         }
-    }
-
-    componentDidMount() {
-        this.getData()
-    }
-
-    getData = () => {
-        let count = 1
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        let providerName = this.state.providerName
-        if (!providerName) {
-            providerName = ''
-        }
-
-        let query = `{            
-            Claim837RTLoadExceptionFileDetails(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType} ,LoadStatus:"", Status:"", MCGStatus:"${this.state.mcgStatus}", FileID: "") {
-                RecCount
-                FileID
-                FileName
-                Sender
-                FileDate
-                Claimcount
-                FileStatus
-                Rejected
-                Type
-                Status
-                State
-                ProcessID
-                FileLevelError
-                MCGStatus
-                FileDateTime 
-            }
-        }`
-        fetch(Urls.real_time_claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res && res.data && res.data.Claim837RTLoadExceptionFileDetails) {
-
-                    if (res.data.Claim837RTLoadExceptionFileDetails.length > 0) {
-
-                        count = Math.floor(res.data.Claim837RTLoadExceptionFileDetails[0].RecCount / 10)
-                        if (res.data.Claim837RTLoadExceptionFileDetails[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                        this.setState.recount = count;
-                    }
-
-                    this.setState({
-                        rowData: this.state.gridType == 1 ? res.data.Claim837RTLoadExceptionFileDetails : [],
-                        intakeClaims: res.data.Claim837RTLoadExceptionFileDetails,
-                        recount: count,
-
-
-                    }, () => {
-                        this.sortData()
-                    })
-                }
-            })
-            .catch(err => {
-
-            });
     }
     
     sortData(fileId, data) {
@@ -335,9 +267,6 @@ export class Load_Exception extends React.Component {
             orderby: e,
             [key]: rotation == 0 ? 180 : 0
         })
-        setTimeout(() => {
-            this.getData()
-        }, 50);
     }
 
     handleInnerSort = (e, rotation, key, fileId) => {
@@ -481,57 +410,83 @@ export class Load_Exception extends React.Component {
     }
 
     handlePageClick1(data) {
-
         let page = data.selected + 1
-
         this.setState({
             Firstgridpage: page
         })
+    }
 
-        setTimeout(() => {
-            this.getData()
-        }, 50);
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                showClaims: true,
+                showerror: false,
+                claims_rowData: [],
+                Ag_grid_FileName: '',
+                Ag_grid_fileDate: '',
+            })
+            this.getTransactions(event.data.FileID)
+        }
+    }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
     }
 
     _renderList() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let query = `{
+            Claim837RTLoadExceptionFileDetailsNew(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+                    
+                    Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",
+                    Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",
+                    Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , 
+                    page: ` + this.state.Firstgridpage + ` , OrderBy:"${this.state.orderby}", 
+                    RecType: "Inbound", GridType:${this.state.gridType} ,
+                    LoadStatus:"", Status:"", MCGStatus:"${this.state.mcgStatus}", FileID: ""
+            ) {
+                    RecCount
+                    FileID
+                    FileName
+                    Sender
+                    FileDate
+                    Claimcount
+                    FileStatus
+                    Rejected
+                    Type
+                    Status
+                    State
+                    ProcessID
+                    FileLevelError
+                    MCGStatus
+                    FileDateTime
+                }
+            }`
         return (
-            <div>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        icons={this.state.icons}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'File Name') {
-                                this.setState({
-                                    showClaims: true,
-                                    showerror: false,
-                                    claims_rowData: [],
-                                    Ag_grid_FileName: '',
-                                    Ag_grid_fileDate: '',
-                                })
-                                this.getTransactions(event.data.FileID)
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={this.state.columnDefs}
+                    query={query}
+                    url={Urls.real_time_claim_details}
+                    index={'Claim837RTLoadExceptionFileDetailsNew'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    fieldType={'FileDateTime'}
+                    endDate={endDate}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
     }
@@ -613,7 +568,7 @@ export class Load_Exception extends React.Component {
     }
 
     _refreshScreen = () => {
-        this.getData()
+        
     }
 
     onGridChange = (event) => {
@@ -626,9 +581,7 @@ export class Load_Exception extends React.Component {
             showDetails: false,
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            
-                this.getData()
-            
+
         })
     }
 

@@ -49,7 +49,7 @@ export class viewCustomEdit_New extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
+            rowSelection: 'never',
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData:[],

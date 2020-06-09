@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 import '../../Files/files-styles.css';
-import {Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import '../../color.css'
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
@@ -15,6 +15,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
 export class RealTimeDashboard_New extends React.Component {
 
@@ -114,15 +115,15 @@ export class RealTimeDashboard_New extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
 
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
- 
+
         }
 
         this.showFile = this.showFile.bind(this)
-      
+
     }
 
     componentWillReceiveProps() {
@@ -408,9 +409,6 @@ export class RealTimeDashboard_New extends React.Component {
             orderby: e,
             [key]: rotation == 0 ? 180 : 0
         })
-        setTimeout(() => {
-            this.getListData()
-        }, 50);
     }
 
     renderTableHeader() {
@@ -594,13 +592,13 @@ export class RealTimeDashboard_New extends React.Component {
         this.setState({
             page: page
         }, () => {
-            this.getListData()
+            
         })
     }
 
     renderList() {
         let row = []
-        const data = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList:[]
+        const data = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList : []
 
         data.forEach((d) => {
             row.push(
@@ -691,56 +689,40 @@ export class RealTimeDashboard_New extends React.Component {
         })
     }
 
-    _renderList() {
-        return (
-            <div>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'File Name') {
-                                this.setState({
-                                    incoming_fileId: event.data.FileID
-                                }, () => {
-                                    this.gotoClaimDetails()
-                                })
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
-            </div>
-        )
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
     }
 
-    getListData = () => {
-        let count = 1
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                incoming_fileId: event.data.FileID
+            }, () => {
+                this.gotoClaimDetails()
+            })
+        }
+    }
+
+    _renderList() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        let providerName = this.state.providerName
-        if (!providerName) {
-            providerName = ''
-        }
-
-        let query = `{            
-            Claim837RTDashboardFileDetails (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",Provider:"${providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , page: ` + this.state.page + ` , OrderBy:"${this.state.orderby}", RecType: "Inbound", GridType:${this.state.gridType}, LoadStatus:"", Status:"", MCGStatus:"", FileID: "", Status277CA:"",ClaimID:"") {
+        let query = `{
+            Claim837RTDashboardFileDetailsNew(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+                    
+                    page:1,Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
+                    Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
+                    FileID: "" , OrderBy:"` + this.state.orderby + `",Type:"${this.state.type}", RecType:"Inbound", GridType:${this.state.gridType}, 
+                    LoadStatus:"", MCGStatus:"", Status277CA:"", ClaimID:"",  Status: ""
+            ) {
                 RecCount
                 FileID
                 FileName
@@ -753,41 +735,29 @@ export class RealTimeDashboard_New extends React.Component {
                 Status
                 State
                 ProcessID
+                FileLevelError
                 MCGStatus
                 FileDateTime
-            }
-        }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res && res.data && res.data.Claim837RTDashboardFileDetails) {
-
-                    if (res.data.Claim837RTDashboardFileDetails.length > 0) {
-
-                        count = Math.floor(res.data.Claim837RTDashboardFileDetails[0].RecCount / 10)
-                        if (res.data.Claim837RTDashboardFileDetails[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                        this.setState.recount = count;
-                    }
-
-                    this.setState({
-                        claimsList: res.data.Claim837RTDashboardFileDetails,
-                        rowData: this.state.gridType == 1 ? res.data.Claim837RTDashboardFileDetails : []
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
+              }
+            }`
+        return (
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={this.state.columnDefs}
+                    query={query}
+                    url={Urls.base_url}
+                    fieldType={'FileDateTime'}
+                    index={'Claim837RTDashboardFileDetailsNew'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    type={this.state.type}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
+            </div>
+        )
     }
 
     showFile(name) {
@@ -796,13 +766,12 @@ export class RealTimeDashboard_New extends React.Component {
             flag: name
         })
     }
-    
+
     _refreshScreen = () => {
         this._get999Count()
         this.getClaimCounts()
         this.getData()
         this._getCounts()
-        this.getListData()
     }
 
     _get999Count = async () => {
@@ -1125,7 +1094,7 @@ export class RealTimeDashboard_New extends React.Component {
             rowData: [],
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            this.getListData()
+            // this.getListData()
         })
     }
 
@@ -1162,7 +1131,7 @@ export class RealTimeDashboard_New extends React.Component {
                 <div className="general-header">Claim Status</div>
                 {this.renderClaimDetails()}
                 {this.renderCharts()}
-                {this.state.claimsList && this.state.claimsList.length > 0 && this.state.gridType ? this._renderList() : null}
+                {this._renderList()}
                 {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
             </div>
         );

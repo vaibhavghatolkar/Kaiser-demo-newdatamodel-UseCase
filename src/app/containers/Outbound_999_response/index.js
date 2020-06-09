@@ -11,18 +11,19 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Strings from '../../../helpers/Strings';
 import { Filters } from '../../components/Filters';
+import { ServersideGrid } from '../../components/ServersideGrid';
 
 var val = ''
 export class Outbound_response_999 extends React.Component {
 
     constructor(props) {
         super(props);
-    
+
         let pagination_length = 10
         try {
             pagination_length = this.props.location.state && this.props.location.state.data && this.props.location.state.data.length > 0 ? (this.props.location.state.data[0].flag999 == 0 ? 5 : 10) : 10
         } catch (error) {
-            
+
         }
         this.state = {
             claimsList: [],
@@ -57,8 +58,8 @@ export class Outbound_response_999 extends React.Component {
             apiflag: 0,
             Response: '',
             initialPage: null,
-            flag999: props.location.state && this.props.location.state.data[0].flag999 ? this.props.location.state.data[0].flag999:'',
-            type:  props.location.state && props.location.state.data[1] && props.location.state.data[1].type ? props.location.state.data[1].type : "",
+            flag999: props.location.state && this.props.location.state.data[0].flag999 ? this.props.location.state.data[0].flag999 : '',
+            type: props.location.state && props.location.state.data[1] && props.location.state.data[1].type ? props.location.state.data[1].type : "",
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -89,11 +90,11 @@ export class Outbound_response_999 extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-          
+
 
         }
 
@@ -335,7 +336,7 @@ export class Outbound_response_999 extends React.Component {
         )
     }
 
- 
+
 
     renderTableHeader() {
         return (
@@ -401,6 +402,98 @@ export class Outbound_response_999 extends React.Component {
                     pageLinkClassName={'page-link'}
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
+                />
+            </div>
+        )
+    }
+
+    clickNavigation = (event) => {
+        if (
+            (this.state.flag999 == 1 && event.colDef.headerName == 'Response File Name') ||
+            (this.state.flag999 == 0 && event.colDef.headerName == 'Process Id')
+        ) {
+            this.render999Details(event.data.id)
+            if (this.state.flag999 != 1) {
+                this.getFileDetails(event.data.FileId)
+            }
+        }
+    }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
+    }
+
+    _renderTransactionsServerSide = () => {
+        let columnDefs = []
+        this.state.flag999 == 1 ?
+            columnDefs = [
+                { headerName: "Response File Name", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Date", field: "ResponseFileDateTime", width: 100, },
+                { headerName: "X12 File Name", field: "FileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "X12 File Date", field: "FileDateTime", flex: 1, },
+            ] :
+            columnDefs = [
+                { headerName: "Process Id", field: "ResponseFileName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Date", field: "ResponseFileDateTime", flex: 1, },
+                { headerName: "835 File Name", field: "FileName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "835 File Date", field: "FileDateTime", flex: 1, },
+            ]
+
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
+        let recType = 'Inbound'
+        if (this.state.flag999 == 0) {
+            recType = 'Outbound'
+        }
+        let query = `{
+            Data999New(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+                    
+                    RecType: "${recType}", TrasactionType: "${this.state.transactionType}", 
+                    FileId: "${fileId}", FileName: "", 
+                    StartDt: "${startDate}", EndDt: "${endDate}", 
+                    State: "${this.state.State}", page: ${this.state.page}, 
+                    OrderBy: "${this.state.orderby}", GridType:${this.state.gridType},
+                    Type: "${this.state.type}"
+            ) {
+                  FileId
+                  FileName
+                  Date
+                  Submitter
+                  id
+                  status
+                  Response
+                  TrasactionType
+                  RecCount
+                  ResponseFileName
+                  ResponseFileDate
+                  ResponseFileDateTime
+                  FileDateTime
+                }
+              }`
+        return (
+            <div style={{ padding: '0', marginTop: '17px' }}>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls.common_data}
+                    fieldType={'ResponseFileDateTime'}
+                    index={'Data999New'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
                 />
             </div>
         )
@@ -609,7 +702,7 @@ export class Outbound_response_999 extends React.Component {
                 {this._renderTopbar()}
                 <div className={this.state.flag999 == 1 ? "row" : ""}>
                     <div className={this.state.flag999 == 1 ? "col-7 margin-top" : "margin-top"}>
-                        {this.state.files_list && this.state.files_list.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                        {this.state.flag999 == 1 ? this._renderTransactionsServerSide() : this._renderTransactions()}
                         {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
                     </div>
                     <div className={this.state.flag999 == 1 ? "col-5 margin-top" : "margin-top"}>

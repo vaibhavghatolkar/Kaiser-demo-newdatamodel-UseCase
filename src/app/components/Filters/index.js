@@ -187,7 +187,7 @@ export class Filters extends React.Component {
             clearTimeout(val_in)
             val_in = setTimeout(() => {
                 this.onChangeName(passing_val, 'Filter_ClaimId')
-            }, 300);
+            }, 750);
         })
     }
 

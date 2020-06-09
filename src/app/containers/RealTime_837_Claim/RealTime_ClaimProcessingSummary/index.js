@@ -11,9 +11,8 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../../components/TableTiles';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
-let val = ''
-let controller = new AbortController()
 export class ClaimProcessingSummary extends React.Component {
 
     constructor(props) {
@@ -111,7 +110,7 @@ export class ClaimProcessingSummary extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
+            rowSelection: 'never',
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
@@ -188,85 +187,6 @@ export class ClaimProcessingSummary extends React.Component {
             });
     }
 
-    getData = async () => {
-        controller.abort()
-        controller = new AbortController()
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-
-        let query = `{            
-            Claim837RTProcessingSummary (page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, FileStatus : "", LoadStatus:"", MCGStatus:"", Status277CA:"",ClaimID:"${this.state.Filter_ClaimId}") {
-                RecCount
-                ClaimID
-                ClaimDate
-                ClaimTMTrackingID
-                Subscriber_ID
-                Claim_Amount
-                ClaimStatus
-                ProviderLastName
-                ProviderFirstName
-                SubscriberLastName
-                SubscriberFirstName
-                adjudication_status
-                ClaimLevelErrors
-                ClaimUniqueID
-                FileID
-                FileName
-                FileCrDate
-                FileStatus
-                F999
-				F277
-                TotalLinewise835
-                TotalLine
-                Transaction_Status
-                ClaimRefId
-                MolinaClaimID
-                ProcessID
-                State
-                FileDateTime
-                ClaimDateTime
-                Status277CA
-            }
-        }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claim_processing, {
-            method: 'POST',
-            signal: controller.signal,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                var data = res.data.Claim837RTProcessingSummary
-                let count = 0
-                if (data && data.length > 0) {
-                    let recCount = data[0].RecCount
-                    try {
-                        count = recCount / 10
-                        count = count.floor(count)
-                        if (recCount % 10 > 0) {
-                            count = count + 1
-                        }
-                    } catch (error) {
-
-                    }
-
-                }
-
-                this.setState({
-                    Claim837RTProcessingSummary: data,
-                    rowData: this.state.gridType == 1 ? data : [],
-                    recCount: count,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
     renderSearchBar() {
         return (
             <div className="row">
@@ -282,33 +202,23 @@ export class ClaimProcessingSummary extends React.Component {
         })
 
         setTimeout(() => {
-            
             this.getClaimCounts()
-            this.getData()
         }, 50);
     }
 
     goto277 = (fileId) => {
-        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_277CAResponse, {
             fileId: fileId
         })
-        // setTimeout(() => {
-        //     window.location.reload()
-        // }, 50);
     }
 
     goto999 = (fileId) => {
-        // sessionStorage.setItem('isOutbound', true)
         this.props.history.push('/' + Strings.Outbound_response_999, {
             fileId: fileId,
             data : [
                 { flag999: '1' },
             ]
         })
-        // setTimeout(() => {
-        //     window.location.reload()
-        // }, 50);
     }
 
     gotoDetails = (fileId) => {
@@ -389,9 +299,7 @@ export class ClaimProcessingSummary extends React.Component {
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            
             this.getClaimCounts()
-            this.getData()
         }, 50);
     }
 
@@ -549,52 +457,102 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
-    _renderTransactions() {
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == '999') {
+            this.goto999(event.data.FileID)
+        }
+        if (event.colDef.headerName == '277CA') {
+            this.goto277(event.data.FileID)
+        }
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                incoming_fileId: event.data.FileID
+            }, () => {
+                this.gotoDetails()
+            })
+        }
+    }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
+    }
+
+    _renderTransactions = () => {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+
+        let query = `{
+            Claim837RTProcessingSummaryNew(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+                    
+                    page:${this.state.pageCount},Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
+                    Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
+                    FileID: "${this.state.file_id}" , OrderBy:"` + this.state.orderby + `",Type:"", RecType:"Inbound", GridType:${this.state.gridType}, 
+                    FileStatus : "", LoadStatus:"", MCGStatus:"", Status277CA:"", ClaimID:"${this.state.Filter_ClaimId}"
+            ) {
+              RecCount
+              ClaimID
+              ClaimDate
+              ClaimTMTrackingID
+              Subscriber_ID
+              Claim_Amount
+              ClaimStatus
+              ProviderLastName
+              ProviderFirstName
+              SubscriberLastName
+              SubscriberFirstName
+              adjudication_status
+              ClaimLevelErrors
+              ClaimUniqueID
+              FileID
+              FileName
+              FileCrDate
+              FileStatus
+              F277
+              F999
+              TotalLine
+              TotalLinewise835
+              BatchName
+              BatchStatus
+              Transaction_Status
+              ClaimRefId
+              MolinaClaimID
+              FileDate
+              ProcessID
+              State
+              FileDateTime
+              ClaimDateTime
+              Status277CA
+            }
+          }`
         return (
-            <div className="ag-theme-balham" style={{ height: '400px', padding: '0px', marginLeft: '1px' }}>
-                <AgGridReact
-                    modules={this.state.modules}
-                    columnDefs={this.state.columnDefs}
-                    autoGroupColumnDef={this.state.autoGroupColumnDef}
-                    defaultColDef={this.state.defaultColDef}
-                    suppressRowClickSelection={true}
-                    groupSelectsChildren={true}
-                    debug={true}
-                    rowSelection={this.state.rowSelection}
-                    rowGroupPanelShow={this.state.rowGroupPanelShow}
-                    pivotPanelShow={this.state.pivotPanelShow}
-                    enableRangeSelection={true}
-                    paginationAutoPageSize={false}
-                    pagination={true}
-                    domLayout={this.state.domLayout}
-                    paginationPageSize={this.state.paginationPageSize}
-                    onGridReady={this.onGridReady}
-                    rowData={this.state.rowData}
-                    enableCellTextSelection={true}
-                    onCellClicked={(event) => {
-                        if (event.colDef.headerName == '999') {
-                            this.goto999(event.data.FileID)
-                        }
-                        if (event.colDef.headerName == '277CA') {
-                            this.goto277(event.data.FileID)
-                        }
-                        if (event.colDef.headerName == 'File Name') {
-                            this.setState({
-                                incoming_fileId: event.data.FileID
-                            }, () => {
-                                this.gotoDetails()
-                            })
-                        }
-                    }}
-                >
-                </AgGridReact>
-            </div>
+            <ServersideGrid
+                columnDefs={this.state.columnDefs}
+                query={query}
+                url={Urls.claim_processing}
+                fieldType={'ClaimDateTime'}
+                index={'Claim837RTProcessingSummaryNew'}
+                State={this.state.State}
+                selectedTradingPartner={this.state.selectedTradingPartner}
+                startDate={startDate}
+                endDate={endDate}
+                filterClaim={this.state.Filter_ClaimId}
+                updateFields={this.updateFields}
+                onClick={this.clickNavigation}
+            />
         )
     }
 
     _refreshScreen = () => {
         this.getClaimCounts()
-        this.getData()
     }
 
     onGridChange = (event) => {
@@ -604,7 +562,7 @@ export class ClaimProcessingSummary extends React.Component {
             Claim837RTProcessingSummary: [],
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            this.getData()
+            // this.getData()
         })
     }
 
@@ -639,7 +597,7 @@ export class ClaimProcessingSummary extends React.Component {
                 {this._renderTopbar()}
                 {/* {this._renderStats()} */}
                 {this.renderClaimDetails()}
-                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                {this._renderTransactions()}
                 {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
             </div>
         );

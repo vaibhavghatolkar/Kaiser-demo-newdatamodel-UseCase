@@ -11,6 +11,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Strings from '../../../helpers/Strings';
 import { Filters } from '../../components/Filters';
+import { ServersideGrid } from '../../components/ServersideGrid';
 
 var val = ''
 export class Outbound_277CAReponse extends React.Component {
@@ -25,7 +26,7 @@ export class Outbound_277CAReponse extends React.Component {
             submitterRotation: 180,
             errorRotation: 180,
             rotation: 180,
-            fileNameRotation : 180,
+            fileNameRotation: 180,
             files_list: [],
             tradingpartner: [],
             errorList: [],
@@ -51,14 +52,14 @@ export class Outbound_277CAReponse extends React.Component {
             fileRotation: 180,
             dateRotation: 180,
             statusRotation: 180,
-            gridType:1,
+            gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             columnDefs: [
-                { headerName: "Response File Name", field: "ResponseFileName",width:220 , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "Date", field: "ResponseFileDateTime",width:100, },
-                { headerName: "837 File Name", field: "FileName", width:220, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
-                { headerName: "Status", field: "status", flex:1, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' ,} },
+                { headerName: "Response File Name", field: "ResponseFileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Date", field: "ResponseFileDateTime", width: 100, },
+                { headerName: "837 File Name", field: "FileName", width: 220, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
+                { headerName: "Status", field: "status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', } },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -90,66 +91,6 @@ export class Outbound_277CAReponse extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.getTransactions()
-    }
-
-    getTransactions() {
-
-        let query = ''
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
-        query = `{
-            Data277CA(RecType: "Inbound", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}) {
-              FileId
-              FileName
-              Date
-              Submitter
-              id
-              status
-              Response
-              TrasactionType
-              RecCount
-              ResponseFileName
-              ResponseFileDate
-              ResponseFileDateTime
-            }
-          }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data
-                let count = 1
-                if (data && data.Data277CA.length > 0) {
-
-                    count = Math.floor(data.Data277CA[0].RecCount / 10)
-                    if (data.Data277CA[0].RecCount % 10 > 0) {
-                        count = count + 1
-                    }
-                }
-                
-                if (res.data) {
-                    this.setState({
-                        files_list: res.data.Data277CA,
-                        rowData: this.state.gridType == 1 ? res.data.Data277CA : [],
-                        count: count
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
     showDetails() {
         this.setState({
             showDetails: true
@@ -166,12 +107,6 @@ export class Outbound_277CAReponse extends React.Component {
         this.setState({
             page: page
         })
-
-        if (flag) {
-            setTimeout(() => {
-                this.getTransactions()
-            }, 50)
-        }
     }
 
     handleToggle = (e, rotation, key) => {
@@ -186,9 +121,6 @@ export class Outbound_277CAReponse extends React.Component {
             orderby: e,
             [key]: rotation == 0 ? 180 : 0
         })
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
     }
 
     render277CADetails(refId) {
@@ -228,7 +160,7 @@ export class Outbound_277CAReponse extends React.Component {
             <div className="row">
                 <div className={"col-12"}>
                     <div className="top-padding"><a  >{flag ? '277CA Acknowledgement' : 'Transaction Request'}</a></div>
-                    <div style={{height:"200px" ,overflow: "auto"}} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
+                    <div style={{ height: "200px", overflow: "auto" }} className="border-view breakword" id={'hello' + flag}>{this.state.Response}</div>
                 </div>
             </div>
         )
@@ -304,58 +236,83 @@ export class Outbound_277CAReponse extends React.Component {
         )
     }
 
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'Response File Name') {
+            this.render277CADetails(event.data.id)
+        }
+    }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
+    }
+
     _renderTransactions() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
+
+        let query = `{
+            Data277CANew(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+                    
+                    RecType: "Inbound", TrasactionType: "${this.state.transactionType}", 
+                    FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", 
+                    State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}
+            ) {
+                    FileId
+                    FileName
+                    Date
+                    Submitter
+                    id
+                    status
+                    Response
+                    TrasactionType
+                    RecCount
+                    ResponseFileName
+                    ResponseFileDate
+                    ResponseFileDateTime            
+                }
+            }`
         return (
-            <div style={{ width: '100%', height: '100%' }}>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '17px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={this.state.columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        enableCellTextSelection={true}    
-                        onCellClicked={(event) => {
-                            if(event.colDef.headerName == 'Response File Name'){
-                            this.render277CADetails(event.data.id)
-                            }
-                        }}
-                    >
-
-                    </AgGridReact>
-
-                </div>
-
-
+            <div style={{ padding: '0', marginTop: '17px' }}>
+                <ServersideGrid
+                    columnDefs={this.state.columnDefs}
+                    query={query}
+                    url={Urls.common_data}
+                    index={'Data277CANew'}
+                    fieldType={'ResponseFileDateTime'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
     }
 
     _refreshScreen = () => {
-        this.getTransactions()
+        
     }
 
     onGridChange = (event) => {
         this.setState({
             page: 1,
-            rowData : [],
+            rowData: [],
             showDetails: false,
             files_list: [],
-            gridType : event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
+            gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            this.getTransactions()
+            // this.getTransactions()
         })
     }
 
@@ -396,8 +353,8 @@ export class Outbound_277CAReponse extends React.Component {
                     <div className="col-7 margin-top">
                         {/* {this.renderTransactionsNew()} */}
 
-                    {this.state.files_list && this.state.files_list.length > 0 && this.state.gridType ? this._renderTransactions() : null}
-                    {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
+                        {this._renderTransactions()}
+                        {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
                     </div>
                     <div className="col-5 margin-top">
                         {this.state.showDetails ? this.renderDetails(1) : null}
