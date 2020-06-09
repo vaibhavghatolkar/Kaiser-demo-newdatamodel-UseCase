@@ -29,7 +29,7 @@ export class StateDropdown extends React.Component {
             if (!element) {
                 return
             }
-            row.push(<option selected = {this.props.selected_state == element ? "selected" : ''} value="">{element}</option>)
+            row.push(<option value={element}>{element}</option>)
         })
         return row
     }
@@ -40,6 +40,7 @@ export class StateDropdown extends React.Component {
                 onChange={(event) => {
                     this.props.method(event)
                 }}
+                value={this.props.selected_state}
             >
                 <option value=""></option>
                 {this.getOptions()}

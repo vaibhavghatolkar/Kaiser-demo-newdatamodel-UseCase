@@ -1,7 +1,6 @@
 import React from 'react';
 import './style.css';
 import '../color.css'
-import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 import Strings from '../../../helpers/Strings';
 
@@ -229,7 +228,7 @@ export class MenuCreate extends React.Component {
 
             })
             this.setState({
-                customList: data,
+                customList: [...data],
             })
         }
         else {
@@ -238,7 +237,7 @@ export class MenuCreate extends React.Component {
 
             })
             this.setState({
-                customList: data,
+                customList: [...data],
             })
         }
     }
@@ -253,7 +252,7 @@ export class MenuCreate extends React.Component {
 
             })
             this.setState({
-                customList: data,
+                customList: [...data],
             })
         }
         else {
@@ -262,19 +261,16 @@ export class MenuCreate extends React.Component {
 
             })
             this.setState({
-                customList: data,
+                customList: [...data],
             })
         }
     }
     renderList() {
         let row = []
-        const data = this.state.customList;
+        const data = this.state.customList && this.state.customList.length > 0 ? this.state.customList : [];
         data.forEach((d) => {
             var roletype = d.parent_node;
-            var menuID = d.menu_id;
-            var isDisabled = "";
             if (d.is_editable == false) {
-                isDisabled = "disabled";
                 d.isAccessValue = false
             }
             if (d.isChecked == "0") {
@@ -506,8 +502,8 @@ export class MenuCreate extends React.Component {
                 </div>
                 <div className="form-group col-3" >
                     <div className="list-header-dashboard">Select Menu Type</div>
-                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')}>
-                        <option value="I" selected>Inbound</option>
+                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')} defaultValue={'I'}>
+                        <option value="I">Inbound</option>
                         <option value="O">Outbound</option>
                         <option value="B">Both</option>
                     </select>
@@ -517,29 +513,29 @@ export class MenuCreate extends React.Component {
                     <button type="submit" className="btn btn-display" onClick={this.Update}>Save</button>
                 </div>
                 <div className="form-group col-sm-2">
-                    <button type="button" class="btn btn-display" data-toggle="modal" data-target="#myModal"
+                    <button type="button" className="btn btn-display" data-toggle="modal" data-target="#myModal"
                         onClick={this.RenderUserRoleList}
                     >
                         Add User Role
                     </button>
                 </div>
 
-                <div class="modal right fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content" style={{ paddingRight: "25px" }}>
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="myModalLabel2" style={{ color: 'white' }}>User Role</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "20px" }}>&times;</span></button>
+                <div className="modal right fade" id="myModal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content" style={{ paddingRight: "25px" }}>
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="myModalLabel2" style={{ color: 'white' }}>User Role</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "20px" }}>&times;</span></button>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
                                 <div className="row">
-                                    <div class="form-group col-6">
-                                        <label for="FirstName">User Role</label>
+                                    <div className="form-group col-6">
+                                        <label>User Role</label>
                                         <input onChange={(e) => this.onHandleChange(e, 'userRoleName')} type="text" className="form-control width1" name="userRoleName" id="userRoleName"
                                             placeholder="Enter User Role Name" value={this.state.userRoleName} />
                                     </div>
-                                    <div class="form-group col-6">
-                                        <button type="submit" class="btn btn-display" style={{ marginTop: "20px" }} onClick={this.AddUserRole} >Save User Role</button>
+                                    <div className="form-group col-6">
+                                        <button type="submit" className="btn btn-display" style={{ marginTop: "20px" }} onClick={this.AddUserRole} >Save User Role</button>
                                     </div>
                                 </div>
 

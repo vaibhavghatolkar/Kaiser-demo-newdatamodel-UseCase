@@ -6,8 +6,6 @@ import '../../Files/files-styles.css';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
-import { Pie } from 'react-chartjs-2';
 import Strings from '../../../../helpers/Strings';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -21,7 +19,6 @@ export class ClaimPaymentDetails extends React.Component {
 
     constructor(props) {
         super(props);
-        let flag = props.location.state.data[0].flag
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -32,14 +29,14 @@ export class ClaimPaymentDetails extends React.Component {
             memberInfo: {},
             subscriberNo: '',
             clickedError: '',
-            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
-            selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            type: props.location.state && props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
+            selectedTradingPartner: props.location.state && props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type: '',
             plan_code: '',
-            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
-            endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
-            subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
+            startDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            incoming_fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
+            subtitle: props.location.state && props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
             availitySent: props.location.state && props.location.state.data[0] && props.location.state.data[0].availitySent ? props.location.state.data[0].availitySent : '',
             EFTCHK: props.location.state && props.location.state.data[0] && props.location.state.data[0].EFTCHK ? props.location.state.data[0].EFTCHK : '',
             Service_startDate: '',
@@ -56,16 +53,15 @@ export class ClaimPaymentDetails extends React.Component {
             claimLineDetails: [],
             Transaction_Compliance: '',
             Organization: '',
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
-            claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            State: props.location.state && props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            transactionId: props.location.state && props.location.state.data[0] && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            claimStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
             Filter_ClaimId: props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
-            page: 1,
             count: 0,
             recount: 0,
             Firstgridpage: 1,
-            apiflag: props.location.state.data[0].apiflag,
+            apiflag: props.location.state && props.location.state.data[0] && props.location.state.data[0].apiflag,
 
             pieArray: [],
             labelArray: [],
@@ -137,8 +133,6 @@ export class ClaimPaymentDetails extends React.Component {
         controller.abort()
         controller = new AbortController()
         let count = 1
-        let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
-        let ServiceEndDate = this.state.Service_endDate ? moment(this.state.Service_endDate).format('YYYY-MM-DD') : ""
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.Organization
@@ -183,16 +177,16 @@ export class ClaimPaymentDetails extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                this.setState({
-                    rowData: res.data.Dashboard835FileDetails,
-                    claims_rowData: [],
-                    showClaims: res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0 ? true : false
-                }, () => {
-                    if (res.data.Dashboard835FileDetails && res.data.Dashboard835FileDetails.length > 0) {
-                        this.getTransactions(res.data.Dashboard835FileDetails[0].FileID)
-                    }
-                })
                 if (res && res.data && res.data.Dashboard835FileDetails) {
+                    this.setState({
+                        rowData: res.data.Dashboard835FileDetails,
+                        claims_rowData: [],
+                        showClaims: res.data.Dashboard835FileDetails.length > 0 ? true : false
+                    }, () => {
+                        if (res.data.Dashboard835FileDetails.length > 0) {
+                            this.getTransactions(res.data.Dashboard835FileDetails[0].FileID)
+                        }
+                    })
 
                     if (res.data.Dashboard835FileDetails.length > 0) {
 
@@ -249,10 +243,6 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     getTransactions = (fileId) => {
-
-
-        let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
-        let ServiceEndDate = this.state.ServiceEndDate ? moment(this.state.ServiceEndDate).format('YYYY-MM-DD') : ""
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -311,8 +301,8 @@ export class ClaimPaymentDetails extends React.Component {
 
                 this.setState({
                     claims_rowData: res.data.PaymentProcessingSummary,
-                    Ag_grid_FileName: res.data.PaymentProcessingSummary[0].RemittanceFileName,
-                    Ag_grid_fileDate: res.data.PaymentProcessingSummary[0].RemittanceSentDate
+                    Ag_grid_FileName: data && data.length > 0 ? res.data.PaymentProcessingSummary[0].RemittanceFileName : '',
+                    Ag_grid_fileDate: data && data.length > 0 ? res.data.PaymentProcessingSummary[0].RemittanceSentDate : ''
                 });
 
             })
@@ -341,7 +331,6 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     getDetails(claimId, fileId, RefID, fileData, page) {
-        let url = Urls.real_time_claim_details
         let query = `{
             RemittanceViewerClaimDetails (RefID:`+ RefID + `, FileID: "` + fileId + `") {
                 FileID
@@ -404,70 +393,71 @@ export class ClaimPaymentDetails extends React.Component {
             .then(res => {
                 let count = 1
                 let data = res.data
-                this.setState({
-                    showDetails: true,
-                    Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
-                    Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
-
-
-                })
-                if (data && data.RemittanceViewerClaimServiceDetails[0].length > 0) {
-
-                    count = Math.floor(data.RemittanceViewerClaimServiceDetails[0].RecCount / 10)
-                    if (data.RemittanceViewerClaimServiceDetails[0].RecCount % 10 > 0) {
-                        count = count + 1
-                    }
-                }
-                let fileDetails = []
-                if (res.data.RemittanceViewerClaimDetails && res.data.RemittanceViewerClaimDetails.length > 0) {
-
-                    let data = res.data.RemittanceViewerClaimDetails[0]
-
-                    let fileDetails = [
-                        { field_name: 'File Name', value: fileData.FileName },
-                        { field_name: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
-                        { field_name: 'Receiver', value: fileData.Receiver }
-                    ]
-
-                    let claimDetails =
-                        [
-                            { field_name: 'Claim Id', value: data.ClaimID },
-                            { field_name: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
-                            { field_name: 'Patient Name', value: data.PatientName },
-                            // { field_name: '835 Response (RAW)',value: "" },
-                            { field_name: 'Days Aged', value: "" },
-                            { field_name: 'Payment Method Code', value: data.CHECKEFTFlag },
-                            { field_name: 'Total Billed Amount', value: "" },
-                            { field_name: 'Total Adjusted Amount', value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt },
-                            { field_name: 'Payer Name', value: data.PayerName },
-                            { field_name: 'Payer claim control No.', value: data.PayerClaimControl },
-                            { field_name: 'Claim Status Code', value: data.ClaimStatusCode },
-                            { field_name: 'Claim Filling Indicator', },
-
-                            { field_name: 'Patient ID', },
-
-                            { field_name: 'Provider ID', },
-                            { field_name: 'Provider Name', },
-                            { field_name: 'Rendering Provider ID', },
-                            { field_name: 'Facility Code Value', value: data.FacilityCode },
-                            { field_name: 'Patient Control Number', value: data.PatientControlNo },
-
-                            { field_name: 'DRG Code', value: data.DigonisCode },
-                            { field_name: 'Total Patient Resp', value: data.PatietResAMT },
-
-                        ]
+                if (data) {
                     this.setState({
                         showDetails: true,
-                        claimDetails: claimDetails,
-                        claimLineDetails: res.data.RemittanceViewerClaimServiceDetails,
-                        fileDetails: fileDetails,
-                        fileid: data.FileID,
-                        claimid: data.ClaimID,
-                        count: count,
+                        Aggrid_Service_Line_Info: res.data.RemittanceViewerClaimServiceDetails,
+                        Aggrid_Claim_Info_data: res.data.RemittanceViewerClaimDetails,
+
 
                     })
+                    if (data.RemittanceViewerClaimServiceDetails[0].length > 0) {
+
+                        count = Math.floor(data.RemittanceViewerClaimServiceDetails[0].RecCount / 10)
+                        if (data.RemittanceViewerClaimServiceDetails[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
+                    }
+                    if (res.data.RemittanceViewerClaimDetails && res.data.RemittanceViewerClaimDetails.length > 0) {
+
+                        let data = res.data.RemittanceViewerClaimDetails[0]
+
+                        let fileDetails = [
+                            { field_name: 'File Name', value: fileData.FileName },
+                            { field_name: 'File Date', value: moment(fileData.FileDate).format('MM/DD/YYYY') + moment(fileData.FileDate).format(' h:m A') },
+                            { field_name: 'Receiver', value: fileData.Receiver }
+                        ]
+
+                        let claimDetails =
+                            [
+                                { field_name: 'Claim Id', value: data.ClaimID },
+                                { field_name: 'Claim Received Date', value: moment((data.ClaimReceivedDate)).format("MM/DD/YYYY") },
+                                { field_name: 'Patient Name', value: data.PatientName },
+                                // { field_name: '835 Response (RAW)',value: "" },
+                                { field_name: 'Days Aged', value: "" },
+                                { field_name: 'Payment Method Code', value: data.CHECKEFTFlag },
+                                { field_name: 'Total Billed Amount', value: "" },
+                                { field_name: 'Total Adjusted Amount', value: res.data.RemittanceViewerClaimServiceDetails[0].AdjAmt },
+                                { field_name: 'Payer Name', value: data.PayerName },
+                                { field_name: 'Payer claim control No.', value: data.PayerClaimControl },
+                                { field_name: 'Claim Status Code', value: data.ClaimStatusCode },
+                                { field_name: 'Claim Filling Indicator', },
+
+                                { field_name: 'Patient ID', },
+
+                                { field_name: 'Provider ID', },
+                                { field_name: 'Provider Name', },
+                                { field_name: 'Rendering Provider ID', },
+                                { field_name: 'Facility Code Value', value: data.FacilityCode },
+                                { field_name: 'Patient Control Number', value: data.PatientControlNo },
+
+                                { field_name: 'DRG Code', value: data.DigonisCode },
+                                { field_name: 'Total Patient Resp', value: data.PatietResAMT },
+
+                            ]
+                        this.setState({
+                            showDetails: true,
+                            claimDetails: claimDetails,
+                            claimLineDetails: res.data.RemittanceViewerClaimServiceDetails,
+                            fileDetails: fileDetails,
+                            fileid: data.FileID,
+                            claimid: data.ClaimID,
+                            count: count,
+
+                        })
+                    }
+                    process.env.NODE_ENV == 'development' && console.log("sdnsajhsfjf", this.state.claimLineDetails)
                 }
-                process.env.NODE_ENV == 'development' && console.log("sdnsajhsfjf", this.state.claimLineDetails)
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -483,7 +473,7 @@ export class ClaimPaymentDetails extends React.Component {
             col.push(
                 <div className="col-4">
                     <div className="header">{item.field_name}</div>
-                    <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
+                    <div>{(moment(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.field_name == 'Claim Date') ? moment(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>
                 </div>
             )
 
@@ -537,15 +527,6 @@ export class ClaimPaymentDetails extends React.Component {
             })
             this.getData()
         }, 300);
-    }
-    getoptions() {
-
-        let row = []
-        this.state.StateList.forEach(element => {
-            row.push(<option selected={this.state.Statecode == element.StateCode ? element.StateCode : ''} value={element.StateCode}>{element.State}</option>)
-        })
-        return row
-
     }
 
     handlePageClickLine = (data) => {
@@ -729,24 +710,10 @@ export class ClaimPaymentDetails extends React.Component {
         let row = []
         let col = []
         let data = this.state.claimsObj;
-        let count = 0
 
-
-        try {
-            count = data[Object.keys(data)[0]].value.RecCount / 10
-            if (data[Object.keys(data)[0]].value.RecCount % 10 > 0) {
-                count = count + 1
-            }
-        } catch (error) {
-
-        }
-
-
-        Object.keys(data).map((keys) => {
-
+        Object.keys(data).forEach((keys) => {
             row.push(
                 <div className="row">
-
                     <div className="col-3 col-small-style border-left small-font left-align"><a href={'#' + keys}
                         onClick={() => {
                             this.getTransactions(data[keys].value.FileID)
@@ -755,7 +722,6 @@ export class ClaimPaymentDetails extends React.Component {
                     <div className="col-2 col-small-style small-font">{data[keys].value.Organization}</div>
                     <div className="col-2 col-small-style small-font">{data[keys].value.CheckEFTNo}</div>
                     <div className="col-3 col-small-style small-font">{moment((data[keys].value.CheckEFTDt)).format("MM/DD/YYYY")}</div>
-
                 </div>
             )
 
@@ -924,8 +890,8 @@ export class ClaimPaymentDetails extends React.Component {
 
     errorDialog = () => {
         return (
-            <div class="modal" id="payment_error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog-error">
+            <div className="modal" id="payment_error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div className="modal-dialog-error">
                     <div className="error-dialog">
                         <div className="error-header">Error Description</div>
                         <div className="scroll-div">

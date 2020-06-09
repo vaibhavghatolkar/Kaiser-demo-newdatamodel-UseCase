@@ -1,5 +1,4 @@
 import React from 'react';
-import { MDBDataTable } from 'mdbreact';
 import './style.css';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
@@ -65,7 +64,7 @@ export class NPILook_Up extends React.Component {
                 }
 
                 this.setState({
-                    claimsList: data.NPILookup,
+                    claimsList: data && data.NPILookup.length > 0 ? data.NPILookup : [],
                     count: count
                 })
             })
@@ -110,7 +109,7 @@ export class NPILook_Up extends React.Component {
 
 
         let row = []
-        let array = this.state.claimsList  
+        let array = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList : []
         array.forEach(item => {
             row.push(
                 <tr>

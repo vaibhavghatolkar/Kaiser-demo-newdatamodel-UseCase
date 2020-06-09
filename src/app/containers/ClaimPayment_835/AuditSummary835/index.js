@@ -3,12 +3,7 @@ import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
 import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
-import { Link } from 'react-router-dom'
-import { getDetails, getProviders } from '../../../../helpers/getDetails';
-import DatePicker from "react-datepicker";
 import ReactPaginate from 'react-paginate';
-import { AutoComplete } from '../../../components/AutoComplete';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -108,13 +103,10 @@ export class AuditSummary835 extends React.Component {
                 flex: 1,
                 minWidth: 100,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
     }
 
@@ -162,7 +154,7 @@ export class AuditSummary835 extends React.Component {
                 if (res.data) {
 
                     let count = 1
-                    if (data && data.AuditSummary835.length > 0) {
+                    if (data.AuditSummary835.length > 0) {
 
                         count = Math.floor(data.AuditSummary835[0].RecCount / 10)
                         if (data.AuditSummary835[0].RecCount % 10 > 0) {
@@ -244,7 +236,6 @@ export class AuditSummary835 extends React.Component {
     _renderSummaryDetails = () => {
         let row = []
         let array = this.state.summaryList
-        let apiflag = this.state.apiflag
         let availitySent = ''
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
@@ -359,11 +350,6 @@ export class AuditSummary835 extends React.Component {
         let row = []
         const data = this.state.claimsAudit;
         data.forEach((d) => {
-            let count = 0
-            try {
-                count = (Number(d.Submitted) ? Number(d.Submitted) : 0) - (Number(d.InHiPaaS) ? Number(d.InHiPaaS) : 0)
-            } catch (error) { }
-
             row.push(
                 <tr>
                     <td style={{ wordBreak: 'break-all' }} className="list-item-style">{d.QNXTFileName}</td>

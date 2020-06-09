@@ -92,12 +92,12 @@ export class Login extends React.Component {
                                 <span style={{ color: "var(--gray-dark-color)", fontSize: "16px" }}>Log in to <b>HiPaaS Portal </b></span>
                                 <p>Enter your username and password to log into your HiPaaS Portal</p>
                             </div>
-                            <div class="form-group" style={{ paddingLeft: "20px", marginTop: "-5px" }}>
+                            <div className="form-group" style={{ paddingLeft: "20px", marginTop: "-5px" }}>
                                 <label className="header_login"><b>Username</b></label>
                                 <input onChange={(e) => this.onHandleChange(e, 'EmailId')} name="email" type="text" className="form-control shadow-none widthText" id="Email"
                                     placeholder="Enter Username" onKeyPress={this.handleKeyPress} />
                             </div>
-                            <div class="form-group" style={{ paddingLeft: "20px" }}>
+                            <div className="form-group" style={{ paddingLeft: "20px" }}>
                                 <label className="header_login"><b>Password</b></label>
                                 <input onChange={(e) => this.onHandleChange(e, 'Password')} name="password" type="password" className="form-control shadow-none widthText" id="Password"
                                     placeholder="Enter Password" onKeyPress={this.handleKeyPress} />
@@ -106,7 +106,7 @@ export class Login extends React.Component {
                                 <a href="#" style={{ color: "var(--login-color)", fontSize: "12px" }}>Forgot your password?</a>
                             </div>
                             <div style={{ marginTop: "10px", paddingLeft: "10px" }}>
-                                <button onClick={this.loginUser} class="btn btn-demo">Log in to Account</button>
+                                <button onClick={this.loginUser} className="btn btn-demo">Log in to Account</button>
                             </div>
                        
                     </div>

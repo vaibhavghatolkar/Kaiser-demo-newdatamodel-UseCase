@@ -5,11 +5,9 @@ import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
 import '../Files/files-styles.css';
 import { CommonTable } from '../../components/CommonTable';
-import { StateDropdown } from '../../components/StateDropdown';
 import { Filters } from '../../components/Filters';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -37,20 +35,20 @@ export class EligibilityDetails extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            startDate: props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
-            endDate: props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            State: props.location.state && props.location.state.data && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            status: props.location.state && props.location.state.data && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            startDate: props.location.state && props.location.state.data && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            transactionId: props.location.state && props.location.state.data && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             errorcode: props.location.state && props.location.state.data && props.location.state.data[0].errorcode ? props.location.state.data[0].errorcode : '',
 
-            selectedTradingPartner: props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            selectedTradingPartner: props.location.state && props.location.state.data && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             page: 1,
             count: 0,
-            apiflag: props.location.state.data[0].apiflag,
-            transactionStatus: props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
-            HiPaaSID: props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
-            subtitle: props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
+            apiflag: props.location.state && props.location.state.data && props.location.state.data[0].apiflag,
+            transactionStatus: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
+            HiPaaSID: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
+            subtitle: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -79,13 +77,10 @@ export class EligibilityDetails extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
 
         this.getData = this.getData.bind(this)
@@ -198,7 +193,6 @@ export class EligibilityDetails extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
         let url = Urls.transaction270
-        let loginflag = localStorage.getItem("DbTech");
 
         query = `{
             ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID: "${this.state.HiPaaSID}" ) {
@@ -214,7 +208,6 @@ export class EligibilityDetails extends React.Component {
         }`
 
         if (this.state.apiflag == 1) {
-            url = Urls.transaction270
             query = `{
                 EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID:"${this.state.HiPaaSID}" ) {
                     HiPaaSUniqueID
@@ -320,7 +313,6 @@ export class EligibilityDetails extends React.Component {
         }`
 
         if (this.state.apiflag == 1) {
-            url = Urls.transaction270
             query = `{
                 Eligibilty270Request(HiPaaSUniqueID:"`+ uuid + `") {
                   Message
@@ -532,8 +524,8 @@ export class EligibilityDetails extends React.Component {
 
     errorDialog = () => {
         return (
-            <div class="modal" id="error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog-error">
+            <div className="modal" id="error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div className="modal-dialog-error">
                     <div className="error-dialog">
                         <div className="error-header">Error Description</div>
                         <div className="scroll-div">
@@ -579,22 +571,6 @@ export class EligibilityDetails extends React.Component {
                 </div>
             </div>
         )
-    }
-
-    getoptions() {
-        let row = []
-        this.state.tradingpartner.forEach(element => {
-            row.push(<option value="" selected={this.state.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""}>{element.Trading_Partner_Name}</option>)
-        })
-        return row
-    }
-
-    getErrorOptions() {
-        let row = []
-        this.state.errorList.forEach(element => {
-            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
-        })
-        return row
     }
 
     onSelect(event, key) {

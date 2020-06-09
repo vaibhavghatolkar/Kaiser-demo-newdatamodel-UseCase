@@ -1,14 +1,14 @@
 import React from 'react'
 import '../../containers/Files/files-styles.css'
 import "../../containers/color.css";
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import moment from 'moment';
 import { StateDropdown } from '../StateDropdown';
 import DatePicker from "react-datepicker";
 import Strings from '../../../helpers/Strings';
 import Urls from '../../../helpers/Urls';
 import { getProviders } from '../../../helpers/getDetails';
-import { AutoComplete } from '../AutoComplete';
+// import { AutoComplete } from '../AutoComplete';
 
 let val = ''
 let val_in = ''
@@ -146,7 +146,7 @@ export class Filters extends React.Component {
             if (!element) {
                 return
             }
-            row.push(<option selected={this.props.selectedTradingPartner == element.Trading_Partner_Name ? "selected" : ""} value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
+            row.push(<option value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
         })
         return row
     }
@@ -177,6 +177,18 @@ export class Filters extends React.Component {
                     process.env.NODE_ENV == 'development' && console.log(error)
                 })
         }, 300);
+    }
+
+    changeFilterInput = (event) => {
+        let passing_val = event.target.value
+        this.setState({
+            Filter_ClaimId: passing_val
+        }, () => {
+            clearTimeout(val_in)
+            val_in = setTimeout(() => {
+                this.onChangeName(passing_val, 'Filter_ClaimId')
+            }, 300);
+        })
     }
 
     renderFilters = () => {
@@ -210,12 +222,13 @@ export class Filters extends React.Component {
                                         onChange={(event) => {
                                             this.onSelect(event, 'transactionType')
                                         }}
+                                        value={this.props.transactionType}
                                     >
                                         <option value="1"></option>
                                         {
                                             this.props._is835 ?
-                                                <option selected={this.props.transactionType == "835" ? "selected" : ""} value="835">835</option> :
-                                                <option selected={this.props.transactionType == "837" ? "selected" : ""} value="837">837</option>
+                                                <option value="835">835</option> :
+                                                <option value="837">837</option>
                                         }
                                         {/* <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option> */}
                                     </select>
@@ -224,6 +237,7 @@ export class Filters extends React.Component {
                                 <div className="form-group col-2">
                                     <div className="list-dashboard">Submitter</div>
                                     <select className="form-control list-dashboard" id="TradingPartner"
+                                        value={this.props.selectedTradingPartner}
                                         onChange={(event) => {
                                             this.onSelect(event, 'selectedTradingPartner')
                                         }}>
@@ -267,12 +281,14 @@ export class Filters extends React.Component {
                                         }
                                         this.props.setData(startDate, endDate, selected_val, chartType)
                                     }}
+
+                                    defaultValue={this.props.changeDefault ? 'halfYear': 'year'}
                                 >
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>
                                     <option value="2">Last 90 days</option>
-                                    <option selected={this.props.changeDefault ? "selected" : ''} value="2">Last 180 days</option>
-                                    <option selected={!this.props.changeDefault ? "selected" : ''} value="2">Last year</option>
+                                    <option value="halfYear">Last 180 days</option>
+                                    <option value="year">Last year</option>
                                 </select>
                             </div> : null
                     }{
@@ -305,11 +321,12 @@ export class Filters extends React.Component {
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Grid Type</div>
                                 <select className="form-control list-dashboard" id="Grid"
+                                    value={'classic'}
                                     onChange={(event) => {
                                         this.props.onGridChange(event)
                                     }}>
-                                    <option value="select">Default</option>
-                                    <option selected value="select">Classic</option>
+                                    <option value="default">Default</option>
+                                    <option value="classic">Classic</option>
                                 </select>
                             </div> : null
                     }
@@ -335,15 +352,7 @@ export class Filters extends React.Component {
                                     className="form-control list-dashboard"
                                     value={this.state.Filter_ClaimId}
                                     onChange={(event) => {
-                                        let passing_val = event.target.value
-                                        this.setState({
-                                            Filter_ClaimId: passing_val
-                                        }, () => {
-                                            clearTimeout(val_in)
-                                            val_in = setTimeout(() => {
-                                                this.onChangeName(passing_val, 'Filter_ClaimId')
-                                            }, 300);
-                                        })
+                                        this.changeFilterInput(event)
                                     }}></input>
                             </div> : null
                     }

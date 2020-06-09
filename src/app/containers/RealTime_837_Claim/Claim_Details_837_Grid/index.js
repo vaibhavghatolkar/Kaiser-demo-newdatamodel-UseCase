@@ -8,9 +8,6 @@ import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import DatePicker from "react-datepicker";
 import { Pie } from 'react-chartjs-2';
-import { getProviders } from '../../../../helpers/getDetails';
-import { AutoComplete } from '../../../components/AutoComplete';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -26,7 +23,7 @@ export class Claim_Details_837_Grid extends React.Component {
 
     constructor(props) {
         super(props);
-        let flag = props.location.state.data[0].flag
+        let flag =props.location.state && props.location.state.data[0] ? props.location.state.data[0].flag:''
         if (flag == 'accept') {
             flag = 'Accepted Claims'
         } else if (flag == 'reject') {
@@ -34,6 +31,7 @@ export class Claim_Details_837_Grid extends React.Component {
         } else {
             flag = 'Other'
         }
+       
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -50,20 +48,20 @@ export class Claim_Details_837_Grid extends React.Component {
             memberInfo: {},
             subscriberNo: '',
             molina_claimId: '',
-            type: props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
-            selectedTradingPartner: props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            type: props.location.state && props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
+            selectedTradingPartner:props.location.state && props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             enrollment_type: '',
             plan_code: '',
-            startDate: props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
-            endDate: props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
-            gridflag: props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
-            fileStatus: props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
-            generalStatus: props.location.state.data[0] && props.location.state.data[0].generalStatus ? props.location.state.data[0].generalStatus : '',
-            mcgStatus: props.location.state.data[0] && props.location.state.data[0].mcgStatus ? props.location.state.data[0].mcgStatus : '',
-            incoming_fileId: props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
-            subtitle:props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
-            status277CA:props.location.state.data[0] && props.location.state.data[0].status277CA ? props.location.state.data[0].status277CA : '',
-            Filter_ClaimId: props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
+            startDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            gridflag: props.location.state && props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
+            fileStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].fileStatus != '' && props.location.state.data[0].fileStatus != undefined ? props.location.state.data[0].fileStatus : '',
+            generalStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].generalStatus ? props.location.state.data[0].generalStatus : '',
+            mcgStatus: props.location.state && props.location.state.data[0] && props.location.state.data[0].mcgStatus ? props.location.state.data[0].mcgStatus : '',
+            incoming_fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
+            subtitle: props.location.state && props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
+            status277CA: props.location.state && props.location.state.data[0] && props.location.state.data[0].status277CA ? props.location.state.data[0].status277CA : '',
+            Filter_ClaimId: props.location.state && props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -78,18 +76,15 @@ export class Claim_Details_837_Grid extends React.Component {
             Transaction_Compliance: '',
             providerName: '',
 
-            State: props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
-            status: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            transactionId: props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
-            claimStatus: props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            State: props.location.state && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            status: props.location.state && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            transactionId: props.location.state && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
+            claimStatus: props.location.state && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             errorcode: '',
-
-            page: 1,
             count: 0,
             recount: 0,
             Firstgridpage: 1,
-            apiflag: props.location.state.data[0].apiflag,
-
+            apiflag:props.location.state && props.location.state.data[0] ? props.location.state.data[0].apiflag:'',
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -159,17 +154,12 @@ export class Claim_Details_837_Grid extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
             showerror: '',
-            rowData: [],
             Aggrid_ClaimLineData: ''
 
         }
 
-        this.handleAccidentdate = this.handleAccidentdate.bind(this)
-        this.Saved = this.Saved.bind(this)
+            this.Saved = this.Saved.bind(this)
     }
 
     componentDidMount() {
@@ -285,7 +275,10 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     ChangeVal(event, key) {
-        this.state.selectedICdCode = event.target.options[event.target.selectedIndex].text;
+        this.setState({
+            selectedICdCode:event.target.options[event.target.selectedIndex].text
+        })
+       
 
     }
     sortData(fileId, data) {
@@ -632,7 +625,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 }
 
 
-                if (res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
+                if ( data &&res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
                         Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
                             <option value="0" ></option>
@@ -651,11 +644,11 @@ export class Claim_Details_837_Grid extends React.Component {
 
                         AccidentDate = res.data.Claim837RTDetails[0].AccidentDate;
                     }
-                    let data = res.data.Claim837RTDetails[0]
+                    let data =res.data.Claim837RTDetails[0]
 
                     let claimDetails =
                         [
-                            { field_name: 'X12 Claim Id', value: data.ClaimID },
+                            { field_name: 'X12 Claim Id', value:  data.ClaimID },
                             { field_name: 'Claim Date', value: data.ClaimDate },
                             { field_name: 'Subscriber First Name', value: data.SubscriberFirstName },
                             { field_name: 'Subscriber Last Name', value: data.SubscriberLastName },
@@ -678,7 +671,7 @@ export class Claim_Details_837_Grid extends React.Component {
                         count: count,
                         seqID: ClaimRefId,
                         fileDataDetails: fileData,
-                        lineCount: data ? data.LXCount : 0,
+                        //  lineCount: data ? data.LXCount : 0,
                         Aggrid_ClaimLineData: res.data.Claim837RTLineDetails,
                         Aggrid_Claim_Info_data: res.data.Claim837RTDetails
                     })
@@ -732,7 +725,7 @@ export class Claim_Details_837_Grid extends React.Component {
             col.push(
                 <div className="col">
                     <div className="header">{item.field_name}</div>
-                    {item.isDate ? this.getDatePicker() : <div>{(moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.key == 'Claim Date') ? moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
+                    {item.isDate ? this.getDatePicker() : <div>{(moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.field_name == 'Claim Date') ? moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
                 </div>
             )
 
@@ -765,13 +758,7 @@ export class Claim_Details_837_Grid extends React.Component {
         )
     }
 
-    getErrorOptions() {
-        let row = []
-        this.state.errorList.forEach(element => {
-            row.push(<option value="" selected={this.state.errorcode == element.ErrorType ? "selected" : ""}>{element.ErrorType}</option>)
-        })
-        return row
-    }
+   
 
     handleAccidentdate = (date) => {
         this.setState({
@@ -1049,19 +1036,7 @@ export class Claim_Details_837_Grid extends React.Component {
         let row = []
         let col = []
         let data = this.state.claimsObj;
-        let count = 0
-
-        try {
-            count = data[Object.keys(data)[0]].value.Claimcount / 10
-            if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
-                count = count + 1
-            }
-        } catch (error) {
-
-        }
-
-
-        Object.keys(data).map((keys) => {
+           Object.keys(data).forEach((keys) => {
             row.push(
                 <div className="row">
                     <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}
@@ -1260,8 +1235,8 @@ export class Claim_Details_837_Grid extends React.Component {
 
     errorDialog = () => {
         return (
-            <div class="modal" id="error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog-error">
+            <div className="modal" id="error_modal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div className="modal-dialog-error">
                     <div className="error-dialog">
                         <div className="error-header">Error Description</div>
                         <div className="scroll-div">
@@ -1556,12 +1531,8 @@ export class Claim_Details_837_Grid extends React.Component {
             showClaims: false,
             showDetails: false,
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-        }, () => {
-            if (this.state.gridType == 1) {
-                this.getData()
-            } else {
-                this.getData()
-            }
+        }, () => {           
+                this.getData()            
         })
     }
 

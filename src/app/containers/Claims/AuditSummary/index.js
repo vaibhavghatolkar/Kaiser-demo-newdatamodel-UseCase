@@ -3,12 +3,7 @@ import '../../Claims/Dashboard/styles.css'
 import moment from 'moment';
 import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
-import { Link } from 'react-router-dom'
-import { getDetails, getProviders } from '../../../../helpers/getDetails';
-import DatePicker from "react-datepicker";
 import ReactPaginate from 'react-paginate';
-import { AutoComplete } from '../../../components/AutoComplete';
-import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -111,13 +106,10 @@ export class AuditSummary extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
 
     }
@@ -173,9 +165,8 @@ export class AuditSummary extends React.Component {
             .then(res => {
                 let data = res.data
                 if (res.data) {
-
                     let count = 1
-                    if (data && data.ClaimsDailyAudit.length > 0) {
+                    if (data.ClaimsDailyAudit.length > 0) {
 
                         count = Math.floor(data.ClaimsDailyAudit[0].RecCount / 10)
                         if (data.ClaimsDailyAudit[0].RecCount % 10 > 0) {
@@ -296,8 +287,6 @@ export class AuditSummary extends React.Component {
     _renderSummaryDetails() {
         let row = []
         let array = this.state.summaryList
-        let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -490,11 +479,6 @@ export class AuditSummary extends React.Component {
         const data = this.state.claimsAudit;
 
         data.forEach((d) => {
-            let count = 0
-            try {
-                count = (Number(d.Submitted) ? Number(d.Submitted) : 0) - (Number(d.InHiPaaS) ? Number(d.InHiPaaS) : 0)
-            } catch (error) { }
-
             row.push(
                 <tr>
                     <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.ClaimProcessingSummary, { file_id: d.FileID }) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>

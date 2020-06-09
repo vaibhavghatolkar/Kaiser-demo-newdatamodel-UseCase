@@ -5,21 +5,16 @@ import { Pie, Bar } from 'react-chartjs-2';
 import moment from 'moment';
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
-import { Link } from 'react-router-dom'
 import Strings from '../../../../helpers/Strings';
-import { CommonTable } from '../../../components/CommonTable';
 import Chart1 from "react-google-charts";
 import Paper from '@material-ui/core/Paper';
 import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
-import { StateDropdown } from '../../../components/StateDropdown';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { PieChart } from '../../../components/PieChart';
 import { TableTiles } from '../../../components/TableTiles';
-import { MDBProgress } from 'mdbreact';
 
 import {
     Chart,
@@ -181,13 +176,10 @@ export class ClaimPaymentDashboard extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
         this.showFile = this.showFile.bind(this)
     }
@@ -323,8 +315,6 @@ export class ClaimPaymentDashboard extends React.Component {
     getListData = () => {
 
         let count = 1
-        let Service_startDate = this.state.Service_startDate ? moment(this.state.Service_startDate).format('YYYY-MM-DD') : ""
-        let ServiceEndDate = this.state.ServiceEndDate ? moment(this.state.ServiceEndDate).format('YYYY-MM-DD') : ""
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let providerName = this.state.providerName
@@ -390,32 +380,6 @@ export class ClaimPaymentDashboard extends React.Component {
             });
     }
 
-    renderList() {
-        let row = []
-        const data = this.state.claimsList;
-        process.env.NODE_ENV == 'development' && console.log("", data)
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td>{d.name}</td>
-                    <td className="list-item-style">{moment(d.date).format('DD/MM/YYYY')}<br />{moment(d.date).format('h:m a')}</td>
-                    <td className={"list-item-style " + (d.status == 'SentToQnxt' || d.status == 'Accepted' ? 'green ' : (d.status == 'Rejected' ? 'red ' : ''))}>{d.status}</td>
-                    <td className="list-item-style">{d.submitter}</td>
-                    <td className="list-item-style">{d.dCount}</td>
-                </tr>
-            )
-        });
-
-        return (
-            <table className="table table-bordered claim-list">
-                {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
-                <tbody>
-                    {row}
-                </tbody>
-            </table>
-        );
-    }
-
     showFile(name) {
         this.setState({
             showFile: true,
@@ -435,7 +399,7 @@ export class ClaimPaymentDashboard extends React.Component {
 
     renderList() {
         let row = []
-        const data = this.state.claimsList;
+        const data = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList : [];
 
         data.forEach((d) => {
             row.push(
@@ -495,32 +459,6 @@ export class ClaimPaymentDashboard extends React.Component {
         );
     }
     renderGraphs() {
-        const data = [
-            ["Year", "Avg days for submission", { role: "style" }],
-            ["2010", 10, "color: grey"],
-            ["2020", 14, "color: grey"],
-            ["2030", 16, "color: grey"],
-            ["2040", 22, "color: grey"],
-            [
-                "2050",
-                28,
-                "stroke-color: grey; stroke-opacity: 0.6; stroke-width: 2; fill-color: grey; fill-opacity: 0.2"
-            ]
-        ];
-
-        const options = {
-            title: 'Average days for submission',
-            chartArea: { width: '20%' },
-            colors: ['lightgrey'],
-            hAxis: {
-                title: 'Total Population',
-                minValue: 0,
-            },
-            vAxis: {
-                title: '',
-            },
-        };
-
         return (
 
             <div className="chart-container2 chart chart-div">
@@ -1018,52 +956,9 @@ export class ClaimPaymentDashboard extends React.Component {
         )
     }
 
-
-    renderGooglePieChart(tittle, data, labels, colors) {
-
-
-        return (
-
-            <div className="row chart-div">
-                <div className="chart-container1 chart">
-                    <Chart1
-                        width={'250px'}
-                        height={'250px'}
-                        chartType="PieChart"
-                        loader={<div>Loading Chart</div>}
-                        data={[
-                            ['Task', 'Hours per Day'],
-                            ['Work', 11],
-                            ['Eat', 2],
-                            ['Commute', 2],
-                            ['Watch TV', 2],
-                            ['Sleep', 7],
-                        ]}
-                        options={{
-                            title: tittle,
-                            chartArea: { width: '100%' },
-                            is3D: true,
-                            series: { 5: { type: 'line' } },
-                            legend: { position: 'top', textStyle: { color: 'blue', fontSize: 16 }, type: 'rectangle' },
-                            legend: 'none'
-
-
-                        }}
-                        rootProps={{ 'data-testid': '1' }}
-                    />
-                </div>
-            </div>
-
-        );
-
-    }
-
-
     _renderSummaryDetails = () => {
         let row = []
         let array = this.state.summaryCount
-        let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270 + '/' + apiflag
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -1075,7 +970,6 @@ export class ClaimPaymentDashboard extends React.Component {
             let subtitle = ''
             let availitySent = ''
             let EFTCHK = ''
-            let loadStatus = ''
             let url = ''
             let data = []
             if (item.name == 'Vaildated') {
@@ -1355,10 +1249,6 @@ export class ClaimPaymentDashboard extends React.Component {
     _getPieChartData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let chartType = this.state.chartType
-        if (!chartType) {
-            chartType = "Monthwise"
-        }
         let query = `{
             file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "Outbound") {
                 X_axis
@@ -1489,15 +1379,12 @@ export class ClaimPaymentDashboard extends React.Component {
 
         let addon = ''
         let claimStatus = ''
-        let loadStatus = ''
-        let generalStatus = ''
         let subtitle = ''
         if (header == 'Top 10 File Level Errors') {
             claimStatus = 'Error'
             subtitle = "Files in Error"
         } else if (header == 'Top 10 Claim Level Errors') {
             addon = '/reject'
-            generalStatus = 'Rejected'
         }
 
         let sendData = [
@@ -1640,15 +1527,15 @@ export class ClaimPaymentDashboard extends React.Component {
         let Error = this.state.progress_Error + "%"
         let exception = this.state.progress_exception + "%"
         return (
-            <div class="progress">
-                {/* <div class="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: Validated, cursor: 'pointer' }}
+            <div className="progress">
+                {/* <div className="progress-bar" role="progressbar" style={{ width: k }}>Total Sent To Availity ({k})</div> */}
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{ width: Validated, cursor: 'pointer' }}
                     data-placement="top" data-toggle="tooltip" title={"Vaildated (" + Validated + ")"}
                 >Vaildated ({Validated})</div>
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: Error, cursor: 'pointer' }}
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style={{ width: Error, cursor: 'pointer' }}
                     data-placement="top" data-toggle="tooltip" title={"Files in Error (" + Error + ")"}
                 >Files in Error ({Error})</div>
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style={{ width: exception, cursor: 'pointer' }}
+                <div className="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style={{ width: exception, cursor: 'pointer' }}
                     data-placement="top" data-toggle="tooltip" title={"Exception (" + exception + ")"}
                 >Exception ({exception})</div>
             </div>

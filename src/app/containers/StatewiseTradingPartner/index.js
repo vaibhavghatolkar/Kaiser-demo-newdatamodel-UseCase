@@ -37,15 +37,15 @@ export class StatewiseTradingPartner extends React.Component {
             Search_State: "",
             Search_Tran_Type: "",
             orderby: '',
-            ISA06_Name_Rotation : 180,
-            ISA06_ID_Rotation : 180,
-            PayerName_Rotation : 180,
-            PayerID_Rotation : 180,
-            ISA08_Name_Rotation : 180,
-            ISA08_ID_Rotation : 180,
-            State_Rotation : 180,
-            Transaction_Code_Rotation : 180,
-            incoming_fileId:"",
+            ISA06_Name_Rotation: 180,
+            ISA06_ID_Rotation: 180,
+            PayerName_Rotation: 180,
+            PayerID_Rotation: 180,
+            ISA08_Name_Rotation: 180,
+            ISA08_ID_Rotation: 180,
+            State_Rotation: 180,
+            Transaction_Code_Rotation: 180,
+            incoming_fileId: "",
 
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -76,15 +76,12 @@ export class StatewiseTradingPartner extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
-
         };
 
         this.displaydata = this.displaydata.bind(this)
         this.ChangeVal = this.ChangeVal.bind(this)
         this.handleClick = this.handleClick.bind(this)
+        this.Inactive = this.Inactive.bind(this)
     }
 
     componentDidMount() {
@@ -150,7 +147,7 @@ export class StatewiseTradingPartner extends React.Component {
                 })
 
 
-                if (data && data.TradingPartnerlist.length > 0) {
+                if (data != "" && data.TradingPartnerlist.length > 0) {
 
                     count = Math.floor(data.TradingPartnerlist[0].Rcount / 10)
                     if (data.TradingPartnerlist[0].Rcount % 10 > 0) {
@@ -245,7 +242,7 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.StateList.forEach(element => {
-            row.push(<option selected={this.state.State == element.StateCode ? element.StateCode : ''} value={element.StateCode}>{element.StateCode}</option>)
+            row.push(<option value={element.StateCode}>{element.StateCode}</option>)
         })
         return row
 
@@ -272,7 +269,8 @@ export class StatewiseTradingPartner extends React.Component {
 
         let row = []
         this.state.TransactionMasterList.forEach(element => {
-            row.push(<option selected={this.state.Transaction_Type == element.Trans_Code ? element.Trans_Code : ''} value={element.Trans_Code}>{element.Trans_Code}</option>)
+            row.push(<option
+                value={element.Trans_Code}>{element.Trans_Code}</option>)
         })
         return row
 
@@ -319,7 +317,7 @@ export class StatewiseTradingPartner extends React.Component {
             [key]: event.target.value
         });
     }
-    
+
     handleSort(e, rotation, key) {
         let addOn = " asc"
         if (rotation == 0) {
@@ -335,7 +333,7 @@ export class StatewiseTradingPartner extends React.Component {
             this.gettranaction()
         }, 50);
     }
-    
+
     renderTableHeader() {
         return (
             <tr className="table-head">
@@ -354,7 +352,7 @@ export class StatewiseTradingPartner extends React.Component {
         )
     }
 
-    Inactive(event) {
+    Inactive = (event) => {
         let id = this.state.incoming_fileId
         var query = 'mutation{' +
             'InActiveTradingPartner(ID : ' + id +
@@ -436,7 +434,7 @@ export class StatewiseTradingPartner extends React.Component {
 
     }
 
-    renderList() {
+    renderList = () => {
         let row = []
         const data = this.state.TradingPartnerList;
         data.forEach((d) => {
@@ -461,7 +459,7 @@ export class StatewiseTradingPartner extends React.Component {
         return (
             <div className="overall-padding">
                 <table className="table table-bordered claim-list" align="center">
-                    {this.state.TradingPartnerList && this.state.TradingPartnerList.length > 0 ? this.renderTableHeader() : null}
+                    {this.state.TradingPartnerList != "" && this.state.TradingPartnerList.length > 0 ? this.renderTableHeader() : null}
                     <tbody>
                         {row}
                     </tbody>
@@ -483,7 +481,7 @@ export class StatewiseTradingPartner extends React.Component {
                     pageLinkClassName={'page-link'}
                     subContainerClassName={'pages pagination'}
                     activeClassName={'active'}
-                   
+
                 />
             </div>
 
@@ -494,27 +492,31 @@ export class StatewiseTradingPartner extends React.Component {
         // <i class="fas fa-pencil-alt"></i>
 
         let columnDefs = [
-            { headerName: "Sender Name", field: "ISA06_Name",flex:1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Sender Id(ISA06)", field: "ISA06_ID",flex:1, },
-            { headerName: "Payer Name", field: "PayerName", flex:1, },
-            { headerName: "Payer ID", field: "PayerID", flex:1,  },
-            { headerName: "Receiver Name", field: "ISA08_Name", flex:1, },
-            { headerName: "Receiver Id(ISA08)", field: "ISA08_ID", flex:1, },
+            { headerName: "Sender Name", field: "ISA06_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Sender Id(ISA06)", field: "ISA06_ID", flex: 1, },
+            { headerName: "Payer Name", field: "PayerName", flex: 1, },
+            { headerName: "Payer ID", field: "PayerID", flex: 1, },
+            { headerName: "Receiver Name", field: "ISA08_Name", flex: 1, },
+            { headerName: "Receiver Id(ISA08)", field: "ISA08_ID", flex: 1, },
             { headerName: "State", field: "state", width: 90 },
-            { headerName: "Transaction Type", field: "Transaction_Code",flex:1, },
-            { headerName: "", field: "pencil", width: 50,  cellRenderer: (data) => {
-                return '<i class="fas fa-pencil-alt"></i>'
-            },cellStyle: {cursor: 'pointer' },  pinned: 'right' },
-            { headerName: "", field: "trash", width: 50,cellRenderer: (data) => {
-                return '<i class="far fa-trash-alt"></i>'
-            },cellStyle: {cursor: 'pointer' },  pinned: 'right' },
+            { headerName: "Transaction Type", field: "Transaction_Code", flex: 1, },
+            {
+                headerName: "", field: "pencil", width: 50, cellRenderer: (data) => {
+                    return '<i class="fas fa-pencil-alt"></i>'
+                }, cellStyle: { cursor: 'pointer' }, pinned: 'right'
+            },
+            {
+                headerName: "", field: "trash", width: 50, cellRenderer: (data) => {
+                    return '<i class="far fa-trash-alt"></i>'
+                }, cellStyle: { cursor: 'pointer' }, pinned: 'right'
+            },
             // { headerName: "Error Type", field: "Error_Type", width: 150 },
             // { headerName: "Error Code", field: "Error_Code", width: 150 },
             // { headerName: "Error Description", field: "ErrorDescription", flex: 1 },
         ]
 
         return (
-            <div className="text-center" style={{width: '94%', marginLeft:'3%'}}>
+            <div className="text-center" style={{ width: '94%', marginLeft: '3%' }}>
 
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
@@ -544,7 +546,7 @@ export class StatewiseTradingPartner extends React.Component {
                                 }, () => {
                                     this.displaydata()
                                 })
-                            }else if (event.column.colId == "trash") {
+                            } else if (event.column.colId == "trash") {
                                 this.setState({
                                     incoming_fileId: event.data.ID
                                 }, () => {
@@ -557,6 +559,28 @@ export class StatewiseTradingPartner extends React.Component {
                 </div>
             </div>
         )
+    }
+
+    changeSender = (event) => {
+        clearTimeout(val)
+        let value = event.target.value
+        val = setTimeout(() => {
+            this.setState({ Search_Senderid: value, showDetails: false })
+            setTimeout(() => {
+                this.gettranaction()
+            }, 50);
+        }, 300);
+    }
+
+    changePayer = (event) => {
+        clearTimeout(val)
+        let value = event.target.value
+        val = setTimeout(() => {
+            this.setState({ Search_PayerID: value, showDetails: false })
+            setTimeout(() => {
+                this.gettranaction()
+            }, 50);
+        }, 300);
     }
 
     Headerview() {
@@ -610,14 +634,14 @@ export class StatewiseTradingPartner extends React.Component {
                                     </div>
                                     <div className="form-group col-sm-2">
                                         <label className="list-header1">State</label>
-                                        <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'State')}>
+                                        <select className="form-control list-header1" value={this.state.State} onChange={(event) => this.ChangeVal(event, 'State')}>
                                             <option value="0"></option>
                                             {this.getoptions()}
                                         </select>
                                     </div>
                                     <div className="form-group col-sm-2">
                                         <label className="list-header1">Transaction Type</label>
-                                        <select className="form-control list-header1" va id="fao1" onChange={(event) => this.ChangeVal(event, 'Transaction_Type')}>
+                                        <select className="form-control list-header1" va id="fao1" value={this.state.Transaction_Type} onChange={(event) => this.ChangeVal(event, 'Transaction_Type')} >
                                             <option value="0" ></option>
                                             {this.gettrans()}
                                             {/* <option selected={this.state.Transaction_Type == '270' ? "selected" : ''} value="270" >270</option>
@@ -657,14 +681,7 @@ export class StatewiseTradingPartner extends React.Component {
                                             <label className="list-header1">Sender Id(ISA06)</label>
                                             <input className="form-control list-header1" id="state"
                                                 onChange={(event) => {
-                                                    clearTimeout(val)
-                                                    let value = event.target.value
-                                                    val = setTimeout(() => {
-                                                        this.setState({ Search_Senderid: value, showDetails: false })
-                                                        setTimeout(() => {
-                                                            this.gettranaction()
-                                                        }, 50);
-                                                    }, 300);
+                                                    this.changeSender(event)
                                                 }}
                                             />
                                         </div>
@@ -686,14 +703,7 @@ export class StatewiseTradingPartner extends React.Component {
                                             <label className="list-header1">Payer Id</label>
                                             <input className="form-control list-header1" id="state"
                                                 onChange={(event) => {
-                                                    clearTimeout(val)
-                                                    let value = event.target.value
-                                                    val = setTimeout(() => {
-                                                        this.setState({ Search_PayerID: value, showDetails: false })
-                                                        setTimeout(() => {
-                                                            this.gettranaction()
-                                                        }, 50);
-                                                    }, 300);
+                                                    this.changePayer(event)
                                                 }}
                                             />
                                         </div>
@@ -730,7 +740,7 @@ export class StatewiseTradingPartner extends React.Component {
 
                                 </div>
                                 <div>
-                                {this._renderList()}
+                                    {this._renderList()}
                                 </div>
                             </div>
                             </div>

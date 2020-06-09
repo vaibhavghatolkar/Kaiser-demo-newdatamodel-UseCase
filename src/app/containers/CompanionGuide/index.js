@@ -1,6 +1,5 @@
 import React from 'react';
 import './style.css';
-import { MDBDataTable } from 'mdbreact';
 import Urls from '../../../helpers/Urls'
 import ReactPaginate from 'react-paginate';
 
@@ -69,19 +68,21 @@ export class CompanionGuide extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let data = res.data
-                let count = 1
-                if (data && data.GetCompanion.length > 0) {
+                if (data) {
+                    let count = 1
+                    if (data.GetCompanion.length > 0) {
 
-                    count = Math.floor(data.GetCompanion[0].RecCount / 10)
-                    if (data.GetCompanion[0].RecCount % 10 > 0) {
-                        count = count + 1
+                        count = Math.floor(data.GetCompanion[0].RecCount / 10)
+                        if (data.GetCompanion[0].RecCount % 10 > 0) {
+                            count = count + 1
+                        }
                     }
-                }
-                this.setState({
+                    this.setState({
 
-                    array: res.data.GetCompanion,
-                    count: count
-                })
+                        array: res.data.GetCompanion,
+                        count: count
+                    })
+                }
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -104,7 +105,7 @@ export class CompanionGuide extends React.Component {
 
 
         let row = []
-        let array = this.state.array
+        let array = this.state.array && this.state.array.length > 0 ? this.state.array : []
 
 
         array.forEach(item => {
@@ -187,7 +188,7 @@ export class CompanionGuide extends React.Component {
                             {/* <p style={{ color: '#139DC9', fontWeight: 'bold' }}>Companion Guide</p> */}
                             <h5 className="headerText">Companion Guide</h5>
                         </div>
-                        <br/>
+                        <br />
                         <div className="row">
 
                             <div className="form-group col-sm-3">
@@ -206,9 +207,9 @@ export class CompanionGuide extends React.Component {
                             </div>
 
                             <div className="pull-right col-sm-2">
-                                <p class="form" style={{marginTop: '-5px'}}>
+                                <p className="form" style={{ marginTop: '-5px' }}>
 
-                                    <label class="add-photo-btn">Add New<span><input type="file" id="myfile" name="myfile" /></span>
+                                    <label className="add-photo-btn">Add New<span><input type="file" id="myfile" name="myfile" /></span>
                                     </label>
                                 </p>
                             </div>
