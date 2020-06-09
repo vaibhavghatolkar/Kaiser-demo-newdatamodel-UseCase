@@ -191,6 +191,14 @@ export class Filters extends React.Component {
         })
     }
 
+    changeTransaction =(event) =>{
+        clearTimeout(val_trans)
+        let passing_val = event.target.value
+        val_trans = setTimeout(() => {
+            this.onChangeName(passing_val, 'transactionId')
+        }, 300);
+    }
+
     renderFilters = () => {
         return (
             <div className="form-style" id='filters'>
@@ -362,11 +370,7 @@ export class Filters extends React.Component {
                                 <div className="list-dashboard">Transaction Id</div>
                                 <input className="form-control list-dashboard"
                                     onChange={(event) => {
-                                        clearTimeout(val_trans)
-                                        let passing_val = event.target.value
-                                        val_trans = setTimeout(() => {
-                                            this.onChangeName(passing_val, 'transactionId')
-                                        }, 300);
+                                        this.changeTransaction(event)
                                     }}></input>
                             </div> : null
                     }

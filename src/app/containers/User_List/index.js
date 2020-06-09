@@ -13,7 +13,7 @@ export class UserList extends React.Component {
             firstName: '',
             lastName: '',
             email: '',
-            password: '',
+            pwd: '',
             phoneNo: '',
             userRole: '',
             userRoleList: [],
@@ -38,8 +38,8 @@ export class UserList extends React.Component {
         this.getUserRole();
     }
     saveUser() {
-        let { firstName, lastName, email, password, userRole } = this.state;
-        if (!firstName || !lastName || !email || !password || !userRole) {
+        let { firstName, lastName, email, pwd, userRole } = this.state;
+        if (!firstName || !lastName || !email || !pwd || !userRole) {
             alert("Please enter the fields");
         }else{
 
@@ -50,7 +50,7 @@ export class UserList extends React.Component {
             LastName:"`+ this.state.lastName + `" 
             Email:"`+ this.state.email + `" 
             PhoneNumber:"`+ this.state.phoneNo + `" 
-            PasswordHash:"`+ this.state.password + `" 
+            PasswordHash:"`+ this.state.pwd + `" 
             is_Active:`+ 1 + `
             )
           }`
@@ -206,7 +206,7 @@ export class UserList extends React.Component {
                     firstName: data.FirstName,
                     lastName: data.LastName,
                     email: data.Email,
-                    password: data.PasswordHash,
+                    pwd: data.PasswordHash,
                     phoneNo: data.PhoneNumber,
                     userRole: data.role_id,
                     disabled: true,
@@ -222,7 +222,7 @@ export class UserList extends React.Component {
             firstName: '',
             lastName: '',
             email: '',
-            password: '',
+            pwd: '',
             phoneNo: '',
             userRole: 0,
             disabled: false,
@@ -308,8 +308,8 @@ export class UserList extends React.Component {
 
                                 <div className="form-group">
                                     <label >Password</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'password')} name="password" type="password" className="form-control width1" id="Password"
-                                        disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter Password" value={this.state.password} />
+                                    <input onChange={(e) => this.onHandleChange(e, 'pwd')} type="password" className="form-control width1"
+                                        disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter Password" value={this.state.pwd} />
                                 </div>
                                 <div className="form-group">
                                     <label >Phone No.</label>

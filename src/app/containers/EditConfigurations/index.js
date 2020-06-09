@@ -236,9 +236,6 @@ export class EditConfiguration extends React.Component {
         this.setState({ files: [...this.state.files, ...filesArr] });
     }
 
-    displayFile() {
-        this.setState({ files: this.state.files });
-    }
     gettrans() {
 
         let row = []
@@ -377,9 +374,9 @@ export class EditConfiguration extends React.Component {
     renderView() {
         let row = []
         let options = this.state.options
-
+        
         Object.keys(options).forEach(item => {
-
+            
             row.push(
 
                 <div className="panel-group">
@@ -403,7 +400,7 @@ export class EditConfiguration extends React.Component {
                                         <div className="form-group col-3">
                                             <div className="list-header1">Select Transaction</div>
                                             <select className="form-control list-header1" id="option"
-                                               onChange={(e) => this.ChangeVal1(e, 'transactionSelect')}
+                                               onChange={(event) => this.ChangeVal1(event, 'transactionSelect')}
                                             value={this.state.transactionSelect}>
                                                 {this.gettrans()}
                                             </select>
@@ -411,7 +408,7 @@ export class EditConfiguration extends React.Component {
 
                                         <div className="form-group col-3">
                                             <div className="list-header1">Trading Partner </div>
-                                            <select className="form-control list-header1" value={this.state.TradingPartner} id="TradingPartner" onChange={(e) => this.ChangeVal(e, 'TradingPartner')} >
+                                            <select className="form-control list-header1" value={this.state.TradingPartner} id="TradingPartner" onChange={(event) => this.ChangeVal(event, 'TradingPartner')} >
                                                 <option value="select">Trading partner</option>
                                                 {/* <option selected="selected">AVAILITY</option> */}
                                                 {this.getoptions()}
@@ -421,7 +418,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                             Rule Description
                                         </div>
-                                            <textarea type="text" className="list-header1 form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(e) => this.onChangeName(e, 'Rule_Desc')} />
+                                            <textarea type="text" className="list-header1 form-control" value={this.state.Rule_Desc == null ? '' : this.state.Rule_Desc} onChange={(event) => this.onChangeName(event, 'Rule_Desc')} />
                                         </div>
                                     </div>
                                     <div className="row">
@@ -430,7 +427,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Validation Level
                                         </div>
-                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'Validationlevel')}>
+                                            <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'Validationlevel')}>
                                                 <option value=""></option>
                                                 <option value="4">SNIP Level 4</option>
                                                 <option value="5">SNIP Level 5</option>
@@ -444,7 +441,7 @@ export class EditConfiguration extends React.Component {
 
                                         <div className="form-group col-sm-3">
                                             <div className="list-header1">Severity</div>
-                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'Severity')}>
+                                            <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'Severity')}>
                                                 <option value=""></option>
                                                 <option value="0">Fail</option>
                                                 <option value="1">Warning</option>
@@ -454,7 +451,7 @@ export class EditConfiguration extends React.Component {
                                     
                                         <div className="form-group col-sm-3">
                                             <div className="list-header1">Error Type</div>
-                                            <select className="form-control list-header1" value="1" onChange={(e) => this.ChangeVal(e, 'ErrorType')}>
+                                            <select className="form-control list-header1" value="1" onChange={(event) => this.ChangeVal(event, 'ErrorType')}>
                                                 <option value=""></option>
                                                 <option value="0">TA1</option>
                                                 <option value="1">999</option>
@@ -465,7 +462,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Error Description
                                         </div>
-                                            <textarea type="text" className="list-header1 form-control" onChange={(e) => this.onChangeName(e, 'ErrorDescription')} />
+                                            <textarea type="text" className="list-header1 form-control" onChange={(event) => this.onChangeName(event, 'ErrorDescription')} />
                                         </div>
                                         </div>
                                     
@@ -475,7 +472,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Main Loop Id
                                         </div>
-                                            <select className="form-control list-header1" id={item + 'mainLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop').value, item, 0) }}>
+                                            <select className="form-control list-header1" id={item + 'mainLoop'} onChange={(event) => {this.onOptionSelect(event.target.value, item, 0) }}>
                                                 <option value=""></option>
                                                 {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                             </select>
@@ -485,7 +482,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Sub Loop Id
                                         </div>
-                                            <select className="form-control list-header1" id={item + 'subLoop'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop').value, item, 1, options[item].selected_mainloopid) }}>
+                                            <select className="form-control list-header1" id={item + 'subLoop'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 1, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].subLoopidArray ? this.renderOptions(options[item].subLoopidArray, 1) : null}
                                             </select>
@@ -495,7 +492,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Segment
                                         </div>
-                                            <select className="form-control list-header1" id={item + 'segment'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment').value, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
+                                            <select className="form-control list-header1" id={item + 'segment'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].segmentArray ? this.renderOptions(options[item].segmentArray, 2) : null}
                                             </select>
@@ -505,7 +502,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Field
                                         </div>
-                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'FieldId')}>
+                                            <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'FieldId')}>
                                                 <option value=""></option>
                                                 {options[item].elementArray ? this.renderOptions(options[item].elementArray, 3) : null}
                                             </select>
@@ -515,7 +512,7 @@ export class EditConfiguration extends React.Component {
 
                                         <div className="form-group col-sm-3">
                                             <div className="list-header1">Usage Req.</div>
-                                            <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'is_mandatory')}>
+                                            <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'is_mandatory')}>
                                                 {/* <option value=""></option> */}
                                                 <option value="0">Required</option>
                                                 <option value="1">Absent</option>
@@ -527,14 +524,14 @@ export class EditConfiguration extends React.Component {
                                                 Min/Max length
                                             </div>
                                             <div className="row" style={{ marginLeft: "16px" }}>
-                                                <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length')} style={{ width: "100px" }} />
-                                                <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Maxlength')} style={{ width: "100px" }} />
+                                                <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'Min_Length')} style={{ width: "100px" }} />
+                                                <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'Maxlength')} style={{ width: "100px" }} />
                                             </div>
                                         </div>
 
                                         <div className="form-group col-sm-3">
                                             <div className="list-header1">Operator</div>
-                                            <select className="form-control list-header1" onChange={(e) => this.ChangeText(e, 'OperatorId')}>
+                                            <select className="form-control list-header1" onChange={(event) => this.ChangeText(event, 'OperatorId')}>
                                                 <option value=""></option>
                                                 {this.getOperatorMaster()}
                                             </select>
@@ -546,13 +543,13 @@ export class EditConfiguration extends React.Component {
                                                 <div className="form-group col-sm-3">
                                                     <div className="list-header1">Min/Max Value</div>
                                                     <div className="row" style={{ marginLeft: "16px" }}>
-                                                        <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'MinValue')} style={{ width: "100px" }} />
-                                                        <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'MaxValue')} style={{ width: "100px" }} />
+                                                        <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'MinValue')} style={{ width: "100px" }} />
+                                                        <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'MaxValue')} style={{ width: "100px" }} />
                                                     </div>
                                                 </div> :
                                                 <div className="form-group col-sm-3">
                                                     <div className="list-header1">Value</div>
-                                                    <input type="text" className="form-control list-header1" onChange={(e) => this.onChangeName(e, 'Value')} />
+                                                    <input type="text" className="form-control list-header1" onChange={(event) => this.onChangeName(event, 'Value')} />
                                                 </div>
                                         }
                                     </div>
@@ -620,7 +617,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Main Loop Id
                                  </div>
-                                                <select className="form-control list-header1" id={item + 'mainLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'mainLoop2').value, item, 6) }}>
+                                                <select className="form-control list-header1" id={item + 'mainLoop2'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 6) }}>
                                                     <option value=""></option>
                                                     {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                                 </select>
@@ -630,7 +627,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Sub Loop Id
                                  </div>
-                                                <select className="form-control list-header1" id={item + 'subLoop2'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'subLoop2').value, item, 4,options[item].selected_mainloopid) }}>
+                                                <select className="form-control list-header1" id={item + 'subLoop2'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 4,options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].subLoopidArray1 ? this.renderOptions(options[item].subLoopidArray1, 1) : null}
                                                     {/* {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null} */}
@@ -641,7 +638,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Segment
                                  </div>
-                                                <select className="form-control list-header1" id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
+                                                <select className="form-control list-header1" id={item + 'segment1'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
                                                 </select>
@@ -651,7 +648,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Field
                                  </div>
-                                                <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'FieldId1')}>
+                                                <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'FieldId1')}>
                                                     <option value=""></option>
                                                     {options[item].elementArray1 ? this.renderOptions(options[item].elementArray1, 3) : null}
                                                 </select>
@@ -661,7 +658,7 @@ export class EditConfiguration extends React.Component {
 
                                             <div className="form-group col-sm-3">
                                                 <div className="list-header1">Usage Req.</div>
-                                                <select className="form-control list-header1" onChange={(e) => this.ChangeVal(e, 'is_mandatory2')}>
+                                                <select className="form-control list-header1" onChange={(event) => this.ChangeVal(event, 'is_mandatory2')}>
                                                     {/* <option value=""></option> */}
                                                     <option value="0">Required</option>
                                                     <option value="1">Absent</option>
@@ -673,14 +670,14 @@ export class EditConfiguration extends React.Component {
                                                     Min/Max length
                                      </div>
                                                 <div className="row" style={{ marginLeft: "16px" }}>
-                                                    <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Length2')} style={{ width: "100px" }} />
-                                                    <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'max_length2')} style={{ width: "100px" }} />
+                                                    <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'Min_Length2')} style={{ width: "100px" }} />
+                                                    <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'max_length2')} style={{ width: "100px" }} />
                                                 </div>
                                             </div>
 
                                             <div className="form-group col-sm-3">
                                                 <div className="list-header1">Operator</div>
-                                                <select className="form-control list-header1" onChange={(e) => this.ChangeText(e, 'Oprator_Id2')}>
+                                                <select className="form-control list-header1" onChange={(event) => this.ChangeText(event, 'Oprator_Id2')}>
                                                     <option value=""></option>
                                                     {this.getOperatorMaster()}
                                                 </select>
@@ -692,13 +689,13 @@ export class EditConfiguration extends React.Component {
                                                     <div className="form-group col-sm-3">
                                                         <div className="list-header1">Min/Max Value</div>
                                                         <div className="row" style={{ marginLeft: "16px" }}>
-                                                            <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Min_Value2')} style={{ width: "100px" }} />
-                                                            <input type="text" className="form-control" onChange={(e) => this.onChangeName(e, 'Max_Value2')} style={{ width: "100px" }} />
+                                                            <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'Min_Value2')} style={{ width: "100px" }} />
+                                                            <input type="text" className="form-control" onChange={(event) => this.onChangeName(event, 'Max_Value2')} style={{ width: "100px" }} />
                                                         </div>
                                                     </div> :
                                                     <div className="form-group col-sm-3">
                                                         <div className="list-header1">Value</div>
-                                                        <input type="text" className="list-header1 form-control" onChange={(e) => this.onChangeName(e, 'Value2')} />
+                                                        <input type="text" className="list-header1 form-control" onChange={(event) => this.onChangeName(event, 'Value2')} />
                                                     </div>
                                             }
                                         </div>
