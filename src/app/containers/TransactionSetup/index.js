@@ -20,7 +20,7 @@ export class TransactionSetup extends React.Component {
             Host: '',
             Port: '',
             UserName: '',
-            Password: '',
+            Pwd: '',
             Directory: '',
             create_directory: false,
 
@@ -120,7 +120,7 @@ export class TransactionSetup extends React.Component {
                 Host:"${this.state.Host}" 
                 Port:"${this.state.Port}"
                 UserName:"${this.state.UserName}" 
-                Password:"${this.state.Password}" 
+                Password:"${this.state.Pwd}" 
                 Directory:"${this.state.Directory}" 
                 Create_Directory:${this.state.create_directory ? this.state.create_directory : false} 
                 File_Naming_Options:"${this.state.file_naming_option ? this.state.file_naming_option : ""}" 
@@ -189,7 +189,7 @@ export class TransactionSetup extends React.Component {
                     Host: r.data.TransactionSetup[0].Host,
                     Port: r.data.TransactionSetup[0].Port,
                     UserName: r.data.TransactionSetup[0].UserName,
-                    Password: r.data.TransactionSetup[0].Password,
+                    Pwd: r.data.TransactionSetup[0].Password,
                     Directory: r.data.TransactionSetup[0].Directory,
                     create_directory: r.data.TransactionSetup[0].create_directory,
                     file_naming_option: r.data.TransactionSetup[0].file_naming_option,
@@ -330,7 +330,7 @@ export class TransactionSetup extends React.Component {
                                                 </div>
                                                 <div className="form-group col-sm-3">
                                                     <label className="list-header1">Password</label>
-                                                    <input type="password" className="form-control list-header1" value={this.state.Password} onChange={(e) => this.onChangeName(e, 'Password')} />
+                                                    <input type="password" className="form-control list-header1" value={this.state.Pwd} onChange={(e) => this.onChangeName(e, 'Pwd')} />
                                                 </div>
                                             </div> :
                                                 <div className="row">

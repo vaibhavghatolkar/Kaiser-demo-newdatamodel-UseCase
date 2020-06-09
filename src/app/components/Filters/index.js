@@ -121,14 +121,14 @@ export class Filters extends React.Component {
         })
     }
 
-    onSelect = (event, key) => {
+    onSelect = (event, name) => {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.props.update(key, '')
+            this.props.update(name, '')
         } else {
-            if (key == 'selectedTradingPartner') {
-                this.props.update(key, event.target.options[event.target.selectedIndex].value)
+            if (name == 'selectedTradingPartner') {
+                this.props.update(name, event.target.options[event.target.selectedIndex].value)
             } else {
-                this.props.update(key, event.target.options[event.target.selectedIndex].text)
+                this.props.update(name, event.target.options[event.target.selectedIndex].text)
             }
         }
     }
@@ -137,8 +137,8 @@ export class Filters extends React.Component {
     onSelected = (value) => {
         this.props.update('providerName', value)
     }
-    onChangeName = (value, key) => {
-        this.props.update(key, value)
+    onChangeName = (value, name) => {
+        this.props.update(name, value)
     }
     getoptions = () => {
         let row = []
