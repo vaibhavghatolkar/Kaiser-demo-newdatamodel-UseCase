@@ -4,7 +4,6 @@ import '../../containers/EligibilityDetails/style.css'
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import loader from '../Images/loader.gif'
 
 export class ServersideGrid extends React.Component {
 
@@ -168,7 +167,6 @@ export class ServersideGrid extends React.Component {
                     domLayout={this.state.domLayout}
                     onCellClicked={(event) => { if (this.props.onClick) { this.props.onClick(event) } }}
                 />
-                {/* <img src={loader} className="loader-image" style={{ height: '25px', width: '25px' }} alt="loading..." /> */}
             </div>
         )
     }
