@@ -9,7 +9,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import Strings from '../../../../helpers/Strings';
 import { Tiles } from '../../../components/Tiles';
-import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../../components/TableTiles';

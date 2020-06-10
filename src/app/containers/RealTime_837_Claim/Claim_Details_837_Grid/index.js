@@ -18,8 +18,6 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 
 var val = ''
 const $ = window.$;
-let controller = new AbortController()
-let controllerTransaction = new AbortController()
 export class Claim_Details_837_Grid extends React.Component {
 
     constructor(props) {

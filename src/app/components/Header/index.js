@@ -54,7 +54,7 @@ export class Header extends React.Component {
         }
     }
 
-    onHandleChange(event, name) {
+    onHandleChange = (event, name) => {
         this.setState({
             [name]: event.target.value
         });

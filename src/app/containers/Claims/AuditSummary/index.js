@@ -5,7 +5,6 @@ import Strings from '../../../../helpers/Strings';
 import Urls from '../../../../helpers/Urls';
 import ReactPaginate from 'react-paginate';
 import { Tiles } from '../../../components/Tiles';
-import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
