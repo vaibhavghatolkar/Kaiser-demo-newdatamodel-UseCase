@@ -246,8 +246,8 @@ export class EditConfiguration extends React.Component {
 
     }
 
-    onOptionSelect(value, iter, flag, loopid, LoopID2) {
-       
+    onOptionSelect = (event, iter, flag, loopid, LoopID2) => {
+       let value = event.target.value
         if (!value) {
             return
         }
@@ -472,7 +472,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Main Loop Id
                                         </div>
-                                            <select className="form-control list-header1" id={item + 'mainLoop'} onChange={(event) => {this.onOptionSelect(event.target.value, item, 0) }}>
+                                            <select className="form-control list-header1" id={item + 'mainLoop'} onChange={(event) => {this.onOptionSelect(event, item, 0) }}>
                                                 <option value=""></option>
                                                 {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                             </select>
@@ -482,7 +482,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Sub Loop Id
                                         </div>
-                                            <select className="form-control list-header1" id={item + 'subLoop'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 1, options[item].selected_mainloopid) }}>
+                                            <select className="form-control list-header1" id={item + 'subLoop'} onChange={(event) => { this.onOptionSelect(event, item, 1, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].subLoopidArray ? this.renderOptions(options[item].subLoopidArray, 1) : null}
                                             </select>
@@ -492,7 +492,7 @@ export class EditConfiguration extends React.Component {
                                             <div className="list-header1">
                                                 Segment
                                         </div>
-                                            <select className="form-control list-header1" id={item + 'segment'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
+                                            <select className="form-control list-header1" id={item + 'segment'} onChange={(event) => { this.onOptionSelect(event, item, 2, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                 <option value=""></option>
                                                 {options[item].segmentArray ? this.renderOptions(options[item].segmentArray, 2) : null}
                                             </select>
@@ -574,7 +574,7 @@ export class EditConfiguration extends React.Component {
                                                 <label className="list-header">
                                                     Loop Id
                                         </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'loop1').value, item, 4) }}>
+                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'loop1'} onChange={(event) => { this.onOptionSelect(event, item, 4) }}>
                                                     <option value=""></option>
                                                     {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null}
                                                 </select>
@@ -587,7 +587,7 @@ export class EditConfiguration extends React.Component {
                                                 <label className="list-header">
                                                     Segment
                                         </label>
-                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={() => { this.onOptionSelect(document.getElementById(item + 'segment1').value, item, 5, options[item].selected_loopid) }}>
+                                                <select className="form-control list-header" style={{ marginLeft: "10px" }} id={item + 'segment1'} onChange={(event) => { this.onOptionSelect(event, item, 5, options[item].selected_loopid) }}>
                                                     <option value=""></option>
                                                     {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
                                                 </select>
@@ -617,7 +617,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Main Loop Id
                                  </div>
-                                                <select className="form-control list-header1" id={item + 'mainLoop2'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 6) }}>
+                                                <select className="form-control list-header1" id={item + 'mainLoop2'} onChange={(event) => { this.onOptionSelect(event, item, 6) }}>
                                                     <option value=""></option>
                                                     {options[item].loopidArray ? this.renderOptions(options[item].loopidArray, 0) : null}
                                                 </select>
@@ -627,7 +627,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Sub Loop Id
                                  </div>
-                                                <select className="form-control list-header1" id={item + 'subLoop2'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 4,options[item].selected_mainloopid) }}>
+                                                <select className="form-control list-header1" id={item + 'subLoop2'} onChange={(event) => { this.onOptionSelect(event, item, 4,options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].subLoopidArray1 ? this.renderOptions(options[item].subLoopidArray1, 1) : null}
                                                     {/* {options[item].loopidArray1 ? this.renderOptions(options[item].loopidArray1, 1) : null} */}
@@ -638,7 +638,7 @@ export class EditConfiguration extends React.Component {
                                                 <div className="list-header1">
                                                     Segment
                                  </div>
-                                                <select className="form-control list-header1" id={item + 'segment1'} onChange={(event) => { this.onOptionSelect(event.target.value, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
+                                                <select className="form-control list-header1" id={item + 'segment1'} onChange={(event) => { this.onOptionSelect(event, item, 5, options[item].selected_loopid, options[item].selected_mainloopid) }}>
                                                     <option value=""></option>
                                                     {options[item].segmentArray1 ? this.renderOptions(options[item].segmentArray1, 2) : null}
                                                 </select>
