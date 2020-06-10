@@ -669,7 +669,7 @@ export class EligibilityDetails extends React.Component {
             row.push(
                 <tr>
                     <td>{d.EventName}</td>
-                    <td>{moment(Number(d.EventCreationDateTime) ? Number(d.EventCreationDateTime) : d.EventCreationDateTime).format('MM/DD/YYYY, hh:mm:ss:SSS')}</td>
+                    <td>{moment(d.EventCreationDateTime ? Number(d.EventCreationDateTime) : d.EventCreationDateTime).format('MM/DD/YYYY, hh:mm:ss:SSS')}</td>
                     <td>{d.Exception}</td>
                 </tr>
             )
