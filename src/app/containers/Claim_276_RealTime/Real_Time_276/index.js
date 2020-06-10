@@ -248,7 +248,7 @@ export class RealTime276 extends React.Component {
                     data = res.data.AverageResponseTime270
                     progress_data = res.data.ProgressBar270 && res.data.ProgressBar270.length > 0 ? res.data.ProgressBar270 : []
                 } else {
-                    data = res.data.AverageResponseTime270
+                    data = res.data.AverageResponseTime276
                     progress_data = res.data.ProgressBar276
                 }
 
