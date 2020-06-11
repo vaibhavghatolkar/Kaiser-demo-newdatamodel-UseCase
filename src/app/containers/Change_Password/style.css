@@ -41,7 +41,7 @@
 /* ----- v CAN BE DELETED v ----- */
 .form-control{
     font-size: 12px !important;
-    background-color: #E8E8E8
+    /* background-color: #E8E8E8 */
 }
 .btn {
     font-size: 12px !important;

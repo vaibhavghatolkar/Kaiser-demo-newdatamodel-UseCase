@@ -133,7 +133,7 @@ export class Outbound_response_999 extends React.Component {
             }
           }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls._common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ export class Outbound_response_999 extends React.Component {
           `
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
+        fetch(Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -302,7 +302,7 @@ export class Outbound_response_999 extends React.Component {
             }
           }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
+        fetch(Urls._common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -690,6 +690,7 @@ export class Outbound_response_999 extends React.Component {
                 isDiffSubmitter={true}
                 _is835={this.state.flag999 == 1 ? false : true}
                 transactionType={this.state.transactionType}
+                removeGrid={true}
             />
         )
     }
