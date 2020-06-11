@@ -191,7 +191,7 @@ export class Filters extends React.Component {
         })
     }
 
-    changeTransaction =(event) =>{
+    changeTransaction = (event) => {
         clearTimeout(val_trans)
         let passing_val = event.target.value
         val_trans = setTimeout(() => {
@@ -233,12 +233,12 @@ export class Filters extends React.Component {
                                         defaultValue={this.props.transactionType}
                                     >
                                         <option value="1"></option>
-                                        {
-                                            this.props._is835 ?
+                                        {!this.props.isEncounter ?
+                                            (this.props._is835 ?
                                                 <option value="835">835</option> :
-                                                <option value="837">837</option>
+                                                <option value="837">837</option>) : null
                                         }
-                                        <option value="837Encounters">837 Encounter</option>
+                                        {this.props.isEncounter ? <option value="837Encounters">837 Encounter</option> : null}
                                     </select>
                                 </div>
                                 :
@@ -290,7 +290,7 @@ export class Filters extends React.Component {
                                         this.props.setData(startDate, endDate, selected_val, chartType)
                                     }}
 
-                                    defaultValue={this.props.changeDefault ? 'halfYear': 'year'}
+                                    defaultValue={this.props.changeDefault ? 'halfYear' : 'year'}
                                 >
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>

@@ -449,6 +449,7 @@ export class Outbound_Encounter_response_999 extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                isEncounter={true}
                 isDiffSubmitter={true}
                 transactionType={this.state.transactionType}
                 removeGrid={true}
