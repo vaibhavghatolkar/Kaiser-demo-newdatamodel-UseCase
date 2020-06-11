@@ -346,7 +346,6 @@ export class Filters extends React.Component {
                                     onChange={(event) => {
                                         this.onSelect(event, 'error_Type')
                                     }}>
-                                    >
                                     <option value=""></option>
                                     {/* {this.getErrorOptions()} */}
                                 </select>

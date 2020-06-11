@@ -131,7 +131,19 @@ const Strings = {
     _Load_Exception:'_Load_Exception',
     _ClaimProcessingSummary: '_claimProcessingSummary',
     _ClaimPayment_835_ProcessingSummary:'_ClaimPayment_835_ProcessingSummary',
-    viewCustomEdit_New:'viewCustomEdit_New'
+    viewCustomEdit_New:'viewCustomEdit_New',
+    EnrollmentDashboard:'EnrollmentDashboard',
+    enrollmentLoadDetails: 'enrollmentDetails',
+    PremiumPaymentLoad:'PremiumPaymentLoad',
+    PremiumPaymentLoadDetails:'PremiumPaymentLoadDetails',
+    MMRFileLoad:'MMRFileLoad',
+    MMRFileLoadDetails:'MMRFileLoadDetails',
+    PremiumPaymentFileCompare:'PremiumPaymentFileCompare',
+    RateCode820Mismatch:'RateCode820Mismatch',
+    ActiveQnxt820:'ActiveQnxt820',
+    TermQnxt820:'TermQnxt820',
+    OutboundActive:'OutboundActive',
+    OutboundTerm:'OutboundTerm',
 }
 
 export default Strings;

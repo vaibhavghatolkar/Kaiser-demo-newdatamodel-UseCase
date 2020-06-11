@@ -42,6 +42,18 @@ import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
 
 import { HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
+import {EnrollmentDashboard} from './app/containers/Enrollment/EnrollmentDashboard'
+import {Files_834} from './app/containers/Files_834'
+import {PremiumPaymentLoad} from './app/containers/820_Dashboard'
+import{PremiumPaymentLoadDetails} from './app/containers/PremiumPaymentLoadDetails'
+import {MMRFileLoad} from './app/containers/MmrFileLoad'
+import{MMRFileLoadDetails} from './app/containers/MMRFileLoadDetails'
+import {PremiumPaymentFileCompare} from './app/containers/PremiumPaymentFileCompare'
+import {RateCode820Mismatch} from './app/containers/820_RateCode_mismatch'
+import {ActiveQnxt820} from './app/containers/ActiveQnxt820'
+import {TermQnxt820} from './app/containers/TermQnxt820'
+import {OutboundActive} from './app/containers/OutboundActive'
+import {OutboundTerm} from './app/containers/OutboundTerm'
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -206,7 +218,22 @@ class PrivateRoute extends React.Component {
                                 
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
+                                <Route path={'/' + Strings.EnrollmentDashboard} component={EnrollmentDashboard} />
+                                <Route path={'/' + Strings.enrollmentLoadDetails} component={Files_834} />
+                                <Route path={'/' + Strings.PremiumPaymentLoad} component={PremiumPaymentLoad} />
+                                <Route path={'/' + Strings.PremiumPaymentLoadDetails} component={PremiumPaymentLoadDetails} />
+                                <Route path={'/' + Strings.MMRFileLoad} component={MMRFileLoad} />
+                                <Route path={'/' + Strings.MMRFileLoadDetails} component={MMRFileLoadDetails} />
+                                <Route path={'/' + Strings.PremiumPaymentFileCompare} component={PremiumPaymentFileCompare} />
+                                <Route path={'/' + Strings.RateCode820Mismatch} component={RateCode820Mismatch} />
+                                <Route path={'/' + Strings.ActiveQnxt820} component={ActiveQnxt820} />
+                                <Route path={'/' + Strings.TermQnxt820} component={TermQnxt820} />
+                                <Route path={'/' + Strings.OutboundActive} component={OutboundActive} />
+                                <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
                                 
+                            
+                            
+                            
                             </div>
                         </div>
                     </div>
