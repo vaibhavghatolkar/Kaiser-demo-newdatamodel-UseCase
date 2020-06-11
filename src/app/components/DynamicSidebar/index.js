@@ -172,6 +172,9 @@ export class DynamicSidebar extends React.Component {
         else if (index == 141) { name = Strings.AuditSummary835 }
         else if (index == 142) { name = Strings._ClaimPayment_835_ProcessingSummary }
         else if (index == 143) { name = Strings._Inbound_response_999 }
+        else if (index == 153) { name = Strings.encounterLoadException }
+        else if (index == 154) { name = Strings.Outbound_Encounter_response_999 }
+        else if (index == 155) { name = Strings.Outbound_Encounter_277CAReponse }
         return name
     }
 
@@ -274,6 +277,15 @@ export class DynamicSidebar extends React.Component {
                     { flag999: '1' },
                 ]
             } else if (element.key == Strings._Inbound_response_999) {
+                data = [
+                    { flag999: '0' },
+                ]
+            }
+            else if (element.key == Strings.Outbound_Encounter_response_999) {
+                data = [
+                    { flag999: '1' },
+                ]
+            } else if (element.key == Strings.Inbound_Encounter_response_999) {
                 data = [
                     { flag999: '0' },
                 ]

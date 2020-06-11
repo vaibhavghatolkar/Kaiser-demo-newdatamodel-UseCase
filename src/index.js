@@ -42,6 +42,18 @@ import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
 
 import { HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
+import { Outbound_Encounter_updated_ProcessingSummary } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_ProcessingSummary';
+import { Encounter_Load_Exception } from './app/containers/RealTime_Encounter/Encounter_Load_Exception';
+import { Outbound_Encounter_response_999 } from './app/containers/Outbound_Encounter_999_response';
+import { Outbound_Encounter_277CAReponse } from './app/containers/Outbound_Encounter_277CAResponse';
+import { Outbound_Encounter_updated_Details_837_Grid } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_Details_837_Grid';
+import { Outbound_Encounter_updated_Dashboard_New } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_Dashboard_New';
+import { EncounterProcessingSummary } from './app/containers/RealTime_Encounter/EncounterProcessingSummary';
+import { EncounterDetails_837_Grid } from './app/containers/RealTime_Encounter/EncounterDetails_837_Grid';
+import { EncounterAuditSummary } from './app/containers/RealTime_Encounter/EncounterAuditSummary';
+import { EncounterDashboard_New } from './app/containers/RealTime_Encounter/EncounterDashboard_New';
+import { Outbound_Encounter_updated_AuditSummary } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_AuditSummary';
+
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -206,6 +218,19 @@ class PrivateRoute extends React.Component {
                                 
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
+                                <Route path={'/' + Strings.encounterLoadException} component={Encounter_Load_Exception} />
+                                <Route path={'/' + Strings.Outbound_Encounter_response_999} component={Outbound_Encounter_response_999} />
+                                <Route path={'/' + Strings.Inbound_Encounter_response_999} component={Outbound_Encounter_response_999} />
+                                <Route path={'/' + Strings.Outbound_Encounter_277CAReponse} component={Outbound_Encounter_277CAReponse} />
+                                <Route path={'/' + Strings.Outbound_Encounter_ClaimProcessingSummary} component={Outbound_Encounter_updated_ProcessingSummary} />
+                                <Route path={'/' + Strings.Outbound_Encounter_Audit} component={Outbound_Encounter_updated_AuditSummary} />
+                                <Route path={'/' + Strings.Outbound_Encounter_ClaimDetails837} component={Outbound_Encounter_updated_Details_837_Grid} />
+                                <Route path={'/' + Strings.Outbound_Encounter_RealTimeDashboard} component={Outbound_Encounter_updated_Dashboard_New} />
+                                <Route path={'/' + Strings.Inbound_Encounter_ClaimProcessingSummary} component={EncounterProcessingSummary} />
+                                <Route path={'/' + Strings.Inbound_EncounterDetails} component={EncounterDetails_837_Grid} />
+                                <Route path={'/' + Strings.Inbound_Encounter_Audit} component={EncounterAuditSummary} />
+                                <Route path={'/' + Strings.Inbound_EncounterDashboard} component={EncounterDashboard_New} />
+                                                                
                                 
                             </div>
                         </div>

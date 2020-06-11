@@ -85,13 +85,6 @@ const Strings = {
     Inbound_Encounter_Audit:'Inbound_Encounter_Audit',
     Outbound_AuditSummary: 'Outbound_AuditSummary',
     Outbound_response_999: 'Outbound_response_999',
-    Inbound_EncounterDashboard : 'Inbound_EncounterDashboard',
-    Inbound_EncounterDetails : 'Inbound_EncounterDetails',
-    Inbound_Encounter_ClaimProcessingSummary : 'Inbound_Encounter_ClaimProcessingSummary',
-    Outbound_Encounter_RealTimeDashboard:'Outbound_Encounter_RealTimeDashboard',
-    Outbound_Encounter_ClaimDetails837: 'Outbound_Encounter_ClaimDetails837',
-    Outbound_Encounter_Audit:'Outbound_Encounter_Audit',
-    Outbound_Encounter_ClaimProcessingSummary:'Outbound_Encounter_ClaimProcessingSummary',
     Outbound_TradingPartnerConfiguration:'Outbound_TradingPartnerConfiguration',
 
     Outbound_TransactionSetup : 'Outbound_TransactionSetup',
@@ -131,7 +124,18 @@ const Strings = {
     _Load_Exception:'_Load_Exception',
     _ClaimProcessingSummary: '_claimProcessingSummary',
     _ClaimPayment_835_ProcessingSummary:'_ClaimPayment_835_ProcessingSummary',
-    viewCustomEdit_New:'viewCustomEdit_New'
+    viewCustomEdit_New:'viewCustomEdit_New',
+    Inbound_EncounterDashboard : 'Inbound_EncounterDashboard',
+    Inbound_Encounter_Audit:'Inbound_Encounter_Audit',
+    Inbound_EncounterDetails : 'Inbound_EncounterDetails',
+    Inbound_Encounter_ClaimProcessingSummary : 'Inbound_Encounter_ClaimProcessingSummary',    
+    Outbound_Encounter_RealTimeDashboard:'Outbound_Encounter_RealTimeDashboard',
+    Outbound_Encounter_ClaimDetails837: 'Outbound_Encounter_ClaimDetails837',
+    Outbound_Encounter_Audit:'Outbound_Encounter_Audit',
+    Outbound_Encounter_ClaimProcessingSummary:'Outbound_Encounter_ClaimProcessingSummary',
+    Outbound_Encounter_277CAReponse: 'Outbound_Encounter_277CAReponse',
+    Outbound_Encounter_response_999:'Outbound_Encounter_response_999',
+     encounterLoadException:'EncounterLoad_Exception',
 }
 
 export default Strings;
