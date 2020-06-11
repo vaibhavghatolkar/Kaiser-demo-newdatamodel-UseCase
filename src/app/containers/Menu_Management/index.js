@@ -485,7 +485,7 @@ export class MenuManagement extends React.Component {
 
                 <div className="form-group col-3" style={{ marginLeft: "25px" }}>
                     <div className="list-header-dashboard">Select Menu Type</div>
-                    <select value={"I"} className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')}>
+                    <select defaultValue={"I"} className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'menuType')}>
                         <option value="I">Inbound</option>
                         <option value="O">Outbound</option>
                         <option value="B">Both</option>
