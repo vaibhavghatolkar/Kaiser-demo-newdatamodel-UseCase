@@ -40,7 +40,8 @@ import { ClaimPayment_835_Exception } from './app/containers/ClaimPayment_835/Cl
 import { ClaimPayment_835_ProcessingSummary } from './app/containers/ClaimPayment_835/ClaimPayment_835_ProcessingSummary';
 import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
 
-
+import { HealthCare278 } from './app/containers/Health_care_278_dashboard'
+import { ServiceDetails278 } from './app/containers/Service_details278'
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -203,6 +204,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._Load_Exception} component={Load_Exception} />
                                 <Route path={'/' + Strings.viewCustomEdit_New} component={viewCustomEdit_New} />
                                 
+                                <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
+                                <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 
                             </div>
                         </div>

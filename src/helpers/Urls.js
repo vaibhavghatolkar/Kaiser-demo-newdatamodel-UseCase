@@ -61,6 +61,9 @@ const Urls = {
     _inbound_claims_837 : base_url + '/claims_837',
     _inbound_real_time_claim_details : base_url + '/real_time_claim_details',
     _inbound_claim_processing : base_url + '/claim_processing',
+
+    sql_base_url : 'http://10.0.1.248:30506/graphQl',
+    // sql_match_claims : 
 }
 
 export default Urls;
