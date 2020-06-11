@@ -1177,7 +1177,7 @@ export class Files_834 extends React.Component {
             title = "Enrollment Errors ";
         }
         else {
-            title = "Enrollment Details ";
+            title = "Enrollment Load Details ";
         }
         return (
 

@@ -1712,7 +1712,7 @@ export class EnrollmentDashboard extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Enrollment Dashboard</h5>
+                <h5 className="headerText">Enrollment File Load</h5>
 
                 <div className="row">
                     <div className="col-12">
