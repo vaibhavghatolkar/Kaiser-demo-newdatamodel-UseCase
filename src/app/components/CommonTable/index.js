@@ -86,7 +86,11 @@ export class CommonTable extends React.Component {
                                         if(row_item.isClick){
                                             row_item.method(row_item.key_argument ? data_item[row_item.key_argument] : '')
                                         } else {
-                                            this.props.onClick(data_item[this.props.onClickKey]) 
+                                            if(this.props.onClickSecondKey){
+                                                this.props.onClick(data_item[this.props.onClickKey], data_item[this.props.onClickSecondKey])
+                                            } else {
+                                                this.props.onClick(data_item[this.props.onClickKey])
+                                            }
                                         }
                                     }}
                                 >

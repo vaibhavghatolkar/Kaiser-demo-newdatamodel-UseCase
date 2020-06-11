@@ -131,7 +131,13 @@ const Strings = {
     _Load_Exception:'_Load_Exception',
     _ClaimProcessingSummary: '_claimProcessingSummary',
     _ClaimPayment_835_ProcessingSummary:'_ClaimPayment_835_ProcessingSummary',
-    viewCustomEdit_New:'viewCustomEdit_New'
+    viewCustomEdit_New:'viewCustomEdit_New',
+
+    hl7_screen : 'hl7_screen',
+    PatientDashboard : 'PatientDashboard',
+    patientsList : 'patientsList',
+    NewPatient : 'NewPatient',
+    PatientDetails : 'PatientDetails',
 }
 
 export default Strings;

@@ -57,7 +57,7 @@ export class CompanionGuide extends React.Component {
             }
           }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls.sql_base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

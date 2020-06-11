@@ -212,3 +212,9 @@ a[data-toggle="collapse"] {
     border: 1px solid transparent;
     padding: .275rem .75rem;
 }
+.hl7_image_style{
+    width: 100%;
+    /* height: 100%; */
+    left: 50%;
+    top: 50%; 
+}

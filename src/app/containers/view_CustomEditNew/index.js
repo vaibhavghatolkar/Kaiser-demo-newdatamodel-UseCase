@@ -88,7 +88,7 @@ export class View_CustomEditsNew extends React.Component {
         //   }
         process.env.NODE_ENV == 'development' && console.log(query)
 
-        fetch(Urls.base_url, {
+        fetch(Urls.sql_base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -145,7 +145,7 @@ export class View_CustomEditsNew extends React.Component {
             }
         }`
         process.env.NODE_ENV == 'development' && console.log(query);
-        fetch(Urls.common_data, {
+        fetch(Urls.sql_common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -174,7 +174,7 @@ export class View_CustomEditsNew extends React.Component {
             }           
         }`
 
-        fetch(Urls.common_data, {
+        fetch(Urls.sql_common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -370,7 +370,7 @@ export class View_CustomEditsNew extends React.Component {
               }
         `
         process.env.NODE_ENV == 'development' && console.log(query)
-        fetch(Urls.base_url, {
+        fetch(Urls.sql_base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,9 +1,6 @@
 import React from 'react'
 import '../../Claims/Dashboard/styles.css'
-import moment from 'moment';
-import { Topbar } from '../../../components/Topbar';
 import Urls from '../../../../helpers/Urls';
-import { CommonTable } from '../../../components/CommonTable';
 
 export class MatchClaims extends React.Component {
 
@@ -127,7 +124,6 @@ export class MatchClaims extends React.Component {
         return (
             <div>
                 {this.renderSearchBar()}
-                <Topbar />
                 {this.renderClaimsError()}
             </div>
         );
