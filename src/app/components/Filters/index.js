@@ -230,7 +230,7 @@ export class Filters extends React.Component {
                                         onChange={(event) => {
                                             this.onSelect(event, 'transactionType')
                                         }}
-                                        value={this.props.transactionType}
+                                        defaultValue={this.props.transactionType}
                                     >
                                         <option value="1"></option>
                                         {
@@ -238,7 +238,7 @@ export class Filters extends React.Component {
                                                 <option value="835">835</option> :
                                                 <option value="837">837</option>
                                         }
-                                        {/* <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option> */}
+                                        <option value="837Encounters">837 Encounter</option>
                                     </select>
                                 </div>
                                 :

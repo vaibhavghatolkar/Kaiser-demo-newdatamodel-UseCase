@@ -133,6 +133,25 @@ export class Outbound_Encounter_response_999 extends React.Component {
               FileDateTime
             }
           }`
+          if(this.state.flag999 == 1){
+            query = `{
+                Data999(RecType: "${recType}", TrasactionType: "${transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}, Type:"") {
+                  FileId
+                  FileName
+                  Date
+                  Submitter
+                  id
+                  status
+                  Response
+                  TrasactionType
+                  RecCount
+                  ResponseFileName
+                  ResponseFileDate
+                  ResponseFileDateTime
+                  FileDateTime
+                }
+              }`
+          }
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(this.state.flag999 == 1 ? Urls._inbound_common_data : Urls._common_data, {
             method: 'POST',

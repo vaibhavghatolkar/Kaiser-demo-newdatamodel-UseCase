@@ -133,7 +133,7 @@ export class Outbound_response_999 extends React.Component {
             }
           }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._common_data, {
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ export class Outbound_response_999 extends React.Component {
           `
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._transaction835, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -302,7 +302,7 @@ export class Outbound_response_999 extends React.Component {
             }
           }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._common_data, {
+        fetch(Urls.common_data, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
