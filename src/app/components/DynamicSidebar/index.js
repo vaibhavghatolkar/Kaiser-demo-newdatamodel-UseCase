@@ -74,8 +74,8 @@ export class DynamicSidebar extends React.Component {
 
     getkeys(index) {
         let name = ''
-        if (index == 2) { name = Strings.claimsDashboard_834 }
-        else if (index == 3) { name = Strings.claimsDashboard_834_details }
+        if (index == 2) { name = Strings.EnrollmentDashboard }
+        else if (index == 3) { name = Strings.enrollmentLoadDetails }
         else if (index == 4) { name = Strings.EnrollmentError }
 
         else if (index == 6) { name = Strings.FullComparsion_dashboard }
@@ -175,6 +175,15 @@ export class DynamicSidebar extends React.Component {
         else if (index == 153) { name = Strings.encounterLoadException }
         else if (index == 154) { name = Strings.Outbound_Encounter_response_999 }
         else if (index == 155) { name = Strings.Outbound_Encounter_277CAReponse }
+        else if (index == 144) { name = Strings.PremiumPaymentLoad }
+        else if (index == 145) { name = Strings.PremiumPaymentLoadDetails }
+        else if (index == 146) { name = Strings.MMRFileLoad }
+        else if (index == 147) { name = Strings.MMRFileLoadDetails }
+        else if (index == 148) { name = Strings.PremiumPaymentFileCompare } 
+        else if (index == 149) { name = Strings.RateCode820Mismatch }
+        else if (index == 150) { name = Strings.ActiveQnxt820 }
+        else if (index == 151) { name = Strings.TermQnxt820 }
+
         return name
     }
 
@@ -268,7 +277,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
             }
-            else if (element.key === Strings._claimPayment_835_details) {
+            else if (element.key === Strings._claimPayment_835_details || element.key === Strings.PremiumPaymentLoadDetails || element.key === Strings.MMRFileLoadDetails) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
@@ -280,6 +289,11 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { flag999: '0' },
                 ]
+            } else if (element.key == Strings.enrollmentLoadDetails) {
+                data = [
+                    { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: '', count: 'n' },
+                ]
+
             }
             else if (element.key == Strings.Outbound_Encounter_response_999) {
                 data = [

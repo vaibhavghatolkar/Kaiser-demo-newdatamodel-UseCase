@@ -136,6 +136,18 @@ const Strings = {
     Outbound_Encounter_277CAReponse: 'Outbound_Encounter_277CAReponse',
     Outbound_Encounter_response_999:'Outbound_Encounter_response_999',
      encounterLoadException:'EncounterLoad_Exception',
+    EnrollmentDashboard:'EnrollmentDashboard',
+    enrollmentLoadDetails: 'enrollmentDetails',
+    PremiumPaymentLoad:'PremiumPaymentLoad',
+    PremiumPaymentLoadDetails:'PremiumPaymentLoadDetails',
+    MMRFileLoad:'MMRFileLoad',
+    MMRFileLoadDetails:'MMRFileLoadDetails',
+    PremiumPaymentFileCompare:'PremiumPaymentFileCompare',
+    RateCode820Mismatch:'RateCode820Mismatch',
+    ActiveQnxt820:'ActiveQnxt820',
+    TermQnxt820:'TermQnxt820',
+    OutboundActive:'OutboundActive',
+    OutboundTerm:'OutboundTerm',
 }
 
 export default Strings;
