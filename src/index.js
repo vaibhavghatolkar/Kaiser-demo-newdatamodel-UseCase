@@ -43,7 +43,7 @@ import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
 import { HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
 import { PatientDetails } from './app/containers/PatientDetails';
-import { HL7_screen } from './app/containers/HL7/HL7_screen';
+import { ADT } from './app/containers/HL7/HL7_screen';
 import { PatientDashboard } from './app/containers/PatientDashboard';
 import { Patients } from './app/containers/Patients'
 import { NewPatient } from './app/containers/New_Patient'
@@ -75,6 +75,9 @@ import {ActiveQnxt820} from './app/containers/ActiveQnxt820'
 import {TermQnxt820} from './app/containers/TermQnxt820'
 import {OutboundActive} from './app/containers/OutboundActive'
 import {OutboundTerm} from './app/containers/OutboundTerm'
+import {RDE} from './app/containers/HL7/Medications'
+import {ORU} from './app/containers/HL7/ORU'
+import{DFT} from './app/containers/HL7/DFT'
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -265,7 +268,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.OutboundActive} component={OutboundActive} />
                                 <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
                                 
-                                <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
+                                <Route path={'/' + Strings.ADT} component={ADT} />
                                 <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />
                                 <Route path={'/' + Strings.NewPatient} component={NewPatient } />
@@ -274,7 +277,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
                                 <Route path={'/' + Strings.submitClaims} component={SubmitClaim} />
                                 <Route path={'/' + Strings.ChangePassword} component={ChangePassword} />
-                                
+                                <Route path={'/' + Strings.RDE} component={RDE} />
+                                <Route path={'/' + Strings.ORU} component={ORU} />
+                                <Route path={'/' + Strings.DFT} component={DFT} />
                             
                             
                             
