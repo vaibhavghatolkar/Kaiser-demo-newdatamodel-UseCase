@@ -126,7 +126,7 @@ const Strings = {
     _ClaimPayment_835_ProcessingSummary:'_ClaimPayment_835_ProcessingSummary',
     viewCustomEdit_New:'viewCustomEdit_New',
 
-    hl7_screen : 'hl7_screen',
+    ADT : 'ADT',
     PatientDashboard : 'PatientDashboard',
     patientsList : 'patientsList',
     NewPatient : 'NewPatient',
@@ -154,7 +154,10 @@ const Strings = {
     TermQnxt820:'TermQnxt820',
     OutboundActive:'OutboundActive',
     OutboundTerm:'OutboundTerm',
-    consent_management:'consent_management'
+    consent_management:'consent_management',
+    RDE:'RDE',
+    ORU:'ORU',
+    DFT:'DFT'
 }
 
 export default Strings;

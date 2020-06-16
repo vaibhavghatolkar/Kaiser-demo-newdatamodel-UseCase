@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles.css';
+import '../HL7_screen/styles.css';
 import '../../Files/files-styles.css';
 import { Bar, Line } from 'react-chartjs-2';
 import '../../color.css'
@@ -12,7 +12,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 let val = ''
 
-export class ADT extends React.Component {
+export class DFT extends React.Component {
 
     constructor(props) {
         super(props);
@@ -235,8 +235,8 @@ export class ADT extends React.Component {
 
     getBarData(labelArray, dataArray, color) {
 
-        labelArray = ['A01', 'A02', 'A03', 'A04', 'A05', 'A08']
-        dataArray = ['100000', '2000000', '1400000', '1200000', '1200000', '2200200']
+        labelArray = ['DFT_P03', 'DFT_P11', ]
+        dataArray = ['12950', '9200', ]
         let bardata = {
             labels: labelArray,
             showFile: false,
@@ -262,46 +262,7 @@ export class ADT extends React.Component {
 
     renderDetails(flag) {
 
-        let message = `MSH|^~\&|EPIC|COH||COH|20261116032527|202592|ADT^A08|11766077|P|2.5.1
-        EVN|A08|20261116032527||ONBASE_ADT|202592^POQUETTE^RITA^M^^^^^COHSA^^^^^DUR
-        PID|1||100005^^^EPI^MR||LESKI^RUSTY^^^^^D|^^|19591231|M|LEWIS^LESKI^^~LESKI^LEWIS^^~LESKI^LEWIS^E^|W|4058 ROGOSA DR^^DATIL^NM^91750^USA^L^^LOS ANGELES|LOS ANGELES|(408)-543-1432^P^H^^^909^2609824||ENG|S|||692-83-6839|||NOT HISPANIC||N||||||N
-        PD1|||COMMUNITY SITES^^10100|1306836770^KADHIUM^SABAH^^^^^^NPI^^^^NPI~600729^KADHIUM^SABAH^^^^^^PROVID^^^^PROVID
-        ROL|1|UP|CoH|1124331723^ZHUMKHAWALA^ALI-ASGHAR^^^^^^NPI^^^^NPI~29173^ZHUMKHAWALA^ALI-ASGHAR^^^^^^PROVID^^^^PROVID|20180628||||CoH|INTERNAL|1500 E. DUARTE RD.^^DUARTE^CA^91010^US^^^LOS ANGELES|(626)914-3921^^W^^^626^9143921
-        ROL|2|UP|GENERAL|1306836770^KADHIUM^SABAH^^^^^^NPI^^^^NPI~600729^KADHIUM^SABAH^^^^^^PROVID^^^^PROVID|20180628||||GENERAL|EXTERNAL|1334 W. COVINA BLVD.^STE 204^SAN DIMAS^CA^91773-3211^US|(909)599-6300^^W^^^909^5996300~(909)305-2500^^FAX^^^909^3052500
-        CON|1|NPP Acknowle|||||||||SIGNED||20180720141300
-        CON|2|General T OP|||||||||SIGNED||20180720141300||20190719235959
-        CON|3|Identificati|CDL- EXP 02/17/2021|ONB15602153|||||||Scanned||20180720141300
-        CON|4|QUESTIONNAIR|||||||||SIGNED||20180720141300
-        CON|5|Insur Card||ONB15602171|||||||Scanned||20180720141300
-        CON|6|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568438|||||||Received||20180718134715
-        CON|7|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568442|||||||Received||20180718134715
-        CON|8|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568444|||||||Received||20180718134715
-        CON|9|Outside Labo|OUTSIDE LABORATORY|ONB15568458|||||||Received||20180718134716
-        CON|10|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568531|||||||Received||20180718134721
-        CON|11|NPP Acknowle|NPP ACKNOWLEDGEMENT FORM|ONB15609004|||||||Received||20180720185413
-        CON|12|General T OP|GENERAL CONSENT FOR TREATMENT OP|ONB15609603|||||||Received||20180720192103||20190719235959
-        CON|13|HIM ROI AUTH|USE \T\ DISCLOSE PHI AUTH|ONB15614657|||||||Received||20180723014018
-        CON|14|General T OP|GENERAL CONSENT FOR TREATMENT OP|ONB15614673|||||||Received||20180723014022||20190722235959
-        CON|15|Miscellaneou|MISCELLANEOUS|ONB16657259|||||||Received||20181010125705
-        CON|16|Miscellaneou|MISCELLANEOUS|ONB16682338|||||||Received||20181011122215
-        CON|17|Miscellaneou|MISC ADMIN|ONB16765782|||||||Received||20181016213133
-        CON|18|Outside Op P|OUTSIDE OP PROCEDURE RPT|ONB16805766|||||||Received||20181018143823
-        CON|19|HIM ROI AUTH|ROI REQUEST|ONB19043834|||||||Received||20190320092923
-        CON|20|Insur Card||ONB20630668|||||||Scanned||20190708104014
-        CON|21|Outside Labo|OUTSIDE LABORATORY|ONB20862944|||||||Received||20190722215718
-        CON|22|Outside Labo|OUTSIDE LABORATORY|ONB20863178|||||||Received||20190722215738
-        CON|23|Outside Radl|OUTSIDE RADIOLOGY|ONB22899353|||||||Received||20191003170542
-        NK1|1|DYESS^VANCE^^|Daughter|7367 BUCHANAN ST^^FORT WINGATE^NM^91750^USA^^|(408)-663-8863^^H^^^310^7099249||Emergency Contact 1
-        PV1|1|OUTPATIENT|BRMNUROSUR^^^DC^^^^^UROLOGY^^DEPID||||1194937920^POQUETTE^RITA^MARIE^^^^^NPI^^^^NPI~85555^POQUETTE^RITA^MARIE^^^^^PROVID^^^^PROVID||||||||||||307091344|MEDICARE MC||||||||||||||||||||||||
-        PV2||||||||20191118||||Orders Only||||||||||N
-        OBX|1|TX|APPT STAFF^APPT STAFF|1|85555^POQUETTE, RITA MARIE^PROVID|||||||||20191118
-        AL1|1|DRUG INGREDI|^CODEINE^||Nausea|20180720
-        AL1|2|Drug Class|^SULFA ANTIBIOTICS^|Low|Rash|20190523
-        GT1|1|445660|GABBETT^GRADY^AUGUST^||9661 MONITOR ROAD^^WEST HILLS^WA^91750^USA^^^LOS ANGELES|(408)-644-7540^^^^^909^2609824||19591231|M|P/F|SLF|193-27-9031|||||^^^^^US|||Retired
-        IN1|1|30831212885^*EASY CHOICE MCR HCP IPA|308212128|*EASY CHOICE MANAGED CARE|PO BOX 260519^^PLANO^TX^75026-0519^|||422-63-4775|HCP NON CAP|||20190401|||HMO|HARTY^LEWIS^STEFAN^|Self|19591231|509 FRANKLIN RD 89^^ANCHORAGE^AK^91750^USA^^^LOS ANGELES|||1|||||||||||||218471|22656055||||||Retired|M|^^^^^US|||BOTH
-        IN2||692-83-6839|||Payor Plan||||||||||||||||||||||||||||||||||||||||||||||||||||||||22656055||(408)-543-1432^^^^^909^2609824
-        IN1|2|308002279135^*SECURE HORIZONS MCR HCP IPA|308002279|*UNITED HEALTHCARE MANAGED CARE NETWORK|PO BOX 30970^^SALT LAKE CITY^UT^84130-0970^||(408)-794-5664^^^^^866^3169776|378-19-6902||||20170101|20190331||HMO|LECRONE^VINCENT^GASTON^|Self|19591231|9017 ADAMS STREET^^N LAS VEGAS^NV^91750^USA^^^LOS ANGELES|||2|||YES|20190509111553|||||||||218304|5625570|||||||M||||BOTH
-        IN2||692-83-6839|||Payor Plan||||||||||||||||||||||||||||||||||||||||||||||||||||||||5625570||(408)-543-1432^^^^^909^2609824`
+        let message = `MSH|^~\&|WCDataSend|SENDING_FAC|RECEIVING_APP|RECEIVEING_FAC|20100211083948||DFT^P03|DSD1184189125|P|2.5||||||EVN||20100212083948||PID|1|10476|10476^^^MR&1.3.6.1.4.1.21367.2005.1.1&ISO^MR^1.3.6.1.4.1.21367.2005.1.1&MR&ISO~999999999^^^^SS||Duck^Daffy||20100201|M|||123 Test St.^^Fort Wayne^IN^46125||||||||999999999|||||||||||FT1|1|||20100212000000||CG|76775|||1||||||^^^^407^^^^TESTLOCATION ||I|440.0~441.4|20^Stewart^Patrick^^^DO|||114078|20^Stewart^Patrick^^^DO|76775|PR1|1|CPT|76775||20100212000000|||||||20^Stewart^Patrick^^^DO ||||DG1|1|ICD9|440.0|Atherosclerosis of abdominal aorta||F|||||||||0|20^Stewart^Patrick^^^DO|DDG1|2|ICD9|441.4|AAA - Abdominal aortic aneurysm||F|||||||||0|20^Stewart^Patrick^^^DO|D`
         return (
             <div>
                 <div>
@@ -551,27 +512,27 @@ export class ADT extends React.Component {
                 <div className="col-2 summary-container">
                     <div className="summary-header">Total Outbound</div>
                     <div className='green summary-title' >
-                        1.3M
+                        10030
                 </div>
                 </div>
 
                 <div className="col-2 summary-container">
                     <div className="summary-header">Queue</div>
                     <div className='orange summary-title' >
-                        6
+                        11
                 </div>
                 </div>
 
                 <div className="col-2 summary-container">
                     <div className="summary-header">   Total Inbound</div>
                     <div className='green summary-title' >
-                        1.9M
+                        12200
             </div>
                 </div>
                 <div className="col-2 summary-container">
                     <div className="summary-header">  Queue Depth</div>
                     <div className='blue summary-title' >
-                        3
+                        4
             </div>
                 </div>
 
@@ -669,14 +630,8 @@ export class ADT extends React.Component {
                             }}
                         >
                             <option value=""></option>
-                            <option value="1">A01</option>
-                            <option value="2">A02</option>
-                            <option value="3">A03</option>
-                            <option value="4">A04</option>
-                            <option value="5">A05</option>
-                            <option value="6">A06</option>
-                            <option value="7">A07</option>
-                            <option value="8">A08</option>
+                            <option value="1">DFT_P03</option>
+                            <option value="2">DFT_P11</option>
                             
                         </select>
                     </div>
@@ -688,7 +643,7 @@ export class ADT extends React.Component {
                         <select class="form-control list-dashboard">
                             <option selected value=""></option>
                             <option  value="1">COH</option>
-                        </select>
+                            </select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Directory</div>
@@ -736,7 +691,7 @@ export class ADT extends React.Component {
                     pointHoverBorderWidth: 2,
                     pointRadius: 3,
                     pointHitRadius: 1,
-                    data: [10200,23000, 12000, 15000, 17000, 14000, 12000, 18000,14500, 13700,14550, 15430]
+                    data: [1020,1230, 1500, 1800, 1330, 1270, 1550, 1930,1760, 1950,1410, 1630]
                 }
             ]
         }
@@ -770,82 +725,15 @@ export class ADT extends React.Component {
 
     _renderInboundTable() {
 
-        let data = [
-            {
-                API_ID: 12345,
-                Date: '06/16/2020 06:00:00',
-                API_URL: 'A08',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12346,
-                Date: '06/16/2020 06:00:00',
-                API_URL: 'A01',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12347,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A04',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12348,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A05',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12349,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A03',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12341,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A02',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-
-            {
-                API_ID: 12342,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A06',
-                Requester: 'EPIC',
-                Destination:'COH'
-
-            },
-
-
-            {
-                API_ID: 12343,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A03',
-                Requester: 'EPIC',
-                Destination:'COH'
-
-            },
-
-            {
-                API_ID: 12344,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A07',
-                Requester: 'EPIC',
-                Destination:'COH'
-            }
+        let data = [{API_ID: 12345,Date: '06/16/2020 06:00:00',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12346,Date: '06/16/2020 06:00:00',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12347,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12348,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12349,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12341,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12342,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12343,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12344,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'}
 
         ]
 
@@ -900,85 +788,17 @@ export class ADT extends React.Component {
 
     _renderOutboundTable() {
 
-        let data = [
-            {
-                API_ID: 12345,
-                Date: '06/16/2020 06:00:00',
-                API_URL: 'A08',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12346,
-                Date: '06/16/2020 06:00:00',
-                API_URL: 'A01',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12347,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A04',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12348,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A05',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12349,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A03',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12341,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A02',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-
-            {
-                API_ID: 12342,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A06',
-                Requester: 'EPIC',
-                Destination:'COH'
-
-            },
-
-
-            {
-                API_ID: 12343,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A03',
-                Requester: 'EPIC',
-                Destination:'COH'
-
-            },
-
-            {
-                API_ID: 12344,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A07',
-                Requester: 'EPIC',
-                Destination:'COH'
-            }
+        let data = [{API_ID: 12345,Date: '06/16/2020 06:00:00',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12346,Date: '06/16/2020 06:00:00',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12347,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12348,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12349,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12341,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12342,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12343,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P11',Requester: 'EPIC',Destination:'COH'},
+                    {API_ID: 12344,Date: '06/15/2020 08:20:10',API_URL: 'DFT_P03',Requester: 'EPIC',Destination:'COH'}
 
         ]
-
 
         let columnDefs = [
             { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
@@ -1028,26 +848,10 @@ export class ADT extends React.Component {
         )
     }
 
-
-
-    // onClick = (e) => {
-    //     this.setState({
-    //         showDetails: true
-    //     })
-    // }
-
-
-
-    // onClick1 = (e) => {
-    //   this.setState({
-    //         showDetails1: true
-    //     })
-    // }
-
     render() {
         return (
             <div className="container">
-                <h5 className="headerText">ADT</h5>
+                <h5 className="headerText">DFT</h5>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
                 {this._renderAllCharts()}

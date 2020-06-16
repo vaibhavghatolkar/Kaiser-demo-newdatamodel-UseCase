@@ -171,7 +171,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 141) { name = Strings.AuditSummary835 }
         else if (index == 142) { name = Strings._ClaimPayment_835_ProcessingSummary }
         else if (index == 143) { name = Strings._Inbound_response_999 }
-        else if (index == 152) { name = Strings.hl7_screen }
+        else if (index == 152) { name = Strings.ADT }
         else if (index == 157) { name = Strings.PatientDashboard }
         else if (index == 158) { name = Strings.patientsList }
         else if (index == 159) { name = Strings.NewPatient }
@@ -189,6 +189,10 @@ export class DynamicSidebar extends React.Component {
         else if (index == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
         else if (index == 160) { name = Strings.Outbound_Encounter_RealTimeDashboard }
         else if (index == 53) { name = Strings.Outbound_Encounter_updated_FileDashboard }        
+        else if (index == 166) { name = Strings.ORU }
+        else if (index == 167) { name = Strings.RDE }
+        else if (index == 168) { name = Strings.DFT }
+        
         return name
     }
 
