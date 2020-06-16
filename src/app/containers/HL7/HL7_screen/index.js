@@ -848,11 +848,11 @@ export class HL7_screen extends React.Component {
 
 
         let columnDefs = [
-            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color:'#139DC9', cursor:'pointer' } },
-            { headerName: "Date", field: "Date", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Type", field: "API_URL", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Submitter", field: "Requester", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Destination", field: "Destination", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },   
+            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
+            { headerName: "Date", field: "Date", width: 140,  },
+            { headerName: "Type", field: "API_URL", width: 120, },
+            { headerName: "Submitter", field: "Requester", width: 140, },
+            { headerName: "Destination", field: "Destination", flex: 1,  },   
         ]
 
         return (
@@ -978,11 +978,11 @@ export class HL7_screen extends React.Component {
 
 
         let columnDefs = [
-            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color:'#139DC9', cursor:'pointer' } },
-            { headerName: "Date", field: "Date", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Type", field: "API_URL", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Submitter", field: "Requester", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Destination", field: "Destination", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },   
+            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
+            { headerName: "Date", field: "Date", width: 140, },
+            { headerName: "Type", field: "API_URL", width: 120, },
+            { headerName: "Submitter", field: "Requester", width: 140, },
+            { headerName: "Destination", field: "Destination", flex: 1, },   
         ]
 
         return (
