@@ -3,13 +3,16 @@ import React from 'react'
 import moment from 'moment';
 import ReactPaginate from 'react-paginate';
 import Urls from '../../../helpers/Urls';
-
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export class ServiceDetails278 extends React.Component {
 
     constructor(props) {
         super(props);
-
+console.log("sadsafc",props.location.state.data[0])
         this.state = {
             files_list: [],
             count: 1,
@@ -19,6 +22,35 @@ export class ServiceDetails278 extends React.Component {
             message_271:'',
             TransStatus:props.location.state.data[0].TransStatus,
             ErrorCode:props.location.state.data[0].ErrorCode,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
+
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+            },
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
+            rowData: [],
         }
 
 
@@ -31,7 +63,7 @@ export class ServiceDetails278 extends React.Component {
     getData() {
 
         let query = `{
-            ServiceDetails278 (TransStatus:"${this.state.TransStatus}" ErrorCode:"${this.state.ErrorCode}" page:${this.state.page}) {
+            ServiceDetails278New (TransStatus:"${this.state.TransStatus}" ErrorCode:"${this.state.ErrorCode}" page:${this.state.page}) {
                 TranID
                 TranName
                 TranDate
@@ -68,7 +100,8 @@ export class ServiceDetails278 extends React.Component {
 
                 this.setState({
                     files_list: data,
-                    count: count
+                    count: count,
+                    TradingPartnerList:res.data.ServiceDetails278
                 })
 
             })
@@ -218,7 +251,7 @@ export class ServiceDetails278 extends React.Component {
                         </select>
                     </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="form-group col-3">
                         <div className="list-dashboard">Transaction Name</div>
                         <input className="form-control" type="text" />
@@ -238,12 +271,70 @@ export class ServiceDetails278 extends React.Component {
                         <div className="list-dashboard">Error Code</div>
                         <input className="form-control" type="text" />
                     </div>
-                </div>
+                </div> */}
             </div>
         )
 
     }
+    _renderList = () => {
+        // <td><a onClick={() => {
+        //     // this.getData(d.HiPaaSUniqueID)
+        //     this.getDetails(d.HiPaaSUniqueID)
+        // }} style={{ color: "var(--light-blue)", cursor: "pointer" }}>{d.TranName}</a></td>
+        // <td>{moment(d.TranDate).format("MM/DD/YYYY hh:mm a")}</td>
+        // <td>{d.TranStatus}</td>
+        // <td>{d.Submitter}</td>
+        // {this.state.status != 'Pass' ? <td>{d.ErrorCode}</td> : null}
+        let columnDefs =
+        this.state.status!='Pass' ? [
+            { headerName: "Transaction Name", field: "TranName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Transaction State", field: "TranDate", flex: 1, },
+            { headerName: "Status", field: "TranStatus", flex: 1, },
+            { headerName: "Submitter", field: "Submitter", flex: 1, },
+            { headerName: "Error Code", field: "ErrorCode", flex: 1, },
+           
+        ]: [
+            { headerName: "Transaction Name", field: "TranName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Transaction State", field: "TranDate", flex: 1, },
+            { headerName: "Status", field: "TranStatus", flex: 1, },
+            { headerName: "Submitter", field: "Submitter", flex: 1, },
+            // { headerName: "Error Code", field: "ErrorCode", flex: 1, },
+           
+        ]
 
+        return (
+            <div className="text-center" >
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.TradingPartnerList}
+                        icons={this.state.icons}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            this.getDetails()
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
     render() {
         return (
             <div>
@@ -251,7 +342,8 @@ export class ServiceDetails278 extends React.Component {
                 {this.renderTopbar()}
                 <div className="row">
                     <div className="col-7">
-                        {this.renderTableList()}
+                    {/* {this.renderTableList()} */}
+                        {this._renderList()}
                     </div>
                     <div className="col-5">
                     {this.state.showDetails ? <div><h6 style={{marginTop: '15px'}}>278 Transaction Details</h6><hr /> </div>: null}

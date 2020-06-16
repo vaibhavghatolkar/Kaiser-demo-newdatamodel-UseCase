@@ -154,6 +154,7 @@ const Strings = {
     TermQnxt820:'TermQnxt820',
     OutboundActive:'OutboundActive',
     OutboundTerm:'OutboundTerm',
+    consent_management:'consent_management'
 }
 
 export default Strings;

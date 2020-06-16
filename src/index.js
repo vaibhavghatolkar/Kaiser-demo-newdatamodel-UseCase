@@ -77,6 +77,7 @@ import {OutboundActive} from './app/containers/OutboundActive'
 import {OutboundTerm} from './app/containers/OutboundTerm'
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/RealTime_Encounter/Outbound_Encounter_Batch_Details_837';
 import { Outbound_Encounter_updated_FileDashboard } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_FileDashboard';
+import { consent_management } from './app/containers/consent_management';
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -239,8 +240,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._Load_Exception} component={Load_Exception} />
                                 <Route path={'/' + Strings.viewCustomEdit_New} component={viewCustomEdit_New} />
                                 
-                                {/* <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
-                                <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} /> */}
+                                <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
+                                <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 <Route path={'/' + Strings.encounterLoadException} component={Encounter_Load_Exception} />
                                 <Route path={'/' + Strings.Outbound_Encounter_response_999} component={Outbound_Encounter_response_999} />
                                 <Route path={'/' + Strings.Inbound_Encounter_response_999} component={Outbound_Encounter_response_999} />
@@ -269,7 +270,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
                                 
                                 <Route path={'/' + Strings.Outbound_Encounter_updated_FileDashboard} component={Outbound_Encounter_updated_FileDashboard} />
-                                {/* <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
+                                <Route path={'/' + Strings.consent_management} component={consent_management} />
+                                <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
                                 <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />
                                 <Route path={'/' + Strings.NewPatient} component={NewPatient } />
@@ -277,7 +279,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.matchClaims} component={MatchClaims} />
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
                                 <Route path={'/' + Strings.submitClaims} component={SubmitClaim} />
-                                <Route path={'/' + Strings.ChangePassword} component={ChangePassword} /> */}
+                                <Route path={'/' + Strings.ChangePassword} component={ChangePassword} />
                                 
                             
                             
