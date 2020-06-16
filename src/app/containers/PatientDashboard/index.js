@@ -1,8 +1,9 @@
 import React from 'react'
 import DatePicker from "react-datepicker";
 import Urls from '../../../helpers/Urls';
+import moment from 'moment';
 // import './style.css'
-import { AgGridReact } from 'ag-grid-react';
+// import { AgGridReact } from 'ag-grid-react';
 import 'react-datepicker/dist/react-datepicker.css';
 import person from '../../assets/Images/person.svg';
 import { Tiles } from '../../components/Tiles';
@@ -18,6 +19,13 @@ export class PatientDashboard extends React.Component {
             observationList: [],
             claimList: [],
             eligibilityList: [],
+            Eligibilty: false,
+            Claim: false,
+            showMedicationTable: false,
+            showObservationTable: true,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
 
@@ -501,26 +509,120 @@ export class PatientDashboard extends React.Component {
         )
     }
 
+    onClickEligibilty = (key) => {
+        this.setState({
+            Eligibilty: true,
+            Claim: false,
+            showMedicationTable: false,
+            showObservationTable: false,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+        })
+    }
+    onClickClaim = (key) => {
+        this.setState({
+            Claim: true,
+            Eligibilty: false,
+            showMedicationTable: false,
+            showObservationTable: false,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+        })
+    }
+    onClickshowMedicationTable = (key) => {
+        this.setState({
+            showMedicationTable: true,
+            Eligibilty: false,
+            Claim: false,
+            showObservationTable: false,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+        })
+    }
+    onClickshowObservationTable = (key) => {
+        this.setState({
+            showObservationTable: true,
+            Eligibilty: false,
+            Claim: false,
+            showMedicationTable: false,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+        })
+    }
+    onClickImmunization = (key) => {
+        this.setState({
+            Immunization: true,
+            Eligibilty: false,
+            Claim: false,
+            showMedicationTable: false,
+            showObservationTable: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+        })
+    }
+    onClickshowAllergyIntoleranceTable = (key) => {
+        this.setState({
+            showAllergyIntoleranceTable: true,
+            Eligibilty: false,
+            Claim: false,
+            showMedicationTable: false,
+            showObservationTable: false,
+            Immunization: false,
+            showConditionTable: false,
+        })
+    }
+    onClickshowConditionTable = (key) => {
+        this.setState({
+            showConditionTable: true,
+            Eligibilty: false,
+            Claim: false,
+            showMedicationTable: false,
+            showObservationTable: false,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+        })
+    }
+
     _renderSummaryDetails = () => {
         let row = []
         let summary = []
         summary = [
-            { name: 'Eligibility', value: 2 },
-            { name: 'Claims', value: 2 },
-            { name: 'Medication Request', value: 1 },
-            { name: 'Observation', value: 2 },
-            { name: 'Immunization', value: 3 },
-            { name: 'Allergy Tolerance', value: 3 },
-            { name: 'Condition', value: 3 },
+            { name: 'Observation', value: 2, color: '#00C0EF' },
+            { name: 'Immunization', value: 3, color: '#DD4B39' },
+            { name: 'Allergy Tolerance', value: 3, color: '#615CA8' },
+            { name: 'Eligibility', value: 2, color: '#39CCCC' },
+            { name: 'Claims', value: 2, color: '#F39C12' },
+            { name: 'Medication Request', value: 1, color: '#01A65A' },
+            { name: 'Condition', value: 3, color: '#8FEA7C' },
         ]
         let array = summary
         array.forEach(item => {
             row.push(
-                <Tiles
-                    isClickable={true}
-                    header_text={item.name}
-                    value={item.value}
-                />
+                <div className="col-3 clickable nopadding" style={{ backgroundColor: item.color, margin: '6px', paddingLeft: '20px' }}
+                    onClick={() => {
+                        if (item.name == 'Observation') { this.onClickshowObservationTable() }
+                        else if (item.name == 'Immunization') { this.onClickImmunization() }
+                        else if (item.name == 'Allergy Tolerance') { this.onClickshowAllergyIntoleranceTable() }
+                        else if (item.name == 'Eligibility') { this.onClickEligibilty() }
+                        else if (item.name == 'Claims') { this.onClickClaim() }
+                        else if (item.name == 'Medication Request') { this.onClickshowMedicationTable() }
+                        else if (item.name == 'Condition') { this.onClickshowConditionTable() }
+                    }}>
+                    <div className="summary-header white">{item.name}</div>
+                    <div className="summary-title white">
+                        {item.value}
+                    </div>
+                </div>
+                // <Tiles
+                //     isClickable={true}
+                //     header_text={item.name}
+                //     value={item.value}
+                //     differentTile={true}
+                // />
             )
         });
         return (
@@ -528,6 +630,12 @@ export class PatientDashboard extends React.Component {
                 {row}
             </div>
         )
+    }
+
+    formatDate(date) {
+
+        return moment(Number(date)).format("MM/DD/YYYY");
+
     }
 
     renderHeader() {
@@ -554,14 +662,15 @@ export class PatientDashboard extends React.Component {
     render() {
         return (
             <div style={{ height: $(window).height() }}>
+                {this.renderHeader()}
                 {this._renderSummaryDetails()}
-                {this.Eligibilty(this.state.conditionArray)}
-                {this.Claim()}
-                {this.showMedicationTable()}
-                {this.showObservationTable()}
-                {this.Immunization()}
-                {this.showAllergyIntoleranceTable()}
-                {this.showConditionTable()}
+                {this.state.Eligibilty ? this.Eligibilty(this.state.conditionArray) : null}
+                {this.state.Claim ? this.Claim() : null}
+                {this.state.showMedicationTable ? this.showMedicationTable() : null}
+                {this.state.showObservationTable ? this.showObservationTable() : null}
+                {this.state.Immunization ? this.Immunization() : null}
+                {this.state.showAllergyIntoleranceTable ? this.showAllergyIntoleranceTable() : null}
+                {this.state.showConditionTable ? this.showConditionTable() : null}
             </div>
         )
     }
