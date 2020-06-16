@@ -87,7 +87,7 @@ console.log("sadsafc",props.location.state.data[0])
             .then(res => res.json())
             .then(res => {
                 let count = 1
-                let data = res.data.ServiceDetails278
+                let data = res.data.ServiceDetails278New
 
 
 
@@ -101,7 +101,7 @@ console.log("sadsafc",props.location.state.data[0])
                 this.setState({
                     files_list: data,
                     count: count,
-                    TradingPartnerList:res.data.ServiceDetails278
+                    TradingPartnerList:res.data.ServiceDetails278New
                 })
 
             })
