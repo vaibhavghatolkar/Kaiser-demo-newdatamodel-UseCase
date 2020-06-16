@@ -194,12 +194,12 @@ export class consent_management extends React.Component {
         return (
             <tr className="table-head">
                 <td className="table-text">List</td>
-                <td className="table-text">Enable / Disable
+                <td className="table-text list-item-style">Enable / Disable
 
-                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input>
+                {/* <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeMenuAcces}></input> */}
                 </td>
-                <td className="table-text">Editable
-                <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeFunAccess}></input>
+                <td className="table-text list-item-style">Editable
+                {/* <input style={{ marginLeft: "10px" }} type="checkbox" onChange={this.ChangeFunAccess}></input> */}
                 </td>
 
 
@@ -260,78 +260,78 @@ export class consent_management extends React.Component {
         }
     }
     renderList() {
-       
-       
+
+
         let row = []
         const data = [
             {
-               Request:"Citrus Valley Health Partners", 
-              
+                Request: "Citrus Valley Health Partners",
+
             },
             {
-                Request:"Idaho Health Data Exchange", 
-        
-             },
-           
-             {
-                Request:"MyHealth Access Network", 
-               
-             },
-             {
-                 Request:"NC HealthConnex", 
-         
-              },
-              {
-                 Request:"Immunization Registry", 
-             
-              },
+                Request: "Idaho Health Data Exchange",
 
-              {
-                Request:"ABC Labs (American Bio-clinical Labs)", 
-               
-             },
-             {
-                 Request:"Bako Pathology", 
-         
-              },
-            
-              {
-                 Request:"CAMC Memorial Hospital", 
-                
-              },
-              {
-                  Request:"CMB Laboratories", 
-          
-               },
-               {
-                  Request:"Diagnostic Imaging of Salem", 
-              
-               },
-               {
-                Request:"Alaska Immunization Information System (VacTrAK)", 
-               
-             },
-             {
-                 Request:"California Immunization Registry (CAIR)", 
-         
-              },
-              {
-                 Request:"Maryland Immunization Registry (IMMUNET)", 
-             
-              },
+            },
+
+            {
+                Request: "MyHealth Access Network",
+
+            },
+            {
+                Request: "NC HealthConnex",
+
+            },
+            {
+                Request: "Immunization Registry",
+
+            },
+
+            {
+                Request: "ABC Labs (American Bio-clinical Labs)",
+
+            },
+            {
+                Request: "Bako Pathology",
+
+            },
+
+            {
+                Request: "CAMC Memorial Hospital",
+
+            },
+            {
+                Request: "CMB Laboratories",
+
+            },
+            {
+                Request: "Diagnostic Imaging of Salem",
+
+            },
+            {
+                Request: "Alaska Immunization Information System (VacTrAK)",
+
+            },
+            {
+                Request: "California Immunization Registry (CAIR)",
+
+            },
+            {
+                Request: "Maryland Immunization Registry (IMMUNET)",
+
+            },
         ]
 
         let menuOptions = {}
         data.forEach((d) => {
-        
+
             row.push(
 
                 <tr>
-                    <td style={{fontWeight:"bold"}}>
-                       {d.Request}
+                    <td style={{ fontWeight: "bold" }}>
+                        {d.Request}
                     </td>
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(event) => {
-                   
+
                     }} /></td>
                     <td className="list-item-style">{<input checked={d.is_editable} type="checkbox" onChange={(event) => {
                         d.is_editable = event.target.checked
@@ -351,14 +351,14 @@ export class consent_management extends React.Component {
 
         });
 
-      
+
         return (
             <div>
 
 
 
                 <table className="table table-bordered" id="userList" align="center">
-                    { this.renderTableHeader()}
+                    {this.renderTableHeader()}
                     <tbody>
                         {row}
                     </tbody>
@@ -549,7 +549,10 @@ export class consent_management extends React.Component {
         return (
             <div>
                 <div>
-                    <h5 className="headerText">Consent Management</h5>
+                    <div className="form-group col-6 row">
+                        <h5 className="headerText">Consent Management</h5>
+                        <div type="submit" className="btnDesign" style={{ marginLeft: "20px", marginTop : '12px' }} onClick={() => {}} >Save</div>
+                    </div>
                 </div>
                 {
 
