@@ -467,7 +467,7 @@ export class Outbound_Encounter_277CAReponse extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                isDiffSubmitter={true}
+                removeSubmitter={true}
                 transactionType={this.state.transactionType}
                 removeGrid={true}
             />

@@ -182,7 +182,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 145) { name = Strings.PremiumPaymentLoadDetails }
         else if (index == 146) { name = Strings.MMRFileLoad }
         else if (index == 147) { name = Strings.MMRFileLoadDetails }
-        else if (index == 148) { name = Strings.PremiumPaymentFileCompare } 
+        else if (index == 148) { name = Strings.PremiumPaymentFileCompare }
         else if (index == 149) { name = Strings.RateCode820Mismatch }
         else if (index == 150) { name = Strings.ActiveQnxt820 }
         else if (index == 151) { name = Strings.TermQnxt820 }
@@ -315,7 +315,7 @@ export class DynamicSidebar extends React.Component {
 
             row.push(
                 <li>
-                    <Link to={{ pathname: '/' + (element.key ? element.key : '') + addon, state: { data } }}>{element.menu_description}</Link>
+                    <Link to={{ pathname: element.key ? ('/' + (element.key ? element.key : '') + addon) : "", state: { data } }}>{element.menu_description}</Link>
                 </li>
             )
         });

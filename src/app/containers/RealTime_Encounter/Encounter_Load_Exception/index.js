@@ -181,7 +181,7 @@ export class Encounter_Load_Exception extends React.Component {
         }`
 
         console.log(query)
-        fetch(Urls.inbound_Encounter, {
+        fetch(Urls._inbound_Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -270,7 +270,7 @@ export class Encounter_Load_Exception extends React.Component {
 
         console.log(query)
 
-        fetch(Urls.inbound_Encounter, {
+        fetch(Urls._inbound_Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
