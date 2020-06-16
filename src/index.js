@@ -237,8 +237,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._Load_Exception} component={Load_Exception} />
                                 <Route path={'/' + Strings.viewCustomEdit_New} component={viewCustomEdit_New} />
                                 
-                                {/* <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
-                                <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} /> */}
+                                <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
+                                <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 <Route path={'/' + Strings.encounterLoadException} component={Encounter_Load_Exception} />
                                 <Route path={'/' + Strings.Outbound_Encounter_response_999} component={Outbound_Encounter_response_999} />
                                 <Route path={'/' + Strings.Inbound_Encounter_response_999} component={Outbound_Encounter_response_999} />
@@ -265,7 +265,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.OutboundActive} component={OutboundActive} />
                                 <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
                                 
-                                {/* <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
+                                <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
                                 <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />
                                 <Route path={'/' + Strings.NewPatient} component={NewPatient } />
@@ -273,7 +273,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.matchClaims} component={MatchClaims} />
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
                                 <Route path={'/' + Strings.submitClaims} component={SubmitClaim} />
-                                <Route path={'/' + Strings.ChangePassword} component={ChangePassword} /> */}
+                                <Route path={'/' + Strings.ChangePassword} component={ChangePassword} />
                                 
                             
                             
