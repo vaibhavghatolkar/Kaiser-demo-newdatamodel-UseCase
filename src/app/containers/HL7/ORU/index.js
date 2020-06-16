@@ -244,7 +244,7 @@ export class ORU extends React.Component {
             showFile: false,
             datasets: [
                 {
-                    label: 'Total Claims',
+                   
                     backgroundColor: color,
                     borderColor: color,
                     borderWidth: 1,
