@@ -39,12 +39,25 @@ export class Tiles extends React.Component {
                     </div>
                 </Link>
                 :
-                <div className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
-                    <div className="summary-header">{this.props.header_text}</div>
-                    <div className={this.props._style ? [this.props._style, style] : style}>
+                // <div className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
+                //     <div className="summary-header">{this.props.header_text}</div>
+                //     <div className={this.props._style ? [this.props._style, style] : style}>
+                //     {this.props.isAmount ? '$' : ''}{Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
+                //     </div>
+                // </div>
+                <div className={this.props.isenrollment ? "summary-enrollment summary-container" : this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
+                <div className="summary-header">{this.props.header_text}</div>
+                <div className={this.props._style ? [this.props._style, style] : style}>
                     {this.props.isAmount ? '$' : ''}{Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
-                    </div>
+                    {
+                        this.props.header_text == 'Resubmit Queue' || this.props.header_text == 'Ready For Batch' ?
+                            <button className="btnDesign button-resubmit"
+                                onClick={() => {
+                                    if (this.props.onClick) { this.props.onClick() }
+                                }}>{this.props.header_text == 'Ready For Batch' ? "Create AdHoc" : "Submit"}</button> : null
+                    }
                 </div>
+            </div>
         )
     }
 

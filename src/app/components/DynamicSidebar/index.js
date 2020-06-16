@@ -158,8 +158,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 113) { name = Strings.Outbound_Covered }
         else if (index == 114) { name = Strings.Outbound_NonCovered }
         else if (index == 115) { name = Strings.Outbound_CompanionGuide }
-        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
-        else if (index == 53) { name = Strings.Outbound_Encounter_RealTimeDashboard }
+        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }      
         else if (index == 54) { name = Strings.Outbound_Encounter_ClaimDetails837 }
         else if (index == 133) { name = Strings.NPILook_Up }
         else if (index == 134) { name = Strings.Outbound_NPILook_Up }
@@ -187,7 +186,9 @@ export class DynamicSidebar extends React.Component {
         else if (index == 149) { name = Strings.RateCode820Mismatch }
         else if (index == 150) { name = Strings.ActiveQnxt820 }
         else if (index == 151) { name = Strings.TermQnxt820 }
-
+        else if (index == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
+        else if (index == 160) { name = Strings.Outbound_Encounter_RealTimeDashboard }
+        else if (index == 53) { name = Strings.Outbound_Encounter_updated_FileDashboard }        
         return name
     }
 

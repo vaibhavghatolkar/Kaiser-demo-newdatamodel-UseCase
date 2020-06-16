@@ -75,6 +75,8 @@ import {ActiveQnxt820} from './app/containers/ActiveQnxt820'
 import {TermQnxt820} from './app/containers/TermQnxt820'
 import {OutboundActive} from './app/containers/OutboundActive'
 import {OutboundTerm} from './app/containers/OutboundTerm'
+import { Outbound_Encounter_BatchDetails837 } from './app/containers/RealTime_Encounter/Outbound_Encounter_Batch_Details_837';
+import { Outbound_Encounter_updated_FileDashboard } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_FileDashboard';
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -264,7 +266,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.TermQnxt820} component={TermQnxt820} />
                                 <Route path={'/' + Strings.OutboundActive} component={OutboundActive} />
                                 <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
+                                <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
                                 
+                                <Route path={'/' + Strings.Outbound_Encounter_updated_FileDashboard} component={Outbound_Encounter_updated_FileDashboard} />
                                 {/* <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
                                 <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />

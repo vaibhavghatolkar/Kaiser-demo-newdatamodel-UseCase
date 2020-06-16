@@ -4,9 +4,7 @@ import '../../Files/files-styles.css';
 import { Pie, Bar, Line } from 'react-chartjs-2';
 import '../../color.css'
 import moment from 'moment';
-import { Files } from '../../Files';
-import { Topbar } from '../../../components/Topbar';
-import { Files_837 } from '../../Files_837';
+
 import DatePicker from "react-datepicker";
 import ReactPaginate from 'react-paginate';
 import "react-datepicker/dist/react-datepicker.css";
