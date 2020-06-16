@@ -4,6 +4,7 @@ import Urls from '../../../helpers/Urls';
 import Strings from '../../../helpers/Strings';
 import { Link } from 'react-router-dom'
 import { Tiles } from '../../components/Tiles';
+import { Filters } from '../../components/Filters';
 
 export class HealthCare278 extends React.Component {
 
@@ -586,6 +587,26 @@ console.log("ddddddddddddddddd",sendData)
         )
 
     }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray,
+        })
+    }
+    update = (key, value) => {
+        this.setState({
+            [key]: value,
+            showDetails: false,
+            showerror: false,
+            showClaims: false
+        }, () => {
+            this._refreshScreen()
+        })
+    }
     renderTopbar() {
         return (
             <div className="row">
@@ -631,7 +652,7 @@ console.log("ddddddddddddddddd",sendData)
                 <div className="form-group col-3">
                     <div className="list-dashboard">Provider Name</div>
                     <select className="form-control list-dashboard" id="ProviderName">
-                        <option value="">Provider Name</option>
+                        <option value=""></option>
                         <option selected="selected" value="1">Provider Name 1</option>
                         <option value="2">Provider Name 2</option>
                     </select>
@@ -641,12 +662,33 @@ console.log("ddddddddddddddddd",sendData)
         )
 
     }
+    _refreshScreen = () => {
+
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                setData={this.setData}
+                State={this.state.State}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                removeGrid={true}
+                removeEndDate={true}
+                removeStartDate={true}
+                removeSubmitter={true}
+                Transaction_278_provider={true}
+                Transaction_278_Submitter={true}
+            />
+        )
+    }
 
     render() {
         return (
             <div>
                 <h5 className="headerText">278 Health Care Service Request Dashboard</h5>
-                {this.renderTopbar()}
+                {this._renderTopbar()}
                 {this._renderSummaryDetails()}
                 {this.dateviewtabledata()}
 

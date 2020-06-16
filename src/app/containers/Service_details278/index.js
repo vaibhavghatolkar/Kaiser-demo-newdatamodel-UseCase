@@ -7,6 +7,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Filters } from '../../components/Filters';
 
 export class ServiceDetails278 extends React.Component {
 
@@ -335,11 +336,28 @@ console.log("sadsafc",props.location.state.data[0])
             </div>
         )
     }
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                setData={this.setData}
+                State={this.state.State}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                removeGrid={true}
+                removeEndDate={true}
+                removeStartDate={true}
+                removeSubmitter={true}
+                Transaction_278_provider={true}
+                Transaction_278_Submitter={true}
+            />
+        )
+    }
     render() {
         return (
             <div>
                 <h5 className="headerText">Service Details</h5>
-                {this.renderTopbar()}
+                {this._renderTopbar()}
                 <div className="row">
                     <div className="col-7">
                     {/* {this.renderTableList()} */}
