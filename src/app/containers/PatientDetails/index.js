@@ -102,7 +102,7 @@ export class PatientDetails extends React.Component {
             MaritalStatus
           }}`
 
-
+          console.log(query1)
         fetch('http://10.0.1.248:30514/FHIRpatients', {
             method: 'POST',
             headers: {
