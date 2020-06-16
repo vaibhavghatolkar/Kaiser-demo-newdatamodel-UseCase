@@ -1,45 +1,16 @@
 import React from 'react';
 import './styles.css';
-import '../Files/files-styles.css';
-import { Pie, Bar } from 'react-chartjs-2';
-import '../color.css'
+import '../../Files/files-styles.css';
+import { Bar, Line } from 'react-chartjs-2';
+import '../../color.css'
 import moment from 'moment';
-import ReactPaginate from 'react-paginate';
 import "react-datepicker/dist/react-datepicker.css";
-import Urls from '../../../helpers/Urls';
-import { Link } from 'react-router-dom'
-import Strings from '../../../helpers/Strings';
-import { CommonTable } from '../../components/CommonTable';
-
-
+import Urls from '../../../../helpers/Urls';
+import Strings from '../../../../helpers/Strings';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 let val = ''
-const second_data = {
-    labels: [
-
-    ],
-    datasets: [{
-        data: [100, 100, 70, 20, 50, 20],
-        backgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ],
-        hoverBackgroundColor: [
-            '#139DC9',
-            '#83D2B4',
-            '#9DC913',
-            '#EC6236',
-            '#C9139D',
-            'blue',
-        ]
-    }],
-    flag: ''
-};
-
-
 
 export class HL7_screen extends React.Component {
 
@@ -69,7 +40,35 @@ export class HL7_screen extends React.Component {
             search: '',
             showDetails: false,
             showDetails1: false,
-            flag1: false
+            flag1: false,
+            paginationPageSize: 10,
+            domLayout: 'autoHeight',
+            autoGroupColumnDef: {
+                headerName: 'Group',
+                minWidth: 170,
+                field: 'athlete',
+                valueGetter: function (params) {
+                    if (params.node.group) {
+                        return params.node.key;
+                    } else {
+                        return params.data[params.colDef.field];
+                    }
+                },
+                headerCheckboxSelection: true,
+                cellRenderer: 'agGroupCellRenderer',
+                cellRendererParams: { checkbox: true },
+            },
+            defaultColDef: {
+
+                cellClass: 'cell-wrap-text',
+                autoHeight: true,
+                sortable: true,
+                resizable: true,
+                filter: true,
+            },
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
 
         }
         this.handleStartChange = this.handleStartChange.bind(this);
@@ -223,21 +222,21 @@ export class HL7_screen extends React.Component {
     };
 
     renderTableHeader() {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text list-item-style">File Name<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Date<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">File Status<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Submitter<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-                <td className="table-head-text list-item-style">Claim Count<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-            </tr>
-        )
+        // return (
+        //     <tr className="table-head">
+        //         <td className="table-head-text list-item-style">File Name<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+        //         <td className="table-head-text list-item-style">File Date<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+        //         <td className="table-head-text list-item-style">File Status<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+        //         <td className="table-head-text list-item-style">Submitter<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+        //         <td className="table-head-text list-item-style">Claim Count<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
+        //     </tr>
+        // )
     }
 
     getBarData(labelArray, dataArray, color) {
 
         labelArray = ['A01', 'A02', 'A03', 'A04', 'A05', 'A08']
-        dataArray = ['100000', '2000000', '1400000', '1200000', '1200000']
+        dataArray = ['100000', '2000000', '1400000', '1200000', '1200000', '2200200']
         let bardata = {
             labels: labelArray,
             showFile: false,
@@ -261,39 +260,53 @@ export class HL7_screen extends React.Component {
     }
 
 
-
-
-    onClick = (e) => {
-        this.setState({
-            showDetails: true
-        })
-    }
-
-
-
-    onClick1 = (e) => {
-
-
-
-        this.setState({
-            showDetails1: true
-
-
-        })
-
-
-
-    }
-
-
     renderDetails(flag) {
 
-        let message = "ISA*00* *00* *ZZ*SUBMITTERID *ZZ*CMS *160127*0734*^*00501*000005014*1*P*|~GS*HS*SUBMITTERID*CMS*20160127*073411*5014*X*005010X279A1~ST*277*3708*005010X212~BHT*0010*08*ABC276XYZ*20120128*1426*DG~HL*1**20*1~NM1*PR*2*BCBS DISNEY*****PI*8584537845~HL*2*1*21*1~NM1*41*2*UCLA MEDICAL CENTER*****46*1982~HL*3*2*19*1~NM1*1P*2*UCLA MEDICAL CENTER*****XX*1215193883~HL*4*3*22*0~DMG*D8*19281118*M~NM1*QC*1*MOUSE*MICKEY****MI*60345914A~TRN*1*ABC9001~STC*P3:60*20120128**225*0~REF*BLT*221~REF*EJ*ABC9001~DTP*472*D8*20120124~HL*5*3*22*0~DMG*D8*19340619*M~NM1*QC*1*DUCK*DONALD****MI*60345914B~TRN*1*ABC9002~REF*BLT*221~REF*EJ*ABC9002~DTP*472*D8*20120124~SVC*HC:98765*150**0450***1~STC*F1:65*20120128~SE*26*3708~GE*1*5014~IEA*1*000005014~"
+        let message = `MSH|^~\&|EPIC|COH||COH|20261116032527|202592|ADT^A08|11766077|P|2.5.1
+        EVN|A08|20261116032527||ONBASE_ADT|202592^POQUETTE^RITA^M^^^^^COHSA^^^^^DUR
+        PID|1||100005^^^EPI^MR||LESKI^RUSTY^^^^^D|^^|19591231|M|LEWIS^LESKI^^~LESKI^LEWIS^^~LESKI^LEWIS^E^|W|4058 ROGOSA DR^^DATIL^NM^91750^USA^L^^LOS ANGELES|LOS ANGELES|(408)-543-1432^P^H^^^909^2609824||ENG|S|||692-83-6839|||NOT HISPANIC||N||||||N
+        PD1|||COMMUNITY SITES^^10100|1306836770^KADHIUM^SABAH^^^^^^NPI^^^^NPI~600729^KADHIUM^SABAH^^^^^^PROVID^^^^PROVID
+        ROL|1|UP|CoH|1124331723^ZHUMKHAWALA^ALI-ASGHAR^^^^^^NPI^^^^NPI~29173^ZHUMKHAWALA^ALI-ASGHAR^^^^^^PROVID^^^^PROVID|20180628||||CoH|INTERNAL|1500 E. DUARTE RD.^^DUARTE^CA^91010^US^^^LOS ANGELES|(626)914-3921^^W^^^626^9143921
+        ROL|2|UP|GENERAL|1306836770^KADHIUM^SABAH^^^^^^NPI^^^^NPI~600729^KADHIUM^SABAH^^^^^^PROVID^^^^PROVID|20180628||||GENERAL|EXTERNAL|1334 W. COVINA BLVD.^STE 204^SAN DIMAS^CA^91773-3211^US|(909)599-6300^^W^^^909^5996300~(909)305-2500^^FAX^^^909^3052500
+        CON|1|NPP Acknowle|||||||||SIGNED||20180720141300
+        CON|2|General T OP|||||||||SIGNED||20180720141300||20190719235959
+        CON|3|Identificati|CDL- EXP 02/17/2021|ONB15602153|||||||Scanned||20180720141300
+        CON|4|QUESTIONNAIR|||||||||SIGNED||20180720141300
+        CON|5|Insur Card||ONB15602171|||||||Scanned||20180720141300
+        CON|6|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568438|||||||Received||20180718134715
+        CON|7|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568442|||||||Received||20180718134715
+        CON|8|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568444|||||||Received||20180718134715
+        CON|9|Outside Labo|OUTSIDE LABORATORY|ONB15568458|||||||Received||20180718134716
+        CON|10|Outside Prog|OUTSIDE PROGRESS NOTES|ONB15568531|||||||Received||20180718134721
+        CON|11|NPP Acknowle|NPP ACKNOWLEDGEMENT FORM|ONB15609004|||||||Received||20180720185413
+        CON|12|General T OP|GENERAL CONSENT FOR TREATMENT OP|ONB15609603|||||||Received||20180720192103||20190719235959
+        CON|13|HIM ROI AUTH|USE \T\ DISCLOSE PHI AUTH|ONB15614657|||||||Received||20180723014018
+        CON|14|General T OP|GENERAL CONSENT FOR TREATMENT OP|ONB15614673|||||||Received||20180723014022||20190722235959
+        CON|15|Miscellaneou|MISCELLANEOUS|ONB16657259|||||||Received||20181010125705
+        CON|16|Miscellaneou|MISCELLANEOUS|ONB16682338|||||||Received||20181011122215
+        CON|17|Miscellaneou|MISC ADMIN|ONB16765782|||||||Received||20181016213133
+        CON|18|Outside Op P|OUTSIDE OP PROCEDURE RPT|ONB16805766|||||||Received||20181018143823
+        CON|19|HIM ROI AUTH|ROI REQUEST|ONB19043834|||||||Received||20190320092923
+        CON|20|Insur Card||ONB20630668|||||||Scanned||20190708104014
+        CON|21|Outside Labo|OUTSIDE LABORATORY|ONB20862944|||||||Received||20190722215718
+        CON|22|Outside Labo|OUTSIDE LABORATORY|ONB20863178|||||||Received||20190722215738
+        CON|23|Outside Radl|OUTSIDE RADIOLOGY|ONB22899353|||||||Received||20191003170542
+        NK1|1|DYESS^VANCE^^|Daughter|7367 BUCHANAN ST^^FORT WINGATE^NM^91750^USA^^|(408)-663-8863^^H^^^310^7099249||Emergency Contact 1
+        PV1|1|OUTPATIENT|BRMNUROSUR^^^DC^^^^^UROLOGY^^DEPID||||1194937920^POQUETTE^RITA^MARIE^^^^^NPI^^^^NPI~85555^POQUETTE^RITA^MARIE^^^^^PROVID^^^^PROVID||||||||||||307091344|MEDICARE MC||||||||||||||||||||||||
+        PV2||||||||20191118||||Orders Only||||||||||N
+        OBX|1|TX|APPT STAFF^APPT STAFF|1|85555^POQUETTE, RITA MARIE^PROVID|||||||||20191118
+        AL1|1|DRUG INGREDI|^CODEINE^||Nausea|20180720
+        AL1|2|Drug Class|^SULFA ANTIBIOTICS^|Low|Rash|20190523
+        GT1|1|445660|GABBETT^GRADY^AUGUST^||9661 MONITOR ROAD^^WEST HILLS^WA^91750^USA^^^LOS ANGELES|(408)-644-7540^^^^^909^2609824||19591231|M|P/F|SLF|193-27-9031|||||^^^^^US|||Retired
+        IN1|1|30831212885^*EASY CHOICE MCR HCP IPA|308212128|*EASY CHOICE MANAGED CARE|PO BOX 260519^^PLANO^TX^75026-0519^|||422-63-4775|HCP NON CAP|||20190401|||HMO|HARTY^LEWIS^STEFAN^|Self|19591231|509 FRANKLIN RD 89^^ANCHORAGE^AK^91750^USA^^^LOS ANGELES|||1|||||||||||||218471|22656055||||||Retired|M|^^^^^US|||BOTH
+        IN2||692-83-6839|||Payor Plan||||||||||||||||||||||||||||||||||||||||||||||||||||||||22656055||(408)-543-1432^^^^^909^2609824
+        IN1|2|308002279135^*SECURE HORIZONS MCR HCP IPA|308002279|*UNITED HEALTHCARE MANAGED CARE NETWORK|PO BOX 30970^^SALT LAKE CITY^UT^84130-0970^||(408)-794-5664^^^^^866^3169776|378-19-6902||||20170101|20190331||HMO|LECRONE^VINCENT^GASTON^|Self|19591231|9017 ADAMS STREET^^N LAS VEGAS^NV^91750^USA^^^LOS ANGELES|||2|||YES|20190509111553|||||||||218304|5625570|||||||M||||BOTH
+        IN2||692-83-6839|||Payor Plan||||||||||||||||||||||||||||||||||||||||||||||||||||||||5625570||(408)-543-1432^^^^^909^2609824`
         return (
             <div>
                 <div>
-                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{'Transaction Request'}</a></div>
-                    <div className="border-view" id={'hello' + flag}>{flag ? message : message}</div>
+                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{'Message'}</a></div>
+                    <div className="border-view" style={{ height:  "300px", overflow: "auto" }} id={'hello' + flag}>{flag ? message : message}</div>
                 </div>
             </div>
         )
@@ -319,16 +332,13 @@ export class HL7_screen extends React.Component {
 
     renderCharts() {
 
-
-
-
         return (
-            <div className="row">
-                <div className="chart">
-                    <h6 align="center" style={{ paddingBottom: "20px", paddingRight: "60px" }}> <b>Type of Message </b></h6>
-                    {this.renderTabs()}
-                    {/* <label className="chart-header">{this.state.type == 'Providerwise' ? 'Provider (Top 5)' : 'Submitter volume (Top 5)'}</label> */}
-                    <Bar
+
+<div className="row chart-div col-12">
+               
+               <div className="chart-container chart col-12">
+                   <div className="chart-header">Type of Message</div>
+                   <Bar
                         data={this.getBarData(this.state.type == 'Provider' ? this.state.providerChartLabel : this.state.tradingChartLabel, this.state.type == 'Provider' ? this.state.providerChartData : this.state.tradingChartData, '#139DC9')}
                         width={400}
                         height={200}
@@ -345,29 +355,26 @@ export class HL7_screen extends React.Component {
                                 }],
                             },
                         }} />
-                </div>
+               </div>
+               
+      
+   </div>
 
-                <div className="chart">
-                    <h6 align="center" style={{ paddingBottom: "20px", paddingRight: "60px" }}> <b>Real time Volume </b></h6>
-                    <Bar
-                        data={this.getBarData(this.state.claimLabels, this.state.ClaimBarChart, "#83D2B4")}
-                        width={400}
-                        height={250}
-                        options={{
-                            legend: {
-                                position: 'bottom'
-                            },
-                            scales: {
-                                xAxes: [{
-                                    ticks: {
-                                        fontSize: 10,
-                                    }
-                                }]
-                            }
-                        }} />
+        )
+    }
+
+    _renderAllCharts() {
+        return (
+            <div className="chart-div">
+                <div className="row">
+                    <div className="col-6" style={{ padding: '6px' }}>
+                        {this.renderCharts()}
+                    </div>
+                    <div className="col-6" style={{ padding: '6px' }}>
+                        {this.renderCharts1()}
+                    </div>
                 </div>
             </div>
-
         )
     }
 
@@ -407,200 +414,6 @@ export class HL7_screen extends React.Component {
         }, () => {
             this.getListData()
         })
-    }
-
-    renderTransactionsNew(flag) {
-
-
-        let data = this.state.files_list ? this.state.files_list : []
-        let headerArray = []
-        let rowArray = []
-        headerArray.push(
-            { value: 'Message ID', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-            { value: 'Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'Type', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
-            { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-            { value: 'Destination' }
-
-        )
-
-
-
-        rowArray.push(
-            { value: 'API_ID', upScale: 1 },
-            { value: 'Date', isDate: 1, isNottime: 1 },
-            { value: 'API_URL' },
-            { value: 'Requester' },
-
-            { value: 'Destination' },
-        )
-
-        data = [
-            {
-                API_ID: 12345,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'Availity'
-
-
-            },
-
-            {
-                API_ID: 12346,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'Availity'
-
-
-            },
-
-            {
-                API_ID: 12347,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'GH Generations'
-
-
-            },
-
-            {
-                API_ID: 12348,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'Availity'
-
-
-            },
-
-            {
-                API_ID: 12349,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'Availity'
-            },
-
-            {
-                API_ID: 12341,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'GH Generations'
-            },
-
-
-            {
-                API_ID: 12342,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'Availity'
-
-            },
-
-
-            {
-                API_ID: 12343,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'GH Generations'
-
-            },
-
-            {
-                API_ID: 12344,
-                Date: 1582810469000,
-                API_URL: 'Pass',
-                Requester: 'Availity'
-
-            }
-
-
-
-
-
-        ]
-
-        if (flag) {
-
-            return (
-                <CommonTable
-                    headerArray={headerArray}
-                    rowArray={rowArray}
-                    data={data}
-                    count={this.state.count}
-                    handlePageClick={this.handlePageClick}
-                    onClickKey={'HiPaaSUniqueID'}
-                    onClick={this.onClick1}
-                />
-            )
-        }
-        else {
-
-            return (
-                <CommonTable
-                    headerArray={headerArray}
-                    rowArray={rowArray}
-                    data={data}
-                    count={this.state.count}
-                    handlePageClick={this.handlePageClick}
-                    onClickKey={'HiPaaSUniqueID'}
-                    onClick={this.onClick}
-                />
-            )
-
-        }
-    }
-
-    renderList() {
-        let row = []
-        const data = this.state.claimsList;
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type },
-        ]
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td style={{ color: "var(--light-blue)" }}><Link to={{ pathname: '/ClaimDetails837', state: { data: sendData } }}>{d.FileName}</Link></td>
-                    <td className="list-item-style">{moment(d.date).format('MM/DD/YYYY, ')}{moment(d.FileDate).format('hh:mm a')}</td>
-                    <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Sender}</td>
-                    <td className="list-item-style">{d.Claimcount}</td>
-                </tr>
-            )
-        });
-
-        return (
-            <div>
-                <table className="table table-bordered claim-list">
-                    {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
-                    <tbody>
-                        {row}
-                    </tbody>
-                </table>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0)}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClick(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
-            </div>
-        );
     }
 
     getListData = () => {
@@ -856,21 +669,15 @@ export class HL7_screen extends React.Component {
                             }}
                         >
                             <option value=""></option>
-                            <option selected value="1">ADT01</option>
-                            <option value="2">Michigan</option>
-                            <option value="3">Florida</option>
-                            <option value="4">New York</option>
-                            <option value="5">Idaho</option>
-                            <option value="6">Ohio</option>
-                            <option value="7">Illinois</option>
-                            <option value="8">Texas</option>
-                            <option value="9">Mississippi</option>
-                            <option value="10">South Carolina</option>
-                            <option value="11">New Mexico</option>
-                            <option value="12">Puerto Rico</option>
-                            <option value="13">Washington</option>
-                            <option value="14">Utah</option>
-                            <option value="15">Wisconsin</option>
+                            <option value="1">A01</option>
+                            <option value="2">A02</option>
+                            <option value="3">A03</option>
+                            <option value="4">A04</option>
+                            <option value="5">A05</option>
+                            <option value="6">A06</option>
+                            <option value="7">A07</option>
+                            <option value="8">A08</option>
+                            
                         </select>
                     </div>
                     <div className="form-group col-2">
@@ -878,7 +685,7 @@ export class HL7_screen extends React.Component {
                         {/* <input className="form-control" type="text"
                             onChange={(e) => this.onHandleChange(e)}
                         /> */}
-                        <select class="form-control list-dashboard"><option value=""></option><option selected value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
+                        <select class="form-control list-dashboard"><option selected value=""></option><option  value="1">Provider Name 1</option><option value="2">Provider Name 2</option></select>
                     </div>
                     <div className="form-group col-2">
                         <div className="list-dashboard">Directory</div>
@@ -903,25 +710,336 @@ export class HL7_screen extends React.Component {
         })
     }
 
-    renderChart() {
+
+    getLineChart(labelArray, dataArray, color) {
+        let _data = {
+            labels: ['Jun-2019','Aug-2019','Sept-2019','Oct-2019','Nov-2019','Dec-2019','Jan-2020','Feb-2020','Mar-2020','Apr-2020','May-2020'],
+            datasets: [
+                {
+                    label: '',
+                    fill: true,
+                    cubicInterpolationMode: 'default',
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: color,
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'round',
+                    pointBorderColor: color,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 3,
+                    pointHitRadius: 1,
+                    data: [10200,23000, 12000, 15000, 17000, 14000, 12000, 18000,14500, 13700,14550, 15430]
+                }
+            ]
+        }
+        return _data
+    }
+
+    renderCharts1() {
         return (
-            <Pie data={second_data}
-                options={{
-                    elements: {
-                        arc: {
-                            borderWidth: 0
-                        }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                }}
-                width={100}
-                height={80} />
+            <div className="row chart-div col-12">
+               
+                        <div className="chart-container chart col-12">
+                            <div className="chart-header">Volume Analysis</div>
+                            <Line
+                                data={this.getLineChart(this.state.dateChartLabel, this.state.dateChartData, '#139DC9')}
+                                width={400}
+                                height={200}
+                                options={{
+                                    legend: {
+                                        display: false,
+                                    },
+                                }}
+                            />
+                        </div>
+                        
+               
+            </div>
+
+
+        )
+    }
+
+    _renderInboundTable() {
+
+        let data = [
+            {
+                API_ID: 12345,
+                Date: '06/16/2020 06:00:00',
+                API_URL: 'A08',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12346,
+                Date: '06/16/2020 06:00:00',
+                API_URL: 'A01',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12347,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A04',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12348,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A05',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12349,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A03',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12341,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A02',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+
+            {
+                API_ID: 12342,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A06',
+                Requester: 'EPIC',
+                Destination:'COH'
+
+            },
+
+
+            {
+                API_ID: 12343,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A03',
+                Requester: 'EPIC',
+                Destination:'COH'
+
+            },
+
+            {
+                API_ID: 12344,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A07',
+                Requester: 'EPIC',
+                Destination:'COH'
+            }
+
+        ]
+
+
+        let columnDefs = [
+            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
+            { headerName: "Date", field: "Date", width: 140,  },
+            { headerName: "Type", field: "API_URL", width: 120, },
+            { headerName: "Submitter", field: "Requester", width: 140, },
+            { headerName: "Destination", field: "Destination", flex: 1,  },   
+        ]
+
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '10px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={data}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if(event.colDef.headerName == 'Message ID'){
+                                this.setState({
+                                    showDetails: true
+                                })   
+                            }
+                        }}
+                    >
+
+                    </AgGridReact>
+
+                </div>
+
+
+            </div>
+        )
+    }
+
+    _renderOutboundTable() {
+
+        let data = [
+            {
+                API_ID: 12345,
+                Date: '06/16/2020 06:00:00',
+                API_URL: 'A08',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12346,
+                Date: '06/16/2020 06:00:00',
+                API_URL: 'A01',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12347,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A04',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12348,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A05',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12349,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A03',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+            {
+                API_ID: 12341,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A02',
+                Requester: 'EPIC',
+                Destination:'COH'
+            },
+
+
+            {
+                API_ID: 12342,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A06',
+                Requester: 'EPIC',
+                Destination:'COH'
+
+            },
+
+
+            {
+                API_ID: 12343,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A03',
+                Requester: 'EPIC',
+                Destination:'COH'
+
+            },
+
+            {
+                API_ID: 12344,
+                Date: '06/15/2020 08:20:10',
+                API_URL: 'A07',
+                Requester: 'EPIC',
+                Destination:'COH'
+            }
+
+        ]
+
+
+        let columnDefs = [
+            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
+            { headerName: "Date", field: "Date", width: 140, },
+            { headerName: "Type", field: "API_URL", width: 120, },
+            { headerName: "Submitter", field: "Requester", width: 140, },
+            { headerName: "Destination", field: "Destination", flex: 1, },   
+        ]
+
+        return (
+            <div style={{ width: '100%', height: '100%' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '10px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={data}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if(event.colDef.headerName == 'Message ID'){
+                                this.setState({
+                                    showDetails1: true
+                                })   
+                            }
+                        }}
+                    >
+
+                    </AgGridReact>
+
+                </div>
+
+
+            </div>
         )
     }
 
 
+
+    // onClick = (e) => {
+    //     this.setState({
+    //         showDetails: true
+    //     })
+    // }
+
+
+
+    // onClick1 = (e) => {
+    //   this.setState({
+    //         showDetails1: true
+    //     })
+    // }
 
     render() {
         return (
@@ -929,14 +1047,14 @@ export class HL7_screen extends React.Component {
                 <h5 className="headerText">ADT</h5>
                 {this.renderTopbar()}
                 {this.renderSummaryDetails()}
-                {this.renderCharts()}
+                {this._renderAllCharts()}
                 <div className="row">
                     <div className="col-7">
                         <h6> Inbound Table</h6>
-                        {this.renderTransactionsNew()}
+                        {this._renderInboundTable()}
                     </div>
                     {this.state.showDetails ?
-                        <div className="col-5">
+                        <div className="col-5" style={{marginTop: '10px'}}>
                             {this.renderDetails()}
                         </div> : null}
                 </div>
@@ -944,10 +1062,10 @@ export class HL7_screen extends React.Component {
                 <div className="row">
                     <div className="col-7">
                         <h6> Outbound Table</h6>
-                        {this.renderTransactionsNew(1)}
+                        {this._renderOutboundTable(1)}
                     </div>
                     {this.state.showDetails1 ?
-                        <div className="col-5">
+                        <div className="col-5" style={{marginTop: '10px'}}>
                             {this.renderDetails(1)}
                         </div> : null}
                 </div>

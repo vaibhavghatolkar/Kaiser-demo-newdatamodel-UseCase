@@ -297,3 +297,9 @@
     color: var(--grayBlack);   
     padding-bottom: 16px;
 }
+.underline-label{
+    text-decoration: underline;
+}
+.clickable1{
+    cursor: pointer;
+}

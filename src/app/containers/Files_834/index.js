@@ -878,7 +878,7 @@ export class Files_834 extends React.Component {
                                    })
                                    $('#MemberInfoDialogbox').modal('show')
 
-                               }} className="clickable underline-label" style={{ float: 'right', marginRight: '20px', color: "#139DC9", fontWeight: 'bold' }}> Edit</label><br></br> </div>
+                               }} className="clickable1 underline-label" style={{ float: 'right', fontSize:'12px', marginRight: '20px', color: "#139DC9", fontWeight: 'bold' }}> Edit</label><br/></div>
                            : null
                    }
                    {this.renderRows(this.state.memberDetails834)}

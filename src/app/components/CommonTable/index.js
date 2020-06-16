@@ -48,7 +48,7 @@ export class CommonTable extends React.Component {
             header_row.push(
                 item.method ?
                     <div className={headerArray.length > 10 ? "col-1 col-header justify-align" : item.upScale == 1 ? "col-2 col-header justify-align" : "col col-header justify-align"}>
-                        <a className="clickable" onClick={() => item.method()}>{item.value}</a>
+                        <a className="clickable1" onClick={() => item.method()}>{item.value}</a>
                         {/* {item.value} <img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right', marginRight: '4px' }}></img> */}
                     </div>
                     :
