@@ -1048,7 +1048,7 @@ export class EnrollmentDashboard extends React.Component {
                     isenrollment={true}
                     second_val={item.second_val}
 
-                    url={url ? url : Strings.claimsDashboard_834_details}
+                    url={url ? url : Strings.enrollmentLoadDetails}
                 />
 
             )
@@ -1134,7 +1134,7 @@ export class EnrollmentDashboard extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.claimsDashboard_834_details}
+                    url={Strings.enrollmentLoadDetails}
                     data={sendData}
                     color={color}
                 />
@@ -1701,7 +1701,7 @@ export class EnrollmentDashboard extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.claimsDashboard_834_details, {
+        this.props.history.push('/' + Strings.enrollmentLoadDetails, {
             data: sendData
         })
     }

@@ -43,7 +43,7 @@ import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
 import { HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
 import { PatientDetails } from './app/containers/PatientDetails';
-import { HL7_screen } from './app/containers/HL7_screen';
+import { HL7_screen } from './app/containers/HL7/HL7_screen';
 import { PatientDashboard } from './app/containers/PatientDashboard';
 import { Patients } from './app/containers/Patients'
 import { NewPatient } from './app/containers/New_Patient'
@@ -265,16 +265,16 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.OutboundActive} component={OutboundActive} />
                                 <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
                                 
-                                {/* <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
-                                <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
+                                <Route path={'/' + Strings.hl7_screen} component={HL7_screen} />
+                                {/* <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />
                                 <Route path={'/' + Strings.NewPatient} component={NewPatient } />
                                 <Route path={'/' + Strings.PatientDetails} component={PatientDetails} />
                                 <Route path={'/' + Strings.matchClaims} component={MatchClaims} />
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
                                 <Route path={'/' + Strings.submitClaims} component={SubmitClaim} />
-                                <Route path={'/' + Strings.ChangePassword} component={ChangePassword} /> */}
-                                
+                                <Route path={'/' + Strings.ChangePassword} component={ChangePassword} />
+                                 */}
                             
                             
                             
