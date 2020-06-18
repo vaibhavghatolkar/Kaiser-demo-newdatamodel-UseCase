@@ -232,6 +232,11 @@
     padding-right: 4px;
     width: 11%;
 }
+.summary-diff-tile{
+    padding-left: 9px;
+    padding-right: 4px;
+    width: 13%;
+}
 .chart-container2{
     border-radius: 8px;
     margin: 12px;

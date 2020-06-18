@@ -16,9 +16,9 @@ export class Tiles extends React.Component {
             this.props.header_text.toLowerCase().indexOf('total sent to availity') != -1 ? 'green summary-title' :
                 this.props.header_text.toLowerCase().indexOf('total') != -1 ? 'blue summary-title' :
                     this.props.header_text.toLowerCase().indexOf('exception') != -1 ? 'orange summary-title' :
-                        this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 || this.props.header_text.toLowerCase().indexOf('error resolved') != -1 || this.props.header_text.toLowerCase()=='valid transaction'? 'green summary-title' :
-                            (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) || this.props.header_text.toLowerCase().indexOf('invalid') != -1 ? 'red summary-title':
-                            (this.props.header_text.toLowerCase().indexOf('avg response time (sec)') != -1) ? 'dark_red summary-title' : 'blue summary-title'
+                        this.props.header_text.toLowerCase().indexOf('accepted') != -1 || this.props.header_text.toLowerCase().indexOf('paid') != -1 || this.props.header_text.toLowerCase().indexOf('error resolved') != -1 || this.props.header_text.toLowerCase() == 'valid transaction' ? 'green summary-title' :
+                            (this.props.header_text.toLowerCase().indexOf('rejected') != -1 || this.props.header_text.toLowerCase().indexOf('failed') != -1 || this.props.header_text.toLowerCase().indexOf('denied') != -1 || this.props.header_text.toLowerCase().indexOf('error') != -1) || this.props.header_text.toLowerCase().indexOf('invalid') != -1 ? 'red summary-title' :
+                                (this.props.header_text.toLowerCase().indexOf('avg response time (sec)') != -1) ? 'dark_red summary-title' : 'blue summary-title'
         return style
     }
 
@@ -31,7 +31,7 @@ export class Tiles extends React.Component {
                 <Link to={{ pathname: this.props.url, state: { data: this.props._data } }} className={this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
                     <div className="summary-header">{this.props.header_text}</div>
                     <div className={this.props._style ? [this.props._style, style] : style}>
-                    {this.props.isAmount ? '$' : ''}{Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
+                        {this.props.isAmount ? '$' : ''}{Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
                         {
                             this.props.header_text == 'Resubmit Queue' ?
                                 <button className="btnDesign button-resubmit">Submit</button> : null
@@ -46,18 +46,18 @@ export class Tiles extends React.Component {
                 //     </div>
                 // </div>
                 <div className={this.props.isenrollment ? "summary-enrollment summary-container" : this.props.header_text == 'Accepted with Errors' || this.props.header_text == 'Reconciled Error' || this.props.uniformWidth ? "summary-exception summary-container-uniform" : "col summary-container"}>
-                <div className="summary-header">{this.props.header_text}</div>
-                <div className={this.props._style ? [this.props._style, style] : style}>
-                    {this.props.isAmount ? '$' : ''}{Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
-                    {
-                        this.props.header_text == 'Resubmit Queue' || this.props.header_text == 'Ready For Batch' ?
-                            <button className="btnDesign button-resubmit"
-                                onClick={() => {
-                                    if (this.props.onClick) { this.props.onClick() }
-                                }}>{this.props.header_text == 'Ready For Batch' ? "Create AdHoc" : "Submit"}</button> : null
-                    }
+                    <div className="summary-header">{this.props.header_text}</div>
+                    <div className={this.props._style ? [this.props._style, style] : style}>
+                        {this.props.isAmount ? '$' : ''}{Number(this.props.value) ? this.props.value : 0} {this.props.second_val ? ('| ' + this.props.second_val) : ''}
+                        {
+                            this.props.header_text == 'Resubmit Queue' || this.props.header_text == 'Ready For Batch' ?
+                                <button className="btnDesign button-resubmit"
+                                    onClick={() => {
+                                        if (this.props.onClick) { this.props.onClick() }
+                                    }}>{this.props.header_text == 'Ready For Batch' ? "Create AdHoc" : "Submit"}</button> : null
+                        }
+                    </div>
                 </div>
-            </div>
         )
     }
 
@@ -72,11 +72,25 @@ export class Tiles extends React.Component {
         )
     }
 
+    renderDiffTile = () => {
+        return (
+            <div className="summary-diff-tile summary-container-uniform clickable nopadding" style={{ paddingLeft: '16px' }}
+                onClick={() => this.props.onClick()}>
+                <div className="summary-header">{this.props.header_text}</div>
+                <div className="summary-title" style={{ color: this.props.count_color }}>
+                    {this.props.value}
+                </div>
+            </div>
+        )
+    }
+
     render() {
         return (
-            this.props.isDualTile ?
-                this.renderDualTile() :
-                this.renderTiles()
+            this.props.differentTile ?
+                this.renderDiffTile() :
+                (this.props.isDualTile ?
+                    this.renderDualTile() :
+                    this.renderTiles())
         )
     }
 }
