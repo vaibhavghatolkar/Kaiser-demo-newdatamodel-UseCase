@@ -40,6 +40,7 @@ export class ADT extends React.Component {
             search: '',
             showDetails: false,
             showDetails1: false,
+            showA04: false,
             flag1: false,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -239,6 +240,24 @@ export class ADT extends React.Component {
                 <div>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{'Message'}</a></div>
                     <div className="border-view" style={{ height:  "300px", overflow: "auto" }} id={'hello' + flag}>{flag ? message : message}</div>
+                </div>
+            </div>
+        )
+    }
+
+    renderDetails1(flag) {
+
+        let message = `MSH|^~\&|ADT1|MCM|LABADT|MCM|198808181126|SECURITY|ADT^A04|MSG00001|P|2.4
+        EVN|A01-|198808181123
+        PID|||7155312^5^M11||Stanon^John^A^III||19990504|M-||2106-3|1200 N ELM STREET^^^FL^27401-1020|US||||S||7155312^2^M10|123456789|9-87654^FL
+        PV1|1|I|2000^2012^01||||004777^LEBAUER^^J.|||SUR||-||1|A0-
+        IN1|001|A357|1234|BCMD|||||132987
+        IN2|ID1551001|SSN12345678`
+        return (
+            <div>
+                <div>
+                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{'Message'}</a></div>
+                    <div className="border-view" style={{ height:  "160px", overflow: "auto" }} id={'hello' + flag}>{flag ? message : message}</div>
                 </div>
             </div>
         )
@@ -732,9 +751,17 @@ export class ADT extends React.Component {
                         rowData={this.state.summaryList}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if(event.colDef.headerName == 'Message ID'){
+
+                            if(event.data.Type == 'A04' && event.data.MessageID == '12350'){
                                 this.setState({
-                                    showDetails: true
+                                    showA04: true,
+                                    showDetails: false
+                                })   
+                            }
+                            else {
+                                this.setState({
+                                    showDetails: true,
+                                    showA04: false,
                                 })   
                             }
                         }}
@@ -910,6 +937,10 @@ export class ADT extends React.Component {
                     {this.state.showDetails ?
                         <div className="col-5" style={{marginTop: '10px'}}>
                             {this.renderDetails()}
+                        </div> : null}
+                        {this.state.showA04 ?
+                        <div className="col-5" style={{marginTop: '10px'}}>
+                            {this.renderDetails1()}
                         </div> : null}
                 </div>
                 <br></br><br></br>
