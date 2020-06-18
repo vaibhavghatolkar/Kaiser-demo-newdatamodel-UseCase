@@ -126,31 +126,17 @@ export class ADT extends React.Component {
         }
 
         let query = `{
-            Claim837RTDashboardCount (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", Type : "` + this.state.type + `") {
-                TotalFiles
-                TotalClaims
-                Accepted
-                Rejected
-                Accepted_Per
-                Rejected_Per
-                Total999
-                Total277CA
-                TotalSentToQNXT
-                InProgress
-            }
-            Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `") {
-                From
-                MonthNo
-                Year
-                To
-                Amount
-                TotalClaims
-                X_axis
-                Y_axis
-            }
+                ADTDetails {
+                  MessageID
+                  Date
+                  Type
+                  Submitter
+                  Destination
+                }
+              
         }`
         console.log(query)
-        fetch(Urls.sql_real_time_claim, {
+        fetch(Urls.sql_base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -160,56 +146,11 @@ export class ADT extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                let array = []
-                let summary = []
-                let data = res.data
-                let Accepted_per1 = 0
-                let rejected_per1 = 0
-                let accepted = 0
-                let rejected = 0
-                let inProgress = 0
-                let ClaimBarChart = res.data.Claim837RTClaimBarchart
-                let claimLabels = []
-
-                if (data.Claim837RTDashboardCount && data.Claim837RTDashboardCount.length > 0) {
-                    summary = [
-                        { name: 'Total Files', value: data.Claim837RTDashboardCount[0].TotalFiles ? data.Claim837RTDashboardCount[0].TotalFiles : '' },
-                        { name: 'Total Claims', value: data.Claim837RTDashboardCount[0].TotalClaims ? data.Claim837RTDashboardCount[0].TotalClaims : '' },
-                        { name: 'Failed File Load', value: 0 },
-                        { name: 'Accepted Claims', value: data.Claim837RTDashboardCount[0].Accepted ? data.Claim837RTDashboardCount[0].Accepted : '' },
-                        { name: 'Rejected Claims', value: data.Claim837RTDashboardCount[0].Rejected ? data.Claim837RTDashboardCount[0].Rejected : '' },
-                        { name: 'Accepted Percent', value: data.Claim837RTDashboardCount[0].Accepted_Per ? Math.round(data.Claim837RTDashboardCount[0].Accepted_Per * 100) / 100 : '' },
-                        { name: 'Rejected Percent', value: data.Claim837RTDashboardCount[0].Rejected_Per ? Math.round(data.Claim837RTDashboardCount[0].Rejected_Per * 100) / 100 : '' },
-                    ]
-                    Accepted_per1 = data.Claim837RTDashboardCount[0].Accepted_Per
-                    rejected_per1 = data.Claim837RTDashboardCount[0].Rejected_Per
-                    accepted = data.Claim837RTDashboardCount[0].Accepted
-                    rejected = data.Claim837RTDashboardCount[0].Rejected
-                    inProgress = data.Claim837RTDashboardCount[0].InProgress
-                }
-
-                let count = 0
-                ClaimBarChart.forEach((d) => {
-                    count++;
-                    array.push(
-                        d.Y_axis ? parseFloat(d.Y_axis) : 0
-                    )
-                    if (chartType == 'Weekwise') {
-                        claimLabels.push('week' + count)
-                    } else {
-                        claimLabels.push(d.X_axis)
-                    }
-                })
+               let data = res.data.ADTDetails
 
                 this.setState({
-                    summaryList: summary,
-                    Accepted_per: Accepted_per1,
-                    rejected_per: rejected_per1,
-                    ClaimBarChart: array,
-                    claimLabels: claimLabels,
-                    accepted: accepted,
-                    rejected: rejected,
-                    inProgress: inProgress
+                    summaryList: data,
+                   
                 })
             })
             .catch(err => {
@@ -222,15 +163,6 @@ export class ADT extends React.Component {
     };
 
     renderTableHeader() {
-        // return (
-        //     <tr className="table-head">
-        //         <td className="table-head-text list-item-style">File Name<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-        //         <td className="table-head-text list-item-style">File Date<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-        //         <td className="table-head-text list-item-style">File Status<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-        //         <td className="table-head-text list-item-style">Submitter<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-        //         <td className="table-head-text list-item-style">Claim Count<img src={require('../../components/Images/search_table.png')} style={{ height: '14px', marginTop: '3px', float: 'right' }}></img></td>
-        //     </tr>
-        // )
     }
 
     getBarData(labelArray, dataArray, color) {
@@ -532,7 +464,6 @@ export class ADT extends React.Component {
 
     renderSummaryDetails() {
         let row = []
-        let array = this.state.summaryList
         let apiflag = this.state.apiflag
         let url = Strings.ElilgibilityDetails270 + '/' + apiflag
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
@@ -770,91 +701,11 @@ export class ADT extends React.Component {
 
     _renderInboundTable() {
 
-        let data = [
-            {
-                API_ID: 12345,
-                Date: '06/16/2020 06:00:00',
-                API_URL: 'A08',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12346,
-                Date: '06/16/2020 06:00:00',
-                API_URL: 'A01',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12347,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A04',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12348,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A05',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12349,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A03',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-            {
-                API_ID: 12341,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A02',
-                Requester: 'EPIC',
-                Destination:'COH'
-            },
-
-
-            {
-                API_ID: 12342,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A06',
-                Requester: 'EPIC',
-                Destination:'COH'
-
-            },
-
-
-            {
-                API_ID: 12343,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A03',
-                Requester: 'EPIC',
-                Destination:'COH'
-
-            },
-
-            {
-                API_ID: 12344,
-                Date: '06/15/2020 08:20:10',
-                API_URL: 'A07',
-                Requester: 'EPIC',
-                Destination:'COH'
-            }
-
-        ]
-
-
         let columnDefs = [
-            { headerName: "Message ID", field: "API_ID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
+            { headerName: "Message ID", field: "MessageID", width: 120, cellStyle: { color:'#139DC9', cursor:'pointer' } },
             { headerName: "Date", field: "Date", width: 140,  },
-            { headerName: "Type", field: "API_URL", width: 120, },
-            { headerName: "Submitter", field: "Requester", width: 140, },
+            { headerName: "Type", field: "Type", width: 120, },
+            { headerName: "Submitter", field: "Submitter", width: 140, },
             { headerName: "Destination", field: "Destination", flex: 1,  },   
         ]
 
@@ -878,7 +729,7 @@ export class ADT extends React.Component {
                         domLayout={this.state.domLayout}
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
-                        rowData={data}
+                        rowData={this.state.summaryList}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if(event.colDef.headerName == 'Message ID'){

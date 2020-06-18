@@ -157,7 +157,8 @@ const Strings = {
     consent_management:'consent_management',
     RDE:'RDE',
     ORU:'ORU',
-    DFT:'DFT'
+    DFT:'DFT',
+    FHiR_API_management:'FHiR_API_management'
 }
 
 export default Strings;

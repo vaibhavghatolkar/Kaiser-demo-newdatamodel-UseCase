@@ -193,7 +193,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 167) { name = Strings.RDE }
         else if (index == 168) { name = Strings.DFT }
         else if (index == 169) { name = Strings.consent_management }
-        
+        else if (index == 172) { name = Strings.FHiR_API_management }       
         return name
     }
 
