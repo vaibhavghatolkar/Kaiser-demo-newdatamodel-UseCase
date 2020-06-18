@@ -30,7 +30,7 @@ export class PatientDashboard extends React.Component {
             showAllergyIntoleranceTable: false,
             showConditionTable: false,
             paginationPageSize: 10,
-            selectedFileId: '3647630434666307581',
+            selectedFileId: '2825123507869164533',
             domLayout: 'autoHeight',
             inner_orderby: '',
             gridType: 1,
@@ -1285,7 +1285,7 @@ export class PatientDashboard extends React.Component {
                     filterClaim={this.state.Filter_ClaimId}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigationClaims}
-                    defaultRecCount={10}
+                    // defaultRecCount={10}
                 />
             </div>
         )
