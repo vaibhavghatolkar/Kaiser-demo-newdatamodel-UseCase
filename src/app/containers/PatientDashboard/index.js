@@ -16,7 +16,7 @@ export class PatientDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            patientId_id: '71553',
+            patientId_id: '8100',
             patientId: "10019",
             medicationList: [],
             observationList: [],
@@ -993,7 +993,7 @@ export class PatientDashboard extends React.Component {
             { name: 'Immunization', value: 3, color: '#DD4B39' },
             { name: 'Allergy Tolerance', value: 3, color: '#615CA8' },
             { name: 'Eligibility', value: 2, color: '#39CCCC' },
-            { name: 'Claims', value: 10, color: '#F39C12' },
+            { name: 'Claims', value: 1, color: '#F39C12' },
             { name: 'Medication Request', value: 1, color: '#01A65A' },
             { name: 'Condition', value: 3, color: '#8FEA7C' },
         ]
