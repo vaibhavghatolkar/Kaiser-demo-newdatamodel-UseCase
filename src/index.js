@@ -81,7 +81,7 @@ import { consent_management } from './app/containers/consent_management';
 import {RDE} from './app/containers/HL7/Medications'
 import {ORU} from './app/containers/HL7/ORU'
 import{DFT} from './app/containers/HL7/DFT'
-
+import{FHiR_API_management} from './app/containers/FHiR_API_management'
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -286,6 +286,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.RDE} component={RDE} />
                                 <Route path={'/' + Strings.ORU} component={ORU} />
                                 <Route path={'/' + Strings.DFT} component={DFT} />
+                                <Route path={'/' + Strings.FHiR_API_management} component={FHiR_API_management} />
+                                
                             
                             
                             
