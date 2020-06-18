@@ -606,6 +606,8 @@ export class Load_Exception extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
+                State={this.state.State}
+                selectedTradingPartner={this.state.selectedTradingPartner}
             />
         )
     }
