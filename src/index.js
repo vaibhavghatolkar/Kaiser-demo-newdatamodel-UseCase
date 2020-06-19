@@ -85,6 +85,7 @@ import{FHiR_API_management} from './app/containers/FHiR_API_management'
 import {Outbound_Encounter_StatewiseTradingPartner} from './app/containers/RealTime_Encounter/Outbound_Encounter_StatewiseTradingPartner'
 import {TransactionSetup_New} from './app/containers/TransactionSetup_New'
 import {Encounter_view_CustomEditNew} from './app/containers/RealTime_Encounter/Encounter_view_CustomEditNew'
+import {CrosswalkTable} from './app/containers/CrosswalkTable'
 import { EthnicityMismatch } from './app/containers/EthnicityMismatch';
 import { RateCode } from './app/containers/RateCode';
 import { SameGenderTwin } from './app/containers/SameGenderTwin';
