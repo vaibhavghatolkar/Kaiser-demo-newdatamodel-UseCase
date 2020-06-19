@@ -78,14 +78,14 @@ import { OutboundTerm } from './app/containers/OutboundTerm'
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/RealTime_Encounter/Outbound_Encounter_Batch_Details_837';
 import { Outbound_Encounter_updated_FileDashboard } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_FileDashboard';
 import { consent_management } from './app/containers/consent_management';
-import {RDE} from './app/containers/HL7/Medications'
-import {ORU} from './app/containers/HL7/ORU'
-import{DFT} from './app/containers/HL7/DFT'
-import{FHiR_API_management} from './app/containers/FHiR_API_management'
-import {Outbound_Encounter_StatewiseTradingPartner} from './app/containers/RealTime_Encounter/Outbound_Encounter_StatewiseTradingPartner'
-import {TransactionSetup_New} from './app/containers/TransactionSetup_New'
-import {Encounter_view_CustomEditNew} from './app/containers/RealTime_Encounter/Encounter_view_CustomEditNew'
-import {CrosswalkTable} from './app/containers/CrosswalkTable'
+import { RDE } from './app/containers/HL7/Medications'
+import { ORU } from './app/containers/HL7/ORU'
+import { DFT } from './app/containers/HL7/DFT'
+import { FHiR_API_management } from './app/containers/FHiR_API_management'
+import { Outbound_Encounter_StatewiseTradingPartner } from './app/containers/RealTime_Encounter/Outbound_Encounter_StatewiseTradingPartner'
+import { TransactionSetup_New } from './app/containers/TransactionSetup_New'
+import { Encounter_view_CustomEditNew } from './app/containers/RealTime_Encounter/Encounter_view_CustomEditNew'
+import { CrosswalkTable } from './app/containers/CrosswalkTable'
 import { EthnicityMismatch } from './app/containers/EthnicityMismatch';
 import { RateCode } from './app/containers/RateCode';
 import { SameGenderTwin } from './app/containers/SameGenderTwin';
@@ -106,6 +106,7 @@ import { Enrollment_FullFileCompare } from './app/containers/Enrollment/Enrollme
 import { Enrollment_eligibiltyDetails } from './app/containers/Enrollment/Enrollment_eligibiltyDetails';
 import { House_Head_Mismatch } from './app/containers/House_Head_Mismatch';
 import { CustomService } from './app/containers/CustomService';
+import { Enrollment_FullFileCompare_Dashboard } from './app/containers/Enrollment/Enrollment_FullFileComparison_Dashboard';
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
 class PrivateRoute extends React.Component {
@@ -329,6 +330,7 @@ class PrivateRoute extends React.Component {
 
                                 <Route path={'/' + Strings.House_Head_Mismatch} component={House_Head_Mismatch} />
                                 <Route path={'/' + Strings.CustomService} component={CustomService} />
+                                <Route path={'/' + Strings.Enrollment_FullFileCompare_Dashboard} component={Enrollment_FullFileCompare_Dashboard} />
 
 
                             </div>

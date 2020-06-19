@@ -178,7 +178,9 @@ const Strings = {
     LoadtoQNXT:'LoadtoQNXT',
     EnrollmentLoadException:'EnrollmentLoadException',
     DualCodeMismatch: 'DualCodeMismatch',
-    CustomService: 'CustomService'
+    CustomService: 'CustomService',
+    
+    Enrollment_FullFileCompare_Dashboard: 'Enrollment_FullFileCompare_Dashboard',
     
 }
 

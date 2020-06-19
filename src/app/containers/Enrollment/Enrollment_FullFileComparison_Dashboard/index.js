@@ -98,7 +98,7 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
             Hipaas_Count: 0,
             domLayout: 'autoHeight',
             FileName: [],
-            selected_FileID: (props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].incoming_fileId == "") ? "" : props.location.state.data[0].incoming_fileId,
+            selected_FileID: props.location.state.data[0].incoming_fileId == "" ? "" : props.location.state.data[0].incoming_fileId,
             // selected_FileID:'834_UT_Audit.da',
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -169,20 +169,7 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
             molchip_ethinicityMismatch: 0,
             molchip_telephoneMismatch: 0,
 
-            summaryCount: [
-                { name: 'Total X12', value: 64567 },
-                { name: 'Audit', value: 64567 },
-                { name: 'Add', value: 0 },
-                { name: 'Change', value: 0 },
-                { name: 'Term', value: 0 },
-                { name: 'Reinstate', value: 0 },
-                { name: 'In QNXT', value: 61099 },
-                { name: 'Add Delta', value: 9441 },
-                { name: 'Change Delta', value: 0 },
-                { name: 'Term Delta', value: 0 },
-                { name: 'Reinstate Delta', value: 0 },
-                { name: 'Term by Absence', value: 5973 },
-            ],
+            summaryCount: [],
             summaryCountNew: [
                 { name: 'Queued to QNXT', value: 5000 },
                 { name: 'Applied to QNXT', value: 4000 },
@@ -232,17 +219,15 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
 
     }
     _refreshScreen = () => {
-
-        // this._getCounts()
-        // this.gettiles()
-        // this.getFilename()
+        this._getCounts()
+        this.gettiles()
+        this.getFilename()
         // this.getCommonData()
         // this.getListData()
         // this._getOtherCounts('MOLINA')
         // this._getOtherCounts('MOL IMED')
-        // this._getOtherCounts('MOLCHIP')       
+        // this._getOtherCounts('MOLCHIP')
         // this.getSecond_tiles()
-
     }
     getCommonData() {
         let query = `{
@@ -419,37 +404,15 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
         this.setState({
             [key]: event.target.options[event.target.selectedIndex].value,
         })
-
         let eventvalue = event.target.options[event.target.selectedIndex].value
         setTimeout(() => {
             if (eventvalue == '834_UT_Audit.da') {
                 this.setState({
-                    summaryCount: [
-                        { name: 'Total X12', value: 64567 },
-                        { name: 'Audit', value: 64567 },
-                        { name: 'Add', value: 0 },
-                        { name: 'Change', value: 0 },
-                        { name: 'Term', value: 0 },
-                        { name: 'Reinstate', value: 0 },
-                        { name: 'In QNXT', value: 61099 },
-                        { name: 'Add Delta', value: 9441 },
-                        { name: 'Change Delta', value: 0 },
-                        { name: 'Term Delta', value: 0 },
-                        { name: 'Reinstate Delta', value: 0 },
-                        { name: 'Term by Absence', value: 5973 },
-                    ],
-                    MissingPCP: 944,
-                    TermedPCP: 1750,
-                    Duplicate: 0,
-                    SameGenderTwin: 66,
-                    RateCodeMismatch: 1989,
-                    dobMisMatch: 8,
-                    addressMismatch: 1200,
-                    genderMismatch: 0,
-                    ethinicityMismatch: 0,
-                    DeltaCodeMismatch: 3004,
                     effectiveData: 7,
                     household: 340
+                }, () => {
+                    this._getCounts()
+                    this.gettiles()
                 })
             } else {
                 this.setState({
@@ -460,7 +423,7 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
                     this.gettiles()
                 })
             }
-        }, 50);
+        }, 100);
     }
 
     MonthsEvent(event, key) {
@@ -1962,7 +1925,7 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
         let stage_4 = [
             { 'header': 'Rate Code' },
             { 'name': 'Rate Code Mismatch', 'value': this.state.RateCodeMismatch, 'isClick': true },
-            { 'name': 'Dual Code Mismatch', 'value': this.state.DeltaCodeMismatch, 'isClick': true  },
+            { 'name': 'Dual Code Mismatch', 'value': this.state.DeltaCodeMismatch, 'isClick': true },
             // { 'name': 'Molina', 'value': this.state.molchip_TermbyAbsence, 'isClick': true },
             // { 'name': 'Molina IMED', 'value': this.state.molchip_MissingPCP, 'isClick': true },
             //  { 'name': 'Termed PCP', 'value': this.state.molchip_TermedPCP },

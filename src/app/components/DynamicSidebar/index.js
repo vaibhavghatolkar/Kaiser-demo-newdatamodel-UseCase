@@ -332,7 +332,10 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { incoming_fileId: "834_UT_Audit.da" },
                 ]
-
+            } else if (element.key == Strings.Enrollment_FullFileCompare_Dashboard) {
+                data = [
+                    { incoming_fileId: "834_UT_Audit.da" },
+                ]
             } else if (element.key == Strings.Enrollment_eligibiltyDetails) {
                 data = [{
                     status: 'n',
