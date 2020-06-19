@@ -308,3 +308,8 @@
 .clickable1{
     cursor: pointer;
 }
+.summary-enrollment{
+    padding-left: 9px;
+    padding-right: 4px;
+    width: 15%;
+}

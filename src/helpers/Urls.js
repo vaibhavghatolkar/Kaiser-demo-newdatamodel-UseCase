@@ -53,6 +53,7 @@ const Urls = {
     _customEdits: _base_url + '/customEdits',
     _transaction834: _base_url + '/transaction834',
     _Payment820: _base_url + '/Payment820',
+    _transaction834 : _base_url + '/transaction834',
     
     _Response999 : base_url + '/common_data', 
     _transaction835: base_url + '/transaction835',

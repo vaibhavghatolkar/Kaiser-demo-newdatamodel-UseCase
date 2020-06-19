@@ -158,7 +158,26 @@ const Strings = {
     RDE:'RDE',
     ORU:'ORU',
     DFT:'DFT',
-    FHiR_API_management:'FHiR_API_management'
+    FHiR_API_management:'FHiR_API_management',
+    
+    FileCompareDashboard: 'FileCompareDashboard',
+    EnrollmentDetails : 'EnrollmentDetails',
+    
+    EthnicityMismatch:'EthnicityMismatch',
+    RateCode:'RateCodeMismatch',
+    SameGenderTwin:'SameGenderTwin',
+    Duplicate:'DuplicateInFile',
+    AddressMismatch:'AddressMismatchDelta',
+    DobMismatch:'DobMismatchDelta',
+    GenderMismatch:'GenderMismatchDelta',
+    Enrollment_eligibiltyDetails:'Enrollment_eligibiltyDetails',
+    Effective_date_Mismatch:'EffectiveDateMismatch',
+    House_Head_Mismatch:'HouseholdMismatch',
+    LoadtoQNXT:'LoadtoQNXT',
+    EnrollmentLoadException:'EnrollmentLoadException',
+    DualCodeMismatch: 'DualCodeMismatch',
+    CustomService: 'CustomService'
+    
 }
 
 export default Strings;
