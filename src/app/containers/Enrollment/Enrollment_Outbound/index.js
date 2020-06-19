@@ -892,15 +892,15 @@ export class Enrollment_Outbound extends React.Component {
             .then(res => {
                 let summary = []
                 let data = res.data.Dashboard834Count[0]
-                 let FileCount= res.data.FileLevelCount834[0]
+                let FileCount = res.data.FileLevelCount834[0]
 
 
                 summary = [
-                { name: 'Total Files', value: FileCount.TotalCount },
-                { name: 'Validated', value:FileCount.Validated },
-                { name: 'File In Error', value: FileCount.Error },
-                { name: 'Resubmit', value: data.Resubmit },
-                { name: 'Total Sent', value:FileCount.Validated },
+                    { name: 'Total Files', value: FileCount.TotalCount },
+                    { name: 'Validated', value: FileCount.Validated },
+                    { name: 'File In Error', value: FileCount.Error },
+                    { name: 'Resubmit', value: data.Resubmit },
+                    { name: 'Total Sent', value: FileCount.Validated },
 
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
@@ -1014,16 +1014,16 @@ export class Enrollment_Outbound extends React.Component {
             if (item.name == 'Total Files') {
                 addon = '/accept'
                 claimStatus = ''
-                EnrollmentStatus=''
+                EnrollmentStatus = ''
                 subtitle = ""
             } else if (item.name == 'File In Error') {
                 claimStatus = 'Error'
                 subtitle = "Total Errors"
-                EnrollmentStatus=''
+                EnrollmentStatus = ''
             } else if (item.name == 'Resubmit') {
                 claimStatus = ''
                 subtitle = "Resubmit"
-                EnrollmentStatus="Ready to Resubmit"
+                EnrollmentStatus = "Ready to Resubmit"
             }
             else if (item.name == 'Total Sent') {
                 // claimStatus = 'Total Sent'
@@ -1032,7 +1032,7 @@ export class Enrollment_Outbound extends React.Component {
             else if (item.name == 'Validated') {
                 claimStatus = 'Validated'
                 subtitle = "Validated"
-                EnrollmentStatus=''
+                EnrollmentStatus = ''
             }
             data = [
                 {
@@ -1043,7 +1043,7 @@ export class Enrollment_Outbound extends React.Component {
                     endDate: endDate,
                     transactionId: 'n',
                     status: claimStatus,
-                    EnrollmentStatus:EnrollmentStatus,
+                    EnrollmentStatus: EnrollmentStatus,
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent
@@ -1094,6 +1094,7 @@ export class Enrollment_Outbound extends React.Component {
             let color = "var(--red)"
             let Status = ''
             let EnrollmentStatus = ''
+            let unclick = ''
             if (item.name == 'Add') {
                 claimStatus = '021'
                 subtitle = "Add"
@@ -1134,15 +1135,12 @@ export class Enrollment_Outbound extends React.Component {
                 EnrollmentStatus = 'Ready to Resubmit'
                 subtitle = "Resubmit Count"
                 color = "var(--green)"
-
-            }
-            else if (item.name == 'Total Sent') {
+            } else if (item.name == 'Total Sent') {
                 Status = ''
                 claimStatus = ''
                 EnrollmentStatus = ''
                 subtitle = ""
-                color = "var(--green)"
-
+                unclick = "var(--main-bg-color)"
             }
 
 
@@ -1159,7 +1157,7 @@ export class Enrollment_Outbound extends React.Component {
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent,
-                    EnrollmentStatus:EnrollmentStatus,
+                    EnrollmentStatus: EnrollmentStatus,
                 },
             ]
 
@@ -1169,6 +1167,7 @@ export class Enrollment_Outbound extends React.Component {
                     url={Strings.Enrollment_Details_Outbound}
                     data={sendData}
                     color={color}
+                    unclick={unclick}
                 />
             )
         })
@@ -1179,6 +1178,7 @@ export class Enrollment_Outbound extends React.Component {
             </div>
         )
     }
+
     _getClaimCounts = async () => {
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -1220,7 +1220,7 @@ export class Enrollment_Outbound extends React.Component {
                         Hipaas_Count: res.data.EnrollmentDashboardTable834[0].Hipaas_Count,
                         ErrorCount: res.data.EnrollmentDashboardTable834[0].ErrorCount,
                         ResubmitCount: res.data.EnrollmentDashboardTable834[0].ResubmitCount,
-                        SentCount:res.data.EnrollmentDashboardTable834[0].SentCount,
+                        SentCount: res.data.EnrollmentDashboardTable834[0].SentCount,
 
                     }, () => {
                         this._getCounts()
@@ -1233,12 +1233,12 @@ export class Enrollment_Outbound extends React.Component {
     }
 
     renderClaimDetails = () => {
-    
+
         let stage_1 = [
-            { 'header': 'HiPaaS Received Status' },    
-            { 'name': ' Received From QNXT', 'value': this.state.X12_Count},       
-            { 'name': ' HiPaaS Received', 'value': this.state.Hipaas_Count , 'isClick': true},
-           
+            { 'header': 'HiPaaS Received Status' },
+            { 'name': ' Received From QNXT', 'value': this.state.X12_Count },
+            { 'name': ' HiPaaS Received', 'value': this.state.Hipaas_Count, 'isClick': true },
+
             // { 'name': 'X12 Count', 'value': this.state.X12_Count },
             // { 'name': 'HiPaaS Count', 'value': this.state.Hipaas_Count, 'isClick': true },
         ]
@@ -1258,7 +1258,7 @@ export class Enrollment_Outbound extends React.Component {
         let stage_4 = [
             { 'header': '' },
             { 'name': 'Total Sent', 'value': this.state.SentCount },
-        
+
 
         ]
 
@@ -1641,7 +1641,7 @@ export class Enrollment_Outbound extends React.Component {
             // { headerName: "Submitter", field: "Subscriber",width:120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }  },
             { headerName: "Total Enrollments", field: "Enrollment", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Errors", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "File Status", field: "FileStatus",  flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "File Status", field: "FileStatus", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "", field: "CompareFile", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer', fontWeight: 'bold' } },
 
 
@@ -1684,7 +1684,7 @@ export class Enrollment_Outbound extends React.Component {
                             }
                             if (event.colDef.headerName == '') {
                                 this.setState({
-                                    incoming_fileId: event.data.FileName=="834_UT_Audit.da" ||  event.data.FileName=="834_UT_Daily.da" ?  event.data.FileName :""
+                                    incoming_fileId: event.data.FileName == "834_UT_Audit.da" || event.data.FileName == "834_UT_Daily.da" ? event.data.FileName : ""
                                 }, () => {
                                     this.gotocomparefile()
                                 })
@@ -1700,7 +1700,7 @@ export class Enrollment_Outbound extends React.Component {
         )
     }
     gotocomparefile = (data) => {
-      
+
         let sendData = []
         if (data && data.length > 0) {
             sendData = data
