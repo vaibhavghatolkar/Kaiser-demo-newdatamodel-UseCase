@@ -16,8 +16,10 @@ export class PatientDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            patientId_id: '8100',
-            patientId: "10019",
+            // patientId_id: '8100',
+            // patientId: "10019",
+            patientId_id: props && props.location && props.location.state && props.location.state.patientId_id ? props.location.state.patientId_id : '8100',
+            patientId: props && props.location && props.location.state && props.location.state.patientId ? props.location.state.patientId : '10019',
             medicationList: [],
             observationList: [],
             claimList: [],
@@ -81,13 +83,52 @@ export class PatientDashboard extends React.Component {
             transactionId: '',
             claimStatus: '',
             apiflag: '',
-            providerName: ''
+            providerName: '',
+            Observation: 0,
+            Eligibility: 0,
+            MedicationReq: 0,
+            ClaimCount: 0,
         }
     }
 
     componentDidMount() {
         this.getData()
         this.getpatientdetails()
+        this.getCount()
+    }
+
+    getCount = () => {
+
+        let query = `{FHIRCount(Patient:"${this.state.patientId_id}") {
+            Observation
+            Eligibility
+            MedicationReq
+            Claim
+          }}`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch('http://10.0.1.248:30514/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.FHIRCount && res.data.FHIRCount.length > 0) {
+                    this.setState({
+                        Observation: res.data.FHIRCount[0].Observation,
+                        Eligibility: res.data.FHIRCount[0].Eligibility,
+                        MedicationReq: res.data.FHIRCount[0].MedicationReq,
+                        ClaimCount: res.data.FHIRCount[0].Claim,
+                        Immunization : res.data.FHIRCount[0].Claim == 0 ? true : false
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
     }
 
     get_Error = (ClaimID, seqid, fileID) => {
@@ -989,12 +1030,12 @@ export class PatientDashboard extends React.Component {
         let row = []
         let summary = []
         summary = [
-            { name: 'Observation', value: 2, color: '#00C0EF' },
+            { name: 'Observation', value: this.state.Observation, color: '#00C0EF' },
             { name: 'Immunization', value: 3, color: '#DD4B39' },
             { name: 'Allergy Intolerance', value: 3, color: '#615CA8' },
-            { name: 'Eligibility', value: 2, color: '#39CCCC' },
-            { name: 'Claims', value: 1, color: '#F39C12' },
-            { name: 'Medication Request', value: 1, color: '#01A65A' },
+            { name: 'Eligibility', value: this.state.Eligibility, color: '#39CCCC' },
+            { name: 'Claims', value: this.state.ClaimCount, color: '#F39C12' },
+            { name: 'Medication Request', value: this.state.MedicationReq, color: '#01A65A' },
             { name: 'Condition', value: 3, color: '#8FEA7C' },
         ]
         let array = summary
@@ -1465,7 +1506,7 @@ export class PatientDashboard extends React.Component {
                 {this.rendersepsis()}
                 {this.state.Eligibilty ? this.Eligibilty(this.state.conditionArray) : null}
                 {/* {this.state.Claim ? this.Claim() : null} */}
-                {this.state.Claim ? this.renderClaims() : null}
+                {this.state.Claim && this.state.ClaimCount > 0 ? this.renderClaims() : null}
                 {this.state.showMedicationTable ? this.showMedicationTable() : null}
                 {this.state.showObservationTable ? this.showObservationTable() : null}
                 {this.state.Immunization ? this.Immunization() : null}
