@@ -30,15 +30,15 @@ import { Outbound_277CAReponse } from './app/containers/Outbound_277CAResponse';
 import { Outbound_response_999 } from './app/containers/Outbound_999_response'
 
 import { NPILook_Up } from './app/containers/NPILook_Up';
-import {View_CustomEditsNew} from './app/containers/view_CustomEditNew'
+import { View_CustomEditsNew } from './app/containers/view_CustomEditNew'
 import { Claim_Details_837_Grid } from './app/containers/RealTime_837_Claim/Claim_Details_837_Grid'
 import { RealTimeDashboard_New } from './app/containers/RealTime_837_Claim/RealTimeDashboard_New';
 import { Payment_details } from './app/containers/ClaimPayment_835/PaymentDetails';
 import { Load_Exception } from './app/containers/RealTime_837_Claim/Load_Exception';
-import {AuditSummary835} from './app/containers/ClaimPayment_835/AuditSummary835'
+import { AuditSummary835 } from './app/containers/ClaimPayment_835/AuditSummary835'
 import { ClaimPayment_835_Exception } from './app/containers/ClaimPayment_835/ClaimPayment_835_Exception';
 import { ClaimPayment_835_ProcessingSummary } from './app/containers/ClaimPayment_835/ClaimPayment_835_ProcessingSummary';
-import {viewCustomEdit_New} from './app/containers/viewCustomEdit_new'
+import { viewCustomEdit_New } from './app/containers/viewCustomEdit_new'
 
 import { HealthCare278 } from './app/containers/Health_care_278_dashboard'
 import { ServiceDetails278 } from './app/containers/Service_details278'
@@ -63,18 +63,18 @@ import { EncounterAuditSummary } from './app/containers/RealTime_Encounter/Encou
 import { EncounterDashboard_New } from './app/containers/RealTime_Encounter/EncounterDashboard_New';
 import { Outbound_Encounter_updated_AuditSummary } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_AuditSummary';
 
-import {EnrollmentDashboard} from './app/containers/Enrollment/EnrollmentDashboard'
-import {Files_834} from './app/containers/Files_834'
-import {PremiumPaymentLoad} from './app/containers/820_Dashboard'
-import{PremiumPaymentLoadDetails} from './app/containers/PremiumPaymentLoadDetails'
-import {MMRFileLoad} from './app/containers/MmrFileLoad'
-import{MMRFileLoadDetails} from './app/containers/MMRFileLoadDetails'
-import {PremiumPaymentFileCompare} from './app/containers/PremiumPaymentFileCompare'
-import {RateCode820Mismatch} from './app/containers/820_RateCode_mismatch'
-import {ActiveQnxt820} from './app/containers/ActiveQnxt820'
-import {TermQnxt820} from './app/containers/TermQnxt820'
-import {OutboundActive} from './app/containers/OutboundActive'
-import {OutboundTerm} from './app/containers/OutboundTerm'
+import { EnrollmentDashboard } from './app/containers/Enrollment/EnrollmentDashboard'
+import { Files_834 } from './app/containers/Files_834'
+import { PremiumPaymentLoad } from './app/containers/820_Dashboard'
+import { PremiumPaymentLoadDetails } from './app/containers/PremiumPaymentLoadDetails'
+import { MMRFileLoad } from './app/containers/MmrFileLoad'
+import { MMRFileLoadDetails } from './app/containers/MMRFileLoadDetails'
+import { PremiumPaymentFileCompare } from './app/containers/PremiumPaymentFileCompare'
+import { RateCode820Mismatch } from './app/containers/820_RateCode_mismatch'
+import { ActiveQnxt820 } from './app/containers/ActiveQnxt820'
+import { TermQnxt820 } from './app/containers/TermQnxt820'
+import { OutboundActive } from './app/containers/OutboundActive'
+import { OutboundTerm } from './app/containers/OutboundTerm'
 import { Outbound_Encounter_BatchDetails837 } from './app/containers/RealTime_Encounter/Outbound_Encounter_Batch_Details_837';
 import { Outbound_Encounter_updated_FileDashboard } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_FileDashboard';
 import { consent_management } from './app/containers/consent_management';
@@ -84,11 +84,31 @@ import{DFT} from './app/containers/HL7/DFT'
 import{FHiR_API_management} from './app/containers/FHiR_API_management'
 import{Enrollment_Outbound} from './app/containers/Enrollment/Enrollment_Outbound'
 import{Enrollment_Details_Outbound} from './app/containers/Enrollment/Enrollment_Details_Outbound'
+// import { RDE } from './app/containers/HL7/Medications'
+// import { ORU } from './app/containers/HL7/ORU'
+// import { DFT } from './app/containers/HL7/DFT'
+// import { FHiR_API_management } from './app/containers/FHiR_API_management'
+
+import { EthnicityMismatch } from './app/containers/EthnicityMismatch';
+import { RateCode } from './app/containers/RateCode';
+import { SameGenderTwin } from './app/containers/SameGenderTwin';
+import { Duplicate } from './app/containers/Duplicate';
+import { AddressMismatch } from './app/containers/Address';
+import { DobMismatch } from './app/containers/DOB_Mismatch';
+import { GenderMismatch } from './app/containers/Gender_mismatch';
+import { Effective_date_Mismatch } from './app/containers/Effective_date_Mismatch';
+import { LoadtoQNXT } from './app/containers/LoadtoQNXT';
+import { EnrollmentLoadException } from './app/containers/EnrollmentLoadException';
+import { DualCodeMismatch } from './app/containers/DualCode_Mismatch';
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
 
 import { LicenseManager } from "ag-grid-enterprise";
+import { Enrollment_FullFileCompare } from './app/containers/Enrollment/Enrollment_FullFileCompare';
+import { Enrollment_eligibiltyDetails } from './app/containers/Enrollment/Enrollment_eligibiltyDetails';
+import { House_Head_Mismatch } from './app/containers/House_Head_Mismatch';
+import { CustomService } from './app/containers/CustomService';
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
 class PrivateRoute extends React.Component {
@@ -107,7 +127,7 @@ class PrivateRoute extends React.Component {
 
             loggedIn,
             // timeout: 1200000,
-             timeOut: 1000*600,
+            timeOut: 1000 * 600,
             isTimedOut: false
         };
 
@@ -198,13 +218,13 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.RealTime270} component={RealTime276} />
                                 <Route path={'/' + Strings.claimsAudit} component={AuditSummary} />
                                 <Route path={'/' + Strings.editConfiguration} component={EditConfiguration} />
-                                <Route path={'/'+ Strings.tradingPartnerDetails} component={StatewiseTradingPartner} />
+                                <Route path={'/' + Strings.tradingPartnerDetails} component={StatewiseTradingPartner} />
                                 <Route path={'/' + Strings.viewEdit} component={ViewEdit} />
                                 <Route path={'/' + Strings.transactionSetup} component={TransactionSetup} />
                                 <Route path={'/' + Strings.companionGuide} component={CompanionGuide} />
                                 <Route path={'/' + Strings.covered} component={CoveredICDCode} />
                                 <Route path={'/' + Strings.noncovered} component={NonCovered} />
-                                <Route path={'/'+ Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
+                                <Route path={'/' + Strings.tradingPartnerConfiguration} component={TradingPartnerConfiguration} />
                                 <Route path={'/' + Strings.ViewCustomEdits} component={ViewCustomEdits} />
                                 <Route path={'/' + Strings.ElilgibilityDetails270} component={EligibilityDetails} />
                                 <Route path={'/' + Strings.elilgibilityErrors270} component={EligibilityDetails} />
@@ -215,23 +235,23 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.MenuCreate} component={MenuCreate} />
 
                                 <Route path={'/' + Strings.RealTimeDashboard} component={RealTimeDashboard_New} />
-                                <Route path={'/'+ Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
-                                <Route path={'/'+ Strings._ClaimProcessingSummary} component={ClaimProcessingSummary} />
+                                <Route path={'/' + Strings.ClaimProcessingSummary} component={ClaimProcessingSummary} />
+                                <Route path={'/' + Strings._ClaimProcessingSummary} component={ClaimProcessingSummary} />
                                 <Route path={'/' + Strings.MenuManagement} component={MenuManagement} />
 
                                 <Route path={'/' + Strings.claimPayment_835} component={ClaimPaymentDashboard} />
                                 <Route path={'/' + Strings.claimPayment_835_details} component={ClaimPaymentDetails} />
                                 <Route path={'/' + Strings.Outbound_277CAResponse} component={Outbound_277CAReponse} />
                                 <Route path={'/' + Strings.Outbound_response_999} component={Outbound_response_999} />
-                              
-                                
+
+
                                 <Route path={'/' + Strings.NPILook_Up} component={NPILook_Up} />
                                 <Route path={'/' + Strings.View_CustomEditsNew} component={View_CustomEditsNew} />
                                 <Route path={'/' + Strings.Claim_Details_837_Grid} component={Claim_Details_837_Grid} />
                                 <Route path={'/' + Strings.Payment_details} component={Payment_details} />
                                 <Route path={'/' + Strings.Load_Exception} component={Load_Exception} />
                                 <Route path={'/' + Strings.AuditSummary835} component={AuditSummary835} />
-                                    
+
                                 <Route path={'/' + Strings.ClaimPayment_835_Exception} component={ClaimPayment_835_Exception} />
                                 <Route path={'/' + Strings.ClaimPayment_835_ProcessingSummary} component={ClaimPayment_835_ProcessingSummary} />
                                 <Route path={'/' + Strings._ClaimPayment_835_ProcessingSummary} component={ClaimPayment_835_ProcessingSummary} />
@@ -245,7 +265,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._Inbound_response_999} component={Outbound_response_999} />
                                 <Route path={'/' + Strings._Load_Exception} component={Load_Exception} />
                                 <Route path={'/' + Strings.viewCustomEdit_New} component={viewCustomEdit_New} />
-                                
+
                                 <Route path={'/' + Strings.healthCare278} component={HealthCare278} />
                                 <Route path={'/' + Strings.serviceDetails278} component={ServiceDetails278} />
                                 <Route path={'/' + Strings.encounterLoadException} component={Encounter_Load_Exception} />
@@ -260,7 +280,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Inbound_EncounterDetails} component={EncounterDetails_837_Grid} />
                                 <Route path={'/' + Strings.Inbound_Encounter_Audit} component={EncounterAuditSummary} />
                                 <Route path={'/' + Strings.Inbound_EncounterDashboard} component={EncounterDashboard_New} />
-                                                                
+
                                 <Route path={'/' + Strings.EnrollmentDashboard} component={EnrollmentDashboard} />
                                 <Route path={'/' + Strings.enrollmentLoadDetails} component={Files_834} />
                                 <Route path={'/' + Strings.PremiumPaymentLoad} component={PremiumPaymentLoad} />
@@ -274,12 +294,12 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.OutboundActive} component={OutboundActive} />
                                 <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
                                 <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
-                                 <Route path={'/' + Strings.Outbound_Encounter_updated_FileDashboard} component={Outbound_Encounter_updated_FileDashboard} />
+                                <Route path={'/' + Strings.Outbound_Encounter_updated_FileDashboard} component={Outbound_Encounter_updated_FileDashboard} />
                                 <Route path={'/' + Strings.consent_management} component={consent_management} />
                                 <Route path={'/' + Strings.ADT} component={ADT} />
                                 <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />
-                                <Route path={'/' + Strings.NewPatient} component={NewPatient } />
+                                <Route path={'/' + Strings.NewPatient} component={NewPatient} />
                                 <Route path={'/' + Strings.PatientDetails} component={PatientDetails} />
                                 <Route path={'/' + Strings.matchClaims} component={MatchClaims} />
                                 <Route path={'/' + Strings.researchQueue} component={ResearchQueue} />
@@ -294,6 +314,28 @@ class PrivateRoute extends React.Component {
                             
                                 
                             
+
+                                <Route path={'/' + Strings.Enrollment_FullFileCompare} component={Enrollment_FullFileCompare} />
+                                <Route path={'/' + Strings.Enrollment_eligibiltyDetails} component={Enrollment_eligibiltyDetails} />
+
+                                <Route path={'/' + Strings.EthnicityMismatch} component={EthnicityMismatch} />
+                                <Route path={'/' + Strings.RateCode} component={RateCode} />
+                                <Route path={'/' + Strings.SameGenderTwin} component={SameGenderTwin} />
+                                <Route path={'/' + Strings.Duplicate} component={Duplicate} />
+
+                                <Route path={'/' + Strings.AddressMismatch} component={AddressMismatch} />
+                                <Route path={'/' + Strings.DobMismatch} component={DobMismatch} />
+                                <Route path={'/' + Strings.GenderMismatch} component={GenderMismatch} />
+                                <Route path={'/' + Strings.Effective_date_Mismatch} component={Effective_date_Mismatch} />
+
+                                <Route path={'/' + Strings.LoadtoQNXT} component={LoadtoQNXT} />
+                                <Route path={'/' + Strings.EnrollmentLoadException} component={EnrollmentLoadException} />
+                                <Route path={'/' + Strings.DualCodeMismatch} component={DualCodeMismatch} />
+
+                                <Route path={'/' + Strings.House_Head_Mismatch} component={House_Head_Mismatch} />
+                                <Route path={'/' + Strings.CustomService} component={CustomService} />
+
+
                             </div>
                         </div>
                     </div>

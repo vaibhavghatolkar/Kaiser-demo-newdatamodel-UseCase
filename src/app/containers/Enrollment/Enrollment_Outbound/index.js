@@ -1057,7 +1057,7 @@ export class Enrollment_Outbound extends React.Component {
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Error Resolved'
+                        item.name != 'Total Sent'
                     }
                     _data={data}
                     header_text={item.name}

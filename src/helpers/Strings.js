@@ -160,7 +160,26 @@ const Strings = {
     DFT:'DFT',
     FHiR_API_management:'FHiR_API_management',
     Enrollment_Outbound:'Enrollment_Outbound',
-    Enrollment_Details_Outbound:'Enrollment_Details_Outbound'
+    Enrollment_Details_Outbound:'Enrollment_Details_Outbound',
+    
+    Enrollment_FullFileCompare: 'Enrollment_FullFileCompare',
+    EnrollmentDetails : 'EnrollmentDetails',
+    
+    EthnicityMismatch:'EthnicityMismatch',
+    RateCode:'RateCodeMismatch',
+    SameGenderTwin:'SameGenderTwin',
+    Duplicate:'DuplicateInFile',
+    AddressMismatch:'AddressMismatchDelta',
+    DobMismatch:'DobMismatchDelta',
+    GenderMismatch:'GenderMismatchDelta',
+    Enrollment_eligibiltyDetails:'Enrollment_eligibiltyDetails',
+    Effective_date_Mismatch:'EffectiveDateMismatch',
+    House_Head_Mismatch:'HouseholdMismatch',
+    LoadtoQNXT:'LoadtoQNXT',
+    EnrollmentLoadException:'EnrollmentLoadException',
+    DualCodeMismatch: 'DualCodeMismatch',
+    CustomService: 'CustomService'
+    
 }
 
 export default Strings;

@@ -158,7 +158,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 113) { name = Strings.Outbound_Covered }
         else if (index == 114) { name = Strings.Outbound_NonCovered }
         else if (index == 115) { name = Strings.Outbound_CompanionGuide }
-        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }      
+        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
         else if (index == 54) { name = Strings.Outbound_Encounter_ClaimDetails837 }
         else if (index == 133) { name = Strings.NPILook_Up }
         else if (index == 134) { name = Strings.Outbound_NPILook_Up }
@@ -188,12 +188,27 @@ export class DynamicSidebar extends React.Component {
         else if (index == 151) { name = Strings.TermQnxt820 }
         else if (index == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
         else if (index == 160) { name = Strings.Outbound_Encounter_RealTimeDashboard }
-        else if (index == 53) { name = Strings.Outbound_Encounter_updated_FileDashboard }        
+        else if (index == 53) { name = Strings.Outbound_Encounter_updated_FileDashboard }
         else if (index == 166) { name = Strings.ORU }
         else if (index == 167) { name = Strings.RDE }
         else if (index == 168) { name = Strings.DFT }
         else if (index == 169) { name = Strings.consent_management }
-        else if (index == 172) { name = Strings.FHiR_API_management }       
+        else if (index == 172) { name = Strings.FHiR_API_management }
+
+        else if (index == 173) { name = Strings.Enrollment_FullFileCompare }
+        else if (index == 174) { name = Strings.Enrollment_eligibiltyDetails }
+        else if (index == 175) { name = Strings.EthnicityMismatch }
+        else if (index == 176) { name = Strings.RateCode }
+        else if (index == 177) { name = Strings.AddressMismatch }
+        else if (index == 178) { name = Strings.DobMismatch }
+        else if (index == 179) { name = Strings.GenderMismatch }
+        else if (index == 180) { name = Strings.SameGenderTwin }
+        else if (index == 181) { name = Strings.Duplicate }
+        else if (index == 182) { name = Strings.LoadtoQNXT }
+        else if (index == 183) { name = Strings.EnrollmentLoadException }
+        else if (index == 184) { name = Strings.DualCodeMismatch }
+        else if (index == 185) { name = Strings.Effective_date_Mismatch }
+        else if (index == 188) { name = Strings.CustomService }
         return name
     }
 
@@ -313,7 +328,25 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { flag999: '0' },
                 ]
+            } else if (element.key == Strings.Enrollment_FullFileCompare) {
+                data = [
+                    { incoming_fileId: "834_UT_Audit.da" },
+                ]
+
+            } else if (element.key == Strings.Enrollment_eligibiltyDetails) {
+                data = [{
+                    status: 'n',
+                    claimStatus: 'n',
+                    inDHS: 'Y',
+                    Audit: 'n',
+                    Add: 'n',
+                    flag: 'Y',
+                    inQnxt: 'n',
+                    MonthlyStatus: 'n',
+                    incoming_fileId: '834_UT_Audit.da'
+                }]
             }
+
             else {
                 addon = ''
             }
