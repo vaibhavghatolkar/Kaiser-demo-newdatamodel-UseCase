@@ -871,21 +871,14 @@ export class Enrollment_Details_Outbound extends React.Component {
     renderFileLevelTable() {
 
         let columnDefs = [
-            { headerName: "Sent File", field: "FileName", width: 350, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Sent File Name", field: "FileName", width: 350, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Sent Date", field: "Date", width: 180, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "Submitter", field: "Subscriber",width:120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }  },
             { headerName: "Total Enrollments", field: "Enrollment", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-           { headerName: "File In Errors", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Errors", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "File Status", field: "FileStatus",  flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "", field: "CompareFile", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer', fontWeight: 'bold' } },
 
-            // { headerName: "File Name", field: "FileName", width: 360, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            // { headerName: "File Date", field: "ate", width: 200 },
-            // // { headerName: "Submitter", field: "Subscriber", width: 200 },
-            // // { headerName: "Enrollments", field: "Enrollment", },
-            // { headerName: "L1 L2 Errors", field: "Error", flex: 1 },
-
-            // // { headerName: "File Status", field: "FileStatus", flex: 1 },
         ]
 
         return (
@@ -913,7 +906,7 @@ export class Enrollment_Details_Outbound extends React.Component {
                         icons={this.state.icons}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Sent File') {
+                            if (event.colDef.headerName == 'Sent File Name') {
                                 this.setState({
                                     showClaims: true,
                                     showerror: false,
@@ -1152,7 +1145,7 @@ export class Enrollment_Details_Outbound extends React.Component {
             title = "Enrollment Errors  ";
         }
         else {
-            title = "Enrollment Load Details  ";
+            title = "Enrollment Details";
         }
         return (
 
