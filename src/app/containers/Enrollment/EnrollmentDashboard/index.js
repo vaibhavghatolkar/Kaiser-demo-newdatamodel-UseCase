@@ -1660,8 +1660,6 @@ export class EnrollmentDashboard extends React.Component {
         if (data && data.length > 0) {
             sendData = data
         } else {
-
-
             sendData = [
                 {
                     incoming_fileId: this.state.incoming_fileId,

@@ -160,7 +160,7 @@ const Strings = {
     DFT:'DFT',
     FHiR_API_management:'FHiR_API_management',
     
-    FileCompareDashboard: 'FileCompareDashboard',
+    Enrollment_FullFileCompare: 'Enrollment_FullFileCompare',
     EnrollmentDetails : 'EnrollmentDetails',
     
     EthnicityMismatch:'EthnicityMismatch',

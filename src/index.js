@@ -304,7 +304,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.DFT} component={DFT} />
                                 <Route path={'/' + Strings.FHiR_API_management} component={FHiR_API_management} />
 
-                                <Route path={'/' + Strings.FileCompareDashboard} component={Enrollment_FullFileCompare} />
+                                <Route path={'/' + Strings.Enrollment_FullFileCompare} component={Enrollment_FullFileCompare} />
                                 <Route path={'/' + Strings.Enrollment_eligibiltyDetails} component={Enrollment_eligibiltyDetails} />
 
                                 <Route path={'/' + Strings.EthnicityMismatch} component={EthnicityMismatch} />

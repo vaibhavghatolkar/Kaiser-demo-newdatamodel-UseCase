@@ -98,8 +98,8 @@ export class Enrollment_FullFileCompare extends React.Component {
             Hipaas_Count: 0,
             domLayout: 'autoHeight',
             FileName: [],
-            // selected_FileID: (props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].incoming_fileId == "") ? "" : props.location.state.data[0].incoming_fileId,
-            selected_FileID:'834_UT_Audit.da',
+            selected_FileID: (props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].incoming_fileId == "") ? "" : props.location.state.data[0].incoming_fileId,
+            // selected_FileID:'834_UT_Audit.da',
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,

@@ -195,7 +195,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 169) { name = Strings.consent_management }
         else if (index == 172) { name = Strings.FHiR_API_management }
 
-        else if (index == 173) { name = Strings.FileCompareDashboard }
+        else if (index == 173) { name = Strings.Enrollment_FullFileCompare }
         else if (index == 174) { name = Strings.Enrollment_eligibiltyDetails }
         else if (index == 175) { name = Strings.EthnicityMismatch }
         else if (index == 176) { name = Strings.RateCode }
