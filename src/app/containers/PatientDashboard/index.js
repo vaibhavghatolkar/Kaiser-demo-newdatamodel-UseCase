@@ -18,8 +18,8 @@ export class PatientDashboard extends React.Component {
         this.state = {
             // patientId_id: '8100',
             // patientId: "10019",
-            patientId_id: props && props.location && props.location.state && props.location.state.patientId_id ? props.location.state.patientId_id : '8100',
-            patientId: props && props.location && props.location.state && props.location.state.patientId ? props.location.state.patientId : '10019',
+            patientId_id: props && props.location && props.location.state && props.location.state.patientId_id ? props.location.state.patientId_id : 'CUSTOM-67633',
+            patientId: props && props.location && props.location.state && props.location.state.patientId ? props.location.state.patientId : '10011',
             medicationList: [],
             observationList: [],
             claimList: [],
