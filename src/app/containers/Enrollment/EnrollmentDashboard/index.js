@@ -894,7 +894,7 @@ export class EnrollmentDashboard extends React.Component {
                 summary = [
                     { name: 'Total Files', value: data.TotalFiles },
                     // { name: 'Total Errors', value: data.TotalError },
-                 { name: 'L1 L2 Errors', value: data.TotalError },
+                    { name: 'L1 L2 Errors', value: data.TotalError },
                     { name: 'Resubmit', value: data.Resubmit },
 
                 ]
@@ -1047,7 +1047,6 @@ export class EnrollmentDashboard extends React.Component {
                     value={item.value}
                     isenrollment={true}
                     second_val={item.second_val}
-
                     url={url ? url : Strings.enrollmentLoadDetails}
                 />
 
@@ -1055,7 +1054,7 @@ export class EnrollmentDashboard extends React.Component {
         });
 
         return (
-            <div className="row padding-left col-7">
+            <div className="row padding-left">
                 {row}
             </div>
         )
@@ -1640,7 +1639,7 @@ export class EnrollmentDashboard extends React.Component {
                             }
                             if (event.colDef.headerName == '') {
                                 this.setState({
-                                    incoming_fileId: event.data.FileName=="834_UT_Audit.da" ||  event.data.FileName=="834_UT_Daily.da" ?  event.data.FileName :""
+                                    incoming_fileId: event.data.FileName == "834_UT_Audit.da" || event.data.FileName == "834_UT_Daily.da" ? event.data.FileName : ""
                                 }, () => {
                                     this.gotocomparefile()
                                 })
@@ -1656,7 +1655,7 @@ export class EnrollmentDashboard extends React.Component {
         )
     }
     gotocomparefile = (data) => {
-      
+
         let sendData = []
         if (data && data.length > 0) {
             sendData = data
