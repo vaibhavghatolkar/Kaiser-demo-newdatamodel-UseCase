@@ -1636,11 +1636,11 @@ export class Enrollment_Outbound extends React.Component {
     _renderList = () => {
 
         let columnDefs = [
-            { headerName: "Sent File", field: "FileName", width: 350, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Sent File Name", field: "FileName", width: 350, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Sent Date", field: "Date", width: 180, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "Submitter", field: "Subscriber",width:120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }  },
             { headerName: "Total Enrollments", field: "Enrollment", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "File In Error", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Errors", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "File Status", field: "FileStatus",  flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "", field: "CompareFile", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer', fontWeight: 'bold' } },
 
@@ -1675,7 +1675,7 @@ export class Enrollment_Outbound extends React.Component {
                         enableCellTextSelection={true}
 
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Sent File') {
+                            if (event.colDef.headerName == 'Sent File Name') {
                                 this.setState({
                                     incoming_fileId: event.data.FileID
                                 }, () => {
@@ -1756,7 +1756,7 @@ export class Enrollment_Outbound extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Enrollment File Load </h5>
+                <h5 className="headerText">Enrollment Dashboard </h5>
 
                 <div className="row">
                     <div className="col-12">
