@@ -208,6 +208,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 183) { name = Strings.EnrollmentLoadException }
         else if (index == 184) { name = Strings.DualCodeMismatch }
         else if (index == 185) { name = Strings.Effective_date_Mismatch }
+        else if (index == 186) { name = Strings.House_Head_Mismatch }
         else if (index == 188) { name = Strings.CustomService }
         return name
     }
