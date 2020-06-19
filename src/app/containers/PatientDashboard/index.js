@@ -746,7 +746,7 @@ export class PatientDashboard extends React.Component {
         ]
         return (
             <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Immunization</h6>
+                <h6>Allergy Intolerance</h6>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={columnDefs}
@@ -835,7 +835,7 @@ export class PatientDashboard extends React.Component {
         ]
         return (
             <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Immunization</h6>
+                <h6>Condition</h6>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={columnDefs}
@@ -991,7 +991,7 @@ export class PatientDashboard extends React.Component {
         summary = [
             { name: 'Observation', value: 2, color: '#00C0EF' },
             { name: 'Immunization', value: 3, color: '#DD4B39' },
-            { name: 'Allergy Tolerance', value: 3, color: '#615CA8' },
+            { name: 'Allergy Intolerance', value: 3, color: '#615CA8' },
             { name: 'Eligibility', value: 2, color: '#39CCCC' },
             { name: 'Claims', value: 1, color: '#F39C12' },
             { name: 'Medication Request', value: 1, color: '#01A65A' },
@@ -1029,7 +1029,7 @@ export class PatientDashboard extends React.Component {
                         }, () => {
                             if (item.name == 'Observation') { this.onClickshowObservationTable() }
                             else if (item.name == 'Immunization') { this.onClickImmunization() }
-                            else if (item.name == 'Allergy Tolerance') { this.onClickshowAllergyIntoleranceTable() }
+                            else if (item.name == 'Allergy Intolerance') { this.onClickshowAllergyIntoleranceTable() }
                             else if (item.name == 'Eligibility') { this.onClickEligibilty() }
                             else if (item.name == 'Claims') { this.onClickClaim() }
                             else if (item.name == 'Medication Request') { this.onClickshowMedicationTable() }
@@ -1269,7 +1269,7 @@ export class PatientDashboard extends React.Component {
           }`
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="font-size">Claim  Information</h6>
+                <h6>Claim  Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
