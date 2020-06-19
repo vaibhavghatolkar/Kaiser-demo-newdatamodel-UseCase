@@ -23,10 +23,11 @@ import { MDBProgress } from 'mdbreact';
 import { Filters } from '../../../components/Filters';
 
 let val = ''
-export class EnrollmentDashboard extends React.Component {
+export class Enrollment_eligibiltyDetails extends React.Component {
 
     constructor(props) {
         super(props);
+console.log("afkjsakffsjklsfjsalkfjslf" ,props.location.state.data[0].incoming_fileId)
         this.state = {
             claimsList: [],
             summaryList: [],
@@ -49,7 +50,7 @@ export class EnrollmentDashboard extends React.Component {
             chartType: 'Monthwise',
             selectedTradingPartner: '',
             incoming_fileId: '',
-            State: '',
+            State: 'UT',
             Months: 0,
             accepted: 0,
             rejected: 0,
@@ -59,6 +60,7 @@ export class EnrollmentDashboard extends React.Component {
             ClaimBarChart: [],
             claimLabels: [],
             complience: [],
+
             //////////----------table----
             Organization: '',
             Service_startDate: '',
@@ -90,7 +92,16 @@ export class EnrollmentDashboard extends React.Component {
             X12_Count: 0,
             Hipaas_Count: 0,
             domLayout: 'autoHeight',
-
+            FileName: [],
+            QNXTStatus2: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].status != 'n'  ? props.location.state.data[0].status : '',
+            QNXTStatus1: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].claimStatus != 'n'   ? props.location.state.data[0].claimStatus : '',
+            inDHS: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].inDHS != 'n'  ? props.location.state.data[0].inDHS : '',
+            Audit: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].Audit != 'n'   ? props.location.state.data[0].Audit : '',
+            Add: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].Add != 'n'   ? props.location.state.data[0].Add : '',
+            flag: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].flag != 'n'  ? props.location.state.data[0].flag : '',
+            inQnxt: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].inQnxt != 'n'   ? props.location.state.data[0].inQnxt : '',
+            MonthlyStatus: props.location.state == undefined ? '' : props.location.state.data[0] && props.location.state.data[0].MonthlyStatus != 'n'  ? props.location.state.data[0].MonthlyStatus : '',
+            selected_FileID:props.location.state==undefined ? '' : props.location.state.data[0] && props.location.state.data[0].incoming_fileId  ? props.location.state.data[0].incoming_fileId : '',
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,
@@ -112,14 +123,13 @@ export class EnrollmentDashboard extends React.Component {
                 sortable: true,
                 resizable: true,
                 filter: true,
-
-
-
             },
             rowSelection: 'never',
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
+
+
         }
 
 
@@ -127,14 +137,8 @@ export class EnrollmentDashboard extends React.Component {
         this.handleEndChange = this.handleEndChange.bind(this);
 
         this.showFile = this.showFile.bind(this)
-
     }
 
-    ageCellRendererFunc(params) {
-
-        //return '<button ng-click="ageClicked(data.age)" ng-bind="data.age"></button>';
-        return '<button ng-click="ageClicked(data.age)">Age</button>';
-    }
     componentWillReceiveProps() {
         this.setState({
             apiflag: this.props.apiflag
@@ -149,12 +153,19 @@ export class EnrollmentDashboard extends React.Component {
 
     }
     _refreshScreen = () => {
-        this.getCommonData()
+        // this.getCommonData()
+        // this.getListData()
+        // this._getCounts()
+        // this._getOtherCounts('MOLINA')
+        // this._getOtherCounts('MOL IMED')
+        // this._getOtherCounts('MOLCHIP')
+        // this.getFilename()
+        // this.gettiles()
+        this.getSecond_tiles()
+        // this.state.flag == "Y" ? this.getSecond_tiles_1() : this.getSecond_tiles()
 
-        this.getListData()
-        this._getCounts()
-        this._getPieChartData()
-        this._getClaimCounts()
+
+
     }
     getCommonData() {
         let query = `{
@@ -211,91 +222,7 @@ export class EnrollmentDashboard extends React.Component {
         )
     }
 
-    getBarData(labelArray, dataArray, color) {
-        let bardata = {
-            labels: labelArray,
-            showFile: false,
-            datasets: [
-                {
-                    label: 'Total Claims',
-                    backgroundColor: color,
-                    borderColor: color,
-                    borderWidth: 1,
-                    hoverBackgroundColor: color,
-                    hoverBorderColor: color,
-                    data: dataArray
-                }
-            ],
-            legend: {
-                display: false
-            }
-        }
 
-        return bardata
-    }
-
-
-
-    renderMonthlyTrendsChart() {
-
-        return (
-            <div className="chart-div chart-container1 chart">
-                <div className="row">
-
-                    <div className="col-7">
-
-                        <h6 > Volume - This Month trends</h6>
-                    </div>
-
-
-                </div>
-
-
-                <Chart1
-                    width={'700px'}
-                    height={'300px'}
-                    chartType="LineChart"
-                    loader={<div>Loading Chart</div>}
-                    data={[
-                        ['x', 'EFT'],
-                        [0, 0],
-                        [1, 10],
-                        [2, 23],
-                        [3, 17],
-                        [4, 18],
-                        [5, 9],
-                        [6, 11],
-                        [7, 27],
-                        [8, 33],
-                        [9, 40],
-                        [10, 32],
-                        [11, 35],
-                    ]}
-                    options={{
-                        series: {
-                            0: { curveType: 'function' },
-                        },
-                        chartArea: { width: '100%' },
-
-                        colors: ['#139DC9'],
-
-                        fill: true
-                    }}
-
-                />
-
-            </div>
-        );
-    }
-
-    handleSort(e) {
-        this.setState({
-            type: e
-        })
-        setTimeout(() => {
-
-        }, 50);
-    }
 
     getListData = () => {
 
@@ -310,7 +237,7 @@ export class EnrollmentDashboard extends React.Component {
         }
 
         let query = `{            
-            Dashboard834FileDetails(State:"${this.state.State}",StartDt :"${startDate}", EndDt : "${endDate}", RecType: "Inbound" ,Status:"",FileID:"",MaintenanceCode:"") {
+            Dashboard834FileDetails(State:"${this.state.State}", StartDt :"${startDate}", EndDt : "${endDate}", RecType: "Inbound" ,Status:"",FileID:"",MaintenanceCode:"") {
                 FileName
                 Date
                 Subscriber
@@ -318,7 +245,6 @@ export class EnrollmentDashboard extends React.Component {
                 Error
                 FileStatus
                 FileID
-                CompareFile
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -334,7 +260,8 @@ export class EnrollmentDashboard extends React.Component {
             .then(res => {
                 console.log("al;fjsdjfjsh", res.data.Dashboard834FileDetails)
                 this.setState({
-                    rowData: res.data.Dashboard834FileDetails,
+                    // rowData: res.data.Dashboard834FileDetails,
+                    rowData: []
 
                 })
 
@@ -411,18 +338,12 @@ export class EnrollmentDashboard extends React.Component {
     }
 
     onSelect(event, key) {
-        if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
-            this.setState({
-                [key]: ''
-            })
-        } else {
-            this.setState({
-                [key]: event.target.options[event.target.selectedIndex].text
-            })
-        }
-
+        console.log(event.target.options[event.target.selectedIndex].value)
+        this.setState({
+            [key]: event.target.options[event.target.selectedIndex].value,
+        })
         setTimeout(() => {
-
+            this._refreshScreen()
         }, 50);
     }
 
@@ -457,8 +378,10 @@ export class EnrollmentDashboard extends React.Component {
         }, 300);
     }
     update = (key, value) => {
+
         this.setState({
-            [key]: value
+            [key]: value,
+            selected_FileID: 0
         }, () => {
             this._refreshScreen()
         })
@@ -466,10 +389,11 @@ export class EnrollmentDashboard extends React.Component {
 
     _renderTopbar = () => {
         return (
+
+
             <Filters
+                isSubmitter={false}
                 isTimeRange={true}
-                removeGrid={true}
-                removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
@@ -558,323 +482,163 @@ export class EnrollmentDashboard extends React.Component {
             </div>
         );
     }
-    renderGraphs() {
 
-        const data = [
-            ["Year", "Avg days for submission", { role: "style" }],
-            ["2010", 10, "color: grey"],
-            ["2020", 14, "color: grey"],
-            ["2030", 16, "color: grey"],
-            ["2040", 22, "color: grey"],
-            [
-                "2050",
-                28,
-                "stroke-color: grey; stroke-opacity: 0.6; stroke-width: 2; fill-color: grey; fill-opacity: 0.2"
-            ]
-        ];
-
-        const options = {
-            title: 'Average days for submission',
-            chartArea: { width: '20%' },
-            colors: ['lightgrey'],
-            hAxis: {
-                title: 'Total Population',
-                minValue: 0,
+    _getOtherCounts = async (policy) => {
+        let query = `{
+            CompareAuditFileDashboardTablePolicywise (PolicyType:"${policy}",FileName:"") {
+                ActiveDeltaAdd
+                TermbyAbsence
+                MissingPCP
+                TermedPCP
+                Duplicate
+                SameGenderTwin
+                RateCodeMismatch
+                dobMisMatch
+                addressMismatch
+                genderMismatch
+                ethinicityMismatch
+                telephoneMismatch
+          }
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction834, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
-            vAxis: {
-                title: '',
-            },
-        };
-
-        return (
-
-            <div className="chart-container2 chart chart-div">
-
-                <div style={{ color: "grey" }} className="row">
-
-                    {/* <div className="col-4" style={{ padding: '0' }}>
-                        <h6>Top 5 Providers</h6> */}
-                    {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
-
-                    {/* <Bar
-                            data={this.getBarData(this.state.providerChartLabel, this.state.providerChartData, '#139DC9')}
-                            width={100}
-                            height={60}
-                            options={{
-                                legend: {
-                                    display: false,
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true,
-                                            userCallback: function (label, index, labels) {
-                                                // when the floored value is the same as the value we have a whole number
-                                                if (Math.floor(label) === label) {
-                                                    return label;
-                                                }
-
-                                            },
-                                        }
-                                    }],
-                                },
-                            }} />
-                        <br /><br />
-
-                        <p style={{ color: "grey" }} > Provider </p>
-
-                        <div className="row">
-                            <div className="col-9"> Kaiser </div>
-                            <div className="col-3"> 128</div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-                        <div className="row">
-                            <div className="col-9"> Aetna </div>
-                            <div className="col-3"> 96</div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-
-                        <div className="row">
-                            <div className="col-9"> Cigna </div>
-                            <div className="col-3"> 64</div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} /> */}
-
-
-                    {/* <div className ="row">
-<div className="col-9"> BCBS </div>
-<div className="col-3"> 16</div>
-</div> */}
-                    {/* <hr style ={{ borderColor : 'lightgrey'}}  /> */}
-                    {/* </div> */}
-
-                    <div className="col-5" style={{ padding: '0' }}>
-                        <h6> EFT vs CHK </h6>
-                        {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
-                        <Bar
-                            data={this.getBarData(this.state.ErrorChartLabel, this.state.ErrorChartData, '#139DC9')}
-                            width={100}
-                            height={60}
-                            options={{
-                                legend: {
-                                    display: false,
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true,
-                                            userCallback: function (label, index, labels) {
-                                                // when the floored value is the same as the value we have a whole number
-                                                if (Math.floor(label) === label) {
-                                                    return label;
-                                                }
-
-                                            },
-                                        }
-                                    }],
-                                },
-                            }} />
-                        <br /><br />
-                        <p style={{ color: "grey" }} > Provider </p>
-
-                        <div className="row">
-                            <div className="col-9"> Example 1 </div>
-                            <div className="col-3"> 100% </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-                        <div className="row">
-                            <div className="col-9">  Example 2 </div>
-                            <div className="col-3"> 86% </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-
-                        <div className="row">
-                            <div className="col-9"> Example 3 </div>
-                            <div className="col-3"> 64% </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-
-                        <div className="row">
-                            <div className="col-9"> Example 4 </div>
-                            <div className="col-3"> 16% </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-                    </div>
-                    <div className="col-1"></div>
-                    <div className="col-5" style={{ padding: '0' }}>
-                        <h6> Average # of Errors </h6>
-                        {/* <Chart1 chartType="Bar" width="100%" height="200px" data={data} options ={options} /> */}
-                        <Bar
-                            data={this.getBarData(this.state.ErrorChartLabel, this.state.ErrorChartData, '#139DC9')}
-                            width={100}
-                            height={60}
-                            options={{
-                                legend: {
-                                    display: false,
-                                },
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true,
-                                            userCallback: function (label, index, labels) {
-                                                // when the floored value is the same as the value we have a whole number
-                                                if (Math.floor(label) === label) {
-                                                    return label;
-                                                }
-
-                                            },
-                                        }
-                                    }],
-                                },
-                            }} />
-                        <br /><br />
-                        <p style={{ color: "grey" }} > Error Reason </p>
-
-                        <div className="row">
-                            <div className="col-9">   Negative numbers </div>
-                            <div className="col-3"> 82 </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-
-                        <div className="row">
-                            <div className="col-9">  Charge exceeds fee </div>
-                            <div className="col-3"> 18 </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-
-
-                        <div className="row">
-                            <div className="col-9"> Example  </div>
-                            <div className="col-3"> 12 </div>
-                        </div>
-                        <hr style={{ borderColor: 'lightgrey' }} />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    renderCharts() {
-        let Data = this.state.complience
-        let pieLabel = []
-        let pieData = []
-        Data.forEach((d) => {
-            pieLabel.push(d.Type)
-            pieData.push(d.TotalCount)
+            body: JSON.stringify({ query: query })
         })
-        const data = {
-            labels: pieLabel,
-            datasets: [{
-                data: pieData,
-                backgroundColor: [
-                    '#139DC9',
-                    '#daea00',
-                ],
-                hoverBackgroundColor: [
-                    '#139DC9',
-                    '#daea00',
-                ]
-            }],
-            flag: ''
-        };
-
-        return (
-            <div className="row chart-div">
-                <div className="chart-container chart col-12">
-                    <div className="chart-header">Compliance</div>
-                    <Pie data={data}
-                        options={{
-                            elements: {
-                                arc: {
-                                    borderWidth: 0
-                                }
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }}
-                        width={130}
-                        height={90} />
-
-                </div>
-            </div>
-        )
+            .then(res => res.json())
+            .then(res => {
+                if (policy == 'MOLINA') {
+                    this.setState({
+                        molina_ActiveDeltaAdd: res.data.CompareAuditFileDashboardTablePolicywise[0].ActiveDeltaAdd,
+                        molina_TermbyAbsence: res.data.CompareAuditFileDashboardTablePolicywise[0].TermbyAbsence,
+                        molina_MissingPCP: res.data.CompareAuditFileDashboardTablePolicywise[0].MissingPCP,
+                        molina_TermedPCP: res.data.CompareAuditFileDashboardTablePolicywise[0].TermedPCP,
+                        molina_Duplicate: res.data.CompareAuditFileDashboardTablePolicywise[0].Duplicate,
+                        molina_SameGenderTwin: res.data.CompareAuditFileDashboardTablePolicywise[0].SameGenderTwin,
+                        molina_RateCodeMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].RateCodeMismatch,
+                        molina_dobMisMatch: res.data.CompareAuditFileDashboardTablePolicywise[0].dobMisMatch,
+                        molina_addressMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].addressMismatch,
+                        molina_genderMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].genderMismatch,
+                        molina_ethinicityMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].ethinicityMismatch,
+                        molina_telephoneMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].telephoneMismatch,
+                    })
+                } else if (policy == 'MOL IMED') {
+                    this.setState({
+                        mol_imed_ActiveDeltaAdd: res.data.CompareAuditFileDashboardTablePolicywise[0].ActiveDeltaAdd,
+                        mol_imed_TermbyAbsence: res.data.CompareAuditFileDashboardTablePolicywise[0].TermbyAbsence,
+                        mol_imed_MissingPCP: res.data.CompareAuditFileDashboardTablePolicywise[0].MissingPCP,
+                        mol_imed_TermedPCP: res.data.CompareAuditFileDashboardTablePolicywise[0].TermedPCP,
+                        mol_imed_Duplicate: res.data.CompareAuditFileDashboardTablePolicywise[0].Duplicate,
+                        mol_imed_SameGenderTwin: res.data.CompareAuditFileDashboardTablePolicywise[0].SameGenderTwin,
+                        mol_imed_RateCodeMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].RateCodeMismatch,
+                        mol_imed_dobMisMatch: res.data.CompareAuditFileDashboardTablePolicywise[0].dobMisMatch,
+                        mol_imed_addressMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].addressMismatch,
+                        mol_imed_genderMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].genderMismatch,
+                        mol_imed_ethinicityMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].ethinicityMismatch,
+                        mol_imed_telephoneMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].telephoneMismatch,
+                    })
+                } else if (policy == 'MOLCHIP') {
+                    this.setState({
+                        molchip_ActiveDeltaAdd: res.data.CompareAuditFileDashboardTablePolicywise[0].ActiveDeltaAdd,
+                        molchip_TermbyAbsence: res.data.CompareAuditFileDashboardTablePolicywise[0].TermbyAbsence,
+                        molchip_MissingPCP: res.data.CompareAuditFileDashboardTablePolicywise[0].MissingPCP,
+                        molchip_TermedPCP: res.data.CompareAuditFileDashboardTablePolicywise[0].TermedPCP,
+                        molchip_Duplicate: res.data.CompareAuditFileDashboardTablePolicywise[0].Duplicate,
+                        molchip_SameGenderTwin: res.data.CompareAuditFileDashboardTablePolicywise[0].SameGenderTwin,
+                        molchip_RateCodeMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].RateCodeMismatch,
+                        molchip_dobMisMatch: res.data.CompareAuditFileDashboardTablePolicywise[0].dobMisMatch,
+                        molchip_addressMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].addressMismatch,
+                        molchip_genderMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].genderMismatch,
+                        molchip_ethinicityMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].ethinicityMismatch,
+                        molchip_telephoneMismatch: res.data.CompareAuditFileDashboardTablePolicywise[0].telephoneMismatch,
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
     }
-
-
-    // renderErrorChart() {
-    //     return (
-    //         <Pie data={second_data}
-    //             options={{
-    //                 elements: {
-    //                     arc: {
-    //                         borderWidth: 0
-    //                     }
-    //                 },
-    //                 legend: {
-    //                     display: false,
-    //                 }
-    //             }}
-    //             width={100}
-    //             height={60} />
-    //     )
-    // }
-
-    // renderValues() {
-    //     let row = []
-    //     let data = second_data.labels
-    //     let colors = second_data.datasets[0].backgroundColor
-    //     let count = 0
-    //     data.forEach(item => {
-    //         row.push(
-    //             <div className="row" style={{ textAlign: 'center', fontSize: '12px', marginTop: '4px', marginLeft: '60px', color: 'slategrey', alignItems: 'center' }}>
-    //                 <div style={{ height: '10px', width: '20px', backgroundColor: colors[count], marginRight: '12px' }}></div><div>{item}</div>
-    //             </div>
-    //         )
-    //         count++
-    //     })
-    //     return (
-    //         <div style={{ marginTop: '20px' }} className="row">
-    //             {row}
-    //         </div>
-    //     )
-    // }
-
-    RenderMainErrorChart() {
-        return (
-            <div className="row chart-div">
-                <div className="chart-container chart col-12">
-                    <div style={{ fontWeight: '500' }}>Top Denial Reason codes</div><br />
-                    {/* {this.renderErrorChart()} */}
-                    {/* {this.renderValues()} */}
-                </div>
-            </div>
-        )
-    }
-
-
-
-
 
 
     _getCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let query = `{
+                  CompareAuditFileDashboardTable (FileName:"${this.state.selected_FileID}" ,PolicyType:"") {
+                    ActiveDeltaAdd
+                    TermbyAbsence
+                    MissingPCP
+                    TermedPCP
+                    Duplicate
+                    SameGenderTwin
+                    RateCodeMismatch
+                    dobMisMatch
+                    addressMismatch
+                    genderMismatch
+                    ethinicityMismatch
+                    telephoneMismatch
+                  }
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction834, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+
+                this.setState({
+                    RowData_Enrollment: res.data.Compare834AuditFileDetails,
+                    ActiveDeltaAdd: res.data.CompareAuditFileDashboardTable[0].ActiveDeltaAdd,
+                    TermbyAbsence: res.data.CompareAuditFileDashboardTable[0].TermbyAbsence,
+                    MissingPCP: res.data.CompareAuditFileDashboardTable[0].MissingPCP,
+                    TermedPCP: res.data.CompareAuditFileDashboardTable[0].TermedPCP,
+                    Duplicate: res.data.CompareAuditFileDashboardTable[0].Duplicate,
+                    SameGenderTwin: res.data.CompareAuditFileDashboardTable[0].SameGenderTwin,
+                    RateCodeMismatch: res.data.CompareAuditFileDashboardTable[0].RateCodeMismatch,
+                    dobMisMatch: res.data.CompareAuditFileDashboardTable[0].dobMisMatch,
+                    addressMismatch: res.data.CompareAuditFileDashboardTable[0].addressMismatch,
+                    genderMismatch: res.data.CompareAuditFileDashboardTable[0].genderMismatch,
+                    ethinicityMismatch: res.data.CompareAuditFileDashboardTable[0].ethinicityMismatch,
+                    telephoneMismatch: res.data.CompareAuditFileDashboardTable[0].telephoneMismatch,
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+    }
+
+    gettiles = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let query = `{
             
-            Dashboard834Count(State:"${this.state.State}", StartDt :"${startDate}", EndDt : "${endDate}", RecType: "Inbound"){
-                TotalFiles
-                TotalError
-                Resubmit
+            Compare834AuditFileDahsboardCount (FileName:"${this.state.selected_FileID}"){
+                TotalX12
+                Active
+                TotalQnxt
+                FoundInQNXT
+                Audit
+                Add
+                Change
+                Term
+                Reinstate
+                ActiveDeltaAdd
+                TermbyAbsence
+                ChangeDeltaAdd
+                TermDelta
+                RenDeltaAdd
                 }
                
-              
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls._transaction834, {
@@ -888,21 +652,198 @@ export class EnrollmentDashboard extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let summary = []
-                let data = res.data.Dashboard834Count[0]
+                let data = res.data.Compare834AuditFileDahsboardCount[0]
 
 
                 summary = [
-                    { name: 'Total Files', value: data.TotalFiles },
-                    // { name: 'Total Errors', value: data.TotalError },
-                    { name: 'L1 L2 Errors', value: data.TotalError },
-                    { name: 'Resubmit', value: data.Resubmit },
 
+                    { name: 'Total', value: data.TotalX12 },
+                    { name: 'Audit', value: data.Audit },
+                    { name: 'Add', value: data.Add },
+                    { name: 'Change', value: data.Change },
+                    { name: 'Term', value: data.Term },
+                    { name: 'Reinstate', value: data.Reinstate },
+                    { name: 'In QNXT', value: data.TotalQnxt },
+                    { name: 'Add Delta', value: data.ActiveDeltaAdd },
+                    { name: 'Change Delta', value: data.ChangeDeltaAdd },
+                    { name: 'Term Delta', value: data.TermDelta },
+                    { name: 'Reinstate Delta', value: data.RenDeltaAdd },
+                    { name: 'Term by Absence', value: data.TermbyAbsence },
+                    // { name: 'Active', value: data.Active },
+                    // { name: 'Total Qnxt', value: data.TotalQnxt },
+                    // { name: 'Found In QNXT', value: data.FoundInQNXT },
+                    // { name: 'Active Delta Add', value: data.ActiveDeltaAdd },
+                    // { name: 'Term by Absence', value: data.TermbyAbsence },
                 ]
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
                     summaryCount: summary,
 
-                    // totalFiles: totalCount
+
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+    }
+
+    // getSecond_tiles = async () => {
+    //     let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+    //     let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+    //     let query = `{
+            
+    //         Compare834AuditFileDetails(FileName:"${this.state.selected_FileID}" ,QNXTStatus1:"${this.state.QNXTStatus1}" ,QNXTStatus2:"${this.state.QNXTStatus2}") {
+    //             memid
+    // enrollid
+    // SubscriberNo
+    // FirstName
+    // LastName
+    // MiddleIntial
+    // dob
+    // Gender
+    // StreetAddress
+    // zip
+    // City
+    // State
+    // Telephone
+    // ethnicid
+    // ratecode
+    // primarylanguage
+    // planname
+    // Qeffdate
+    // QnxtStatus1
+    // QnxtStatus2
+    // Qendate
+    // deathdate
+    // x12StreetAddress
+    // enrolltype
+    // ssn
+    // telephoneMismatch
+    // x12Sex
+    // fileenddate
+    // segtype
+    // dhsloadmonth
+    // filestartdate
+    // x12Ethnicid
+    // planid
+    // MonthlyFileStatus
+    // x12City
+    // x12Dob
+    // x12Zip
+    // Qnxtloadmonth
+    // SeqID
+    // programid
+    // LoadMonth
+    // FullFile
+    // SFHPID
+    // LoadDateTime
+    // OtherID
+    // ReconcileRuntime
+    // x12Telephone
+    // inDHS
+    // inQnxt
+    // qcsiid
+    // x12State
+    //           }
+               
+    //     }`
+    //     if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+    //     fetch(Urls._transaction834, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json',
+    //         },
+    //         body: JSON.stringify({ query: query })
+    //     })
+    //         .then(res => res.json())
+    //         .then(res => {
+    //             this.setState({
+
+    //                 RowData_Enrollment: res.data.Compare834AuditFileDetails,
+
+
+    //             })
+    //         })
+    //         .catch(err => {
+    //             process.env.NODE_ENV == 'development' && console.log(err)
+    //         })
+    // }
+    getSecond_tiles = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let query = `{
+            Compare834FileDetailsTotal(FileName:"${this.state.selected_FileID}",inDHS:"${this.state.inDHS}",inQnxt:"${this.state.inQnxt}",Add:"${this.state.Add}",Audit:"${this.state.Audit}",MonthlyStatus:"${this.state.MonthlyStatus}" ,QNXTStatus1:"${this.state.QNXTStatus1}", QNXTStatus2:"${this.state.QNXTStatus2}") {
+                memid
+                enrollid
+                SubscriberNo
+                FirstName
+                LastName
+                MiddleIntial
+                dob
+                Gender
+                StreetAddress
+                zip
+                City
+                State
+                Telephone
+                ethnicid
+                ratecode
+                primarylanguage
+                planname
+                Qeffdate
+                QnxtStatus1
+                QnxtStatus2
+                Qendate
+                deathdate
+                x12StreetAddress
+                enrolltype
+                ssn
+                telephoneMismatch
+                x12Sex
+                fileenddate
+                segtype
+                dhsloadmonth
+                filestartdate
+                x12Ethnicid
+                planid
+                MonthlyFileStatus
+                x12City
+                x12Dob
+                x12Zip
+                Qnxtloadmonth
+                SeqID
+                programid
+                LoadMonth
+                FullFile
+                SFHPID
+                LoadDateTime
+                OtherID
+                ReconcileRuntime
+                x12Telephone
+                inDHS
+                inQnxt
+                qcsiid
+                x12State
+              }
+               
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction834, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                this.setState({
+
+                    RowData_Enrollment: res.data.Compare834FileDetailsTotal,
+
+
                 })
             })
             .catch(err => {
@@ -1006,15 +947,15 @@ export class EnrollmentDashboard extends React.Component {
             let data = []
 
 
-            if (item.name == 'Total Files') {
+            if (item.name == 'Add') {
                 addon = '/accept'
                 claimStatus = ''
 
                 subtitle = ""
-            } else if (item.name == 'Total Errors') {
+            } else if (item.name == 'Term') {
                 claimStatus = 'Error'
                 subtitle = "Total Errors"
-            } else if (item.name == 'Resubmit') {
+            } else if (item.name == 'Changes') {
                 claimStatus = 'Ready to Resubmit'
                 subtitle = "Resubmit"
             }
@@ -1039,15 +980,16 @@ export class EnrollmentDashboard extends React.Component {
             // }
             row.push(
                 <Tiles
-                    isClickable={
-                        item.name != 'Error Resolved'
-                    }
+                    // isClickable={
+                    //     item.name != 'Error Resolved'
+                    // }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     isenrollment={true}
                     second_val={item.second_val}
-                    url={url ? url : Strings.enrollmentLoadDetails}
+
+                    url={url ? url : Strings.claimsDashboard_834_details}
                 />
 
             )
@@ -1059,6 +1001,8 @@ export class EnrollmentDashboard extends React.Component {
             </div>
         )
     }
+
+
 
     _renderClaimTables = (array) => {
         let row = []
@@ -1076,29 +1020,29 @@ export class EnrollmentDashboard extends React.Component {
             let color = "var(--red)"
             let Status = ''
 
-            if (item.name == 'Add') {
+            if (item.name == 'Add Delta') {
                 claimStatus = '021'
                 subtitle = "Add"
                 Status = ''
-                color = "var(--orange)"
-            } else if (item.name == 'Term') {
+                color = "var(--blue)"
+            } else if (item.name == 'Change Delta') {
                 claimStatus = '024'
                 subtitle = "Term"
                 Status = ''
                 color = "var(--green)"
-            } else if (item.name == 'Change') {
+            } else if (item.name == 'Term Delta') {
                 claimStatus = '001'
                 subtitle = "Change"
                 color = "var(--orange)"
                 Status = ''
             }
-            else if (item.name == 'HiPaaS Count') {
+            else if (item.name == 'Reinstate Delta') {
                 claimStatus = ''
                 Status = ''
                 subtitle = "HiPaaS Count"
                 color = "var(--green)"
             }
-            else if (item.name == 'Enrollment Errors') {
+            else if (item.name == 'Term by Absence') {
                 Status = 'Error'
                 claimStatus = ''
                 subtitle = " Enrollment Errors"
@@ -1133,88 +1077,107 @@ export class EnrollmentDashboard extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.enrollmentLoadDetails}
+                    // url={Strings.claimsDashboard_834_details}
                     data={sendData}
-                    color={color}
+                // color={color}
                 />
             )
         })
 
         return (
-            <div className="col-3 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )
     }
-    _getClaimCounts = async () => {
 
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            EnrollmentDashboardTable834(State:"${this.state.State}", StartDt :"${startDate}", EndDt : "${endDate}", RecType: "Inbound") {
-                Addition
-                Termination
-                Changes
-                X12_Count
-  Hipaas_Count
-  ErrorCount
-  ResubmitCount
-              }             
-              
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._transaction834, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-
-                    this.setState({
-
-                        Addition: res.data.EnrollmentDashboardTable834[0].Addition,
-                        Changes: res.data.EnrollmentDashboardTable834[0].Changes,
-                        Termination: res.data.EnrollmentDashboardTable834[0].Termination,
-                        X12_Count: res.data.EnrollmentDashboardTable834[0].X12_Count,
-                        Hipaas_Count: res.data.EnrollmentDashboardTable834[0].Hipaas_Count,
-                        ErrorCount: res.data.EnrollmentDashboardTable834[0].ErrorCount,
-                        ResubmitCount: res.data.EnrollmentDashboardTable834[0].ResubmitCount,
-
-                    }, () => {
-                        this._getCounts()
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
 
     renderClaimDetails = () => {
 
         let stage_1 = [
-            { 'header': 'HiPaaS Load Status' },
-            { 'name': 'X12 Count', 'value': this.state.X12_Count },
-            { 'name': 'HiPaaS Count', 'value': this.state.Hipaas_Count, 'isClick': true },
+            { header: 'Demographics Mismatch', },
+            { 'name': 'Address Mismatch', 'value': this.state.addressMismatch, 'isClick': true },
+            { 'name': 'Dob MisMatch', 'value': this.state.dobMisMatch, 'isClick': true },
+            { 'name': 'Ethinicity Mismatch', 'value': this.state.ethinicityMismatch, 'isClick': true },
+            // { 'name': 'Termed PCP', 'value': this.state.TermedPCP },
+            // { 'name': 'Duplicate', 'value': this.state.Duplicate, 'isClick': true },
+            // { 'name': 'Same Gender Twin', 'value': this.state.SameGenderTwin, 'isClick': true },
+            // { 'name': 'RateCode Mismatch', 'value': this.state.RateCodeMismatch, 'isClick': true },
+
+            // { 'name': 'Duplicate', 'value': this.state.Duplicate, 'isClick': true },
+            // { 'name': 'Address Mismatch', 'value': this.state.addressMismatch, 'isClick': true },
+            // { 'name': 'Gender Mismatch', 'value': this.state.genderMismatch, 'isClick': true },
+
+            // { 'name': 'Telephone Mismatch', 'value': this.state.telephoneMismatch, 'isClick': true },
+
         ]
         let stage_2 = [
-            { 'header': 'HiPaaS Validation Status' },
-            { 'name': 'Enrollment Errors', 'value': this.state.ErrorCount, 'isClick': true },
-            { 'name': 'Resubmit Count', 'value': this.state.ResubmitCount, 'isClick': true },
+            { 'header': 'PCP' },
+            { 'name': 'Term PCP', 'value': this.state.TermedPCP, 'isClick': true },
+            { 'name': 'Missing PCP', 'value': this.state.MissingPCP, 'isClick': true },
+
+            // { 'name': 'Termed PCP', 'value': this.state.molina_TermedPCP },
+            // { 'name': 'Duplicate', 'value': this.state.molina_Duplicate, 'isClick': true },
+            // { 'name': 'Same Gender Twin', 'value': this.state.molina_SameGenderTwin, 'isClick': true },
+            // { 'name': 'RateCode Mismatch', 'value': this.state.molina_RateCodeMismatch, 'isClick': true },
+            // { 'name': 'Dob MisMatch', 'value': this.state.molina_dobMisMatch, 'isClick': true },
+            // { 'name': 'Duplicate', 'value': this.state.molina_Duplicate, 'isClick': true },
+            // { 'name': 'Address Mismatch', 'value': this.state.molina_addressMismatch, 'isClick': true },
+            // { 'name': 'Gender Mismatch', 'value': this.state.molina_genderMismatch, 'isClick': true },
+            // { 'name': 'Ethinicity Mismatch', 'value': this.state.molina_ethinicityMismatch, 'isClick': true },
+            // { 'name': 'Telephone Mismatch', 'value': this.state.molina_telephoneMismatch, 'isClick': true },
         ]
 
         let stage_3 = [
-            { 'header': '' },
-            { 'name': 'Add', 'value': this.state.Addition, 'isClick': true },
-            { 'name': 'Term', 'value': this.state.Termination, 'isClick': true },
-            { 'name': 'Change', 'value': this.state.Changes, 'isClick': true },
+            { 'header': 'Duplicate Or Hold' },
+            { 'name': 'Duplicate', 'value': this.state.Duplicate, 'isClick': true },
+            { 'name': 'Same Gender Twin', 'value': this.state.SameGenderTwin, 'isClick': true },
+            // { 'name': 'Missing PCP', 'value': this.state.mol_imed_MissingPCP, 'isClick': true },
+            // { 'name': 'Termed PCP', 'value': this.state.mol_imed_TermedPCP },
+            // { 'name': 'Duplicate', 'value': this.state.mol_imed_Duplicate, 'isClick': true },
+            // { 'name': 'Same Gender Twin', 'value': this.state.mol_imed_SameGenderTwin, 'isClick': true },
+            // { 'name': 'RateCode Mismatch', 'value': this.state.mol_imed_RateCodeMismatch, 'isClick': true },
+            // { 'name': 'Dob MisMatch', 'value': this.state.mol_imed_dobMisMatch, 'isClick': true },
+            // { 'name': 'Duplicate', 'value': this.state.mol_imed_Duplicate, 'isClick': true },
+            // { 'name': 'Address Mismatch', 'value': this.state.mol_imed_addressMismatch, 'isClick': true },
+            // { 'name': 'Gender Mismatch', 'value': this.state.mol_imed_genderMismatch, 'isClick': true },
+            // { 'name': 'Ethinicity Mismatch', 'value': this.state.mol_imed_ethinicityMismatch, 'isClick': true },
+            // { 'name': 'Telephone Mismatch', 'value': this.state.mol_imed_telephoneMismatch, 'isClick': true },
+
+        ]
+        let stage_4 = [
+            { 'header': 'Rate Code Delta' },
+            { 'name': 'Rate Code Mismatch', 'value': this.state.RateCodeMismatch, 'isClick': true },
+            // { 'name': 'Molina', 'value': this.state.molchip_TermbyAbsence, 'isClick': true },
+            // { 'name': 'Molina IMED', 'value': this.state.molchip_MissingPCP, 'isClick': true },
+            //  { 'name': 'Termed PCP', 'value': this.state.molchip_TermedPCP },
+            // { 'name': 'Duplicate', 'value': this.state.molchip_Duplicate, 'isClick': true },
+            // { 'name': 'Same Gender Twin', 'value': this.state.molchip_SameGenderTwin, 'isClick': true },
+            // { 'name': 'RateCode Mismatch', 'value': this.state.molchip_RateCodeMismatch, 'isClick': true },
+            // { 'name': 'Dob MisMatch', 'value': this.state.molchip_dobMisMatch, 'isClick': true },
+            // { 'name': 'Duplicate', 'value': this.state.molchip_Duplicate, 'isClick': true },
+            // { 'name': 'Address Mismatch', 'value': this.state.molchip_addressMismatch, 'isClick': true },
+            // { 'name': 'Gender Mismatch', 'value': this.state.molchip_genderMismatch, 'isClick': true },
+            // { 'name': 'Ethinicity Mismatch', 'value': this.state.molchip_ethinicityMismatch, 'isClick': true },
+            // { 'name': 'Telephone Mismatch', 'value': this.state.molchip_telephoneMismatch, 'isClick': true },
+
+        ]
+        let stage_5 = [
+            { 'header': 'Dual Plan Delta' },
+            // { 'name': 'EXT', 'value': this.state.RateCodeMismatch },
+            { 'name': 'Rate Code Delta', 'value': this.state.RateCodeMismatch },
+            // { 'name': 'Molina', 'value': this.state.molchip_TermbyAbsence, 'isClick': true },
+            // { 'name': 'Molina IMED', 'value': this.state.molchip_MissingPCP, 'isClick': true },
+            //  { 'name': 'Termed PCP', 'value': this.state.molchip_TermedPCP },
+            // { 'name': 'Duplicate', 'value': this.state.molchip_Duplicate, 'isClick': true },
+            // { 'name': 'Same Gender Twin', 'value': this.state.molchip_SameGenderTwin, 'isClick': true },
+            // { 'name': 'RateCode Mismatch', 'value': this.state.molchip_RateCodeMismatch, 'isClick': true },
+            // { 'name': 'Dob MisMatch', 'value': this.state.molchip_dobMisMatch, 'isClick': true },
+            // { 'name': 'Duplicate', 'value': this.state.molchip_Duplicate, 'isClick': true },
+            // { 'name': 'Address Mismatch', 'value': this.state.molchip_addressMismatch, 'isClick': true },
+            // { 'name': 'Gender Mismatch', 'value': this.state.molchip_genderMismatch, 'isClick': true },
+            // { 'name': 'Ethinicity Mismatch', 'value': this.state.molchip_ethinicityMismatch, 'isClick': true },
+            // { 'name': 'Telephone Mismatch', 'value': this.state.molchip_telephoneMismatch, 'isClick': true },
 
         ]
 
@@ -1225,6 +1188,8 @@ export class EnrollmentDashboard extends React.Component {
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {this._renderClaimTables(stage_3)}
+                {this._renderClaimTables(stage_4)}
+                {this._renderClaimTables(stage_5)}
             </div>
         )
     }
@@ -1240,22 +1205,6 @@ export class EnrollmentDashboard extends React.Component {
                             method={this._handleStateChange}
                         />
                     </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Provider</div>
-                        <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        />
-                    </div> */}
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div> */}
                     <div className="form-group col-2">
                         <div className="list-dashboard">Time Range</div>
                         <select
@@ -1324,176 +1273,8 @@ export class EnrollmentDashboard extends React.Component {
                             minDate={this.state.startDate ? new Date(moment(this.state.startDate).format('YYYY-MM-DD hh:mm')) : ''}
                         />
                     </div>
-                    {/* <div className="form-group col-2">
-                        <div className="list-dashboard">Grid Type</div>
-                        <select className="form-control list-dashboard" id="Grid"
-                            onChange={(event) => {
-                                this.setState({
-                                    page: 1,
-                                    rowData: [],
-                                    gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-                                }, () => {
-                                    this.getListData()
-                                })
-                            }}>
-                            <option value="select">Default</option>
-                            <option selected value="select">Classic</option>
-                        </select>
-                    </div> */}
                 </div>
             </div>
-        )
-    }
-
-    getPieChartData = (pieChart) => {
-        let pieLabel = []
-        let pieData = []
-        console.log("askjsakscak", pieChart)
-        pieChart.forEach((d) => {
-            pieLabel.push(d.X_axis)
-            pieData.push(d.Y_axis)
-        })
-
-        let second_data = {
-            labels: pieLabel,
-            datasets: [{
-                data: pieData,
-                backgroundColor: [
-                    '#139DC9',
-                    '#83D2B4',
-                    '#9DC913',
-                    '#EC6236',
-                    '#C9139D',
-                    'blue',
-                    '#5369e7',
-                    '#b7bf11',
-                    '#448dce',
-                    '#cb662c',
-                ],
-                hoverBackgroundColor: [
-                    '#139DC9',
-                    '#83D2B4',
-                    '#9DC913',
-                    '#EC6236',
-                    '#C9139D',
-                    'blue',
-                    '#5369e7',
-                    '#b7bf11',
-                    '#448dce',
-                    '#cb662c',
-                ]
-            }]
-        }
-
-
-
-        return second_data
-    }
-
-    _getPieChartData = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let chartType = this.state.chartType
-        if (!chartType) {
-            chartType = "Monthwise"
-        }
-        let query = `{
-            file_piechart:Dashboard834ErrorPieChart(State:"${this.state.State}",  StartDt :"${startDate}", EndDt : "${endDate}", RecType: "Inbound") {
-                X_axis
-                Y_axis
-            }
-  
-        }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._transaction834, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res)
-                let array = []
-                // let ClaimBarChart = res.data.barchart
-                let claimLabels = []
-                let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
-                let pie_data = res.data.piechart && res.data.piechart.length > 0 ? this.getPieChartData(res.data.piechart) : ''
-                // let second_data = ""
-                // let pie_data = ""
-                let complience = res.data.CompliancePieChart835 ? res.data.CompliancePieChart835 : []
-                let complaince_data = res.data.CompliancePieChart835 ? this.getComplianceChartData(res.data.CompliancePieChart835) : {}
-                let count = 0
-                // ClaimBarChart.forEach((d) => {
-                //     count++;
-                //     array.push(
-                //         d.Y_axis ? parseFloat(d.Y_axis) : 0
-                //     )
-                //     if (chartType == 'Weekwise') {
-                //         claimLabels.push('week' + count)
-                //     } else {
-                //         claimLabels.push(d.X_axis)
-                //     }
-                // })
-
-                this.setState({
-                    // ClaimBarChart: array,
-                    // claimLabels: claimLabels,
-                    second_data: second_data,
-                    // pie_data: pie_data,
-                    // complience: complience,
-                    // complaince_data: complaince_data
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            })
-
-    }
-
-    getComplianceChartData = (pieChart) => {
-        let pieLabel = []
-        let pieData = []
-        pieChart.forEach((d) => {
-            pieLabel.push(d.Type)
-            pieData.push(d.TotalCount)
-        })
-        let data = {
-            labels: pieLabel,
-            datasets: [{
-                data: pieData,
-                backgroundColor: [
-                    '#139DC9',
-                    '#daea00',
-                ],
-                hoverBackgroundColor: [
-                    '#139DC9',
-                    '#daea00',
-                ]
-            }],
-            flag: ''
-        }
-
-        return data
-    }
-
-    renderChart(piechart_data) {
-        return (
-            <Pie data={piechart_data}
-                options={{
-                    elements: {
-                        arc: {
-                            borderWidth: 0
-                        }
-                    },
-                    legend: {
-                        display: false,
-                    }
-                }}
-                width={20}
-                height={19} />
         )
     }
 
@@ -1567,13 +1348,9 @@ export class EnrollmentDashboard extends React.Component {
         return (
             <div className="chart-div">
                 <div className="row">
-                    <div className="col-6" style={{ padding: '6px' }}>
+                    <div className="col-8" style={{ padding: '6px' }}>
                         {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
                     </div>
-                    {/* {this.renderCompliance()} */}
-                    {/* <div className="col-6" style={{ padding: '8px' }}>
-                        {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
-                    </div> */}
                 </div>
             </div>
         )
@@ -1587,27 +1364,47 @@ export class EnrollmentDashboard extends React.Component {
         )
     }
 
-
     _renderList = () => {
 
         let columnDefs = [
-            { headerName: "File Name", field: "FileName", width: 350, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "File Date", field: "Date", width: 180, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            // { headerName: "Submitter", field: "Subscriber",width:120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }  },
-            { headerName: "Enrollments", field: "Enrollment", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "L1 L2 Errors", field: "Error", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "File Status", field: "FileStatus", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "", field: "CompareFile", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer', fontWeight: 'bold' } },
+            // { headerName: "Member Id", field: "memid", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            // { headerName: "Enrollment Id", field: "enrollid", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Subscriber No", field: "SubscriberNo", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }, pinned: 'left' },
+            { headerName: "First Name", field: "FirstName", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }, pinned: 'left' },
+            { headerName: "Last Name", field: "LastName", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }, pinned: 'left' },
+            
+            { headerName: "Qnxt Status1", field: "QnxtStatus1", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Qnxt Status2", field: "QnxtStatus2", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "QNXT Eff Date", field: "Qeffdate", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "QNXT End Date", field: "Qendate", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            
+            { headerName: "QNXT Dob", field: "dob", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Dob", field: "x12Dob", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "QNXT Gender", field: "Gender", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Gender", field: "x12Sex", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
 
+            { headerName: "QNXT Street Address", field: "StreetAddress", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Street Address", field: "x12StreetAddress", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Zip", field: "zip", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Zip", field: "x12Zip", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "QNXT City", field: "City", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 City", field: "x12City", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "QNXT State", field: "State", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 State", field: "x12State", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "QNXT Telephone", field: "Telephone", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Telephone", field: "x12Telephone", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
 
-
-
+            { headerName: "Ethnic Id", field: "ethnicid", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Ethnic Id", field: "x12Ethnicid", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Rate Code", field: "ratecode", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Primary Language", field: "primarylanguage", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Plan Name", field: "planname", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
         ]
 
         return (
             <div>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
 
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1625,10 +1422,9 @@ export class EnrollmentDashboard extends React.Component {
                         domLayout={this.state.domLayout}
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
+                        rowData={this.state.RowData_Enrollment}
                         icons={this.state.icons}
                         enableCellTextSelection={true}
-
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
                                 this.setState({
@@ -1637,41 +1433,14 @@ export class EnrollmentDashboard extends React.Component {
                                     this.gotoClaimDetails()
                                 })
                             }
-                            if (event.colDef.headerName == '') {
-                                this.setState({
-                                    incoming_fileId: event.data.FileName == "834_UT_Audit.da" || event.data.FileName == "834_UT_Daily.da" ? event.data.FileName : ""
-                                }, () => {
-                                    this.gotocomparefile()
-                                })
-                            }
                         }}
-
-
                     >
-
                     </AgGridReact>
                 </div>
             </div>
         )
     }
-    gotocomparefile = (data) => {
 
-        let sendData = []
-        if (data && data.length > 0) {
-            sendData = data
-        } else {
-            sendData = [
-                {
-                    incoming_fileId: this.state.incoming_fileId,
-                },
-            ]
-        }
-
-        this.props.history.push('/' + Strings.Enrollment_FullFileCompare, {
-            data: sendData
-        })
-
-    }
     gotoClaimDetails = (data) => {
 
         let sendData = []
@@ -1698,28 +1467,78 @@ export class EnrollmentDashboard extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.enrollmentLoadDetails, {
+        this.props.history.push('/' + Strings.claimsDashboard_834_details, {
             data: sendData
         })
     }
+    getFilename() {
+        let query = `{
+            GetFileName834(State:"${this.state.State}", StartDt :"` + this.state.startDate + `", EndDt : "` + this.state.endDate + `") {
+                FileID
+                FileName
+            }
+        }`
 
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction834, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        FileName: res.data.GetFileName834 ? res.data.GetFileName834 : [],
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+    FileName() {
+        let row = []
 
+        this.state.FileName.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option value={element.FileID} selected={this.state.selected_FileID == element.FileName ? element.FileName : ''}>{element.FileName}</option>)
+            // row.push(<option selected={this.state.selected_FileID == element.FileID ? element.FileID : ''}>{element.FileName}</option>)
+        })
+        return row
+    }
 
     render() {
 
         return (
             <div>
-                <h5 className="headerText">Enrollment File Load</h5>
+                <h5 className="headerText">Enrollment Details</h5>
 
                 <div className="row">
                     <div className="col-12">
-                        {this._renderTopbar()}
 
-                        <div className="general-header" style={{ marginBottom: "10px", marginTop: '12px' }}>File Level</div>
-                        {this._renderSummaryDetails()}
-                        <div className="general-header">Enrollment Level</div>
-                        {this.renderClaimDetails()}
-                        {this.renderAllPieCharts()}
+                        {/* {this._renderTopbar()} */}
+
+                        <div className="col-4" style={{ padding: "0px" }}>
+                            <div className="list-dashboard">File Name</div>
+                            <select className="form-control list-dashboard" id="FileName"
+                                onChange={(event) => {
+                                    this.onSelect(event, 'selected_FileID')
+                                }}>
+                                <option value="select"></option>
+                                <option selected={this.state.selected_FileID == '834_UT_Audit.da' ? "selected" : ''} value="834_UT_Audit.da">834_UT_Audit.da</option>
+                                <option selected={this.state.selected_FileID == '834_UT_Daily.da' ? "selected" : ''} value="834_UT_Daily.da">834_UT_Daily.da</option>
+                                {/* {this.FileName()} */}
+                            </select>
+                            {/* <input type="text" name="name" value={this.state.selected_FileID} className="form-control list-dashboard"  /> */}
+                        </div>
+
+
                     </div>
 
 

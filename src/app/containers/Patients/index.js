@@ -102,7 +102,8 @@ export class Patients extends React.Component {
 
     onClick = (value, secondValue) => {
         console.log('Sent', secondValue)
-        this.props.history.push('/' + Strings.PatientDetails, {
+        // this.props.history.push('/' + Strings.PatientDetails, {
+        this.props.history.push('/' + Strings.PatientDashboard, {
             patientId: value,
             patientId_id: secondValue,
         })

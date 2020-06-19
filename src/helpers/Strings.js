@@ -162,7 +162,24 @@ const Strings = {
     Outbound_Encounter_StatewiseTradingPartner:'Outbound_StatewiseTradingPartner',
     TransactionSetup_New:'TransactionSetup_New',
     Encounter_view_CustomEditNew:'View_Outbound_CustomEditNew',
-    CrosswalkTable: 'CrosswalkTable'
+    CrosswalkTable: 'CrosswalkTable',
+    Enrollment_FullFileCompare: 'Enrollment_FullFileCompare',
+    EnrollmentDetails : 'EnrollmentDetails',
+    EthnicityMismatch:'EthnicityMismatch',
+    RateCode:'RateCodeMismatch',
+    SameGenderTwin:'SameGenderTwin',
+    Duplicate:'DuplicateInFile',
+    AddressMismatch:'AddressMismatchDelta',
+    DobMismatch:'DobMismatchDelta',
+    GenderMismatch:'GenderMismatchDelta',
+    Enrollment_eligibiltyDetails:'Enrollment_eligibiltyDetails',
+    Effective_date_Mismatch:'EffectiveDateMismatch',
+    House_Head_Mismatch:'HouseholdMismatch',
+    LoadtoQNXT:'LoadtoQNXT',
+    EnrollmentLoadException:'EnrollmentLoadException',
+    DualCodeMismatch: 'DualCodeMismatch',
+    CustomService: 'CustomService'
+    
 }
 
 export default Strings;
