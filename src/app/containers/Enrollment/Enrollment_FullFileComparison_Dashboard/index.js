@@ -23,7 +23,7 @@ import { MDBProgress } from 'mdbreact';
 import { Filters } from '../../../components/Filters';
 
 let val = ''
-export class Enrollment_FullFileCompare extends React.Component {
+export class Enrollment_FullFileCompare_Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
