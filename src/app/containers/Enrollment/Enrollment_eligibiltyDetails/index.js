@@ -150,7 +150,6 @@ console.log("afkjsakffsjklsfjsalkfjslf" ,props.location.state.data[0].incoming_f
 
     componentDidMount() {
         this._refreshScreen()
-
     }
     _refreshScreen = () => {
         // this.getCommonData()

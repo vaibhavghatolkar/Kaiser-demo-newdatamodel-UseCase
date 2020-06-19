@@ -60,8 +60,8 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
             inProgress: 0,
             Accepted_per: 0,
             rejected_per: 0,
-            effectiveData: 7,
-            household: 340,
+            effectiveData: 0,
+            household: 0,
             ClaimBarChart: [],
             claimLabels: [],
             complience: [],
@@ -403,27 +403,10 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
         console.log(event.target.options[event.target.selectedIndex].value)
         this.setState({
             [key]: event.target.options[event.target.selectedIndex].value,
+        }, () => {
+            this._getCounts()
+            this.gettiles()
         })
-        let eventvalue = event.target.options[event.target.selectedIndex].value
-        setTimeout(() => {
-            if (eventvalue == '834_UT_Audit.da') {
-                this.setState({
-                    effectiveData: 7,
-                    household: 340
-                }, () => {
-                    this._getCounts()
-                    this.gettiles()
-                })
-            } else {
-                this.setState({
-                    effectiveData: 8,
-                    household: 2
-                }, () => {
-                    this._getCounts()
-                    this.gettiles()
-                })
-            }
-        }, 100);
     }
 
     MonthsEvent(event, key) {
@@ -660,6 +643,8 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
                     ethinicityMismatch
                     telephoneMismatch
                     DeltaCodeMismatch
+                    Headofhousemismatch
+                    EffDateMismatch
                   }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -688,6 +673,8 @@ export class Enrollment_FullFileCompare_Dashboard extends React.Component {
                     ethinicityMismatch: res.data.CompareAuditFileDashboardTable[0].ethinicityMismatch,
                     telephoneMismatch: res.data.CompareAuditFileDashboardTable[0].telephoneMismatch,
                     DeltaCodeMismatch: res.data.CompareAuditFileDashboardTable[0].DeltaCodeMismatch,
+                    effectiveData: res.data.CompareAuditFileDashboardTable[0].EffDateMismatch,
+                    household: res.data.CompareAuditFileDashboardTable[0].Headofhousemismatch,
                 })
             })
             .catch(err => {
