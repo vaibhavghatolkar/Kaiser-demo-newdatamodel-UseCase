@@ -191,7 +191,7 @@ export class CompanionGuide extends React.Component {
                         <br />
                         <div className="row">
 
-                            <div className="form-group col-sm-3">
+                            <div className="form-group col-sm-3" style={{padding: '0'}}>
                                 <label className="list-header1">Select Companion Guide</label>
                                 <select onChange={this.ChangeTradingPartner} className="form-control list-header1" id="fao1">
                                     <option>834 Medicare</option>

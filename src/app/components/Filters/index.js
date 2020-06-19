@@ -27,12 +27,16 @@ export class Filters extends React.Component {
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
+            transOptions:[],
         }
     }
 
     componentDidMount() {
         this.getCommonData()
         this.getTransactiondata()
+        if (this.props.isTransType) {
+            this.getTransOptions()
+        }
     }
 
     getCommonData = async () => {
@@ -100,6 +104,39 @@ export class Filters extends React.Component {
             })
     }
 
+    getTransOptions = () => {
+        let query = `{
+            Transaction834_DropDown {
+              transtype
+            }
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction834, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        transOptions: res.data.Transaction834_DropDown ? res.data.Transaction834_DropDown : [],
+                    })
+
+                    if (res.data.Transaction834_DropDown && res.data.Transaction834_DropDown.length > 0) {
+                        this.props.update('transType', res.data.Transaction834_DropDown[0].transtype)
+                    }
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
 
     _handleStateChange = (event) => {
         this.props.update('State', event.target.options[event.target.selectedIndex].text)
@@ -163,6 +200,17 @@ export class Filters extends React.Component {
 
     }
 
+    renderTransOptions = () => {
+        let row = []
+        this.state.transOptions.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option value="">{element.transtype}</option>)
+        })
+        return row
+    }
+
     onHandleChange = (event) => {
         clearTimeout(val)
         let providerName = event.target.value
@@ -218,6 +266,23 @@ export class Filters extends React.Component {
                             onSelected={this.onSelected}
                         />
                     </div> */}
+
+                    {
+                        this.props.isTransType ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">
+                                    Transaction Type
+                                </div>
+                                <select className="form-control list-dashboard"
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'transType')
+                                    }}
+                                >
+                                    {this.renderTransOptions()}
+                                    {/* <option selected={this.props.transactionType == "837 Encounter" ? "selected" : ""} value="837 Encounter">837 Encounter</option> */}
+                                </select>
+                            </div> : null
+                    }
 
                     {
                         !this.props.removeSubmitter ?

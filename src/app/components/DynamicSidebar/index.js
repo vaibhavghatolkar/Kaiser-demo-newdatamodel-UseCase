@@ -114,9 +114,9 @@ export class DynamicSidebar extends React.Component {
         else if (index == 35 || index == 100) { name = Strings.submitClaims }
 
         else if (index == 37) { name = Strings.tradingPartnerConfiguration }
-        else if (index == 38) { name = Strings.transactionSetup }
+        else if (index == 38) { name = Strings.TransactionSetup_New }
         else if (index == 39) { name = Strings.editConfiguration }
-        else if (index == 40) { name = Strings.View_CustomEditsNew }
+        else if (index == 40) { name = Strings.Encounter_view_CustomEditNew }
         else if (index == 41) { name = Strings.covered }
         else if (index == 42) { name = Strings.noncovered }
         else if (index == 43) { name = Strings.companionGuide }
@@ -134,7 +134,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 50) { name = Strings.claimPayment_835 }
         else if (index == 51) { name = Strings._claimPayment_835_details }
 
-        else if (index == 120) { name = Strings.tradingPartnerDetails }
+        else if (index == 120) { name = Strings.Outbound_Encounter_StatewiseTradingPartner }
         else if (index == 116) { name = Strings.healthCare278 }
         else if (index == 117) { name = Strings.serviceDetails278 }
         else if (index == 122) { name = Strings._ClaimProcessingSummary }
@@ -193,7 +193,9 @@ export class DynamicSidebar extends React.Component {
         else if (index == 167) { name = Strings.RDE }
         else if (index == 168) { name = Strings.DFT }
         else if (index == 169) { name = Strings.consent_management }
-        else if (index == 172) { name = Strings.FHiR_API_management }       
+        else if (index == 172) { name = Strings.FHiR_API_management } 
+        else if (index == 189) { name = Strings.CrosswalkTable } 
+              
         return name
     }
 
