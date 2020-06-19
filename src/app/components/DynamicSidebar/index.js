@@ -211,6 +211,9 @@ export class DynamicSidebar extends React.Component {
         else if (index == 186) { name = Strings.House_Head_Mismatch }
         else if (index == 187) { name = Strings.OutboundEnrollmentDashboard }
         else if (index == 188) { name = Strings.CustomService }
+        else if (index == 191) { name = Strings.Enrollment_Outbound }
+        else if (index == 192) { name = Strings.Enrollment_Details_Outbound }
+     
         return name
     }
 
@@ -316,7 +319,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { flag999: '0' },
                 ]
-            } else if (element.key == Strings.enrollmentLoadDetails) {
+            } else if (element.key == Strings.enrollmentLoadDetails ||element.key ==Strings.  Enrollment_Details_Outbound) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: '', count: 'n' },
                 ]
