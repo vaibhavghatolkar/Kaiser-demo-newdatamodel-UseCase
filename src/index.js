@@ -89,6 +89,10 @@ import{Enrollment_Details_Outbound} from './app/containers/Enrollment/Enrollment
 // import { DFT } from './app/containers/HL7/DFT'
 // import { FHiR_API_management } from './app/containers/FHiR_API_management'
 
+import {Outbound_Encounter_StatewiseTradingPartner} from './app/containers/RealTime_Encounter/Outbound_Encounter_StatewiseTradingPartner'
+import {TransactionSetup_New} from './app/containers/TransactionSetup_New'
+import {Encounter_view_CustomEditNew} from './app/containers/RealTime_Encounter/Encounter_view_CustomEditNew'
+import {CrosswalkTable} from './app/containers/CrosswalkTable'
 import { EthnicityMismatch } from './app/containers/EthnicityMismatch';
 import { RateCode } from './app/containers/RateCode';
 import { SameGenderTwin } from './app/containers/SameGenderTwin';
@@ -315,6 +319,10 @@ class PrivateRoute extends React.Component {
                                 
                             
 
+                                <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />
+                                <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_New} />
+                                <Route path={'/' + Strings.Encounter_view_CustomEditNew} component={Encounter_view_CustomEditNew} />
+                                <Route path={'/' + Strings.CrosswalkTable} component={CrosswalkTable} />
                                 <Route path={'/' + Strings.Enrollment_FullFileCompare} component={Enrollment_FullFileCompare} />
                                 <Route path={'/' + Strings.Enrollment_eligibiltyDetails} component={Enrollment_eligibiltyDetails} />
 

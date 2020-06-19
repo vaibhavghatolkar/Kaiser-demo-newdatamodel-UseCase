@@ -17,7 +17,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
             tradingpartner: [],
             selectedTradingPartner: '',
             State: "CA",
-            transaction: 'Encounter 837P',
+            transaction: '834',
             direction: 'Outbound',
             UpdateCheckBox: '',
             checked: [],
@@ -50,11 +50,9 @@ export class Encounter_view_CustomEditNew extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData:[],
             rowData1:[]
             
@@ -131,7 +129,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
         //   }
         process.env.NODE_ENV == 'development' && console.log(query)
 
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -188,7 +186,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
             }
        }`
        process.env.NODE_ENV == 'development' && console.log(query);
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -216,7 +214,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
               }
         }`
         process.env.NODE_ENV == 'development' && console.log(query);
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -335,7 +333,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
             }           
         }`
 
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -589,7 +587,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
               }
         `
         process.env.NODE_ENV == 'development' && console.log(query)
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -784,7 +782,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
                                 {this._renderList()}
                             </div>
                             <div className="col-12">
-                                {/* {this._reconcileConfig()} */}
+                                {this._reconcileConfig()}
                             </div>
 
                         </div>

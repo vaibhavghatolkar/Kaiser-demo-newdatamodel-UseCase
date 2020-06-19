@@ -162,9 +162,12 @@ const Strings = {
     Enrollment_Outbound:'Enrollment_Outbound',
     Enrollment_Details_Outbound:'Enrollment_Details_Outbound',
     
+    Outbound_Encounter_StatewiseTradingPartner:'Outbound_StatewiseTradingPartner',
+    TransactionSetup_New:'TransactionSetup_New',
+    Encounter_view_CustomEditNew:'View_Outbound_CustomEditNew',
+    CrosswalkTable: 'CrosswalkTable',
     Enrollment_FullFileCompare: 'Enrollment_FullFileCompare',
     EnrollmentDetails : 'EnrollmentDetails',
-    
     EthnicityMismatch:'EthnicityMismatch',
     RateCode:'RateCodeMismatch',
     SameGenderTwin:'SameGenderTwin',
