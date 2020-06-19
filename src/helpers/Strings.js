@@ -158,7 +158,9 @@ const Strings = {
     RDE:'RDE',
     ORU:'ORU',
     DFT:'DFT',
-    FHiR_API_management:'FHiR_API_management'
+    FHiR_API_management:'FHiR_API_management',
+    Enrollment_Outbound:'Enrollment_Outbound',
+    Enrollment_Details_Outbound:'Enrollment_Details_Outbound'
 }
 
 export default Strings;

@@ -82,6 +82,8 @@ import {RDE} from './app/containers/HL7/Medications'
 import {ORU} from './app/containers/HL7/ORU'
 import{DFT} from './app/containers/HL7/DFT'
 import{FHiR_API_management} from './app/containers/FHiR_API_management'
+import{Enrollment_Outbound} from './app/containers/Enrollment/Enrollment_Outbound'
+import{Enrollment_Details_Outbound} from './app/containers/Enrollment/Enrollment_Details_Outbound'
 
 // import "ag-grid-enterprise/dist/styles/ag-grid.css";
 // import "ag-grid-enterprise/dist/styles/ag-theme-balham.css";
@@ -287,9 +289,10 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ORU} component={ORU} />
                                 <Route path={'/' + Strings.DFT} component={DFT} />
                                 <Route path={'/' + Strings.FHiR_API_management} component={FHiR_API_management} />
+                                <Route path={'/' + Strings.Enrollment_Outbound} component={Enrollment_Outbound} />
+                                <Route path={'/' + Strings.Enrollment_Details_Outbound} component={Enrollment_Details_Outbound} />
+                            
                                 
-                            
-                            
                             
                             </div>
                         </div>
