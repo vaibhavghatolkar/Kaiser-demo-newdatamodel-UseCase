@@ -1520,7 +1520,7 @@ export class OutboundEnrollmentDashboard extends React.Component {
                 header={header}
                 piechart_data={piechart_data}
                 data={sendData}
-                height={12}
+                height={8}
             />
         )
     }

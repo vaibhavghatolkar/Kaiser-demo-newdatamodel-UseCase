@@ -325,7 +325,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_New} />
                                 <Route path={'/' + Strings.Encounter_view_CustomEditNew} component={Encounter_view_CustomEditNew} />
                                 <Route path={'/' + Strings.CrosswalkTable} component={CrosswalkTable} />
-                                <Route path={'/' + Strings.Enrollment_FullFileCompare} component={Enrollment_FullFileCompare} />
+                                <Route path={'/' + Strings.Enrollment_FullFileCompare} component={Enrollment_FullFileCompare_Dashboard} />
                                 <Route path={'/' + Strings.Enrollment_eligibiltyDetails} component={Enrollment_eligibiltyDetails} />
 
                                 <Route path={'/' + Strings.EthnicityMismatch} component={EthnicityMismatch} />
@@ -344,7 +344,7 @@ class PrivateRoute extends React.Component {
 
                                 <Route path={'/' + Strings.House_Head_Mismatch} component={House_Head_Mismatch} />
                                 <Route path={'/' + Strings.CustomService} component={CustomService} />
-                                <Route path={'/' + Strings.Enrollment_FullFileCompare_Dashboard} component={Enrollment_FullFileCompare_Dashboard} />
+                                {/* <Route path={'/' + Strings.Enrollment_FullFileCompare_Dashboard} component={Enrollment_FullFileCompare_Dashboard} /> */}
                                 <Route path={'/' + Strings.OutboundEnrollmentDashboard} component={ OutboundEnrollmentDashboard } />
 
                             </div>
