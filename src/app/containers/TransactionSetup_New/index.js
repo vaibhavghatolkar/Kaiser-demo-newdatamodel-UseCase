@@ -20,7 +20,7 @@ export class TransactionSetup_New extends React.Component {
             Companion_Guide: '834 Medicare',
             Acceptance_Criteria: '',
             Communication_Type: '1',
-            Change_Trading_Partner: 'MOLINA HEALTHCARE CALIFORNIA',
+            Change_Trading_Partner: '',
             file_naming_option: '',
             Use_Default_Settings: false,
             Host: '',
@@ -36,11 +36,11 @@ export class TransactionSetup_New extends React.Component {
             MaxSizeFile: '',
             MaxEncounterFile: '',
             MaxLineItems: '',
-            SelectedLob: 'Northern California',
+            SelectedLob: '',
             SelectedTransaction: '',
             daysofmonth: '',
             daysofweek: '',
-            State: 'CA',
+            State: '',
             direction: 'Outbound',
             SelectedTransaction: '834'
 
@@ -408,7 +408,7 @@ export class TransactionSetup_New extends React.Component {
                             <div className="form-group col-sm-2">
                                 <label className="list-header1">Trading partner</label>
                                 <select onChange={this.ChangeTradingPartner} className="form-control list-header1" id="fao1">
-                                    <option value="0">Trading partner</option>
+                                    <option value="0"></option>
                                     {this.getoptions()}
                                 </select>
                             </div>
