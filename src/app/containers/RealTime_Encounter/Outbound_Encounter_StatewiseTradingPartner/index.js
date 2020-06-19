@@ -35,7 +35,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
             Search_PayerID: '',
             Search_PayerName: '',
             Search_State: "",
-            Search_Tran_Type: "Encounter 837P",
+            Search_Tran_Type: "834",
             direction: 'Outbound',
             orderby: '',
             showTable: false,
@@ -49,7 +49,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
             Transaction_Code_Rotation: 180,
             incoming_fileId: "",
             fileName: '',
-            paginationPageSize: 10,
+            paginationPageSize: 5,
             domLayout: 'autoHeight',
             LOB: '',
             autoGroupColumnDef: {
@@ -74,19 +74,17 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+           
             statusArray: [
                 { 'State': 'UT', 'fileName': '834_UT_Audit.da', 'Monthly_file': '', 'Cut_off_period': '25-04-2020', 'Cut_off_period_end': '29-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 { 'State': 'ID', 'fileName': '834_ID_Audit.da', 'Monthly_file': '', 'Cut_off_period': '26-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 { 'State': 'CA', 'fileName': '834_CA_Audit.da', 'Monthly_file': '', 'Cut_off_period': '26-04-2020', 'Cut_off_period_end': '29-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
-                { 'State': 'AL', 'fileName': '834_AL_Audit.da', 'Monthly_file': '', 'Cut_off_period': '27-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
-                { 'State': 'AK', 'fileName': '834_AK_Audit.da', 'Monthly_file': '', 'Cut_off_period': '28-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
+                { 'State': 'FL', 'fileName': '834_FL_Audit.da', 'Monthly_file': '', 'Cut_off_period': '27-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
+                { 'State': 'IL', 'fileName': '834_IL_Audit.da', 'Monthly_file': '', 'Cut_off_period': '28-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 { 'State': 'AZ', 'fileName': '834_AZ_Audit.da', 'Monthly_file': '', 'Cut_off_period': '28-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 { 'State': 'AR', 'fileName': '834_AR_Audit.da', 'Monthly_file': '', 'Cut_off_period': '29-04-2020', 'Cut_off_period_end': '27-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 { 'State': 'CO', 'fileName': '834_CO_Audit.da', 'Monthly_file': '', 'Cut_off_period': '29-04-2020', 'Cut_off_period_end': '30-04-2020', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
@@ -106,11 +104,11 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                 // { 'State': 'UT', 'fileName':'834_UT_Audit2.da',  'dailyFile': '834_UT_Daily1.da','sequence': 'MOLINA',  'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '',},
                 // { 'State': 'UT', 'fileName':'834_UT_Audit2.da',  'dailyFile': '834_UT_Daily2.da','sequence': 'MOLCHIP',  'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '',},
 
-                { 'State': 'AL', 'fileName': '834_AL_Audit.da', 'dailyFile': '834_AL_Daily01.da', 'sequence': 'MOLINA', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
+                { 'State': 'IL', 'fileName': '834_IL_Audit.da', 'dailyFile': '834_IL_Daily01.da', 'sequence': 'MOLINA', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 // { 'State': 'AL', 'fileName':'834_AL_Audit.da', 'dailyFile': '834_AL_Daily02.da', 'sequence': 'MOLCHIP', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '',},
                 // { 'State': 'AL', 'fileName':'834_AL_Audit.da', 'dailyFile': '834_AL_Daily03.da', 'sequence': 'MOL IMED', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '',},
 
-                { 'State': 'AK', 'fileName': '834_AK_Audit.da', 'dailyFile': '834_UT_Daily001.da', 'sequence': 'MOLCHIP', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
+                { 'State': 'FL', 'fileName': '834_FL_Audit.da', 'dailyFile': '834_FL_Daily001.da', 'sequence': 'MOLCHIP', 'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '', },
                 // { 'State': 'AK', 'fileName':'834_AK_Audit001.da', 'dailyFile': '834_UT_Daily002.da','sequence': 'MOLCHIP',  'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '',},
                 // { 'State': 'AK', 'fileName':'834_AK_Audit002.da', 'dailyFile': '834_UT_Daily003.da','sequence': 'MOL IMED',  'Daily_threshold': '3:00 PM', 'Email_threshold': 'enrollment@molina.com', 'Override': '',},
 
@@ -168,7 +166,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -231,7 +229,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -259,7 +257,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
             }
        }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -354,7 +352,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
 
 
             if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-            fetch(Urls.base_url, {
+            fetch(Urls._base_url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -422,7 +420,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
 
             '}'
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -468,7 +466,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
 
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls._base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -569,8 +567,8 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
             { headerName: "Transaction Type", field: "Transaction_Code", width: 150 },
             { headerName: "Scheduled Time", field: "ScheduleTime", width: 250 },
             { headerName: "Max Size of File", field: "Max_Size_of_File", width: 120 },
-            { headerName: "Max Encounter in File", field: "Max_Encounter_In_File", width: 150 },
-            { headerName: "Max Line items in Encounter", field: "Max_Line_Items_In_Encounter", width: 150 },
+            // { headerName: "Max Encounter in File", field: "Max_Encounter_In_File", width: 150 },
+            // { headerName: "Max Line items in Encounter", field: "Max_Line_Items_In_Encounter", width: 150 },
 
             {
                 headerName: "", field: "pencil", width: 50, cellRenderer: (data) => {
@@ -933,7 +931,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                                                     setTimeout(() => {
                                                         this.gettranaction()
                                                     }, 50);
-                                                }} >>
+                                                }} >
                                             <option value="" ></option>
                                                 {this.Search_gettrans()}
 
@@ -947,9 +945,9 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                                 </div>
                                 <div>
                                     {this._renderList()}
-                                    {/* <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Audit File Sequencing</b></div> */}
-                                    {/* {this.AuditFileSeq()} */}
-                                    {/* {this.state.showTable ? this.AuditFileSeqDetails() : null} */}
+                                    <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Audit File Sequencing</b></div> 
+                                    {this.AuditFileSeq()}
+                                     {this.state.showTable ? this.AuditFileSeqDetails() : null}
                                 </div>
                             </div>
                             </div>
@@ -985,7 +983,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                             setTimeout(() => {
                                 this.gettranaction()
                             }, 50);
-                        }} >>
+                        }} >
                                             <option value="" ></option>
                         {this.Search_gettrans()}
 

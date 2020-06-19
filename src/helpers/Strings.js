@@ -159,10 +159,12 @@ const Strings = {
     ORU:'ORU',
     DFT:'DFT',
     FHiR_API_management:'FHiR_API_management',
-    
+    Outbound_Encounter_StatewiseTradingPartner:'Outbound_StatewiseTradingPartner',
+    TransactionSetup_New:'TransactionSetup_New',
+    Encounter_view_CustomEditNew:'View_Outbound_CustomEditNew',
+    CrosswalkTable: 'CrosswalkTable',
     Enrollment_FullFileCompare: 'Enrollment_FullFileCompare',
     EnrollmentDetails : 'EnrollmentDetails',
-    
     EthnicityMismatch:'EthnicityMismatch',
     RateCode:'RateCodeMismatch',
     SameGenderTwin:'SameGenderTwin',
