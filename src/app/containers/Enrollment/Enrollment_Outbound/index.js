@@ -896,7 +896,7 @@ export class Enrollment_Outbound extends React.Component {
 
 
                 summary = [
-                    { name: 'Total Files', value: FileCount.TotalCount },
+                    { name: 'Received From QNXT', value: FileCount.TotalCount },
                     { name: 'Validated', value: FileCount.Validated },
                     { name: 'File In Error', value: FileCount.Error },
                     { name: 'Resubmit', value: data.Resubmit },
@@ -1011,7 +1011,7 @@ export class Enrollment_Outbound extends React.Component {
             let data = []
 
 
-            if (item.name == 'Total Files') {
+            if (item.name == 'Received From QNXT') {
                 addon = '/accept'
                 claimStatus = ''
                 EnrollmentStatus = ''
@@ -1095,7 +1095,9 @@ export class Enrollment_Outbound extends React.Component {
             let Status = ''
             let EnrollmentStatus = ''
             let unclick = ''
-            if (item.name == 'Add') {
+            if (item.name == 'HiPaaS Received') {
+                color = "var(--green)"
+            } else if (item.name == 'Add') {
                 claimStatus = '021'
                 subtitle = "Add"
                 Status = ''
@@ -1236,8 +1238,8 @@ export class Enrollment_Outbound extends React.Component {
 
         let stage_1 = [
             { 'header': 'HiPaaS Received Status' },
-            { 'name': ' Received From QNXT', 'value': this.state.X12_Count },
-            { 'name': ' HiPaaS Received', 'value': this.state.Hipaas_Count, 'isClick': true },
+            { 'name': 'QNXT Generated', 'value': this.state.X12_Count },
+            { 'name': 'HiPaaS Received', 'value': this.state.Hipaas_Count, 'isClick': true },
 
             // { 'name': 'X12 Count', 'value': this.state.X12_Count },
             // { 'name': 'HiPaaS Count', 'value': this.state.Hipaas_Count, 'isClick': true },
@@ -1636,8 +1638,9 @@ export class Enrollment_Outbound extends React.Component {
     _renderList = () => {
 
         let columnDefs = [
-            { headerName: "Sent File Name", field: "FileName", width: 350, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Sent Date", field: "Date", width: 180, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "File Name", field: "FileName", width: 250, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Process Id", field: "FileID",  width: 130},
+            { headerName: "Sent Date", field: "Date", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "Submitter", field: "Subscriber",width:120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }  },
             { headerName: "Total Enrollments", field: "Enrollment", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Errors", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -1675,7 +1678,7 @@ export class Enrollment_Outbound extends React.Component {
                         enableCellTextSelection={true}
 
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Sent File Name') {
+                            if (event.colDef.headerName == 'File Name') {
                                 this.setState({
                                     incoming_fileId: event.data.FileID
                                 }, () => {
