@@ -27,6 +27,7 @@ export class Enrollment_FullFileCompare extends React.Component {
 
     constructor(props) {
         super(props);
+        let selected_FileID = (props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].incoming_fileId == "") ? "" : props.location.state.data[0].incoming_fileId
         this.state = {
             claimsList: [],
             summaryList: [],
@@ -183,19 +184,24 @@ export class Enrollment_FullFileCompare extends React.Component {
                 { name: 'Reinstate Delta', value: 0 },
                 { name: 'Term by Absence', value: 5973 },
             ],
+            // summaryCountNew: [
+            //     { name: 'Queued to QNXT', value: 15414 },
+            //     { name: 'Applied to QNXT', value: 15409 },
+            //     { name: 'Errors', value: 5 },
+            // ],
             summaryCountNew: [
-                { name: 'Queued to QNXT', value: 5000 },
-                { name: 'Applied to QNXT', value: 4000 },
-                { name: 'Errors', value: 5 },
+                { name: 'Queued to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61099 : 61 },
+                { name: 'Applied to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
+                { name: 'Errors', value: selected_FileID != '834_UT_Daily.da' ? 5 : 0 },
             ],
             summaryCount1New: [
-                { name: 'Queued ID Cards', value: 4000 },
-                { name: 'Id Cards Generated', value: 3000 },
-                { name: 'Generated Errors', value: 0 },
+                { name: 'Queued ID Cards', value: selected_FileID != '834_UT_Daily.da' ? 9441 : 16 },
+                { name: 'Id Cards Generated', value: selected_FileID != '834_UT_Daily.da' ? 9436 : 16 },
+                { name: 'Generated Errors', value: selected_FileID != '834_UT_Daily.da' ? 5 : 0 },
             ],
             summaryCount2New: [
-                { name: 'Queued Outbound Generated', value: 2000 },
-                { name: 'Outbound Generated', value: 1000 },
+                { name: 'Queued Outbound Generated', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
+                { name: 'Outbound Generated', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
                 { name: 'Outbound Errors', value: 0 },
             ],
 
@@ -449,12 +455,42 @@ export class Enrollment_FullFileCompare extends React.Component {
                     ethinicityMismatch: 0,
                     DeltaCodeMismatch: 3004,
                     effectiveData: 7,
-                    household: 340
+                    household: 340,
+                    summaryCountNew: [
+                        { name: 'Queued to QNXT', value: 61099 },
+                        { name: 'Applied to QNXT', value: 61094 },
+                        { name: 'Errors', value: 5 },
+                    ],
+                    summaryCount1New: [
+                        { name: 'Queued ID Cards', value: 9441 },
+                        { name: 'Id Cards Generated', value: 9436 },
+                        { name: 'Generated Errors', value: 5 },
+                    ],
+                    summaryCount2New: [
+                        { name: 'Queued Outbound Generated', value: 61094 },
+                        { name: 'Outbound Generated', value: 61094 },
+                        { name: 'Outbound Errors', value: 0 },
+                    ],
                 })
             } else {
                 this.setState({
                     effectiveData: 8,
-                    household: 2
+                    household: 2,
+                    summaryCountNew: [
+                        { name: 'Queued to QNXT', value: 61 },
+                        { name: 'Applied to QNXT', value: 61 },
+                        { name: 'Errors', value: 0 },
+                    ],
+                    summaryCount1New: [
+                        { name: 'Queued ID Cards', value: 16 },
+                        { name: 'Id Cards Generated', value: 16 },
+                        { name: 'Generated Errors', value: 0 },
+                    ],
+                    summaryCount2New: [
+                        { name: 'Queued Outbound Generated', value: 61 },
+                        { name: 'Outbound Generated', value: 61 },
+                        { name: 'Outbound Errors', value: 0 },
+                    ],
                 }, () => {
                     this._getCounts()
                     this.gettiles()
@@ -769,7 +805,6 @@ export class Enrollment_FullFileCompare extends React.Component {
                 let summary = []
                 let data = res.data.Compare834AuditFileDahsboardCount[0]
 
-
                 summary = [
                     { name: 'Total X12', value: data.TotalX12 },
                     { name: 'Audit', value: data.Audit },
@@ -784,22 +819,27 @@ export class Enrollment_FullFileCompare extends React.Component {
                     { name: 'Reinstate Delta', value: data.RenDeltaAdd },
                     { name: 'Term by Absence', value: data.TermbyAbsence },
                 ]
+
+                let selected_FileID = this.state.selected_FileID
                 let summery1 = [
-                    { name: 'Queued to QNXT', value: 5000 },
-                    { name: 'Applied to QNXT', value: 4000 },
-                    { name: 'Errors', value: 5 },
+                    { name: 'Queued to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61099 : 61 },
+                    { name: 'Applied to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
+                    { name: 'Errors', value: selected_FileID != '834_UT_Daily.da' ? 5 : 0 },
                 ]
+
                 let summery2 = [
-                    { name: 'Queued ID Cards', value: 4000 },
-                    { name: 'Id Cards Generated', value: 3000 },
-                    { name: 'Generated Errors', value: 0 },
+                    { name: 'Queued ID Cards', value: selected_FileID != '834_UT_Daily.da' ? 9441 : 16 },
+                    { name: 'Id Cards Generated', value: selected_FileID != '834_UT_Daily.da' ? 9436 : 16 },
+                    { name: 'Generated Errors', value: selected_FileID != '834_UT_Daily.da' ? 5 : 0 },
 
                 ]
+
                 let summery3 = [
-                    { name: 'Queued Outbound Generated', value: 2000 },
-                    { name: 'Outbound Generated', value: 1000 },
+                    { name: 'Queued Outbound Generated', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
+                    { name: 'Outbound Generated', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
                     { name: 'Outbound Errors', value: 0 },
                 ]
+
                 process.env.NODE_ENV == 'development' && console.log(summary)
                 this.setState({
                     summaryCount: summary,
@@ -1139,7 +1179,6 @@ export class Enrollment_FullFileCompare extends React.Component {
                     value={item.value}
                     isenrollment={true}
                     second_val={item.second_val}
-
                     url={url ? url : Strings.Enrollment_eligibiltyDetails}
                 />
 
@@ -1392,7 +1431,9 @@ export class Enrollment_FullFileCompare extends React.Component {
             let MonthlyStatus = ""
             let data = []
 
-            if (item.name == 'Total X12') {
+            if (item.name == 'Id Cards Generated') {
+                url = Strings.OutboundIdGenerated
+            } else if (item.name == 'Total X12') {
                 claimStatus = ''
                 status = ''
                 Audit = ''
@@ -1562,8 +1603,7 @@ export class Enrollment_FullFileCompare extends React.Component {
                     value={item.value}
                     isenrollment={true}
                     second_val={item.second_val}
-
-                // url={url ? url : Strings.Enrollment_eligibiltyDetails}
+                    url={url ? url : ''}
                 />
 
             )
@@ -1962,7 +2002,7 @@ export class Enrollment_FullFileCompare extends React.Component {
         let stage_4 = [
             { 'header': 'Rate Code' },
             { 'name': 'Rate Code Mismatch', 'value': this.state.RateCodeMismatch, 'isClick': true },
-            { 'name': 'Dual Code Mismatch', 'value': this.state.DeltaCodeMismatch, 'isClick': true  },
+            { 'name': 'Dual Code Mismatch', 'value': this.state.DeltaCodeMismatch, 'isClick': true },
             // { 'name': 'Molina', 'value': this.state.molchip_TermbyAbsence, 'isClick': true },
             // { 'name': 'Molina IMED', 'value': this.state.molchip_MissingPCP, 'isClick': true },
             //  { 'name': 'Termed PCP', 'value': this.state.molchip_TermedPCP },

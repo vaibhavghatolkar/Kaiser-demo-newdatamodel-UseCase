@@ -46,6 +46,7 @@ export class Login extends React.Component {
                         localStorage.setItem("UserId", res.data.UserLogin[0].Id)
                         localStorage.setItem("DbTech", res.data.UserLogin[0].DbTech)
                         localStorage.setItem("role_id", res.data.UserLogin[0].role_id)
+                        sessionStorage.setItem("role_id", res.data.UserLogin[0].role_id)
                         this.props.handleFlag(this.state.loggedIn)
                     }, 100);
 
