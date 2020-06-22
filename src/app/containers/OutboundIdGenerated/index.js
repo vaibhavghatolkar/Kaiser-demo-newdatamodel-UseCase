@@ -49,7 +49,7 @@ export class OutboundIdGenerated extends React.Component {
             chartType: 'Monthwise',
             selectedTradingPartner: '',
             incoming_fileId: '',
-            State: '',
+            State: 'UT',
             Months: 0,
             accepted: 0,
             rejected: 0,
@@ -481,7 +481,7 @@ export class OutboundIdGenerated extends React.Component {
                 removeGrid={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
-                State={'UT'}
+                State={this.state.State}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
@@ -1656,7 +1656,7 @@ export class OutboundIdGenerated extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Id Cards Generated</h5>
+                <h5 className="headerText">Id Card Dashboard</h5>
 
                 <div className="row">
                     <div className="col-12">
