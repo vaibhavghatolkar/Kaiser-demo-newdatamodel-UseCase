@@ -23,7 +23,7 @@ import { MDBProgress } from 'mdbreact';
 import { Filters } from '../../components/Filters';
 
 let val = ''
-export class OutboundEnrollmentDashboard extends React.Component {
+export class OutboundIdGenerated extends React.Component {
 
     constructor(props) {
         super(props);
@@ -1562,11 +1562,11 @@ export class OutboundEnrollmentDashboard extends React.Component {
 
 
     _renderList = () => {
-        
         let columnDefs = [
             { headerName: "Enrollment Id", field: "enrollid", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "First Name", field: "FirstName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Last Name", field: "LastName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Id Card Generated", field: "Id_card_generated", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
 
             { headerName: "Caremark", field: "Caremark", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Humanarc", field: "Humanarc", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -1656,7 +1656,7 @@ export class OutboundEnrollmentDashboard extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Outbound Enrollment Dashboard</h5>
+                <h5 className="headerText">Id Cards Generated</h5>
 
                 <div className="row">
                     <div className="col-12">
