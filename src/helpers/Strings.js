@@ -184,7 +184,8 @@ const Strings = {
     CustomService: 'CustomService',
     
     Enrollment_FullFileCompare_Dashboard: 'Enrollment_FullFileCompare_Dashboard',
-    OutboundEnrollmentDashboard : 'OutboundEnrollmentDashboard'
+    OutboundEnrollmentDashboard : 'OutboundEnrollmentDashboard',
+    Enrollment_Outbound_JobList:'Enrollment_Outbound_JobList'
 }
 
 export default Strings;

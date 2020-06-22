@@ -213,6 +213,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 188) { name = Strings.CustomService }
         else if (index == 191) { name = Strings.Enrollment_Outbound }
         else if (index == 192) { name = Strings.Enrollment_Details_Outbound }
+        else if (index == 193) { name = Strings.Enrollment_Outbound_JobList }
      
         return name
     }
