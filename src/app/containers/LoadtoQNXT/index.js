@@ -905,7 +905,7 @@ export class LoadtoQNXT extends React.Component {
                                     })
                                     $('#MemberInfoDialogbox').modal('show')
 
-                                }} className="clickable underline-label" style={{ float: 'right', marginRight: '20px', color: "#139DC9", fontWeight: 'bold' }}> Edit</label><br></br> </div>
+                                }} className="clickable1 underline-label" style={{ float: 'right',fontSize:'12px', marginRight: '20px', color: "#139DC9", fontWeight: 'bold' }}> Edit</label><br></br> </div>
                             {this.renderRows(this.state.memberDetails834)}
                             <br></br>
                             {/* {this.renderButton()} */}
@@ -1114,7 +1114,7 @@ export class LoadtoQNXT extends React.Component {
                                 })
                                 $('#MemberInfoDialogbox').modal('hide')
                             }}>
-                            <span class="close clickable">&times;</span>
+                            <span class="close clickable1">&times;</span>
                         </div>
 
                         <div>
