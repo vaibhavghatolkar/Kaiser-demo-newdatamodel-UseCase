@@ -693,16 +693,6 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                         rowData={Data}
                         icons={this.state.icons}
                         enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'State') {
-                                this.setState({
-                                    State: event.data.State,
-                                    showTable: true
-                                }, () => {
-                                    this._refreshScreen1()
-                                })
-                            }
-                        }}
                     >
                     </AgGridReact>
                 </div>
