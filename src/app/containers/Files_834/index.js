@@ -1085,7 +1085,7 @@ export class Files_834 extends React.Component {
                                 $('#MemberInfoDialogbox').modal('hide')
 
                             }}>
-                            <span class="close clickable">&times;</span>
+                            <span class="close clickable1">&times;</span>
                         </div>
                        
                         <div>

@@ -1011,9 +1011,9 @@ export class EnrollmentDashboard extends React.Component {
                 claimStatus = ''
 
                 subtitle = ""
-            } else if (item.name == 'Total Errors') {
+            } else if (item.name == 'L1 L2 Errors') {
                 claimStatus = 'Error'
-                subtitle = "Total Errors"
+                subtitle = "L1 L2 Errors"
             } else if (item.name == 'Resubmit') {
                 claimStatus = 'Ready to Resubmit'
                 subtitle = "Resubmit"
