@@ -367,7 +367,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                 .then(data => alert(data.data.TradingPartnerSave[0].Msg))
             setTimeout(() => {
                 window.location.reload()
-            }, 1000)
+            }, 3000)
         }
         else { alert("Plaese Enter the Payer Name") }
     }
@@ -628,6 +628,78 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                                     showTable: false
                                 }, () => {
                                     this._refreshScreen()
+                                })
+                            }
+                        }}
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+    ScheduleTimeFile = () => {
+        // <i class="fas fa-pencil-alt"></i>
+        let Data = [
+            {'State': 'UT','Job_name': 'elig_b_x_ext_ob_ut_caremark', 'LOB':'', 'scheduleTime':'1:00 pm every 1 day','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_m_ces_ob_ut_humanarc_fully_identified', 'LOB':'', 'scheduleTime':'02:00 pm to 03:00 pm every 15 Minute','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_m_ces_ob_ut_hms', 'LOB':'', 'scheduleTime':'04:00 pm to 07:00 pm every 1 Minute','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_d_ext_ob_ut_mp_questlab_834', 'LOB':'MP', 'scheduleTime':'06:00 pm to 09:00 pm every 1 Hour','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_d_ces_ob_ut_mp_logisticare', 'LOB':'MP', 'scheduleTime':'03:00 am to 05:00 am every 1 Hour','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_d_ces_ob_ut_vsp_medicaid_834', 'LOB':'', 'scheduleTime':'3:00 pm every 1 day','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_m_ces_ob_ut_march_vision_medicaid_834', 'LOB':'', 'scheduleTime':'11:00 pm to 01:00 am every 1 Hour','maxSize':'2MB'},
+            {'State': 'UT','Job_name': 'elig_b_m_ces_ob_ut_rxamerica', 'LOB':'', 'scheduleTime':'1:00 pm every 1 day','maxSize':'2MB'}
+        ]
+
+        let columnDefs = [
+            { headerName: "State", field: "State", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Job Name", field: "Job_name", flex: 1 },
+            { headerName: "LOB", field: "LOB", width: 90 },
+            { headerName: "Scheduled Time", field: "scheduleTime", flex: 1 },
+            { headerName: "Max Size", field: "maxSize", width: 120 },
+            {
+                headerName: "", field: "pencil", width: 50, cellRenderer: (data) => {
+                    return '<i class="fas fa-pencil-alt"></i>'
+                }, cellStyle: { cursor: 'pointer' }, pinned: 'right'
+            },
+            {
+                headerName: "", field: "trash", width: 50, cellRenderer: (data) => {
+                    return '<i class="far fa-trash-alt"></i>'
+                }, cellStyle: { cursor: 'pointer' }, pinned: 'right'
+            },
+        ]
+
+        return (
+            <div className="text-center" style={{ width: '94%', marginLeft: '3%' }}>
+
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '10px' }}>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={Data}
+                        icons={this.state.icons}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == 'State') {
+                                this.setState({
+                                    State: event.data.State,
+                                    showTable: true
+                                }, () => {
+                                    this._refreshScreen1()
                                 })
                             }
                         }}
@@ -945,6 +1017,8 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                                 </div>
                                 <div>
                                     {this._renderList()}
+                                    <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Outbound File Generation Scheduled</b></div> 
+                                    {this.ScheduleTimeFile()}
                                     <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Audit File Sequencing</b></div> 
                                     {this.AuditFileSeq()}
                                      {this.state.showTable ? this.AuditFileSeqDetails() : null}

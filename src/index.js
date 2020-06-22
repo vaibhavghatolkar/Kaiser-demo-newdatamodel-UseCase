@@ -115,6 +115,7 @@ import { CustomService } from './app/containers/CustomService';
 import { Enrollment_FullFileCompare_Dashboard } from './app/containers/Enrollment/Enrollment_FullFileComparison_Dashboard';
 import { OutboundEnrollmentDashboard } from './app/containers/OutboundEnrollmentDashboard';
 import { OutboundIdGenerated } from './app/containers/OutboundIdGenerated';
+import {Enrollment_Outbound_JobList} from './app/containers/Enrollment/Enrollment_Outbound_JobList'
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -364,6 +365,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Enrollment_FullFileCompare_Dashboard} component={Enrollment_FullFileCompare_Dashboard} />
                                 <Route path={'/' + Strings.OutboundEnrollmentDashboard} component={ OutboundEnrollmentDashboard } />
                                 <Route path={'/' + Strings.OutboundIdGenerated} component={ OutboundIdGenerated } />
+                                <Route path={'/' + Strings.Enrollment_Outbound_JobList} component={ Enrollment_Outbound_JobList } />
+                                
 
                             </div>
                         </div>
