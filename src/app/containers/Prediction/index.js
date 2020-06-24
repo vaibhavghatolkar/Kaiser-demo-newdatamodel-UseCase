@@ -10,6 +10,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../components/TableTiles';
+import { Filters } from '../../components/Filters';
 import { faAmericanSignLanguageInterpreting } from '@fortawesome/free-solid-svg-icons';
 let val = ''
 
@@ -1073,111 +1074,124 @@ export class Prediction extends React.Component {
         }, 300);
     }
 
-    renderTopbar() {
-        return (
-            <div className="form-style" id='filters'>
-                <div className="form-row">
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Time Range</div>
-                        <select
-                            className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                let day = 0
-                                let chartType = ''
-                                let selected_val = event.target.options[event.target.selectedIndex].text
+    // renderTopbar() {
+    //     return (
+    //         <div className="form-style" id='filters'>
+    //             <div className="form-row">
+    //                 <div className="form-group col-2">
+    //                     <div className="list-dashboard">Time Range</div>
+    //                     <select
+    //                         className="form-control list-dashboard" id="state"
+    //                         onChange={(event) => {
+    //                             let day = 0
+    //                             let chartType = ''
+    //                             let selected_val = event.target.options[event.target.selectedIndex].text
 
-                                if (selected_val == 'Last week') {
-                                    day = 7
-                                    chartType = 'Datewise'
-                                } else if (selected_val == 'Last 30 days') {
-                                    day = 30
-                                    chartType = 'Weekwise'
-                                } else if (selected_val == 'Last 90 days') {
-                                    day = 90
-                                } else if (selected_val == 'Last 180 days') {
-                                    day = 180
-                                } else if (selected_val == 'Last year') {
-                                    day = 365
-                                }
+    //                             if (selected_val == 'Last week') {
+    //                                 day = 7
+    //                                 chartType = 'Datewise'
+    //                             } else if (selected_val == 'Last 30 days') {
+    //                                 day = 30
+    //                                 chartType = 'Weekwise'
+    //                             } else if (selected_val == 'Last 90 days') {
+    //                                 day = 90
+    //                             } else if (selected_val == 'Last 180 days') {
+    //                                 day = 180
+    //                             } else if (selected_val == 'Last year') {
+    //                                 day = 365
+    //                             }
 
-                                let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
-                                let endDate = moment().format('YYYY-MM-DD')
+    //                             let startDate = moment().subtract(day, 'd').format('YYYY-MM-DD')
+    //                             let endDate = moment().format('YYYY-MM-DD')
 
-                                if (!selected_val) {
-                                    startDate = ''
-                                    endDate = ''
-                                }
+    //                             if (!selected_val) {
+    //                                 startDate = ''
+    //                                 endDate = ''
+    //                             }
 
-                                this.setState({
-                                    startDate: startDate,
-                                    endDate: endDate,
-                                    selected_val: selected_val,
-                                    chartType: chartType
-                                })
+    //                             this.setState({
+    //                                 startDate: startDate,
+    //                                 endDate: endDate,
+    //                                 selected_val: selected_val,
+    //                                 chartType: chartType
+    //                             })
 
-                                setTimeout(() => {
-                                    this.getData()
-                                    this.getListData()
-                                }, 50);
-                            }}
-                        >
-                            <option value="1">Last week</option>
-                            <option value="2">Last 30 days</option>
-                            <option value="2">Last 90 days</option>
-                            <option value="2">Last 180 days</option>
-                            <option selected="selected" value="2">Last year</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Type</div>
-                        <select className="form-control list-dashboard" id="state"
-                            onChange={(event) => {
-                                this.setState({
-                                    State: event.target.options[event.target.selectedIndex].text
-                                }, () => {
-                                    this.getData()
-                                    this.getListData()
-                                })
-                            }}
-                        >
-                            <option value=""></option>
-                            <option value="1">A01</option>
-                            <option value="2">A02</option>
-                            <option value="3">A03</option>
-                            <option value="4">A04</option>
-                            <option value="5">A05</option>
-                            <option value="6">A06</option>
-                            <option value="7">A07</option>
-                            <option value="8">A08</option>
+    //                             setTimeout(() => {
+    //                                 this.getData()
+    //                                 this.getListData()
+    //                             }, 50);
+    //                         }}
+    //                     >
+    //                         <option value="1">Last week</option>
+    //                         <option value="2">Last 30 days</option>
+    //                         <option value="2">Last 90 days</option>
+    //                         <option value="2">Last 180 days</option>
+    //                         <option selected="selected" value="2">Last year</option>
+    //                     </select>
+    //                 </div>
+    //                 <div className="form-group col-2">
+    //                     <div className="list-dashboard">Type</div>
+    //                     <select className="form-control list-dashboard" id="state"
+    //                         onChange={(event) => {
+    //                             this.setState({
+    //                                 State: event.target.options[event.target.selectedIndex].text
+    //                             }, () => {
+    //                                 this.getData()
+    //                                 this.getListData()
+    //                             })
+    //                         }}
+    //                     >
+    //                         <option value=""></option>
+    //                         <option value="1">A01</option>
+    //                         <option value="2">A02</option>
+    //                         <option value="3">A03</option>
+    //                         <option value="4">A04</option>
+    //                         <option value="5">A05</option>
+    //                         <option value="6">A06</option>
+    //                         <option value="7">A07</option>
+    //                         <option value="8">A08</option>
                             
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Destination</div>
-                        {/* <input className="form-control" type="text"
-                            onChange={(e) => this.onHandleChange(e)}
-                        /> */}
-                        <select class="form-control list-dashboard">
-                            <option selected value=""></option>
-                            <option  value="1">COH</option>
-                        </select>
-                    </div>
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Directory</div>
-                        <select className="form-control list-dashboard" id="TradingPartner"
-                            onChange={(event) => {
-                                this.onSelect(event, 'selectedTradingPartner')
-                            }}>
-                            <option value="select"></option>
-                            {this.getoptions()}
-                        </select>
-                    </div>
-                </div>
-            </div>
+    //                     </select>
+    //                 </div>
+    //                 <div className="form-group col-2">
+    //                     <div className="list-dashboard">Destination</div>
+    //                     {/* <input className="form-control" type="text"
+    //                         onChange={(e) => this.onHandleChange(e)}
+    //                     /> */}
+    //                     <select class="form-control list-dashboard">
+    //                         <option selected value=""></option>
+    //                         <option  value="1">COH</option>
+    //                     </select>
+    //                 </div>
+    //                 <div className="form-group col-2">
+    //                     <div className="list-dashboard">Directory</div>
+    //                     <select className="form-control list-dashboard" id="TradingPartner"
+    //                         onChange={(event) => {
+    //                             this.onSelect(event, 'selectedTradingPartner')
+    //                         }}>
+    //                         <option value="select"></option>
+    //                         {this.getoptions()}
+    //                     </select>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     )
+    // }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={true}
+                setData={this.setData}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                removeGrid={true}
+                removeSubmitter={true}
+            />
         )
     }
-
-
 
     setData = (startDate, endDate, selected_val) => {
         this.setState({
@@ -1614,7 +1628,7 @@ export class Prediction extends React.Component {
         return (
             <div className="container">
                 <h5 className="headerText">Prediction Dashboard</h5>
-                {this.renderTopbar()}
+                {this._renderTopbar()}
                 {this.renderSummaryDetails()}
                 <div className="general-header">Topics</div>
                 {this.renderClaimDetails()}

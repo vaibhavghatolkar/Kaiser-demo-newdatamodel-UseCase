@@ -216,6 +216,8 @@ export class DynamicSidebar extends React.Component {
         else if (index == 194) { name = Strings.OutboundIdGenerated }
         else if (index == 193) { name = Strings.Enrollment_Outbound_JobList }
         else if (index == 197) { name = Strings.Prediction }
+        else if (index == 196) { name = Strings.Sepsis_Dashboard }
+
         return name
     }
 
