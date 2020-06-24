@@ -857,52 +857,52 @@ export class Sepsis_Dashboard extends React.Component {
             let color = "var(--red)"
 
             if (item.name == 'ADT_HL7') {
-                generalStatus = 'HL7'
+                generalStatus = 'ADT_HL7'
                 subtitle = 'ADT_HL7'
                 color = "var(--blue)"
                 flag = 1
             } else if (item.name == 'ADT_JSON') {
-                generalStatus = 'JSON'
+                generalStatus = 'ADT_JSON'
                 subtitle = "ADT_JSON"
                 color = "var(--green)"
                 flag = 1
             } else if (item.name == 'ADT_JSON_ENRICHED') {
-                generalStatus = 'ENRICHED'
+                generalStatus = 'ADT_JSON_ENRICHED'
                 subtitle = 'ADT_JSON_ENRICHED'
                 color = "var(--blue)"
                 flag = 1
             } else if (item.name == 'VITALS_HL7') {
-                generalStatus = 'HL7'
+                generalStatus = 'VITALS_HL7'
                 subtitle = 'VITALS_HL7'
                 color = "var(--blue)"
                 flag = 2
             } else if (item.name == 'VITALS_JSON') {
-                generalStatus = 'JSON'
+                generalStatus = 'VITALS_JSON'
                 subtitle = "VITALS_JSON"
                 color = "var(--green)"
                 flag = 2
             }else if (item.name == 'LABORDERS_HL7') {
-                generalStatus = 'HL7'
-                subtitle = 'VITALS_LABORDERS_HL7HL7'
+                generalStatus = 'LABORDERS_HL7'
+                subtitle = 'LABORDERS_HL7'
                 color = "var(--blue)"
                 flag = 3
             } else if (item.name == 'LABORDERS_JSON') {
-                generalStatus = 'JSON'
+                generalStatus = 'LABORDERS_JSON'
                 subtitle = "LABORDERS_JSON"
                 color = "var(--green)"
                 flag = 3
             }else if (item.name == 'MEDICATIONS_HL7') {
-                generalStatus = 'HL7'
+                generalStatus = 'MEDICATIONS_HL7'
                 subtitle = 'MEDICATIONS_HL7'
                 color = "var(--blue)"
                 flag = 4
             } else if (item.name == 'MEDICATIONS_JSON') {
-                generalStatus = 'JSON'
+                generalStatus = 'MEDICATIONS_JSON'
                 subtitle = "MEDICATIONS_JSON"
                 color = "var(--green)"
                 flag = 4
             }else if (item.name == 'MEDICATIONS_JSON_UNENRICHED') {
-                generalStatus = 'ENRICHED'
+                generalStatus = 'MEDICATIONS_JSON_UNENRICHED'
                 subtitle = 'MEDICATIONS_JSON_UNENRICHED'
                 color = "var(--blue)"
                 flag = 4
@@ -1030,6 +1030,8 @@ export class Sepsis_Dashboard extends React.Component {
     
             this.setState({
                 summaryList: data,
+                showA04: false,
+                showDetails: false,
                 sepsisTable: true
             })
         })
