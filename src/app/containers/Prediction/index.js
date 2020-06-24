@@ -35,6 +35,7 @@ export class Prediction extends React.Component {
             inProgress: 0,
             Accepted_per: 0,
             rejected_per: 0,
+            predition:false,
             page: 1,
             ClaimBarChart: [],
             claimLabels: [],
@@ -43,6 +44,7 @@ export class Prediction extends React.Component {
             showDetails1: false,
             showA04: false,
             flag1: false,
+            first_tiles:true,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
             autoGroupColumnDef: {
@@ -78,6 +80,9 @@ export class Prediction extends React.Component {
 
         this.showFile = this.showFile.bind(this)
         this.getData = this.getData.bind(this)
+        this.Checkflag = this.Checkflag.bind(this)
+     
+       
     }
 
     componentWillReceiveProps() {
@@ -195,8 +200,14 @@ export class Prediction extends React.Component {
 
 
     renderDetails(flag) {
-        let message="";                
+        let message="";  
+        let checkflag=this.state.massage_flag;
+        if(checkflag=="BMT_PAYLOAD") 
+        {             
         message = `{"MRN":"55104733","VisitID":"3010904","CSN":"3010904","VIT":[],"MED":[{"Value":"","RX_Route":"Oral","RX_Identifier":"2566","RX_NDC":"DOCUSATE SODIUM 100 MG PO CAPS","RX_CompAmount":"100","RX_CompUnits":"mg","RX_CompStrength":"100","RX_CompStrengthUnits":"mg","RX_Status":"DC","RX_Placer_Order_Number":"42059","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"DOCUSATE SODIUM 100 MG PO CAPS","THERA_CLASS_NAME":"Gastrointestinal Agents","PHARM_SUBCLASS_NAME":"Surfactant Laxatives","NAME":"DOCUSATE SODIUM 100 MG PO CAPS","PHARM_CLASS_NAME":"Laxatives","RX_Component_Type":"","EventDateTime":"2020/04/20 09:10:42","CreatedDateTime":"2020/06/16 16:43:20"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"104207","RX_NDC":"LIDOCAINE HCL (PF) 1 % IJ SOLN","RX_CompAmount":"1","RX_CompUnits":"mg","RX_CompStrength":"50","RX_CompStrengthUnits":"mg","RX_Status":"NW","RX_Placer_Order_Number":"42079","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LIDOCAINE HCL (PF) 1 % IJ SOLN","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Local Anesthetics - Amides","NAME":"LIDOCAINE HCL (PF) 1 % IJ SOLN","PHARM_CLASS_NAME":"Local Anesthetics-Parenteral","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:11"},{"Value":"","RX_Route":"Oral","RX_Identifier":"2566","RX_NDC":"DOCUSATE SODIUM 100 MG PO CAPS","RX_CompAmount":"100","RX_CompUnits":"mg","RX_CompStrength":"100","RX_CompStrengthUnits":"mg","RX_Status":"NW","RX_Placer_Order_Number":"42059","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"DOCUSATE SODIUM 100 MG PO CAPS","THERA_CLASS_NAME":"Gastrointestinal Agents","PHARM_SUBCLASS_NAME":"Surfactant Laxatives","NAME":"DOCUSATE SODIUM 100 MG PO CAPS","PHARM_CLASS_NAME":"Laxatives","RX_Component_Type":"","EventDateTime":"2020/04/20 09:10:42","CreatedDateTime":"2020/06/16 16:43:10"},{"Value":"","RX_Route":"Topical","RX_Identifier":"10434","RX_NDC":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","RX_CompAmount":"","RX_CompUnits":"","RX_CompStrength":"","RX_CompStrengthUnits":"","RX_Status":"NW","RX_Placer_Order_Number":"42078","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","THERA_CLASS_NAME":"Topical Products","PHARM_SUBCLASS_NAME":"Local Anesthetics - Topical","NAME":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","PHARM_CLASS_NAME":"Dermatological","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:10"},{"Value":"","RX_Route":"Topical","RX_Identifier":"10434","RX_NDC":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","RX_CompAmount":"","RX_CompUnits":"","RX_CompStrength":"","RX_CompStrengthUnits":"","RX_Status":"XO","RX_Placer_Order_Number":"42078","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","THERA_CLASS_NAME":"Topical Products","PHARM_SUBCLASS_NAME":"Local Anesthetics - Topical","NAME":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","PHARM_CLASS_NAME":"Dermatological","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:17"},{"Value":"","RX_Route":"Intravenous","RX_Identifier":"4318","RX_NDC":"LACTATED RINGERS IV SOLN","RX_CompAmount":"100","RX_CompUnits":"mL/hr","RX_CompStrength":"","RX_CompStrengthUnits":"","RX_Status":"NW","RX_Placer_Order_Number":"42075","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LACTATED RINGERS IV SOLN","THERA_CLASS_NAME":"Nutritional Products","PHARM_SUBCLASS_NAME":"Electrolyte Mixtures","NAME":"LACTATED RINGERS IV SOLN","PHARM_CLASS_NAME":"Minerals & Electrolytes","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:10"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"105900","RX_NDC":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","RX_CompAmount":"40","RX_CompUnits":"mg","RX_CompStrength":"40","RX_CompStrengthUnits":"mg","RX_Status":"XO","RX_Placer_Order_Number":"42100","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","THERA_CLASS_NAME":"Hematological Agents","PHARM_SUBCLASS_NAME":"Heparins And Heparinoid-Like Agents","NAME":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","PHARM_CLASS_NAME":"Anticoagulants","RX_Component_Type":"","EventDateTime":"2020/04/20 14:33:18","CreatedDateTime":"2020/06/16 16:43:25"},{"Value":"","RX_Route":"Topical","RX_Identifier":"10434","RX_NDC":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","RX_CompAmount":"","RX_CompUnits":"","RX_CompStrength":"","RX_CompStrengthUnits":"","RX_Status":"DC","RX_Placer_Order_Number":"42078","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","THERA_CLASS_NAME":"Topical Products","PHARM_SUBCLASS_NAME":"Local Anesthetics - Topical","NAME":"LIDOCAINE-PRILOCAINE 2.5-2.5 % EX CREA","PHARM_CLASS_NAME":"Dermatological","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:22"},{"Value":"","RX_Route":"Oral","RX_Identifier":"5940","RX_NDC":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","RX_CompAmount":"1","RX_CompUnits":"Tab","RX_CompStrength":"1","RX_CompStrengthUnits":"Tab","RX_Status":"DC","RX_Placer_Order_Number":"42098","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Opioid Combinations","NAME":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","PHARM_CLASS_NAME":"Analgesics-Opioid","RX_Component_Type":"","EventDateTime":"2020/04/20 14:32:12","CreatedDateTime":"2020/06/16 16:43:27"},{"Value":"","RX_Route":"Oral","RX_Identifier":"5940","RX_NDC":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","RX_CompAmount":"2","RX_CompUnits":"Tab","RX_CompStrength":"1","RX_CompStrengthUnits":"Tab","RX_Status":"NW","RX_Placer_Order_Number":"42099","RX_Single_Dispense_Amount":"2","RX_Single_Dispense_Unit":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Opioid Combinations","NAME":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","PHARM_CLASS_NAME":"Analgesics-Opioid","RX_Component_Type":"","EventDateTime":"2020/04/20 14:32:12","CreatedDateTime":"2020/06/16 16:43:25"},{"Value":"","RX_Route":"Intravenous","RX_Identifier":"4318","RX_NDC":"LACTATED RINGERS IV SOLN","RX_CompAmount":"100","RX_CompUnits":"mL/hr","RX_CompStrength":"","RX_CompStrengthUnits":"","RX_Status":"XO","RX_Placer_Order_Number":"42075","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LACTATED RINGERS IV SOLN","THERA_CLASS_NAME":"Nutritional Products","PHARM_SUBCLASS_NAME":"Electrolyte Mixtures","NAME":"LACTATED RINGERS IV SOLN","PHARM_CLASS_NAME":"Minerals & Electrolytes","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:17"},{"Value":"","RX_Route":"Oral","RX_Identifier":"2566","RX_NDC":"DOCUSATE SODIUM 100 MG PO CAPS","RX_CompAmount":"100","RX_CompUnits":"mg","RX_CompStrength":"100","RX_CompStrengthUnits":"mg","RX_Status":"XO","RX_Placer_Order_Number":"42059","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"DOCUSATE SODIUM 100 MG PO CAPS","THERA_CLASS_NAME":"Gastrointestinal Agents","PHARM_SUBCLASS_NAME":"Surfactant Laxatives","NAME":"DOCUSATE SODIUM 100 MG PO CAPS","PHARM_CLASS_NAME":"Laxatives","RX_Component_Type":"","EventDateTime":"2020/04/20 09:10:42","CreatedDateTime":"2020/06/16 16:43:17"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"105900","RX_NDC":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","RX_CompAmount":"40","RX_CompUnits":"mg","RX_CompStrength":"40","RX_CompStrengthUnits":"mg","RX_Status":"NW","RX_Placer_Order_Number":"42100","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","THERA_CLASS_NAME":"Hematological Agents","PHARM_SUBCLASS_NAME":"Heparins And Heparinoid-Like Agents","NAME":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","PHARM_CLASS_NAME":"Anticoagulants","RX_Component_Type":"","EventDateTime":"2020/04/20 14:33:18","CreatedDateTime":"2020/06/16 16:43:24"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"104207","RX_NDC":"LIDOCAINE HCL (PF) 1 % IJ SOLN","RX_CompAmount":"1","RX_CompUnits":"mg","RX_CompStrength":"50","RX_CompStrengthUnits":"mg","RX_Status":"XO","RX_Placer_Order_Number":"42079","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LIDOCAINE HCL (PF) 1 % IJ SOLN","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Local Anesthetics - Amides","NAME":"LIDOCAINE HCL (PF) 1 % IJ SOLN","PHARM_CLASS_NAME":"Local Anesthetics-Parenteral","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:17"},{"Value":"","RX_Route":"Oral","RX_Identifier":"5940","RX_NDC":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","RX_CompAmount":"1","RX_CompUnits":"Tab","RX_CompStrength":"1","RX_CompStrengthUnits":"Tab","RX_Status":"NW","RX_Placer_Order_Number":"42098","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Opioid Combinations","NAME":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","PHARM_CLASS_NAME":"Analgesics-Opioid","RX_Component_Type":"","EventDateTime":"2020/04/20 14:32:12","CreatedDateTime":"2020/06/16 16:43:24"},{"Value":"","RX_Route":"Oral","RX_Identifier":"101","RX_NDC":"ACETAMINOPHEN 325 MG PO TABS","RX_CompAmount":"650","RX_CompUnits":"mg","RX_CompStrength":"325","RX_CompStrengthUnits":"mg","RX_Status":"NW","RX_Placer_Order_Number":"42097","RX_Single_Dispense_Amount":"2","RX_Single_Dispense_Unit":"ACETAMINOPHEN 325 MG PO TABS","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Analgesics Other","NAME":"ACETAMINOPHEN 325 MG PO TABS","PHARM_CLASS_NAME":"Analgesics-Nonnarcotic","RX_Component_Type":"","EventDateTime":"2020/04/20 14:32:12","CreatedDateTime":"2020/06/16 16:43:22"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"105900","RX_NDC":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","RX_CompAmount":"40","RX_CompUnits":"mg","RX_CompStrength":"40","RX_CompStrengthUnits":"mg","RX_Status":"DC","RX_Placer_Order_Number":"42100","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","THERA_CLASS_NAME":"Hematological Agents","PHARM_SUBCLASS_NAME":"Heparins And Heparinoid-Like Agents","NAME":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","PHARM_CLASS_NAME":"Anticoagulants","RX_Component_Type":"","EventDateTime":"2020/04/20 14:33:18","CreatedDateTime":"2020/06/16 16:43:27"},{"Value":"","RX_Route":"Oral","RX_Identifier":"5940","RX_NDC":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","RX_CompAmount":"2","RX_CompUnits":"Tab","RX_CompStrength":"1","RX_CompStrengthUnits":"Tab","RX_Status":"DC","RX_Placer_Order_Number":"42099","RX_Single_Dispense_Amount":"2","RX_Single_Dispense_Unit":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Opioid Combinations","NAME":"OXYCODONE-ACETAMINOPHEN 5-325 MG PO TABS","PHARM_CLASS_NAME":"Analgesics-Opioid","RX_Component_Type":"","EventDateTime":"2020/04/20 14:32:12","CreatedDateTime":"2020/06/16 16:43:27"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"105900","RX_NDC":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","RX_CompAmount":"40","RX_CompUnits":"mg","RX_CompStrength":"40","RX_CompStrengthUnits":"mg","RX_Status":"DC","RX_Placer_Order_Number":"42100","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","THERA_CLASS_NAME":"Hematological Agents","PHARM_SUBCLASS_NAME":"Heparins And Heparinoid-Like Agents","NAME":"ENOXAPARIN SODIUM 40 MG/0.4ML SC SOLN","PHARM_CLASS_NAME":"Anticoagulants","RX_Component_Type":"","EventDateTime":"2020/04/20 14:33:18","CreatedDateTime":"2020/06/16 16:43:27"},{"Value":"","RX_Route":"Oral","RX_Identifier":"101","RX_NDC":"ACETAMINOPHEN 325 MG PO TABS","RX_CompAmount":"650","RX_CompUnits":"mg","RX_CompStrength":"325","RX_CompStrengthUnits":"mg","RX_Status":"DC","RX_Placer_Order_Number":"42097","RX_Single_Dispense_Amount":"2","RX_Single_Dispense_Unit":"ACETAMINOPHEN 325 MG PO TABS","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Analgesics Other","NAME":"ACETAMINOPHEN 325 MG PO TABS","PHARM_CLASS_NAME":"Analgesics-Nonnarcotic","RX_Component_Type":"","EventDateTime":"2020/04/20 14:32:12","CreatedDateTime":"2020/06/16 16:43:25"},{"Value":"","RX_Route":"Subcutaneous","RX_Identifier":"104207","RX_NDC":"LIDOCAINE HCL (PF) 1 % IJ SOLN","RX_CompAmount":"1","RX_CompUnits":"mg","RX_CompStrength":"50","RX_CompStrengthUnits":"mg","RX_Status":"DC","RX_Placer_Order_Number":"42079","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LIDOCAINE HCL (PF) 1 % IJ SOLN","THERA_CLASS_NAME":"Analgesics & Anesthetics","PHARM_SUBCLASS_NAME":"Local Anesthetics - Amides","NAME":"LIDOCAINE HCL (PF) 1 % IJ SOLN","PHARM_CLASS_NAME":"Local Anesthetics-Parenteral","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:22"},{"Value":"","RX_Route":"Intravenous","RX_Identifier":"4318","RX_NDC":"LACTATED RINGERS IV SOLN","RX_CompAmount":"100","RX_CompUnits":"mL/hr","RX_CompStrength":"","RX_CompStrengthUnits":"","RX_Status":"DC","RX_Placer_Order_Number":"42075","RX_Single_Dispense_Amount":"1","RX_Single_Dispense_Unit":"LACTATED RINGERS IV SOLN","THERA_CLASS_NAME":"Nutritional Products","PHARM_SUBCLASS_NAME":"Electrolyte Mixtures","NAME":"LACTATED RINGERS IV SOLN","PHARM_CLASS_NAME":"Minerals & Electrolytes","RX_Component_Type":"","EventDateTime":"2020/04/20 10:12:31","CreatedDateTime":"2020/06/16 16:43:22"}],"LAB":[{"Value":" This is the final diagnosis ","EventUM":"","EventType":"PATHOLOGY REPORT FINAL DIAGNOSIS NARRATIVE","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"Electronically signed by Physician Pathology, MD on 4/20/2020 at  1:56 PM","EventUM":"","EventType":"PATHOLOGY REPORT FINAL DIAGNOSIS NARRATIVE","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"na","EventUM":"","EventType":"LAB AP CLINICAL INFORMATION","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"Medical Cytology Report                           Case: N20-00007                                 ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"Authorizing Provider:  Anesthesiologist           Collected:           04/20/2020 1347            ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"                       Anesthesia, MD                                                             ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"Ordering Location:     Operating Room             Received:            04/20/2020 1348            ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"Pathologist:           Physician Pathology, MD                                                    ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"Specimen:    Other                                                                                ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"As the attending pathologist whose electronic signature appears on this ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"report, I have reviewed the slides and edited the gross and microscopic ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"portions of the report in rendering the final diagnosis. Cytology is ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"intended to be a screening procedure with an inherent false negative and ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":"false positive rate.","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":" ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 16:52:59"},{"Value":" This is the final diagnosis ","EventUM":"","EventType":"PATHOLOGY REPORT FINAL DIAGNOSIS NARRATIVE","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"Electronically signed by Physician Pathology, MD on 4/20/2020 at  1:56 PM","EventUM":"","EventType":"PATHOLOGY REPORT FINAL DIAGNOSIS NARRATIVE","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"na","EventUM":"","EventType":"LAB AP CLINICAL INFORMATION","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"Medical Cytology Report                           Case: N20-00007                                 ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"Authorizing Provider:  Anesthesiologist           Collected:           04/20/2020 1347            ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"                       Anesthesia, MD                                                             ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"Ordering Location:     Operating Room             Received:            04/20/2020 1348            ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"Pathologist:           Physician Pathology, MD                                                    ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"Specimen:    Other                                                                                ","EventUM":"","EventType":"LAB AP CASE REPORT","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"As the attending pathologist whose electronic signature appears on this ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"report, I have reviewed the slides and edited the gross and microscopic ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"portions of the report in rendering the final diagnosis. Cytology is ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"intended to be a screening procedure with an inherent false negative and ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":"false positive rate.","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"},{"Value":" ","EventUM":"","EventType":"AP DISCLAIMERS","EventDateTime":"2020/04/20 13:56:31","CreatedDateTime":"2020/06/16 17:06:41"}],"Admission":[]}`
+        }
+       else if(checkflag=="BMT_VITALS") 
+       {
         // Vittal
         message = `{
             "MSH02" : "^~&",
@@ -335,9 +346,15 @@ export class Prediction extends React.Component {
             ],
             "CreateDateTime" : "2020/06/16 15:38:46"
           }`
-    //   ADT_json
+        }
+        else if(checkflag=="BMT_ADT") 
+        {
+          //   ADT_json
           message = `{"MSH02": "^~&", "MSH03": "EPIC", "MSH04": "COH", "MSH06": "COH", "MSH07": "20200616171210", "MSH08": "ADTPA", "MSH09.1": "ADT", "MSH09.2": "A01", "MSH10": "23193", "MSH11": "T", "MSH12": "2.5.1", "EVN01": "A01", "EVN02": "20200616171210", "EVN04": "ADT_EVENT", "EVN05.1": "ADTPA", "EVN05.2": "ADT", "EVN05.3": "PATIENT", "EVN05.4": "ACCESS", "EVN05.9": "COHSA", "EVN05.14": "DUR", "EVN06": "20200616171200", "PID01": "1", "PID03.1": "55100510", "PID03.4": "EPI", "PID03.5": "MR", "PID05.1": "TEST^PATHWAY^^^^^L", "PID07": "1981/06/16", "PID08": "M", "PID10": "B", "PID11.1": "555 STREET PLACE", "PID11.3": "LOS ANGELES", "PID11.4": "CA", "PID11.5": "90004", "PID11.6": "US", "PID11.7": "L", "PID11.9": "LOS ANGELES", "PID12": "LOS ANGELES", "PID13.1": "(818)555-4789^P^H^^^818^5554789", "PID15": "ENG", "PID16": "S", "PID18": "4000002251", "PID19": "887-56-9942", "PID22": "NOT HISPANIC", "PID24": "N", "PID30": "N", "ZPD02": "MYCH", "ZPD07": "N", "ZPD09": "N", "PD103.1": "DUARTE", "PD103.3": "10150", "CON_PD1": [{"CON01": "1", "CON02": "NPP Acknowle", "CON11": "Not Recv", "CON13": "20200616171118"}, {"CON01": "2", "CON02": "General T OP", "CON11": "Not Recv", "CON13": "20200616171118"}, {"CON01": "3", "CON02": "Identificati", "CON11": "Not Recv", "CON13": "20200616171118"}, {"CON01": "4", "CON02": "QUESTIONNAIR", "CON11": "Not Recv", "CON13": "20200616171118"}, {"CON01": "5", "CON02": "Insur Card", "CON11": "Not Recv", "CON13": "20200616171118"}], "NK1": [{"NK101": "1", "NK104.1": "250 PARKCENTER BLVD", "NK104.3": "BOISE", "NK104.4": "ID", "NK104.5": "83706", "NK104.6": "US", "NK104.9": "ADA", "NK105": "(208)395-6200^^H^^^208^3956200", "NK107": "Employer", "NK113": "ALBERTSONS", "NK133": "1034"}], "PV101": "1", "PV102": "AM ADMIT", "PV103.1": "HCRHOR", "PV103.2": "HCRH OR", "PV103.3": "2179", "PV103.4": "DC", "PV103.5": "R", "PV103.9": "OPERATING ROOM", "PV103.11": "DEPID", "PV104": "EL", "PV107": "1103299990^SURGERY^PHYSICIAN^^^^^^NPI^^^^NPI", "PV110": "Surgery", "PV114": "Home", "PV117": "1103299990^SURGERY^PHYSICIAN^^^^^^NPI^^^^NPI", "PV119": "3013472", "PV120": "SELF", "PV141": "Adm*Conf", "PV144": "2020/06/16 17:12:00", "PV202.1": "Med Surg", "PV208": "20200616171000", "PV212": "Hospital Encounter", "PV221": "n", "PV222": "N", "ROL_PV2": [{"ROL01": "1", "ROL02": "UP", "ROL03.1": "Surgeon", "ROL04.1": "1103299990", "ROL04.2": "SURGERY", "ROL04.3": "PHYSICIAN", "ROL04.9": "NPI", "ROL04.13": "NPI", "ROL05.1": "20200616165319", "ROL11.1": "123 ANYWHERE STREET", "ROL11.3": "VERONA", "ROL11.4": "WI", "ROL11.5": "53593", "ROL12.1": "(555)555-5555", "ROL12.3": "W", "ROL12.6": "555", "ROL12.7": "5555555"}], "OBX": [{"OBX01": "1", "OBX02": "NM", "OBX03.1": "PRIMARYCSN", "OBX04": "1", "OBX05": "3013472", "OBX11": "F"}], "CON_PV2": [{"CON01": "1", "CON02": "General Cons", "CON11": "Not Recv", "CON13": "20200616171118"}], "AL1": [{"AL101": "1", "AL102.1": "SYSTEMIC", "AL103.2": "ALLERGIES NOT ON FILE"}], "DG1": [{"DG101": "1", "DG102": "I10", "DG103.1": "C54.1", "DG103.2": "Malignant neoplasm of endometrium", "DG103.3": "I10", "DG104": "Malignant neoplasm of endometrium", "DG106": "^A"}], "GT_Array": [{"GT101": "1", "GT102": "1812", "GT103.1": "TEST", "GT103.2": "PATHWAY", "GT105.1": "555 STREET PLACE", "GT105.3": "LOS ANGELES", "GT105.4": "CA", "GT105.5": "90004", "GT105.6": "US", "GT105.9": "LOS ANGELES", "GT106.1": "(818)555-4789", "GT106.6": "818", "GT106.7": "5554789", "GT108.1": "19810616", "GT109": "M", "GT110": "P/F", "GT111": "SLF", "GT112": "887-56-9942", "GT116": "ALBERTSONS", "GT117.1": "250 PARKCENTER BLVD", "GT117.3": "BOISE", "GT117.4": "ID", "GT117.5": "83706", "GT117.6": "US", "GT118.1": "(208)395-6200", "GT118.6": "208", "GT118.7": "3956200", "GT120": "Full"}], "CreateDateTime": "2020/06/16 17:12:18", "ICD_Codes": ["C54.1"]}`
-      //Lab
+        }
+          //Lab
+          else if(checkflag=="BMT_LABORDERS") 
+          {
           message = `{
             "MSH02" : "^~&",
             "MSH03.1" : "EPIC",
@@ -652,9 +669,15 @@ export class Prediction extends React.Component {
             ],
             "CreateDateTime" : "2020/06/16 15:53:40"
           }`
-      //Medication
+        }
+          //Medication
+          else if(checkflag=="BMT_MEDICATIONS") 
+          {
           message = `{"MSH02": "^~&", "MSH03.1": "Epic", "MSH04.1": "COH", "MSH06.1": "COH", "MSH07": "20200406155132", "MSH08": "203758", "MSH09.1": "RDE", "MSH09.2": "O11", "MSH10": "379", "MSH11.1": "T", "MSH12.1": "2.3", "PID03.1": "55102300", "PID03.4": "EPI", "PID03.5": "MR", "PID05.1": "RAD-TEST^NINE^^^^^D", "PID07": "19820326", "PID08.1": "F", "PID09": "RADTEST^NINE", "PID10.1": "X", "PID11.1": "1500 E. DUARTE ROAD", "PID11.3": "DUARTE", "PID11.4": "CA", "PID11.5": "91009", "PID11.6": "US", "PID11.7": "L", "PID11.9": "LOS ANGELES", "PID12": "LOS ANGELES", "PID13.1": "(626)256-4673^P^H^^^626^2564673~^NET^Internet^rad-testnine@gmail.com", "PID15.1": "ENG", "PID16.1": "S", "PID18.1": "3010208", "PID19": "555-11-2299", "PID22.1": "DECLINE", "PV102.1": "TREATMENT", "PV103.1.1": "HCRHPET", "PV103.4": "DC", "PV103.11": "DEPID", "PV107.1": "1184731135^FORMAN^STEPHEN^J^^^^^NPI^^^^NPI~2949^FORMAN^STEPHEN^J^^^^^PROVID^^^^PROVID", "PV108.1": "1184731135", "PV108.2": "FORMAN", "PV108.3": "STEPHEN", "PV108.4": "J", "PV108.9": "NPI", "PV108.13": "NPI~2949", "PV108.14": "FORMAN", "PV108.15": "STEPHEN", "PV108.16": "J", "PV108.21": "PROVID", "PV108.25": "PROVID", "PV119.1": "3010208", "ORC01": "DC", "ORC02.1": "38536", "ORC02.2": "EPC", "ORC07.2": "Once", "ORC07.3": "X1", "ORC07.4": "20200406163000", "ORC07.5": "20200406163000", "ORC07.6": "R", "ORC09": "2020/04/06 15:51:00", "ORC11.1": "1174978", "ORC11.2": "TORRICELLI", "ORC11.3": "CHERYL", "ORC11.4": "J", "ORC11.9": "PROVID", "ORC11.13": "PROVID", "ORC12.1": "1184731135", "ORC12.2": "FORMAN", "ORC12.3": "STEPHEN", "ORC12.4": "J", "ORC12.9": "NPI", "ORC12.13": "NPI~2949", "ORC12.14": "FORMAN", "ORC12.15": "STEPHEN", "ORC12.16": "J", "ORC12.21": "PROVID", "ORC12.25": "PROVID", "ORC14.1": "(626)218-2704", "ORC14.6": "626", "ORC14.7": "2182704", "ORC21.1": "Duarte", "ORC22.1": "1500 DUARTE RD", "ORC22.3": "DUARTE", "ORC22.4": "CA", "ORC22.5": "91010-3012", "ORC23.1": "(626)256-4673", "ORC23.6": "626", "ORC23.7": "2564673", "ORC24.1": "1500 E. DUARTE RD.", "ORC24.2": "DEPT OF HEMATOLOGY  HCT", "ORC24.3": "DUARTE", "ORC24.4": "CA", "ORC24.5": "91010", "ORC24.6": "US", "ORC29": "I", "RXE01.2": "Once", "RXE01.3": "X1", "RXE01.4": "20200406163000", "RXE01.5": "20200406163000", "RXE01.6": "R", "RXE02.1": "4088845000", "RXE02.2": "FLUCICLOVINE 10 MCI", "RXE02.9": "fluciclovine (AXUMIN) injection 45 mCi", "RXE03": "45", "RXE05.1": "mCi", "RXE05.2": "mCi", "RXE06.1": "30", "RXE07.1": "Dose per protocol", "RXE10": "5", "RXE13.1": "AF6578934", "RXE13.2": "FORMAN", "RXE13.3": "STEPHEN", "RXE13.4": "J", "RXE30": "STANDARD", "RXE40.2": "RADIOPHARM RX", "TQ": [{"TQ103.1": "Once", "TQ109.1": "R"}], "RXR01.1": "IV", "RXR01.2": "Intravenous", "RXC": [{"RXC02.1": "4088845000", "RXC02.2": "FLUCICLOVINE 10 MCI", "RXC03": "45", "RXC04.1": "millicurie", "RXC04.2": "mCi", "RXC05": "10", "RXC06.1": "millicurie", "RXC06.2": "mCi", "NAME": "FLUCICLOVINE 10 MCI", "Therapeutic_Class": "Miscellaneous Products", "Pharmaceutical_Class": "Diagnostic Products", "PHARMACEUTICAL_SUBCLASS": "Diagnostic Radiopharmaceuticals"}], "ZTA": [{"ZTA01": "50", "ZTA02.1": "millicurie", "ZTA05": "1015", "ZTA08.6": "5 x 10 millicurie "}], "CreateDateTime": "2020/06/16 16:42:37"}`
-       //Model
+       
+             }   //Model
+             else if(checkflag=="MODEL_RESULT") 
+             {
           message = `{"result": {"exit_code": "0",
           "stdout": [""],
           "stderr": [""],
@@ -752,7 +775,8 @@ export class Prediction extends React.Component {
             "immunocomorbidity": {"Values": [-0.04840672633755129]},
             "hypertension": {"Values": [5.829840185288732]}}},
           "messages": []}}`
-        return (
+             }
+          return (
             <div>
                 <div>
                     <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{'Message'}</a></div>
@@ -848,7 +872,35 @@ export class Prediction extends React.Component {
             this.getListData()
         })
     }
-
+    Checkflag(name) {
+        let first_tiles=false;
+        let snd_tiles=false;
+        let third_tiles=false;
+        if(name==1)
+        {
+            first_tiles=true;
+            snd_tiles=false;
+           third_tiles=false;
+        }
+        else if(name==2)
+        {
+            first_tiles=false;
+            snd_tiles=true;
+           third_tiles=false;
+        }
+        else if(name==3)
+        {
+            first_tiles=false;
+            snd_tiles=false;
+           third_tiles=true;
+        }
+        this.setState({
+            first_tiles:first_tiles,
+          snd_tiles:snd_tiles,
+          third_tiles:third_tiles
+          
+        })
+    }
     getListData = () => {
         let count = 1
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -980,23 +1032,23 @@ export class Prediction extends React.Component {
 
 
             <div className="row padding-left">
-                <div className="col-2 summary-container">
-                    <div className="summary-header">Total BMT Messages</div>
-                    <div className='green summary-title' >
-                     1.2 M
+                <div className="col-2 summary-container"  style={{cursor:'pointer'}} onClick={() => this.Checkflag('1')}>
+                    <div className="summary-header" >Total BMT Messages</div>
+                    <div className='green summary-title isClickable'>
+                     1.2M
                 </div>
                 </div>
 
-                <div className="col-2 summary-container">
+                <div className="col-2 summary-container"style={{cursor:'pointer'}} onClick={() => this.Checkflag('2')}>
                     <div className="summary-header">Total BMT Paylod</div>
-                    <div className='red summary-title' >
-                        150
+                    <div className='blue summary-title'  >
+                        90K
                 </div>
                 </div>
-                <div className="col-2 summary-container">
+                <div className="col-2 summary-container"style={{cursor:'pointer'}} onClick={() => this.Checkflag('3')}>
                     <div className="summary-header">Total Predictions</div>
-                    <div className='red summary-title' >
-                        100
+                    <div className='blue summary-title' >
+                        70K
                 </div>
                 </div>
 
@@ -1197,12 +1249,12 @@ export class Prediction extends React.Component {
             { headerName: "Date", field: "Date", width: 140,  },
             // { headerName: "Type", field: "Type", width: 120, },
             // { headerName: "Submitter", field: "Submitter", width: 140, },
-            { headerName: "Destination", field: "Destination", flex: 1,  },   
+            { headerName: "Topic", field: "Topic", flex: 1,  },   
         ]
 
         return (
             <div style={{ width: '100%', height: '100%' }}>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '10px' }}>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '15px' }}>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1395,61 +1447,50 @@ export class Prediction extends React.Component {
             let notSent = ''
             let subtitle = ''
             let status277CA = ''
-            let color = "var(--red)"
-            let  Api_Flag=""
+            let color = "var(--main-bg-color)"
+            let  flag=""
             
             
             if (item.name == 'BMT_ADT') {
-                Api_Flag='BMT_ADT'
-                generalStatus = 'Accepted'
-                subtitle = 'Accepted Claims'
-                color = "var(----main-bg-color)"
+                flag=1
+                generalStatus = 'BMT_ADT'
+                subtitle = 'BMT_ADT'
+               
             } else if (item.name == 'BMT_VITALS') {
-                Api_Flag='BMT_VITALS'
-                generalStatus = 'Rejected'
-                subtitle = "Rejected Claims"
-                color = "var(----main-bg-color)"
+                flag=2
+                generalStatus = 'BMT_VITALS'
+                subtitle = "BMT_VITALS"
+               
             } else if (item.name == 'BMT_MEDICATIONS') {
-                Api_Flag='BMT_MEDICATIONS'
-                generalStatus = 'File Rejected'
-                subtitle = item.name
+                flag=4
+                generalStatus = 'BMT_MEDICATIONS'
+                subtitle = "BMT_MEDICATIONS"
             } else if (item.name == 'BMT_LABORDERS') {
-                Api_Flag='BMT_LABORDERS'
-                subtitle = item.name
-                loadStatus = 'Reconcile Exception'
+                flag=3
+                generalStatus = 'BMT_LABORDERS'
+                subtitle = "BMT_LABORDERS"           
             } else if (item.name == 'BMT_PAYLOAD') {
-                Api_Flag='BMT_PAYLOAD'
-                mcgStatus = 'Loaded'
-                subtitle = item.name
+                flag=3
+                generalStatus = 'BMT_PAYLOAD'                          
+                subtitle ="BMT_PAYLOAD"
                 color = "var(--main-bg-color)"
             } else if (item.name == 'MODEL_RESULT') {
-                Api_Flag='MODEL_RESULT'
-                subtitle = item.name
-                mcgStatus = 'Exception'
+                flag=3
+                subtitle = "MODEL_RESULT"
+                generalStatus = 'MODEL_RESULT'
+               
             }
-
-
+   
             let sendData = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: claimStatus,
-                    type: type,
-                    gridflag: loadStatus,
-                    generalStatus: generalStatus,
-                    mcgStatus: mcgStatus,
-                    notSent: notSent,
-                    subtitle: subtitle,
-                    status277CA: status277CA
-                },
-            ]
+                {  
+                    generalStatus:generalStatus,
+                    flag: flag
+                }
+              ]
             row.push(
                 <TableTiles
                 item={item}
-                data={Api_Flag}
+                data={sendData}
                 diffClick={true}
                 Click= {this.Click}
                 unclick={color}
@@ -1458,7 +1499,7 @@ export class Prediction extends React.Component {
         })
 
         return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col-4 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )
@@ -1466,31 +1507,104 @@ export class Prediction extends React.Component {
                        
     
     Click=(data)=>{
-        alert(data)
-       
+        let query 
+        let flag = data[0].flag
+        let topic = data[0].generalStatus
+        if(flag == 1){
+            query = `{
+                ADTJSONDetails(Topic:"${topic}") {
+                MessageID
+                Date
+                Topic
+              }
+            }`
+        }
+        else if(flag == 2){
+            query = `{
+                VitalsDetails(Topic:"${topic}") {
+                MessageID
+                Date
+                Topic
+              }
+            }`
+        }
+        else if(flag == 3){
+            query = `{
+                LaborderDetails(Topic:"${topic}") {
+                MessageID
+                Date
+                Topic
+              }
+            }`
+        }
+        else if(flag == 4){
+            query = `{
+                MedicationDetails(Topic:"${topic}") {
+                MessageID
+                Date
+                Topic
+              }
+            }`
+        }
+        
+    console.log(query)
+    fetch(Urls.sql_base_url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ query: query })
+    })
+        .then(res => res.json())
+        .then(res => {
+            let data = ''
+            if(flag == 1){
+                data = res.data.ADTJSONDetails
+            }else if(flag == 2){
+                data = res.data.VitalsDetails
+            }else if(flag == 3){
+                data = res.data.LaborderDetails
+            }else if(flag == 4){
+                data = res.data.MedicationDetails
+            }
+             
+    
+            this.setState({
+                summaryList: data,
+                sepsisTable: true,
+                massage_flag:topic,
+                showDetails:false,
+                predition:true
+            })
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
     
     renderClaimDetails = () => {
         let stage_1 = [
-            { 'name': 'BMT_ADT', 'value': 13 , 'isClick': 1 },
-            { 'name': 'BMT_VITALS', 'value': 15, 'isClick': 1 },
-            { 'name': 'BMT_MEDICATIONS', 'value': 10, 'isClick': 1 },
+            { 'name': 'BMT_ADT', 'value': '50K' , 'isClick': 1 },
+            { 'name': 'BMT_VITALS', 'value': '30K', 'isClick': 1 },
+            { 'name': 'BMT_MEDICATIONS', 'value': '20K', 'isClick': 1 },
+            { 'name': 'BMT_LABORDERS', 'value': '20K', 'isClick': 1 },
         ]
         let stage_2 = [
-            { 'name': 'BMT_LABORDERS', 'value': 11, 'isClick': 1 },
-            { 'name': 'BMT_PAYLOAD', 'value': 12, 'isClick': 1 },
+          
+            { 'name': 'BMT_PAYLOAD', 'value': '90K', 'isClick': 1 },
         ]
         let stage_3 = [
-            { 'name': 'MODEL_RESULT', 'value': 12, 'isClick': 1 },
+            { 'name': 'MODEL_RESULT', 'value': '70K', 'isClick': 1 },
          
         ]
 
 
         return (
-            <div className="row" style={{ marginBottom: '12px', marginLeft: '-9px' }}>
-                {this._renderClaimTables(stage_1)}
-                {this._renderClaimTables(stage_2)}
-                {this._renderClaimTables(stage_3)}
+            <div className="row-2" style={{ marginBottom: '12px', marginLeft: '-9px' }}>
+                {this.state.first_tiles ?this._renderClaimTables(stage_1):""}
+                {this.state.snd_tiles ? this._renderClaimTables(stage_2):""}
+                {this.state.third_tiles ?  this._renderClaimTables(stage_3):""}
             
             </div>
         )
@@ -1504,18 +1618,18 @@ export class Prediction extends React.Component {
                 {this.renderSummaryDetails()}
                 <div className="general-header">Topics</div>
                 {this.renderClaimDetails()}
-                {/* {this._renderAllCharts()} */}
+                {this._renderAllCharts()}
                 <div className="row">
                     <div className="col-7">
                         {/* <h6> Inbound Table</h6> */}
-                        {this._renderInboundTable()}
+                        {this.state.predition ? this._renderInboundTable() : null}
                     </div>
                     {this.state.showDetails ?
-                        <div className="col-5" style={{marginTop: '10px'}}>
+                        <div className="col-5" >
                             {this.renderDetails()}
                         </div> : null}
                         {this.state.showA04 ?
-                        <div className="col-5" style={{marginTop: '10px'}}>
+                        <div className="col-5" >
                             {this.renderDetails()}
                         </div> : null}
                 </div>
