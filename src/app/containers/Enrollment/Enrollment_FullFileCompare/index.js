@@ -190,8 +190,8 @@ export class Enrollment_FullFileCompare extends React.Component {
             //     { name: 'Errors', value: 5 },
             // ],
             summaryCountNew: [
-                { name: 'Queued to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61099 : 61 },
-                { name: 'Applied to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
+                { name: 'Queued to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 15414 : 61 },
+                { name: 'Applied to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 15409 : 61 },
                 { name: 'Errors', value: selected_FileID != '834_UT_Daily.da' ? 5 : 0 },
             ],
             summaryCount1New: [
@@ -238,9 +238,15 @@ export class Enrollment_FullFileCompare extends React.Component {
 
     }
     _refreshScreen = () => {
-
-        // this._getCounts()
-        // this.gettiles()
+        if(this.state.selected_FileID == '834_UT_Daily.da'){
+            this.setState({
+                effectiveData: 8,
+                household: 2,
+            }, () => {
+                this._getCounts()
+                this.gettiles()
+            })
+        }
         // this.getFilename()
         // this.getCommonData()
         // this.getListData()
@@ -457,8 +463,8 @@ export class Enrollment_FullFileCompare extends React.Component {
                     effectiveData: 7,
                     household: 340,
                     summaryCountNew: [
-                        { name: 'Queued to QNXT', value: 61099 },
-                        { name: 'Applied to QNXT', value: 61094 },
+                        { name: 'Queued to QNXT', value: 15414 },
+                        { name: 'Applied to QNXT', value: 15409 },
                         { name: 'Errors', value: 5 },
                     ],
                     summaryCount1New: [
@@ -822,8 +828,8 @@ export class Enrollment_FullFileCompare extends React.Component {
 
                 let selected_FileID = this.state.selected_FileID
                 let summery1 = [
-                    { name: 'Queued to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61099 : 61 },
-                    { name: 'Applied to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 61094 : 61 },
+                    { name: 'Queued to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 15414 : 61 },
+                    { name: 'Applied to QNXT', value: selected_FileID != '834_UT_Daily.da' ? 15409 : 61 },
                     { name: 'Errors', value: selected_FileID != '834_UT_Daily.da' ? 5 : 0 },
                 ]
 

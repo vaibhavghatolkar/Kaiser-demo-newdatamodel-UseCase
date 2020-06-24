@@ -1638,7 +1638,7 @@ export class Enrollment_Outbound extends React.Component {
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 250, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Process Id", field: "FileID", width: 130 },
-            { headerName: "Sent Date", field: "Date", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "File Date", field: "Date", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "Submitter", field: "Subscriber",width:120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }  },
             { headerName: "Total Enrollments", field: "Enrollment", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Errors", field: "Error", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },

@@ -452,7 +452,7 @@ export class TransactionSetup_New extends React.Component {
                                             Transaction Setup
                        </span>
                                     </div>
-                                    <div id="BasicX12Options"  > <div className=" content">
+                                    <div id="BasicX12Options"  > <div className=" content" style={{ backgroundColor: 'white' }}>
                                         <br />
 
                                         {/* <div style={{ fontWeight: '500', marginLeft: '15px', fontSize: '14px' }}>Transaction Setup</div> */}
@@ -663,7 +663,7 @@ export class TransactionSetup_New extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="row" style={{ marginTop: '10px',marginLeft: '5px' }}>
+                                        <div className="row" style={{ marginTop: '10px', marginLeft: '5px' }}>
                                             <div className="col-2 "></div>
                                             <div class="form-check leftmargin">
                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />
@@ -671,7 +671,7 @@ export class TransactionSetup_New extends React.Component {
                                                     Tuesday</div>
                                             </div>
                                         </div>
-                                        <div className="row" style={{ marginTop: '10px',marginLeft: '5px' }}>
+                                        <div className="row" style={{ marginTop: '10px', marginLeft: '5px' }}>
                                             <div className="col-2"></div>
                                             <div class="form-check leftmargin">
                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />
@@ -679,7 +679,7 @@ export class TransactionSetup_New extends React.Component {
                                                     Wednesday</div>
                                             </div>
                                         </div>
-                                        <div className="row" style={{ marginTop: '10px',marginLeft: '5px' }}>
+                                        <div className="row" style={{ marginTop: '10px', marginLeft: '5px' }}>
                                             <div className="col-2"></div>
                                             <div class="form-check leftmargin">
                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />
@@ -687,7 +687,7 @@ export class TransactionSetup_New extends React.Component {
                                                     Thursday</div>
                                             </div>
                                         </div>
-                                        <div className="row" style={{ marginTop: '10px',marginLeft: '5px' }}>
+                                        <div className="row" style={{ marginTop: '10px', marginLeft: '5px' }}>
                                             <div className="col-2"></div>
                                             <div class="form-check leftmargin">
                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />
@@ -695,7 +695,7 @@ export class TransactionSetup_New extends React.Component {
                                                     Friday</div>
                                             </div>
                                         </div>
-                                        <div className="row" style={{ marginTop: '10px',marginLeft: '5px' }}>
+                                        <div className="row" style={{ marginTop: '10px', marginLeft: '5px' }}>
                                             <div className="col-2"></div>
                                             <div class="form-check leftmargin">
                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />
@@ -703,7 +703,7 @@ export class TransactionSetup_New extends React.Component {
                                                     Saturday</div>
                                             </div>
                                         </div>
-                                        <div className="row" style={{ marginTop: '10px',marginLeft: '5px' }}>
+                                        <div className="row" style={{ marginTop: '10px', marginLeft: '5px' }}>
                                             <div className="col-2"></div>
                                             <div class="form-check leftmargin">
                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" />

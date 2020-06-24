@@ -68,6 +68,7 @@ export class LoadtoQNXT extends React.Component {
             maintenance_Code: condition && props.location.state.data[0] && props.location.state.data[0].MaintenanceCode ? props.location.state.data[0].MaintenanceCode : '',
             incoming_FileID: condition && props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
             dob: '',
+            selected_FileID: '834_UT_Audit.da',
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
@@ -1266,19 +1267,19 @@ export class LoadtoQNXT extends React.Component {
             <div className="row padding-left">
                 <Tiles
                     header_text={'Queued for Qnxt'}
-                    value={5000}
+                    value={this.state.selected_FileID != '834_UT_Daily.da' ? 15414 : 61}
                     isenrollment={true}
                 />
 
                 <Tiles
                     header_text={'Applied for Qnxt'}
-                    value={4000}
+                    value={this.state.selected_FileID != '834_UT_Daily.da' ? 15409 : 61}
                     isenrollment={true}
                 />
 
                 <Tiles
                     header_text={'Errors'}
-                    value={5}
+                    value={this.state.selected_FileID != '834_UT_Daily.da' ? 5 : 0}
                     isenrollment={true}
                 />
             </div>
