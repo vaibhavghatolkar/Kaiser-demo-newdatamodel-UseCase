@@ -2,15 +2,12 @@ import React from 'react'
 import '../../containers/Files/files-styles.css'
 import "../../containers/color.css";
 import { Link } from 'react-router-dom'
-
 export class TableTiles extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
         };
     }
-
     renderTableTiles = () => {
         let item = this.props.item
         return (
@@ -26,7 +23,6 @@ export class TableTiles extends React.Component {
             </div>
         )
     }
-
     renderDiffTableTiles = () => {
         let item = this.props.item
         return (
@@ -39,7 +35,6 @@ export class TableTiles extends React.Component {
             </div>
         )
     }
-
     render() {
         return (
             this.props.diffClick ? 
@@ -48,3 +43,12 @@ export class TableTiles extends React.Component {
         )
     }
 }
+
+
+
+
+
+
+
+
+
