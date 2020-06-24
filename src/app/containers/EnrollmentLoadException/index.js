@@ -59,6 +59,7 @@ export class EnrollmentLoadException extends React.Component {
             maintenance_Code: condition && props.location.state.data[0] && props.location.state.data[0].MaintenanceCode ? props.location.state.data[0].MaintenanceCode : '',
             incoming_FileID: condition && props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
             dob: '',
+            selected_FileID: '834_UT_Audit.da',
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,

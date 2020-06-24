@@ -847,7 +847,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                                     Trading Partner Configuration
                                 </span>
                             </div>
-                            <div id="BasicX12Options"   > <div className=" content">
+                            <div id="BasicX12Options"   > <div className=" content" style={{backgroundColor: 'white'}}>
 
 
                                 <br />
