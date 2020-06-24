@@ -10,6 +10,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../../components/TableTiles';
+import { Filters } from '../../../components/Filters';
 let val = ''
 
 export class Sepsis_Dashboard extends React.Component {
@@ -1573,11 +1574,45 @@ export class Sepsis_Dashboard extends React.Component {
         })
     }
 
+    setData = (startDate, endDate, selected_val, chartType) => {
+        this.setState({
+            startDate,
+            endDate,
+            selected_val,
+            chartType
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value
+        }, () => {
+            this._refreshScreen()
+        })
+    }
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={true}
+                removeSubmitter={true}
+                setData={this.setData}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                removeGrid={true}
+            />
+        )
+    }
+
     render() {
         return (
             <div className="container">
                 <h5 className="headerText">HiPaaS Dashboard</h5>
-                {this.renderTopbar()}
+                {this._renderTopbar()}
                 {this.renderSummaryDetails()}
                 <div className="general-header">Topics</div>
                 {this.renderClaimDetails()}
