@@ -186,7 +186,8 @@ const Strings = {
     Enrollment_FullFileCompare_Dashboard: 'Enrollment_FullFileCompare_Dashboard',
     OutboundEnrollmentDashboard : 'OutboundEnrollmentDashboard',
     OutboundIdGenerated : 'OutboundIdGenerated',
-    Enrollment_Outbound_JobList:'Enrollment_Outbound_JobList'
+    Enrollment_Outbound_JobList:'Enrollment_Outbound_JobList',
+    Prediction:'Prediction',
 }
 
 export default Strings;
