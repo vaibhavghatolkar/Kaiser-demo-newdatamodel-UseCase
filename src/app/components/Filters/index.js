@@ -27,7 +27,7 @@ export class Filters extends React.Component {
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
-            transOptions:[],
+            transOptions: [],
         }
     }
 
@@ -251,13 +251,16 @@ export class Filters extends React.Component {
         return (
             <div className="form-style" id='filters'>
                 <div className="form-row">
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">State</div>
-                        <StateDropdown
-                            selected_state={this.props.State}
-                            method={this._handleStateChange}
-                        />
-                    </div>
+                    {
+                        !this.props.removeState ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">State</div>
+                                <StateDropdown
+                                    selected_state={this.props.State}
+                                    method={this._handleStateChange}
+                                />
+                            </div> : null
+                    }
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Provider</div>
                         <AutoComplete
@@ -298,13 +301,13 @@ export class Filters extends React.Component {
                                         defaultValue={this.props.transactionType}
                                     >
                                         <option value="1"></option>
-                                        {!this.props.isEncounter ? 
+                                        {!this.props.isEncounter ?
                                             (this.props._is835 ?
                                                 <option value="835">835</option> :
                                                 <option value="837">837</option>) : null
                                         }
                                         {this.props.isEncounter ? <option value="837Encounters">837 Encounter</option> : null}
-                                     
+
                                     </select>
                                 </div>
                                 :
@@ -455,33 +458,33 @@ export class Filters extends React.Component {
                     }
                     {
                         this.props.Transaction_278_Submitter ?
-                        <div className="form-group col-2">
-                        <div className="list-dashboard">Submitter</div>
-                        <select className="form-control list-dashboard" id="ProviderName">
-                            <option value=""></option>
-                            <option  value="1">TRIZETTO PROVIDER SOLUTIONS</option>
-                            <option value="2">WPS</option>
-                        </select>
-                    </div>
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Submitter</div>
+                                <select className="form-control list-dashboard" id="ProviderName">
+                                    <option value=""></option>
+                                    <option value="1">TRIZETTO PROVIDER SOLUTIONS</option>
+                                    <option value="2">WPS</option>
+                                </select>
+                            </div>
                             : null
                     }
-                     {
+                    {
                         this.props.Transaction_278_provider ?
-                        <div className="form-group col-2">
-                        <div className="list-dashboard">Provider Name</div>
-                        <select className="form-control list-dashboard" id="ProviderName">
-                            <option value=""></option>
-                            <option  value="1">Provider Name 1</option>
-                            <option value="2">Provider Name 2</option>
-                        </select>
-                    </div>
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Provider Name</div>
+                                <select className="form-control list-dashboard" id="ProviderName">
+                                    <option value=""></option>
+                                    <option value="1">Provider Name 1</option>
+                                    <option value="2">Provider Name 2</option>
+                                </select>
+                            </div>
                             : null
                     }
-                      
-                    
-                    
 
-                    
+
+
+
+
 
                 </div>
             </div>
