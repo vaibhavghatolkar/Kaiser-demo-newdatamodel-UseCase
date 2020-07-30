@@ -1188,6 +1188,7 @@ export class Prediction extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
+                removeState={true}
                 removeSubmitter={true}
             />
         )
