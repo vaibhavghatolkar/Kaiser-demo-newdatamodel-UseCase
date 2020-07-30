@@ -34,7 +34,7 @@ export class Header extends React.Component {
             let query = `mutation{
             ChangePassword(Id:`+ userId + ` OldPassword:"` + this.state.oldPwd + `" NewPassword:"` + this.state.newPwd + `" ForgotOrNot:0)
           }`
-          if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             fetch(Urls.base_url, {
                 method: 'POST',
                 headers: {
@@ -45,7 +45,7 @@ export class Header extends React.Component {
             })
                 .then(res => res.json())
                 .then(res => {
-                    let message = res.data.ChangePassword 
+                    let message = res.data.ChangePassword
                     alert(message);
                     window.location.reload()
                 }).catch(err => {
@@ -66,15 +66,13 @@ export class Header extends React.Component {
         window.location.reload()
     }
     siderbar() {
-     
+
         $('#sidebar').toggleClass('active');
-        if($('#sidebar').attr('class')=="active")
-        {
-           $('#Col-12').removeClass("col-10");        
-          $('#Col-12').addClass('col-12'); 
+        if ($('#sidebar').attr('class') == "active") {
+            $('#Col-12').removeClass("col-10");
+            $('#Col-12').addClass('col-12');
         }
-        else 
-        { $('#Col-12').removeClass("col-12");  $('#Col-12').addClass('col-10');}
+        else { $('#Col-12').removeClass("col-12"); $('#Col-12').addClass('col-10'); }
     }
 
 
@@ -83,14 +81,18 @@ export class Header extends React.Component {
         return (
             <div>
                 <div className="header_container">
-                    <h2 className="header_text"><b>EDIVAL</b>
+                    {/* <h2 className="header_text"><b>EDIVAL</b>
                     <span className="Sidebar_drawer" onClick={this.siderbar} id="sidebarCollapse">&#9776; </span>
-                    </h2>
-                    <label style={{ color: "white", marginLeft: "20px", fontSize: "11px" }}>Powered by HiPaaS</label>
-                  
+                </h2> */}
+                    <div style={{ marginLeft: "20px" }}>
+                        <img src={require('../Images/header_logo.png')} style={{ width: '70px', backgroundColor: 'white' }} />
+                        <span className="Sidebar_drawer" onClick={this.siderbar} id="sidebarCollapse">&#9776; </span>
+                    </div>
+                    <label style={{ color: "white", marginLeft: "20px", fontSize: "10px", marginBottom: '0px' }}>Powered by HiPaaS</label>
+
                     {
                         localStorage.getItem('UserId') ?
-                            <div className="dropdown" style={{ float: 'right', marginTop: '-16px' }}>
+                            <div className="dropdown" style={{ float: 'right', marginTop: "-24px" }}>
                                 <img src={require('../Images/user.png')} style={{ width: '25px' }} />
                                 <div className="dropdown-content">
                                     <a onClick={this.changePwd} data-toggle="modal" data-target="#myModal10">Change Password</a>
@@ -118,7 +120,7 @@ export class Header extends React.Component {
                                 </div>
                                 <div className="form-group col-12">
                                     <label className="list-header2">New Password</label>
-                                    <input onChange={(event) => this.onHandleChange(event, 'newPwd')} name="OldPassword" type="password" className="form-control textInput" 
+                                    <input onChange={(event) => this.onHandleChange(event, 'newPwd')} name="OldPassword" type="password" className="form-control textInput"
                                         placeholder="Enter New Password" autoComplete="off" value={this.state.newPwd} />
                                 </div>
                                 <div className="form-group col-12">
