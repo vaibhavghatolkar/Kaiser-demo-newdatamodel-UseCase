@@ -120,6 +120,9 @@ import {Prediction} from './app/containers/Prediction';
 // import {Enrollment_Outbound_JobList} from './app/containers/Enrollment/Enrollment_Outbound_JobList'
 import {Sepsis_Dashboard} from './app/containers/HL7/Sepsis_Dashboard'
 
+import { Transaction275Dashboard } from './app/containers/Transaction_275/Transaction275_Dashboard'
+import { Transaction_275_Details } from './app/containers/Transaction_275/Transaction_275_Details'
+
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
 class PrivateRoute extends React.Component {
@@ -236,7 +239,7 @@ class PrivateRoute extends React.Component {
                                                     }} />
                                                     :
                                                     <Redirect to={{
-                                                        pathname: '/' + Strings.RealTimeDashboard, state: { data }
+                                                        pathname: '/' + Strings.RealTimeDashboard , state: { data }
                                                     }} />
                                             ) : <Redirect to="/" />
                                     }
@@ -372,6 +375,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Prediction} component={ Prediction } />
                                 
                                 <Route path={'/' + Strings.Sepsis_Dashboard} component={ Sepsis_Dashboard } />
+                                <Route path={'/' + Strings.Transaction275Dashboard} component={Transaction275Dashboard} />
+                                <Route path={'/' + Strings.Transaction_275_Details} component={Transaction_275_Details} />
+                                <Route path={'/' + Strings._Transaction_275_Details} component={Transaction_275_Details} />
 
 
                             </div>

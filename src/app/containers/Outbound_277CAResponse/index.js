@@ -31,14 +31,15 @@ export class Outbound_277CAReponse extends React.Component {
             errorList: [],
             eventLog: [],
             Transaction_Compliance: '',
-            State: "",
+            State: props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].State &&  props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : "",
+            startDate: props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].startDate && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].endDate && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            selectedTradingPartner: props.location.state && props.location.state.data && props.location.state.data.length > 0 && props.location.state.data[0].selectedTradingPartner && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             status: "",
-            startDate: "",
-            endDate: "",
             transactionId: "",
             errorcode: "",
             transactionType: this.props.location.state ? (this.props.location.state.flag ? '837 Encounter' : '837') : "837",
-
+            type: props.location.state && props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             page: 1,
             count: 0,
             apiflag: 0,
@@ -98,11 +99,6 @@ export class Outbound_277CAReponse extends React.Component {
 
     handlePageClick = (data) => {
         let page = data.selected + 1
-        let flag = false
-        if (page != this.state.page) {
-            flag = true
-        }
-
         this.setState({
             page: page
         })
@@ -135,6 +131,10 @@ export class Outbound_277CAReponse extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -264,7 +264,8 @@ export class Outbound_277CAReponse extends React.Component {
                     
                     RecType: "Inbound", TrasactionType: "${this.state.transactionType}", 
                     FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", 
-                    State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType}
+                    State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType},
+                    Sender:"${this.state.selectedTradingPartner}",Type:"${this.state.type}"
             ) {
                     FileId
                     FileName
@@ -330,6 +331,7 @@ export class Outbound_277CAReponse extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
+                State={this.state.State}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}

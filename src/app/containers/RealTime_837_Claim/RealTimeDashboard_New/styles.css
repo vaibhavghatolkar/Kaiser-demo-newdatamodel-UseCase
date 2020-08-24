@@ -102,7 +102,6 @@ td a {
     Font-Style: normal;
     font-size: 14px;
     Line-Height: 16px;
-    text-align: Left;
     Letter-Spacing: -0.41px;
 }
 .list-header-dashboard{
@@ -126,9 +125,6 @@ td a {
 }
 .spacing{
     padding-left: 0px;
-}
-.dashInp{
-    margin-right: 0px;
 }
 .dashfrm-LR1{
     margin: 24px
@@ -171,13 +167,4 @@ td a {
 .margin{
     margin-left: 16px;
     margin-right: 16px;
-}
-.dark_red{
-    color: #AD320D
-}
-.green{
-    color: #2AC327
-}
-.orange{
-    color: #FA731A
 }

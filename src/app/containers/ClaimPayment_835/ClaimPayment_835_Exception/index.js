@@ -127,7 +127,6 @@ export class ClaimPayment_835_Exception extends React.Component {
     componentDidMount() {
         this.getCommonData()
         this.getData()
-
     }
 
     getCommonData() {
@@ -142,6 +141,10 @@ export class ClaimPayment_835_Exception extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -189,10 +192,14 @@ export class ClaimPayment_835_Exception extends React.Component {
         }`
 
 
-        fetch(Urls.real_time_claim_details, {
+        fetch(Urls.base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -254,11 +261,6 @@ export class ClaimPayment_835_Exception extends React.Component {
     }
 
     getTransactions = (fileId) => {
-        let providerName = this.state.providerName
-        if (!providerName) {
-            providerName = ''
-        }
-
         let query = `{            
             LoadException (FileID : "` + fileId + `") {
                 FileID
@@ -270,10 +272,14 @@ export class ClaimPayment_835_Exception extends React.Component {
             }
         }`
 
-        fetch(Urls.claim_processing, {
+        fetch(Urls.base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -460,11 +466,7 @@ export class ClaimPayment_835_Exception extends React.Component {
                                     showDetails: false,
                                     gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
                                 }, () => {
-                                    if (this.state.gridType == 1) {
-                                        this.getData()
-                                    } else {
-                                        this.getData()
-                                    }
+                                    this.getData()
                                 })
                             }}
                         >
@@ -582,21 +584,9 @@ export class ClaimPayment_835_Exception extends React.Component {
 
     renderList() {
         let row = []
-        let col = []
         let data = this.state.claimsObj;
-        let count = 0
 
-        try {
-            count = data[Object.keys(data)[0]].value.Claimcount / 10
-            if (data[Object.keys(data)[0]].value.Claimcount % 10 > 0) {
-                count = count + 1
-            }
-        } catch (error) {
-
-        }
-
-
-        Object.keys(data).map((keys) => {
+        Object.keys(data).forEach((keys) => {
             row.push(
                 <div className="row">
                     <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}

@@ -2,18 +2,16 @@ import React from 'react'
 import '../../Claims/Dashboard/styles.css'
 import './style.css'
 import '../../color.css'
-import { Pie, Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import Strings from '../../../../helpers/Strings';
-import { Link } from 'react-router-dom';
 import { Filters } from '../../../components/Filters';
-import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
-import { AgGridReact } from 'ag-grid-react';
-import { Tiles } from '../../../components/Tiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import { ServersideGrid } from '../../../components/ServersideGrid';
+import { Common_270 } from '../../../components/Common_270';
 
 let val = ''
 export class RealTime276 extends React.Component {
@@ -111,21 +109,16 @@ export class RealTime276 extends React.Component {
 
 
     componentDidMount() {
-        this.getData()
-        this.gettableTilesData()
-        this.getCommonData()
-        this.getTransactions()
+        this._refreshScreen()
     }
 
 
     _refreshScreen = () => {
         this.getData()
-        this.gettableTilesData()
         this.getCommonData()
-        this.getTransactions()
     }
 
-    getCommonData(chartType) {
+    getCommonData = async(chartType) => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         chartType = this.state.chartType
@@ -165,7 +158,11 @@ export class RealTime276 extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ query: query })
         })
@@ -194,7 +191,7 @@ export class RealTime276 extends React.Component {
             });
     }
 
-    getData(chartType) {
+    getData = async() => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let url = Urls.transaction270
@@ -207,9 +204,6 @@ export class RealTime276 extends React.Component {
                 Error
                 Total_NoResponse
             }
-            AverageResponseTime276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                AvgResTime
-            }
         }`
 
         if (this.state.apiflag == 1) {
@@ -221,11 +215,7 @@ export class RealTime276 extends React.Component {
                     Success
                     Error
                     Total_NoResponse
-                }
-                AverageResponseTime270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                    AvgResTime
-                }
-                  
+                } 
             }`
         }
 
@@ -235,43 +225,30 @@ export class RealTime276 extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
             .then(res => {
-                let data = ""
                 let progress_data = ""
 
                 if (this.state.apiflag == 1) {
-                    data = res.data.AverageResponseTime270
                     progress_data = res.data.ProgressBar270 && res.data.ProgressBar270.length > 0 ? res.data.ProgressBar270 : []
                 } else {
-                    data = res.data.AverageResponseTime276
                     progress_data = res.data.ProgressBar276
                 }
-
-                // if (res.data) {
-                //     this.performOperations(res, chartType)
-                // }
 
                 let progress_condition = progress_data && progress_data.length > 0
                 let Valid_Per = progress_condition ? Number(progress_data[0].Valid_Per).toFixed(2) : 0
                 let InValid_Per = progress_condition ? Number(progress_data[0].InValid_Per).toFixed(2) : 0
                 let NoResponse_Per = progress_condition ? Number(progress_data[0].NoResponse_Per).toFixed(2) : 0
 
-                let summary = [
-                    { name: 'Total Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].TotalNumOfReq : 0 },
-                    { name: 'Valid Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].Success : 0 },
-                    { name: 'Invalid Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].Error : 0 },
-                    { name: 'No Response', value: progress_data && progress_data.length > 0 ? progress_data[0].Total_NoResponse : 0 },
-                    { name: 'Avg Response Time (sec)', value: data && data.length > 0 ? data[0].AvgResTime : 0 },
-                ]
-
-
                 this.setState({
-                    summaryCount: summary,
                     progress_valid: Valid_Per,
                     progress_invalid: InValid_Per,
                     progress_noResponse: NoResponse_Per,
@@ -281,84 +258,6 @@ export class RealTime276 extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-    }
-
-    gettableTilesData() {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let url = Urls.transaction270
-        let query = `{
-            DashboardComplianceRatio276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                In_Compliance_Per
-                out_of_Compliance_per
-            }
-            DashboardMonthCount276(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                ThisMonth_Volume
-                LastMonth_Volume
-              }
-        }`
-
-        if (this.state.apiflag == 1) {
-            query = `{
-                DashboardComplianceRatio270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                    In_Compliance_Per
-                    out_of_Compliance_per
-                }
-                DashboardMonthCount270(State:"${this.state.State}",Sender:"${this.state.selectedTradingPartner}",StartDt:"${startDate}",EndDt:"${endDate}") {
-                    ThisMonth_Volume
-                    LastMonth_Volume
-                  }
-                  
-            }`
-        }
-
-        process.env.NODE_ENV == 'development' && console.log(query)
-
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let complianceRatioData = []
-                let DashboardMonthCount = []
-                let In_Compliance_Per = 0
-                let out_of_Compliance_per = 0
-                let lastMonth = 0
-                let thisMonth = 0
-
-                if (this.state.apiflag == 1) {
-                    complianceRatioData = res.data.DashboardComplianceRatio270
-                    DashboardMonthCount = res.data.DashboardMonthCount270
-                } else {
-                    complianceRatioData = res.data.DashboardComplianceRatio276
-                    DashboardMonthCount = res.data.DashboardMonthCount276
-                }
-
-                if (complianceRatioData && complianceRatioData.length > 0) {
-                    In_Compliance_Per = complianceRatioData[0].In_Compliance_Per
-                    out_of_Compliance_per = complianceRatioData[0].out_of_Compliance_per
-                }
-                if (DashboardMonthCount && DashboardMonthCount.length > 0) {
-                    thisMonth = DashboardMonthCount[0].ThisMonth_Volume
-                    lastMonth = DashboardMonthCount[0].LastMonth_Volume
-                }
-
-                this.setState({
-                    inComplaince: In_Compliance_Per,
-                    outComplaince: out_of_Compliance_per,
-                    thisMonth: thisMonth,
-                    lastMonth: lastMonth,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-
     }
 
     async performCommonOperations(res, flag) {
@@ -398,101 +297,6 @@ export class RealTime276 extends React.Component {
         })
     }
 
-    async performOperations(res, flag) {
-        let data = []
-        let errorPieArray = []
-        let errorLabelArray = []
-
-        if (this.state.apiflag == 1) {
-            data = res.data.Eligibilty270[0]
-        } else {
-            data = res.data.ClaimRequest276[0]
-        }
-        process.env.NODE_ENV == 'development' && console.log("asdad", data)
-        let summary = [
-            { name: 'TOTAL TRANSACTION', value: data.TotalNumOfReq },
-            { name: 'INVALID TRANSACTIONS', value: data.Invalid_Trans },
-            { name: 'ERROR PERCENTAGE', value: data.Error_Per },
-            { name: 'AVG RESPONSE TIME (sec)', value: data.AvgResTime },
-        ]
-
-        if (this.state.apiflag == 0) {
-            summary.push({ name: 'TOTAL PAID', value: data.Total_Paid })
-        }
-
-        let pieArray = []
-        pieArray.push(data.Success)
-        pieArray.push(data.Error)
-
-        let pieLabels = []
-        pieLabels.push("Success")
-        pieLabels.push("Error")
-
-        let errorArray = []
-        if (res.data.Eligibilty271ErrorwiseCount && res.data.Eligibilty271ErrorwiseCount.length > 0 && this.state.apiflag == 1) {
-            errorArray = res.data.Eligibilty271ErrorwiseCount
-            res.data.Eligibilty271ErrorwiseCount.forEach(item => {
-                errorPieArray.push(item.RecCount)
-                errorLabelArray.push(item.ErrorType)
-                errorLabelArray.push(item.Percentage)
-            })
-        } else if (res.data.ClaimStatuswiseCount && res.data.ClaimStatuswiseCount.length > 0) {
-            errorArray = res.data.ClaimStatuswiseCount
-            res.data.ClaimStatuswiseCount.forEach(item => {
-                errorPieArray.push(item.Total)
-                errorLabelArray.push(item.ClaimStatus)
-            })
-        }
-
-        this.setState({
-            summaryList: summary,
-            pieArray: pieArray,
-            pieLabels: pieLabels,
-            errorPieArray: errorPieArray,
-            errorLabelArray: errorLabelArray,
-            // inComplaince: data.In_Compliance_Per,
-            // outComplaince: data.out_of_Compliance_per,
-            thisMonth: data.ThisMonth_Volume,
-            // lastMonth: data.LastMonth_Volume,
-            // averageResponseTime: data.AvgResTime,
-            // noResponsePercent: data.NoResponse_Per,
-            errorCount: data.Error,
-            errorArray: errorArray,
-            realTimePercent: data.RealTime_Per
-        })
-    }
-
-    renderSearchBar() {
-        return (
-            <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
-            </div>
-        )
-    }
-
-    getBarData(labelArray, dataArray, color) {
-        let bardata = {
-            labels: labelArray,
-            showFile: false,
-            datasets: [
-                {
-                    label: 'Total Transactions',
-                    backgroundColor: color,
-                    borderColor: color,
-                    borderWidth: 1,
-                    hoverBackgroundColor: color,
-                    hoverBorderColor: color,
-                    data: dataArray
-                }
-            ],
-            legend: {
-                display: false
-            }
-        }
-
-        return bardata
-    }
-
     getLineChart(labelArray, dataArray, color) {
         let _data = {
             labels: labelArray,
@@ -520,88 +324,6 @@ export class RealTime276 extends React.Component {
             ]
         }
         return _data
-    }
-
-    getPieData(array, labels, colorArray) {
-        const data = {
-            labels: [
-                'Completed',
-                'Errored'
-            ],
-            datasets: [{
-                data: [95, 5],
-                backgroundColor: [
-                    '#139DC9',
-                    '#83D2B4'
-                ],
-                hoverBackgroundColor: [
-                    '#139DC9',
-                    '#83D2B4'
-                ]
-            }],
-            flag: ''
-        };
-
-        return data
-    }
-
-    handleSort(e) {
-        this.setState({
-            type: e
-        })
-    }
-
-    renderTabs(flag) {
-        return (
-            <nav>
-                {
-                    flag ?
-                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
-
-                        </div>
-                        :
-                        <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a className="nav-item nav-link active" id="nav-home-tab" onClick={() => this.handleSort('Submitter')} data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Submitter (top 5)</a>
-                            <a className="nav-item nav-link" id="nav-profile-tab" onClick={() => this.handleSort('Provider')} data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Provider (top 5)</a>
-                        </div>
-                }
-            </nav>
-        )
-    }
-
-    renderPieChart() {
-        return (
-            <div className="row chart">
-                <div className="col-6" style={{ paddingTop: "0px" }}>
-                    <Pie data={this.getPieData}
-                        options={{
-                            elements: {
-                                arc: {
-                                    borderWidth: 0
-                                }
-                            },
-                            tooltips: {
-                                enabled: false
-                            },
-                            pieceLabel: {
-                                render: 'label',
-                                position: 'outside'
-                            },
-                            responsive: true,
-                            legend: {
-                                position: 'bottom',
-                                display: 'false'
-                            },
-                            animation: {
-                                animateScale: true,
-                                animateRotate: true
-                            }
-                        }}
-                        width={200}
-                        height={200} />
-                </div>
-            </div>
-        );
     }
 
     renderCharts() {
@@ -688,8 +410,6 @@ export class RealTime276 extends React.Component {
 
         let addon = ''
         let claimStatus = ''
-        let loadStatus = ''
-        let generalStatus = ''
         let subtitle = ''
         if (header == 'Top 10 Transaction Level Errors') {
             claimStatus = 'Fail'
@@ -736,291 +456,50 @@ export class RealTime276 extends React.Component {
         )
     }
 
-    renderSummaryDetails() {
-        let row = []
-        let data = []
-        let array = this.state.summaryList
-        let apiflag = this.state.apiflag
-        let url = Strings.ElilgibilityDetails270
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let errorcode = ""
+    clickNavigation = (event) => {
 
-        array.forEach(item => {
-            if (item.name == 'INVALID TRANSACTIONS') {
-                errorcode = '999'
-            } else {
-                errorcode = ""
-            }
-
-            data = [
-                { apiflag: apiflag, State: this.state.State ? this.state.State : 'n', selectedTradingPartner: this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n', startDate: startDate, endDate: endDate, transactionId: this.state.transactionId ? this.state.transactionId : 'n', status: item.name == 'TOTAL TRANSACTION' ? 'n' : item.name == 'Total Success Count' ? 'Pass' : 'Fail', count: item.value, errorcode: errorcode },
-            ]
-
-            if (item.name !== 'TOTAL PAID' && item.name !== 'OVERALL VOLUME') {
-                row.push(
-                    item.name == 'TOTAL TRANSACTION' || item.name == 'ERROR PERCENTAGE' || item.name == 'INVALID TRANSACTIONS'
-                        ?
-                        <Link to={{ pathname: '/' + url, state: { data } }} className="col summary-container">
-                            <div>
-                                <div className="summary-header">
-                                    {item.name}
-                                </div>
-
-
-
-                                <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME (sec)') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
-                                    {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
-
-                                </div>
-                            </div>
-                        </Link>
-                        :
-                        <div className="col summary-container">
-                            <div className="summary-header">{item.name}</div>
-                            <div className={(item.name == 'ERROR PERCENTAGE') ? 'orange summary-title' : (item.name == 'TOTAL TRANSACTION' || item.name == 'OVERALL VOLUME(DAILY)') ? 'blue summary-title' : (item.name == 'INVALID TRANSACTIONS') ? 'orange summary-title' : (item.name == 'AVG RESPONSE TIME (sec)') ? 'dark_red summary-title' : (item.name == 'TOTAL PAID') ? 'dark_red summary-title' : (item.name == 'TOTAL TRANSACTION' ? 'green summary-title' : '')}  >
-
-                                {Number(item.value) ? item.value : 0}{item.name == 'ERROR PERCENTAGE' || item.name == 'NO RESPONSE' ? '%' : ''}
-                            </div>
-                        </div>
-                )
-            }
-        });
-
-        return (
-            <div className="row padding-left">
-                {row}
-            </div>
-        )
+        if (event.colDef.headerName == 'Transaction Id') {
+            this.setState({
+                incoming_fileId: event.data.HiPaaSUniqueID
+            }, () => {
+                this.gotoTransactionDetails()
+            })
+        }
     }
 
-    renderVolumeSummary(header, initialHeader, initialValue, laterHeader, laterValue, rise) {
-        return (
-            <div className="volume-summary chart">
-                <div className="volume-summary-header">{header}</div>
-                <div className="row">
-                    <div className="col nopadding">
-                        <div className="volume-header center-align-vol">{initialHeader}</div>
-                        <div className="volume-title center-align-vol">{initialValue}</div>
-                    </div>
-                    <div className="vertical-line"></div>
-                    <div className="col nopadding">
-                        <div className="volume-header center-align-vol">{laterHeader}</div>
-                        <div className="volume-title center-align-vol">{laterValue}</div>
-                    </div>
-                </div>
-                {
-                    rise ?
-                        <div className="increase-percent">{rise}</div>
-                        :
-                        <div className="col padding-top">
-                            <div className="volume-header center-align-vol">No Response</div>
-                            <div className="no-response-title center-align-vol">{this.state.noResponsePercent} %</div>
-                        </div>
-                }
-            </div>
-        )
-    }
 
-    renderAvgSummaryDetails() {
-        return (
-            <div className="col-5 summary-container">
-                <div className="summary-header">Average Response Times</div>
-                <div className="row">
-                    <div className="col-6">
-                        <div className="response-summary-title">Response Time : {this.state.averageResponseTime}sec</div>
-                        <div className="response-summary-title">No Response : {this.state.noResponsePercent}</div>
-                    </div>
-                    <div>
-                        <div className="response-summary-title">In Compliance {this.state.inComplaince} %</div>
-                        <div className="response-summary-title">Out of Compliance {this.state.outComplaince} %</div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
 
-    _renderSummaryDetails = () => {
-        let row = []
-        let array = this.state.summaryCount
-        let apiflag = this.state.apiflag
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-        let mainUrl = apiflag == 1 ? Strings.ElilgibilityDetails270 : Strings.ElilgibilityDetails276
 
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let subtitle = ''
-            let availitySent = ''
-            let EFTCHK = ''
-            let apiflag = ''
-            let loadStatus = ''
-            let url = ''
-            let data = []
-            if (item.name == 'Total Transaction') {
-                claimStatus = ''
-                subtitle = ""
-                apiflag = this.state.apiflag
-            } else if (item.name == 'Valid Transaction') {
-                claimStatus = 'Pass'
-                subtitle = "Valid Transaction"
-                apiflag = this.state.apiflag
-            } else if (item.name == 'Invalid Transaction') {
-                claimStatus = 'Fail'
-                subtitle = "Invalid Transaction"
-                apiflag = this.state.apiflag
-            } else if (item.name == 'No Response') {
-                claimStatus = 'No'
-                subtitle = "No Response"
-                apiflag = this.state.apiflag
-            } else {
-                addon = '/other'
-            }
-
-            data = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    transactionId: 'n',
-                    transactionStatus: claimStatus,
-                    type: type,
-                    subtitle: subtitle,
-                    availitySent: availitySent,
-                    EFTCHK: EFTCHK,
-                    apiflag: apiflag
-                },
-            ]
-
-            row.push(
-                <Tiles
-                    isClickable={
-                        item.name != 'Avg Response Time (sec)'
-                    }
-                    _data={data}
-                    header_text={item.name}
-                    value={item.value}
-                    second_val={item.second_val}
-                    url={mainUrl}
-                />
-
-            )
-        });
-
-        return (
-            <div className="row padding-left">
-                {row}
-            </div>
-        )
-    }
-
-    _renderClaimTables = (array) => {
-        let row = []
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let subtitle = ''
-            let availitySent = ''
-            let color = "var(--grayBlack)"
-            let Status = ''
-            if (item.name == 'In Compliance') {
-                // claimStatus = 'Error'
-                // subtitle = "Files in Error"
-                color = "var(--main-bg-color)"
-            } else if (item.name == 'Out of Compliance') {
-                // availitySent = 'Y'
-                // subtitle = "Sent to Availity"
-                color = "var(--orange)"
-            } else if (item.name == 'No Response') {
-                // availitySent = 'Y'
-                // subtitle = "Sent to Availity"
-                color = "var(--red)"
-            } else if (item.name == 'This Month') {
-                // availitySent = 'Y'
-                // subtitle = "Sent to Availity"
-                // color = "var(--main-bg-color)"
-            }
-
-            let sendData = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    transactionId: 'n',
-                    status: Status,
-                    MaintenanceCode: claimStatus,
-                    type: type,
-                    subtitle: subtitle,
-                    availitySent: availitySent,
-                },
-            ]
-
-            row.push(
-                <TableTiles
-                    item={item}
-                    // url={Strings.claimsDashboard_834_details}
-                    data={sendData}
-                    unclick={color}
-                />
-            )
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
         })
-        return (
-            <div className="col-3 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
-                {row}
-            </div>
-        )
     }
 
-
-    _renderTableTiles = () => {
-
-        let stage_1 = [
-            { 'header': 'Real - Time Volume' },
-            { 'name': 'Last Month', 'value': this.state.lastMonth },
-            { 'name': 'This Month', 'value': this.state.thisMonth },
+    _renderList() {
+        let columnDefs = [
+            { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Transaction Date", field: "Date", flex: 1 },
+            { headerName: "Status", field: "Trans_type", flex: 1 },
+            { headerName: "Submitter", field: "Submiter", flex: 1 },
         ]
-        let stage_2 = [
-            { 'header': 'Compliance Ratio' },
-            { 'name': 'In Compliance', 'value': this.state.inComplaince + ' %' },
-            { 'name': 'Out of Compliance', 'value': this.state.outComplaince + ' %' },
-            { 'name': 'No Response', 'value': this.state.noResponsePercent + ' %' },
-
-        ]
-
-
-        return (
-            <div className="row" style={{ marginBottom: '12px' }}>
-                {this._renderClaimTables(stage_1)}
-                {this._renderClaimTables(stage_2)}
-            </div>
-        )
-    }
-
-
-    getTransactions() {
-
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let query = ''
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let chartQuery = ''
-        let url = Urls.transaction270
-
+        let passquery = ''
         query = `{
-            ClaimRequest_Datewise(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {
+            ClaimRequest_DatewiseNew(TypeID:"" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:""
+            ,sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+            startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},
+            TransactionStatus: ""
+            ) {
+                RecCount
                 HiPaaSUniqueID
                 Date
                 Trans_type
@@ -1034,7 +513,12 @@ export class RealTime276 extends React.Component {
 
         if (this.state.apiflag == 1) {
             query = `{
-                EligibilityAllDtlTypewise(TypeID:"" page: 1  State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" ) {
+                EligibilityAllDtlTypewiseNew(TypeID:"" page: 1  State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"" OrderBy:"", HiPaaSUniqueID:"" 
+                ,sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},
+                TransactionStatus: ""
+                ) {
+                    RecCount
                     HiPaaSUniqueID
                     Date
                     Trans_type
@@ -1046,109 +530,30 @@ export class RealTime276 extends React.Component {
                 }`+ chartQuery + `
             }`
         }
-
-        process.env.NODE_ENV == 'development' && console.log(query)
-
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let count = 1
-                    let data = []
-                    let pieArray = []
-                    let labelArray = []
-
-                    if (this.state.apiflag == 1) {
-                        data = res.data.EligibilityAllDtlTypewise
-                    } else {
-                        data = res.data.ClaimRequest_Datewise
-                    }
-
-                    if (this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount) {
-                        res.data.Eligibilty271ErrorwiseCount.forEach(item => {
-                            pieArray.push(item.RecCount)
-                            labelArray.push(item.ErrorType)
-                        })
-                    }
-
-                    // if (data && data.length > 0) {
-                    //     count = Math.floor(data[0].RecCount / 10)
-                    //     if (data[0].RecCount % 10 > 0) {
-                    //         count = count + 1
-                    //     }
-                    // }
-
-                    this.setState({
-                        files_list: data,
-                        count: count,
-                        pieArray: pieArray,
-                        labelArray: labelArray,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    _renderList = () => {
-        let columnDefs = [
-            { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Transaction Date", field: "Date", flex: 1 },
-            { headerName: "Status", field: "Trans_type", flex: 1 },
-            { headerName: "Submitter", field: "Submiter", flex: 1 },
-            // { headerName: "Error Type", field: "Error_Type", width: 150 },
-            // { headerName: "Error Code", field: "Error_Code", width: 150 },
-            // { headerName: "Error Description", field: "ErrorDescription", flex: 1 },
-        ]
+        if (this.state.apiflag == 1) {
+            passquery = 'EligibilityAllDtlTypewiseNew'
+        } else {
+            passquery = 'ClaimRequest_DatewiseNew'
+        }
 
         return (
-            <div>
-
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.files_list}
-                        icons={this.state.icons}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Transaction Id') {
-                                this.setState({
-                                    incoming_fileId: event.data.HiPaaSUniqueID
-                                }, () => {
-                                    this.gotoTransactionDetails()
-                                })
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls.transaction270}
+                    fieldType={'Date'}
+                    index={passquery}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
     }
-
 
     gotoTransactionDetails = (data) => {
 
@@ -1250,8 +655,19 @@ export class RealTime276 extends React.Component {
         )
     }
 
-
-
+    renderCommonGroup = () => {
+        return (
+            <Common_270
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                type={this.state.type}
+                selectedTradingPartner={this.state.selectedTradingPartner}
+                providerName={this.state.providerName}
+                State={this.state.State}
+                apiflag={this.state.apiflag}
+            />
+        )
+    }
 
     render() {
         return (
@@ -1259,8 +675,7 @@ export class RealTime276 extends React.Component {
                 <h5 className="headerText">{this.state.apiflag == 0 ? 'Claim Status Real Time' : 'Eligibility Real Time'}</h5>
                 {this._renderTopbar()}
                 {this.progressBar()}
-                {this._renderSummaryDetails()}
-                {this._renderTableTiles()}
+                {this.renderCommonGroup()}
                 {this._renderAllPieCharts()}
                 {this._renderList()}
             </div>

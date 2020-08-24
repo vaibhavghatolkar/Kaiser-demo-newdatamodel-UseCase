@@ -4,18 +4,18 @@ import '../../color.css'
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import Strings from '../../../../helpers/Strings'
-import { CommonTable } from '../../../components/CommonTable';
 import { Tiles } from '../../../components/Tiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { TableTiles } from '../../../components/TableTiles';
 import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
+import { Common_837 } from '../../../components/Common_837';
 
 export class ClaimProcessingSummary extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log("dddddddddddd", props.location.state)
         this.state = {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
@@ -24,18 +24,19 @@ export class ClaimProcessingSummary extends React.Component {
             status277CA: '',
             gridType: 1,
             recCount: 0,
-            HiPaaSCount:0,
+            HiPaaSCount: 0,
             pageCount: 1,
             Months: 0,
             loaded: 0,
             Accepted_277CA: 0,
             Rejected_277CA: 0,
-            selectedTradingPartner: "",
-            State: "",
+            selectedTradingPartner: props.location.state && props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            State: props.location.state && props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            startDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            file_id: props.location.state && props.location.state.data[0] && props.location.state.data[0].file_id != 'n' ? props.location.state.data[0].file_id : '',
             type: "",
             providerName: "",
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
-            endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
             Rejected: 0,
@@ -47,7 +48,7 @@ export class ClaimProcessingSummary extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
-            Filter_ClaimId:"",
+            Filter_ClaimId: "",
             X12Count: 0,
             Accepted_Claims: 0,
             Rejected_Claims: 0,
@@ -66,7 +67,6 @@ export class ClaimProcessingSummary extends React.Component {
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
             paginationPageSize: 10,
-            file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
@@ -74,16 +74,16 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "State", field: "State", width: 80 },
                 { headerName: "File Date", field: "FileDateTime", width: 100 },
                 { headerName: "File Status", field: "FileStatus", width: 100 },
-                { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "Claim Date", field: "ClaimDateTime", width:100, },
-                { headerName: "Claim Status", field: "ClaimStatus", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "	Subscriber Id", field: "Subscriber_ID", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-                { headerName: "277CA Status", field: "Status277CA", width: 100 },              
-                { headerName: "999", field: "F999", width:240, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277CA", field: "F277", width:100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Claim Date", field: "ClaimDateTime", width: 100, },
+                { headerName: "Claim Status", field: "ClaimStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "	Subscriber Id", field: "Subscriber_ID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "277CA Status", field: "Status277CA", width: 100 },
+                { headerName: "999", field: "F999", width: 240, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277CA", field: "F277", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "HiPaaS Status", field: "Transaction_Status", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
-          
-                { headerName: "Adjudication Status", field: "adjudication_status", width: 100 },
+
+                // { headerName: "Adjudication Status", field: "adjudication_status", width: 100 },
                 // { headerName: "835", field: "F277" },
             ],
 
@@ -113,109 +113,33 @@ export class ClaimProcessingSummary extends React.Component {
             rowGroupPanelShow: 'always',
             pivotPanelShow: 'always',
             rowData: [],
-         
+
         }
-
-         this.handlePageClick = this.handlePageClick.bind(this)
-    }
-
-    componentDidMount() {
-        this._refreshScreen()
-    }
-
-    getClaimCounts = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-
-        let query = `{
-            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                X12Count
-                HiPaaSCount
-                MCGLoadCount
-            }
-            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                Accepted_Claims
-                Rejected_Claims
-                FileReject_Claims
-                Processing_Claims
-                ReconciledError_Claims
-                LoadingClaims
-                LoadedErrorClaims
-                Accepted_277CA
-                Rejected_277CA
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
-                    let _data = res.data.Claim837RTDashboardTable[0]
-
-                    this.setState({
-                        Accepted: _data ? _data.Accepted_Claims : 0,
-                        Rejected: _data ? _data.Rejected_Claims : 0,
-                        loaded: _data ? _data.LoadingClaims : 0,
-
-
-                        X12Count: data ? data.X12Count : 0,
-                        HiPaaSCount: data ? data.HiPaaSCount : 0,
-                        Accepted_Claims: _data ? _data.Accepted_Claims : 0,
-                        Rejected_Claims: _data ? _data.Rejected_Claims : 0,
-                        FileReject_Claims: _data ? _data.FileReject_Claims : 0,
-                        Processing_Claims: _data ? _data.Processing_Claims : 0,
-                        ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadingClaims: _data ? _data.LoadingClaims : 0,
-                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0,
-                        Accepted_277CA: _data ? _data.Accepted_277CA : 0,
-                        Rejected_277CA: _data ? _data.Rejected_277CA : 0,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    renderSearchBar() {
-        return (
-            <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search" />
-            </div>
-        )
-    }
-
-    handlePageClick(data, fileId) {
-        let page = data.selected + 1
-        this.setState({
-            pageCount: page
-        })
-
-        setTimeout(() => {
-            this.getClaimCounts()
-        }, 50);
     }
 
     goto277 = (fileId) => {
         this.props.history.push('/' + Strings.Outbound_277CAResponse, {
-            fileId: fileId
+            fileId: fileId,
+            data: [{
+                startDate: this.state.startDate,
+                endDate: this.state.endDate,
+                selectedTradingPartner: this.state.selectedTradingPartner,
+                State: this.state.State,
+            }]
         })
     }
 
     goto999 = (fileId) => {
         this.props.history.push('/' + Strings.Outbound_response_999, {
             fileId: fileId,
-            data : [
-                { flag999: '1' },
+            data: [
+                {
+                    flag999: '1',
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                    selectedTradingPartner: this.state.selectedTradingPartner,
+                    State: this.state.State
+                },
             ]
         })
     }
@@ -228,62 +152,12 @@ export class ClaimProcessingSummary extends React.Component {
         let type = this.state.type ? this.state.type : ''
 
         let sendData = [
-            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId: fileId ? fileId : this.state.incoming_fileId,Filter_ClaimId: this.state.Filter_ClaimId, },
+            { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId: fileId ? fileId : this.state.incoming_fileId, Filter_ClaimId: this.state.Filter_ClaimId, },
         ]
 
         this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
             data: sendData
         })
-    }
-
-    renderTransactionsNew() {
-        const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
-        let headerArray = []
-        let rowArray = []
-
-        headerArray.push(
-            { value: 'File Name', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By n.FileName", this.state.fileNameFlag, 'fileNameFlag'), key: this.state.fileNameFlag },
-            { value: 'File Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileDate" : "Order By n.FileCrDate", this.state.fileDateFlag, 'fileDateFlag'), key: this.state.fileDateFlag },
-            { value: 'File Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ExtraField2" : "Order By n.FileStatus", this.state.extraField2Flag, 'extraField2Flag'), key: this.state.extraField2Flag },
-            { value: 'Molina Claim Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.ClaimID" : "Order By n.MolinaClaimID", this.state.claimIDFlag, 'claimIDFlag'), key: this.state.claimIDFlag },
-            { value: 'Claim Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.CreateDateTime" : "Order By n.ClaimDate", this.state.createDateTimeFlag, 'createDateTimeFlag'), key: this.state.createDateTimeFlag },
-            { value: 'Claim Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? " Order By IntakeClaimData.ClaimStatus" : "Order By n.ClaimStatus", this.state.claimStatusFlag, 'claimStatusFlag'), key: this.state.claimStatusFlag },
-            { value: 'Subscriber Id', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By IntakeClaimData.Subscriber_ID" : "Order By n.Subscriber_ID", this.state.subscriber_IDFlag, 'subscriber_IDFlag'), key: this.state.subscriber_IDFlag },
-            { value: '277CA Status' },
-            { value: '999' },           
-            // { value: 'HiPaaS Status' },           
-            { value: '277CA' },
-            { value: 'Adjudication Status' },
-            // { value: '835' },
-        )
-
-        rowArray.push(
-            { value: 'FileName', method: this.gotoDetails, isClick: 1, key_argument: 'FileID' },
-            { value: 'FileCrDate', isDate: 1 },
-            { value: 'FileStatus' },
-            { value: 'MolinaClaimID' },
-            { value: 'ClaimDate', isDate: 1 },
-            { value: 'ClaimStatus' },
-            { value: 'Subscriber_ID' },
-            { value: 'Status277CA' },
-            { value: 'F999', isClick: 1, method: this.goto999, key_argument: 'FileID' },            
-            // { value: 'Transaction_Status' },           
-            { value: 'F277', isClick: 1, method: this.goto277, key_argument: 'FileID'  },
-             { value: 'adjudication_status' },
-            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
-            // { value: '' },
-        )
-
-        return (
-            <CommonTable
-                overflow={true}
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-                count={this.state.recCount}
-                handlePageClick={this.handlePageClick}
-            />
-        )
     }
 
     handleSort = (e, rotation, key) => {
@@ -335,132 +209,11 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
-    _renderClaimTables = (array) => {
-        let row = []
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let loadStatus = ''
-            let generalStatus = ''
-            let mcgStatus = ''
-            let status277CA = ''
-            let subtitle = ''
-            let color = "var(--red)"
-
-            if (item.name == 'Accepted') {
-                generalStatus = 'Accepted'
-                subtitle = 'Accepted Claims'
-                color = "var(--green)"
-            } else if (item.name == 'Accepted with Errors') {
-                generalStatus = 'Rejected'
-                subtitle = "Rejected Claims"
-            } else if (item.name == 'File Rejected') {
-                generalStatus = 'File Rejected'
-                subtitle = item.name
-            } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconcile Exception'
-                subtitle = item.name
-            } else if (item.name == 'Load in MCG') {
-                mcgStatus = 'Loaded'
-                subtitle = item.name
-                color = "var(--main-bg-color)"
-            } else if (item.name == 'Load Error') {
-                mcgStatus = 'Exception'
-                subtitle = item.name
-            }
-
-            if (item.name == 'Accepted' && item.is277CA) {
-                subtitle = '277CA Accepted Claims'
-                generalStatus = ''
-                status277CA = 'Accepted'
-            }
-            
-            if (item.name == 'Rejected' && item.is277CA) {
-                subtitle = '277CA Rejected Claims'
-                generalStatus = ''
-                status277CA = 'Rejected'
-            }
-
-            let sendData = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: claimStatus,
-                    type: type,
-                    gridflag: loadStatus,
-                    generalStatus: generalStatus,
-                    mcgStatus: mcgStatus,
-                    subtitle: subtitle,
-                    status277CA: status277CA
-                },
-            ]
-            row.push(
-                <TableTiles
-                    item={item}
-                    url={Strings.Claim_Details_837_Grid}
-                    data={sendData}
-                    color={color}
-                />
-            )
-        })
-
-        return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
-                {row}
-            </div>
-        )
-    }
-
-
-    renderClaimDetails = () => {
-        let stage_1 = [
-            { 'header': 'HiPaaS Load Status' },
-            { 'name': 'X12 Count', 'value': this.state.X12Count },
-            { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
-            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
-        ]
-        let stage_2 = [
-            { 'header': 'L1 - L2 Status' },
-            { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
-            { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
-            { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
-        ]
-        let stage_3 = [
-            { 'header': 'MCG Load Status' },
-            { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
-            { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
-        ]
-
-        let stage_4 = [
-            { 'header': 'L3 - L7 Status' },
-            { 'name': 'Accepted', 'value': this.state.Accepted_277CA, 'isClick': 1, 'is277CA': 1 },
-            { 'name': 'Rejected', 'value': this.state.Rejected_277CA, 'isClick': 1, 'is277CA': 1 },
-        ]
-
-        return (
-            <div className="row" style={{ marginBottom: '12px', marginLeft: '-10px' }}>
-                {this._renderClaimTables(stage_1)}
-                {this._renderClaimTables(stage_2)}
-                {this._renderClaimTables(stage_3)}
-                {this._renderClaimTables(stage_4)}
-            </div>
-        )
-    }
-
     clickNavigation = (event) => {
-        if (event.colDef.headerName == '999') {
+        if (event.colDef.headerName == '999' && event.data.F999) {
             this.goto999(event.data.FileID)
         }
-        if (event.colDef.headerName == '277CA') {
+        if (event.colDef.headerName == '277CA' && event.data.F277) {
             this.goto277(event.data.FileID)
         }
         if (event.colDef.headerName == 'File Name') {
@@ -536,7 +289,7 @@ export class ClaimProcessingSummary extends React.Component {
             <ServersideGrid
                 columnDefs={this.state.columnDefs}
                 query={query}
-                url={Urls.claim_processing}
+                url={Urls.base_url}
                 fieldType={'ClaimDateTime'}
                 index={'Claim837RTProcessingSummaryNew'}
                 State={this.state.State}
@@ -550,21 +303,6 @@ export class ClaimProcessingSummary extends React.Component {
         )
     }
 
-    _refreshScreen = () => {
-        this.getClaimCounts()
-    }
-
-    onGridChange = (event) => {
-        this.setState({
-            page: 1,
-            rowData: [],
-            Claim837RTProcessingSummary: [],
-            gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-        }, () => {
-            // this.getData()
-        })
-    }
-
     update = (key, value) => {
         this.setState({
             [key]: value
@@ -572,19 +310,37 @@ export class ClaimProcessingSummary extends React.Component {
             this._refreshScreen()
         })
     }
+    _refreshScreen = () => {
+
+    }
 
     _renderTopbar = () => {
         return (
             <Filters
                 isTimeRange={false}
                 setData={this.setData}
-                onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 showclaimId={true}
                 isMolina={true}
                 removeGrid={true}
+                State={this.state.State}
+                selectedTradingPartner={this.state.selectedTradingPartner}
+            />
+        )
+    }
+
+    renderCommonGroup = () => {
+        return (
+            <Common_837
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                type={this.state.type}
+                selectedTradingPartner={this.state.selectedTradingPartner}
+                providerName={this.state.providerName}
+                State={this.state.State}
+                removeFiles={true}
             />
         )
     }
@@ -594,10 +350,8 @@ export class ClaimProcessingSummary extends React.Component {
             <div>
                 <h5 className="headerText">Claim Processing Summary</h5>
                 {this._renderTopbar()}
-                {/* {this._renderStats()} */}
-                {this.renderClaimDetails()}
+                {this.renderCommonGroup()}
                 {this._renderTransactions()}
-                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
             </div>
         );
     }

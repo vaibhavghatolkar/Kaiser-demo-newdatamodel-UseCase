@@ -4,16 +4,13 @@ import '../../color.css'
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
 import Strings from '../../../../helpers/Strings'
-import { CommonTable } from '../../../components/CommonTable';
 import { Tiles } from '../../../components/Tiles';
-import { AgGridReact } from 'ag-grid-react';
-import { TableTiles } from '../../../components/TableTiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
+import { Common_835 } from '../../../components/Common_835';
 
-let val = ''
-let controller = new AbortController()
 export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     constructor(props) {
@@ -29,13 +26,14 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             Months: 0,
             loaded: 0,
             TotalException: 0,
-            selectedTradingPartner: "",
-            State: "",
-            Filter_ClaimId:"",
+            selectedTradingPartner: props.location.state && props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
+            State:props.location.state && props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            startDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            file_id: props.location.state && props.location.state.data[0] && props.location.state.data[0].file_id != 'n' ? props.location.state.data[0].file_id : '',
+            Filter_ClaimId: '',
             type: "",
             providerName: "",
-            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
-            endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
             Rejected: 0,
@@ -68,7 +66,6 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             subscriberLastNameFlag: 180,
             subscriberFirstNameFlag: 180,
             paginationPageSize: 10,
-            file_id: props && props.location.state && props.location.state.file_id ? props.location.state.file_id : '',
             EFTData: 0,
             CheckData: 0,
             QNXT_Generated: 0,
@@ -86,16 +83,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 { headerName: " Remittance File Status", field: "", suppressMovable: true, },
                 { headerName: "999", field: "", suppressMovable: true, },
                 { headerName: "In HiPaaS", field: "", suppressMovable: true, },
-                // { headerName: "Claim Id", field: "ClaimID" },
-                // { headerName: "Days", field: "Days" },
-                // { headerName: "Claim Received Date", field: "ClaimReceivedDate" },
-                // { headerName: "Check EFT No", field: "CheckEFTNo" },
-                // { headerName: "Check EFT Date", field: "CheckEFTDt" },
-                // { headerName: "Payment Method                ", field: "CHECKEFTFlag" },
-                // { headerName: "Total Charge Amount    ", field: "TotalChargeAmt" },
-                // { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt" },
-                // { headerName: "Total Bill Amount    ", field: "TotalBillAmount" },
-                // { headerName: "Total Adjustment Amount", field: "TotalAdjustmentAmount" },
+            
 
             ],
 
@@ -133,174 +121,6 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             rowData: [],
         }
 
-        this.handlePageClick = this.handlePageClick.bind(this)
-    }
-
-    componentDidMount() {
-        this.getData()
-        this._getClaimCounts()
-    }
-
-    getData = async () => {
-        controller.abort()
-        controller = new AbortController()
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        let query = `{            
-            PaymentProcessingSummary(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",FileID:"${this.state.file_id}",Status:"",RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}") {
-                RefID
-                RecCount
-                FileID
-                FileName
-                FileDate
-                ClaimID
-                ClaimReceivedDate
-                PatientName
-                PatientControlNo
-                PayerName
-                TotalChargeAmt
-                TotalClaimPaymentAmt
-                Sender
-                Organization
-                TransactionType
-                CheckEFTNo
-                TRN03
-                PayerID
-                CheckEFTDt
-                AccountNo
-                CHECKEFTFlag
-                Receiver
-                TotalAdjustmentAmount
-                TotalBillAmount
-                Days
-                RemittanceFileName
-                RemittanceSentDate
-                State
-                Status
-                ProcessID
-              }
-            }
-              `
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
-            method: 'POST',
-            signal: controller.signal,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                var data = res.data.PaymentProcessingSummary
-                let count = 0
-                // if (data && data.length > 0) {
-                //     let recCount = data[0].RecCount
-                //     try {
-                //         count = recCount / 10
-                //         count = count.floor(count)
-                //         if (recCount % 10 > 0) {
-                //             count = count + 1
-                //         }
-                //     } catch (error) {
-
-                //     }
-
-                // }
-                console.log("asjfhsaf", data)
-                this.setState({
-                    Claim837RTProcessingSummary: data,
-                    rowData: this.state.gridType == 1 ? data : [],
-                    recCount: count,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    handlePageClick(data, fileId) {
-        let page = data.selected + 1
-        this.setState({
-            pageCount: page
-        })
-
-        setTimeout(() => {
-            this.getData()
-        }, 50);
-    }
-
-    renderTransactionsNew() {
-        const data = this.state.Claim837RTProcessingSummary ? this.state.Claim837RTProcessingSummary : []
-        let headerArray = []
-        let rowArray = []
-
-        headerArray.push(
-            { value: ' Remittance  File Name' },
-            { value: 'Remittance  File Date' },
-            { value: 'Remittance  File Status' },
-            { value: '999' },
-            { value: 'In HiPaaS' },
-            // { value: 'Claim Id' },
-            // { value: 'Day' },
-            // // { value: 'Claim Received Date'},
-            // { value: 'Check EFT No'},
-            // // { value: 'Check EFT Date'},
-            // { value: 'Payment Method' },
-            // { value: 'Total Charge Amount' },
-            // { value: 'Total Paid Amount' },
-            // { value: 'Total Bill Amount' },
-            // { value: 'Total Adjustment Amount' },
-
-
-        )
-
-        rowArray.push(
-            { value: 'FileName', method: this.gotoDetails, isClick: 1, key_argument: 'FileID' },
-            { value: 'FileDate', isDate: 1 },
-            { value: '' },
-            { value: '' },
-            { value: '' },
-            // { value: 'ClaimID' },
-            // { value: 'Days'},
-            // // { value: 'ClaimReceivedDate', isDate: 1 },
-            // { value: 'CheckEFTNo' },
-            // // { value: 'CheckEFTDt' },
-            // { value: 'CheckEFTNo' },
-            // { value: 'TotalChargeAmt' },
-            // { value: 'TotalClaimPaymentAmt'  },
-            // { value: 'TotalBillAmount' },
-            // { value: 'TotalAdjustmentAmount'  },
-            // { value: 'TotalLine', secondVal: 'TotalLinewise835', isBar: 1 },
-
-        )
-
-        return (
-            <CommonTable
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-                count={this.state.recCount}
-                handlePageClick={this.handlePageClick}
-            />
-        )
-    }
-
-    handleSort = (e, rotation, key) => {
-        let addOn = " asc"
-        if (rotation == 0) {
-            addOn = " desc"
-        }
-
-        e = e + addOn
-        this.setState({
-            orderby: e,
-            [key]: rotation == 0 ? 180 : 0
-        })
-        setTimeout(() => {
-            this.getData()
-        }, 50);
     }
 
     _renderStats() {
@@ -336,172 +156,6 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         )
     }
 
-    _renderClaimTables = (array) => {
-        let row = []
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let subtitle = ''
-            let availitySent = ''
-            let color = "var(--red)"
-            let EFTCHK = ''
-
-            if (item.name == 'Total Number of Errors') {
-                claimStatus = 'Error'
-                subtitle = "Files in Error"
-            } else if (item.name == 'Sent to Availity') {
-                availitySent = 'Y'
-                subtitle = "Sent to Availity"
-                color = "var(--green)"
-            } else if (item.name == 'EFT') {
-                EFTCHK = 'ACH'
-                color = "var(--main-bg-color)"
-            } else if (item.name == 'CHK') {
-                EFTCHK = 'CHK'
-                color = "var(--main-bg-color)"
-            }
-
-            let sendData = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    transactionId: 'n',
-                    status: claimStatus,
-                    type: type,
-                    subtitle: subtitle,
-                    availitySent: availitySent,
-                    EFTCHK: EFTCHK
-                },
-            ]
-            row.push(
-                <TableTiles
-                    item={item}
-                    url={Strings.claimPayment_835_details}
-                    data={sendData}
-                    color={color}
-                />
-            )
-        })
-
-        return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
-                {row}
-            </div>
-        )
-    }
-
-
-    _getClaimCounts = async () => {
-
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
-                X12Count
-                HiPaaSCount
-                MCGLoadCount
-              }
-
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
-                  Accepted
-                  Rejected
-                  FileReject
-                  Processing
-                  ReconciledError
-                  Loading
-                  LoadedError
-                  Accepted_277CA
-                  Rejected_277CA
-                  EFT
-                  Check
-                  AvailitySent
-                  TotalError
-                  TotalException
-              }
-              
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let _data = res.data.ERA835DashboardCountPaymentStatus[0]
-                    let data2 = res.data.ERA835DashboardTable[0]
-                    // let _data = res.data.Claim837RTDashboardTable[0]
-
-                    this.setState({
-                        CheckData: data2 ? data2.Check : 0,
-                        EFTData: data2 ? data2.EFT : 0,
-                        Rejected999: data2 ? data2.Rejected : 0,
-                        Accepted999: data2 ? data2.Accepted : 0,
-                        QNXT_Generated: _data ? _data.X12Count : 0,
-                        Hipaas_Received: _data ? _data.HiPaaSCount : 0,
-                        AvailitySent: data2 ? data2.AvailitySent : 0,
-                        TotalError: data2 ? data2.TotalError : 0,
-                        TotalException: data2 ? data2.TotalException : 0,
-                        // TotalCountQnxt: data ? data.TotalCount: 0
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-    renderClaimDetails = () => {
-
-        let stage_1 = [
-            { 'header': 'HiPaaS Received Status' },
-            { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
-            { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
-            { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
-
-        ]
-        let stage_2 = [
-            { 'header': 'HiPaaS Validation Status' },
-            { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
-            // { 'name': 'Number of Acknowledged 835', 'value': 7 },
-
-        ]
-        let stage_3 = [
-            { 'header': 'Availity Status' },
-            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true },
-            { 'name': 'Accepted', 'value': this.state.Accepted999 },
-            { 'name': 'Rejected', 'value': this.state.Rejected999 },
-            // { 'name': '% ERA Out of Total', 'value': '100%' },
-            // { 'name': '# Availity Rejected', 'value': 0 },
-            // { 'name': 'Rejected %', 'value': '15%' }
-        ]
-
-
-        return (
-            <div className="row" style={{ marginBottom: '12px' }}>
-                {this._renderClaimTables(stage_1)}
-                {this._renderClaimTables(stage_2)}
-                {this._renderClaimTables(stage_3)}
-                {/* {this._renderClaimTables(stage_4)} */}
-            </div>
-        )
-    }
-
     gotoDetails = (fileId) => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
@@ -527,6 +181,28 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             data: sendData
         })
     }
+   
+    clickNavigation = (event) => {
+     
+        if (event.colDef.headerName == 'Process Id') {
+            this.setState({
+                incoming_fileId: event.data.FileID
+            }, () => {
+                this.gotoDetails()
+            })
+        }
+    }  
+
+    
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
+    }
 
     _renderTransactions() {
         let columnDefs = [
@@ -539,70 +215,81 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
+            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
             { headerName: "Claim Id", field: "ClaimID", width: 150 },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
             { headerName: "Days Aged", field: "Days", width: 70 },
             { headerName: "Patient Name", field: "PatientName", width: 200 },
             { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
             { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
-            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
         ]
-
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let query = `{
+            PaymentProcessingSummaryNew(
+                StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
+                RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                   startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                                
+            ) {
+                RefID
+                RecCount
+                FileID
+                FileName
+                FileDate
+                ClaimID
+                ClaimReceivedDate
+                PatientName
+                PatientControlNo
+                PayerName
+                TotalChargeAmt
+                TotalClaimPaymentAmt
+                Sender
+                Organization
+                TransactionType
+                CheckEFTNo
+                TRN03
+                PayerID
+                CheckEFTDt
+                AccountNo
+                CHECKEFTFlag
+                Receiver
+                TotalAdjustmentAmount
+                TotalBillAmount
+                Days
+                RemittanceFileName
+                RemittanceSentDate
+                State
+                Status
+                ProcessID
+                }
+              }`
         return (
-            <div>
-
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == '999') {
-                                // this.goto999(event.data.FileID)
-                            }
-                            if (event.colDef.headerName == 'Process Id') {
-                                this.setState({
-                                    incoming_fileId: event.data.FileID
-                                }, () => {
-                                    this.gotoDetails()
-                                })
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls.transaction835}
+                    fieldType={'FileDate'}
+                    index={'PaymentProcessingSummaryNew'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                    filterClaim={this.state.Filter_ClaimId}
+                />
             </div>
         )
-    }
-
-    _refreshScreen = () => {
-        setTimeout(() => {
-            this.getData()
-        }, 500);
-        this._getClaimCounts()
     }
 
     update = (key, value) => {
         this.setState({
             [key]: value
-        }, () => {
-            this._refreshScreen()
         })
     }
 
@@ -616,6 +303,22 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 showclaimId={true}
+                State={this.state.State}
+               
+                
+            />
+        )
+    }
+
+    renderCommonGroup = () => {
+        return (
+            <Common_835
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                selectedTradingPartner={this.state.selectedTradingPartner}
+                providerName={this.state.providerName}
+                State={this.state.State}
+                removeFiles={true}
             />
         )
     }
@@ -625,10 +328,8 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             <div>
                 <h5 className="headerText">Payment Processing Summary</h5>
                 {this._renderTopbar()}
-                {/* {this._renderStats()} */}
-                {this.renderClaimDetails()}
-                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && this.state.gridType ? this._renderTransactions() : null}
-                {this.state.Claim837RTProcessingSummary && this.state.Claim837RTProcessingSummary.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
+                {this.renderCommonGroup()}
+                {this._renderTransactions()}
             </div>
         );
     }

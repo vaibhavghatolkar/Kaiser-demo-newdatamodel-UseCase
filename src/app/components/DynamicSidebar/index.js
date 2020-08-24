@@ -217,6 +217,8 @@ export class DynamicSidebar extends React.Component {
         else if (index == 193) { name = Strings.Enrollment_Outbound_JobList }
         else if (index == 197) { name = Strings.Prediction }
         else if (index == 196) { name = Strings.Sepsis_Dashboard }
+        else if (index == 195) { name = Strings.Transaction275Dashboard }
+        else if (index == 198) { name = Strings._Transaction_275_Details }
 
         return name
     }
@@ -403,7 +405,7 @@ export class DynamicSidebar extends React.Component {
                                 isOutbound = false
                                 sessionStorage.setItem('isOutbound', false)
                                 setTimeout(() => {
-                                    window.location.reload()
+                                    this.getData()
                                 }, 50);
                             }}
                         >
@@ -418,7 +420,7 @@ export class DynamicSidebar extends React.Component {
                                 isOutbound = true
                                 sessionStorage.setItem('isOutbound', true)
                                 setTimeout(() => {
-                                    window.location.reload()
+                                    this.getData()
                                 }, 50);
                             }}
                         >

@@ -115,7 +115,7 @@ export class ServersideGrid extends React.Component {
                             if (this.props.postData) {
                                 this.props.postData(data)
                             }
-                            params.successCallback(data, this.props.defaultRecCount ? this.props.defaultRecCount : (data && data.length > 0 ? data[0].RecCount : 0));
+                            params.successCallback(data, data && data.length > 0 ? data[0].RecCount : 0);
                         }).catch(error => {
                             this.gridApi.hideOverlay()
                             console.log(error)
@@ -137,6 +137,10 @@ export class ServersideGrid extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: this.props.query })

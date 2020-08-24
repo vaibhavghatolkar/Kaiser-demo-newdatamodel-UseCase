@@ -4,7 +4,6 @@ import '../color.css'
 import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
-import ReactPaginate from 'react-paginate';
 import '../Files/files-styles.css';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -18,7 +17,7 @@ export class Outbound_response_999 extends React.Component {
 
     constructor(props) {
         super(props);
-
+console.log("fsdfdsf" ,this.props.location)
         let pagination_length = 10
         try {
             pagination_length = this.props.location.state && this.props.location.state.data && this.props.location.state.data.length > 0 ? (this.props.location.state.data[0].flag999 == 0 ? 5 : 10) : 10
@@ -45,10 +44,11 @@ export class Outbound_response_999 extends React.Component {
             errorDetailArray: [],
             errorContextDetailArray: [],
             Transaction_Compliance: '',
-            State: "",
+            State: props.location.state && props.location.state.data[0].State &&  props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : "",
+            startDate: props.location.state && props.location.state.data[0].startDate && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
+            endDate: props.location.state && props.location.state.data[0].endDate && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
+            selectedTradingPartner: props.location.state && props.location.state.data[0].selectedTradingPartner && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
             status: "",
-            startDate: "",
-            endDate: "",
             transactionId: "",
             errorcode: "",
             transactionType: this.props.location.state ? (this.props.location.state.data[0].flag999 == 0 ? '835' : (this.props.location.state.flag ? '837 Encounter' : '837')) : "837",
@@ -59,7 +59,7 @@ export class Outbound_response_999 extends React.Component {
             Response: '',
             initialPage: null,
             flag999: props.location.state && this.props.location.state.data[0].flag999 ? this.props.location.state.data[0].flag999 : '',
-            type: props.location.state && props.location.state.data[1] && props.location.state.data[1].type ? props.location.state.data[1].type : "",
+            type: props.location.state && props.location.state.data[0] && props.location.state.data[0].type ? props.location.state.data[0].type : "",
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -101,69 +101,7 @@ export class Outbound_response_999 extends React.Component {
     }
 
     componentDidMount() {
-        this.getTransactions()
-    }
-
-    getTransactions() {
-        let query = ''
-        // let typeId = this.state.status
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let fileId = this.props.location.state ? (this.props.location.state.fileId ? this.props.location.state.fileId : '') : ""
-        let recType = 'Inbound'
-        if (this.state.flag999 == 0) {
-            recType = 'Outbound'
-        }
-
-        query = `{
-            Data999(RecType: "${recType}", TrasactionType: "${this.state.transactionType}", FileId: "${fileId}", FileName: "", StartDt: "${startDate}", EndDt: "${endDate}", State: "${this.state.State}", page: ${this.state.page}, OrderBy: "${this.state.orderby}", GridType:${this.state.gridType} ,Type: "${this.state.type}",) {
-              FileId
-              FileName
-              Date
-              Submitter
-              id
-              status
-              Response
-              TrasactionType
-              RecCount
-              ResponseFileName
-              ResponseFileDate
-              ResponseFileDateTime
-              FileDateTime
-            }
-          }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data
-                let count = 1
-                if (data && data.Data999.length > 0) {
-
-                    count = Math.floor(data.Data999[0].RecCount / 10)
-                    if (data.Data999[0].RecCount % 10 > 0) {
-                        count = count + 1
-                    }
-                }
-
-                if (res.data) {
-                    this.setState({
-                        files_list: res.data.Data999,
-                        rowData: this.state.gridType == 1 ? res.data.Data999 : [],
-                        count: count
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
+        
     }
 
     getFileDetails = async (fileId) => {
@@ -226,6 +164,10 @@ export class Outbound_response_999 extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -265,7 +207,7 @@ export class Outbound_response_999 extends React.Component {
 
         if (flag) {
             setTimeout(() => {
-                this.getTransactions()
+               
             }, 50)
         }
     }
@@ -283,7 +225,7 @@ export class Outbound_response_999 extends React.Component {
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            this.getTransactions()
+            
         }, 50);
     }
 
@@ -306,6 +248,10 @@ export class Outbound_response_999 extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -335,77 +281,7 @@ export class Outbound_response_999 extends React.Component {
             </div>
         )
     }
-
-
-
-    renderTableHeader() {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text list-item-style">
-                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.ResponseFileName", this.state.fileNameRotation, 'fileNameRotation')}>Response File Name</a></td>
-                <td className="table-head-text list-item-style">
-                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.ResponseFileDate", this.state.dateRotation, 'dateRotation')}>Date</a></td>
-                <td className="table-head-text list-item-style">
-                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.FileName", this.state.fileRotation, 'fileRotation')}>837 File Name</a>
-                </td>
-                <td className="table-head-text list-item-style">
-                    <a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Data999.status", this.state.statusRotation, 'statusRotation')}>Status</a>
-                </td>
-            </tr>
-        )
-    }
-
-    renderTransactionsNew() {
-        const data = this.state.files_list ? this.state.files_list : [];
-        let row = []
-
-        data.forEach(item => {
-            let date = item.ResponseFileDate ? moment.utc((item.ResponseFileDate)).format("MM/DD/YYYY hh:mm a") : ''
-            row.push(
-                <tr>
-                    <td className="list-item-style">
-                        <a className="clickable"
-                            onClick={() => {
-                                this.render999Details(item.id)
-                            }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{item.ResponseFileName}</a></td>
-                    <td className="list-item-style">{date}</td>
-                    <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{item.FileName}</td>
-                    <td className="list-item-style">{item.status}</td>
-                </tr>
-            )
-
-        });
-
-        return (
-            <div>
-                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed' }}>
-                    {this.state.files_list && this.state.files_list.length > 0 ? this.renderTableHeader() : null}
-                    <tbody>
-                        {row}
-                    </tbody>
-                </table>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={this.state.initialPage}
-                    forcePage={this.state.initialPage}
-                    pageCount={this.state.count}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClick(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
-            </div>
-        )
-    }
+   
 
     clickNavigation = (event) => {
         if (
@@ -463,7 +339,7 @@ export class Outbound_response_999 extends React.Component {
                     StartDt: "${startDate}", EndDt: "${endDate}", 
                     State: "${this.state.State}", page: ${this.state.page}, 
                     OrderBy: "${this.state.orderby}", GridType:${this.state.gridType},
-                    Type: "${this.state.type}"
+                    Type: "${this.state.type}", Sender:"${this.state.selectedTradingPartner}"
             ) {
                   FileId
                   FileName
@@ -651,7 +527,7 @@ export class Outbound_response_999 extends React.Component {
     }
 
     _refreshScreen = () => {
-        this.getTransactions()
+       
     }
 
     onGridChange = (event) => {
@@ -662,7 +538,7 @@ export class Outbound_response_999 extends React.Component {
             files_list: [],
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            this.getTransactions()
+            
         })
     }
 
@@ -682,6 +558,7 @@ export class Outbound_response_999 extends React.Component {
             <Filters
                 isTimeRange={false}
                 removeGrid={true}
+                State={this.state.State}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
@@ -690,7 +567,6 @@ export class Outbound_response_999 extends React.Component {
                 isDiffSubmitter={true}
                 _is835={this.state.flag999 == 1 ? false : true}
                 transactionType={this.state.transactionType}
-                removeGrid={true}
             />
         )
     }
@@ -703,8 +579,7 @@ export class Outbound_response_999 extends React.Component {
                 {this._renderTopbar()}
                 <div className={this.state.flag999 == 1 ? "row" : ""}>
                     <div className={this.state.flag999 == 1 ? "col-7 margin-top" : "margin-top"}>
-                        {this.state.flag999 == 1 ? this._renderTransactionsServerSide() : this._renderTransactions()}
-                        {this.state.files_list && this.state.files_list.length > 0 && !this.state.gridType ? this.renderTransactionsNew() : null}
+                        {this._renderTransactionsServerSide()}
                     </div>
                     <div className={this.state.flag999 == 1 ? "col-5 margin-top" : "margin-top"}>
                         {this.state.showDetails ? this.renderDetails(1) : null}

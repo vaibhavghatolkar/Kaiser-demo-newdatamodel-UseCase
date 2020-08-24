@@ -1,6 +1,6 @@
 @import "../color.css";
 
-padding-top.Title
+.padding-top
 {
     font-weight: bold;
     font-size: 14x;
@@ -82,4 +82,9 @@ padding-top.Title
 .gradient-color{
     background: var(--gradient-color);   
 }
+.errorMsg {
+    color: #cc0000;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
 /* linear-gradient(29deg, rgba(105,237,241,1) 0%, rgba(89,89,227,1) 0%, rgba(34,201,252,1) 100%) */
