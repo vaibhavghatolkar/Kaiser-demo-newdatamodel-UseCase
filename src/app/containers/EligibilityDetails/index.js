@@ -4,15 +4,11 @@ import '../color.css'
 import '../Claim_276_RealTime/Real_Time_276/style.css'
 import moment from 'moment';
 import Urls from '../../../helpers/Urls';
-import ReactPaginate from 'react-paginate';
-import { Pie } from 'react-chartjs-2';
 import '../Files/files-styles.css';
-import { CommonTable } from '../../components/CommonTable';
 import { Filters } from '../../components/Filters';
-import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-
+import { ServersideGrid } from '../../components/ServersideGrid';
 var val = ''
 const $ = window.$;
 let controller = new AbortController()
@@ -49,6 +45,7 @@ export class EligibilityDetails extends React.Component {
             transactionStatus: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].transactionStatus ? props.location.state.data[0].transactionStatus : "",
             HiPaaSID: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].HiPaaSID ? props.location.state.data[0].HiPaaSID : "",
             subtitle: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
+            complianceStatus: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].complianceStatus ? props.location.state.data[0].complianceStatus : '',
             pieArray: [],
             labelArray: [],
             orderby: '',
@@ -84,23 +81,20 @@ export class EligibilityDetails extends React.Component {
         }
 
         this.getData = this.getData.bind(this)
-        this.handleStartChange = this.handleStartChange.bind(this)
-        this.handleEndChange = this.handleEndChange.bind(this)
     }
 
     componentDidMount() {
         this.getData()
-        this.getTransactions()
+
     }
 
     _refreshScreen = () => {
         this.getData()
-        this.getTransactions()
+
     }
 
     getData(uuid) {
         let query = ''
-        if (uuid) {
             if (this.state.apiflag == 1) {
                 query = `{
                     EventLogData270( HiPaaS_UUID: "${uuid}") {
@@ -110,6 +104,7 @@ export class EligibilityDetails extends React.Component {
                         Exception
                         ErrorMessage
                         Transaction_Compliance
+                        Response_Time
                       }
             }`
             } else {
@@ -121,30 +116,11 @@ export class EligibilityDetails extends React.Component {
                         Exception
                         ErrorMessage
                         Transaction_Compliance
+                        Response_Time
                       }
             }`
-            }
-        } else {
-            query = `{
-                Trading_PartnerList(RecType :"Inbound", Transaction:"ClaimRequest")  {
-                    Trading_Partner_Name 
-                }
-                ErrorType_List(Transaction: "ClaimRequest") {
-                    ErrorType
-                }
-            }`
-
-            if (this.state.apiflag == 1) {
-                query = `{
-                    Trading_PartnerList(RecType :"Inbound", Transaction:"EligibilityStatus")  {
-                        Trading_Partner_Name 
-                    }
-                    ErrorType_List(Transaction: "Eligibility") {
-                        ErrorType
-                    }
-                }`
-            }
         }
+        
 
         process.env.NODE_ENV == 'development' && console.log(query)
 
@@ -152,6 +128,10 @@ export class EligibilityDetails extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -173,8 +153,8 @@ export class EligibilityDetails extends React.Component {
                         })
                     } else {
                         this.setState({
-                            tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
-                            errorList: res.data.ErrorType_List ? res.data.ErrorType_List : [],
+                            tradingpartner: [],
+                            errorList: [],
                         })
                     }
                 }
@@ -182,98 +162,6 @@ export class EligibilityDetails extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-    }
-
-    getTransactions() {
-        controller.abort()
-        controller = new AbortController()
-        let query = ''
-        let typeId = this.state.transactionStatus
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let chartQuery = ''
-        let url = Urls.transaction270
-
-        query = `{
-            ClaimRequest_Datewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID: "${this.state.HiPaaSID}" ) {
-                HiPaaSUniqueID
-                Date
-                Trans_type
-                Submiter
-                Trans_ID
-                Error_Type
-                Error_Code
-                ErrorDescription
-            }`+ chartQuery + `
-        }`
-
-        if (this.state.apiflag == 1) {
-            query = `{
-                EligibilityAllDtlTypewise(TypeID:"`+ typeId + `" page:` + this.state.page + ` State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `" ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID:"${this.state.HiPaaSID}" ) {
-                    HiPaaSUniqueID
-                    Date
-                    Trans_type
-                    Submiter
-                    Trans_ID
-                    Error_Type
-                    Error_Code
-                    ErrorDescription
-                }`+ chartQuery + `
-            }`
-        }
-
-        process.env.NODE_ENV == 'development' && console.log(query)
-
-        fetch(url, {
-            method: 'POST',
-            signal: controller.signal,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let count = 1
-                    let data = []
-                    let pieArray = []
-                    let labelArray = []
-
-                    if (this.state.apiflag == 1) {
-                        data = res.data.EligibilityAllDtlTypewise
-                    } else {
-                        data = res.data.ClaimRequest_Datewise
-                    }
-
-                    if (this.state.status != "Pass" && res.data.Eligibilty271ErrorwiseCount) {
-                        res.data.Eligibilty271ErrorwiseCount.forEach(item => {
-                            pieArray.push(item.RecCount)
-                            labelArray.push(item.ErrorType)
-                        })
-                    }
-
-
-                    this.setState({
-                        files_list: data,
-                        count: count,
-                        pieArray: pieArray,
-                        labelArray: labelArray,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    renderSearchBar() {
-        return (
-            <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
-            </div>
-        )
     }
 
     showDetails() {
@@ -329,6 +217,10 @@ export class EligibilityDetails extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -348,97 +240,34 @@ export class EligibilityDetails extends React.Component {
             });
     }
 
-    renderTransactions() {
-        let row = []
-        const data = this.state.files_list ? this.state.files_list : []
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'Transaction Id') {
+            this.setState({
+                showDetails: true
+            }, () => {
+                this.getData(event.data.HiPaaSUniqueID)
+                this.getDetails(event.data.HiPaaSUniqueID)
+            })
 
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td className="border-left"><a onClick={() => {
-                        this.getData(d.HiPaaSUniqueID)
-                        this.getDetails(d.HiPaaSUniqueID)
-                    }} style={{ color: "var(--light-blue)", cursor: "pointer" }}>{d.Trans_ID}</a></td>
-                    <td>{moment(d.Date).format("MMM DD YYYY hh:mm a")}</td>
-                    <td>{d.Trans_type}</td>
-                    <td>{d.Submiter}</td>
-                    {this.state.status != 'Pass' ? <td>{d.Error_Type}</td> : null}
-                    {this.state.status != 'Pass' ? <td>{d.Error_Code}</td> : null}
-                    {this.state.status != 'Pass' ? <td>{d.ErrorDescription}</td> : null}
-                </tr>
-            )
-        })
-        return (
-            <div>
-                <table className="table table-bordered claim-list">
-                    <thead>
-                        <tr className="table-head" style={{ fontSize: "9px" }}>
-                            <td className="table-head-text">Transaction Id
-                                <div>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation')} src={require('../../components/Images/icons8-down-arrow-241.png')} style={{ width: '13px', transform: `rotate(${this.state.transactionRotation}deg)` }}></img>
-                                </div>
-                            </td>
-                            <td className="table-head-text list-item-style" >Transaction Date
-                            <div>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation')} src={require('../../components/Images/icons8-down-arrow-241.png')} style={{ width: '13px', transform: `rotate(${this.state.dateRotation}deg)` }}></img>
-                                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime desc" : "order by Date desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img> */}
-                                </div>
-                            </td>
-                            <td className="table-head-text list-item-style">Status
-                            <div>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation')} src={require('../../components/Images/icons8-down-arrow-241.png')} style={{ width: '13px', transform: `rotate(${this.state.statusRotation}deg)` }}></img>
-                                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus desc" : "order by Trans_type desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img> */}
-                                </div>
-                            </td>
-                            <td className="table-head-text list-item-style">Submitter
-                            <div>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation')} src={require('../../components/Images/icons8-down-arrow-241.png')} style={{ width: '13px', transform: `rotate(${this.state.submitterRotation}deg)` }}></img>
-                                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender desc" : "order by Submiter desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img> */}
-                                </div>
-                            </td>
-                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Type
-                            <div>
-                                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage" : "order by Error_Type", this.state.errorRotation, 'errorRotation')} src={require('../../components/Images/icons8-down-arrow-241.png')} style={{ width: '13px', transform: `rotate(${this.state.errorRotation}deg)` }}></img>
-                                    {/* <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage desc" : "order by Error_Type desc")} src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '13px' }}></img> */}
-                                </div>
-                            </td> : null}
-                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Code
-                            {/* <img src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '8px' }}></img>
-                                <img src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '8px' }}></img> */}
-                            </td> : null}
-                            {this.state.status != 'Pass' ? <td className="table-head-text list-item-style">Error Description
-                            {/* <img src={require('../../components/Images/icons8-long-arrow-up-32.png')} style={{ width: '8px' }}></img>
-                                <img src={require('../../components/Images/icons8-down-arrow-24.png')} style={{ width: '8px' }}></img> */}
-                            </td> : null}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {row}
-                    </tbody>
-                </table>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.state.count}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClick(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
-            </div>
-        )
+        } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
+            this.setState({
+                clickedError: event.data.ErrorDescription
+            }, () => {
+                $('#error_modal').modal('show')
+            })
+
+        }
     }
-
-    _renderList = () => {
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray
+        })
+    }
+    _renderList() {
         let columnDefs;
         if (this.state.transactionStatus == 'Pass' || this.state.transactionStatus == 'No') {
             columnDefs = [
@@ -446,14 +275,16 @@ export class EligibilityDetails extends React.Component {
                 { headerName: "Transaction Date", field: "Date", flex: 1 },
                 { headerName: "Status", field: "Trans_type", flex: 1 },
                 { headerName: "Submitter", field: "Submiter", flex: 1 },
+                { headerName: "Response Time (sec)", field: "Response_Time", flex: 1 },
             ]
         } else {
-            if(this.state.apiflag == 1){
+            if (this.state.apiflag == 1) {
                 columnDefs = [
                     { headerName: "Transaction Id", field: "Trans_ID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                     { headerName: "Transaction Date", field: "Date", width: 150 },
                     { headerName: "Status", field: "Trans_type", width: 150 },
                     { headerName: "Submitter", field: "Submiter", width: 150 },
+                    { headerName: "Response Time (sec)", field: "Response_Time", width: 70 },
                     { headerName: "Error Type", field: "Error_Type", width: 150 },
                     { headerName: "Error Code", field: "Error_Code", width: 150 },
                     { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -464,60 +295,85 @@ export class EligibilityDetails extends React.Component {
                     { headerName: "Transaction Date", field: "Date", width: 150 },
                     { headerName: "Status", field: "Trans_type", width: 150 },
                     { headerName: "Submitter", field: "Submiter", width: 150 },
+                    { headerName: "Response Time (sec)", field: "Response_Time", width: 70 },
                     { headerName: "Error Code", field: "Error_Code", width: 150 },
                     { headerName: "Error Description", field: "ErrorDescription", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
                 ]
             }
         }
 
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let query = ''
+        let chartQuery = ''
+        let passquery = ''
+        query = `{
+            ClaimRequest_DatewiseNew(TypeID:"${this.state.transactionStatus}" page: 1 State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" StartDt:"` + startDate + `" EndDt:"` + endDate + `" TransactionID:"` + this.state.transactionId + `"  ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `", HiPaaSUniqueID: "${this.state.HiPaaSID}"
+            ,sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+            startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},
+            TransactionStatus: "${this.state.complianceStatus}"
+            ) {
+                RecCount
+                HiPaaSUniqueID
+                Date
+                Trans_type
+                Submiter
+                Trans_ID
+                Error_Type
+                Error_Code
+                ErrorDescription
+                Response_Time
+            }`+ chartQuery + `
+        }`
+
+        if (this.state.apiflag == 1) {
+            query = `{
+                EligibilityAllDtlTypewiseNew(TypeID:"${this.state.transactionStatus}" page: 1  
+                State:"` + this.state.State + `" Sender:"` + this.state.selectedTradingPartner + `" 
+                StartDt:"` + startDate + `" EndDt:"` + endDate + `" 
+                TransactionID:"` + this.state.transactionId + `"  
+                ErrorType:"` + this.state.errorcode + `" OrderBy:"` + this.state.orderby + `",
+                HiPaaSUniqueID: "${this.state.HiPaaSID}"
+                ,sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},
+                TransactionStatus: "${this.state.complianceStatus}"
+                ) {
+                    RecCount
+                    HiPaaSUniqueID
+                    Date
+                    Trans_type
+                    Submiter
+                    Trans_ID
+                    Error_Type
+                    Error_Code
+                    ErrorDescription
+                    Response_Time
+                }`+ chartQuery + `
+            }`
+        }
+        if (this.state.apiflag == 1) {
+            passquery = 'EligibilityAllDtlTypewiseNew'
+        } else {
+            passquery = 'ClaimRequest_DatewiseNew'
+        }
 
         return (
-            <div>
-
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.files_list}
-                        icons={this.state.icons}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Transaction Id') {
-                                this.setState({
-                                    showDetails: true
-                                }, () => {
-                                    this.getData(event.data.HiPaaSUniqueID)
-                                    this.getDetails(event.data.HiPaaSUniqueID)
-                                })
-
-                            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
-                                this.setState({
-                                    clickedError: event.data.ErrorDescription
-                                }, () => {
-                                    $('#error_modal').modal('show')
-                                })
-
-                            }
-
-
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls.transaction270}
+                    fieldType={'Date'}
+                    index={passquery}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    filterClaim={this.state.transactionId}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
     }
@@ -545,23 +401,6 @@ export class EligibilityDetails extends React.Component {
         )
     }
 
-
-
-    handleSort = (e, rotation, key) => {
-        let addOn = " asc"
-        if (rotation == 0) {
-            addOn = " desc"
-        }
-
-        e = e + addOn
-        this.setState({
-            orderby: e,
-            [key]: rotation == 0 ? 180 : 0
-        })
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
     renderDetails(flag) {
         return (
             <div className="row">
@@ -591,81 +430,14 @@ export class EligibilityDetails extends React.Component {
         }, 50);
     }
 
-    handleStartChange(date) {
-        this.setState({
-            startDate: date,
-            showDetails: false
-        });
-
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
-
-    handleEndChange(date) {
-        this.setState({
-            endDate: date,
-            showDetails: false
-        });
-
-        setTimeout(() => {
-            this.getTransactions()
-        }, 50);
-    }
-
-    renderPieChart() {
-        const data = {
-            labels: this.state.labelArray,
-            datasets: [{
-                data: this.state.pieArray,
-                backgroundColor: [
-                    'var(--main-bg-color)',
-                    'var(--cyan-color)',
-                    'var(--hex-color)',
-                    'var(--pacific-blue-color)',
-                ],
-                hoverBackgroundColor: [
-                    'var(--main-bg-color)',
-                    'var(--cyan-color)',
-                    'var(--hex-color)',
-                    'var(--pacific-blue-color)',
-                ]
-            }],
-            flag: ''
-        };
-        return (
-            <div>
-                <Pie data={data}
-                    options={{
-                        elements: {
-                            arc: {
-                                borderWidth: 0
-                            }
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }}
-                    width={80}
-                    height={40} />
-            </div>
-        )
-    }
-
-    _handleStateChange = (event) => {
-        this.setState({
-            State: event.target.options[event.target.selectedIndex].text,
-            showDetails: false
-        }, () => {
-            this.getTransactions()
-        })
-    }
-
     renderEventLog() {
         let row = []
         const data = this.state.eventLog ? this.state.eventLog : []
-
+        let responseTime = 0
         data.forEach((d) => {
+            try {
+                responseTime = (Math.round(d.Response_Time * 100) / 100).toFixed(2);
+            } catch (error) {}
             row.push(
                 <tr>
                     <td>{d.EventName}</td>
@@ -678,7 +450,7 @@ export class EligibilityDetails extends React.Component {
         return (
             <div className="row">
                 <div className={"col-12"}>
-                    <div className="top-padding clickable" href={'#' + 'event'} data-toggle="collapse">Stage Details ({this.state.Transaction_Compliance})</div>
+                    <div className="top-padding clickable" href={'#' + 'event'} data-toggle="collapse">Stage Details ({this.state.Transaction_Compliance}), {responseTime && responseTime != 0 ? ('Response Time (sec) : ' + responseTime) : ''}</div>
                     <div id={'event'}>
                         <table className="table table-bordered background-color">
                             <thead>
@@ -702,132 +474,9 @@ export class EligibilityDetails extends React.Component {
         return { Trans_ID, Date, Trans_type, Submiter };
     }
 
-    renderHeader() {
-        return (
-            <div className="row">
-                <div className="col-header justify-align col">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.transactionRotation}deg)`, marginRight: '2px' }}></img> Transaction
-                </div>
-                <div className="col-header justify-align col" >
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '2px' }}></img>Date
-                </div>
-                <div className="col-header justify-align col">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '2px' }}></img> Status
-                </div>
-                <div className="col-header justify-align col">
-                    <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '2px' }}></img> Submitter
-                </div>
-                {this.state.status != 'Pass' ? <div className="col-header justify-align col"><img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage" : "order by Error_Type", this.state.errorRotation, 'errorRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '13px', transform: `rotate(${this.state.errorRotation}deg)` }}></img> Error Type</div> : null}
-                {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Code</div> : null}
-                {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Description</div> : null}
-            </div>
-        )
-    }
-
     onClick = (value) => {
         this.getData(value)
         this.getDetails(value)
-    }
-
-    renderTransactionsNew() {
-        const data = this.state.files_list ? this.state.files_list : []
-        let headerArray = []
-        let rowArray = []
-        headerArray.push(
-            { value: 'Transaction', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation'), key: this.state.transactionRotation, upScale: 1 },
-            { value: 'Date', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation'), key: this.state.dateRotation },
-            { value: 'Status', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation'), key: this.state.statusRotation },
-            { value: 'Submitter', method: () => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation'), key: this.state.submitterRotation },
-            { value: 'Error Type' },
-            { value: 'Error Code' },
-            { value: 'Description' }
-        )
-
-        rowArray.push(
-            { value: 'Trans_ID', upScale: 1 },
-            { value: 'Date', isDate: 1, isNottime: 1 },
-            { value: 'Trans_type' },
-            { value: 'Submiter' },
-            { value: 'Error_Type' },
-            { value: 'Error_Code' },
-            { value: 'ErrorDescription' }
-        )
-
-        return (
-            <CommonTable
-                headerArray={headerArray}
-                rowArray={rowArray}
-                data={data}
-                count={this.state.count}
-                handlePageClick={this.handlePageClick}
-                onClickKey={'HiPaaSUniqueID'}
-                onClick={this.onClick}
-            />
-        )
-    }
-
-    renderEnhancedTable() {
-        let row = []
-        const data = this.state.files_list ? this.state.files_list : []
-
-        data.forEach((d) => {
-            row.push(
-                <div className="row">
-                    <div className="col col-small-style">
-                        <a className="cursor-value small-font"
-                            onClick={() => {
-                                this.getData(d.HiPaaSUniqueID)
-                                this.getDetails(d.HiPaaSUniqueID)
-                            }} style={{ color: "#6AA2B8" }}>{d["Trans_ID"]}</a></div>
-                    <div className="col col-small-style small-font">{moment(d.Date).format("MMM DD YYYY hh:mm a")}</div>
-                    <div className="col col-small-style small-font">{d["Trans_type"]}</div>
-                    <div className="col col-small-style small-font">{d["Submiter"]}</div>
-                    {this.state.status != 'Pass' ? <div className="col col-style small-font">{d["Error_Type"]}</div> : null}
-                    {this.state.status != 'Pass' ? <div className="col col-style small-font">{d["Error_Code"]}</div> : null}
-                    {this.state.status != 'Pass' ? <div className="col col-style small-font">{d["ErrorDescription"]}</div> : null}
-                </div>
-            )
-        })
-        return (
-            <div className="margin">
-                <div className="row">
-                    <div className="col-header justify-align col">
-                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionID" : "order by Trans_ID", this.state.transactionRotation, 'transactionRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.transactionRotation}deg)`, marginRight: '2px' }}></img> Transaction
-                    </div>
-                    <div className="col-header justify-align col" >
-                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.EventCreationDateTime" : "order by Date", this.state.dateRotation, 'dateRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.dateRotation}deg)`, marginRight: '2px' }}></img>Date
-                    </div>
-                    <div className="col-header justify-align col">
-                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.TransactionStatus" : "order by Trans_type", this.state.statusRotation, 'statusRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.statusRotation}deg)`, marginRight: '2px' }}></img> Status
-                    </div>
-                    <div className="col-header justify-align col">
-                        <img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.Sender" : "order by Submiter", this.state.submitterRotation, 'submitterRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '14px', transform: `rotate(${this.state.submitterRotation}deg)`, marginRight: '2px' }}></img> Submitter
-                    </div>
-                    {this.state.status != 'Pass' ? <div className="col-header justify-align col"><img onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "order by Request.ErrorMessage" : "order by Error_Type", this.state.errorRotation, 'errorRotation')} src={require('../../components/Images/up_arrow.png')} style={{ width: '13px', transform: `rotate(${this.state.errorRotation}deg)` }}></img> Error Type</div> : null}
-                    {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Code</div> : null}
-                    {this.state.status != 'Pass' ? <div className="col-header justify-align col">Error Description</div> : null}
-                </div>
-                {row}
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.state.count}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClick(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
-            </div>
-        )
     }
 
     setData = (startDate, endDate, selected_val, chartType) => {
@@ -878,16 +527,7 @@ export class EligibilityDetails extends React.Component {
                 {this.state.showDetails ? this.renderDetails() : null}
                 {this.state.showDetails ? this.renderDetails(1) : null}
                 {this.errorDialog()}
-                {/* <div className="row">
-                    <div className="col-7 margin-top">
-                        {this.renderTransactionsNew()}
-                    </div>
-                    <div className="col-5">
-                        {this.state.showDetails && this.state.eventLog && this.state.eventLog.length > 0 ? this.renderEventLog(1) : null}
-                        {this.state.showDetails ? this.renderDetails() : null}
-                        {this.state.showDetails ? this.renderDetails(1) : null}
-                    </div>
-                </div> */}
+               
             </div>
         );
     }

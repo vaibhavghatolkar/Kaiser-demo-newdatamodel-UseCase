@@ -6,7 +6,7 @@ RUN apk add nginx && \
     mkdir /run/nginx && \
     cd /var/www/localhost/htdocs && \
     npm install && \
-    npm run build && \
+    GENERATE_SOURCEMAP=false npm run build && \
     apk del nodejs && \
     apk del npm && \
     mv /var/www/localhost/htdocs/build /var/www/localhost && \

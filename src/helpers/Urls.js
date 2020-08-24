@@ -1,13 +1,14 @@
-// let base_url = 'http://localhost:4000' //local
+let base_url = 'http://localhost:4000' //local
 // let _base_url = 'http://localhost:4000' //local
-let base_url = 'http://10.0.1.248:30544' //graph
+// let base_url = 'http://10.0.1.248:30544' //graph
 let _base_url = 'http://10.0.1.248:30528' //local
 let sql_base_url = 'http://10.0.1.248:30506'
 // let base_url = 'http://10.0.1.71:30506' //sql
 //  let base_url = 'http://10.229.4.247:30108' //molina
 //  let base_url = 'http://hapiservice.hipaas-stage.svc.cluster.local:4000' //service
 const Urls = {
-    base_url : 'http://10.0.1.248:30544/graphQl', //local
+    base_url : 'http://localhost:4000/graphQl', //local
+    // base_url : 'http://10.0.1.248:30544/graphQl', //local
     // base_url : 'http://10.0.1.71:30506/graphQl', //sql
     // base_url : 'http://10.0.1.248:30508/graphQl', //graph
     // base_url : 'http://10.229.4.247:30108/graphQl', //molina
@@ -32,6 +33,7 @@ const Urls = {
     transaction270: base_url + '/transaction270',
     tradingPartnerAdmin: base_url + '/tradingPartnerAdmin',
     CustomConfiguration: base_url + '/CustomConfiguration',
+    transaction275: base_url + '/transaction275',
 
 
     _base_url : 'http://10.0.1.248:30528/graphQl', //local

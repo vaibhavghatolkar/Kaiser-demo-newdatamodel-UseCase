@@ -5,7 +5,6 @@ import '../../color.css'
 import '../../Files/files-styles.css';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
-import ReactPaginate from 'react-paginate';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -140,43 +139,10 @@ export class Load_Exception extends React.Component {
         }
     }
     
-    sortData(fileId, data) {
-        let files = {}
-        let intakeClaims = this.state.intakeClaims
-
-        if (fileId && data) {
-            files = this.state.claimsObj
-            if ('sort_' + fileId in files) {
-                files['sort_' + fileId].array = []
-                data.forEach(item => {
-                    files['sort_' + fileId].array.push(item)
-                });
-            }
-
-        } else {
-            intakeClaims.forEach(item => {
-                files['sort_' + item.FileID] = {
-                    value: item,
-                    array: []
-                }
-            })
-        }
-
-        this.setState({
-            claimsObj: files,
-            page: 1
-        })
-    }
-
+  
     getTransactions = (fileId) => {
-
         // let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         // let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        let providerName = this.state.providerName
-        if (!providerName) {
-            providerName = ''
-        }
-
         let query = `{            
             LoadException (FileID : "` + fileId + `") {
                 FileID
@@ -192,10 +158,14 @@ export class Load_Exception extends React.Component {
 
         // console.log(query)
 
-        fetch(Urls.claim_processing, {
+        fetch(Urls.base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -218,205 +188,7 @@ export class Load_Exception extends React.Component {
 
             });
     }
-
-
-    handlePageClick = (data, fileId) => {
-
-        let page = data.selected + 1
-        this.setState({
-            page: page
-        }, () => {
-            this.getTransactions(fileId)
-        })
-    }
-
-    handlePageClickLine = (data) => {
-        let page = data.selected + 1
-        this._getHLDetails(this.state.fileid)
-        this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
-
-    }
-
-    renderHeader(header) {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text">{header}</td>
-            </tr>
-        )
-    }
-
-    renderClaimsHeader(fileId) {
-        return (
-            <tr className="table-head">
-                {/* <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Process ID</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>State</a></td> */}
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Exception</a></td>
-
-            </tr>
-        )
-    }
-
-    handleSort(e, rotation, key) {
-        let addOn = " asc"
-        if (rotation == 0) {
-            addOn = " desc"
-        }
-
-        e = e + addOn
-        this.setState({
-            orderby: e,
-            [key]: rotation == 0 ? 180 : 0
-        })
-    }
-
-    handleInnerSort = (e, rotation, key, fileId) => {
-        let addOn = " asc"
-        if (rotation == 0) {
-            addOn = " desc"
-        }
-
-        e = e + addOn
-        this.setState({
-            inner_orderby: e,
-            [key]: rotation == 0 ? 180 : 0
-        })
-        setTimeout(() => {
-            this.getTransactions(fileId)
-        }, 50);
-    }
-
-    renderTableHeader() {
-        return (
-            <div className="row">
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>Process Id</a>
-                </div>
-                {/* <div className="col-1 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
-                </div> */}
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By FileLevelError", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Error Description</a>
-                </div>
-            </div>
-        )
-    }
-
-    render_load_excaption() {
-        let row = []
-        const data = this.state.claims_rowData ? this.state.claims_rowData : []
-
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td>{d.ClaimID}</td>
-                    <td style={{ wordBreak: 'break-all' }}>{d.ProcessName}</td>
-                    <td style={{ wordBreak: 'break-all' }}>{d.Exception}</td>
-                </tr>
-            )
-        })
-        return (
-            <div className="row">
-                <div className="col-12">
-                    <br></br>
-                    <div >
-                        <table className="table table-bordered background-color">
-                            <thead>
-                                <tr className="table-head">
-
-                                    <td className="table-head-text list-item-style">Claim Id</td>
-                                    <td className="table-head-text list-item-style">Process Name</td>
-                                    <td className="table-head-text list-item-style">Exception</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {row}
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-
-    renderList() {
-        let row = []
-        let col = []
-        let data = this.state.claimsObj;
-      
-        Object.keys(data).forEach((keys) => {
-            row.push(
-                <div className="row">
-                    <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}
-                        onClick={() => {
-                            this.setState({
-                                showDetails: false
-                            })
-                            this.getTransactions(data[keys].value.FileID)
-                        }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
-                    <div className="col-2 col-small-style small-font" style={{ wordBreak: 'break-all' }}>{data[keys].value.ProcessID}</div>
-                    {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment(data[keys].value.FileDateTime).format('MM/DD/YYYY')}<br />{moment(data[keys].value.FileDate).format('hh:mm a')}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
-                </div>
-            )
-
-
-        });
-
-        return (
-            <div>
-                {this.renderTableHeader()}
-                <table className="table claim-details">
-                    {row}
-                </table>
-                <div style={{ marginLeft: '-14px' }}>
-                    <ReactPaginate
-                        previousLabel={'previous'}
-                        nextLabel={'next'}
-                        breakLabel={'...'}
-                        breakClassName={'page-link'}
-                        initialPage={0}
-                        pageCount={this.state.recount}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={(page) => { this.handlePageClick1(page) }}
-                        containerClassName={'pagination'}
-                        pageClassName={'page-item'}
-                        previousClassName={'page-link'}
-                        nextClassName={'page-link'}
-                        pageLinkClassName={'page-link'}
-                        subContainerClassName={'pages pagination'}
-                        activeClassName={'active'}
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    handlePageClick1(data) {
-        let page = data.selected + 1
-        this.setState({
-            Firstgridpage: page
-        })
-    }
-
-    clickNavigation = (event) => {
+     clickNavigation = (event) => {
         if (event.colDef.headerName == 'File Name') {
             this.setState({
                 showClaims: true,
@@ -477,7 +249,7 @@ export class Load_Exception extends React.Component {
                 <ServersideGrid
                     columnDefs={this.state.columnDefs}
                     query={query}
-                    url={Urls.real_time_claim_details}
+                    url={Urls.base_url}
                     index={'Claim837RTLoadExceptionFileDetailsNew'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
@@ -618,31 +390,11 @@ export class Load_Exception extends React.Component {
             <div>
                 <h5 className="headerText">Load Exception</h5>
                 {this._renderTopbar()}
-                {
-                    this.state.gridType
-                        ?
-                        <div>
+                    <div>
                             {this._renderList()}
                             {this.state.showClaims ? this._renderClaims() : null}
-
-                            {/* {this.state.showerror ? this._ClaimStage() : null} */}
-
                         </div>
-                        :
-                        <div className="row padding-left">
-                            <div className="col-6 claim-list file-table">
-                                {this.state.claimsObj ? this.renderList() : null}
-                            </div>
-                            <div className="col-6">
-
-                                {this.state.showDetails ? this.render_load_excaption() : null}
-                            </div>
-
-
-                        </div>
-
-                }
-                {this.errorDialog()}
+                   {this.errorDialog()}
             </div>
         );
     }

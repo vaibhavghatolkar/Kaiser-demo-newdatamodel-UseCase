@@ -5,21 +5,14 @@ import '../../color.css'
 import '../../Files/files-styles.css';
 import moment from 'moment';
 import Urls from '../../../../helpers/Urls';
-import ReactPaginate from 'react-paginate';
-import DatePicker from "react-datepicker";
-import { Pie } from 'react-chartjs-2';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Strings from '../../../../helpers/Strings';
 import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
-
-
-var val = ''
 const $ = window.$;
 export class Claim_Details_837_Grid extends React.Component {
-
     constructor(props) {
         super(props);
         let flag = props.location.state && props.location.state.data[0] ? props.location.state.data[0].flag : ''
@@ -30,7 +23,6 @@ export class Claim_Details_837_Grid extends React.Component {
         } else {
             flag = 'Other'
         }
-
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -61,7 +53,7 @@ export class Claim_Details_837_Grid extends React.Component {
             incoming_fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_fileId ? props.location.state.data[0].incoming_fileId : '',
             subtitle: props.location.state && props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
             status277CA: props.location.state && props.location.state.data[0] && props.location.state.data[0].status277CA ? props.location.state.data[0].status277CA : '',
-            Filter_ClaimId: props.location.state && props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
+            Filter_ClaimId: props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
             flag: flag,
             coverage_data: [],
             tradingpartner: [],
@@ -75,7 +67,6 @@ export class Claim_Details_837_Grid extends React.Component {
             claimLineDetails: [],
             Transaction_Compliance: '',
             providerName: '',
-
             State: props.location.state && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             status: props.location.state && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: props.location.state && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
@@ -106,16 +97,12 @@ export class Claim_Details_837_Grid extends React.Component {
             errorRotation: 180,
             stateRotation: 180,
             processIdRotation: 180,
-
             seqID: '',
             fileDataDetails: '',
             page1: 1,
-
             gridType: 1,
             paginationPageSize: 5,
             domLayout: 'autoHeight',
-
-
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,
@@ -132,109 +119,22 @@ export class Claim_Details_837_Grid extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
             defaultColDef: {
-                // editable: false,
-                // enableRowGroup: true,
-                // enablePivot: true,
-                // enableValue: true,
-                // sortable: true,
-                // resizable: true,
-                // filter: true,
-                // flex: 1,
-                // minWidth: 100,
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
                 sortable: true,
                 resizable: true,
                 filter: true,
             },
-
-
-
             rowSelection: 'never',
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
             showerror: '',
             Aggrid_ClaimLineData: ''
-
         }
-
-        this.Saved = this.Saved.bind(this)
-    }
-
-    componentDidMount() {
-        // this.getListData()
-        this.getIcdCode()
-    }
-
-    getIcdCode() {
-        let query = `{
-            ClaimsICDCODE  {
-                SeqId
-                ICD_CODE
-                Year
-                ExtraField1
-            }
-        }`
-
-
-        fetch(Urls.real_time_claim_details, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-
-                if (res.data) {
-                    this.setState({
-                        Icdcode: res.data.ClaimsICDCODE ? res.data.ClaimsICDCODE : [],
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    ChangeVal(event, key) {
-        this.setState({
-            selectedICdCode: event.target.options[event.target.selectedIndex].text
-        })
-
-
-    }
-    sortData(fileId, data) {
-        let files = {}
-        let intakeClaims = this.state.intakeClaims
-
-        if (fileId && data) {
-            files = this.state.claimsObj
-            if ('sort_' + fileId in files) {
-                files['sort_' + fileId].array = []
-                data.forEach(item => {
-                    files['sort_' + fileId].array.push(item)
-                });
-            }
-
-        } else {
-            intakeClaims.forEach(item => {
-                files['sort_' + item.FileID] = {
-                    value: item,
-                    array: []
-                }
-            })
         }
-        process.env.NODE_ENV == 'development' && console.log(files)
-        this.setState({
-            claimsObj: files,
-            page: 1
-        })
+    componentDidMount() {      
     }
-
     get_Error = (ClaimID, seqid, fileID) => {
         let query = `{            
             ClaimErrorStages  (ClaimID:"` + ClaimID + `",SeqID:` + seqid + `,FileID:"` + fileID + `") {
@@ -249,10 +149,14 @@ export class Claim_Details_837_Grid extends React.Component {
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim_details, {
+        fetch(Urls.base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -275,145 +179,8 @@ export class Claim_Details_837_Grid extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
     }
-    renderButton() {
-
-        return (
-
-            <div>
-
-                <button onClick={this.Saved} className="btn light_blue1 btn-xs" style={{ marginLeft: "20px" }}>Save</button>
-
-            </div>
-        )
-    }
-
-    Saved() {
-        if (this.state.Icdcodepresent == "Icdcode") {
-            if (this.state.selectedICdCode != "") {
-                let query = `mutation{updateICDCode(
-                    ClaimID:"`+ this.state.claimid + `" 
-                    FileID:"`+ this.state.fileid + `"  
-                    ICDCode:"`+ this.state.selectedICdCode + `"     
-                    )
-                  }`
-
-
-                fetch(Urls.base_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query
-
-                    })
-                })
-                    .then(r => r.json())
-                    .then(data =>
-                        alert(data.data.updateICDCode),
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1000)
-
-                    );
-
-            }
-        }
-        else if (this.state.Icdcodepresent == "AccidentDt") {
-            if (this.state.Accidentdate != "") {
-                let query = `mutation{updateAccidentDate(
-                    ClaimID:"`+ this.state.claimid + `"
-                    FileID:"`+ this.state.fileid + `"  
-                    AccidentDate:"`+ this.state.Accidentdate + `"     
-                    )
-                  }`
-                fetch(Urls.base_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query
-
-                    })
-                })
-                    .then(r => r.json())
-                    .then(data =>
-                        alert(data.data.updateAccidentDate),
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 1000)
-
-                    );
-            }
-
-        }
-
-
-    }
-    renderSearchBar() {
-        return (
-            <div className="row">
-                <input type="text" name="name" className="input-style" placeholder="Search Claim" />
-            </div>
-        )
-    }
-
-    showDetails() {
-        this.setState({
-            showDetails: true
-        })
-    }
-
-    handlePageClick = (data, fileId) => {
-
-        let page = data.selected + 1
-        this.setState({
-            page: page
-        })
-    }
-
-    handlePageClickLine = (data) => {
-        let page = data.selected + 1
-        this._getHLDetails(this.state.fileid)
-        this.getDetails(this.state.claimid, this.state.fileid, this.state.seqID, this.state.fileDataDetails, page)
-
-    }
-
-
-
-    getIcdcodeoptions() {
-        let row = []
-        this.state.Icdcode.forEach(element => {
-
-            row.push(<option value="">{element.ICD_CODE}</option>)
-        })
-        return row
-    }
-    onChangeName(event, key) {
-
-        this.setState({
-            Accidentdate: event.target.value
-
-        });
-    }
-
-    getDatePicker = () => {
-        return (
-            <DatePicker
-                className="form-control list-header-dashboard"
-                selected={this.state.Accidentdate ? new Date(this.state.Accidentdate) : ''}
-                onChange={this.handleAccidentdate}
-            />
-        )
-    }
-
     getDetails(claimId, fileId, ClaimRefId, fileData, page) {
-        let Claim_Icdcode = ""
-        let AccidentDate = ""
-        let url = Urls.real_time_claim_details
+        let url = Urls.base_url
         let query = `{
             Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", SeqID: ${ClaimRefId}) {
               ClaimID
@@ -457,52 +224,30 @@ export class Claim_Details_837_Grid extends React.Component {
             }
           }
           `
-
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
         })
             .then(res => res.json())
             .then(res => {
-                let data = res.data
+                let _data = res.data
                 let count = 1
-
-                if (data && data.Claim837RTLineDetails.length > 0) {
-
-                    count = Math.floor(data.Claim837RTLineDetails[0].RecCount / 10)
-                    if (data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
-                        count = count + 1
-                    }
+                if (_data && _data.Claim837RTLineDetails.length > 0) {
+                    count = Math.floor(_data.Claim837RTLineDetails[0].RecCount / 10)
+                    if (_data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
+                        count = count + 1                    }
                 }
-
-
-                if (data && res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
-                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
-                        Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
-                            <option value="0" ></option>
-                            {this.getIcdcodeoptions()}
-                        </select>
-                    }
-                    else {
-                        Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
-                    }
-                    let isDate = 0
-                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "AccidentDt") {
-                        isDate = 1
-                        AccidentDate = this.getDatePicker()
-                    }
-                    else {
-
-                        AccidentDate = res.data.Claim837RTDetails[0].AccidentDate;
-                    }
+                if (_data && res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {                   
                     let data = res.data.Claim837RTDetails[0]
-
                     let claimDetails =
                         [
                             { field_name: 'X12 Claim Id', value: data.ClaimID },
@@ -513,8 +258,8 @@ export class Claim_Details_837_Grid extends React.Component {
                             { field_name: 'Claim Amount', value: data.Claim_Amount },
                             { field_name: 'Provider Address', value: data.BillingProviderAddress },
                             { field_name: 'Claim Status', value: data.ClaimStatus },
-                            { field_name: 'ICD Code', value: Claim_Icdcode },
-                            { field_name: 'Accident Date', value: isDate ? "" : AccidentDate, isDate: isDate },
+                            { field_name: 'ICD Code', value: data.Claim_Icdcode },
+                            { field_name: 'Accident Date', value: data.AccidentDate },
                             { field_name: '', },
                             { field_name: '', },
                         ]
@@ -528,7 +273,6 @@ export class Claim_Details_837_Grid extends React.Component {
                         count: count,
                         seqID: ClaimRefId,
                         fileDataDetails: fileData,
-                        //  lineCount: data ? data.LXCount : 0,
                         Aggrid_ClaimLineData: res.data.Claim837RTLineDetails,
                         Aggrid_Claim_Info_data: res.data.Claim837RTDetails
                     })
@@ -540,7 +284,7 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     getClaimStages(claimId, fileId, seqId) {
-        let url = Urls.real_time_claim_details
+        let url = Urls.base_url
         let query = `{
             ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}", SeqID: ${seqId}) {
               Stage
@@ -548,13 +292,15 @@ export class Claim_Details_837_Grid extends React.Component {
             }
           }
           `
-
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -571,430 +317,10 @@ export class Claim_Details_837_Grid extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-    }
+    }  
 
-    renderRows(dictionary) {
-        let row = []
-        let col = []
-        let count = 0
-
-        dictionary.forEach(item => {
-            col.push(
-                <div className="col">
-                    <div className="header">{item.field_name}</div>
-                    {item.isDate ? this.getDatePicker() : <div>{(moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') != "Invalid date" && item.field_name == 'Claim Date') ? moment.utc(item.value).format('MM/DD/YYYY, hh:mm a') : item.value}</div>}
-                </div>
-            )
-
-            if (col.length % 4 == 0) {
-                row.push(<div className="row">{col}</div>)
-                col = []
-            }
-            count++
-            if (count == dictionary.length && col.length > 0) {
-                row.push(<div className="row">{col}</div>)
-            }
-        });
-
-        return (
-            <div className="summary-style">
-                {row}
-            </div>
-        )
-    }
-
-    renderDetails(flag) {
-        return (
-            <div className="row">
-                {this.state.status != 'n' ? <div className="col-1"></div> : null}
-                <div className={this.state.status == 'n' ? "col-12" : "col-11"}>
-                    <div className="top-padding"><a href={'#' + 'hello' + flag} data-toggle="collapse">{flag ? 'Transaction Response' : 'Transaction Request'}</a></div>
-                    <div className="border-view collapse" id={'hello' + flag}>{flag ? this.state.message_271 : this.state.message_270}</div>
-                </div>
-            </div>
-        )
-    }
-
-
-
-    handleAccidentdate = (date) => {
-        this.setState({
-            Accidentdate: date,
-        });
-    }
-
-    renderPieChart() {
-        const data = {
-            labels: this.state.labelArray,
-            datasets: [{
-                data: this.state.pieArray,
-                backgroundColor: [
-                    'var(--main-bg-color)',
-                    'var(--cyan-color)',
-                    'var(--hex-color)',
-                    'var(--pacific-blue-color)',
-                ],
-                hoverBackgroundColor: [
-                    'var(--main-bg-color)',
-                    'var(--cyan-color)',
-                    'var(--hex-color)',
-                    'var(--pacific-blue-color)',
-                ]
-            }],
-            flag: ''
-        };
-        return (
-            <div>
-                <Pie data={data}
-                    options={{
-                        elements: {
-                            arc: {
-                                borderWidth: 0
-                            }
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }}
-                    width={80}
-                    height={40} />
-            </div>
-        )
-    }
-
-    renderClaimDetails() {
-        let row = []
-        const data = this.state.claimLineDetails ? this.state.claimLineDetails : []
-
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td>{d.ClaimID}</td>
-                    <td>{d.MolinaClaimID}</td>
-                    <td>{d.ServiceLineCount}</td>
-                    <td>{d.ServiceDate}</td>
-                    <td>{d.ProcedureDate}</td>
-                    <td>{d.PaidServiceUnitCount}</td>
-                </tr>
-            )
-        })
-        return (
-            <div className="row">
-                <div className="col-12">
-                    <div className="top-padding">
-                        <a href={'#' + 'event'} data-toggle="collapse">Claim Line Data</a>
-                        <div className="right-aligned">Line count : {this.state.lineCount}</div>
-                    </div>
-                    <div id={'event'}>
-                        <table className="table table-bordered background-color">
-                            <thead>
-                                <tr className="table-head" style={{ fontSize: "9px" }}>
-                                    <td className="table-head-text list-item-style">
-                                        <a>X12 Claim Id</a>
-                                    </td>
-                                    <td className="table-head-text list-item-style">
-                                        <a>Claim Id</a>
-                                    </td>
-                                    <td className="table-head-text list-item-style">Service Line No.</td>
-                                    <td className="table-head-text list-item-style">Service Date</td>
-                                    <td className="table-head-text list-item-style">Procedure Code</td>
-                                    <td className="table-head-text list-item-style">Unit</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {row}
-                            </tbody>
-                        </table>
-                        <ReactPaginate
-                            previousLabel={'previous'}
-                            nextLabel={'next'}
-                            breakLabel={'...'}
-                            breakClassName={'page-link'}
-                            initialPage={0}
-                            pageCount={this.state.count}
-                            marginPagesDisplayed={2}
-                            pageRangeDisplayed={5}
-                            onPageChange={(page) => { this.handlePageClickLine(page) }}
-                            containerClassName={'pagination'}
-                            pageClassName={'page-item'}
-                            previousClassName={'page-link'}
-                            nextClassName={'page-link'}
-                            pageLinkClassName={'page-link'}
-                            subContainerClassName={'pages pagination'}
-                            activeClassName={'active'}
-                        />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    renderClaimStageDetails() {
-        let row = []
-        const data = this.state.claimStageDetails ? this.state.claimStageDetails : []
-
-        data.forEach((d) => {
-            let date = d.Createdatetime ? moment.utc((d.Createdatetime)).format("MM/DD/YYYY hh:mm a") : ''
-            row.push(
-                <tr>
-                    <td className="list-item-style">{d.Stage}</td>
-                    <td className="list-item-style">{date}</td>
-                </tr>
-            )
-        })
-        return (
-            <div className="row">
-                <div className="col-12">
-                    <div className="top-padding"><a href={'#' + 'event1'} data-toggle="collapse">Claim Stages</a></div>
-                    <div id={'event1'}>
-                        <table className="table table-bordered background-color">
-                            <thead>
-                                <tr className="table-head" style={{ fontSize: "9px" }}>
-                                    <td className="table-head-text list-item-style">Stage</td>
-                                    <td className="table-head-text list-item-style">Date</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {row}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    renderHeader(header) {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text">{header}</td>
-            </tr>
-        )
-    }
-
-    renderClaimsHeader(fileId) {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Molina Claim Id</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>Claim Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Subscriber Id</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Claim_Amount", this.state.claimAmountRotation, 'claimAmountRotation', fileId) }}>Claim Amount</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimLevelErrors", this.state.errorRotation, 'errorRotation', fileId) }}>Error</a></td>
-            </tr>
-        )
-    }
-    handleSort(e, rotation, key) {
-        let addOn = " asc"
-        if (rotation == 0) {
-            addOn = " desc"
-        }
-
-        e = e + addOn
-        this.setState({
-            orderby: e,
-            [key]: rotation == 0 ? 180 : 0
-        })
-    }
-
-    handleInnerSort = (e, rotation, key, fileId) => {
-        let addOn = " asc"
-        if (rotation == 0) {
-            addOn = " desc"
-        }
-
-        e = e + addOn
-        this.setState({
-            inner_orderby: e,
-            [key]: rotation == 0 ? 180 : 0
-        })
-    }
-
-    renderTableHeader() {
-        return (
-            <div className="row">
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')} src={require('../../../components/Images/up_arrow.png')}>File Name</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>Process Id</a>
-                </div>
-                {/* <div className="col-1 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')} src={require('../../../components/Images/up_arrow.png')}>Type</a>
-                </div> */}
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')} src={require('../../../components/Images/up_arrow.png')}>File Date</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')} src={require('../../../components/Images/up_arrow.png')}>File Status</a>
-                </div>
-                <div className="col-2 col-header justify-align">
-                    <a className="clickable" onClick={() => this.handleSort((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By FileLevelError", this.state.submitterRotation, 'submitterRotation')} src={require('../../../components/Images/up_arrow.png')}>Error Description</a>
-                </div>
-            </div>
-        )
-    }
-
-    _getHLDetails = async (fileId) => {
-        let query = `{
-            Claim837RTHLCount(FileID: "${fileId}") {
-              FileID
-              HL22
-              HL20
-              HL23
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data && res.data.Claim837RTHLCount && res.data.Claim837RTHLCount.length > 0) {
-                    let fileData = this.state.fileDataDetails
-                    let fileDetails = [
-                        { field_name: 'File Name', value: fileData.FileName },
-                        { field_name: 'File Date', value: moment.utc(fileData.FileDate).format('MM/DD/YYYY') + moment.utc(fileData.FileDate).format(' h:m A') },
-                        { field_name: 'Receiver', value: fileData.Receiver },
-                        { field_name: 'HL20 Count', value: this.state.HL20 },
-                        { field_name: 'HL22 Count', value: this.state.HL22 },
-                        { field_name: 'HL23 Count', value: this.state.HL23 },
-                        { field_name: '', value: '' },
-                        { field_name: '', value: '' },
-                    ]
-                    this.setState({
-                        HL20: res.data.Claim837RTHLCount[0].HL20,
-                        HL22: res.data.Claim837RTHLCount[0].HL22,
-                        HL23: res.data.Claim837RTHLCount[0].HL23,
-                        fileDetails: fileDetails
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    renderList() {
-        let row = []
-        let col = []
-        let data = this.state.claimsObj;
-        Object.keys(data).forEach((keys) => {
-            row.push(
-                <div className="row">
-                    <div className="col-2 col-small-style border-left small-font left-align"><a href={'#' + keys}
-                        onClick={() => {
-
-                        }} style={{ color: "var(--light-blue)" }} data-toggle="collapse" aria-expanded="false">{data[keys].value.FileName}</a></div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.State}</div>
-                    <div className="col-2 col-small-style small-font" style={{ wordBreak: 'break-all' }}>{data[keys].value.ProcessID}</div>
-                    {/* <div className="col-1 col-small-style small-font">{data[keys].value.Type}</div> */}
-                    <div className="col-2 col-small-style small-font">{moment.utc(data[keys].value.FileDateTime).format('MM/DD/YYYY')}<br />{moment.utc(data[keys].value.FileDate).format('hh:mm a')}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.FileStatus}</div>
-                    <div className="col-2 col-small-style small-font">{data[keys].value.FileLevelError}</div>
-                </div>
-            )
-
-            {
-                col = []
-                data[keys].array.forEach((d) => {
-
-                    col.push(
-                        <tr>
-                            <td className="list-item-style"><a className="clickable" onClick={() => {
-                                this.setState({
-                                    claimId: d.ClaimID,
-                                    showDetails: false,
-                                    molina_claimId: d.MolinaClaimID
-                                }, () => {
-                                    this._getHLDetails(d.FileID)
-                                    this.getDetails(d.ClaimID, d.FileID, d.ClaimRefId, data[keys].value, 1)
-                                    this.getClaimStages(d.ClaimID, d.FileID, d.ClaimRefId)
-                                })
-                            }} style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>{d.MolinaClaimID}</a></td>
-                            <td className="list-item-style">{d.ClaimStatus}</td>
-                            <td className="list-item-style">{d.Subscriber_ID}</td>
-                            <td className="style-left"> ${d.Claim_Amount}</td>
-                            <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ClaimLevelErrors}</td>
-                        </tr>
-                    )
-                })
-            }
-
-            row.push(
-                <div id={keys} className="collapse">
-                    <table id="" className="table table-bordered claim-details" style={{ tableLayout: 'fixed' }}>
-                        {this.renderClaimsHeader(data[keys].value.FileID)}
-                        {col}
-                    </table>
-
-                    <ReactPaginate
-                        previousLabel={'previous'}
-                        nextLabel={'next'}
-                        breakLabel={'...'}
-                        breakClassName={'page-link'}
-                        initialPage={this.state.initialPage}
-                        pageCount={Math.floor((data[keys].value.Claimcount / 10) + (data[keys].value.Claimcount % 10 > 0 ? 1 : 0))}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={(page) => { this.handlePageClick(page, data[keys].value.FileID) }}
-                        containerClassName={'pagination'}
-                        pageClassName={'page-item'}
-                        previousClassName={'page-link'}
-                        nextClassName={'page-link'}
-                        pageLinkClassName={'page-link'}
-                        subContainerClassName={'pages pagination'}
-                        activeClassName={'active'}
-                    />
-
-                </div>
-            )
-        });
-
-        return (
-            <div>
-                {this.renderTableHeader()}
-                <table className="table claim-details">
-                    {row}
-                </table>
-                <div style={{ marginLeft: '-14px' }}>
-                    <ReactPaginate
-                        previousLabel={'previous'}
-                        nextLabel={'next'}
-                        breakLabel={'...'}
-                        breakClassName={'page-link'}
-                        initialPage={0}
-                        pageCount={this.state.recount}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={(page) => { this.handlePageClick1(page) }}
-                        containerClassName={'pagination'}
-                        pageClassName={'page-item'}
-                        previousClassName={'page-link'}
-                        nextClassName={'page-link'}
-                        pageLinkClassName={'page-link'}
-                        subContainerClassName={'pages pagination'}
-                        activeClassName={'active'}
-                    />
-                </div>
-            </div>
-        );
-    }
-    handlePageClick1(data) {
-        let page = data.selected + 1
-        this.setState({
-            Firstgridpage: page
-        })
-    }
-
+  
+  
     clickNavigation = (event) => {
         if (event.colDef.headerName == 'File Name') {
             this.setState({
@@ -1163,8 +489,8 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "Claim Status", field: "ClaimStatus", width: 140 },
             { headerName: "Subscriber Id", field: "Subscriber_ID", width: 140 },
             { headerName: "277CA Status", field: "Status277CA", width: 100 },
-            { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
-            { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
+            // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
+            // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
             { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
@@ -1226,7 +552,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
-                    url={Urls.claim_processing}
+                    url={Urls.base_url}
                     index={'Claim837RTProcessingSummaryNew'}
                     State={this.state.State}
                     fieldType={'ClaimDateTime'}
@@ -1485,61 +811,19 @@ export class Claim_Details_837_Grid extends React.Component {
     }
 
     render() {
-
         return (
             <div>
                 <h5 className="headerText">Claims Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}  </h5>
                 {this._renderTopbar()}
-                {
-                    this.state.gridType
-                        ?
-                        <div>
+                    <div>
                             {this._renderList()}
                             {this.state.showClaims && this.state.selectedFileId ? this._renderClaims() : null}
                             {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.status277CA == "Rejected") ? this._renderError() : null}
                             {this.state.showerror ? this._ClaimView_Info_Table() : null}
                             {this.state.showerror ? this._ClaimLineTable() : null}
                             {/* {this.state.showerror ? this._ClaimStage() : null} */}
-
-                        </div>
-                        :
-                        <div className="row padding-left">
-                            <div className="col-6 claim-list file-table">
-                                {this.state.claimsObj ? this.renderList() : null}
-                            </div>
-
-                            <div className="col-6">
-                                {
-                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                        <div>
-                                            <h6 style={{ marginTop: '20px', color: "#424242" }}>Claim Data</h6>
-                                            <hr />
-                                        </div> : null
-                                }
-                                {
-                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                        <table className="table claim-Details border">
-                                            {this.renderHeader('File #' + this.state.fileid)}
-                                            {this.renderRows(this.state.fileDetails)}
-                                        </table>
-                                        : null
-                                }
-                                {
-                                    this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
-                                        <table className="table claim-Details border">
-                                            {this.renderHeader('Claim #' + this.state.molina_claimId)}
-                                            {this.renderRows(this.state.claimDetails)}
-                                            <br></br>
-                                            {this.state.Icdcodepresent == "Icdcode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
-                                        </table>
-                                        : null
-                                }
-                                {this.state.showDetails && this.state.claimLineDetails && this.state.claimLineDetails.length > 0 ? this.renderClaimDetails() : null}
-                                {/* {this.state.showDetails && this.state.claimStageDetails && this.state.claimStageDetails.length > 0 ? this.renderClaimStageDetails() : null} */}
-                            </div>
-                        </div>
-                }
-                {this.errorDialog()}
+                    </div>                    
+               {this.errorDialog()}
             </div>
         );
     }

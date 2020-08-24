@@ -19,7 +19,7 @@ export class MenuCreate extends React.Component {
             Menucheckall: '',
             isChecked: '',
             menuType: "I",
-            userroleID: ""
+            userroleID: localStorage.getItem("role_id")
         }
 
         this.showFile = this.showFile.bind(this)
@@ -57,6 +57,10 @@ export class MenuCreate extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -107,6 +111,10 @@ export class MenuCreate extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -114,7 +122,6 @@ export class MenuCreate extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let array = []
-                let summary = []
                 let data = res.data.UserwiseMenu
                 let iterator = data
                 process.env.NODE_ENV == 'development' && console.log(res.data);
@@ -162,6 +169,10 @@ export class MenuCreate extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -183,7 +194,7 @@ export class MenuCreate extends React.Component {
         let row = []
 
         this.state.userrole.forEach(element => {
-            row.push(<option value={element.Role_id}>{element.role_description}</option>)
+            row.push(<option selected={element.Role_id==this.state.userroleID} value={element.Role_id}>{element.role_description}</option>)
         })
         return row
     }
@@ -293,7 +304,6 @@ export class MenuCreate extends React.Component {
                         let parent = d.parent_node
                         let menuId = d.menu_id
                         let data2 = [...data]
-                        let count = 0;
                         // alert(parent)true
                         data2.forEach((item) => {
 
@@ -436,6 +446,10 @@ export class MenuCreate extends React.Component {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                     'Accept': 'application/json',
                 },
                 body: JSON.stringify({
@@ -444,8 +458,8 @@ export class MenuCreate extends React.Component {
                 })
             })
                 .then(r => r.json())
-                .then(data => {
-                    alert(data.data.updateuserwisemenu)
+                .then(res => {
+                    alert(res.data.updateuserwisemenu)
                     setTimeout(() => {
                         window.location.reload()
                     }, 100);
@@ -520,12 +534,12 @@ export class MenuCreate extends React.Component {
                     </button>
                 </div>
 
-                <div className="modal right fade" id="myModal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div className="modal right widthHandling fade" id="myModal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                     <div className="modal-dialog" role="document">
-                        <div className="modal-content" style={{ paddingRight: "25px" }}>
+                        <div className="modal-content">
                             <div className="modal-header">
                                 <h5 className="modal-title" id="myModalLabel2" style={{ color: 'white' }}>User Role</h5>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "20px" }}>&times;</span></button>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style={{ color: 'white', marginRight: "15px" }}>&times;</span></button>
                             </div>
                             <div className="modal-body">
                                 <div className="row">

@@ -102,7 +102,6 @@ td a {
     Font-Style: normal;
     font-size: 14px;
     Line-Height: 16px;
-    text-align: Left;
     Letter-Spacing: -0.41px;
 }
 .list-header-dashboard{
@@ -126,9 +125,6 @@ td a {
 }
 .spacing{
     padding-left: 0px;
-}
-.dashInp{
-    margin-right: 0px;
 }
 .dashfrm-LR1{
     margin: 24px
@@ -164,16 +160,4 @@ td a {
 }
 ::-webkit-scrollbar:horizontal{
    height: 8px;
-}
-.btn-ApplyBtn {
-    margin: 15px;
-    padding: 9px 9px;
-    border-radius: 150;
-    font-size: 12px;
-    float: right;
-    width: 120px;
-    font-weight: bold;
-   
-    background-color: var(--main-bg-color);
-    color: var(--white-color);
 }

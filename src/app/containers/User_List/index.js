@@ -3,6 +3,8 @@ import './UserList.css';
 import '../color.css'
 import Urls from '../../../helpers/Urls';
 import Strings from '../../../helpers/Strings';
+const bcrypt = require('bcryptjs');
+
 const $ = window.$;
 
 export class UserList extends React.Component {
@@ -10,10 +12,11 @@ export class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            errors: {},
             firstName: '',
             lastName: '',
             email: '',
-            pwd: '',
+            ChangeText: '',
             phoneNo: '',
             userRole: '',
             userRoleList: [],
@@ -28,6 +31,7 @@ export class UserList extends React.Component {
         this.clearState = this.clearState.bind(this);
         this.displayUser = this.displayUser.bind(this)
         this.deleteUser = this.deleteUser.bind(this)
+        this._onBlur = this._onBlur.bind(this)
     }
 
     componentWillReceiveProps() {
@@ -37,53 +41,127 @@ export class UserList extends React.Component {
     componentDidMount() {
         this.getUserRole();
     }
-    saveUser() {
-        let { firstName, lastName, email, pwd, userRole } = this.state;
-        if (!firstName || !lastName || !email || !pwd || !userRole) {
-            alert("Please enter the fields");
-        }else{
 
-        let query = `mutation{updateuser(
+    validateForm(flag) {
+        debugger;
+        let formIsValid = true;
+        if (this.state.firstName == "") {
+            formIsValid = false;
+            this.refs.firstName.focus();
+            alert("Please Enter your First Name.");
+        }
+        else if (this.state.lastName == "") {
+            formIsValid = false;
+            this.refs.lastName.focus();
+            alert("Please Enter your Last Name.");
+        }
+        else if (flag == 0) {
+            if (this.state.email == "") {
+                formIsValid = false;
+                this.refs.email.focus();
+                alert("Please Enter your Email Id.");
+            }
+            else if (this.state.email != "") {
+                //regular expression for email validation
+                var pattern = /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i;
+                if (!pattern.test(this.state.email)) {
+                    formIsValid = false;
+                    this.refs.email.focus();
+                    alert("Please Enter Valid Email Id.");
+                }
+
+                else if (this.state.ChangeText == "") {
+                    formIsValid = false;
+                    this.refs.ChangeText.focus();
+                    alert("Please Enter your Password.");
+                }
+                else if (this.state.ChangeText != "") {
+                    let _pattern = /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).*$/
+                    if (!_pattern.test(this.state.ChangeText)) {
+                        formIsValid = false;
+                        this.refs.ChangeText.focus();
+                        alert("Please Enter Valid Password.");
+                    }
+
+                    else if (this.state.phoneNo == "") {
+                        formIsValid = false;
+                        this.refs.phoneNo.focus();
+                        alert("Please Enter your Phone No.");
+                    }
+                    else if (this.state.userRole == "") {
+                        formIsValid = false;
+                        this.refs.userRole.focus();
+                        alert("Please Select your UserRole.");
+                    }
+                }
+            }
+        }
+        else if (this.state.phoneNo == "") {
+            formIsValid = false;
+            this.refs.phoneNo.focus();
+            alert("Please Enter your Phone No.");
+        }
+        else if (this.state.userRole == "") {
+            formIsValid = false;
+            this.refs.userRole.focus();
+            alert("Please Select your UserRole.");
+        }
+        return formIsValid;
+
+    }
+    saveUser(event) {
+        event.preventDefault();
+        if (this.validateForm(this.state.id)) {
+            var salt = bcrypt.genSaltSync(10);
+            var encryptUserPass = bcrypt.hashSync(this.state.ChangeText, salt);
+
+            let query = `mutation{updateuser(
             Id:`+ this.state.id + ` 
             roleid:`+ this.state.userRole + `  
             FirstName:"`+ this.state.firstName + `" 
             LastName:"`+ this.state.lastName + `" 
             Email:"`+ this.state.email + `" 
             PhoneNumber:"`+ this.state.phoneNo + `" 
-            PasswordHash:"`+ this.state.pwd + `" 
+            PasswordHash:"`+ encryptUserPass + `" 
             is_Active:`+ 1 + `
             )
           }`
 
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.errors) {
-                    alert(res.errors[0].message)
-                } else {
-                    $("#myModal2").modal("hide");
-                    if (res.data.updateuser == "") {
-                        alert("User Updated Successfully.")
-                    } else {
-                        alert(res.data.updateuser);
-                    } setTimeout(() => {
-                        this.getUserRole()
-                    }, 50);
-                }
-            }).catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            fetch(Urls.base_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'user-id': sessionStorage.getItem('user-id'),
+                    'Cache-Control': 'no-cache, no-store',
+                    'Expires': 0,
+                    'Pragma': 'no-cache',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
             })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.errors) {
+                        alert(res.errors[0].message)
+                    } else {
+                        $("#myModal2").modal("hide");
+                        if (res.data.updateuser == "") {
+                            alert("User Updated Successfully.")
+                        } else {
+                            alert(res.data.updateuser);
+                        } setTimeout(() => {
+                            this.getUserRole()
+                        }, 200);
+                    }
+                }).catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                })
+
         }
     }
     getUserRole() {
+
         let query = `{
             Userrole(role_id:0) {
                 Role_id
@@ -107,6 +185,10 @@ export class UserList extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -148,15 +230,15 @@ export class UserList extends React.Component {
                     <td>{d.role_description}</td>
                     <td>{FullName}</td>
                     {
-                        d.is_active == "1" ?  
-                    <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} data-toggle="modal" data-target="#myModal2" style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }}></img></td>
-                    : <td></td>
+                        d.is_active == "1" ?
+                            <td><img src={require('../../components/Images/pencil.png')} onClick={this.displayUser} data-value={d.Id} data-toggle="modal" data-target="#myModal2" style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }}></img></td>
+                            : <td></td>
                     }
                     {d.is_active == "1" ?
                         <td><img src={require('../../components/Images/trash.png')} style={{ width: '14px', marginLeft: '10px', cursor: 'pointer' }} data-value={d.Id} onClick={this.displayUser} data-toggle="modal" data-target="#myModal" ></img></td>
-                    : <td>InActive</td>
+                        : <td>InActive</td>
                     }
-                    
+
                 </tr>
             )
         });
@@ -194,6 +276,10 @@ export class UserList extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -203,10 +289,11 @@ export class UserList extends React.Component {
                 let data = res.data.User[0]
 
                 this.setState({
+                    errors: {},
                     firstName: data.FirstName,
                     lastName: data.LastName,
                     email: data.Email,
-                    pwd: data.PasswordHash,
+                    ChangeText: data.PasswordHash,
                     phoneNo: data.PhoneNumber,
                     userRole: data.role_id,
                     disabled: true,
@@ -219,16 +306,21 @@ export class UserList extends React.Component {
     }
     clearState() {
         this.setState({
+            errors: {},
             firstName: '',
             lastName: '',
             email: '',
-            pwd: '',
+            ChangeText: '',
             phoneNo: '',
             userRole: 0,
             disabled: false,
             UserStatus: 'Create User',
             id: 0
         })
+    }
+
+    _onBlur() {
+        this.validateForm(this.state.id);
     }
 
     deleteUser() {
@@ -244,6 +336,10 @@ export class UserList extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -252,7 +348,7 @@ export class UserList extends React.Component {
             .then(res => {
                 alert(res.data.InactiveUser)
                 setTimeout(() => {
-                    this.getUserRole()  
+                    this.getUserRole()
                 }, 50);
             }).catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
@@ -262,15 +358,15 @@ export class UserList extends React.Component {
     UserList() {
 
         return (
-            <div style={{padding:"10px"}}>
+            <div style={{ padding: "10px" }}>
                 <div className="row">
                     <h5 className="headerText">HiPaaS User List</h5>
                     <button type="button" className="btn btn-design" data-toggle="modal" onClick={this.clearState} data-target="#myModal2">
                         Add New
                     </button>
                 </div>
-                <div className="row" style={{ marginTop: '30px'}}>
-                    <div className="col-7" style={{padding: '0'}}>
+                <div className="row" style={{ marginTop: '30px' }}>
+                    <div className="col-7" style={{ padding: '0' }}>
                         {this.RenderUserList()}
                     </div>
                 </div>
@@ -289,42 +385,52 @@ export class UserList extends React.Component {
                                 <div className="row">
                                     <div className="form-group col-6">
                                         <label>First Name</label>
-                                        <input onChange={(e) => this.onHandleChange(e, 'firstName')} type="text" className="form-control width1" name="firstName" id="FirstName"
+                                        <input ref="firstName" onChange={(e) => this.onHandleChange(e, 'firstName')} type="text" className="form-control width1" name="firstName" id="FirstName"
                                             placeholder="Enter First Name" value={this.state.firstName} />
+                                        {/* <div className="errorMsg">{this.state.errors.firstName}</div> */}
                                     </div>
                                     <div className="form-group col-6">
                                         <label>Last Name</label>
-                                        <input onChange={(e) => this.onHandleChange(e, 'lastName')} name="lastName" type="text" className="form-control width1" id="LastName"
+                                        <input ref="lastName" onChange={(e) => this.onHandleChange(e, 'lastName')} name="lastName" type="text" className="form-control width1" id="LastName"
                                             placeholder="Enter Last Name" value={this.state.lastName} />
+                                        {/* <div className="errorMsg">{this.state.errors.lastName}</div> */}
                                     </div>
                                 </div>
 
                                 <div className="form-group">
                                     <label>Email address</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'email')} name="email" type="text" className="form-control width1" id="Email"
+                                    <input ref="email" onChange={(e) => this.onHandleChange(e, 'email')} name="email" type="text" className="form-control width1" id="Email"
                                         disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter email" value={this.state.email} />
-                                </div>
-                                <br/><br/>
-
+                                    {/* <div className="errorMsg">{this.state.errors.email}</div> */}
+                                </div><br /><br />
                                 <div className="form-group">
                                     <label >Password</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'pwd')} type="password" className="form-control width1"
-                                        disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter Password" value={this.state.pwd} />
+                                    <input ref="ChangeText" onChange={(e) => this.onHandleChange(e, 'ChangeText')} type="password" className="form-control width1"
+                                        disabled={(this.state.disabled) ? "disabled" : ""} placeholder="Enter Password" value={this.state.ChangeText} />
+                                    {/* <div className="errorMsg">{this.state.errors.ChangeText}</div> */}
                                 </div>
                                 <div className="form-group">
                                     <label >Phone No.</label>
-                                    <input onChange={(e) => this.onHandleChange(e, 'phoneNo')} name="phoneNo" type="text" className="form-control width1" id="phoneno"
+                                    <input ref="phoneNo" maxlength="15" onChange={(e) => this.onHandleChange(e, 'phoneNo')} name="phoneNo" type="text" className="form-control width1" id="phoneno"
                                         placeholder="Enter Phone Number" value={this.state.phoneNo} />
+                                    {/* <div className="errorMsg">{this.state.errors.phoneNo}</div> */}
                                 </div>
-                                <br/><br/>
+                                <br /><br />
                                 <div className="form-group">
                                     <label >User Role</label>
-                                    <select className="form-control width1" name="userRole" onChange={(e) => this.onHandleChange(e, 'userRole')} value={this.state.userRole}>
+                                    <select ref="userRole" className="form-control width1" name="userRole" onChange={(e) => this.onHandleChange(e, 'userRole')} value={this.state.userRole}>
                                         <option value="0">Select User Role</option>
                                         {this.getoptions()}
                                     </select>
+                                    {/* <div className="errorMsg">{this.state.errors.userRole}</div> */}
                                 </div>
-
+                                <div style={{ color: '#3B3A39' }}>
+                                    * Password must contain at least one English uppercase character (A through Z).<br></br>
+                                    * Password must contain at least one English lowercase character (a through z).<br></br>
+                                    * Password must contain at least one Base 10 digit (0 through 9).<br></br>
+                                    * Password must contain one non-alphanuneric character (e.g.@,#,$,%).<br></br>
+                                    * Password must contain atleast 8 characters.<br></br>
+                                </div>
                                 <button type="submit" className="btn btn-display" style={{ marginLeft: '0px' }} data-value={this.state.id} onClick={this.saveUser} >{this.state.UserStatus}</button>
 
                             </div>

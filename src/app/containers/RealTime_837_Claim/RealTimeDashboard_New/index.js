@@ -4,17 +4,15 @@ import '../../Files/files-styles.css';
 import { Line } from 'react-chartjs-2';
 import '../../color.css'
 import moment from 'moment';
-import ReactPaginate from 'react-paginate';
 import "react-datepicker/dist/react-datepicker.css";
 import Urls from '../../../../helpers/Urls';
 import Strings from '../../../../helpers/Strings';
-import { Tiles } from '../../../components/Tiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
 import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
+import { Common_837 } from '../../../components/Common_837';
 
 export class RealTimeDashboard_New extends React.Component {
 
@@ -135,151 +133,6 @@ export class RealTimeDashboard_New extends React.Component {
         this._refreshScreen()
     }
 
-    getClaimCounts = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            Claim837RTDashboardCountClaimStatus(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                X12Count
-                HiPaaSCount
-                MCGLoadCount
-            }
-            Claim837RTDashboardTable(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Type:"${this.state.type}", RecType: "Inbound") {
-                Accepted_Claims
-                Rejected_Claims
-                FileReject_Claims
-                Processing_Claims
-                ReconciledError_Claims
-                LoadingClaims
-                LoadedErrorClaims
-                Accepted_277CA
-                Rejected_277CA
-            }
-        }`
-
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.common_data, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.data) {
-                    let data = res.data.Claim837RTDashboardCountClaimStatus[0]
-                    let _data = res.data.Claim837RTDashboardTable[0]
-
-                    this.setState({
-                        X12Count: data ? data.X12Count : 0,
-                        HiPaaSCount: data ? data.HiPaaSCount : 0,
-                        LoadingClaims: _data ? _data.LoadingClaims : 0,
-                        Accepted_Claims: _data ? _data.Accepted_Claims : 0,
-                        Rejected_Claims: _data ? _data.Rejected_Claims : 0,
-                        FileReject_Claims: _data ? _data.FileReject_Claims : 0,
-                        Processing_Claims: _data ? _data.Processing_Claims : 0,
-                        ReconciledError_Claims: _data ? _data.ReconciledError_Claims : 0,
-                        LoadedErrorClaims: _data ? _data.LoadedErrorClaims : 0,
-                        Accepted_277CA: _data ? _data.Accepted_277CA : 0,
-                        Rejected_277CA: _data ? _data.Rejected_277CA : 0,
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    _getCounts = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let query = `{
-            Claim837RTDashboardCountNew(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                TotalCount
-                Accepted
-                Rejected
-                AcceptedwithErrors
-                Processing
-            }
-            Claim837RTDashboardCountFileStatuswise(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", Type : "` + this.state.type + `", RecType: "Inbound") {
-                Reconciled
-                ReconciledError
-                Loaded
-                LoadedError
-                ProcessingFiles
-                MCGLoadingFiles
-            }
-        }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let summary = []
-                let data = res.data.Claim837RTDashboardCountNew
-                let _data = res.data.Claim837RTDashboardCountFileStatuswise
-                let reconciled = ''
-                let reconciledError = ''
-                let loaded = ''
-                let loadedError = ''
-                let totalCount = ''
-                let accepted = ''
-                let rejected = ''
-                let acceptedwithErrors = ''
-                let processing = ''
-                let MCGLoadingFiles = ''
-
-                if (data && data.length > 0) {
-                    totalCount = data[0].TotalCount
-                    accepted = data[0].Accepted
-                    rejected = data[0].Rejected
-                    acceptedwithErrors = data[0].AcceptedwithErrors
-                }
-
-                if (_data && _data.length > 0) {
-                    reconciled = _data[0].Reconciled
-                    reconciledError = _data[0].ReconciledError
-                    loaded = _data[0].Loaded
-                    loadedError = _data[0].LoadedError
-                    processing = _data[0].ProcessingFiles
-                    MCGLoadingFiles = _data[0].MCGLoadingFiles
-                }
-
-                summary = [
-                    { name: 'Total Files', value: totalCount },
-                    { name: 'Accepted Files', value: accepted },
-                    { name: 'Accepted with Errors', value: acceptedwithErrors },
-                    { name: 'Rejected Files', value: rejected },
-                    { name: '999', value: this.state.total_999 },
-                    { name: 'Reconciled Files | Error', value: reconciled, second_val: reconciledError },
-                    // { name: 'Reconciled Error', value: reconciledError },
-                    { name: 'Load in MCG | Error', value: loaded, second_val: loadedError },
-                    // { name: 'Load Error', value: loadedError,  },
-                    // { name: 'Load in MCG', value: loaded },
-                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
-                    { name: '277CA', value: this.state.total277CA },
-                ]
-
-                this.setState({
-                    summaryList: summary,
-                    rejectedCount: rejected,
-                    totalFiles: totalCount
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            })
-    }
-
     getPieChartData = (pieChart) => {
         let pieLabel = []
         let pieData = []
@@ -351,10 +204,14 @@ export class RealTimeDashboard_New extends React.Component {
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.real_time_claim, {
+        fetch(Urls.base_url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -408,23 +265,6 @@ export class RealTimeDashboard_New extends React.Component {
             orderby: e,
             [key]: rotation == 0 ? 180 : 0
         })
-    }
-
-    renderTableHeader() {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By FileName", this.state.nameRotation, 'nameRotation')}>File Name</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By State", this.state.stateRotation, 'stateRotation')}>State</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.FileName" : "Order By ProcessID", this.state.processIdRotation, 'processIdRotation')}>Process Id</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By Type", this.state.typeRotation, 'typeRotation')}>Type</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order by fileintake.FileDate" : "Order by FileDate", this.state.dateRotation, 'dateRotation')}>File Date</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.Extrafield2" : "Order By FileStatus", this.state.statusRotation, 'statusRotation')}>File Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Status", this.state._statusRotation, '_statusRotation')}>Load Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By MCGStatus", this.state.mcg_statusRotation, 'mcg_statusRotation')}>MCG Load Status</a></td>
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => this.handleToggle((localStorage.getItem("DbTech") === "SQL") ? "Order By fileintake.ISA06" : "Order By Sender", this.state.submitterRotation, 'submitterRotation')}>Submitter</a></td>
-                <td className="table-head-text list-item-style">Total Claims | Rejected Claims</td>
-            </tr>
-        )
     }
 
     getBarData(labelArray, dataArray, color) {
@@ -490,13 +330,16 @@ export class RealTimeDashboard_New extends React.Component {
         let claimStatus = ''
         let loadStatus = ''
         let generalStatus = ''
+        let subtitle = ''
 
         if (header == 'Top 10 File Level Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
+            subtitle = 'Rejected Files'
         } else if (header == 'Top 10 Claim Level Errors') {
             addon = '/reject'
             generalStatus = 'Rejected'
+            subtitle = 'Rejected Claims'
         }
 
         let sendData = [
@@ -509,7 +352,8 @@ export class RealTimeDashboard_New extends React.Component {
                 status: claimStatus,
                 type: type,
                 gridflag: loadStatus,
-                generalStatus: generalStatus
+                generalStatus: generalStatus,
+                subtitle: subtitle
             },
         ]
 
@@ -584,77 +428,6 @@ export class RealTimeDashboard_New extends React.Component {
                 </div>
             </div>
         )
-    }
-
-    handlePageClick = (data) => {
-        let page = data.selected + 1
-        this.setState({
-            page: page
-        }, () => {
-            
-        })
-    }
-
-    renderList() {
-        let row = []
-        const data = this.state.claimsList && this.state.claimsList.length > 0 ? this.state.claimsList : []
-
-        data.forEach((d) => {
-            row.push(
-                <tr>
-                    <td style={{ color: "var(--light-blue)", wordBreak: 'break-all' }}>
-                        <a style={{ color: "#6AA2B8", cursor: "pointer" }}
-                            onClick={() => {
-                                this.setState({
-                                    incoming_fileId: d.FileID
-                                }, () => {
-                                    this.gotoClaimDetails()
-                                })
-                            }}>
-                            {d.FileName}
-                        </a>
-                    </td>
-                    <td className="list-item-style">{d.State}</td>
-                    <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
-                    <td className="list-item-style">{d.Type}</td>
-                    <td className="list-item-style">{moment(d.FileDateTime).format('MM/DD/YYYY ')}<br />{moment(d.FileDate).format('hh:mm a')}</td>
-                    <td className={"list-item-style " + (d.FileStatus == 'Accepted' ? 'green ' : (d.FileStatus == 'FullFileReject' ? 'red ' : (d.FileStatus == 'In Progress' ? 'grey ' : ' ')))}>{d.FileStatus}</td>
-                    <td className="list-item-style">{d.Status}</td>
-                    <td className="list-item-style">{d.MCGStatus}</td>
-                    <td className="list-item-style">{d.Sender}</td>
-                    <td className="list-item-style">{d.Claimcount} | {d.Rejected}</td>
-                </tr>
-            )
-        });
-
-        return (
-            <div>
-                <table className="table table-bordered claim-list" style={{ tableLayout: 'fixed', marginTop: '30px' }}>
-                    {this.state.claimsList && this.state.claimsList.length > 0 ? this.renderTableHeader() : null}
-                    <tbody>
-                        {row}
-                    </tbody>
-                </table>
-                <ReactPaginate
-                    previousLabel={'previous'}
-                    nextLabel={'next'}
-                    breakLabel={'...'}
-                    breakClassName={'page-link'}
-                    initialPage={0}
-                    pageCount={this.state.claimsList && this.state.claimsList.length > 0 ? Math.floor(this.state.claimsList[0].RecCount / 10) + (this.state.claimsList[0].RecCount % 10 > 0 ? 1 : 0) : 1}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
-                    onPageChange={(page) => { this.handlePageClick(page) }}
-                    containerClassName={'pagination'}
-                    pageClassName={'page-item'}
-                    previousClassName={'page-link'}
-                    nextClassName={'page-link'}
-                    pageLinkClassName={'page-link'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
-                />
-            </div>
-        );
     }
 
     gotoClaimDetails = (data) => {
@@ -767,313 +540,7 @@ export class RealTimeDashboard_New extends React.Component {
     }
 
     _refreshScreen = () => {
-        this._get999Count()
-        this.getClaimCounts()
         this.getData()
-        this._getCounts()
-    }
-
-    _get999Count = async () => {
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
-        let query = `{
-            Total999Response(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
-              Total999
-              NotSent999
-            }
-            Total277CAResponse(submitter:"`+ this.state.selectedTradingPartner + `",fromDt:"` + startDate + `",ToDt:"` + endDate + `" ,  RecType:"Inbound", Provider:"${this.state.providerName}", State:"${this.state.State}", Type: "${this.state.type}") {
-                Total277CA
-                NotSent277CA
-            }
-         }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.claims_837, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                this.setState({
-                    total_999: res.data.Total999Response && res.data.Total999Response.length > 0 ? res.data.Total999Response[0].Total999 : 0,
-                    total277CA: res.data.Total277CAResponse && res.data.Total277CAResponse.length > 0 ? res.data.Total277CAResponse[0].Total277CA : 0,
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
-
-    _renderSummaryDetails() {
-        let row = []
-        let array = this.state.summaryList
-        // let apiflag = this.state.apiflag
-        // let url = Strings.ElilgibilityDetails270 + '/' + apiflag
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let loadStatus = ''
-            let mcgStatus = ''
-            let notSent = ''
-            let isDual = false
-            let data = []
-            let _second_data = []
-            if (item.name == 'Accepted Files') {
-                addon = '/accept'
-                claimStatus = 'Accepted'
-            } else if (item.name == 'Accepted with Errors') {
-                addon = '/reject'
-                claimStatus = 'Accepted with Errors'
-            } else if (item.name == 'Processing Files') {
-                addon = '/reject'
-                claimStatus = 'Received'
-            } else if (item.name == 'Rejected Files') {
-                claimStatus = 'Rejected'
-            } else if (item.name == 'Reconciled Files') {
-                loadStatus = 'Reconciled'
-            } else if (item.name == 'Reconciled Error') {
-                loadStatus = 'Reconcile Exception'
-            } else if (item.name == 'Load Error') {
-                mcgStatus = 'Exception'
-            } else if (item.name == 'Load in MCG') {
-                mcgStatus = 'Loaded'
-            } else if (item.name == '999') {
-                notSent = 'Y'
-            } else if (item.name == '277CA') {
-                notSent = 'CA'
-            } else if (item.name == 'Reconciled Files | Error') {
-                loadStatus = 'Reconciled'
-                isDual = true
-            } else if (item.name == 'Load in MCG | Error') {
-                mcgStatus = 'Loaded'
-                isDual = true
-            } else {
-                addon = '/other'
-            }
-
-            data = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: claimStatus,
-                    type: type,
-                    gridflag: loadStatus,
-                    mcgStatus: mcgStatus,
-                    subtitle: (item.name == 'Total Files') ? '' : (item.name == 'Reconciled Files | Error') ? 'Reconciled Files' : (item.name == 'Load in MCG | Error') ? 'Load in MCG' : item.name,
-                    notSent: notSent
-                },
-            ]
-
-            if (isDual) {
-                if (item.name == 'Reconciled Files | Error') {
-                    _second_data = [{
-                        flag: addon,
-                        State: State,
-                        selectedTradingPartner: selectedTradingPartner,
-                        startDate: startDate,
-                        endDate: endDate,
-                        status: claimStatus,
-                        type: type,
-                        gridflag: 'Reconcile Exception',
-                        subtitle: 'Reconciled Error',
-                        mcgStatus: mcgStatus,
-                        notSent: notSent
-                    }]
-                } else {
-                    _second_data = [{
-                        flag: addon,
-                        State: State,
-                        selectedTradingPartner: selectedTradingPartner,
-                        startDate: startDate,
-                        endDate: endDate,
-                        status: claimStatus,
-                        type: type,
-                        gridflag: loadStatus,
-                        subtitle: 'Load Error',
-                        mcgStatus: 'Exception',
-                        notSent: notSent
-                    }]
-                }
-            }
-
-            let geturl = Strings.Claim_Details_837_Grid
-            if (notSent == 'Y') {
-                geturl = Strings.Outbound_response_999
-                data = [
-                    { flag999: '1' },
-                    { type: type },
-                ]
-            } else if (notSent == 'CA') {
-                geturl = Strings.Outbound_277CAResponse
-                data = []
-            }
-
-            row.push(
-                <Tiles
-                    isClickable={
-                        item.name != 'HiPaaS | MCG'
-                    }
-                    // uniformWidth={true}
-                    _data={data}
-                    header_text={item.name}
-                    value={item.value}
-                    second_val={item.second_val}
-                    isDualTile={
-                        item.name == 'Reconciled Files | Error' ||
-                        item.name == 'Load in MCG | Error'
-                    }
-                    first_arg_style={item.name == 'Reconciled Files | Error' ? 'blue' : 'green'}
-                    first_data={data}
-                    second_data={_second_data}
-                    url={geturl}
-                    second_url={item.name == 'Load in MCG | Error' ? Strings.Load_Exception : ''}
-                />
-
-            )
-        });
-
-        return (
-            <div className="row padding-left" style={{ marginLeft: '-14px', marginTop: '16px' }}>
-                {row}
-            </div>
-        )
-    }
-
-    _renderClaimTables = (array) => {
-        let row = []
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-        let State = this.state.State ? this.state.State : 'n'
-        let type = this.state.type ? this.state.type : ''
-
-        array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let loadStatus = ''
-            let generalStatus = ''
-            let mcgStatus = ''
-            let notSent = ''
-            let subtitle = ''
-            let status277CA = ''
-            let color = "var(--red)"
-
-            if (item.name == 'Accepted') {
-                generalStatus = 'Accepted'
-                subtitle = 'Accepted Claims'
-                color = "var(--green)"
-            } else if (item.name == 'Rejected') {
-                generalStatus = 'Rejected'
-                subtitle = "Rejected Claims"
-            } else if (item.name == 'File Rejected') {
-                generalStatus = 'File Rejected'
-                subtitle = item.name
-            } else if (item.name == 'Reconciled Error') {
-                subtitle = item.name
-                loadStatus = 'Reconcile Exception'
-            } else if (item.name == 'Load in MCG') {
-                mcgStatus = 'Loaded'
-                subtitle = item.name
-                color = "var(--main-bg-color)"
-            } else if (item.name == 'Load Error') {
-                subtitle = item.name
-                mcgStatus = 'Exception'
-            } else if (item.name == '999 Not Sent') {
-                notSent = 'Y'
-            }
-
-            if (item.name == 'Accepted' && item.is277CA) {
-                subtitle = '277CA Accepted Claims'
-                generalStatus = ''
-                status277CA = 'Accepted'
-            }
-
-            if (item.name == 'Rejected' && item.is277CA) {
-                subtitle = '277CA Rejected Claims'
-                generalStatus = ''
-                status277CA = 'Rejected'
-            }
-
-            let sendData = [
-                {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: claimStatus,
-                    type: type,
-                    gridflag: loadStatus,
-                    generalStatus: generalStatus,
-                    mcgStatus: mcgStatus,
-                    notSent: notSent,
-                    subtitle: subtitle,
-                    status277CA: status277CA
-                },
-            ]
-            row.push(
-                <TableTiles
-                    item={item}
-                    url={Strings.Claim_Details_837_Grid}
-                    data={sendData}
-                    color={color}
-                />
-            )
-        })
-
-        return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
-                {row}
-            </div>
-        )
-    }
-
-    renderClaimDetails = () => {
-        let stage_1 = [
-            { 'header': 'HiPaaS Load Status' },
-            { 'name': 'X12 Count', 'value': this.state.X12Count },
-            { 'name': 'HiPaaS Count', 'value': this.state.HiPaaSCount },
-            { 'name': 'Reconciled Error', 'value': this.state.ReconciledError_Claims, 'isClick': 1 },
-        ]
-        let stage_2 = [
-            { 'header': 'L1 - L2 Status' },
-            { 'name': 'Accepted', 'value': this.state.Accepted_Claims, 'isClick': 1 },
-            { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
-            { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
-        ]
-        let stage_3 = [
-            { 'header': 'MCG Load Status' },
-            { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
-            { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
-        ]
-
-        let stage_4 = [
-            { 'header': 'L3 - L7 Status' },
-            { 'name': 'Accepted', 'value': this.state.Accepted_277CA, 'isClick': 1, 'is277CA': 1 },
-            { 'name': 'Rejected', 'value': this.state.Rejected_277CA, 'isClick': 1, 'is277CA': 1 },
-        ]
-
-        return (
-            <div className="row" style={{ marginBottom: '12px', marginLeft: '-9px' }}>
-                {this._renderClaimTables(stage_1)}
-                {this._renderClaimTables(stage_2)}
-                {this._renderClaimTables(stage_3)}
-                {this._renderClaimTables(stage_4)}
-            </div>
-        )
     }
 
     setData = (startDate, endDate, selected_val, chartType) => {
@@ -1084,16 +551,6 @@ export class RealTimeDashboard_New extends React.Component {
             chartType
         }, () => {
             this._refreshScreen()
-        })
-    }
-
-    onGridChange = (event) => {
-        this.setState({
-            page: 1,
-            rowData: [],
-            gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
-        }, () => {
-            // this.getListData()
         })
     }
 
@@ -1110,11 +567,25 @@ export class RealTimeDashboard_New extends React.Component {
             <Filters
                 isTimeRange={true}
                 setData={this.setData}
-                onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
+            />
+        )
+    }
+
+    renderCommonGroup = () => {
+        return (
+            <Common_837
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                type={this.state.type}
+                selectedTradingPartner={this.state.selectedTradingPartner}
+                providerName={this.state.providerName}
+                State={this.state.State}
+                fileHeader={true}
+                claimHeader={true}
             />
         )
     }
@@ -1125,13 +596,9 @@ export class RealTimeDashboard_New extends React.Component {
                 <h5 className="headerText">Claims Dashboard</h5>
                 {this._renderTopbar()}
                 {this.tab()}
-                <div className="general-header" style={{ marginBottom: "-6px" }}>File Status</div>
-                {this._renderSummaryDetails()}
-                <div className="general-header">Claim Status</div>
-                {this.renderClaimDetails()}
+                {this.renderCommonGroup()}
                 {this.renderCharts()}
                 {this._renderList()}
-                {this.state.claimsList && this.state.claimsList.length > 0 && !this.state.gridType ? this.renderList() : null}
             </div>
         );
     }
