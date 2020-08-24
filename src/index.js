@@ -119,6 +119,7 @@ import {Enrollment_Outbound_JobList} from './app/containers/Enrollment/Enrollmen
 import {Prediction} from './app/containers/Prediction';
 // import {Enrollment_Outbound_JobList} from './app/containers/Enrollment/Enrollment_Outbound_JobList'
 import {Sepsis_Dashboard} from './app/containers/HL7/Sepsis_Dashboard'
+import {ProviderDirectory} from './app/containers/Provider_DIrectory'
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -372,7 +373,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Prediction} component={ Prediction } />
                                 
                                 <Route path={'/' + Strings.Sepsis_Dashboard} component={ Sepsis_Dashboard } />
-
+                                <Route path={'/' + Strings.ProviderDirectory} component={ ProviderDirectory } />
+                                
 
                             </div>
                         </div>

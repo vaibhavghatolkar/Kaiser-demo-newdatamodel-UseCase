@@ -188,7 +188,8 @@ const Strings = {
     OutboundIdGenerated : 'OutboundIdGenerated',
     Enrollment_Outbound_JobList:'Enrollment_Outbound_JobList',
     Prediction:'Prediction',
-    Sepsis_Dashboard:'HiPaaS_Dashboard'
+    Sepsis_Dashboard:'HiPaaS_Dashboard',
+    ProviderDirectory:'ProviderDirectory'
 }
 
 export default Strings;
