@@ -193,6 +193,7 @@ const Strings = {
     Transaction275Dashboard:'Transaction275Dashboard',
     Transaction_275_Details:'Transaction275Details',
     _Transaction_275_Details:'_Transaction275Details',
+    ConsentManagement:'ConsentManagement'
 }
 
 export default Strings;

@@ -73,7 +73,12 @@ export class ProviderDirectory extends React.Component {
             { headerName: "Languages Spoken", field: "Language", width: 160, },
             { headerName: "Medicaid", field: "Medicaid", width: 130, },
             { headerName: "National Provider Identifier", field: "National_provider", width: 160, },
-            { headerName: "Bookmark", field: "Bookmark", flex: 1, },
+            {
+                headerName: "Bookmark", field: "pencil", width : 130, cellRenderer: (data) => {
+                    return '<i class="fa fa-cog"></i>'
+                }, cellStyle: { cursor: 'pointer', marginLeft:  '24px' }
+            },
+
 
         ]
 
