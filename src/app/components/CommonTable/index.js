@@ -78,13 +78,17 @@ export class CommonTable extends React.Component {
                 }
 
                 col.push(
-                    <div className={headerArray.length > 10 ? ("col-1 col-small-style small-font word-wrap" + (count == 0 ? " border-left" : "")) : row_item.upScale == 1 ? "col-2 col-small-style small-font" + (count == 0 ? " border-left" : "") : "col col-small-style small-font" + (count == 0 ? " border-left" : "")}>
+                    <div className={headerArray.length > 10 ? ("col-1 col-small-style small-font word-wrap" + (count == 0 ? " border-left" : "")) : row_item.upScale == 1 ? "col-2 col-small-style" + (count == 0 ? " border-left" : "") : "col col-small-style" + (count == 0 ? " border-left" : "")}>
                         {
                             this.props.onClick && count == 0 || row_item.isClick == 1 && row_item.method ?
                                 <a style={{ color: "#6AA2B8", cursor: "pointer" }}
                                     onClick={() => { 
                                         if(row_item.isClick){
-                                            row_item.method(row_item.key_argument ? data_item[row_item.key_argument] : '')
+                                            if(this.props.sendItem){
+                                                row_item.method(data_item)
+                                            } else {
+                                                row_item.method(row_item.key_argument ? data_item[row_item.key_argument] : '')
+                                            }
                                         } else {
                                             if(this.props.onClickSecondKey){
                                                 this.props.onClick(data_item[this.props.onClickKey], data_item[this.props.onClickSecondKey])

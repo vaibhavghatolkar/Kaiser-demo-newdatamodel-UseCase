@@ -102,6 +102,7 @@ export class ConsentUserList extends React.Component {
     }
 
     update = (patient) => {
+        console.log("this is the ",patient)
         // this.setState({
         //     firstName : patient.firstName,
         //     lastName : patient.lastName,
@@ -126,7 +127,7 @@ export class ConsentUserList extends React.Component {
         let rowArray = []
 
         headerArray.push(
-            {value : 'Identifier'},
+            {value : 'User ID'},
             {value : 'First Name'},
             {value : 'Last Name'},
             {value : 'DOB', isDate: 1},
@@ -135,12 +136,12 @@ export class ConsentUserList extends React.Component {
         )
 
         rowArray.push(
-            { value : 'PatientID'},
+            { value : 'UserID'},
             { value : 'FirstName'},
             { value : 'LastName'},
             { value : 'DOB',isDate : 1},
             { value : 'Gender'},
-            { value : 'Verify', isClick: 1, onClick: this.update, key_argument : ''}
+            { value : 'Verify', isClick: 1, method: this.update, sendItem : true}
         )
 
         return(
