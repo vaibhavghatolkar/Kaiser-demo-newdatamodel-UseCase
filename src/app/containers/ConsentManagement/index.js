@@ -229,7 +229,7 @@ export class ConsentManagement extends React.Component {
             <tr className="table-head">
                 <td className="table-text">List</td>
                 <td className="table-text list-item-style">Enable / Disable</td>
-                <td className="table-text list-item-style">Third Party Application</td>
+                {/* <td className="table-text list-item-style">Third Party Application</td> */}
             </tr>
         )
     }
@@ -244,6 +244,7 @@ export class ConsentManagement extends React.Component {
             { Request: "Problems", isChecked : true, thirdParty: 'Apple Health' },
             { Request: "Diagnostics", isChecked : true, thirdParty: 'Apple Health' },
             { Request: "Claims", isChecked : false, thirdParty: '' },
+            { Request: "Claims Data for another Insurance Companies", isChecked : false, thirdParty: '' },
             { Request: "Encounters", isChecked : true, thirdParty: 'Google Health' },
             { Request: "Remittances", isChecked : false, thirdParty: '' },
             { Request: "Coverage", isChecked : true, thirdParty: 'Google Health' },
@@ -258,7 +259,7 @@ export class ConsentManagement extends React.Component {
                         {d.Request}
                     </td>
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(event) => { }} /></td>
-                    <td className="list-item-style">{d.thirdParty}</td>
+                    {/* <td className="list-item-style">{d.thirdParty}</td> */}
                 </tr>
             )
 
@@ -268,7 +269,7 @@ export class ConsentManagement extends React.Component {
 
 
         return (
-            <div>
+            <div className="col-8" style={{padding:'0'}}>
                 <table className="table table-bordered" id="userList" align="center">
                     {this.renderTableHeader()}
                     <tbody>
@@ -282,12 +283,64 @@ export class ConsentManagement extends React.Component {
     }
 
 
+    renderTableHeader1() {
+        return (
+            <tr className="table-head">
+                <td className="table-text">Third Party Application</td>
+                <td className="table-text list-item-style">Token</td>
+                {/* <td className="table-text list-item-style">Third Party Application</td> */}
+            </tr>
+        )
+    }
+
+    renderList1() {
+        let row = []
+        const data = [
+            // { thirdParty: 'Google Health', token:"" },
+            { thirdParty: 'Apple Health', token:"b4de3833-178e-47c4-9486-a80e79ff05f6"},
+            
+        ]
+
+        data.forEach((d) => {
+            row.push(
+                <tr>
+                    <td style={{ fontWeight: "bold" }}>
+                        {d.thirdParty}
+                    </td>
+            <td className="list-item-style">{d.token}</td>
+                    {/* <td className="list-item-style">{d.thirdParty}</td> */}
+                </tr>
+            )
+
+
+
+        });
+
+
+        return (
+            <div className="col-8" style={{padding:'0'}}>
+                <table className="table table-bordered" id="userList" align="center">
+                    {this.renderTableHeader1()}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+            </div>
+
+
+        );
+    }
+
+
+
     render() {
         return (
             <div>
                 <h5 className="headerText">Consent Management</h5>
                 {this.renderHeader()}
                 {this.state.reload ? this.renderList() : false}
+                <h6 style={{color:"#139DC9", paddingBottom: '12px', marginTop : '24px', marginLeft: '0px'}}><b>Grant Access to Third Party Apps</b></h6>
+                {this.state.reload ? this.renderList1() : false}
             </div>
         );
     }
