@@ -58,10 +58,11 @@ export class ProviderDirectory extends React.Component {
     _renderList() {
         let rowData = [
             {"Provider":"A", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
-            {"Provider":"Athena Health", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"Ali Jones", "Specialty":"All", "Provider_type":"PCP", "Phone":"408-125-1230", "Address":"120 Health", "Language":"English", "Medicaid":"Yes", "National_provider":"1139280183", "Bookmark":""},
             {"Provider":"K", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
-            {"Provider":"Kaiser Oakland", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
-            {"Provider":"M", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""}
+            {"Provider":"Blain Smith", "Specialty":"Dermatology", "Provider_type":"PCP", "Phone":"221-245-1230", "Address":"", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"1239280183", "Bookmark":""},
+            {"Provider":"M", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"CBA Health", "Specialty":"Family Practice", "Provider_type":"Medical Group", "Phone":"408-345-1230", "Address":"", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"1339280183", "Bookmark":""},
         ]
 
         let columnDefs = [
