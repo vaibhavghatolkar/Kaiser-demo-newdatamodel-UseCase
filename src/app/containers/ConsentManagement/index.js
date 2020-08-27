@@ -216,8 +216,8 @@ export class ConsentManagement extends React.Component {
                 <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '12px' }}>  Gender : {this.state.Gender}
                 </label>
 
-                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '12px', marginBottom: '12px' }}>  Identifier : {this.state.patientId_id}
-                </label>
+                {/* <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '12px', marginBottom: '12px' }}>  Identifier : {this.state.patientId_id}
+                </label> */}
                 {this.renderTopbar()}
                 <hr style={{ margin: '8px' }}></hr>
             </div>
