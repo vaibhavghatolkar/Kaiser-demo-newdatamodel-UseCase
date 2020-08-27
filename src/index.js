@@ -124,6 +124,7 @@ import {ProviderDirectory} from './app/containers/Provider_DIrectory'
 import { Transaction275Dashboard } from './app/containers/Transaction_275/Transaction275_Dashboard'
 import { Transaction_275_Details } from './app/containers/Transaction_275/Transaction_275_Details'
 import { ConsentManagement } from './app/containers/ConsentManagement';
+import { ConsentUserList } from './app/containers/ConsentUserList';
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -327,7 +328,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.OutboundTerm} component={OutboundTerm} />
                                 <Route path={'/' + Strings.Outbound_Encounter_BatchDetails837} component={Outbound_Encounter_BatchDetails837} />
                                 <Route path={'/' + Strings.Outbound_Encounter_updated_FileDashboard} component={Outbound_Encounter_updated_FileDashboard} />
-                                <Route path={'/' + Strings.consent_management} component={consent_management} />
+                                <Route path={'/' + Strings.consent_management} component={ConsentManagement} />
                                 <Route path={'/' + Strings.ADT} component={ADT} />
                                 <Route path={'/' + Strings.PatientDashboard} component={PatientDashboard} />
                                 <Route path={'/' + Strings.patientsList} component={Patients} />
@@ -383,7 +384,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Transaction_275_Details} component={Transaction_275_Details} />
                                 <Route path={'/' + Strings._Transaction_275_Details} component={Transaction_275_Details} />
                                 <Route path={'/' + Strings.ConsentManagement} component={ConsentManagement} />
-
+                                <Route path={'/' + Strings.ConsentUserList} component={ConsentUserList} />
 
                             </div>
                         </div>

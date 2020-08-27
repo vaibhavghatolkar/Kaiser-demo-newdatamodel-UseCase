@@ -132,7 +132,7 @@ export class ConsentManagement extends React.Component {
             { headerName: "Status", field: "Status", flex: 1, },
             { headerName: "Delegate", field: "Delegate", flex: 1 },
             {
-                headerName: "", field: "pencil", width : 70, cellRenderer: (data) => {
+                headerName: "", field: "pencil", width: 70, cellRenderer: (data) => {
                     return '<i class="fa fa-cog"></i>'
                 }, cellStyle: { cursor: 'pointer', marginLeft: '12px' }
             },
@@ -176,24 +176,84 @@ export class ConsentManagement extends React.Component {
         return moment(Number(date)).format("MM/DD/YYYY");
     }
 
-    renderHeader() {
+    getoptions() {
+        // let row = []
+        // this.state.userlist.forEach(element => {
+        //     row.push(<option>{element.name}</option>)
+        // })
+        // return row
+    }
+
+    renderTopbar() {
         return (
-            <div style={{ color: "#4290F0" }}>
-                <br></br>
-                <label style={{ color: "#139dc9", marginLeft: "12px", fontWeight: "500", fontSize: '16px' }}> {this.state.FirstName} {this.state.LastName}
-                </label>
-
-                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '13px' }}>  Dob : {this.formatDate(this.state.DOB)}
-                </label>
-
-                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '13px' }}>  Gender : {this.state.Gender}
-                </label>
-
-                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '13px' }}>  Identifier : {this.state.patientId_id}
-                </label>
-                <hr style={{ margin: '8px' }}></hr>
+            <div className="row" style={{ padding: '0' }}>
+                <div className="form-group col-3">
+                    <div className="list-header-dashboard">Select User</div>
+                    <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
+                        <option value="0">Select User</option>
+                        {this.getoptions()}
+                    </select>
+                </div>
             </div>
         )
+    }
+
+    renderTableHeader() {
+        return (
+            <tr className="table-head">
+                <td className="table-text">List</td>
+                <td className="table-text list-item-style">Enable / Disable</td>
+            </tr>
+        )
+    }
+
+    renderList() {
+        let row = []
+        const data = [
+            { Request: "Allergies", },
+            { Request: "Immunization", },
+            { Request: "Medications", },
+            { Request: "Labs", },
+            { Request: "Problems", },
+            { Request: "Diagnostics", },
+            { Request: "Claims", },
+            { Request: "Encounters", },
+            { Request: "Remittances", },
+            { Request: "Coverage", },
+            { Request: "Devices", },
+            { Request: "Authorizations", },
+        ]
+
+        let menuOptions = {}
+        data.forEach((d) => {
+
+            row.push(
+
+                <tr>
+                    <td style={{ fontWeight: "bold" }}>
+                        {d.Request}
+                    </td>
+                    <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(event) => { }} /></td>
+                </tr>
+            )
+
+
+
+        });
+
+
+        return (
+            <div>
+                <table className="table table-bordered" id="userList" align="center">
+                    {this.renderTableHeader()}
+                    <tbody>
+                        {row}
+                    </tbody>
+                </table>
+            </div>
+
+
+        );
     }
 
 
@@ -201,8 +261,8 @@ export class ConsentManagement extends React.Component {
         return (
             <div>
                 <h5 className="headerText">Consent Management</h5>
-                {this.renderHeader()}
-                {this._renderList()}
+                {this.renderTopbar()}
+                {this.renderList()}
             </div>
         );
     }
