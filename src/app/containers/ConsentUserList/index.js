@@ -63,9 +63,11 @@ export class ConsentUserList extends React.Component {
     }
 
     savePatient() {
-        let dateOfBirth = this.state.dob && Number(this.state.dob) ? moment(this.state.dob).format('YYYY-MM-DD') : ''
+        let dateOfBirth = this.state.dob && Number(this.state.dob) ? moment(Number(this.state.dob)).format('YYYY-MM-DD') : ''
+        let patient_id = Math.floor(100000 + Math.random() * 900000)
+
         let query = `mutation {
-            SP_SaveFHIRPatient(UserId: 0, Patient_Id: "${this.state.patientId}",
+            SP_SaveFHIRPatient(UserId: 0, Patient_Id: "${patient_id}",
             FirstName: "${this.state.firstName}",
             LastName: "${this.state.lastName}",
             DOB: "${dateOfBirth}",

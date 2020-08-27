@@ -19,7 +19,10 @@ export class ConsentManagement extends React.Component {
             endDate: moment().format('YYYY-MM-DD'),
             selectedTradingPartner: '',
             State: '',
+            userlist: [],
             paginationPageSize: 10,
+            row_number: 0,
+            reload: true,
             domLayout: 'autoHeight',
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -48,7 +51,8 @@ export class ConsentManagement extends React.Component {
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
-            patientId: '10011'
+            patientId: '10011',
+            page: 1
         }
 
     }
@@ -59,7 +63,7 @@ export class ConsentManagement extends React.Component {
 
     getpatientdetails() {
         let query1 = `{
-            NewPortalRegisterdUserList(page: `+this.state.page+`) {
+            NewPortalRegisterdUserList(page: `+ this.state.page + `) {
               RecCount
               UserID
               PatientID
@@ -83,11 +87,12 @@ export class ConsentManagement extends React.Component {
             .then(res => res.json())
             .then(r => {
                 this.setState({
-                    FirstName: r.data.NewPortalRegisterdUserList[0].FirstName,
-                    LastName: r.data.NewPortalRegisterdUserList[0].LastName,
-                    DOB: r.data.NewPortalRegisterdUserList[0].DOB,
-                    Gender: r.data.NewPortalRegisterdUserList[0].Gender,
-                    patientId_id : r.data.NewPortalRegisterdUserList[0].Gender,
+                    FirstName: r.data.NewPortalRegisterdUserList[this.state.row_number].FirstName,
+                    LastName: r.data.NewPortalRegisterdUserList[this.state.row_number].LastName,
+                    DOB: r.data.NewPortalRegisterdUserList[this.state.row_number].DOB,
+                    Gender: r.data.NewPortalRegisterdUserList[this.state.row_number].Gender,
+                    patientId_id: r.data.NewPortalRegisterdUserList[this.state.row_number].Gender,
+                    userlist: r.data.NewPortalRegisterdUserList
                 })
 
             })
@@ -161,11 +166,28 @@ export class ConsentManagement extends React.Component {
     }
 
     getoptions() {
-        // let row = []
-        // this.state.userlist.forEach(element => {
-        //     row.push(<option>{element.name}</option>)
-        // })
-        // return row
+        let row = []
+        let count = 0
+        this.state.userlist.forEach(element => {
+            row.push(<option value={count}>{element.FirstName} {element.LastName}</option>)
+            count++;
+        })
+        return row
+    }
+
+    ChangeVal(event, key) {
+        this.setState({
+            reload: false,
+            row_number: event.target.value
+        },() => {
+            this.getpatientdetails()
+        });
+
+        setTimeout(() => {
+            this.setState({
+                reload: true
+            });
+        }, 1000);
     }
 
     renderTopbar() {
@@ -174,7 +196,6 @@ export class ConsentManagement extends React.Component {
                 <div className="form-group col-3">
                     <div className="list-header-dashboard">Select User</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
-                        <option value="0">Select User</option>
                         {this.getoptions()}
                     </select>
                 </div>
@@ -208,7 +229,7 @@ export class ConsentManagement extends React.Component {
             <tr className="table-head">
                 <td className="table-text">List</td>
                 <td className="table-text list-item-style">Enable / Disable</td>
-                <td className="table-text list-item-style">Third Party Integration</td>
+                <td className="table-text list-item-style">Third Party Application</td>
             </tr>
         )
     }
@@ -216,25 +237,22 @@ export class ConsentManagement extends React.Component {
     renderList() {
         let row = []
         const data = [
-            { Request: "Allergies", thirdParty : 'Apple'},
-            { Request: "Immunization", thirdParty : 'Apple'},
-            { Request: "Medications", thirdParty : 'Google'},
-            { Request: "Labs", thirdParty : 'Google'},
-            { Request: "Problems", thirdParty : 'Apple'},
-            { Request: "Diagnostics", thirdParty : 'Apple'},
-            { Request: "Claims", thirdParty : 'Google'},
-            { Request: "Encounters", thirdParty : 'Google'},
-            { Request: "Remittances", thirdParty : 'Apple'},
-            { Request: "Coverage", thirdParty : 'Google'},
-            { Request: "Devices", thirdParty : 'Google'},
-            { Request: "Authorizations", thirdParty : 'Apple'},
+            { Request: "Allergies", isChecked : true, thirdParty: 'Apple Health' },
+            { Request: "Immunization", isChecked : true, thirdParty: 'Apple Health' },
+            { Request: "Medications", isChecked : true, thirdParty: 'Google Health' },
+            { Request: "Labs", isChecked : true, thirdParty: 'Google Health' },
+            { Request: "Problems", isChecked : true, thirdParty: 'Apple Health' },
+            { Request: "Diagnostics", isChecked : true, thirdParty: 'Apple Health' },
+            { Request: "Claims", isChecked : false, thirdParty: '' },
+            { Request: "Encounters", isChecked : true, thirdParty: 'Google Health' },
+            { Request: "Remittances", isChecked : false, thirdParty: '' },
+            { Request: "Coverage", isChecked : true, thirdParty: 'Google Health' },
+            { Request: "Devices", isChecked : true, thirdParty: 'Google Health' },
+            { Request: "Authorizations", isChecked : false, thirdParty: '' },
         ]
 
-        let menuOptions = {}
         data.forEach((d) => {
-
             row.push(
-
                 <tr>
                     <td style={{ fontWeight: "bold" }}>
                         {d.Request}
@@ -269,7 +287,7 @@ export class ConsentManagement extends React.Component {
             <div>
                 <h5 className="headerText">Consent Management</h5>
                 {this.renderHeader()}
-                {this.renderList()}
+                {this.state.reload ? this.renderList() : false}
             </div>
         );
     }
