@@ -144,7 +144,7 @@ export class ConsentUserList extends React.Component {
             { value: 'UserID' },
             { value: 'FirstName' },
             { value: 'LastName' },
-            { value: 'DOB', isDate: 1 },
+            { value: 'DOB', isDate: 1,  isNottime: true },
             { value: 'Gender' },
             { value: 'Verify', isClick: 1, method: this.update, sendItem: true }
         )

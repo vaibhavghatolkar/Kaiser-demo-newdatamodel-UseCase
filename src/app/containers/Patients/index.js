@@ -81,7 +81,7 @@ export class Patients extends React.Component {
             { value : 'PatientID'},
             { value : 'FirstName'},
             { value : 'LastName'},
-            { value : 'DOB',isDate : 1},
+            { value : 'DOB',isDate : 1, isNottime: true},
             { value : 'Gender'},
         )
 

@@ -1,14 +1,14 @@
-let base_url = 'http://localhost:4000' //local
+// let base_url = 'http://localhost:4000' //local
 // let _base_url = 'http://localhost:4000' //local
-// let base_url = 'http://10.0.1.248:30544' //graph
+let base_url = 'http://10.0.1.248:30544' //graph
 let _base_url = 'http://10.0.1.248:30528' //local
 let sql_base_url = 'http://10.0.1.248:30506'
 // let base_url = 'http://10.0.1.71:30506' //sql
 //  let base_url = 'http://10.229.4.247:30108' //molina
 //  let base_url = 'http://hapiservice.hipaas-stage.svc.cluster.local:4000' //service
 const Urls = {
-    base_url : 'http://localhost:4000/graphQl', //local
-    // base_url : 'http://10.0.1.248:30544/graphQl', //local
+    // base_url : 'http://localhost:4000/graphQl', //local
+    base_url : 'http://10.0.1.248:30544/graphQl', //local
     // base_url : 'http://10.0.1.71:30506/graphQl', //sql
     // base_url : 'http://10.0.1.248:30508/graphQl', //graph
     // base_url : 'http://10.229.4.247:30108/graphQl', //molina
@@ -72,6 +72,7 @@ const Urls = {
     sql_real_time_claim_details : sql_base_url + '/real_time_claim_details',
     sql_common_data : sql_base_url + '/common_data',
     sql_real_time_claim : sql_base_url + '/real_time_claim',
+    
 }
 
 export default Urls;
