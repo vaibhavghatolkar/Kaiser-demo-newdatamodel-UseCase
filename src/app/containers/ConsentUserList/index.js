@@ -5,23 +5,23 @@ import moment from 'moment';
 
 const $ = window.$;
 export class ConsentUserList extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {
-            files_list : [],
+            files_list: [],
             page: 1,
             count: 0,
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getData()
     }
 
     getData() {
         let query = `{
-            NewPortalRegisterdUserList(page: `+this.state.page+`) {
+            NewPortalRegisterdUserList(page: `+ this.state.page + `) {
               RecCount
               UserID
               PatientID
@@ -53,7 +53,7 @@ export class ConsentUserList extends React.Component {
 
                     this.setState({
                         files_list: data,
-                        count : count 
+                        count: count
                     })
                 }
             })
@@ -63,7 +63,7 @@ export class ConsentUserList extends React.Component {
     }
 
     savePatient() {
-        let dateOfBirth = this.state.dob ? moment(this.state.dob).format('YYYY-MM-DD') : ''
+        let dateOfBirth = this.state.dob && Number(this.state.dob) ? moment(this.state.dob).format('YYYY-MM-DD') : ''
         let query = `mutation {
             SP_SaveFHIRPatient(UserId: 0, Patient_Id: "${this.state.patientId}",
             FirstName: "${this.state.firstName}",
@@ -82,7 +82,7 @@ export class ConsentUserList extends React.Component {
             Email: "${this.state.email}", 
             Country: "USA")
         }`
-      console.log(query)
+        console.log(query)
         fetch('http://10.0.1.248:30514/graphQl', {
             method: 'POST',
             headers: {
@@ -94,6 +94,7 @@ export class ConsentUserList extends React.Component {
             .then(res => res.json())
             .then(res => {
                 alert(res.data.SP_SaveFHIRPatient);
+                this.getData()
                 // this.setState(initialState);
                 console.log(res)
             }).catch(err => {
@@ -102,48 +103,51 @@ export class ConsentUserList extends React.Component {
     }
 
     update = (patient) => {
-        // this.setState({
-        //     firstName : patient.firstName,
-        //     lastName : patient.lastName,
-        //     gender : patient.gender,
-        //     State : patient.State,
-        //     postal_Code : patient.postal_Code,
-        //     Address : patient.Address,
-        //     city : patient.city,
-        //     middleName : patient.middleName,
-        //     externalId : patient.externalId,
-        //     SS : patient.SS,
-        //     licenceId : patient.licenceId,
-        //     Marital_Status : patient.Marital_Status,
-        //     email : patient.email,
-        //     dob: patient.dob
-        // })
+        console.log('this is the patient', patient)
+        this.setState({
+            firstName: patient.FirstName,
+            lastName: patient.LastName,
+            dob: patient.DOB,
+            gender: patient.Gender,
+            State: "",
+            postal_Code: "",
+            Address: "",
+            city: "",
+            middleName: "",
+            externalId: "",
+            SS: "",
+            licenceId: "",
+            Marital_Status: "",
+            email: "",
+        }, () => {
+            this.savePatient()
+        })
     }
 
-    renderTransactionsNew(){
+    renderTransactionsNew() {
         const data = this.state.files_list ? this.state.files_list : []
         let headerArray = []
         let rowArray = []
 
         headerArray.push(
-            {value : 'Identifier'},
-            {value : 'First Name'},
-            {value : 'Last Name'},
-            {value : 'DOB', isDate: 1},
-            {value : 'Gender'},
-            {value : 'Verify'},
+            { value: 'Identifier' },
+            { value: 'First Name' },
+            { value: 'Last Name' },
+            { value: 'DOB', isDate: 1 },
+            { value: 'Gender' },
+            { value: 'Verify' },
         )
 
         rowArray.push(
-            { value : 'PatientID'},
-            { value : 'FirstName'},
-            { value : 'LastName'},
-            { value : 'DOB',isDate : 1},
-            { value : 'Gender'},
-            { value : 'Verify', isClick: 1, onClick: this.update, key_argument : ''}
+            { value: 'PatientID' },
+            { value: 'FirstName' },
+            { value: 'LastName' },
+            { value: 'DOB', isDate: 1 },
+            { value: 'Gender' },
+            { value: 'Verify', isClick: 1, method: this.update, sendItem: true }
         )
 
-        return(
+        return (
             <CommonTable
                 headerArray={headerArray}
                 rowArray={rowArray}
@@ -178,7 +182,7 @@ export class ConsentUserList extends React.Component {
 
     render() {
         return (
-            <div className="container" style={{height : $(window).height()}}>
+            <div className="container" style={{ height: $(window).height() }}>
                 <h5 className="headerText">User List</h5>
                 {this.renderTransactionsNew()}
             </div>
