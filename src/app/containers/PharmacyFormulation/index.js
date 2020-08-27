@@ -108,7 +108,7 @@ export class PharmacyFormulation extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Pharmacy Formulation Information</h5>
+                <h5 className="headerText">Pharmacy Formulary Information</h5>
                 {this._renderList()}
             </div>
         );
