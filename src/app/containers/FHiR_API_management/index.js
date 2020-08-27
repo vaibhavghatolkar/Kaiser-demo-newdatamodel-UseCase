@@ -215,7 +215,35 @@ else if(this.state.setdropdown_value=="AllergyIntolerance")
   {API_URL: 'http://hipaas.fhir.org/baseR4/CoverageEligibilityRequest/id/_history/9',Date: '06/17/2020 08:20:10',},
   {API_URL: 'http://hipaas.fhir.org/baseR4/CoverageEligibilityRequest/id/_history/10',Date: '06/17/2020 08:20:10',},
 ]
-}  
+}
+else if(this.state.setdropdown_value == "PatientDirectory"){
+  data = [
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1991/_history/1',Date: '08/27/2020 06:00:00',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1998/_history/2',Date: '08/27/2020 06:00:00',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1992/_history/3',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1995/_history/4',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1999/_history/5',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/2003/_history/6',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/2001/_history/7',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1994/_history/8',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1996/_history/9',Date: '08/27/2020 08:20:10',},
+  {API_URL: 'http://hipaas.fhir.org/baseR4/ProviderDirectory/1997/_history/10',Date: '08/27/2020 08:20:10',},
+  ]
+} 
+else if(this.state.setdropdown_value == "PharmacyFormulary"){
+  data = [
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1993/_history/1',Date: '08/27/2020 06:00:00',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1999/_history/2',Date: '08/27/2020 06:00:00',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1996/_history/3',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1987/_history/4',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/2003/_history/5',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/2001/_history/6',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1994/_history/7',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1995/_history/8',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1998/_history/9',Date: '08/27/2020 08:20:10',},
+    {API_URL: 'http://hipaas.fhir.org/baseR4/PharmacyFormulary/1991/_history/10',Date: '08/27/2020 08:20:10',},
+    ]
+} 
         this.setState({
               rowData:data
 
@@ -985,6 +1013,264 @@ message = `
 }
 `
          }
+         else if(this.state.setdropdown_value == "PatientDirectory"){
+          message = `{
+            "resourceType": "ProviderDirectory",
+            "id": "SE003",
+            "meta": {
+              "versionId": "2",
+              "lastUpdated": "2020-02-10T09:16:27.852+00:00",
+              "source": "#joFWHaOGYFpZVu9v"
+            },
+            "text": {
+              "status": "generated"
+            },
+            "extension": [ {
+              "url": "http://hl7.org/fhir/registry",
+              "extension": [ {
+                "url": "http://terminology.hl7.org/CodeSystem/v3-Race",
+                "valueCodeableConcept": {
+                  "coding": [ {
+                    "system": "http://terminology.hl7.org/CodeSystem/v3-Race",
+                    "code": "1002-5"
+                  } ]
+                }
+              } ]
+            } ],
+            "identifier": [ {
+              "use": "usual",
+              "type": {
+                "coding": [ {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "MR"
+                } ]
+              },
+              "value": "emrSE003",
+              "assigner": {
+                "display": "Health Care for Christ"
+              }
+            }, {
+              "use": "official",
+              "type": {
+                "coding": [ {
+                  "system": "https://www.ris.gov.tw/app/en/3051",
+                  "code": "PPN"
+                } ],
+                "text": "random"
+              },
+              "system": "https://www.ris.gov.tw/app/en/3051",
+              "value": "SE003",
+              "assigner": {
+                "display": "Department Of Household Registration"
+              }
+            }, {
+              "use": "official",
+              "type": {
+                "coding": [ {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                  "code": "NIIP"
+                } ]
+              },
+              "system": "https://www.mohw.gov.tw/mp-2.html",
+              "value": "SE003",
+              "assigner": {
+                "display": "Ministry Of Health Taiwan"
+              }
+            } ],
+            "active": true,
+            "name": [ {
+              "use": "official",
+              "given": [ "Sunny Egg" ],
+              "prefix": [ "mr" ]
+            }, {
+              "use": "official",
+              "given": [ "陽蛋蛋" ]
+            }, {
+              "use": "official"
+            } ],
+            "telecom": [ {
+              "system": "phone",
+              "value": "_887999999",
+              "use": "mobile"
+            }, {
+              "system": "email",
+              "use": "home"
+            }, {
+              "system": "email",
+              "value": "sunny@anything.com",
+              "use": "home"
+            } ],
+            "address": [ {
+              "use": "home",
+              "text": "1-1-1, TsamTsui, 92000, Taiwan",
+              "line": [ "1-1-1" ],
+              "city": "TsamTsui",
+              "postalCode": "92000"
+            }, {
+              "use": "work",
+              "text": "188, Hualien, 97004, Taiwan",
+              "line": [ "188" ],
+              "city": "Hualien",
+              "postalCode": "97004"
+            } ],
+            "gender": "male",
+            "birthDate": "1950-03-06",
+            "qualification": [ {
+              "identifier": [ {
+                "use": "official",
+                "assigner": {
+                  "display": "University Of Breakfast"
+                }
+              } ],
+              "code": {
+                "coding": [ {
+                  "system": "http://terminology.hl7.org/CodeSystem/v2-0360/2.7",
+                  "code": "MD"
+                } ]
+              },
+              "period": {
+                "start": "1970"
+              }
+            } ]
+          }`
+         }else if(this.state.setdropdown_value == "PharmacyFormulary"){
+          message =`{
+            "resourceType": "Pharmacy Formulary Information",
+            "id": "31353",
+            "fhir_comments": [ " ISO name: /Pharmacy Formulary Information " ],
+            "meta": {
+              "versionId": "1",
+              "lastUpdated": "2019-09-26T19:45:57.669+00:00",
+              "source": "#edb311ae8645085a"
+            },
+            "identifier": [ {
+              "fhir_comments": [ " No id needed or allowed - server assigned ", " ISO name: /Pharmacy Formulary Information/MPID " ],
+              "system": "http://ema.europa.eu/fhir/MPID",
+              "value": "transTest-MP"
+            } ],
+            "legalStatusOfSupply": {
+              "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/MarketingAuthorisation/LegalStatusOfSupply " ],
+              "coding": [ {
+                "system": "http://ema.europa.eu/fhir/legalstatusofsupply",
+                "code": "SubjectToMedicalPrescription"
+              } ]
+            },
+            "productClassification": [ {
+              "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/ProductClassification " ],
+              "coding": [ {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/ProductClassification/Value " ],
+                "system": "http://ema.europa.eu/fhir/WHOAnatomicalTherapeuticChemicalATCClassificationSystem",
+                "code": "B01AF02"
+              } ]
+            } ],
+            "marketingStatus": [ {
+              "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/MarketingStatus " ],
+              "country": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/MarketingStatus/Country " ],
+                "coding": [ {
+                  "system": "http://ema.europa.eu/fhir/countryCode",
+                  "code": "EU"
+                } ]
+              },
+              "status": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/MarketingStatus/MarketingStatus " ],
+                "coding": [ {
+                  "system": "http://ema.europa.eu/fhir/marketingstatus",
+                  "code": "Marketed"
+                } ]
+              },
+              "dateRange": {
+                "start": "2011-09-26",
+                "_start": {
+                  "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/MarketingStatus/MarketingDateStart " ]
+                }
+              }
+            } ],
+            "name": [ {
+              "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName " ],
+              "productName": "Wonderpill 500 mg tablets",
+              "_productName": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/FullName " ]
+              },
+              "namePart": [ {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/InventedNamePart " ],
+                "part": "Wonderpill",
+                "type": {
+                  "code": "INV"
+                }
+              }, {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/StrengthPart " ],
+                "part": "500 mg",
+                "type": {
+                  "code": "STR"
+                }
+              }, {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/PharmaceuticalDoseFormPart " ],
+                "part": "tablets",
+                "type": {
+                  "code": "FRM"
+                }
+              } ],
+              "countryLanguage": [ {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/Country-Language " ],
+                "country": {
+                  "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/Country-Language/Country " ],
+                  "coding": [ {
+                    "system": "http://ema.europa.eu/fhir/countryCode",
+                    "code": "EU"
+                  } ]
+                },
+                "jurisdiction": {
+                  "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/Country-Language/Jurisdiction " ],
+                  "coding": [ {
+                    "system": "http://ema.europa.eu/fhir/jurisdictionCode",
+                    "code": "EU"
+                  } ]
+                },
+                "language": {
+                  "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Pharmacy Formulary InformationName/Country-Language/Language " ],
+                  "coding": [ {
+                    "system": "http://ema.europa.eu/fhir/languageCode",
+                    "code": "EN"
+                  } ]
+                }
+              } ]
+            } ],
+            "manufacturingBusinessOperation": [ {
+              "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Manufacturer-Establishment_Organisation/Manufacturing-BusinessOperation " ],
+              "operationType": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Manufacturer-Establishment_Organisation/Manufacturing-BusinessOperation/OperationType " ],
+                "coding": [ {
+                  "system": "http://ema.europa.eu/fhir/manufacturingOperationType",
+                  "code": "BatchRelease"
+                } ]
+              },
+              "authorisationReferenceNumber": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Manufacturer-Establishment_Organisation/Manufacturing-BusinessOperation/ManufacturingAuthorisationReferenceNumber " ],
+                "system": "http://ema.europa.eu/fhir/manufacturingAuthorisationReferenceNumber",
+                "value": "9999TZ"
+              },
+              "effectiveDate": "2011-09-15",
+              "_effectiveDate": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Manufacturer-Establishment_Organisation/Manufacturing-BusinessOperation/EffectiveDate " ]
+              },
+              "manufacturer": [ {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Manufacturer-Establishment_Organisation " ],
+                "identifier": {
+                  "system": "http://ema.europa.eu/OMS",
+                  "value": "Wonderpill500mg-manufacturer"
+                }
+              } ],
+              "regulator": {
+                "fhir_comments": [ " ISO name: /Pharmacy Formulary Information/Manufacturer-Establishment_Organisation/Manufacturing-BusinessOperation/MedicinesRegulatoryAgency_Organisation " ],
+                "identifier": {
+                  "system": "http://ema.europa.eu/OMS",
+                  "value": "Wonderpill500mg-regulator"
+                }
+              }
+            } ]
+          }`
+         }
   return (
   
     <div>
@@ -1012,7 +1298,8 @@ message = `
                         <option value="MedicationRequest">Medication Request</option>
                         <option value="AllergyIntolerance">Allergy Intolerance</option>
                         <option value="CoverageEligibilityRequest">Coverage Eligibility Request</option>
-                         
+                        <option value="PatientDirectory">Provider Directory</option>
+                        <option value="PharmacyFormulary">Pharmacy Formulary Information </option> 
                     </select>
                 </div>
 
