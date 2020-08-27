@@ -44,8 +44,8 @@ export class ConsentUserList extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res.data && res.data.FHIRPatients && res.data.FHIRPatients.length > 0) {
-                    let data = res.data.FHIRPatients
+                if (res.data && res.data.NewPortalRegisterdUserList && res.data.NewPortalRegisterdUserList.length > 0) {
+                    let data = res.data.NewPortalRegisterdUserList
                     let count = Math.floor(data[0].RecCount / 10)
                     if (data[0].RecCount % 10 > 0) {
                         count = count + 1

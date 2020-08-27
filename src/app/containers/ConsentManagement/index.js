@@ -58,26 +58,18 @@ export class ConsentManagement extends React.Component {
     }
 
     getpatientdetails() {
-        var patientId = this.state.patientId;
-
-        let query1 = '{FHIRPatientDetails(UserID:' + patientId + `) {
-            RecCount
-            UserID
-            PatientID
-            FirstName
-            LastName
-            DOB
-            Gender
-            State
-            PostalCode
-            Address
-            City
-            MiddleName
-            ExternalID
-            SS
-            LicenseID
-            MaritalStatus
-          }}`
+        let query1 = `{
+            NewPortalRegisterdUserList(page: `+this.state.page+`) {
+              RecCount
+              UserID
+              PatientID
+              FirstName
+              LastName
+              DOB
+              Gender
+              Verify
+            }
+        }`
 
 
         fetch('http://10.0.1.248:30514/FHIRpatients', {
@@ -91,19 +83,11 @@ export class ConsentManagement extends React.Component {
             .then(res => res.json())
             .then(r => {
                 this.setState({
-                    FirstName: r.data.FHIRPatientDetails[0].FirstName,
-                    LastName: r.data.FHIRPatientDetails[0].LastName,
-                    DOB: r.data.FHIRPatientDetails[0].DOB,
-                    Gender: r.data.FHIRPatientDetails[0].Gender,
-                    State: r.data.FHIRPatientDetails[0].State,
-                    PostalCode: r.data.FHIRPatientDetails[0].PostalCode,
-                    Address: r.data.FHIRPatientDetails[0].Address,
-                    City: r.data.FHIRPatientDetails[0].City,
-                    MiddleName: r.data.FHIRPatientDetails[0].MiddleName,
-                    ExternalID: r.data.FHIRPatientDetails[0].ExternalID,
-                    SS: r.data.FHIRPatientDetails[0].SS,
-                    LicenseID: r.data.FHIRPatientDetails[0].LicenseID,
-                    MaritalStatus: r.data.FHIRPatientDetails[0].MaritalStatus
+                    FirstName: r.data.NewPortalRegisterdUserList[0].FirstName,
+                    LastName: r.data.NewPortalRegisterdUserList[0].LastName,
+                    DOB: r.data.NewPortalRegisterdUserList[0].DOB,
+                    Gender: r.data.NewPortalRegisterdUserList[0].Gender,
+                    patientId_id : r.data.NewPortalRegisterdUserList[0].Gender,
                 })
 
             })
