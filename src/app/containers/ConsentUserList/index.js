@@ -1,6 +1,7 @@
 import React from 'react'
 import { CommonTable } from '../../components/CommonTable';
 import Strings from '../../../helpers/Strings';
+import moment from 'moment';
 
 const $ = window.$;
 export class ConsentUserList extends React.Component {
@@ -61,7 +62,63 @@ export class ConsentUserList extends React.Component {
             });
     }
 
-   
+    savePatient() {
+        let dateOfBirth = this.state.dob ? moment(this.state.dob).format('YYYY-MM-DD') : ''
+        let query = `mutation {
+            SP_SaveFHIRPatient(UserId: 0, Patient_Id: "${this.state.patientId}",
+            FirstName: "${this.state.firstName}",
+            LastName: "${this.state.lastName}",
+            DOB: "${dateOfBirth}",
+            Gender: "${this.state.gender}", 
+            State: "${this.state.State}", 
+            PostalCode: "${this.state.postal_Code}", 
+            Address: "${this.state.Address}", 
+            City: "${this.state.city}", 
+            MiddleName: "${this.state.middleName}", 
+            ExternalID: "${this.state.externalId}", 
+            SS: "${this.state.SS}", 
+            LicenseID: "${this.state.licenceId}", 
+            MaritalStatus: "${this.state.Marital_Status}", 
+            Email: "${this.state.email}", 
+            Country: "USA")
+        }`
+      console.log(query)
+        fetch('http://10.0.1.248:30514/graphQl', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                alert(res.data.SP_SaveFHIRPatient);
+                // this.setState(initialState);
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
+    }
+
+    update = (patient) => {
+        // this.setState({
+        //     firstName : patient.firstName,
+        //     lastName : patient.lastName,
+        //     gender : patient.gender,
+        //     State : patient.State,
+        //     postal_Code : patient.postal_Code,
+        //     Address : patient.Address,
+        //     city : patient.city,
+        //     middleName : patient.middleName,
+        //     externalId : patient.externalId,
+        //     SS : patient.SS,
+        //     licenceId : patient.licenceId,
+        //     Marital_Status : patient.Marital_Status,
+        //     email : patient.email,
+        //     dob: patient.dob
+        // })
+    }
 
     renderTransactionsNew(){
         const data = this.state.files_list ? this.state.files_list : []
@@ -83,7 +140,7 @@ export class ConsentUserList extends React.Component {
             { value : 'LastName'},
             { value : 'DOB',isDate : 1},
             { value : 'Gender'},
-            { value : 'Verify', isClick: 1}
+            { value : 'Verify', isClick: 1, onClick: this.update, key_argument : ''}
         )
 
         return(
