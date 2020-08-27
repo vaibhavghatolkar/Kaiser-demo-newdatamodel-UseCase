@@ -56,13 +56,16 @@ export class PharmacyFormulation extends React.Component {
 
     _renderList() {
         let rowData = [
-            { "Drug_Name": 'Bacitracin 500 unit/gm Eye Ointment', "Drug_Tier_Description": 'Generic', "30_Day_Preferred_Pharm": '$10.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
-            { "Drug_Name": 'BACITRACIN/POLYMYXIN B OINT 500UNT/10000UNT', "Drug_Tier_Description": 'Specialty Tier', "30_Day_Preferred_Pharm": '$10.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
-            { "Drug_Name": 'BACLOFEN 20 MG TABLET [Lioresal]', "Drug_Tier_Description": 'Generic', "30_Day_Preferred_Pharm": '$10.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
-            { "Drug_Name": 'BALSALAZIDE DISODIUM 750 MG CAPSULE [Colazal]', "Drug_Tier_Description": 'Generic', "30_Day_Preferred_Pharm": '$10.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
-            { "Drug_Name": 'GABAPENTIN 100 MG CAPSULE [Neurontin]', "Drug_Tier_Description": 'Generic', "30_Day_Preferred_Pharm": '$45.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
-            { "Drug_Name": 'GABAPENTIN 600 MG TABLET', "Drug_Tier_Description": 'Generic', "30_Day_Preferred_Pharm": '$45.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
-            { "Drug_Name": 'ECONAZOLE NITRATE 1% CREAM (g) [Spectazole] ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'ABACAVIR 20 MG/ML SOLUTION ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'ABACAVIR 300 MG TABLET ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'ABELCET INJECTION SUSPENSION 5MG/ML ', "Drug_Tier_Description": 'Non-Specialty Tier', "30_Day_Preferred_Pharm": '$15.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'HAILEY 24 FE 1 MG-20 MCG TABLET [Tarina Fe 1/20 ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'Halobetasol Propionate 0.5mg/g 1 TUBE per CARTON / 50 g in 1 TUBE ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'HALOPERIDOL 2MG TABLET (100 CT) ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'ZALEPLON 10 MG CAPSULE [Sonata] ', "Drug_Tier_Description": 'Preferred Brand', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'ZALEPLON 5 MG CAPSULE [Sonata] ', "Drug_Tier_Description": 'Preferred Brand', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'ZENPEP DR 10,000 UNIT CAPSULE DR ', "Drug_Tier_Description": 'Non-Preferred Drug', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
+            { "Drug_Name": 'XARELTO STARTER PACK ', "Drug_Tier_Description": 'Preferred Brand', "30_Day_Preferred_Pharm": '$12.00', "90_Day_Mail_Order": '$10.00', "Drug_Usage_Mgmt": 'None', },
         ]
         let columnDefs = [
             { headerName: "Drug Name", field: "Drug_Name", flex: 1, },
