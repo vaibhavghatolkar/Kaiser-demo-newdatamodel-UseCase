@@ -59,10 +59,24 @@ export class ProviderDirectory extends React.Component {
         let rowData = [
             {"Provider":"A", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
             {"Provider":"Ali Jones", "Specialty":"All", "Provider_type":"PCP", "Phone":"408-125-1230", "Address":"120 Health", "Language":"English", "Medicaid":"Yes", "National_provider":"1139280183", "Bookmark":""},
-            {"Provider":"K", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"Anthony Olivia", "Specialty":"All", "Provider_type":"PCP", "Phone":"408-187-1650", "Address":"241 Health", "Language":"English", "Medicaid":"NO", "National_provider":"5524244243", "Bookmark":""},
+            {"Provider":"B", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
             {"Provider":"Blain Smith", "Specialty":"Dermatology", "Provider_type":"PCP", "Phone":"221-245-1230", "Address":"", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"1239280183", "Bookmark":""},
-            {"Provider":"M", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"C", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
             {"Provider":"CBA Health", "Specialty":"Family Practice", "Provider_type":"Medical Group", "Phone":"408-345-1230", "Address":"", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"1339280183", "Bookmark":""},
+            {"Provider":"D", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"Daniel Anthony", "Specialty":"Family Practice", "Provider_type":"Medical Group", "Phone":"", "Address":"250 Avenue", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"1339280557", "Bookmark":""},
+            {"Provider":"David Alexander", "Specialty":"All", "Provider_type":"Medical Group", "Phone":"408-345-6640", "Address":"250 Hartford Avenue", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"5549280183", "Bookmark":""},
+            {"Provider":"Daniel Jacob", "Specialty":"Family Practice", "Provider_type":"Medical Group", "Phone":"408-345-7630", "Address":"777 Brockton Avenue", "Language":"English", "Medicaid":"NO", "National_provider":"9809280183", "Bookmark":""},
+            {"Provider":"E", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"Ethan Joshua", "Specialty":"All", "Provider_type":"Medical Group", "Phone":"408-554-5430", "Address":"700 Oak Street", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"5252626183", "Bookmark":""},
+            {"Provider":"G", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"Gavin Brayden", "Specialty":"All", "Provider_type":"Medical Group", "Phone":"408-658-8879", "Address":"55 Brooksby Village", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"6651426183", "Bookmark":""},
+            {"Provider":"J", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"James Mason", "Specialty":"All", "Provider_type":"Medical Group", "Phone":"408-878-1379", "Address":"Brooksby Village", "Language":"English, Spanish", "Medicaid":"Yes", "National_provider":"8875926183", "Bookmark":""},
+            {"Provider":"Jose Carter", "Specialty":"All", "Provider_type":"Medical Group", "Phone":"408-768-9879", "Address":"59 Brooksby Village", "Language":"English", "Medicaid":"Yes", "National_provider":"1793446183", "Bookmark":""},
+            {"Provider":"R", "Specialty":"", "Provider_type":"", "Phone":"", "Address":"", "Language":"", "Medicaid":"", "National_provider":"", "Bookmark":""},
+            {"Provider":"Ryan Joseph", "Specialty":"Family Practice", "Provider_type":"Medical Group", "Phone":"408-768-7764", "Address":"42 Fairhaven Commons Way", "Language":"English", "Medicaid":"Yes", "National_provider":"6755454544", "Bookmark":""},
         ]
 
         let columnDefs = [
