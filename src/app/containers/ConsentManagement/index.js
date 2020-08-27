@@ -198,11 +198,33 @@ export class ConsentManagement extends React.Component {
         )
     }
 
+    renderHeader() {
+        return (
+            <div style={{ color: "#4290F0" }}>
+                <br></br>
+                <label style={{ color: "#139dc9", fontWeight: "500", fontSize: '16px' }}> {this.state.FirstName} {this.state.LastName}
+                </label>
+
+                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '12px' }}>  Dob : {this.formatDate(this.state.DOB)}
+                </label>
+
+                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '12px' }}>  Gender : {this.state.Gender}
+                </label>
+
+                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '12px', marginBottom: '12px' }}>  Identifier : {this.state.patientId_id}
+                </label>
+                {this.renderTopbar()}
+                <hr style={{ margin: '8px' }}></hr>
+            </div>
+        )
+    }
+
     renderTableHeader() {
         return (
             <tr className="table-head">
                 <td className="table-text">List</td>
                 <td className="table-text list-item-style">Enable / Disable</td>
+                <td className="table-text list-item-style">Third Party Integration</td>
             </tr>
         )
     }
@@ -210,18 +232,18 @@ export class ConsentManagement extends React.Component {
     renderList() {
         let row = []
         const data = [
-            { Request: "Allergies", },
-            { Request: "Immunization", },
-            { Request: "Medications", },
-            { Request: "Labs", },
-            { Request: "Problems", },
-            { Request: "Diagnostics", },
-            { Request: "Claims", },
-            { Request: "Encounters", },
-            { Request: "Remittances", },
-            { Request: "Coverage", },
-            { Request: "Devices", },
-            { Request: "Authorizations", },
+            { Request: "Allergies", thirdParty : 'Apple'},
+            { Request: "Immunization", thirdParty : 'Apple'},
+            { Request: "Medications", thirdParty : 'Google'},
+            { Request: "Labs", thirdParty : 'Google'},
+            { Request: "Problems", thirdParty : 'Apple'},
+            { Request: "Diagnostics", thirdParty : 'Apple'},
+            { Request: "Claims", thirdParty : 'Google'},
+            { Request: "Encounters", thirdParty : 'Google'},
+            { Request: "Remittances", thirdParty : 'Apple'},
+            { Request: "Coverage", thirdParty : 'Google'},
+            { Request: "Devices", thirdParty : 'Google'},
+            { Request: "Authorizations", thirdParty : 'Apple'},
         ]
 
         let menuOptions = {}
@@ -234,6 +256,7 @@ export class ConsentManagement extends React.Component {
                         {d.Request}
                     </td>
                     <td className="list-item-style"><input checked={d.isChecked} type="checkbox" onChange={(event) => { }} /></td>
+                    <td className="list-item-style">{d.thirdParty}</td>
                 </tr>
             )
 
@@ -261,7 +284,7 @@ export class ConsentManagement extends React.Component {
         return (
             <div>
                 <h5 className="headerText">Consent Management</h5>
-                {this.renderTopbar()}
+                {this.renderHeader()}
                 {this.renderList()}
             </div>
         );

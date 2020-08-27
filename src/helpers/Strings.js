@@ -195,6 +195,7 @@ const Strings = {
     _Transaction_275_Details:'_Transaction275Details',
     ConsentManagement:'ConsentManagement',
     ConsentUserList:'ConsentUserList',
+    PharmacyFormulation : 'PharmacyFormulation'
 }
 
 export default Strings;

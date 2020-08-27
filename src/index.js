@@ -125,6 +125,7 @@ import { Transaction275Dashboard } from './app/containers/Transaction_275/Transa
 import { Transaction_275_Details } from './app/containers/Transaction_275/Transaction_275_Details'
 import { ConsentManagement } from './app/containers/ConsentManagement';
 import { ConsentUserList } from './app/containers/ConsentUserList';
+import { PharmacyFormulation } from './app/containers/PharmacyFormulation';
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -385,6 +386,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._Transaction_275_Details} component={Transaction_275_Details} />
                                 <Route path={'/' + Strings.ConsentManagement} component={ConsentManagement} />
                                 <Route path={'/' + Strings.ConsentUserList} component={ConsentUserList} />
+                                <Route path={'/' + Strings.PharmacyFormulation} component={PharmacyFormulation } />
 
                             </div>
                         </div>

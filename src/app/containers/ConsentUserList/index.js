@@ -1,111 +1,129 @@
-import React from 'react';
-import '../color.css'
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import React from 'react'
+import { CommonTable } from '../../components/CommonTable';
+import Strings from '../../../helpers/Strings';
 
+const $ = window.$;
 export class ConsentUserList extends React.Component {
-
+    
     constructor(props) {
         super(props);
         this.state = {
-            errors: {},
-            firstName: '',
-            lastName: '',
-            email: '',
-            ChangeText: '',
-            phoneNo: '',
-            userRole: '',
-            userRoleList: [],
-            userListDisplay: [],
-            disabled: false,
-            UserStatus: 'Create User',
-            id: 0,
-            paginationPageSize: 10,
-            domLayout: 'autoHeight',
-            autoGroupColumnDef: {
-                headerName: 'Group',
-                minWidth: 170,
-                field: 'athlete',
-                valueGetter: function (params) {
-                    if (params.node.group) {
-                        return params.node.key;
-                    } else {
-                        return params.data[params.colDef.field];
-                    }
-                },
-                headerCheckboxSelection: true,
-                cellRenderer: 'agGroupCellRenderer',
-                cellRendererParams: { checkbox: true },
-            },
-            defaultColDef: {
-
-                cellClass: 'cell-wrap-text',
-                autoHeight: true,
-                sortable: true,
-                resizable: true,
-                filter: true,
-            },
-            rowSelection: 'never',
-            rowGroupPanelShow: 'never',
-            pivotPanelShow: 'never',
+            files_list : [],
+            page: 1,
+            count: 0,
         }
     }
 
-    _renderList() {
-        let rowData = [
-            {"Name": "hello", "Email" : '', 'Verify' : 'Verify'}
-        ]
+    componentDidMount(){
+        this.getData()
+    }
 
-        let columnDefs = [
-            { headerName: "Name", field: "Name", flex: 1, },
-            { headerName: "Email", field: "Email", flex: 1, },
-            {
-                headerName: "Verify", field: "Verify", flex: 1, cellStyle: { cursor: 'pointer', color: '#139DC9' }
+    getData() {
+        let query = `{
+            NewPortalRegisterdUserList(page: `+this.state.page+`) {
+              RecCount
+              UserID
+              PatientID
+              FirstName
+              LastName
+              DOB
+              Gender
+              Verify
+            }
+        }`
+        console.log(query)
+
+        fetch('http://10.0.1.248:30514/FHIRpatients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data && res.data.FHIRPatients && res.data.FHIRPatients.length > 0) {
+                    let data = res.data.FHIRPatients
+                    let count = Math.floor(data[0].RecCount / 10)
+                    if (data[0].RecCount % 10 > 0) {
+                        count = count + 1
+                    }
 
-        ]
+                    this.setState({
+                        files_list: data,
+                        count : count 
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
 
-        return (
-            <div style={{ width: '70%', height: '100%' }}>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={rowData}
-                        enableCellTextSelection={true}
-                    >
+   
 
-                    </AgGridReact>
+    renderTransactionsNew(){
+        const data = this.state.files_list ? this.state.files_list : []
+        let headerArray = []
+        let rowArray = []
 
-                </div>
-
-
-            </div>
+        headerArray.push(
+            {value : 'Identifier'},
+            {value : 'First Name'},
+            {value : 'Last Name'},
+            {value : 'DOB', isDate: 1},
+            {value : 'Gender'},
+            {value : 'Verify'},
         )
+
+        rowArray.push(
+            { value : 'PatientID'},
+            { value : 'FirstName'},
+            { value : 'LastName'},
+            { value : 'DOB',isDate : 1},
+            { value : 'Gender'},
+            { value : 'Verify', isClick: 1}
+        )
+
+        return(
+            <CommonTable
+                headerArray={headerArray}
+                rowArray={rowArray}
+                data={data}
+                count={this.state.count}
+                handlePageClick={this.handlePageClick}
+                onClickKey={'UserID'}
+                onClickSecondKey={'PatientID'}
+                onClick={this.onClick}
+                bigFont={true}
+            />
+        )
+    }
+
+    onClick = (value, secondValue) => {
+        console.log('Sent', secondValue)
+        // this.props.history.push('/' + Strings.PatientDetails, {
+        this.props.history.push('/' + Strings.PatientDashboard, {
+            patientId: value,
+            patientId_id: secondValue,
+        })
+    }
+
+    handlePageClick = (data) => {
+        let page = data.selected + 1
+        this.setState({
+            page: page
+        }, () => {
+            this.getData()
+        })
     }
 
     render() {
         return (
-            <div>
+            <div className="container" style={{height : $(window).height()}}>
                 <h5 className="headerText">User List</h5>
-                {this._renderList()}
+                {this.renderTransactionsNew()}
             </div>
         );
     }
