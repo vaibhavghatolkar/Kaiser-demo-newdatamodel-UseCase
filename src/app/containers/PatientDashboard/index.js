@@ -1503,7 +1503,7 @@ export class PatientDashboard extends React.Component {
             <div style={{ height: $(window).height() }}>
                 {this.renderHeader()}
                 {this._renderSummaryDetails()}
-                {this.rendersepsis()}
+                {/* {this.rendersepsis()} */}
                 {this.state.Eligibilty ? this.Eligibilty(this.state.conditionArray) : null}
                 {/* {this.state.Claim ? this.Claim() : null} */}
                 {this.state.Claim && this.state.ClaimCount > 0 ? this.renderClaims() : null}

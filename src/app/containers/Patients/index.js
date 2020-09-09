@@ -51,6 +51,12 @@ export class Patients extends React.Component {
                         count = count + 1
                     }
 
+                    if(data && data.length > 0){
+                        data.forEach(element => {
+                            element['thirdParty'] = (element.Gender == 'Male' ? 'Google Health' : 'Apple Health')
+                        });
+                    }
+
                     this.setState({
                         files_list: data,
                         count : count 
@@ -75,6 +81,7 @@ export class Patients extends React.Component {
             {value : 'Last Name'},
             {value : 'DOB', isDate: 1},
             {value : 'Gender'},
+            {value : 'Third Party Application'},
         )
 
         rowArray.push(
@@ -83,6 +90,7 @@ export class Patients extends React.Component {
             { value : 'LastName'},
             { value : 'DOB',isDate : 1, isNottime: true},
             { value : 'Gender'},
+            { value : 'thirdParty'},
         )
 
         return(
