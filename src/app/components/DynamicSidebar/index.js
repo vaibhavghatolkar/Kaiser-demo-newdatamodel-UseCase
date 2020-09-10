@@ -114,12 +114,9 @@ export class DynamicSidebar extends React.Component {
         else if (index == 35 || index == 100) { name = Strings.submitClaims }
 
         else if (index == 37) { name = Strings.tradingPartnerConfiguration }
-        else if (index == 38) { name = Strings.TransactionSetup_New }
         else if (index == 39) { name = Strings.editConfiguration }
-        else if (index == 40) { name = Strings.Encounter_view_CustomEditNew }
         else if (index == 41) { name = Strings.covered }
         else if (index == 42) { name = Strings.noncovered }
-        else if (index == 43) { name = Strings.companionGuide }
 
         else if (index == 45) { name = Strings.UserList }
         else if (index == 46) { name = Strings.MenuCreate }
@@ -158,7 +155,6 @@ export class DynamicSidebar extends React.Component {
         else if (index == 113) { name = Strings.Outbound_Covered }
         else if (index == 114) { name = Strings.Outbound_NonCovered }
         else if (index == 115) { name = Strings.Outbound_CompanionGuide }
-        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
         else if (index == 54) { name = Strings.Outbound_Encounter_ClaimDetails837 }
         else if (index == 133) { name = Strings.NPILook_Up }
         else if (index == 134) { name = Strings.Outbound_NPILook_Up }
@@ -198,8 +194,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 167) { name = Strings.RDE }
         else if (index == 168) { name = Strings.DFT }
         else if (index == 169) { name = Strings.consent_management }
-        else if (index == 172) { name = Strings.FHiR_API_management } 
-        else if (index == 189) { name = Strings.CrosswalkTable } 
+        else if (index == 172) { name = Strings.FHiR_API_management }  
         else if (index == 173) { name = Strings.Enrollment_FullFileCompare }
         else if (index == 174) { name = Strings.Enrollment_eligibiltyDetails }
         else if (index == 175) { name = Strings.EthnicityMismatch }
@@ -227,6 +222,25 @@ export class DynamicSidebar extends React.Component {
         else if (index == 199) { name = Strings.ProviderDirectory }
         else if (index == 200) { name = Strings.PharmacyFormulation }
         else if (index == 201) { name = Strings.ConsentUserList }
+
+
+        else if (index == 203) { name = Strings.claimPayment_835 }
+        else if (index == 204) { name = Strings.AuditSummary835 }
+        else if (index == 205) { name = Strings._ClaimPayment_835_ProcessingSummary }
+        else if (index == 206) { name = Strings.claimPayment_835_details }
+        else if (index == 207) { name = Strings._Inbound_response_999 }
+
+        // else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
+        // else if (index == 38) { name = Strings.TransactionSetup_New }
+        // else if (index == 40) { name = Strings.Encounter_view_CustomEditNew }
+        // else if (index == 189) { name = Strings.CrosswalkTable }
+        // else if (index == 43) { name = Strings.companionGuide }
+
+        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
+        else if (index == 38) { name = Strings.TransactionSetup_New }
+        else if (index == 40) { name = Strings.Encounter_view_CustomEditNew }
+        else if (index == 189) { name = Strings.CrosswalkTable }
+        else if (index == 43) { name = Strings.companionGuide }
 
         return name
     }
