@@ -29,7 +29,7 @@ export class DynamicSidebar extends React.Component {
 
         }
 
-        let role_id = JSON.parse(localStorage.getItem('role_id'))
+        let role_id = JSON.parse(sessionStorage.getItem('role_id'))
         let query = `{
             UserwiseMenu(role_id:`+ role_id + ` menutype:"` + menuType + `" For:"S"){
               role_id
