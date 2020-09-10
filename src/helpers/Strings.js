@@ -195,7 +195,14 @@ const Strings = {
     _Transaction_275_Details:'_Transaction275Details',
     ConsentManagement:'ConsentManagement',
     ConsentUserList:'ConsentUserList',
-    PharmacyFormulation : 'PharmacyFormulation'
+    PharmacyFormulation : 'PharmacyFormulation',
+
+
+    Outbound_Encounter_updated_FileDashboard: 'Outbound_Encounter_updated_FileDashboard',
+    Outbound_Encounter_updated_Payment: 'Outbound_Encounter_updated_Payment',
+    Inbound_Encounter_response_999: 'Inbound_Encounter_response_999',
+    EncounterCustomerService: 'EncounterCustomerService',
+    Outbound_Complaince_Reporting: 'Outbound_Complaince_Reporting'
 }
 
 export default Strings;

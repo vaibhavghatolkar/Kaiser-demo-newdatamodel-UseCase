@@ -88,6 +88,7 @@ import { Encounter_view_CustomEditNew } from './app/containers/RealTime_Encounte
 import { CrosswalkTable } from './app/containers/CrosswalkTable'
 import{Enrollment_Outbound} from './app/containers/Enrollment/Enrollment_Outbound'
 import{Enrollment_Details_Outbound} from './app/containers/Enrollment/Enrollment_Details_Outbound'
+
 // import { RDE } from './app/containers/HL7/Medications'
 // import { ORU } from './app/containers/HL7/ORU'
 // import { DFT } from './app/containers/HL7/DFT'
@@ -126,6 +127,9 @@ import { Transaction_275_Details } from './app/containers/Transaction_275/Transa
 import { ConsentManagement } from './app/containers/ConsentManagement';
 import { ConsentUserList } from './app/containers/ConsentUserList';
 import { PharmacyFormulation } from './app/containers/PharmacyFormulation';
+import { Outbound_Encounter_updated_Payment } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_Payment';
+import { EncounterCustomerService } from './app/containers/RealTime_Encounter/EncounterCustomerService';
+import { Outbound_Complaince_Reporting } from './app/containers/RealTime_Encounter/Outbound_Compliance_Reporting';
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -345,6 +349,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.FHiR_API_management} component={FHiR_API_management} />
                                 <Route path={'/' + Strings.Enrollment_Outbound} component={Enrollment_Outbound} />
                                 <Route path={'/' + Strings.Enrollment_Details_Outbound} component={Enrollment_Details_Outbound} />
+                                <Route path={'/' + Strings.Outbound_Encounter_updated_Payment} component={Outbound_Encounter_updated_Payment} />
                             
                                 
                             
@@ -387,6 +392,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ConsentManagement} component={ConsentManagement} />
                                 <Route path={'/' + Strings.ConsentUserList} component={ConsentUserList} />
                                 <Route path={'/' + Strings.PharmacyFormulation} component={PharmacyFormulation } />
+
+                                <Route path={'/' + Strings.EncounterCustomerService} component={ EncounterCustomerService } />
+                                <Route path={'/' + Strings.Outbound_Complaince_Reporting} component={ Outbound_Complaince_Reporting } />
 
                             </div>
                         </div>

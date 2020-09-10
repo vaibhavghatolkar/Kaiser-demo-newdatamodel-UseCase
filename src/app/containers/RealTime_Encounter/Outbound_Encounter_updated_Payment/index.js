@@ -147,7 +147,7 @@ export class Outbound_Encounter_updated_Payment extends React.Component {
             
          }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -182,7 +182,7 @@ export class Outbound_Encounter_updated_Payment extends React.Component {
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -227,7 +227,7 @@ export class Outbound_Encounter_updated_Payment extends React.Component {
           }}
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -326,7 +326,7 @@ export class Outbound_Encounter_updated_Payment extends React.Component {
               }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

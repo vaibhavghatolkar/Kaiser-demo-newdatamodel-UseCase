@@ -313,3 +313,10 @@
     padding-right: 4px;
     width: 15%;
 }
+.compliance_image_style{
+    width: 85%;
+    height: 90%;
+    padding-left: 24px;
+    align-items: center;
+    text-align: center;
+}

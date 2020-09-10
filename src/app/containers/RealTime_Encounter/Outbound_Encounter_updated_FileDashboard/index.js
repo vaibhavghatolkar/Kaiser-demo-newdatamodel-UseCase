@@ -132,13 +132,10 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
                 cellRendererParams: { checkbox: true },
             },
 
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
 
         this.showFile = this.showFile.bind(this)
@@ -174,7 +171,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -255,7 +252,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -358,7 +355,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
             Y_Axis
           }}`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -569,7 +566,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
             CreateBatch
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -596,7 +593,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -748,7 +745,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -781,7 +778,7 @@ export class Outbound_Encounter_updated_FileDashboard extends React.Component {
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.Encounter, {
+        fetch(Urls._Encounter, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -189,6 +189,11 @@ export class DynamicSidebar extends React.Component {
         else if (index == 136) { name = Strings.Outbound_Encounter_BatchDetails837 }
         else if (index == 160) { name = Strings.Outbound_Encounter_RealTimeDashboard }
         else if (index == 53) { name = Strings.Outbound_Encounter_updated_FileDashboard }
+        else if (index == 161) { name = Strings.Outbound_Encounter_updated_Payment }
+        else if (index == 162) { name = Strings.Inbound_Encounter_response_999 }
+        else if (index == 163) { name = Strings.Outbound_Encounter_277CAReponse }
+        else if (index == 164) { name = Strings.EncounterCustomerService }
+        else if (index == 165) { name = Strings.Outbound_Complaince_Reporting }
         else if (index == 166) { name = Strings.ORU }
         else if (index == 167) { name = Strings.RDE }
         else if (index == 168) { name = Strings.DFT }
