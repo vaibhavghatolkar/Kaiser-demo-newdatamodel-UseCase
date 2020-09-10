@@ -131,7 +131,6 @@ export class DynamicSidebar extends React.Component {
         else if (index == 50) { name = Strings.claimPayment_835 }
         else if (index == 51) { name = Strings._claimPayment_835_details }
 
-        else if (index == 120) { name = Strings.Outbound_Encounter_StatewiseTradingPartner }
         else if (index == 116) { name = Strings.healthCare278 }
         else if (index == 117) { name = Strings.serviceDetails278 }
         else if (index == 122) { name = Strings._ClaimProcessingSummary }
@@ -236,7 +235,7 @@ export class DynamicSidebar extends React.Component {
         // else if (index == 189) { name = Strings.CrosswalkTable }
         // else if (index == 43) { name = Strings.companionGuide }
 
-        else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
+        else if (index == 120) { name = Strings.Outbound_Encounter_StatewiseTradingPartner }
         else if (index == 38) { name = Strings.TransactionSetup_New }
         else if (index == 40) { name = Strings.Encounter_view_CustomEditNew }
         else if (index == 189) { name = Strings.CrosswalkTable }
