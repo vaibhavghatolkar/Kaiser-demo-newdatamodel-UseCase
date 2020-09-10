@@ -179,7 +179,7 @@ class PrivateRoute extends React.Component {
 
     onIdle(e) {
         const isTimedOut = this.state.isTimedOut
-
+    
         if (isTimedOut) {
             localStorage.clear()
             sessionStorage.clear()
@@ -192,6 +192,7 @@ class PrivateRoute extends React.Component {
     }
 
     render() {
+       
         let data = []
         data = [
             { apiflag: '1' },
@@ -236,6 +237,7 @@ class PrivateRoute extends React.Component {
                                             pathname: '/' + Strings.RealTimeDashboard, state: { data }
                                         }} /> : <Redirect to="/" />}
                                 </Route> */}
+                                
                                 <Route exact path="/">
                                     {
                                         this.state.loggedIn == true ?
@@ -246,6 +248,14 @@ class PrivateRoute extends React.Component {
                                                         pathname: '/' + Strings.EnrollmentDashboard, state: { data }
                                                     }} />
                                                     :
+
+                                                    sessionStorage.getItem("role_id") == 3936513
+                                                    ?
+                                                    <Redirect to={{
+                                                        pathname: '/' + Strings.Inbound_EncounterDashboard, state: { data }
+                                                    }} />
+                                                    :
+
                                                     <Redirect to={{
                                                         pathname: '/' + Strings.Sepsis_Dashboard, state: { data }
                                                     }} />

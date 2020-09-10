@@ -92,7 +92,7 @@ export class Login extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                console.log('response is this ', res)
+              
                 if (res.data.UserLogin[0].Login == 1) {
                     this.setState({
                         loggedIn: true,
@@ -102,10 +102,12 @@ export class Login extends React.Component {
                         sessionStorage.setItem("token", "sdjjasdnjas")
                         localStorage.setItem("UserId", res.data.UserLogin[0].Id)
                         localStorage.setItem("DbTech", res.data.UserLogin[0].DbTech)
-                        localStorage.setItem("role_id", res.data.UserLogin[0].role_id)
+                        sessionStorage.setItem("role_id", res.data.UserLogin[0].role_id)
                         sessionStorage.setItem("user-id", this.state.EmailId)
                         this.props.handleFlag(this.state.loggedIn)
+                      
                     }, 100);
+                 
                 } else {
                     this.setState({
                         loginStarted: false
