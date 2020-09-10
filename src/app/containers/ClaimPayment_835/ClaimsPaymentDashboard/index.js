@@ -32,7 +32,7 @@ export class ClaimPaymentDashboard extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
