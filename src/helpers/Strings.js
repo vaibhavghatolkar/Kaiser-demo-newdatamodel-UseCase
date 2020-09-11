@@ -202,7 +202,8 @@ const Strings = {
     Outbound_Encounter_updated_Payment: 'Outbound_Encounter_updated_Payment',
     Inbound_Encounter_response_999: 'Inbound_Encounter_response_999',
     EncounterCustomerService: 'EncounterCustomerService',
-    Outbound_Complaince_Reporting: 'Outbound_Complaince_Reporting'
+    Outbound_Complaince_Reporting: 'Outbound_Complaince_Reporting',
+    Member_History:'Member_History'
 }
 
 export default Strings;

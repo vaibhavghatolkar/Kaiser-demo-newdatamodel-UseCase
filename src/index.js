@@ -130,6 +130,8 @@ import { PharmacyFormulation } from './app/containers/PharmacyFormulation';
 import { Outbound_Encounter_updated_Payment } from './app/containers/RealTime_Encounter/Outbound_Encounter_updated_Payment';
 import { EncounterCustomerService } from './app/containers/RealTime_Encounter/EncounterCustomerService';
 import { Outbound_Complaince_Reporting } from './app/containers/RealTime_Encounter/Outbound_Compliance_Reporting';
+import {Member_History} from './app/containers/Member_History'
+
 
 import Outbound_Encounter_StatewiseTradingPartner_Encounter from './app/containers/EncounterAdmin/Outbound_Encounter_StatewiseTradingPartner'
 import TransactionSetup_Encounter from './app/containers/EncounterAdmin/TransactionSetup'
@@ -419,6 +421,9 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_Encounter} />
                                 <Route path={'/' + Strings.Encounter_view_CustomEditNew} component={Encounter_view_CustomEditNew_Encounter} />
                                 <Route path={'/' + Strings.companionGuide} component={CompanionGuide_Encounter} />
+                                <Route path={'/' + Strings.Member_History} component={Member_History} />
+
+                                
                                 
                             </div>
                         </div>
