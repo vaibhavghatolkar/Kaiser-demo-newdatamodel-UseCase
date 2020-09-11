@@ -225,7 +225,7 @@ export class Common_837 extends React.Component {
                     { name: 'Rejected Files', value: rejected },
                     { name: '999', value: this.state.total_999 },
                     { name: 'Reconciled Files | Error', value: reconciled, second_val: reconciledError },
-                    { name: 'Load in MCG | Error', value: loaded, second_val: loadedError },
+                    // { name: 'Load in MCG | Error', value: loaded, second_val: loadedError },
                     { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                     { name: '277CA', value: this.state.total277CA },
                 ]
@@ -548,24 +548,32 @@ export class Common_837 extends React.Component {
             { 'name': 'Rejected', 'value': this.state.Rejected_Claims, 'isClick': 1 },
             { 'name': 'File Rejected', 'value': this.state.FileReject_Claims, 'isClick': 1 },
         ]
+        // let stage_3 = [
+        //     { 'header': 'MCG Load Status' },
+        //     { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
+        //     { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
+        // ]
         let stage_3 = [
-            { 'header': 'MCG Load Status' },
-            { 'name': 'Load in MCG', 'value': this.state.LoadingClaims, 'isClick': 1 },
-            { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
+            { 'header': 'Claim Status' },
+            { 'name': 'Paid', 'value': 6000 },
+            { 'name': 'WIP', 'value': 8000 },
+            { 'name': '0-30', 'value':  2000 },
+            { 'name': '30-60', 'value': 4000 },
+            { 'name': '>60', 'value': 2000 },
         ]
 
         let stage_4 = [
             { 'header': 'L3 - L7 Status' },
-            { 'name': 'Accepted', 'value': this.state.Accepted_277CA, 'isClick': 1, 'is277CA': 1 },
-            { 'name': 'Rejected', 'value': this.state.Rejected_277CA, 'isClick': 1, 'is277CA': 1 },
+            { 'name': 'Accepted', 'value': 27000, 'isClick': 1, 'is277CA': 1 },
+            { 'name': 'Rejected', 'value': 287, 'isClick': 1, 'is277CA': 1 },
         ]
 
         return (
             <div className="row" style={{ marginBottom: '12px', marginLeft: '-9px' }}>
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
-                {this._renderClaimTables(stage_3)}
                 {this._renderClaimTables(stage_4)}
+                {this._renderClaimTables(stage_3)}
             </div>
         )
     }

@@ -215,15 +215,15 @@ export class Header extends React.Component {
         return (
             <div>
                 <div className="header_container">
-                    {/* <h2 className="header_text"><b>EDIVAL</b>
+                    <h2 className="header_text"><b>EDIVAL</b>
                         <span className="Sidebar_drawer" onClick={this.siderbar} id="sidebarCollapse">&#9776; </span>
                     </h2>
-                    <label style={{ color: "white", marginLeft: "20px", fontSize: "11px" }}>Powered by HiPaaS</label> */}
-                    <div style={{ marginLeft: "20px" }}>
+                    <label style={{ color: "white", marginLeft: "20px", fontSize: "11px" }}>Powered by HiPaaS</label>
+                    {/* <div style={{ marginLeft: "20px" }}>
                         <img src={require('../Images/header_logo.png')} style={{ width: '70px', backgroundColor: 'white' }} />
                         <span className="Sidebar_drawer" style={{ position: 'absolute', paddingTop: '10px' }} onClick={this.siderbar} id="sidebarCollapse">&#9776; </span>
                     </div>
-                    <label style={{ color: "white", marginLeft: "20px", fontSize: "10px", marginBottom: '0px' }}>Powered by HiPaaS</label>
+                    <label style={{ color: "white", marginLeft: "20px", fontSize: "10px", marginBottom: '0px' }}>Powered by HiPaaS</label> */}
 
                     {
                         localStorage.getItem('UserId') ?
