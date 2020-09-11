@@ -406,22 +406,23 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ConsentManagement} component={ConsentManagement} />
                                 <Route path={'/' + Strings.ConsentUserList} component={ConsentUserList} />
                                 <Route path={'/' + Strings.PharmacyFormulation} component={PharmacyFormulation } />
-
+                                <Route path={'/' + Strings.Member_History} component={Member_History} />
                                 <Route path={'/' + Strings.EncounterCustomerService} component={ EncounterCustomerService } />
                                 <Route path={'/' + Strings.Outbound_Complaince_Reporting} component={ Outbound_Complaince_Reporting } />
 
                                 {/*  for Sales demo 30545 */}
-                                {/* <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />
+                                <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />
                                 <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_New} />
                                 <Route path={'/' + Strings.Encounter_view_CustomEditNew} component={Encounter_view_CustomEditNew} />
-                                <Route path={'/' + Strings.companionGuide} component={CompanionGuide} /> */}
+                                <Route path={'/' + Strings.companionGuide} component={CompanionGuide} />
+
                                 
                                 {/*  for Encounter demo 30561 */}
-                                <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner_Encounter} />
+                                {/* <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner_Encounter} />
                                 <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_Encounter} />
                                 <Route path={'/' + Strings.Encounter_view_CustomEditNew} component={Encounter_view_CustomEditNew_Encounter} />
-                                <Route path={'/' + Strings.companionGuide} component={CompanionGuide_Encounter} />
-                                <Route path={'/' + Strings.Member_History} component={Member_History} />
+                                <Route path={'/' + Strings.companionGuide} component={CompanionGuide_Encounter} /> */}
+                               
 
                                 
                                 

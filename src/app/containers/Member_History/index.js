@@ -12,6 +12,9 @@ import { Filters } from '../../components/Filters';
 import DatePicker from "react-datepicker";
 import { StateDropdown } from '../../components/StateDropdown';
 import { Tiles } from '../../components/Tiles';
+import { ServersideGrid } from '../../components/ServersideGrid';
+import Strings from '../../../helpers/Strings';
+import person from '../../assets/Images/person.svg';
 const $ = window.$;
 var val_1 = ''
 var val_2 = ''
@@ -34,7 +37,7 @@ export class Member_History extends React.Component {
             MonthlyStatus: '',
             subscriberNo: '',
             enrollment_type: '',
-
+            showDetails:false,
             ethnicid: '',
             planname: '',
             planid: '',
@@ -707,13 +710,13 @@ export class Member_History extends React.Component {
     }
 
 
-    renderHeader(header) {
-        return (
-            <tr className="table-head">
-                <td className="table-head-text">{header}</td>
-            </tr>
-        )
-    }
+    // renderHeader(header) {
+    //     return (
+    //         <tr className="table-head">
+    //             <td className="table-head-text">{header}</td>
+    //         </tr>
+    //     )
+    // }
 
     renderRows(dictionary) {
         let row = []
@@ -1169,9 +1172,9 @@ export class Member_History extends React.Component {
             { headerName: "DOB", field: "dob", width: 100 },
             { headerName: "Gender", field: "gender", width: 100 },
             { headerName: "State", field: "State", width: 100 },
-            { headerName: "City", field: "City", width: 80 },
+            { headerName: "City", field: "City", width: 100 },
             { headerName: "Address", field: "StreetAddress", width: 100 },
-            { headerName: "Postal Code", field: "zip", width: 100 },
+            { headerName: "Postal Code", field: "zip", flex:1 },
         ]
 
         return (
@@ -1199,40 +1202,19 @@ export class Member_History extends React.Component {
                         icons={this.state.icons}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            // if (event.colDef.headerName == 'Subscriber No' && event.data.Resubmit != "Resubmit") {
-                            //     this.setState({
-                            //         subscriberNo: event.data.SubscriberNo,
-                            //         enrollment_type: event.data.Enrollment_type,
-                            //         Insurer_Status: event.data.Insurer_Status,
-                            //         error_status: event.data.Error_Field,
-                            //         showDetailsEnrollment: true,
-                            //         RefID: event.data.RefID,
-                            //         textbox: false,
-                            //         Resubmit: event.data.Resubmit
-                            //     }, () => {
-                            //         this.memberDetails(event.data.RefID, event.data.SubscriberNo)
-                            //     })
-                            // } else 
-                            if (event.colDef.headerName == "Error Description" && event.data.error_desc) {
+                         
+                            if (event.colDef.headerName == "Member Id") {
                                 this.setState({
-                                    ErrorDescClicked: event.data.error_desc
-                                }, () => {
-                                    $('#enrollment_Error_Modal').modal('show')
-                                })
-                            } else if (event.colDef.headerName == 'Subscriber No') {
-                                this.memberDetails(event.data.RefID, event.data.SubscriberNo)
-                                this.setState({
-                                    memberInfoPop: [],
-                                    subscriberNo: event.data.SubscriberNo,
-                                    RefID: event.data.RefID,
                                     showMemberInfo: true,
-                                    textbox: true,
-                                    Resubmit: event.data.Resubmit
-                                }, () => {
-                                    $('#MemberInfoDialogbox').modal('show')
-                                })
-                            }
+                                    FirstName:event.data.FirstName,
+                                    LastName:event.data.LastName,
+                                    DOB:event.data.dob,
+                                    Gender:event.data.gender
 
+                                }, () => {
+                                   
+                                })
+                              }
                         }}
                     >
                     </AgGridReact>
@@ -1443,17 +1425,106 @@ export class Member_History extends React.Component {
         )
     }
 
+    _renderClaims() {
+        let columnDefs = [
+            { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "X12 Claim Id", field: "ClaimID", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
+            { headerName: "Claim Status", field: "ClaimStatus", width: 140 },
+            { headerName: "Subscriber Id", field: "Subscriber_ID", width: 140 },
+            { headerName: "277CA Status", field: "Status277CA", width: 100 },
+            // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
+            // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
+            { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
+        ]
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+
+        let query = `{
+            Claim837RTProcessingSummaryNew(
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: 0, endRow: 9,Filter: ${filter},
+                    
+                    page:${this.state.page},Sender:"${this.state.selectedTradingPartner}",
+                    State:"${this.state.State ? this.state.State : ''}",Provider:"${this.state.providerName}",
+                    StartDt:"",EndDt:"",Claimstatus:"${this.state.generalStatus}", FileID : "` + this.state.selectedFileId + `", 
+                    Type : "` + this.state.type + `" , OrderBy:"${this.state.inner_orderby}", 
+                    RecType: "Inbound", GridType:${this.state.gridType}, 
+                    FileStatus : "${this.state.claimStatus ? this.state.claimStatus : ''}", 
+                    LoadStatus:"${this.state.gridflag}", MCGStatus: "${this.state.mcgStatus}", 
+                    Status277CA:"${this.state.status277CA}" ,ClaimID:"${this.state.Filter_ClaimId}"
+            ) {
+              RecCount
+              ClaimID
+              ClaimDate
+              ClaimTMTrackingID
+              Subscriber_ID
+              Claim_Amount
+              ClaimStatus
+              ProviderLastName
+              ProviderFirstName
+              SubscriberLastName
+              SubscriberFirstName
+              adjudication_status
+              ClaimLevelErrors
+              ClaimUniqueID
+              FileID
+              FileName
+              FileCrDate
+              FileStatus
+              F277
+              F999
+              TotalLine
+              TotalLinewise835
+              BatchName
+              BatchStatus
+              Transaction_Status
+              ClaimRefId
+              MolinaClaimID
+              FileDate
+              ProcessID
+              State
+              FileDateTime
+              ClaimDateTime
+              Status277CA
+            }
+          }`
+        return (
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Claim  Information</h6>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls.claim_processing}
+                    index={'Claim837RTProcessingSummaryNew'}
+                    State={this.state.State}
+                    fieldType={'ClaimDateTime'}
+                    paginationPageSize={5}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    selectedFileId={this.state.selectedFileId}
+                    filterClaim={this.state.Filter_ClaimId}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigationClaims}
+                    // defaultRecCount={10}
+                />
+            </div>
+        )
+    }
+
     _renderSummaryDetails = () => {
         let row = []
         let summary = []
         summary = [
-            { name: 'Observation', value: 2 , color: '#00C0EF' },
-            { name: 'Immunization', value: 3, color: '#DD4B39' },
-            { name: 'Allergy Intolerance', value: 3, color: '#615CA8' },
-            { name: 'Eligibility', value: 5, color: '#39CCCC' },
-            { name: 'Claims', value:6 , color: '#F39C12' },
-            { name: 'Medication Request', value: 9, color: '#01A65A' },
-            { name: 'Condition', value: 3, color: '#8FEA7C' },
+            { name: '834', value: 5, color: '#F39C12' },
+            { name: '270', value: 3 , color: '#00C0EF' },
+            { name: '276', value: 2, color: '#00C0EF' },
+            { name: 'Claims', value:4 , color: '#F39C12' },
+            { name: '835', value:4 , color: '#00C0EF' },
+          
+         
         ]
         let array = summary
         array.forEach(item => {
@@ -1485,13 +1556,14 @@ export class Member_History extends React.Component {
                             claimError_Status: false,
                             showerror: false,
                         }, () => {
-                            if (item.name == 'Observation') { this.onClickshowObservationTable() }
-                            else if (item.name == 'Immunization') { this.onClickImmunization() }
-                            else if (item.name == 'Allergy Intolerance') { this.onClickshowAllergyIntoleranceTable() }
-                            else if (item.name == 'Eligibility') { this.onClickEligibilty() }
+                            // if (item.name == 'Observation') { this.onClickshowObservationTable() }
+                            // else if (item.name == 'Immunization') { this.onClickImmunization() }
+                            // else if (item.name == 'Allergy Intolerance') { this.onClickshowAllergyIntoleranceTable() }
+                             if (item.name == '270') { this.onClickEligibilty_270() }
+                            else if (item.name == '276') { this.onClickEligibilty() }
                             else if (item.name == 'Claims') { this.onClickClaim() }
-                            else if (item.name == 'Medication Request') { this.onClickshowMedicationTable() }
-                            else if (item.name == 'Condition') { this.onClickshowConditionTable() }
+                            else if (item.name == '835') { this.onClickshowMedicationTable() }
+                            else if (item.name == '834') { this.onClickshowConditionTable() }
                         })
                     }}
                 />
@@ -1503,86 +1575,193 @@ export class Member_History extends React.Component {
             </div>
         )
     }
-
-    onClickEligibilty = (key) => {
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
         this.setState({
-            Eligibilty: true,
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray,
+        })
+    }
+    onClickEligibilty_270 = (key) => {
+        
+        this.setState({
+            Eligibilty_270:true,
+            Eligibilty: false,
             Claim: false,
             showMedicationTable: false,
             showObservationTable: false,
             Immunization: false,
             showAllergyIntoleranceTable: false,
             showConditionTable: false,
+            showDetails:false,
+            showDetails_276:false,
+            Payment_835: false,
+            Enrollment_834:false
+          
+        })
+    }
+    onClickEligibilty = (key) => {
+        this.setState({
+            Payment_835: false,
+            Eligibilty: true,
+            Eligibilty_270: false,
+            Claim: false,
+            showMedicationTable: false,
+            showObservationTable: false,
+            Immunization: false,
+            showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+            showDetails:false,
+            showDetails_276:false,
+            Enrollment_834:false
         })
     }
     onClickClaim = (key) => {
         this.setState({
+            Payment_835: false,
             Claim: true,
             Eligibilty: false,
+            Eligibilty_270: false,
             showMedicationTable: false,
             showObservationTable: false,
             Immunization: false,
             showAllergyIntoleranceTable: false,
             showConditionTable: false,
+            showDetails:false,
+            showDetails_276:false,
+            Enrollment_834:false
         })
     }
     onClickshowMedicationTable = (key) => {
         this.setState({
-            showMedicationTable: true,
-            Eligibilty: false,
+            Payment_835: true,
             Claim: false,
+            Eligibilty: false,
+            Eligibilty_270: false,
+            showMedicationTable: false,
             showObservationTable: false,
             Immunization: false,
             showAllergyIntoleranceTable: false,
             showConditionTable: false,
+            showDetails:false,
+            showDetails_276:false,
+            Enrollment_834:false
         })
     }
-    onClickshowObservationTable = (key) => {
-        this.setState({
-            showObservationTable: true,
-            Eligibilty: false,
-            Claim: false,
-            showMedicationTable: false,
-            Immunization: false,
-            showAllergyIntoleranceTable: false,
-            showConditionTable: false,
-        })
-    }
-    onClickImmunization = (key) => {
-        this.setState({
-            Immunization: true,
-            Eligibilty: false,
-            Claim: false,
-            showMedicationTable: false,
-            showObservationTable: false,
-            showAllergyIntoleranceTable: false,
-            showConditionTable: false,
-        })
-    }
-    onClickshowAllergyIntoleranceTable = (key) => {
-        this.setState({
-            showAllergyIntoleranceTable: true,
-            Eligibilty: false,
-            Claim: false,
-            showMedicationTable: false,
-            showObservationTable: false,
-            Immunization: false,
-            showConditionTable: false,
-        })
-    }
+
     onClickshowConditionTable = (key) => {
         this.setState({
-            showConditionTable: true,
-            Eligibilty: false,
+            Enrollment_834: true,
             Claim: false,
+            Eligibilty: false,
+            Payment_835:false,
+            Eligibilty_270: false,
             showMedicationTable: false,
             showObservationTable: false,
             Immunization: false,
             showAllergyIntoleranceTable: false,
+            showConditionTable: false,
+            showDetails:false,
+            showDetails_276:false
         })
     }
 
     Eligibilty() {
+        let ClaimRequest = [
+            {
+              "RecCount": "2",
+              "HiPaaSUniqueID": "execution-05e62dfe-b33c-4332-be52-bbf8365504ea-2019.12.06",
+              "Date": "2020-01-07 04:49:20",
+              "Trans_type": "Fail",
+              "Submiter": "Availity",
+              "Trans_ID": "ABC276XYZ",
+              "Error_Type": "",
+              "Error_Code": "E3",
+              "ErrorDescription": "Correction required - relational fields in error.",
+              "Response_Time": "0.01"
+            },
+            {
+              "RecCount": "2",
+              "HiPaaSUniqueID": "e1d5f08d-8fe8-4398-a964-cdb8c2ff4447",
+              "Date": "2020-01-07 04:49:20",
+              "Trans_type": "Pass",
+              "Submiter": "Availity",
+              "Trans_ID": "ABC276XYZ",
+              "Error_Type": "",
+              "Error_Code": null,
+              "ErrorDescription": null,
+              "Response_Time": "0.01"
+            }
+          ]
+      
+let       columnDefs = [
+        { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "Transaction Date", field: "Date", flex: 1 },
+        { headerName: "Status", field: "Trans_type", flex: 1 },
+        { headerName: "Submitter", field: "Submiter", flex: 1 },
+        { headerName: "Response Time (sec)", field: "Response_Time", flex: 1 },
+    ]
+      
+        return (
+            <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Eligibility 276</h6>
+                <AgGridReact
+                    modules={this.state.modules}
+                    columnDefs={columnDefs}
+                    autoGroupColumnDef={this.state.autoGroupColumnDef}
+                    defaultColDef={this.state.defaultColDef}
+                    suppressRowClickSelection={true}
+                    groupSelectsChildren={true}
+                    debug={true}
+                    rowSelection={this.state.rowSelection}
+                    rowGroupPanelShow={this.state.rowGroupPanelShow}
+                    pivotPanelShow={this.state.pivotPanelShow}
+                    enableRangeSelection={true}
+                    paginationAutoPageSize={false}
+                    pagination={true}
+                    domLayout={this.state.domLayout}
+                    paginationPageSize={this.state.paginationPageSize}
+                    onGridReady={this.onGridReady}
+                    rowData={ClaimRequest}
+                    enableCellTextSelection={true}
+                    
+                    onCellClicked={(event) => {
+                         
+                        if (event.colDef.headerName == "Transaction Id" ) {
+                            this.setState({
+                                showDetails_276: true,                             
+
+                            })
+                        } 
+                        
+
+                    }}
+                >
+                </AgGridReact>
+            </div>
+
+            // <div style={{ paddingTop: '12px' }}>
+            //     <h6>Eligibility</h6>
+            //     <table class="table table-striped border">
+            //         <thead>
+            //             <tr>
+            //                 <th className="color-style" scope="col">Insurance Id</th>
+            //                 <th className="color-style" scope="col">Coverage</th>
+            //                 <th className="color-style" scope="col">Effective From</th>
+            //                 <th className="color-style" scope="col">Allowed Money</th>
+            //                 <th className="color-style" scope="col">Status</th>
+            //             </tr>
+            //         </thead>
+            //         <tbody>
+            //             {row}
+            //         </tbody>
+            //     </table>
+            // </div>
+        )
+    }
+    Eligibilty_270() {
         let  EligibilityAllDtlTypewiseNew= [
             {
               "RecCount": "109",
@@ -1621,17 +1800,17 @@ export class Member_History extends React.Component {
               "Response_Time": "-47.62"
             }
       ]
-        let columnDefs = [
-            { headerName: "Transaction Id", field: "HiPaaSUniqueID", flex: 1  },
-            { headerName: "Date", field: "Date", flex: 1 },
-            { headerName: "Status", field: "Trans_type", flex: 1 },
-            { headerName: "Submiter", field: "Submiter", flex: 1 },
-            { headerName: "Response Time(Sec)", field: "Response_Time", flex: 1 },
-        ]
+let       columnDefs = [
+        { headerName: "Transaction Id", field: "Trans_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "Transaction Date", field: "Date", flex: 1 },
+        { headerName: "Status", field: "Trans_type", flex: 1 },
+        { headerName: "Submitter", field: "Submiter", flex: 1 },
+        { headerName: "Response Time (sec)", field: "Response_Time", flex: 1 },
+    ]
       
         return (
             <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Eligibility</h6>
+                <h6>Eligibility 270</h6>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={columnDefs}
@@ -1651,7 +1830,20 @@ export class Member_History extends React.Component {
                     onGridReady={this.onGridReady}
                     rowData={EligibilityAllDtlTypewiseNew}
                     enableCellTextSelection={true}
-                />
+                    
+                    onCellClicked={(event) => {
+                         
+                        if (event.colDef.headerName == "Transaction Id" ) {
+                            this.setState({
+                                showDetails: true,                             
+
+                            })
+                        } 
+                        
+
+                    }}
+                >
+                </AgGridReact>
             </div>
 
             // <div style={{ paddingTop: '12px' }}>
@@ -1673,17 +1865,1275 @@ export class Member_History extends React.Component {
             // </div>
         )
     }
+    get_Error = (ClaimID, seqid, fileID) => {
+        let query = `{            
+            ClaimErrorStages  (ClaimID:"` + ClaimID + `",SeqID:` + seqid + `,FileID:"` + fileID + `") {
+            FileID
+            ClaimID
+            Stage
+            StageFileID
+            ErrorDesc
+            FileName
+            FileDate
+            MolinaClaimID
+            }
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.real_time_claim_details, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                var data = res.data.ClaimErrorStages
+
+                if (this.state.gridType) {
+                    this.setState({
+                        Error_data: data
+
+                    })
+                } else {
+                    this.sortData(fileID, data)
+                }
+
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
+    getDetails(claimId, fileId, ClaimRefId, fileData, page) {
+        let Claim_Icdcode = ""
+        let AccidentDate = ""
+        let url = Urls.real_time_claim_details
+        let query = `{
+            Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", SeqID: ${ClaimRefId}) {
+              ClaimID
+              ClaimDate
+              ClaimTMTrackingID
+              Subscriber_ID
+              Claim_Amount
+              ClaimStatus
+              ProviderLastName
+              ProviderFirstName
+              SubscriberLastName
+              SubscriberFirstName
+              adjudication_status
+              ClaimLevelErrors
+              AdmissionDate
+              BillingProviderAddress
+              BillingProviderCity_State_Zip
+              ICDCode
+              AccidentDate
+              FileID
+              FieldToUpdate
+              MolinaClaimID
+              LXCount
+              FileName
+              FileDate
+              HL20Count
+              HL22Count
+              HL23Count
+              Receiver
+              ClaimDateTime
+            }
+            Claim837RTLineDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", page: ${page} , GridType:${this.state.gridType}) {
+              ClaimID
+              ServiceLineCount
+              ProviderPaidAmount
+              ServiceDate
+              ProcedureDate
+              PaidServiceUnitCount
+              RecCount
+              MolinaClaimID
+            }
+          }
+          `
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let data = res.data
+                let count = 1
+
+                if (data && data.Claim837RTLineDetails.length > 0) {
+
+                    count = Math.floor(data.Claim837RTLineDetails[0].RecCount / 10)
+                    if (data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
+                        count = count + 1
+                    }
+                }
+
+
+                if (data && res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
+                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "Icdcode") {
+                        Claim_Icdcode = <select id="fao1" className="form-control" style={{ width: "100px" }} onChange={(e) => this.ChangeVal(e)}>
+                            <option value="0" ></option>
+                            {this.getIcdcodeoptions()}
+                        </select>
+                    }
+                    else {
+                        Claim_Icdcode = res.data.Claim837RTDetails[0].ICDCode;
+                    }
+                    let isDate = 0
+                    if (res.data.Claim837RTDetails[0].FieldToUpdate == "AccidentDt") {
+                        isDate = 1
+                        AccidentDate = this.getDatePicker()
+                    }
+                    else {
+
+                        AccidentDate = res.data.Claim837RTDetails[0].AccidentDate;
+                    }
+                    let data = res.data.Claim837RTDetails[0]
+
+                    let claimDetails =
+                        [
+                            { field_name: 'X12 Claim Id', value: data.ClaimID },
+                            { field_name: 'Claim Date', value: data.ClaimDate },
+                            { field_name: 'Subscriber First Name', value: data.SubscriberFirstName },
+                            { field_name: 'Subscriber Last Name', value: data.SubscriberLastName },
+                            { field_name: 'Admission Date', value: data.AdmissionDate },
+                            { field_name: 'Claim Amount', value: data.Claim_Amount },
+                            { field_name: 'Provider Address', value: data.BillingProviderAddress },
+                            { field_name: 'Claim Status', value: data.ClaimStatus },
+                            { field_name: 'ICD Code', value: Claim_Icdcode },
+                            { field_name: 'Accident Date', value: isDate ? "" : AccidentDate, isDate: isDate },
+                            { field_name: '', },
+                            { field_name: '', },
+                        ]
+                    this.setState({
+                        showDetails: true,
+                        claimDetails: claimDetails,
+                        claimLineDetails: res.data.Claim837RTLineDetails,
+                        fileid: data.FileID,
+                        claimid: data.ClaimID,
+                        Icdcodepresent: data.FieldToUpdate,
+                        count: count,
+                        seqID: ClaimRefId,
+                        fileDataDetails: fileData,
+                        //  lineCount: data ? data.LXCount : 0,
+                        Aggrid_ClaimLineData: res.data.Claim837RTLineDetails,
+                        Aggrid_Claim_Info_data: res.data.Claim837RTDetails
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
+    getClaimStages(claimId, fileId, seqId) {
+        let url = Urls.real_time_claim_details
+        let query = `{
+            ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}", SeqID: ${seqId}) {
+              Stage
+              Createdatetime
+            }
+          }
+          `
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res && res.data && res.data.ClaimStagesInbound) {
+                    this.setState({
+                        claimStageDetails: res.data.ClaimStagesInbound,
+                        Aggrid_ClaimStage: res.data.ClaimStagesInbound,
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
+    renderClaimsStatic() {
+        let Claim837RTProcessingSummaryNew = [
+            {
+              "RecCount": "1",
+              "ClaimID": "M1610400873",
+              "ClaimDate": "2020-08-27T05:51:48.448Z",
+              "ClaimTMTrackingID": "13079",
+              "Subscriber_ID": "9461220774",
+              "Claim_Amount": "500",
+              "ClaimStatus": "Accepted",
+              "ProviderLastName": null,
+              "ProviderFirstName": null,
+              "SubscriberLastName": null,
+              "SubscriberFirstName": null,
+              "adjudication_status": null,
+              "ClaimLevelErrors": null,
+              "ClaimUniqueID": "000000000000002",
+              "FileID": "2825123507869164533",
+              "FileName": "837_20201806.txt",
+              "FileCrDate": "2020-08-27",
+              "FileStatus": "Accepted",
+              "F277": "",
+              "F999": "",
+              "TotalLine": null,
+              "TotalLinewise835": null,
+              "BatchName": null,
+              "BatchStatus": null,
+              "Transaction_Status": null,
+              "ClaimRefId": "4122387",
+              "MolinaClaimID": "000000000000002",
+              "FileDate": "2020-08-27T05:51:48.448Z",
+              "ProcessID": "2825123507869164533",
+              "State": "FL",
+              "FileDateTime": "2020-08-27 05:51:48",
+              "ClaimDateTime": "2020-08-27 05:51:48",
+              "Status277CA": "Accepted"
+            },
+          
+            {
+              "RecCount": "27350",
+              "ClaimID": "7706727",
+              "ClaimDate": "2020-08-27T05:07:06.358Z",
+              "ClaimTMTrackingID": "20395",
+              "Subscriber_ID": "2K08WA1WE52",
+              "Claim_Amount": "300",
+              "ClaimStatus": "Accepted",
+              "ProviderLastName": null,
+              "ProviderFirstName": null,
+              "SubscriberLastName": null,
+              "SubscriberFirstName": null,
+              "adjudication_status": null,
+              "ClaimLevelErrors": null,
+              "ClaimUniqueID": "000000000088295",
+              "FileID": "8376823777959845370",
+              "FileName": "FL_8376823777959845370.txt",
+              "FileCrDate": "2020-08-27",
+              "FileStatus": "Accepted",
+              "F277": "",
+              "F999": "",
+              "TotalLine": null,
+              "TotalLinewise835": null,
+              "BatchName": null,
+              "BatchStatus": null,
+              "Transaction_Status": null,
+              "ClaimRefId": "4179516",
+              "MolinaClaimID": "000000000088295",
+              "FileDate": "2020-08-27T05:07:06.358Z",
+              "ProcessID": "8376823777959845370",
+              "State": "FL",
+              "FileDateTime": "2020-08-27 05:07:06",
+              "ClaimDateTime": "2020-08-27 05:07:06",
+              "Status277CA": "Accepted"
+            },
+            {
+                "RecCount": "27350",
+                "ClaimID": "210539",
+                "ClaimDate": "2020-07-07T12:26:50.031Z",
+                "ClaimTMTrackingID": "20289",
+                "Subscriber_ID": "8687890389",
+                "Claim_Amount": "5.75",
+                "ClaimStatus": "Accepted",
+                "ProviderLastName": null,
+                "ProviderFirstName": null,
+                "SubscriberLastName": null,
+                "SubscriberFirstName": null,
+                "adjudication_status": null,
+                "ClaimLevelErrors": null,
+                "ClaimUniqueID": "000000000087301",
+                "FileID": "240349635486892957",
+                "FileName": "FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt",
+                "FileCrDate": "2020-07-07",
+                "FileStatus": "Accepted",
+                "F277": "",
+                "F999": " FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt_07072020.999",
+                "TotalLine": null,
+                "TotalLinewise835": null,
+                "BatchName": null,
+                "BatchStatus": null,
+                "Transaction_Status": null,
+                "ClaimRefId": "4175500",
+                "MolinaClaimID": "000000000087301",
+                "FileDate": "2020-07-07T12:26:50.031Z",
+                "ProcessID": "240349635486892957",
+                "State": "FL",
+                "FileDateTime": "2020-07-07 12:26:50",
+                "ClaimDateTime": "2020-07-07 12:26:50",
+                "Status277CA": "Accepted"
+              },
+            {
+              "RecCount": "27350",
+              "ClaimID": "210511",
+              "ClaimDate": "2020-07-07T12:26:50.031Z",
+              "ClaimTMTrackingID": "20290",
+              "Subscriber_ID": "9525864154",
+              "Claim_Amount": "5.75",
+              "ClaimStatus": "Accepted",
+              "ProviderLastName": null,
+              "ProviderFirstName": null,
+              "SubscriberLastName": null,
+              "SubscriberFirstName": null,
+              "adjudication_status": null,
+              "ClaimLevelErrors": null,
+              "ClaimUniqueID": "000000000087297",
+              "FileID": "240349635486892957",
+              "FileName": "FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt",
+              "FileCrDate": "2020-07-07",
+              "FileStatus": "Accepted",
+              "F277": "",
+              "F999": " FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt_07072020.999",
+              "TotalLine": null,
+              "TotalLinewise835": null,
+              "BatchName": null,
+              "BatchStatus": null,
+              "Transaction_Status": null,
+              "ClaimRefId": "4175499",
+              "MolinaClaimID": "000000000087297",
+              "FileDate": "2020-07-07T12:26:50.031Z",
+              "ProcessID": "240349635486892957",
+              "State": "FL",
+              "FileDateTime": "2020-07-07 12:26:50",
+              "ClaimDateTime": "2020-07-07 12:26:50",
+              "Status277CA": "Accepted"
+            }
+          ]
+      
+      let columnDefs = [
+        { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "X12 Claim Id", field: "ClaimID", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
+        { headerName: "Claim Status", field: "ClaimStatus", width: 140 },
+        { headerName: "Subscriber Id", field: "Subscriber_ID", width: 140 },
+        { headerName: "277CA Status", field: "Status277CA", width: 100 },
+        // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
+        // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
+        { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
+    ]
+      
+        return (
+            <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Claim Information</h6>
+                <AgGridReact
+                    modules={this.state.modules}
+                    columnDefs={columnDefs}
+                    autoGroupColumnDef={this.state.autoGroupColumnDef}
+                    defaultColDef={this.state.defaultColDef}
+                    suppressRowClickSelection={true}
+                    groupSelectsChildren={true}
+                    debug={true}
+                    rowSelection={this.state.rowSelection}
+                    rowGroupPanelShow={this.state.rowGroupPanelShow}
+                    pivotPanelShow={this.state.pivotPanelShow}
+                    enableRangeSelection={true}
+                    paginationAutoPageSize={false}
+                    pagination={true}
+                    domLayout={this.state.domLayout}
+                    paginationPageSize={this.state.paginationPageSize}
+                    onGridReady={this.onGridReady}
+                    rowData={Claim837RTProcessingSummaryNew}
+                    enableCellTextSelection={true}
+                    
+                    onCellClicked={(event) => {
+                         
+                        if (event.colDef.headerName == "Molina Claim Id" ) {
+                      
+                            this.setState({
+                                showerror: true,
+                                claimError_Status: event.data.ClaimStatus,
+                                Error_data: [],
+                                Aggrid_ClaimLineData: [],
+                                Aggrid_Claim_Info_data: [],
+                                Aggrid_ClaimStage: [],
+                            })
+                       
+                        } 
+                        
+
+                    }}
+                >
+                </AgGridReact>
+            </div>
+
+                )
+    }
+
+    _renderError() {
+        if (this.state.Error_data == undefined) { this.state.Error_data = [] }
+        process.env.NODE_ENV == 'development' && console.log("_renderError", this.state.Error_data);
+
+        let columnDefs = this.state.status277CA == "Rejected" ?
+            [
+
+                { headerName: "Stage", field: "Stage", width: 100 },
+                { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
+                { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+
+            ] : [
+
+                { headerName: "Stage", field: "Stage", width: 100 },
+                { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
+                { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+
+            ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    {/* <h6 className="font-size">Claim Error Description</h6> */}
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={this.state.Error_data}
+                        enableCellTextSelection={true}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName == "Error Description" && event.data.ErrorDesc) {
+                                this.setState({
+                                    clickedError: event.data.ErrorDesc
+                                }, () => {
+                                    $('#error_modal').modal('show')
+                                })
+
+                            }
+                        }}
+
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+    _ClaimLineTable() {
+        let Aggrid_ClaimLineData = [
+            {
+              "ClaimID": "M1610400873",
+              "ServiceLineCount": "1",
+              "ProviderPaidAmount": null,
+              "ServiceDate": null,
+              "ProcedureDate": null,
+              "PaidServiceUnitCount": null,
+              "RecCount": "1",
+              "MolinaClaimID": "000000000000002"
+            }
+          ]
+  let columnDefs = [
+            { headerName: "Molina Claim ID", field: "MolinaClaimID" },
+            { headerName: "X12 Claim ID", field: "ClaimID" },
+
+            { headerName: "Service Line No.", field: "ServiceLineCount" },
+            { headerName: " Service Date", field: "ServiceDate" },
+            { headerName: "Procedure Code", field: "ProcedureDate" },
+            { headerName: "Unit", field: "PaidServiceUnitCount", flex: 1 },
+
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <h6 className="font-size">Claim Line Data</h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={Aggrid_ClaimLineData}
+                        enableCellTextSelection={true}
+
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+    _ClaimView_Info_Table() {
+        let Aggrid_Claim_Info_data = [
+            {
+              "ClaimID": "M1610400873",
+              "ClaimDate": "2020-08-27T05:51:48.448Z",
+              "ClaimTMTrackingID": "13079",
+              "Subscriber_ID": "9461220774",
+              "Claim_Amount": "500",
+              "ClaimStatus": "Accepted",
+              "ProviderLastName": null,
+              "ProviderFirstName": null,
+              "SubscriberLastName": "Rose",
+              "SubscriberFirstName": "Coleman",
+              "adjudication_status": null,
+              "ClaimLevelErrors": null,
+              "AdmissionDate": null,
+              "BillingProviderAddress": null,
+              "BillingProviderCity_State_Zip": null,
+              "ICDCode": "ABK:A311",
+              "AccidentDate": null,
+              "FileID": "2825123507869164533",
+              "FieldToUpdate": "",
+              "MolinaClaimID": "000000000000002",
+              "LXCount": "1",
+              "FileName": "837_20201806.txt",
+              "FileDate": "2020-08-27T05:51:48.448Z",
+              "HL20Count": "1",
+              "HL22Count": "1",
+              "HL23Count": "0",
+              "Receiver": "MHFL261055137  ",
+              "ClaimDateTime": "2020-08-27 05:51:48"
+            }
+          ]
+        if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
+        let columnDefs = [
+            // { headerName: " File Name", field: "FileName" },
+            // { headerName: "Receiver", field: "Receiver", width: 100 },
+            { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 120 },
+            { headerName: "X12 Claim Id", field: "ClaimID", width: 100 },
+            { headerName: " HL20 Count", field: "HL20Count", width: 80 },
+            { headerName: "HL22 Count", field: "HL22Count", width: 80 },
+            { headerName: "HL23 Count", field: "HL23Count", width: 80 },
+            { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
+            { headerName: "Subscriber First Name", field: "SubscriberFirstName", width: 140 },
+            { headerName: "Subscriber Last Name", field: "SubscriberLastName", width: 140 },
+            { headerName: "Admission Date", field: "AdmissionDate", width: 140 },
+            { headerName: "Claim Amount", field: "Claim_Amount", width: 100 },
+            { headerName: "Provider Address", field: "BillingProviderAddress", width: 140 },
+            { headerName: "Claim Status", field: "ClaimStatus", width: 100 },
+            { headerName: "ICD Code", field: "ICDCode", width: 100 },
+            { headerName: "Accident Date", field: "AccidentDate", width: 120 },
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={Aggrid_Claim_Info_data}
+                        enableCellTextSelection={true}                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+    renderPaymentStatic() {
+       let PaymentProcessingSummaryNew = [{"RefID":"4043018","RecCount":"4","FileID":"6261215227194493523","FileName":"20200424190846558.Molina.835","FileDate":"2020-04-24 19:08:46","ClaimID":"18227119511","ClaimReceivedDate":"2018-08-14","PatientName":"PEREZMIRANDA","PatientControlNo":"24307362","PayerName":"MOLINA HEALTHCARE OF FLORIDA, INC","TotalChargeAmt":"5343","TotalClaimPaymentAmt":"0","Sender":"MHF260155137   ","Organization":"BLAIR","TransactionType":"1","CheckEFTNo":"EFT2457982","TRN03":"MHF2601551","PayerID":null,"CheckEFTDt":"2018-08-30","AccountNo":null,"CHECKEFTFlag":"ACH","Receiver":"FIS123456789   ","TotalAdjustmentAmount":null,"TotalBillAmount":"21425.9","Days":"16","RemittanceFileName":"20200424190846558.Molina.835","RemittanceSentDate":"2020-04-24 19:08:48","State":"FL","Status":"Validated","ProcessID":"EFT2457982"},{"RefID":"4042998","RecCount":"4","FileID":"6261215227194493523","FileName":"20200424190846558.Molina.835","FileDate":"2020-04-24 19:08:46","ClaimID":"18220123988","ClaimReceivedDate":"2018-08-07","PatientName":"AGUILARFERNANDEZ","PatientControlNo":"24295663","PayerName":"MOLINA HEALTHCARE OF FLORIDA, INC","TotalChargeAmt":"6701","TotalClaimPaymentAmt":"0","Sender":"MHF260155137   ","Organization":"BLAIR","TransactionType":"1","CheckEFTNo":"EFT2457982","TRN03":"MHF2601551","PayerID":null,"CheckEFTDt":"2018-08-30","AccountNo":null,"CHECKEFTFlag":"ACH","Receiver":"FIS123456789   ","TotalAdjustmentAmount":null,"TotalBillAmount":"21425.9","Days":"23","RemittanceFileName":"20200424190846558.Molina.835","RemittanceSentDate":"2020-04-24 19:08:48","State":"FL","Status":"Validated","ProcessID":"EFT2457982"},{"RefID":"4043018","RecCount":"4","FileID":"6261215227194493523","FileName":"20200424190846558.Molina.835","FileDate":"2020-04-24 19:08:46","ClaimID":"18227119511","ClaimReceivedDate":"2018-08-14","PatientName":"PEREZMIRANDA","PatientControlNo":"24307362","PayerName":"MOLINA HEALTHCARE OF FLORIDA, INC","TotalChargeAmt":"5343","TotalClaimPaymentAmt":"0","Sender":"MHF260155137   ","Organization":"BLAIR","TransactionType":"1","CheckEFTNo":"EFT2457982","TRN03":"MHF2601551","PayerID":null,"CheckEFTDt":"2018-08-30","AccountNo":null,"CHECKEFTFlag":"ACH","Receiver":"FIS123456789   ","TotalAdjustmentAmount":null,"TotalBillAmount":"21425.9","Days":"16","RemittanceFileName":"20200424190846558.Molina.835","RemittanceSentDate":"2020-04-24 19:08:48","State":"FL","Status":"Validated","ProcessID":"EFT2457982"},{"RefID":"4042998","RecCount":"4","FileID":"6261215227194493523","FileName":"20200424190846558.Molina.835","FileDate":"2020-04-24 19:08:46","ClaimID":"18220123988","ClaimReceivedDate":"2018-08-07","PatientName":"AGUILARFERNANDEZ","PatientControlNo":"24295663","PayerName":"MOLINA HEALTHCARE OF FLORIDA, INC","TotalChargeAmt":"6701","TotalClaimPaymentAmt":"0","Sender":"MHF260155137   ","Organization":"BLAIR","TransactionType":"1","CheckEFTNo":"EFT2457982","TRN03":"MHF2601551","PayerID":null,"CheckEFTDt":"2018-08-30","AccountNo":null,"CHECKEFTFlag":"ACH","Receiver":"FIS123456789   ","TotalAdjustmentAmount":null,"TotalBillAmount":"21425.9","Days":"23","RemittanceFileName":"20200424190846558.Molina.835","RemittanceSentDate":"2020-04-24 19:08:48","State":"FL","Status":"Validated","ProcessID":"EFT2457982"}]
+
+
+
+
+
+      
+       let columnDefs = [
+        { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Days Aged", field: "Days", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+
+    ]
+
+      
+        return (
+            <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                <h6>Remittance Information</h6>
+                <AgGridReact
+                    modules={this.state.modules}
+                    columnDefs={columnDefs}
+                    autoGroupColumnDef={this.state.autoGroupColumnDef}
+                    defaultColDef={this.state.defaultColDef}
+                    suppressRowClickSelection={true}
+                    groupSelectsChildren={true}
+                    debug={true}
+                    rowSelection={this.state.rowSelection}
+                    rowGroupPanelShow={this.state.rowGroupPanelShow}
+                    pivotPanelShow={this.state.pivotPanelShow}
+                    enableRangeSelection={true}
+                    paginationAutoPageSize={false}
+                    pagination={true}
+                    domLayout={this.state.domLayout}
+                    paginationPageSize={this.state.paginationPageSize}
+                    onGridReady={this.onGridReady}
+                    rowData={PaymentProcessingSummaryNew}
+                    enableCellTextSelection={true}
+                    
+                    onCellClicked={(event) => {
+                         
+                        if (event.colDef.headerName == "Claim Id" ) {
+                      
+                            this.setState({
+                            showpayment: true,
+                               
+                            })
+                       
+                        } 
+                        
+
+                    }}
+                >
+                </AgGridReact>
+            </div>
+
+                )
+    }
+
+   
+    _PaymentLineTable() {
+        let RemittanceViewerClaimServiceDetails = [
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:76805",
+              "ChargeAmount": "886",
+              "PaidAmt": "0",
+              "AdjAmt": "507.8",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "38.9",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:G0383:25",
+              "ChargeAmount": "3648",
+              "PaidAmt": "0",
+              "AdjAmt": "3081.6",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "58.3",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:76805",
+              "ChargeAmount": "886",
+              "PaidAmt": "0",
+              "AdjAmt": "378.2",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "38.9",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:G0383:25",
+              "ChargeAmount": "3648",
+              "PaidAmt": "0",
+              "AdjAmt": "566.4",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "58.3",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:84112",
+              "ChargeAmount": "351",
+              "PaidAmt": "0",
+              "AdjAmt": "240.1",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "11.4",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:76819",
+              "ChargeAmount": "458",
+              "PaidAmt": "0",
+              "AdjAmt": "267.5",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "19.6",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:84112",
+              "ChargeAmount": "351",
+              "PaidAmt": "0",
+              "AdjAmt": "110.9",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "11.4",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            },
+            {
+              "FileID": "6261215227194493523",
+              "ClaimID": "18227119511",
+              "ServiceEndDate": "",
+              "ServiceStartDate": "",
+              "AdjudicatedCPT": "HC:76819",
+              "ChargeAmount": "458",
+              "PaidAmt": "0",
+              "AdjAmt": "190.5",
+              "SubmittedCPT": null,
+              "LineControlNo": null,
+              "ServiceSupplementalAmount": "19.6",
+              "OriginalUnitsofServiceCount": null,
+              "UnitsofServicePaidCount": null,
+              "RecCount": "0"
+            }
+          ]
+          let columnDefs = [
+            { headerName: "Service Start Date", width: 120, field: "ServiceStartDate" },
+            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },
+            { headerName: "Line Item Control #", width: 120, field: "LineControlNo" },
+            { headerName: "Adjudicated CPT", width: 120, field: "AdjudicatedCPT" },
+            { headerName: "	Submitted CPT", width: 120, field: "SubmittedCPT" },
+            { headerName: "Submitted Units", width: 120, field: "" },
+            { headerName: "Allowed Actual", width: 120, field: "" },
+            { headerName: "Paid Units", width: 120, field: "" },
+            { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
+            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
+            { headerName: "Paid Amount", field: "PaidAmt" },
+
+        ]
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                    <h6 className="font-size">Service Line Information</h6>
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={RemittanceViewerClaimServiceDetails}
+                        enableCellTextSelection={true}
+
+                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+    _PaymentView_Info_Table() {
+         let RemittanceViewerClaimDetails = [
+      {
+        "FileID": "6261215227194493523",
+        "FileName": "20200424190846558.Molina.835",
+        "FileDate": "2020-04-24 19:08:46",
+        "Organization": "BLAIR",
+        "Payee_IdentificationQL": "XX",
+        "Payee_IdentificationCode": "1710931522",
+        "CheckEFTNo": "EFT2457982",
+        "PayerIdentifier": "MHF2601551",
+        "PayerName": null,
+        "PayerID": null,
+        "CheckEFTDt": "2018-08-30",
+        "AccountNo": null,
+        "CHECKEFTFlag": "ACH",
+        "ClaimID": "18227119511",
+        "PayerClaimControl": "18227119511",
+        "ClaimReceivedDate": "2018-08-14",
+        "PatientName": "PEREZMIRANDA",
+        "PatientControlNo": "24307362",
+        "TotalChargeAmt": "5343",
+        "TotalClaimPaymentAmt": "0",
+        "PatietResAMT": null,
+        "DigonisCode": null,
+        "DGNQty": "0",
+        "ClaimStatusCode": "2",
+        "FacilityCode": "13",
+        "AdjustmentAmt": null
+      },
+      {
+        "FileID": "6261215227194493523",
+        "FileName": "20200424190846558.Molina.835",
+        "FileDate": "2020-04-24 19:08:46",
+        "Organization": "BLAIR",
+        "Payee_IdentificationQL": "XX",
+        "Payee_IdentificationCode": "1710931522",
+        "CheckEFTNo": "EFT2457982",
+        "PayerIdentifier": "MHF2601551",
+        "PayerName": null,
+        "PayerID": null,
+        "CheckEFTDt": "2018-08-30",
+        "AccountNo": null,
+        "CHECKEFTFlag": "ACH",
+        "ClaimID": "18227119511",
+        "PayerClaimControl": "18227119511",
+        "ClaimReceivedDate": "2018-08-14",
+        "PatientName": "PEREZMIRANDA",
+        "PatientControlNo": "24307362",
+        "TotalChargeAmt": "5343",
+        "TotalClaimPaymentAmt": "0",
+        "PatietResAMT": null,
+        "DigonisCode": null,
+        "DGNQty": "0",
+        "ClaimStatusCode": "2",
+        "FacilityCode": "13",
+        "AdjustmentAmt": null
+      }
+    ]
+
+     
+    let columnDefs = [
+        { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 120 },
+        { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        // { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+        // { headerName: "Days Aged", field: "", width: 100 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
+        { headerName: "Payment Method Code", field: "CHECKEFTFlag", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Patient Control Number", field: "PatientControlNo", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Total Patient Resp", field: "PatietResAMT", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Payer Name", field: "PayerName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Payer claim control No.", field: "PayerClaimControl", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Claim Status Code", field: "ClaimStatusCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Claim Filling Indicator", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Patient ID", field: "", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Provider ID", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Provider Name", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Rendering Provider ID", field: "", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+        { headerName: "Facility Code Value", field: "FacilityCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+
+        { headerName: "DRG Code", field: "DigonisCode", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+
+    ]
+
+
+        return (
+            <div>
+                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+
+                    <AgGridReact
+                        modules={this.state.modules}
+                        columnDefs={columnDefs}
+                        autoGroupColumnDef={this.state.autoGroupColumnDef}
+                        defaultColDef={this.state.defaultColDef}
+                        suppressRowClickSelection={true}
+                        groupSelectsChildren={true}
+                        debug={true}
+                        rowSelection={this.state.rowSelection}
+                        rowGroupPanelShow={this.state.rowGroupPanelShow}
+                        pivotPanelShow={this.state.pivotPanelShow}
+                        enableRangeSelection={true}
+                        paginationAutoPageSize={false}
+                        pagination={true}
+                        domLayout={this.state.domLayout}
+                        paginationPageSize={this.state.paginationPageSize}
+                        onGridReady={this.onGridReady}
+                        rowData={RemittanceViewerClaimDetails}
+                        enableCellTextSelection={true}                    >
+                    </AgGridReact>
+                </div>
+            </div>
+        )
+    }
+
+
+    renderEnrollmentStatic() {
+       let ProcessingSummary834 = [{"NM109_Indetificationcode":"166561046","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6782657","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"166561046","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"400443003","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6782658","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"400443003","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"539401112","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6782681","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"539401112","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"134500008","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6782682","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"134500008","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"544530884","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6782683","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"544530884","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"702617012","INS_Insurer_Maintenance_code":"021","Status1":"Error","RefID":"6782684","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"702617012","error_desc":"Missing member Policy Number","EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"811101177","INS_Insurer_Maintenance_code":"024","Status1":"Error","RefID":"6782685","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"811101177","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"700054331","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6782686","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"700054331","error_desc":"Missing subscriber demographic gender information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"611152222","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6782687","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"611152222","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"539420808","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6784132","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"539420808","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"739421217","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6784133","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"739421217","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"600021002","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6784134","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"600021002","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"600021513","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6784135","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"600021513","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"510012132","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6784136","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"510012132","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"531230884","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6784137","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"531230884","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"561254665","INS_Insurer_Maintenance_code":"021","Status1":"Error","RefID":"6784138","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"561254665","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"822200777","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6784139","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"822200777","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"577712132","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6784140","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"577712132","error_desc":"Missing member Policy Number","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"800052222","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6784141","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"800052222","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"444000333","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6782656","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"444000333","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null}]
+
+       
+        let columnDefs = [
+            { headerName: "Subscriber No", field: "SubscriberNo", width: 250, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Enrollment Type", field: "EnrollmentType", width: 130 },
+            { headerName: "Insurer Status", field: "InsurerStatus", width: 130 },
+            { headerName: "Status", field: "Status1", width: 150 },
+            { headerName: "Error Description", field: "error_desc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            // { headerName: "", field: "Resubmit",width: 100,cellStyle: {  color: '#139DC9', cursor: 'pointer' , fontWeight:'bold'} },
+        ]
+       
+         return (
+             <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                 <h6>Enrollment</h6>
+                 <AgGridReact
+                     modules={this.state.modules}
+                     columnDefs={columnDefs}
+                     autoGroupColumnDef={this.state.autoGroupColumnDef}
+                     defaultColDef={this.state.defaultColDef}
+                     suppressRowClickSelection={true}
+                     groupSelectsChildren={true}
+                     debug={true}
+                     rowSelection={this.state.rowSelection}
+                     rowGroupPanelShow={this.state.rowGroupPanelShow}
+                     pivotPanelShow={this.state.pivotPanelShow}
+                     enableRangeSelection={true}
+                     paginationAutoPageSize={false}
+                     pagination={true}
+                     domLayout={this.state.domLayout}
+                     paginationPageSize={this.state.paginationPageSize}
+                     onGridReady={this.onGridReady}
+                     rowData={ProcessingSummary834}
+                     enableCellTextSelection={true}
+                     
+                     onCellClicked={(event) => {
+                          
+                         if (event.colDef.headerName == "Subscriber No" ) {
+                       
+                             this.setState({
+                             showpayment: true,
+                                
+                             })
+                        
+                         } 
+                         
+ 
+                     }}
+                 >
+                 </AgGridReact>
+             </div>
+ 
+                 )
+     }
+ 
+    
+     _EnrollmentLineTable() {
+        let MemberCoverageDetails834 = [
+            {
+              "FileID": "175",
+              "NM109_Indetificationcode": "400443003",
+              "InsLineCode": "HLT",
+              "StartDate": "20190701",
+              "EndDate": null,
+              "PlanCoverageDesc": "0X026AAD",
+              "SubscriberNo": "400443003",
+              "TransCode": null
+            }
+          ]
+           let columnDefs = [
+            // { headerName: "Subscriber No", field: "SubscriberNo", width: 250, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Subscriber No.", field: "SubscriberNo", width: 250 },
+            { headerName: "Plan Code", field: "InsLineCode", width: 200 },
+            { headerName: "Coverage Start Date", field: "StartDate", width: 250 },
+            { headerName: "Coverage End Date", field: "EndDate", flex: 1 },
+        ]
+ 
+         return (
+             <div>
+                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+                     <h6 className="font-size">Coverage Data
+</h6>
+                     <AgGridReact
+                         modules={this.state.modules}
+                         columnDefs={columnDefs}
+                         autoGroupColumnDef={this.state.autoGroupColumnDef}
+                         defaultColDef={this.state.defaultColDef}
+                         suppressRowClickSelection={true}
+                         groupSelectsChildren={true}
+                         debug={true}
+                         rowSelection={this.state.rowSelection}
+                         rowGroupPanelShow={this.state.rowGroupPanelShow}
+                         pivotPanelShow={this.state.pivotPanelShow}
+                         enableRangeSelection={true}
+                         paginationAutoPageSize={false}
+                         pagination={true}
+                         domLayout={this.state.domLayout}
+                         paginationPageSize={this.state.paginationPageSize}
+                         onGridReady={this.onGridReady}
+                         rowData={MemberCoverageDetails834}
+                         enableCellTextSelection={true}
+ 
+                     >
+                     </AgGridReact>
+                 </div>
+             </div>
+         )
+     }
+     _EnrollmentView_Info_Table() {
+        let MemberDetails834 = [
+            {
+              "FileID": "175",
+              "FileName": "834_UT_20200427 162537",
+              "MemberFName": "Anson",
+              "MemberLName": "Miller",
+              "Telephone": "2515791895",
+              "StreetAddress": "Brooksby Village Way",
+              "PostalCode": "98166",
+              "gender": "M",
+              "SubscriberNo": "400443003",
+              "dateofbirth": "1963-12-02",
+              "City": "Danvers",
+              "State": "UT",
+              "Member_Policy_No": "0X036Y",
+              "Employment_BeginDT": null,
+              "EnrollmentType": "Term",
+              "N1_Plan_insurer_name": "XYX",
+              "Emplymentstatus": "FT",
+              "Department_Agency": null,
+              "RefID": "6782658",
+              "InsurerStatus": "Subscriber",
+              "relationship": "18",
+              "ErrorField": ""
+            }
+          ]
+
+     let columnDefs = [
+         { headerName: "First Name", field: "MemberFName", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+         { headerName: "Last Name", field: "MemberLName", width: 120 },
+         { headerName: "Telephone", field: "Telephone", width: 120  },
+         // { headerName: "835 Response (RAW)", field: "", width: 120, },
+         // { headerName: "Days Aged", field: "", width: 100 , },
+         { headerName: "Address", field: "StreetAddress", width: 200,  },
+         { headerName: "City", field: "City", width: 100,  },
+         { headerName: "State", field: "State", width: 100,  },
+         { headerName: "Postal Code", field: "PostalCode", width: 150,  },
+         { headerName: "Insurer Name", field: "N1_Plan_insurer_name", width: 150,  },
+         { headerName: "Dob", field: "dateofbirth", width: 120  },
+         { headerName: "Gender", field: "gender", width: 120  },
+         { headerName: "Subscriber No", field: "SubscriberNo", width: 140,  },
+         { headerName: "Department Agency", field: "Department_Agency", width: 120  },
+         { headerName: "Policy No", field: "Member_Policy_No", width: 120  },
+         { headerName: "Enrollment Type", field: "Enrollment_type", width: 120  },
+         { headerName: "Employment Begin Date", field: "DepartmentNo", width: 120  },
+         { headerName: "Insurer Status", field: "InsurerStatus", width: 120  },
+         { headerName: "Relationship", field: "member_relationship_name", width: 120  },
+         { headerName: "Employment Status", field: "Emplymentstatus", flex:1 },
+ 
+ 
+     ]
+ 
+ 
+         return (
+             <div>
+                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+ 
+                     <AgGridReact
+                         modules={this.state.modules}
+                         columnDefs={columnDefs}
+                         autoGroupColumnDef={this.state.autoGroupColumnDef}
+                         defaultColDef={this.state.defaultColDef}
+                         suppressRowClickSelection={true}
+                         groupSelectsChildren={true}
+                         debug={true}
+                         rowSelection={this.state.rowSelection}
+                         rowGroupPanelShow={this.state.rowGroupPanelShow}
+                         pivotPanelShow={this.state.pivotPanelShow}
+                         enableRangeSelection={true}
+                         paginationAutoPageSize={false}
+                         pagination={true}
+                         domLayout={this.state.domLayout}
+                         paginationPageSize={this.state.paginationPageSize}
+                         onGridReady={this.onGridReady}
+                         rowData={MemberDetails834}
+                         enableCellTextSelection={true}                    >
+                     </AgGridReact>
+                 </div>
+             </div>
+         )
+     }
+    renderDetails(flag) {
+
+        let  Eligibilty270Request=           
+              "ISA*00*Authorizat*00*Security        I*ZZ*Interchange      Sen*ZZ*Interchange Rec*141001*1037*^*00501*000031033*0*T*:~GS*HS*Sample Sen*Sample Rec*20141001*1037*123456*X*005010X279A1~ST*270*1234*005010X279A1~BHT*0022*13*10000033*20141001*1319~HL*1**20*1~NM1*PR*2*ABC COMPANY*****PI*842610001~HL*2*1*21*1~NM1*1P*2*BONE AND JOINT CLINIC*****XX*1234567893~HL*3*2*22*0~TRN*1*93175-0001*9877281234~NM1*IL*1*Coleman*Rose****MI*123456822~DMG*D8*19430519*F~DTP*291*D8*20141001~EQ*30~SE*13*1234~GE*1*123456~IEA*1*000031033~"
+
+         
+        return (
+            <div className="row">
+                <div className={"col-12"}>
+                    <div className="top-padding clickable" href={'#' + 'hello' + flag} >{'Transaction Request'}</div>
+                    <div className="border-view  breakword" id={'hello' + flag}>{ Eligibilty270Request}</div>
+                </div>
+            </div>
+        )
+    }
+    renderRespones(flag) {
+
+        var Eligibilty271Response= "ISA*00*Authorizat*00*Security     I*ZZ*Interchange Rec*ZZ*Interchange Sen*141001*1037*^*00501*000031033*0*T*:~GS*HB*Sample Rec*Sample Sen*20141001*1037*123456*X*005010X279A1~ST*271*4321*005010X279A1~BHT*0022*11*10001234*20141001*1319~HL*1**20*1~NM1*PR*2*ABC COMPANY*****PI*842610001~HL*2*1*21*1~NM1*1P*2*BONE AND JOINT CLINIC*****XX*1234567893~HL*3*2*22*0~TRN*2*93175-0001*9877281234~NM1*IL*1*SMITH*ROBERT****MI*11122333301~N3*15197 BROADWAY AVENUE*APT 215~N4*KANSAS CITY*MO*64108~DMG*D8*19430519*M~DTP*291*D8*20141001~EB*1**30^1^33^35^47^48^50^86^88^98^AL^MH^UC*HM*GOLD 123 PLAN~EB*L~LS*2120~NM1*P3*1*JONES*MARCUS****XX*2345678900~LE*2120~EB*C**30*HM**23*100*****Y~EB*C**30*HM**23*250*****N~EB*C**30*HM**29*100*****Y~EB*C**30*HM**29*250*****N~EB*A**30^1^33^35^47^48^50^86^88^98^AL^MH^UC*HM****.1****Y~EB*A**30^1^33^35^47^48^50^86^88^98^AL^MH^UC*HM****.2****N~EB*B**30^1^33^35^47^48^50^86^88^98^AL^MH^UC*HM***10*****Y~EB*B**30^1^33^35^47^48^50^86^88^98^AL^MH^UC*HM***30*****N~ SE*27*4321~GE*1*123456~ IEA*1*000031033~"
+            
+          
+        return (
+            <div className="row">
+                <div className={"col-12"}>
+                    <div className="top-padding clickable" href={'#' + 'hello' + flag} >{'Transaction Response'}</div>
+                    <div className="border-view  breakword" id={'hello' + flag}>{ Eligibilty271Response}</div>
+                </div>
+            </div>
+        )
+    }
+    renderDetails_276(flag) {
+
+        let Claim276Request = "ISA*00*   *00*   *ZZ*SUBMITTERID *ZZ*CMS   *160127*0734*^*00501*000005014*1*P*|~GS*HS*SUBMITTERID*CMS*20160127*073411*5014*X*005010X279A1~ST*276*3707*005010X212~BHT*0010*13*ABC276XYZ*20120128*1425~HL*1**20*1~NM1*PR*2*BCBSDISNEY*****PI*8584537845~HL*2*1*21*1~NM1*41*2*UCLA MEDICAL CENTER*****46*1982~HL*3*2*19*1~NM1*1P*2*UCLA MEDICALCENTER*****XX*1215193883~HL*4*3*22*0~DMG*D8*19281118*M~NM1*IL*1*MOUSE*MICKEY****MI*60345914A~TRN*1*ABC9001~REF*BLT*221~REF*EJ*ABC9001~DTP*472*D8*20120124~HL*5*3*22*0~DMG*D8*19340619*M~NM1*IL*1*Coleman*Rose****MI*60345914B~TRN*1*ABC9002~REF*BLT*221~REF*EJ*ABC9002~DTP*472*D8*20120124~SVC*HC:98765*150**0450***1~SE*24*3707~GE*1*5014~IEA*1*000005014~"
+     
+
+         
+        return (
+            <div className="row">
+                <div className={"col-12"}>
+                    <div className="top-padding clickable" href={'#' + 'hello' + flag} >{ 'Transaction Request'}</div>
+                    <div className="border-view  breakword" id={'hello' + flag}>{ Claim276Request}</div>
+                </div>
+            </div>
+        )
+    }
+    renderRespones_276(flag) {
+
+        let Claim277Response ="ISA*00*   *00*   *ZZ*SUBMITTERID *ZZ*CMS   *160127*0734*^*00501*000005014*1*P*|~GS*HS*SUBMITTERID*CMS*20160127*073411*5014*X*005010X279A1~ST*277*3708*005010X212~BHT*0010*08*ABC276XYZ*20120128*1426*DG~HL*1**20*1~NM1*PR*2*BCBS DISNEY*****PI*8584537845~HL*2*1*21*1~NM1*41*2*UCLA MEDICAL CENTER*****46*1982~HL*3*2*19*1~NM1*1P*2*UCLA MEDICAL CENTER*****XX*1215193883~HL*4*3*22*0~DMG*D8*19281118*M~NM1*QC*1*MOUSE*MICKEY****MI*60345914A~TRN*1*ABC9001~STC*P3:60*20120128**225*0~REF*BLT*221~REF*EJ*ABC9001~DTP*472*D8*20120124~HL*5*3*22*0~DMG*D8*19340619*M~NM1*QC*1*Coleman*Rose****MI*60345914B~TRN*1*ABC9002~REF*BLT*221~REF*EJ*ABC9002~DTP*472*D8*20120124~SVC*HC:98765*150**0450***1~STC*F1:65*20120128~SE*26*3708~GE*1*5014~IEA*1*000005014~"
+        return (
+            <div className="row">
+                <div className={"col-12"}>
+                    <div className="top-padding clickable" href={'#' + 'hello' + flag} >{'Transaction Response'}</div>
+                    <div className="border-view  breakword" id={'hello' + flag}>{ Claim277Response}</div>
+                </div>
+            </div>
+        )
+    }
+    renderClaims = () => {
+        return (
+            <div>
+                {/* {this._renderList()} */}
+                {this.renderClaimsStatic()}
+                {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                {this.state.showerror ? this._ClaimLineTable() : null}
+            </div>
+        )
+    }
+    renderPayment = () => {
+        return (
+            <div>
+                {/* {this._renderList()} */}
+                {this.renderPaymentStatic()}
+               { this.state.showpayment ?this._PaymentView_Info_Table():null}
+                {   this.state.showpayment ? this._PaymentLineTable(): null}
+            </div>
+        )
+    }
+    renderEnrollement_834 = () => {
+        return (
+            <div>
+                {/* {this._renderList()} */}
+                {this.renderEnrollmentStatic()}
+               { this.state.showpayment ?this._EnrollmentView_Info_Table():null}
+                {   this.state.showpayment ? this._EnrollmentLineTable(): null}
+            </div>
+        )
+    }
+    renderHeader() {
+        return (
+            <div style={{ color: "#4290F0" }}>
+                <br></br>
+                <img src={person} style={{ fontWeight: "500", marginTop: "10px", marginBottom: "5px", fontSize: '20px' }} alt="" width="40" height="40" title="person" />
+                <label style={{ color: "#139dc9", fontWeight: "500", fontSize: '20px' }}> {this.state.FirstName} {this.state.LastName}
+                </label>
+
+                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '15px' }}>  Dob : {this.state.DOB}
+                </label>
+
+                <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '15px' }}>  Gender : {this.state.Gender}
+                </label>
+
+                {/* <label style={{ color: "grey", marginLeft: "20px", fontWeight: "400", fontSize: '15px' }}>  Identifier : {this.state.patientId_id}
+                </label> */}
+                <hr style={{ margin: '8px' }}></hr>
+            </div>
+        )
+    }
 
     render() {
         var title = ""
         if (this.props.location.state && this.props.location.state.data && this.props.location.state.data[0].Total == "error") {
-            title = "Customer Service";
+            title = "Member History";
         }
         else {
-            title = "Customer Service ";
+            title = "Member History ";
         }
 
  
+       
 
    
         return (
@@ -1691,13 +3141,27 @@ export class Member_History extends React.Component {
             <div>
                 <h5 className="headerText">{title}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {/* {this._renderTopbar()} */}
-                {this.renderFilters()}
+                {/* {this.renderFilters()} */}
                 <div>
                     {this.renderTableEnrollmentLevel()}
-                    {this._renderSummaryDetails()}
-                    {this.state.Eligibilty ? this.Eligibilty(this.state.conditionArray) : null}
+                    {this.state.showMemberInfo ? this.renderHeader():null}
+                    { this.state.showMemberInfo ? this._renderSummaryDetails():null}
+                    {this.state.Eligibilty_270 ? this.Eligibilty_270(): null}
+                    {this.state.Eligibilty ? this.Eligibilty(): null}                  
+                  
+                    {this.state.showDetails ? this.renderDetails() : null}
+                    {this.state.showDetails ? this.renderRespones() : null}
+                    {this.state.showDetails_276 ? this.renderDetails_276() : null}
+                    {this.state.showDetails_276 ? this.renderRespones_276() : null}
+                        
+                    
+                  
+                  
+                  
                 {/* {this.state.Claim ? this.Claim() : null} */}
-                {this.state.Claim && this.state.ClaimCount > 0 ? this.renderClaims() : null}
+                {this.state.Claim ? this.renderClaims() : null}
+                {this.state.Payment_835 ? this.renderPayment() : null}
+                {this.state.Enrollment_834 ? this.renderEnrollement_834() : null}
            
                     {/* {this.state.showDetailsEnrollment ? this.renderSummary() : null} */}
                 </div>
