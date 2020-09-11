@@ -79,8 +79,11 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "Claim Status", field: "ClaimStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "	Subscriber Id", field: "Subscriber_ID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "277CA Status", field: "Status277CA", width: 100 },
-                { headerName: "999", field: "F999", width: 240, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277CA", field: "F277", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "835 Process Id", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                // { headerName: "999", field: "F999", width: 240, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                // { headerName: "277CA", field: "F277", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+
+
                 // { headerName: "HiPaaS Status", field: "Transaction_Status", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
 
                 // { headerName: "Adjudication Status", field: "adjudication_status", width: 100 },
@@ -222,6 +225,28 @@ export class ClaimProcessingSummary extends React.Component {
             }, () => {
                 this.gotoDetails()
             })
+        } 
+        if (event.colDef.headerName == "835 Process Id" && event.data.ProcessID835) {
+            sessionStorage.setItem('isOutbound', true)
+            let data = [
+                {
+                    apiflag: '0',
+                    State: 'n',
+                    selectedTradingPartner: 'n',
+                    startDate: 'n',
+                    endDate: 'n',
+                    transactionId: 'n',
+                    status: 'n',
+                    count: 'n',
+                    incoming_fileId: event.data.ProcessID835
+                }
+            ]
+            this.props.history.push('/' + Strings.claimPayment_835_details, {
+                data: data
+            })
+
+            window.location.reload()
+
         }
     }
 
@@ -283,6 +308,7 @@ export class ClaimProcessingSummary extends React.Component {
               FileDateTime
               ClaimDateTime
               Status277CA
+              ProcessID835
             }
           }`
         return (

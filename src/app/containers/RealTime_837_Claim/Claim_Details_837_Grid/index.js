@@ -481,7 +481,7 @@ export class Claim_Details_837_Grid extends React.Component {
             this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
             this.getDetails(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId, "", 1)
             this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId)
-        }else if(event.colDef.headerName == "835 Process Id"){
+        }else if(event.colDef.headerName == "835 Process Id" && event.data.ProcessID835){
             sessionStorage.setItem('isOutbound', true)
             
             let data = [   

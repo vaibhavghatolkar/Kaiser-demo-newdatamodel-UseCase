@@ -2267,7 +2267,7 @@ let       columnDefs = [
       
         return (
             <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                <h6>Claim Information</h6>
+                <h6>Claims</h6>
                 <AgGridReact
                     modules={this.state.modules}
                     columnDefs={columnDefs}
@@ -3166,18 +3166,7 @@ let       columnDefs = [
     }
 
     render() {
-        var title = ""
-        if (this.props.location.state && this.props.location.state.data && this.props.location.state.data[0].Total == "error") {
-            title = "Member History";
-        }
-        else {
-            title = "Member History ";
-        }
-
- 
-       
-
-   
+        var title = "Member History "
         return (
 
             <div>
