@@ -181,7 +181,7 @@ export class ClaimProcessingSummary extends React.Component {
             { header: 'Accepted Claims', value: this.state.Accepted },
             { header: 'Rejected Claims', value: this.state.Rejected },
             // { header: '999', value: this.state.Total999, style: "red summary-title" },
-            { header: 'Load in MCG', value: this.state.loaded, style: "green summary-title" },
+            // { header: 'Load in MCG', value: this.state.loaded, style: "green summary-title" },
             // { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
             { header: 'Pending', value: this.state.Pending, style: "orange summary-title" },
             { header: 'Paid', value: this.state.Paid },

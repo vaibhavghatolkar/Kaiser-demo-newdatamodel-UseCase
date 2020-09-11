@@ -91,7 +91,7 @@ export class RealTimeDashboard_New extends React.Component {
                 { headerName: "File Date", field: "FileDateTime", width: 100 },
                 { headerName: "File Status", field: "FileStatus", width: 80 },
                 { headerName: "Load Status", field: "Status", width: 80 },
-                { headerName: "MCG Load Status", field: "MCGStatus", width: 100 },
+                // { headerName: "MCG Load Status", field: "MCGStatus", width: 100 },
                 { headerName: "Submitter", field: "Sender", width: 80 },
                 { headerName: "Total Claims", field: "Claimcount", width: 100 },
                 { headerName: "Rejected Claims", field: "Rejected", flex: 1 },

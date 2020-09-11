@@ -383,7 +383,7 @@ export class Claim_Details_837_Grid extends React.Component {
                 { headerName: "File Status", field: "FileStatus", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Submitter", field: "Sender", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Load Status", field: "Status", width: 80 },
-                { headerName: "MCG Status", field: "MCGStatus", width: 80 },
+                // { headerName: "MCG Status", field: "MCGStatus", width: 80 },
                 { headerName: "Total Claims", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Rejected Claims", field: "Rejected", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Error Description", field: "FileLevelError", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
