@@ -1522,7 +1522,7 @@ export class Member_History extends React.Component {
             { name: '270', value: 3 , color: '#00C0EF' },
             { name: '276', value: 2, color: '#00C0EF' },
             { name: 'Claims', value:4 , color: '#F39C12' },
-            { name: '835', value:4 , color: '#00C0EF' },
+            // { name: '835', value:4 , color: '#00C0EF' },
           
          
         ]
@@ -1598,7 +1598,9 @@ export class Member_History extends React.Component {
             showDetails:false,
             showDetails_276:false,
             Payment_835: false,
-            Enrollment_834:false
+            Enrollment_834:false,
+            showEnrollmemt:false,
+            showpayment:false
           
         })
     }
@@ -1615,7 +1617,9 @@ export class Member_History extends React.Component {
             showConditionTable: false,
             showDetails:false,
             showDetails_276:false,
-            Enrollment_834:false
+            Enrollment_834:false,
+            showEnrollmemt:false,
+            showpayment:false
         })
     }
     onClickClaim = (key) => {
@@ -1631,7 +1635,9 @@ export class Member_History extends React.Component {
             showConditionTable: false,
             showDetails:false,
             showDetails_276:false,
-            Enrollment_834:false
+            Enrollment_834:false,
+            showEnrollmemt:false,
+            showpayment:false
         })
     }
     onClickshowMedicationTable = (key) => {
@@ -1647,7 +1653,9 @@ export class Member_History extends React.Component {
             showConditionTable: false,
             showDetails:false,
             showDetails_276:false,
-            Enrollment_834:false
+            Enrollment_834:false,
+            showEnrollmemt:false,
+            showpayment:false
         })
     }
 
@@ -1664,7 +1672,9 @@ export class Member_History extends React.Component {
             showAllergyIntoleranceTable: false,
             showConditionTable: false,
             showDetails:false,
-            showDetails_276:false
+            showDetails_276:false,
+            showEnrollmemt:false,
+            showpayment:false
         })
     }
 
@@ -2866,7 +2876,7 @@ let       columnDefs = [
                          if (event.colDef.headerName == "Subscriber No" ) {
                        
                              this.setState({
-                             showpayment: true,
+                                showEnrollmemt:true,
                                 
                              })
                         
@@ -3097,8 +3107,8 @@ let       columnDefs = [
             <div>
                 {/* {this._renderList()} */}
                 {this.renderEnrollmentStatic()}
-               { this.state.showpayment ?this._EnrollmentView_Info_Table():null}
-                {   this.state.showpayment ? this._EnrollmentLineTable(): null}
+               { this.state.showEnrollmemt ?this._EnrollmentView_Info_Table():null}
+                {   this.state.showEnrollmemt ? this._EnrollmentLineTable(): null}
             </div>
         )
     }
@@ -3165,8 +3175,7 @@ let       columnDefs = [
            
                     {/* {this.state.showDetailsEnrollment ? this.renderSummary() : null} */}
                 </div>
-                {this.errorDialogBox()}
-                {this.MemberInfoDialogbox()}
+             
             </div>
         );
     }
