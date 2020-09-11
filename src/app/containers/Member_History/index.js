@@ -65,7 +65,7 @@ export class Member_History extends React.Component {
             filter_firstName: '',
             filter_lastName: '',
 
-            State: condition && props.location.state.data[0].State && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : 'UT',
+            State: condition && props.location.state.data[0].State && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             startDate: condition && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: condition && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             subtitle: condition && props.location.state.data[0] && props.location.state.data[0].subtitle ? props.location.state.data[0].subtitle : '',
@@ -1221,7 +1221,7 @@ export class Member_History extends React.Component {
                                     showConditionTable: false,
                                     showDetails:false,
                                     showDetails_276:false,
-                                    Enrollment_834:false,
+                                    Enrollment_834:true,
                                     showEnrollmemt:false,
                                     showpayment:false
 
@@ -1377,14 +1377,14 @@ export class Member_History extends React.Component {
                             }}
                         />
                     </div>
-                    <div className="form-group col-2">
+                    {/* <div className="form-group col-2">
                         <div className="list-dashboard">Date of birth</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={this.state.filter_dob ? new Date(moment(this.state.filter_dob).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handledobChange}
                             maxDate={new Date(moment().format('YYYY-MM-DD hh:mm'))}
                         />
-                    </div>
+                    </div> */}
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Policy No</div>
                         <input className="form-control input-style-autocomplete" type="text"
@@ -1396,7 +1396,7 @@ export class Member_History extends React.Component {
                             }}
                         />
                     </div> */}
-                    <div className="col-2">
+                    {/* <div className="col-2">
                         <div className="btnDesign clickable"
                             style={{ textAlign: 'center', width: '80%', marginTop: '20px' }}
                             onClick={() => {
@@ -1431,11 +1431,11 @@ export class Member_History extends React.Component {
                                 })
                             }}>
                             Add
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
-            </div>
+          
         )
     }
 
@@ -2100,7 +2100,8 @@ let       columnDefs = [
     renderClaimsStatic() {
         let Claim837RTProcessingSummaryNew = [
             {
-              "RecCount": "1",
+              "ProcessID835": "12345678",
+              "RecCount": "27350",
               "ClaimID": "M1610400873",
               "ClaimDate": "2020-08-27T05:51:48.448Z",
               "ClaimTMTrackingID": "13079",
@@ -2134,11 +2135,11 @@ let       columnDefs = [
               "ClaimDateTime": "2020-08-27 05:51:48",
               "Status277CA": "Accepted"
             },
-          
             {
+              "ProcessID835": "12345678634856",
               "RecCount": "27350",
               "ClaimID": "7706727",
-              "ClaimDate": "2018-05-17T05:07:06.358Z",
+              "ClaimDate": "2018-06-14T05:07:06.358Z",
               "ClaimTMTrackingID": "20395",
               "Subscriber_ID": "2K08WA1WE52",
               "Claim_Amount": "300",
@@ -2171,47 +2172,13 @@ let       columnDefs = [
               "Status277CA": "Accepted"
             },
             {
-                "RecCount": "27350",
-                "ClaimID": "210539",
-                "ClaimDate": "2017-04-07T12:26:50.031Z",
-                "ClaimTMTrackingID": "20289",
-                "Subscriber_ID": "8687890389",
-                "Claim_Amount": "5.75",
-                "ClaimStatus": "Accepted",
-                "ProviderLastName": null,
-                "ProviderFirstName": null,
-                "SubscriberLastName": null,
-                "SubscriberFirstName": null,
-                "adjudication_status": null,
-                "ClaimLevelErrors": null,
-                "ClaimUniqueID": "000000000087301",
-                "FileID": "240349635486892957",
-                "FileName": "FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt",
-                "FileCrDate": "2020-07-07",
-                "FileStatus": "Accepted",
-                "F277": "",
-                "F999": " FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt_07072020.999",
-                "TotalLine": null,
-                "TotalLinewise835": null,
-                "BatchName": null,
-                "BatchStatus": null,
-                "Transaction_Status": null,
-                "ClaimRefId": "4175500",
-                "MolinaClaimID": "000000000087301",
-                "FileDate": "2020-07-07T12:26:50.031Z",
-                "ProcessID": "240349635486892957",
-                "State": "FL",
-                "FileDateTime": "2020-07-07 12:26:50",
-                "ClaimDateTime": "2020-07-07 12:26:50",
-                "Status277CA": "Accepted"
-              },
-            {
+              "ProcessID835": "13456567890123",
               "RecCount": "27350",
               "ClaimID": "210511",
-              "ClaimDate": "2016-03-07T12:26:50.031Z",
+              "ClaimDate": "2017-05-07T12:26:50.031Z",
               "ClaimTMTrackingID": "20290",
               "Subscriber_ID": "9525864154",
-              "Claim_Amount": "5.75",
+              "Claim_Amount": "700",
               "ClaimStatus": "Accepted",
               "ProviderLastName": null,
               "ProviderFirstName": null,
@@ -2239,8 +2206,50 @@ let       columnDefs = [
               "FileDateTime": "2020-07-07 12:26:50",
               "ClaimDateTime": "2020-07-07 12:26:50",
               "Status277CA": "Accepted"
-            }
-          ]
+            },
+            {
+              "ProcessID835": "13456567890123",
+              "RecCount": "27350",
+              "ClaimID": "210539",
+              "ClaimDate": "2016-03-15T12:26:50.031Z",
+              "ClaimTMTrackingID": "20289",
+              "Subscriber_ID": "8687890389",
+              "Claim_Amount": "500",
+              "ClaimStatus": "Accepted",
+              "ProviderLastName": null,
+              "ProviderFirstName": null,
+              "SubscriberLastName": null,
+              "SubscriberFirstName": null,
+              "adjudication_status": null,
+              "ClaimLevelErrors": null,
+              "ClaimUniqueID": "000000000087301",
+              "FileID": "240349635486892957",
+              "FileName": "FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt",
+              "FileCrDate": "2020-07-07",
+              "FileStatus": "Accepted",
+              "F277": "",
+              "F999": " FL_WE_837P_m837_1.51062_1.20200129_1.0dtjo_01292020071042117_1.txt_07072020.999",
+              "TotalLine": null,
+              "TotalLinewise835": null,
+              "BatchName": null,
+              "BatchStatus": null,
+              "Transaction_Status": null,
+              "ClaimRefId": "4175500",
+              "MolinaClaimID": "000000000087301",
+              "FileDate": "2020-07-07T12:26:50.031Z",
+              "ProcessID": "240349635486892957",
+              "State": "FL",
+              "FileDateTime": "2020-07-07 12:26:50",
+              "ClaimDateTime": "2020-07-07 12:26:50",
+              "Status277CA": "Accepted"
+            }] 
+      
+      
+      
+      
+      
+      
+    
       
       let columnDefs = [
         { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
@@ -2251,7 +2260,9 @@ let       columnDefs = [
         { headerName: "277CA Status", field: "Status277CA", width: 100 },
         // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
         // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
-        { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
+        { headerName: "Claim Amount", field: "Claim_Amount", width: 100},
+       
+        { headerName: "835 Process Id", field: "ProcessID835", flex: 1 },
     ]
       
         return (
@@ -2857,7 +2868,7 @@ let       columnDefs = [
 
 
     renderEnrollmentStatic() {
-       let ProcessingSummary834 = [{"NM109_Indetificationcode":"166561046","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6782657","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"400443003","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6782658","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"539401112","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6782681","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"904226041","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6782682","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"544530884","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6782683","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"702617012","INS_Insurer_Maintenance_code":"021","Status1":"Error","RefID":"6782684","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"702617012","error_desc":"Missing member Policy Number","EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"811101177","INS_Insurer_Maintenance_code":"024","Status1":"Error","RefID":"6782685","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"811101177","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"700054331","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6782686","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"700054331","error_desc":"Missing subscriber demographic gender information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"611152222","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6782687","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"611152222","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"539420808","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6784132","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"539420808","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"739421217","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6784133","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"739421217","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"600021002","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6784134","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"600021002","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"600021513","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6784135","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"600021513","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"510012132","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6784136","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"510012132","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"531230884","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6784137","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"531230884","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"561254665","INS_Insurer_Maintenance_code":"021","Status1":"Error","RefID":"6784138","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"561254665","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"822200777","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6784139","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"822200777","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"577712132","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6784140","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"577712132","error_desc":"Missing member Policy Number","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"800052222","INS_Insurer_Maintenance_code":"001","Status1":"Error","RefID":"6784141","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"800052222","error_desc":"Missing subscriber demographic date of birth information missing","EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":"Resubmit"},{"NM109_Indetificationcode":"444000333","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6782656","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"444000333","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null}]
+        let ProcessingSummary834 = [{"NM109_Indetificationcode":"166561046","INS_Insurer_Maintenance_code":"021","Status1":"Verified","RefID":"6782657","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Add","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"400443003","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6782658","INS_Insurer_Status":"Y","INS_Insurer_relationship":"18","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"539401112","INS_Insurer_Maintenance_code":"024","Status1":"Verified","RefID":"6782681","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Term","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"904226041","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6782682","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null},{"NM109_Indetificationcode":"544530884","INS_Insurer_Maintenance_code":"001","Status1":"Verified","RefID":"6782683","INS_Insurer_Status":"Y","INS_Insurer_relationship":"53","FileID":"175","SubscriberNo":"904226041","error_desc":null,"EnrollmentType":"Change","InsurerStatus":"Subscriber","Resubmit":null}]
 
        
         let columnDefs = [
@@ -3172,7 +3183,7 @@ let       columnDefs = [
             <div>
                 <h5 className="headerText">{title}{this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {/* {this._renderTopbar()} */}
-                {/* {this.renderFilters()} */}
+                {this.renderFilters()}
                 <div>
                     {this.renderTableEnrollmentLevel()}
                     {this.state.showMemberInfo ? this.renderHeader():null}
