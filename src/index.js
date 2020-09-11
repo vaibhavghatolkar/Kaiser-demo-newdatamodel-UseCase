@@ -266,7 +266,7 @@ class PrivateRoute extends React.Component {
                                                     :
 
                                                     <Redirect to={{
-                                                        pathname: '/' + Strings.Sepsis_Dashboard, state: { data }
+                                                        pathname: '/' + Strings.RealTimeDashboard, state: { data }
                                                     }} />
                                             ) : <Redirect to="/" />
                                     }

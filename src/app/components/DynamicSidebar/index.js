@@ -228,6 +228,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 205) { name = Strings._ClaimPayment_835_ProcessingSummary }
         else if (index == 206) { name = Strings.claimPayment_835_details }
         else if (index == 207) { name = Strings._Inbound_response_999 }
+        else if (index == 208) { name = Strings.Member_History }
 
         // else if (index == 121) { name = Strings.Outbound_StatewiseTradingPartner }
         // else if (index == 38) { name = Strings.TransactionSetup_New }
