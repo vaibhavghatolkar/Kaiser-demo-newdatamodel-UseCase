@@ -556,8 +556,8 @@ export class Common_837 extends React.Component {
         let stage_3 = [
             { 'header': 'Claim Status' },
             { 'name': 'Paid', 'value': 8000 },
-            { 'name': 'Denied', 'value': 500 },
-            { 'name': 'WIP 0-30', 'value':  7500 },
+            { 'name': 'Denied', 'value': 100 },
+            { 'name': 'WIP 0-30', 'value':  7900 },
             { 'name': 'WIP 30-60', 'value': 6000 },
             { 'name': 'WIP >60', 'value': 5000 },
         ]
