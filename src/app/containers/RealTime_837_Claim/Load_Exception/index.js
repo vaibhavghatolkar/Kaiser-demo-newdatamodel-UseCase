@@ -99,7 +99,7 @@ export class Load_Exception extends React.Component {
                 { headerName: "Submitter", field: "Sender", width: 80 },
 
                 { headerName: "Load Status", field: "Status", width: 80 },
-                { headerName: "MCG Status", field: "MCGStatus", width: 80 },
+                // { headerName: "MCG Status", field: "MCGStatus", width: 80 },
                 { headerName: "Total Claims", field: "Claimcount", width: 80 },
                 // { headerName: "Rejected Claims", field: "Rejected", flex: 1 },
                 // { headerName: "Error Description", field: "FileLevelError",width:700 ,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal'}  },

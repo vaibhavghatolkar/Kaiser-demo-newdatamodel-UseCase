@@ -226,7 +226,7 @@ export class Common_837 extends React.Component {
                     { name: '999', value: this.state.total_999 },
                     { name: 'Reconciled Files | Error', value: reconciled, second_val: reconciledError },
                     // { name: 'Load in MCG | Error', value: loaded, second_val: loadedError },
-                    { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
+                    // { name: 'HiPaaS | MCG', value: processing, second_val: MCGLoadingFiles },
                     { name: '277CA', value: this.state.total277CA },
                 ]
 
@@ -555,11 +555,11 @@ export class Common_837 extends React.Component {
         // ]
         let stage_3 = [
             { 'header': 'Claim Status' },
-            { 'name': 'Paid', 'value': 6000 },
-            { 'name': 'WIP', 'value': 8000 },
-            { 'name': '0-30', 'value':  2000 },
-            { 'name': '30-60', 'value': 4000 },
-            { 'name': '>60', 'value': 2000 },
+            { 'name': 'Paid', 'value': 8000 },
+            { 'name': 'Denied', 'value': 500 },
+            { 'name': 'WIP 0-30', 'value':  7500 },
+            { 'name': 'WIP 30-60', 'value': 6000 },
+            { 'name': 'WIP >60', 'value': 5000 },
         ]
 
         let stage_4 = [
