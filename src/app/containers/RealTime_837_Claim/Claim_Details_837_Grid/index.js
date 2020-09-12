@@ -668,8 +668,8 @@ export class Claim_Details_837_Grid extends React.Component {
             // { headerName: "Procedure Code", field: "ProcedureDate" },
             // { headerName: "Unit", field: "PaidServiceUnitCount", flex: 1 },
             { headerName: "Procedure", field: "Procedure" },
-            { headerName: "Total Charge Amount", field: "PaidAmount" },
-            { headerName: "Total Paid Amount", field: "ChargeAmt", },
+            { headerName: "Total Charge Amount", field: "ChargeAmt" },
+            { headerName: "Total Paid Amount", field: "PaidAmount", },
 
         ]
 
