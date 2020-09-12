@@ -524,6 +524,7 @@ export class Common_837 extends React.Component {
                     url={Strings.Claim_Details_837_Grid}
                     data={sendData}
                     color={color}
+                    unclick={item.color ? item.color : ''}
                 />
             )
         })
@@ -554,12 +555,12 @@ export class Common_837 extends React.Component {
         //     { 'name': 'Load Error', 'value': this.state.LoadedErrorClaims, 'isClick': 1 },
         // ]
         let stage_3 = [
-            { 'header': 'Claim Status' },
-            { 'name': 'Paid', 'value': 8000 },
-            { 'name': 'Denied', 'value': 100 },
-            { 'name': 'WIP 0-30', 'value':  7900 },
-            { 'name': 'WIP 30-60', 'value': 6000 },
-            { 'name': 'WIP >60', 'value': 5000 },
+            { 'header': 'Payment Status' },
+            { 'name': 'Paid', 'value': 8000, color : '#2AC327' },
+            { 'name': 'Denied', 'value': 100, color : '#FF3B41' },
+            { 'name': 'WIP 0-30', 'value':  7900, color : '#139DC9' },
+            { 'name': 'WIP 30-60', 'value': 6000, color : '#139DC9' },
+            { 'name': 'WIP >60', 'value': 5000, color : '#139DC9' },
         ]
 
         let stage_4 = [

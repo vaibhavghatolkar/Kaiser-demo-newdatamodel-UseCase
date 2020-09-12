@@ -2261,8 +2261,8 @@ let       columnDefs = [
         // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
         // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
         { headerName: "Claim Amount", field: "Claim_Amount", width: 100},
-       
-        { headerName: "835 Process Id", field: "ProcessID835", flex: 1 },
+        { headerName: "Remittance Sent", field: "ProcessID835", width: 150 },
+        { headerName: "835", field: "", width: 100  },
     ]
       
         return (

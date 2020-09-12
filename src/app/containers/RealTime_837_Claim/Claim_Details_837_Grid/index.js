@@ -132,8 +132,8 @@ export class Claim_Details_837_Grid extends React.Component {
             showerror: '',
             Aggrid_ClaimLineData: ''
         }
-        }
-    componentDidMount() {      
+    }
+    componentDidMount() {
     }
     get_Error = (ClaimID, seqid, fileID) => {
         let query = `{            
@@ -153,10 +153,10 @@ export class Claim_Details_837_Grid extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -232,10 +232,10 @@ export class Claim_Details_837_Grid extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -247,9 +247,10 @@ export class Claim_Details_837_Grid extends React.Component {
                 if (_data && _data.Claim837RTLineDetails.length > 0) {
                     count = Math.floor(_data.Claim837RTLineDetails[0].RecCount / 10)
                     if (_data.Claim837RTLineDetails[0].RecCount % 10 > 0) {
-                        count = count + 1                    }
+                        count = count + 1
+                    }
                 }
-                if (_data && res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {                   
+                if (_data && res.data.Claim837RTDetails && res.data.Claim837RTDetails.length > 0) {
                     let data = res.data.Claim837RTDetails[0]
                     let claimDetails =
                         [
@@ -300,10 +301,10 @@ export class Claim_Details_837_Grid extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -320,10 +321,10 @@ export class Claim_Details_837_Grid extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-    }  
+    }
 
-  
-  
+
+
     clickNavigation = (event) => {
         if (event.colDef.headerName == 'File Name') {
             this.setState({
@@ -481,28 +482,28 @@ export class Claim_Details_837_Grid extends React.Component {
             this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
             this.getDetails(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId, "", 1)
             this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId)
-        }else if(event.colDef.headerName == "835 Process Id" && event.data.ProcessID835){
+        } else if (event.colDef.headerName == "Remittance Sent" && event.data.ProcessID835) {
             sessionStorage.setItem('isOutbound', true)
-            
-            let data = [   
-                { 
-                    apiflag: '0', 
-                    State: 'n', 
-                    selectedTradingPartner: 'n', 
-                    startDate: 'n', 
-                    endDate: 'n', 
-                    transactionId: 'n', 
-                    status: 'n', 
+
+            let data = [
+                {
+                    apiflag: '0',
+                    State: 'n',
+                    selectedTradingPartner: 'n',
+                    startDate: 'n',
+                    endDate: 'n',
+                    transactionId: 'n',
+                    status: 'n',
                     count: 'n',
                     incoming_fileId: event.data.ProcessID835
                 }
-            ]                   
+            ]
             this.props.history.push('/' + Strings.claimPayment_835_details, {
                 data: data
             })
-            
+
             window.location.reload()
-          
+
         }
     }
 
@@ -517,7 +518,8 @@ export class Claim_Details_837_Grid extends React.Component {
             // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
             // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
             { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
-            { headerName: "835 Process Id", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Remittance Sent", field: "ProcessID835", width: 200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "835", field: "", flex: 1 },
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -845,15 +847,15 @@ export class Claim_Details_837_Grid extends React.Component {
             <div>
                 <h5 className="headerText">Claims Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}  </h5>
                 {this._renderTopbar()}
-                    <div>
-                            {this._renderList()}
-                            {this.state.showClaims && this.state.selectedFileId ? this._renderClaims() : null}
-                            {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.status277CA == "Rejected") ? this._renderError() : null}
-                            {this.state.showerror ? this._ClaimView_Info_Table() : null}
-                            {this.state.showerror ? this._ClaimLineTable() : null}
-                            {/* {this.state.showerror ? this._ClaimStage() : null} */}
-                    </div>                    
-               {this.errorDialog()}
+                <div>
+                    {this._renderList()}
+                    {this.state.showClaims && this.state.selectedFileId ? this._renderClaims() : null}
+                    {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.status277CA == "Rejected") ? this._renderError() : null}
+                    {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                    {this.state.showerror ? this._ClaimLineTable() : null}
+                    {/* {this.state.showerror ? this._ClaimStage() : null} */}
+                </div>
+                {this.errorDialog()}
             </div>
         );
     }
