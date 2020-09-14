@@ -1377,14 +1377,14 @@ export class Member_History extends React.Component {
                             }}
                         />
                     </div>
-                    {/* <div className="form-group col-2">
+                    <div className="form-group col-2">
                         <div className="list-dashboard">Date of birth</div>
                         <DatePicker className="form-control list-dashboard"
                             selected={this.state.filter_dob ? new Date(moment(this.state.filter_dob).format('YYYY-MM-DD hh:mm')) : ''}
                             onChange={this.handledobChange}
                             maxDate={new Date(moment().format('YYYY-MM-DD hh:mm'))}
                         />
-                    </div> */}
+                    </div>
                     {/* <div className="form-group col-2">
                         <div className="list-dashboard">Policy No</div>
                         <input className="form-control input-style-autocomplete" type="text"
@@ -2261,8 +2261,7 @@ let       columnDefs = [
         // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
         // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
         { headerName: "Claim Amount", field: "Claim_Amount", width: 100},
-        { headerName: "Remittance Sent", field: "ProcessID835", width: 150 },
-        { headerName: "835", field: "", width: 100  },
+        { headerName: "835", field: "ProcessID835", flex: 1 },
     ]
       
         return (
@@ -2396,8 +2395,8 @@ let       columnDefs = [
             { headerName: "X12 Claim ID", field: "ClaimID"  ,width:150},
             { headerName: "Service Line No.", field: "ServiceLineCount"  ,width:150},
             { headerName: "Procedure", field: "Procedure"  ,width:150},
-            { headerName: "Total Charge Amount", field: "PaidAmount" ,width:150 },
-            { headerName: "Total Paid Amount", field: "ChargeAmt",flex:1 },
+            { headerName: "Total Charge Amount", field: "ChargeAmt" ,width:150 },
+            { headerName: "Total Paid Amount", field: "PaidAmount",flex:1 },
         ] 
 
         return (

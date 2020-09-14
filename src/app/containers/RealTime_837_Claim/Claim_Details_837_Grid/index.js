@@ -482,7 +482,7 @@ export class Claim_Details_837_Grid extends React.Component {
             this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
             this.getDetails(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId, "", 1)
             this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId)
-        } else if (event.colDef.headerName == "Remittance Sent" && event.data.ProcessID835) {
+        } else if (event.colDef.headerName == "835" && event.data.ProcessID835) {
             sessionStorage.setItem('isOutbound', true)
 
             let data = [
@@ -518,8 +518,7 @@ export class Claim_Details_837_Grid extends React.Component {
             // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
             // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
             { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
-            { headerName: "Remittance Sent", field: "ProcessID835", width: 200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "835", field: "", flex: 1 },
+            { headerName: "835", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
