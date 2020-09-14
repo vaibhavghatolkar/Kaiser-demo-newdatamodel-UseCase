@@ -482,7 +482,7 @@ export class Claim_Details_837_Grid extends React.Component {
             this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
             this.getDetails(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId, "", 1)
             this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.ClaimRefId)
-        } else if (event.colDef.headerName == "835" && event.data.ProcessID835) {
+        } else if (event.colDef.headerName == "835 Process Id" && event.data.ProcessID835) {
             sessionStorage.setItem('isOutbound', true)
 
             let data = [
@@ -512,13 +512,13 @@ export class Claim_Details_837_Grid extends React.Component {
             { headerName: "Molina Claim Id", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "X12 Claim Id", field: "ClaimID", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
-            { headerName: "Claim Status", field: "ClaimStatus", width: 140 },
+            { headerName: "Claim Status", field: "ClaimStatus", width: 120 },
             { headerName: "Subscriber Id", field: "Subscriber_ID", width: 140 },
             { headerName: "277CA Status", field: "Status277CA", width: 100 },
             // { headerName: "HiPaaS Status", field: "Transaction_Status", width: 100 },
             // { headerName: "Adjudication Status", field: "adjudication_status", width: 140 },
             { headerName: "Claim Amount", field: "Claim_Amount", flex: 1 },
-            { headerName: "835", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "835 Process Id", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""

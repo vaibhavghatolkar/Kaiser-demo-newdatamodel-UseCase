@@ -79,8 +79,9 @@ export class ClaimProcessingSummary extends React.Component {
                 { headerName: "Claim Status", field: "ClaimStatus", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "	Subscriber Id", field: "Subscriber_ID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "277CA Status", field: "Status277CA", width: 100 },
-                { headerName: "835", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' }  },
-                // { headerName: "835", field: "", flex: 1},
+                { headerName: "835 Process Id", field: "ProcessID835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' }  },
+                { headerName: "835", field: "", flex: 1, cellRenderer: (data) => {    return data.data.LXCount + " | " + data.data.paymentcount  }, },
+            
                 // { headerName: "999", field: "F999", width: 240, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "277CA", field: "F277", width: 100, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
@@ -227,7 +228,7 @@ export class ClaimProcessingSummary extends React.Component {
                 this.gotoDetails()
             })
         } 
-        if (event.colDef.headerName == "835" && event.data.ProcessID835) {
+        if (event.colDef.headerName == "835 Process Id" && event.data.ProcessID835) {
             sessionStorage.setItem('isOutbound', true)
             let data = [
                 {
@@ -310,6 +311,8 @@ export class ClaimProcessingSummary extends React.Component {
               ClaimDateTime
               Status277CA
               ProcessID835
+              LXCount
+              paymentcount
             }
           }`
         return (
