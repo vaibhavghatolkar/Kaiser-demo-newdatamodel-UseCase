@@ -203,7 +203,20 @@ const Strings = {
     Inbound_Encounter_response_999: 'Inbound_Encounter_response_999',
     EncounterCustomerService: 'EncounterCustomerService',
     Outbound_Complaince_Reporting: 'Outbound_Complaince_Reporting',
-    Member_History:'Member_History'
+    Member_History:'Member_History',
+
+    Outbound_Claim_Batch_Details_837:'Outbound_Claim_Batch_Details_837',
+    Outbound_Claim_updated_AuditSummary:'Outbound_Claim_updated_AuditSummary',
+    Outbound_Claim_updated_Dashboard_New:'Outbound_Claim_updated_Dashboard_New',
+    Outbound_Claim_updated_Details_837_Grid:'Outbound_Claim_updated_Details_837_Grid',
+    Outbound_Claim_updated_FileDashboard:'Outbound_Claim_updated_FileDashboard',
+    Outbound_Claim_updated_Payment:'Outbound_Claim_updated_Payment',
+    Outbound_Claim_updated_ProcessingSummary:'Outbound_Claim_updated_ProcessingSummary',
+    Outbound_Claim_277CAResponse:'Outbound_Claim_277CAResponse',
+Outbound_Claim_999_response:'Outbound_Claim_999_response',
+Outbound_Compliance_Reporting_Claims:'Outbound_Compliance_Reporting_Claims',
+ClaimCustomerService:'ClaimCustomerService'
+
 }
 
 export default Strings;
