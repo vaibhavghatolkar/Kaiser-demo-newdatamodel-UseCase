@@ -160,9 +160,9 @@ export class ClaimPaymentDashboard extends React.Component {
     getProgressData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
-            ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
+            ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                 Rejected
                 Accepted
                 Exception
@@ -170,7 +170,7 @@ export class ClaimPaymentDashboard extends React.Component {
         }`
         
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
