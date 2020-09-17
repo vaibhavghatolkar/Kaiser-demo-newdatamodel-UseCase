@@ -9,6 +9,8 @@ import { Tiles } from '../Tiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../TableTiles';
+let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+
 
 export class Common_835 extends React.Component {
 
@@ -103,9 +105,11 @@ export class Common_835 extends React.Component {
     _getCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
+
         let query = `{
             
-                ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
+                ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                   TotalCount
                   Rejected
                   Accepted
@@ -114,12 +118,12 @@ export class Common_835 extends React.Component {
                   EFT
                   CHK
                 }
-                Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
+                Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                     Total999
                 }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -313,15 +317,16 @@ export class Common_835 extends React.Component {
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
 
         let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
 
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                   Accepted
                   Rejected
                   FileReject
@@ -341,7 +346,7 @@ export class Common_835 extends React.Component {
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

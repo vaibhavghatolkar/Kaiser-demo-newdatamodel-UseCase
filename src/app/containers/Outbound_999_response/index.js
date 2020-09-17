@@ -13,6 +13,7 @@ import { Filters } from '../../components/Filters';
 import { ServersideGrid } from '../../components/ServersideGrid';
 
 var val = ''
+let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
 export class Outbound_response_999 extends React.Component {
 
     constructor(props) {
@@ -160,7 +161,7 @@ console.log("fsdfdsf" ,this.props.location)
           `
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

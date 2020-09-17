@@ -14,6 +14,7 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 
 var val = ''
 const $ = window.$;
+let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
 export class ClaimPaymentDetails extends React.Component {
 
     constructor(props) {
@@ -150,7 +151,7 @@ export class ClaimPaymentDetails extends React.Component {
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
-        fetch(Urls.transaction835, {
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -285,11 +286,11 @@ export class ClaimPaymentDetails extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             PaymentProcessingSummaryNew(
                 StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
+                RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
                 sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                    startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
             ) {
@@ -332,7 +333,7 @@ export class ClaimPaymentDetails extends React.Component {
                     columnDefs={columnDefs}
                     query={query}
                     paginationPageSize={5}
-                    url={Urls.transaction835}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
                     fieldType={'FileDate'}
                     index={'PaymentProcessingSummaryNew'}
                     State={this.state.State}
@@ -512,11 +513,12 @@ export class ClaimPaymentDetails extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",
             EndDt: "${endDate}",page:1,OrderBy:"${this.state.orderby}" ,
             Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
-            RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",
+            RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",
             ClaimID:"${this.state.Filter_ClaimId}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
@@ -550,7 +552,7 @@ export class ClaimPaymentDetails extends React.Component {
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
-                    url={Urls.transaction835}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
                     paginationPageSize={5}
                     fieldType={'FileDate'}
                     index={'Dashboard835FileDetailsNew'}

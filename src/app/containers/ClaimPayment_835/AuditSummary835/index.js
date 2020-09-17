@@ -10,6 +10,7 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Common_835 } from '../../../components/Common_835';
 
 let val = ''
+let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
 export class AuditSummary835 extends React.Component {
 
     constructor(props) {
@@ -161,9 +162,10 @@ export class AuditSummary835 extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             AuditSummary835New(
-                StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"",Status:"",RecType:"Outbound",
+                StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"",Status:"",RecType:"${recType}",
                 sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                    startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}                
             ) {
@@ -183,12 +185,14 @@ export class AuditSummary835 extends React.Component {
                 Rejected
                 }
               }`
+
+          
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
                 <ServersideGrid
                     columnDefs={this.state.columnDefs}
                     query={query}
-                    url={Urls.transaction835}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
                     fieldType={'FileDate'}
                     index={'AuditSummary835New'}
                     State={this.state.State}

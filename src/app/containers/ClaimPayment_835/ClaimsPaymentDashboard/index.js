@@ -248,18 +248,19 @@ export class ClaimPaymentDashboard extends React.Component {
     _getPieChartData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "Outbound") {
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "${recType}") {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"Outbound") {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"${recType}") {
                 Type
                 TotalCount
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.transaction835, {
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -465,9 +466,10 @@ export class ClaimPaymentDashboard extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-            page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Outbound", 
+            page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"${recType}", 
             AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
@@ -499,7 +501,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 <ServersideGrid
                     columnDefs={this.state.columnDefs}
                     query={query}
-                    url={Urls.transaction835}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
                     fieldType={'FileDate'}
                     index={'Dashboard835FileDetailsNew'}
                     State={this.state.State}

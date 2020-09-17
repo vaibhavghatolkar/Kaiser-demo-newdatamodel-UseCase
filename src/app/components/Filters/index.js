@@ -394,18 +394,18 @@ export class Filters extends React.Component {
                             : null
                     }
                     {
-                        !this.props.removeGrid ?
-                            <div className="form-group col-2">
-                                <div className="list-dashboard">Grid Type</div>
-                                <select className="form-control list-dashboard" id="Grid"
-                                    value={'classic'}
-                                    onChange={(event) => {
-                                        this.props.onGridChange(event)
-                                    }}>
-                                    <option value="default">Default</option>
-                                    <option value="classic">Classic</option>
-                                </select>
-                            </div> : null
+                        // !this.props.removeGrid ?
+                        //     <div className="form-group col-2">
+                        //         <div className="list-dashboard">Grid Type</div>
+                        //         <select className="form-control list-dashboard" id="Grid"
+                        //             value={'classic'}
+                        //             onChange={(event) => {
+                        //                 this.props.onGridChange(event)
+                        //             }}>
+                        //             <option value="default">Default</option>
+                        //             <option value="classic">Classic</option>
+                        //         </select>
+                        //     </div> : null
                     }
                     {
                         this.props.errorType ?

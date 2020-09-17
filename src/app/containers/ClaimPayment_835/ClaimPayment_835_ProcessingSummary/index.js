@@ -11,6 +11,7 @@ import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Common_835 } from '../../../components/Common_835';
 
+let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
 export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     constructor(props) {
@@ -227,10 +228,11 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             PaymentProcessingSummaryNew(
                 StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
-                RecType:"Outbound", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                 sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                    startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
                                 
@@ -272,7 +274,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
-                    url={Urls.transaction835}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
                     fieldType={'FileDate'}
                     index={'PaymentProcessingSummaryNew'}
                     State={this.state.State}
