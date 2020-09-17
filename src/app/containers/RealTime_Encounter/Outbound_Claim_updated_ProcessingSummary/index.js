@@ -349,10 +349,10 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
 
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_Claim_999_response, {
+        this.props.history.push('/' + Strings.Inbound_Claim_999_response, {
             fileId: fileId,
             data: [
-                { flag999: '1' },
+                { flag999: '0' },
             ]
         })
         // setTimeout(() => {

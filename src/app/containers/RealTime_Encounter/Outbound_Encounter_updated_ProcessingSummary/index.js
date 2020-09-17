@@ -339,7 +339,7 @@ export class Outbound_Encounter_updated_ProcessingSummary extends React.Componen
 
     goto277 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
+        this.props.history.push('/' + Strings.Outbound_Encounter_277CAReponse, {
             fileId: fileId
         })
         // setTimeout(() => {
@@ -349,10 +349,11 @@ export class Outbound_Encounter_updated_ProcessingSummary extends React.Componen
 
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999, {
+        // this.props.history.push('/' + Strings.Outbound_response_999, {
+        this.props.history.push('/' + Strings.Inbound_Encounter_response_999, {
             fileId: fileId,
             data: [
-                { flag999: '1' },
+                { flag999: '0' },
             ]
         })
         // setTimeout(() => {
