@@ -1137,6 +1137,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 State={'CA'}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                removeGrid={true}
             />
         )
     }
