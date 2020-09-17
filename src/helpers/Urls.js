@@ -59,9 +59,9 @@ const Urls = {
     _transaction834: _base_url + '/transaction834',
     _Payment820: _base_url + '/Payment820',
     _transaction834 : _base_url + '/transaction834',
+    _transaction835: _base_url + '/transaction835',
     
     _Response999 : base_url + '/common_data', 
-    _transaction835: base_url + '/transaction835',
     _inbound_common_data: base_url + '/common_data',
     _inbound_Encounter : base_url + '/Encounter',
     _inbound_base_url : base_url + '/graphQl',
@@ -69,6 +69,7 @@ const Urls = {
     _inbound_real_time_claim_details : base_url + '/real_time_claim_details',
     _inbound_claim_processing : base_url + '/claim_processing',
 
+    
     // sql_base_url : 'http://localhost:4000/graphQl',
     sql_base_url : 'http://10.0.1.248:30506/graphQl',
     sql_real_time_claim_details : sql_base_url + '/real_time_claim_details',

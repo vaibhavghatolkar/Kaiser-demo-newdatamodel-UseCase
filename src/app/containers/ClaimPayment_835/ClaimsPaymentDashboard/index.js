@@ -12,6 +12,7 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Filters } from '../../../components/Filters';
 import { Common_835 } from '../../../components/Common_835';
 
+let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
 export class ClaimPaymentDashboard extends React.Component {
 
     constructor(props) {
@@ -159,6 +160,7 @@ export class ClaimPaymentDashboard extends React.Component {
     getProgressData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+
         let query = `{
             ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Outbound") {
                 Rejected
@@ -171,10 +173,10 @@ export class ClaimPaymentDashboard extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id' : sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })

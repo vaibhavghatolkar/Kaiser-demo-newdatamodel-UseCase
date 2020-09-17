@@ -704,7 +704,7 @@ export class PremiumPaymentLoad extends React.Component {
               }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._transaction835, {
+        fetch(Urls.transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
