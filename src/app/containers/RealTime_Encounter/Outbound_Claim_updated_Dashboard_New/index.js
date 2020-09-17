@@ -114,8 +114,8 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
                 { headerName: "Load Status", field: "Status", width: 80 },
                 // { headerName: "MCG Load Status", field: "MCGStatus", width: 100 },
                 { headerName: "Submitter", field: "Sender", width: 80 },
-                { headerName: "Total Encounters", field: "Claimcount", width: 100 },
-                { headerName: "Rejected Encounters", field: "Rejected", flex: 1 },
+                { headerName: "Total Claims", field: "Claimcount", width: 100 },
+                { headerName: "Rejected Claims", field: "Rejected", flex: 1 },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -490,7 +490,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
         if (header == 'Top 10 File Level Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
-        } else if (header == 'Top 10 Encounter Level Errors') {
+        } else if (header == 'Top 10 Claims Level Errors') {
             addon = '/reject'
             generalStatus = 'Rejected'
         }
@@ -710,7 +710,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.Outbound_Encounter_BatchDetails837, {
+        this.props.history.push('/' + Strings.Outbound_Claim_Batch_Details_837, {
             data: sendData
         })
     }
@@ -856,7 +856,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
                 },
             ]
 
-            let geturl = Strings.Outbound_Encounter_BatchDetails837
+            let geturl = Strings.Outbound_Claim_Batch_Details_837
             row.push(
                 <Tiles
                     isenrollment={true}
@@ -928,7 +928,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
                 },
             ]
 
-            let geturl = Strings.Outbound_Encounter_BatchDetails837
+            let geturl = Strings.Outbound_Claim_Batch_Details_837
             row.push(
                 <Tiles
                     isenrollment={true}
@@ -1004,7 +1004,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Outbound_Encounter_BatchDetails837}
+                    url={Strings.Outbound_Claim_Batch_Details_837}
                     data={sendData}
                     color={color}
                 />
@@ -1023,8 +1023,8 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
             { headerName: "Batch Name", field: "BatchName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Batch Date", field: "BatchDate", flex: 1 },
             { headerName: "Batch Status", field: "BatchStatus", flex: 1 },
-            { headerName: "Total Encounter", field: "Count", flex: 1 },
-            { headerName: "Errored Encounter", field: "Error", flex: 1 },
+            { headerName: "Total Claims", field: "Count", flex: 1 },
+            { headerName: "Errored Claims", field: "Error", flex: 1 },
         ]
 
         return (
@@ -1070,7 +1070,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate_Outbound", flex: 1 },
             { headerName: "File Status", field: "FileStatus_Outbound", flex: 1 },
-            { headerName: "Total Encounter", field: "TotalEncounterSent", flex: 1 },
+            { headerName: "Total Claims", field: "TotalEncounterSent", flex: 1 },
         ]
 
         return (
@@ -1118,7 +1118,7 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
                                     },
                                 ]
 
-                                this.props.history.push('/' + Strings.Outbound_Encounter_ClaimDetails837, {
+                                this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
                                     data: sendData
                                 })
                             }
@@ -1197,12 +1197,12 @@ export class Outbound_Claim_updated_Dashboard_New extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Encounter Batch Dashboard (Outbound)</h5>
+                <h5 className="headerText">Claims Batch Dashboard (Outbound)</h5>
                 {this._renderTopbar()}
                 {/* {this._renderSummary_(this.state.summary_1)} */}
                 <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Batch Status</h6>
                 {this._renderSummary(this.state.summary_2)}
-                <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Batch Encounter Status</h6>
+                <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Batch Claims Status</h6>
                 {this.renderBatchEncounterDetails()}
                 {/* <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>File Status</h6>
                 {this._renderSummary(this.state.summary_3)}

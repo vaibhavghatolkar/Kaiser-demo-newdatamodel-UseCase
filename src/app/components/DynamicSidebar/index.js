@@ -368,11 +368,11 @@ export class DynamicSidebar extends React.Component {
                 ]
 
             }
-            else if (element.key == Strings.Outbound_Encounter_response_999) {
+            else if (element.key == Strings.Outbound_Encounter_response_999 || element.key == Strings.Outbound_Claim_999_response) {
                 data = [
                     { flag999: '1' },
                 ]
-            } else if (element.key == Strings.Inbound_Encounter_response_999) {
+            } else if (element.key == Strings.Inbound_Encounter_response_999 || element.key == Strings.Inbound_Claim_999_response) {
                 data = [
                     { flag999: '0' },
                 ]

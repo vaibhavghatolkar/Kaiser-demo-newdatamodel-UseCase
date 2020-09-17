@@ -113,8 +113,8 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 { headerName: "Load Status", field: "Status", width: 80 },
                 // { headerName: "MCG Load Status", field: "MCGStatus", width: 100 },
                 { headerName: "Submitter", field: "Sender", width: 80 },
-                { headerName: "Total Encounters", field: "Claimcount", width: 100 },
-                { headerName: "Rejected Encounters", field: "Rejected", flex: 1 },
+                { headerName: "Total Claims", field: "Claimcount", width: 100 },
+                { headerName: "Rejected Claims", field: "Rejected", flex: 1 },
             ],
             autoGroupColumnDef: {
                 headerName: 'Group',
@@ -497,7 +497,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
         if (header == 'Top 10 File Level Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
-        } else if (header == 'Top 10 Encounter Level Errors') {
+        } else if (header == 'Top 10 Claims Level Errors') {
             addon = '/reject'
             generalStatus = 'Rejected'
         }
@@ -531,7 +531,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             <div className="chart-div">
                 <div className="row">
                     <div className="col-6" style={{ paddingRight: '5px' }}>
-                        {this.renderPieChart('Top 10 Encounter Errors', this.state.second_data)}
+                        {this.renderPieChart('Top 10 Claims Errors', this.state.second_data)}
                     </div>
                     {/* <div className="col-6" style={{ paddingRight: '9px' }}>
                         {this.renderPieChart('Top 10 Encounter Level Errors', this.state.pie_data)}
@@ -716,7 +716,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.Outbound_Encounter_ClaimDetails837, {
+        this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
             data: sendData
         })
     }
@@ -838,14 +838,14 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
 
             if (item.name == '999 Accepted') {
                 F99Status = 'Accepted'
-                url = Strings.Inbound_Encounter_response_999
+                url = Strings.Inbound_Claim_999_response
             } else if (item.name == '999 Rejected') {
                 F99Status = 'Rejected'
                 noApiFlag = true
-                url = Strings.Inbound_Encounter_response_999
+                url = Strings.Inbound_Claim_999_response
             } else if (item.name == '277CA Received') {
                 F99Status = 'Accepted'
-                url = Strings.Outbound_Encounter_277CAReponse
+                url = Strings.Outbound_Claim_999_response
             }
 
             data = [
@@ -869,7 +869,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 },
             ]
 
-            let geturl = url ? url : Strings.Outbound_Encounter_ClaimDetails837
+            let geturl = url ? url : Strings.Outbound_Claim_updated_Details_837_Grid
             row.push(
                 <Tiles
                     isenrollment={true}
@@ -955,7 +955,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Outbound_Encounter_ClaimDetails837}
+                    url={Strings.Outbound_Claim_updated_Details_837_Grid}
                     data={sendData}
                     color={color}
                 />
@@ -974,8 +974,8 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             { headerName: "Batch Name", field: "BatchName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Batch Date", field: "BatchDate", flex: 1 },
             { headerName: "Batch Status", field: "BatchStatus", flex: 1 },
-            { headerName: "Total Encounter", field: "Count", flex: 1 },
-            { headerName: "Errored Encounter", field: "Error", flex: 1 },
+            { headerName: "Total Claims", field: "Count", flex: 1 },
+            { headerName: "Errored Claims", field: "Error", flex: 1 },
         ]
 
         return (
@@ -1017,7 +1017,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate_Outbound", flex: 1 },
             { headerName: "File Status", field: "FileStatus_Outbound", flex: 1 },
-            { headerName: "Total Encounter", field: "TotalEncounterSent", flex: 1 },
+            { headerName: "Total Claims", field: "TotalEncounterSent", flex: 1 },
         ]
 
         return (
@@ -1065,7 +1065,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                                     },
                                 ]
 
-                                this.props.history.push('/' + Strings.Outbound_Encounter_ClaimDetails837, {
+                                this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
                                     data: sendData
                                 })
                             }
@@ -1144,11 +1144,11 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Encounter Submission Dashboard (Outbound)</h5>
+                <h5 className="headerText">Claims Submission Dashboard (Outbound)</h5>
                 {this._renderTopbar()}
                 <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>File Status</h6>
                 {this._renderSummary(this.state.summary_3)}
-                <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Encounter Status</h6>
+                <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Claims Status</h6>
                 {this.renderEncounterDetails()}
                 {this.renderCharts()}
                 <div>

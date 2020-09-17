@@ -71,7 +71,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
                 { headerName: "File Name", field: "FileName_Outbound", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
                 { headerName: "File Status", field: "FileStatus_Outbound", width: 120 },
-                { headerName: "Total Encounter Sent", field: "TotalEncounterSent", width: 140 },
+                { headerName: "Total Claims Sent", field: "TotalEncounterSent", width: 140 },
                 { headerName: "Batch Name", field: "BatchName", width: 120 },
                 { headerName: "Accepted 999", field: "Accepted999", width: 120 },
                 { headerName: "Rejected 999", field: "Rejected999", width: 120 },
@@ -405,14 +405,14 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
 
             if (item.name == '999 Accepted') {
                 F99Status = 'Accepted'
-                url = Strings.Inbound_Encounter_response_999
+                url = Strings.Inbound_Claim_999_response
             } else if (item.name == '999 Rejected') {
                 F99Status = 'Rejected'
                 noApiFlag = true
-                url = Strings.Inbound_Encounter_response_999
+                url = Strings.Inbound_Claim_999_response
             } else if (item.name == '277CA Received') {
                 F99Status = 'Accepted'
-                url = Strings.Outbound_Encounter_277CAReponse
+                url = Strings.Outbound_Claim_277CAResponse
             }
 
             data = [
@@ -436,7 +436,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
                 },
             ]
 
-            let geturl = url ? url : Strings.Outbound_Encounter_ClaimDetails837
+            let geturl = url ? url : Strings.Outbound_Claim_updated_Details_837_Grid
 
             row.push(
                 <Tiles
@@ -468,7 +468,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
 
     goto277 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_Encounter_277CAReponse, {
+        this.props.history.push('/' + Strings.Outbound_Claim_277CAResponse, {
             fileId: fileId
         })
         // setTimeout(() => {
@@ -478,7 +478,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
 
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_Encounter_response_999, {
+        this.props.history.push('/' + Strings.Outbound_Claim_999_response, {
             fileId: fileId,
             data: [
                 { flag999: '0' },
@@ -520,7 +520,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
 
             row.push(
                 <tr>
-                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.Outbound_Encounter_ClaimProcessingSummary, { file_id: d.FileID }) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
+                    <td className="list-item-style"><a onClick={() => { this.props.history.push('/' + Strings.Outbound_Claim_updated_ProcessingSummary, { file_id: d.FileID }) }} style={{ color: "#6AA2B8", cursor: "pointer", wordBreak: 'break-all' }}>{d.filename}</a></td>
                     <td className="list-item-style">{d.State}</td>
                     <td className="list-item-style" style={{ wordBreak: 'break-all' }}>{d.ProcessID}</td>
                     <td className="list-item-style">{d.FileStatus}</td>
@@ -679,7 +679,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
                                 this.goto277(event.data.FileID)
                             }
                             if (event.colDef.headerName == 'File Name') {
-                                this.props.history.push('/' + Strings.Outbound_Encounter_ClaimProcessingSummary, {
+                                this.props.history.push('/' + Strings.Outbound_Claim_updated_ProcessingSummary, {
                                     file_id: event.data.FileID
                                 })
                             }
@@ -740,7 +740,7 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Encounter Audit Summary (Outbound)</h5>
+                <h5 className="headerText">Claims Audit Summary (Outbound)</h5>
                 {this._renderTopbar()}
                 {/* {this._renderStats()} */}
                 {this._renderSummaryDetails()}
