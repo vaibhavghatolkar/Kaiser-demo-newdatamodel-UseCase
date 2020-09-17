@@ -563,6 +563,7 @@ export class Outbound_Encounter_Audit extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 transaction={"Encounter"}
+                removeGrid={true}
             />
         )
     }

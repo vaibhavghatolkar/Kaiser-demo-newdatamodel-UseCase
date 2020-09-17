@@ -730,6 +730,7 @@ export class Outbound_Encounter_updated_Payment extends React.Component {
                 State={'CA'}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                removeGrid={true}
             />
         )
     }

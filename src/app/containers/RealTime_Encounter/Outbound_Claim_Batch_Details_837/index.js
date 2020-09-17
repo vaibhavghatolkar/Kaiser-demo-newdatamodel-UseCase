@@ -984,6 +984,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
                 removeSubmitter={true}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                removeGrid={true}
             />
         )
     }

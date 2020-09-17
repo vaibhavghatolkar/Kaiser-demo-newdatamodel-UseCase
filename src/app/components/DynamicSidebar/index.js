@@ -115,7 +115,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 100) { name = Strings.Outbound_Claim_999_response }
         else if (index == 135) { name = Strings.Outbound_Claim_277CAResponse }
         else if (index == 52) { name = Strings.ClaimCustomerService }
-        else if (index == 160) { name = Strings.Outbound_Compliance_Reporting_Claims }
+        // else if (index == 160) { name = Strings.Outbound_Compliance_Reporting_Claims }
 
         // else if (index == 31) { name = Strings._Load_Exception }
 
