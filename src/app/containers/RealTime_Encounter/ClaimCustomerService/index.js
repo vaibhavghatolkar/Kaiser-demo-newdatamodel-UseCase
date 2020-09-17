@@ -22,7 +22,7 @@ import { Filters } from '../../../components/Filters';
 var val = ''
 var controller = new AbortController()
 const $ = window.$;
-export class EncounterCustomerService extends React.Component {
+export class ClaimCustomerService extends React.Component {
 
     constructor(props) {
         super(props);

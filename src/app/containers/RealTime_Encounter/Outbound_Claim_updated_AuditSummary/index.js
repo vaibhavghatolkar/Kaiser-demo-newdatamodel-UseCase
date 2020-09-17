@@ -16,7 +16,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
 
 let val = ''
-export class Outbound_Encounter_updated_AuditSummary extends React.Component {
+export class Outbound_Claim_updated_AuditSummary extends React.Component {
 
     constructor(props) {
         super(props);

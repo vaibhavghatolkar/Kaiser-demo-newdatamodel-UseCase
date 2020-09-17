@@ -16,7 +16,7 @@ import Strings from '../../../../helpers/Strings';
 
 var val = ''
 const $ = window.$;
-export class Outbound_Encounter_BatchDetails837 extends React.Component {
+export class Outbound_Claim_Batch_Details_837 extends React.Component {
 
     constructor(props) {
         super(props);

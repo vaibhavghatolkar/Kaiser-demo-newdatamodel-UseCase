@@ -17,7 +17,7 @@ import Strings from '../../../helpers/Strings';
 import { Filters } from '../../components/Filters';
 
 var val = ''
-export class Outbound_Encounter_277CAReponse extends React.Component {
+export class Outbound_Claim_277CAResponse extends React.Component {
 
     constructor(props) {
         super(props);

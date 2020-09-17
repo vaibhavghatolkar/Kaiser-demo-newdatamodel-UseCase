@@ -24,7 +24,7 @@ import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
 import { Filters } from '../../../components/Filters';
 
-export class Outbound_Encounter_updated_Dashboard_New extends React.Component {
+export class Outbound_Claim_updated_Dashboard_New extends React.Component {
 
     constructor(props) {
         super(props);

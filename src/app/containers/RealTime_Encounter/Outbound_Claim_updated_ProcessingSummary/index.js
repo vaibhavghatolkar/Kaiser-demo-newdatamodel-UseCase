@@ -19,7 +19,7 @@ import { TableTiles } from '../../../components/TableTiles';
 import { Filters } from '../../../components/Filters';
 
 let val = ''
-export class Outbound_Encounter_updated_ProcessingSummary extends React.Component {
+export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
 
     constructor(props) {
         super(props);

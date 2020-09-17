@@ -21,7 +21,7 @@ import { Filters } from '../../../components/Filters';
 
 var val = ''
 const $ = window.$;
-export class Outbound_Encounter_updated_Details_837_Grid extends React.Component {
+export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
     constructor(props) {
         super(props);

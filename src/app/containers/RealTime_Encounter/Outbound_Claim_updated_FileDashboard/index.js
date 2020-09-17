@@ -22,7 +22,7 @@ import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
 import { Filters } from '../../../components/Filters';
 
-export class Outbound_Encounter_updated_FileDashboard extends React.Component {
+export class Outbound_Claim_updated_FileDashboard extends React.Component {
 
     constructor(props) {
         super(props);

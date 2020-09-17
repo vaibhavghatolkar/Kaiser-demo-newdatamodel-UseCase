@@ -104,6 +104,19 @@ export class DynamicSidebar extends React.Component {
         else if (index == 29) { name = Strings.RealTimeDashboard }
         else if (index == 30) { name = Strings.claimsAudit }
         else if (index == 31) { name = Strings._Claim_Details_837_Grid }
+
+        else if (index == 94) { name = Strings.Outbound_Claim_updated_Dashboard_New }
+        else if (index == 95) { name = Strings.Outbound_Claim_updated_FileDashboard }
+        else if (index == 123) { name = Strings.Outbound_Claim_updated_Payment }
+        else if (index == 96) { name = Strings.Outbound_Claim_updated_AuditSummary }
+        else if (index == 97) { name = Strings.Outbound_Claim_updated_ProcessingSummary }
+        else if (index == 98) { name = Strings.Outbound_Claim_updated_Details_837_Grid }
+        else if (index == 99) { name = Strings.Outbound_Claim_Batch_Details_837 }
+        else if (index == 100) { name = Strings.Outbound_Claim_999_response }
+        else if (index == 135) { name = Strings.Outbound_Claim_277CAResponse }
+        else if (index == 52) { name = Strings.ClaimCustomerService }
+        else if (index == 160) { name = Strings.Outbound_Compliance_Reporting_Claims }
+
         // else if (index == 31) { name = Strings._Load_Exception }
 
         // else if (index == 31) { name = Strings.ClaimDetails837 }
@@ -193,7 +206,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 167) { name = Strings.RDE }
         else if (index == 168) { name = Strings.DFT }
         else if (index == 169) { name = Strings.consent_management }
-        else if (index == 172) { name = Strings.FHiR_API_management }  
+        else if (index == 172) { name = Strings.FHiR_API_management }
         else if (index == 173) { name = Strings.Enrollment_FullFileCompare }
         else if (index == 174) { name = Strings.Enrollment_eligibiltyDetails }
         else if (index == 175) { name = Strings.EthnicityMismatch }
@@ -320,7 +333,9 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
             }
-            else if (element.key == Strings.Outbound_Encounter_ClaimDetails837 || element.key == Strings.Outbound_Encounter_BatchDetails837) {
+            else if (element.key == Strings.Outbound_Encounter_ClaimDetails837 || element.key == Strings.Outbound_Encounter_BatchDetails837
+                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid
+                ) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
                 ]
@@ -347,7 +362,7 @@ export class DynamicSidebar extends React.Component {
                 data = [
                     { flag999: '0' },
                 ]
-            } else if (element.key == Strings.enrollmentLoadDetails ||element.key ==Strings.  Enrollment_Details_Outbound) {
+            } else if (element.key == Strings.enrollmentLoadDetails || element.key == Strings.Enrollment_Details_Outbound) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: '', count: 'n' },
                 ]

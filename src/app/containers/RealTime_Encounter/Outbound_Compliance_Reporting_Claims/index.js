@@ -1,7 +1,7 @@
 import React from 'react'
 const $ = window.$;
 
-export class Outbound_Complaince_Reporting extends React.Component {
+export class Outbound_Compliance_Reporting_Claims extends React.Component {
 
     constructor(props) {
         super(props);
