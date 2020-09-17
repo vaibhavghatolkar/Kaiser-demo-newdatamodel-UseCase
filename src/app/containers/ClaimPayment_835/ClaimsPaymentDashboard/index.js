@@ -168,6 +168,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 Exception
             } 
         }`
+        
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls.transaction835, {
             method: 'POST',
