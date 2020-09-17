@@ -131,7 +131,17 @@ import { Outbound_Encounter_updated_Payment } from './app/containers/RealTime_En
 import { EncounterCustomerService } from './app/containers/RealTime_Encounter/EncounterCustomerService';
 import { Outbound_Complaince_Reporting } from './app/containers/RealTime_Encounter/Outbound_Compliance_Reporting';
 import {Member_History} from './app/containers/Member_History'
-
+import { Outbound_Claim_Batch_Details_837 } from './app/containers/RealTime_Encounter/Outbound_Claim_Batch_Details_837';
+import { Outbound_Claim_updated_AuditSummary } from './app/containers/RealTime_Encounter/Outbound_Claim_updated_AuditSummary';
+import { Outbound_Claim_updated_Dashboard_New } from './app/containers/RealTime_Encounter/Outbound_Claim_updated_Dashboard_New';
+import { Outbound_Claim_updated_Details_837_Grid } from './app/containers/RealTime_Encounter/Outbound_Claim_updated_Details_837_Grid';
+import { Outbound_Claim_updated_FileDashboard } from './app/containers/RealTime_Encounter/Outbound_Claim_updated_FileDashboard';
+import { Outbound_Claim_updated_Payment } from './app/containers/RealTime_Encounter/Outbound_Claim_updated_Payment';
+import { Outbound_Claim_updated_ProcessingSummary } from './app/containers/RealTime_Encounter/Outbound_Claim_updated_ProcessingSummary';
+import {Outbound_Claim_277CAResponse} from './app/containers/Outbound_Claim_277CAResponse'
+import {Outbound_Claim_999_response} from './app/containers/Outbound_Claim_999_response'
+import { Outbound_Compliance_Reporting_Claims } from './app/containers/RealTime_Encounter/Outbound_Compliance_Reporting_Claims';
+import { ClaimCustomerService } from './app/containers/RealTime_Encounter/ClaimCustomerService';
 
 import Outbound_Encounter_StatewiseTradingPartner_Encounter from './app/containers/EncounterAdmin/Outbound_Encounter_StatewiseTradingPartner'
 import TransactionSetup_Encounter from './app/containers/EncounterAdmin/TransactionSetup'
@@ -409,7 +419,20 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Member_History} component={Member_History} />
                                 <Route path={'/' + Strings.EncounterCustomerService} component={ EncounterCustomerService } />
                                 <Route path={'/' + Strings.Outbound_Complaince_Reporting} component={ Outbound_Complaince_Reporting } />
-
+ {/*  Outbound claims */}
+                                <Route path={'/' + Strings.Outbound_Claim_Batch_Details_837} component={Outbound_Claim_Batch_Details_837} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_AuditSummary} component={Outbound_Claim_updated_AuditSummary} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_Dashboard_New} component={Outbound_Claim_updated_Dashboard_New } />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_Details_837_Grid} component={Outbound_Claim_updated_Details_837_Grid} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_FileDashboard} component={ Outbound_Claim_updated_FileDashboard } />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_Payment} component={ Outbound_Claim_updated_Payment } />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_ProcessingSummary} component={ Outbound_Claim_updated_ProcessingSummary } />
+                                  <Route path={'/' + Strings.Outbound_Claim_277CAResponse} component={ Outbound_Claim_277CAResponse } />
+                                <Route path={'/' + Strings.Outbound_Claim_999_response} component={ Outbound_Claim_999_response } /> 
+                                <Route path={'/' + Strings.Outbound_Compliance_Reporting_Claims} component={ Outbound_Compliance_Reporting_Claims } />
+                                <Route path={'/' + Strings.ClaimCustomerService} component={ ClaimCustomerService } /> 
+                                
+                               
                                 {/*  for Sales demo 30545 */}
                                 <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />
                                 <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_New} />
