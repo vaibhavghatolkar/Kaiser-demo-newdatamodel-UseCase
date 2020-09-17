@@ -212,11 +212,15 @@ const Strings = {
     Outbound_Claim_updated_FileDashboard:'Outbound_Claim_updated_FileDashboard',
     Outbound_Claim_updated_Payment:'Outbound_Claim_updated_Payment',
     Outbound_Claim_updated_ProcessingSummary:'Outbound_Claim_updated_ProcessingSummary',
+    
     Outbound_Claim_277CAResponse:'Outbound_Claim_277CAResponse',
-Outbound_Claim_999_response:'Outbound_Claim_999_response',
-Outbound_Compliance_Reporting_Claims:'Outbound_Compliance_Reporting_Claims',
-ClaimCustomerService:'ClaimCustomerService'
+    Inbound_Claim_999_response:'Inbound_Claim_999_response',
+    Outbound_Claim_999_response:'Outbound_Claim_999_response',
+    
+    Outbound_Compliance_Reporting_Claims:'Outbound_Compliance_Reporting_Claims',
+    ClaimCustomerService:'ClaimCustomerService'
 
+// Outbound_Claim_updated_Details_837_Grid
 }
 
 export default Strings;

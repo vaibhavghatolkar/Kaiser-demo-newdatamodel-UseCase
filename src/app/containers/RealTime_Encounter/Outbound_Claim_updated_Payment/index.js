@@ -84,11 +84,11 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                 // { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
                 // { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 // { headerName: "Encounter ID", field: "ClaimID", width: 100,},
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "Molina Claim ID", field: "MolinaClaimID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "Payment Status", field: "PaymentStatus", flex: 1 },
-                { headerName: "Encounter Date", field: "EncounterDate", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Encounter 999 Status", field: "Encounter99_Status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Encounter 277CA Status", field: "Encounter277CA_Status", flex: 1 },
+                { headerName: "Claims Date", field: "EncounterDate", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Claims 999 Status", field: "Encounter99_Status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", flex: 1 },
                 { headerName: "Received Date", field: "ReceivedDate835", flex: 1 },
                 // { headerName: "999", field: "F999", width:200, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "277CA", field: "F277CA", width:200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -116,13 +116,10 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                 resizable: true,
                 filter: true,
             },
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
+            rowSelection: 'never',
+            rowGroupPanelShow: 'never',
+            pivotPanelShow: 'never',
             rowData: [],
-            rowSelection: 'multiple',
-            rowGroupPanelShow: 'always',
-            pivotPanelShow: 'always',
         }
 
         this.getData = this.getData.bind(this)
@@ -415,7 +412,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
             },
         ]
 
-        this.props.history.push('/' + Strings.Outbound_Encounter_ClaimDetails837, {
+        this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
             data: sendData
         })
     }
@@ -596,7 +593,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Outbound_Encounter_ClaimDetails837}
+                    url={Strings.Outbound_Claim_updated_Details_837_Grid}
                     data={sendData}
                     color={color}
                 />
@@ -660,7 +657,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                         if (event.colDef.headerName == '277CA') {
                             // this.goto277(event.data.FileID)
                         }
-                        if (event.colDef.headerName == 'Molina Encounter ID') {
+                        if (event.colDef.headerName == 'Molina Claim ID') {
                             let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
                             let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
                             let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -683,7 +680,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                                 },
                             ]
 
-                            this.props.history.push('/' + Strings.Outbound_Encounter_ClaimDetails837, {
+                            this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
                                 data: sendData
                             })
                         }
@@ -737,7 +734,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Encounter Payment Dashboard </h5>
+                <h5 className="headerText">Claims Payment Dashboard </h5>
                 {this._renderTopbar()}
                 {this._renderSummary(this.state.summary)}
                 {this.state.rowData && this.state.rowData.length > 0 && this.state.gridType ? this._renderTransactions() : null}
