@@ -428,6 +428,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_Claim_updated_Payment} component={ Outbound_Claim_updated_Payment } />
                                 <Route path={'/' + Strings.Outbound_Claim_updated_ProcessingSummary} component={ Outbound_Claim_updated_ProcessingSummary } />
                                   <Route path={'/' + Strings.Outbound_Claim_277CAResponse} component={ Outbound_Claim_277CAResponse } />
+                                <Route path={'/' + Strings.Inbound_Claim_999_response} component={ Outbound_Claim_999_response } /> 
                                 <Route path={'/' + Strings.Outbound_Claim_999_response} component={ Outbound_Claim_999_response } /> 
                                 <Route path={'/' + Strings.Outbound_Compliance_Reporting_Claims} component={ Outbound_Compliance_Reporting_Claims } />
                                 <Route path={'/' + Strings.ClaimCustomerService} component={ ClaimCustomerService } /> 

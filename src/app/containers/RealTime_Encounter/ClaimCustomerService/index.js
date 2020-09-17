@@ -1280,7 +1280,7 @@ export class ClaimCustomerService extends React.Component {
             { headerName: "File Date", field: "FileDateTime", width: 100 },
             { headerName: "File Status", field: "FileStatus", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Submitter", field: "Sender", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Encounter", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Claims", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "Rejected Claims", field: "Rejected", width:80 , cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
             { headerName: "Error Description", field: "FileLevelError", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             // { headerName: "Load Status", field: "Status", width:90,cellStyle: { wordBreak: 'break-all',   'white-space': 'normal' }},
@@ -1296,8 +1296,8 @@ export class ClaimCustomerService extends React.Component {
                 { headerName: "Submitter", field: "Sender", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Load Status", field: "Status", width: 80 },
                 { headerName: "MCG Status", field: "MCGStatus", width: 80 },
-                { headerName: "Total Encounter", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Rejected Encounter", field: "Rejected", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Total Claims", field: "Claimcount", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Rejected Claims", field: "Rejected", width: 80, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Error Description", field: "FileLevelError", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ]
         return (
@@ -1378,11 +1378,11 @@ export class ClaimCustomerService extends React.Component {
         let columnDefs = [
             // { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "State", field: "State", width: 80 },
-            { headerName: "Molina Encounter Id", field: "MolinaClaimID", width: 150, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Encounter Date", field: "EncounterDate", width:100, },
+            { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 150, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Date", field: "EncounterDate", width:100, },
             { headerName: "Subscriber Id", field: "Subscriber_ID", width:130, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Inbound File Name", field: "FileName_Inbound", width:150, },
-            { headerName: "Encounter Status", field: "ClaimStatus", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
+            { headerName: "Claims Status", field: "ClaimStatus", width:100, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' } },
             { headerName: "Subscriber FirstName", field: "SubscriberFirstName", width:100, },
             { headerName: "Subscriber LastName", field: "SubscriberLastName", width:100,  },
             
@@ -1427,7 +1427,7 @@ export class ClaimCustomerService extends React.Component {
                         rowData={this.state.claims_rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Molina Encounter Id') {
+                            if (event.colDef.headerName == 'Molina Claim Id') {
                                 this.setState({
 
                                     showerror: true,
@@ -1458,15 +1458,15 @@ export class ClaimCustomerService extends React.Component {
             [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 170 },
-                { headerName: "X12 Encounter ID", field: "ClaimID", width: 170 },
+                { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
                 { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ] : [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 170 },
-                { headerName: "X12 Encounter ID", field: "ClaimID", width: 170 },
+                { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
                 { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ]
@@ -1514,8 +1514,8 @@ export class ClaimCustomerService extends React.Component {
     _ClaimLineTable() {
         if (this.state.Aggrid_ClaimLineData == undefined) { this.state.Aggrid_ClaimLineData = [] }
         let columnDefs = [
-            { headerName: "Molina Encounter ID", field: "MolinaClaimID" , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Encounter Id", field: "ClaimID" },
+            { headerName: "Molina Claim ID", field: "MolinaClaimID" , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Id", field: "ClaimID" },
 
             { headerName: "Service Line No.", field: "ServiceLineCount" },
             { headerName: " Service Date", field: "ServiceDate" },
@@ -1527,7 +1527,7 @@ export class ClaimCustomerService extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Encounter Line Data</h6>
+                    <h6 className="font-size">Claim Line Data</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1548,7 +1548,7 @@ export class ClaimCustomerService extends React.Component {
                         rowData={this.state.Aggrid_ClaimLineData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == "Molina Encounter ID") {
+                            if (event.colDef.headerName == "Molina Claim ID") {
                                 this.setState({
                                   Encounter_Linedata:true,                                  
                                   LineData_MolinaClaimID:event.data.MolinaClaimID,
@@ -1577,15 +1577,15 @@ export class ClaimCustomerService extends React.Component {
             // { headerName: " HL20 Count", field: "HL20Count", width: 80 },
             // { headerName: "HL22 Count", field: "HL22Count", width: 80 },
             // { headerName: "HL23 Count", field: "HL23Count", width: 80 },
-            { headerName: "Molina Encounter Id", field: "MolinaClaimID", width: 150,  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Encounter Id", field: "ClaimID", width: 100 },
-            { headerName: "Encounter Date", field: "ClaimDateTime", width: 100 },
+            { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 150,  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Id", field: "ClaimID", width: 100 },
+            { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName", width: 100 },
             { headerName: "Subscriber Last Name", field: "SubscriberLastName", width: 100 },
             { headerName: "Admission Date", field: "AdmissionDate", width: 100 },
-            { headerName: "Encounter Amount", field: "Claim_Amount", width: 100 },
+            { headerName: "Claim Amount", field: "Claim_Amount", width: 100 },
             { headerName: "Provider Address", field: "BillingProviderAddress", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Encounter Status", field: "ClaimStatus", width: 100 },
+            { headerName: "Claim Status", field: "ClaimStatus", width: 100 },
             { headerName: "ICD Code", field: "ICDCode", width: 100 },
             { headerName: "Error Description", field: "ClaimLevelErrors",  width: 200 ,cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Accident Date", field: "AccidentDate",  width: 150  },
@@ -1616,7 +1616,7 @@ export class ClaimCustomerService extends React.Component {
                         rowData={this.state.Aggrid_Claim_Info_data}
                         enableCellTextSelection={true}   
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == "Molina Encounter Id" ) {
+                            if (event.colDef.headerName == "Molina Claim Id" ) {
                                 this.setState({
                                     MolinaClaimID: event.data.MolinaClaimID,
                                     EncounterId: event.data.ClaimID,
@@ -1662,7 +1662,7 @@ export class ClaimCustomerService extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Encounter Stages</h6>
+                    <h6 className="font-size">Claim Stages</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1698,20 +1698,20 @@ export class ClaimCustomerService extends React.Component {
         return (
            
             <div>
-                 <h2 style={{fontSize:"18px"}}>Encounter Details</h2>
+                 <h2 style={{fontSize:"18px"}}>Claim Details</h2>
                 <div class="form-row">
                
                     <br></br>
                     <div class="form-group col-md-3">
-                        <label>Molina Encounter Id</label>
+                        <label>Molina Claim Id</label>
                         <input  value={this.state.MolinaClaimID == null ? '' : this.state.MolinaClaimID} onChange={(e) => this.onChangeName(e, 'MolinaClaimID')}   class="form-control"  placeholder=""></input>
                     </div> 
                     <div class="form-group col-md-3">
-                        <label>Encounter Id</label>
+                        <label>Claim Id</label>
                         <input  value={this.state.EncounterId == null ? '' : this.state.EncounterId} onChange={(e) => this.onChangeName(e, 'EncounterId')}   class="form-control"  placeholder=""></input>
                     </div> 
                     <div class="form-group col-md-3">
-                        <label>Encounter Date</label>
+                        <label>Claim Date</label>
                         <input  value={this.state.EncounterDate == null ? '' : this.state.EncounterDate} onChange={(e) => this.onChangeName(e, 'EncounterDate')}class="form-control"   placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
@@ -1727,12 +1727,12 @@ export class ClaimCustomerService extends React.Component {
                         <input value={this.state.AdmissionDate == null ? '' : this.state.AdmissionDate} onChange={(e) => this.onChangeName(e, 'AdmissionDate')}  class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
-                        <label>Encounter Amount</label>
+                        <label>Claim Amount</label>
                         <input value={this.state.Claim_Amount == null ? '' : this.state.Claim_Amount} onChange={(e) => this.onChangeName(e, 'Claim_Amount')} class="form-control"  placeholder=""></input>
                     </div>
                    
                     <div class="form-group col-md-3">
-                        <label>Encounter Status</label>    
+                        <label>Claim Status</label>    
                            
                         <input value={this.state.ClaimStatus == null ? '' : this.state.ClaimStatus} onChange={(e) => this.onChangeName(e, 'ClaimStatus')} class="form-control" placeholder=""></input>                
                       
@@ -1773,16 +1773,16 @@ export class ClaimCustomerService extends React.Component {
         return (
            
             <div>
-                 <h2 style={{fontSize:"18px"}}>Encounter Line Data</h2>
+                 <h2 style={{fontSize:"18px"}}>Claim Line Data</h2>
                 <div class="form-row">
                
                     <br></br>
                     <div class="form-group col-md-3">
-                        <label>Molina Encounter Id</label>
+                        <label>Molina Claim Id</label>
                         <input  value={this.state.LineData_MolinaClaimID == null ? '' : this.state.LineData_MolinaClaimID} onChange={(e) => this.onChangeName(e, 'MolinaClaimID')}   class="form-control"  placeholder=""></input>
                     </div> 
                     <div class="form-group col-md-3">
-                        <label>Encounter Id</label>
+                        <label>Claim Id</label>
                         <input  value={this.state.Line_DataClaimID == null ? '' : this.state.Line_DataClaimID} onChange={(e) => this.onChangeName(e, 'EncounterId')}   class="form-control"  placeholder=""></input>
                     </div> 
                     <div class="form-group col-md-3">
@@ -1920,7 +1920,7 @@ export class ClaimCustomerService extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Encounter Customer Service {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}  </h5>
+                <h5 className="headerText">Claim Customer Service {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}  </h5>
                 {this._renderTopbar()}
                 {
                     this.state.gridType
