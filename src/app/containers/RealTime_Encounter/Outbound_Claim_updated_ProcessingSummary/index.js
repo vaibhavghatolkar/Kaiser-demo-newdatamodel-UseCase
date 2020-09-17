@@ -83,11 +83,11 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                 { headerName: "File Name", field: "FileName_Outbound", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
                 { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
-                { headerName: "Encounter ID", field: "ClaimID", width: 100, },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 130, },
-                { headerName: "Encounter Date", field: "EncounterDate", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Encounter 999 Status", field: "Encounter99_Status", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Encounter 277CA Status", field: "Encounter277CA_Status", width: 140 },
+                { headerName: "Claims ID", field: "ClaimID", width: 100, },
+                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 130, },
+                { headerName: "Claims Date", field: "EncounterDate", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width: 140 },
                 { headerName: "999", field: "F999", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
                 { headerName: "277CA", field: "F277CA", width: 200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
@@ -339,7 +339,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
 
     goto277 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_277CAResponse, {
+        this.props.history.push('/' + Strings.Outbound_Claim_277CAResponse, {
             fileId: fileId
         })
         // setTimeout(() => {
@@ -349,7 +349,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
 
     goto999 = (fileId) => {
         // sessionStorage.setItem('isOutbound', true)
-        this.props.history.push('/' + Strings.Outbound_response_999, {
+        this.props.history.push('/' + Strings.Outbound_Claim_999_response, {
             fileId: fileId,
             data: [
                 { flag999: '1' },
@@ -371,7 +371,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             { flag: '', State: State, selectedTradingPartner: selectedTradingPartner, startDate: startDate, endDate: endDate, status: "", type: type, incoming_fileId: fileId ? fileId : this.state.incoming_fileId },
         ]
 
-        this.props.history.push('/' + Strings.Outbound_Encounter_ClaimDetails837, {
+        this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
             data: sendData
         })
     }
@@ -541,7 +541,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Outbound_Encounter_ClaimDetails837}
+                    url={Strings.Outbound_Claim_updated_Details_837_Grid}
                     data={sendData}
                     color={color}
                 />
@@ -652,7 +652,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Encounter Processing Summary (Outbound)</h5>
+                <h5 className="headerText">Claims Processing Summary (Outbound)</h5>
                 {this._renderTopbar()}
                 {/* {this._renderStats()} */}
                 {this.renderEncounterDetails()}

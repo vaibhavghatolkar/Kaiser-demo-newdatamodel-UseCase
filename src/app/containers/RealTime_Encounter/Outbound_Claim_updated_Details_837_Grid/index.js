@@ -668,13 +668,13 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Molina Encounter Id', value: data.MolinaClaimID },
-                            { key: 'Encounter Id', value: data.ClaimID },
-                            { key: 'Encounter Date', value: data.ClaimDateTime },
+                            { key: 'Molina Claims Id', value: data.MolinaClaimID },
+                            { key: 'Claims Id', value: data.ClaimID },
+                            { key: 'Claims Date', value: data.ClaimDateTime },
                             { key: 'Subscriber First Name', value: data.SubscriberFirstName },
                             { key: 'Subscriber Last Name', value: data.SubscriberLastName },
                             { key: 'Admission Date', value: data.AdmissionDate },
-                            { key: 'Encounter Amount', value: data.Claim_Amount },
+                            { key: 'Claims Amount', value: data.Claim_Amount },
                             { key: 'Provider Address', value: data.BillingProviderAddress },
                             // { key: 'Claim Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
@@ -1231,7 +1231,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate_Outbound", flex: 1, },
             { headerName: "File Status", field: "FileStatus_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Encounter Sent", field: "TotalEncounterSent", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Total Claims Sent", field: "TotalEncounterSent", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
         ]
 
         return (
@@ -1316,11 +1316,11 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
     _renderClaims() {
 
         let columnDefs = [
-            { headerName: "Molina Encounter Id", field: "MolinaClaimID", width:160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Molina Claims Id", field: "MolinaClaimID", width:160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Status", field: "FileStatus_Outbound", width:100 },
-            { headerName: "Encounter Date", field: "EncounterDate", width:150 },
-            { headerName: "Encounter 999 Status", field: "Encounter99_Status", width:150 },
-            { headerName: "Encounter 277CA Status", field: "Encounter277CA_Status", width:150 },
+            { headerName: "Claims Date", field: "EncounterDate", width:150 },
+            { headerName: "Claims 999 Status", field: "Encounter99_Status", width:150 },
+            { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width:150 },
             { headerName: "Payment Status", field: "PaymentStatus", width:150 },
             { headerName: "Error Description", field: "Error_Description", flex:1  ,cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
@@ -1332,7 +1332,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             <div>
 
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Encounter Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
+                    <h6 className="font-size">Claims Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1353,7 +1353,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                         rowData={this.state.claims_rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Molina Encounter Id') {
+                            if (event.colDef.headerName == 'Molina Claims Id') {
                                 this.setState({
                                     claimId: event.data.ClaimID,
                                     showerror: true,
@@ -1399,15 +1399,15 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 170 },
-                { headerName: "X12 Encounter ID", field: "ClaimID", width: 170 },
+                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "X12 Claims ID", field: "ClaimID", width: 170 },
                 { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ] : [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 170 },
-                { headerName: "X12 Encounter ID", field: "ClaimID", width: 170 },
+                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "X12 Claims ID", field: "ClaimID", width: 170 },
                 { headerName: "Error Description", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ]
@@ -1455,8 +1455,8 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
     _ClaimLineTable() {
         if (this.state.Aggrid_ClaimLineData == undefined) { this.state.Aggrid_ClaimLineData = [] }
         let columnDefs = [
-            { headerName: "Molina Encounter ID", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Encounter ID", field: "ClaimID" },
+            { headerName: "Molina Claims ID", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claims ID", field: "ClaimID" },
 
             { headerName: "Service Line No.", field: "ServiceLineCount" },
             { headerName: " Service Date", field: "ServiceDate" },
@@ -1468,7 +1468,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Encounter Line Data</h6>
+                    <h6 className="font-size">Claims Line Data</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1504,13 +1504,13 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             // { headerName: " HL20 Count", field: "HL20Count", width: 80 },
             // { headerName: "HL22 Count", field: "HL22Count", width: 80 },
             // { headerName: "HL23 Count", field: "HL23Count", width: 80 },
-            { headerName: "Molina Encounter Id", field: "MolinaClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "X12 Encounter Id", field: "ClaimID", width: 100 },
-            { headerName: "Encounter Date", field: "ClaimDateTime", width: 100 },
+            { headerName: "Molina Claims Id", field: "MolinaClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "X12 Claims Id", field: "ClaimID", width: 100 },
+            { headerName: "Claims Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName", width: 150 },
             { headerName: "Subscriber Last Name", field: "SubscriberLastName", width: 150 },
             { headerName: "Admission Date", field: "AdmissionDate", width: 100 },
-            { headerName: "Encounter Amount", field: "Claim_Amount", width: 100 },
+            { headerName: "Claims Amount", field: "Claim_Amount", width: 100 },
             { headerName: "Provider Address", field: "BillingProviderAddress", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "Encounter Status", field: "ClaimStatus", width: 150 },
             { headerName: "ICD Code", field: "ICDCode", width: 100 },
@@ -1637,16 +1637,16 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         return (
 
             <div>
-                <h2 style={{ fontSize: "18px" }}>Encounter Details</h2>
+                <h2 style={{ fontSize: "18px" }}>Claims Details</h2>
                 <div class="form-row">
 
                     <br></br>
                     <div class="form-group col-md-3">
-                        <label>Encounter Id</label>
+                        <label>Claims Id</label>
                         <input readOnly={this.state.Error_Field == "CLM01" ? "" : "readOnly"} value={this.state.CLM01 == null ? '' : this.state.CLM01} onChange={(e) => this.onChangeName(e, 'CLM01')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
-                        <label>Encounter Date</label>
+                        <label>Claims Date</label>
                         <input readOnly value={this.state.ClaimDate == null ? '' : this.state.ClaimDate} onChange={(e) => this.onChangeName(e, 'ClaimDate')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
@@ -1662,7 +1662,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                         <input readOnly value={this.state.AdmissionDate == null ? '' : this.state.AdmissionDate} onChange={(e) => this.onChangeName(e, 'AdmissionDate')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
-                        <label>Encounter Amount</label>
+                        <label>Claims Amount</label>
                         <input readOnly value={this.state.Claim_Amount == null ? '' : this.state.Claim_Amount} onChange={(e) => this.onChangeName(e, 'Claim_Amount')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
@@ -1730,7 +1730,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Encounter Details (Outbound)</h5>
+                <h5 className="headerText">Claims Details (Outbound)</h5>
                 {this._renderTopbar()}
                 {this.MemberInfoDialogbox()}
 
@@ -1744,7 +1744,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                             {/* {this.state.showerror ? this._ClaimView_Info_Table() : null} */}
                             {this.state.showerror ?
                                 <table className="table claim-Details border">
-                                    {this.renderHeader('Encounter #' + this.state.claimId)}
+                                    {this.renderHeader('Claims #' + this.state.claimId)}
 
                                     {this.renderRows(this.state.claimDetails)}
 

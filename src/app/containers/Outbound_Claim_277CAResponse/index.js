@@ -480,9 +480,9 @@ export class Outbound_Claim_277CAResponse extends React.Component {
         try {
             let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
             if (isOutbound) {
-                header = '277 CA Encounter Acknowledgement'
+                header = '277 CA Claims Acknowledgement'
             } else {
-                header = '277 CA Encounter Acknowledgement (Outbound)'
+                header = '277 CA Claims Acknowledgement (Outbound)'
             }
         } catch (error) {
 

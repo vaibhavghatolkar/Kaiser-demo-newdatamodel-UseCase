@@ -445,12 +445,12 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
 
                     let claimDetails =
                         [
-                            { key: 'Encounter Id', value: data.ClaimID },
-                            { key: 'Encounter Date', value: data.ClaimDate },
+                            { key: 'Claims Id', value: data.ClaimID },
+                            { key: 'Claims Date', value: data.ClaimDate },
                             { key: 'First Name', value: data.SubscriberFirstName },
                             { key: 'Last Name', value: data.SubscriberLastName },
                             { key: 'Admission Date', value: data.AdmissionDate },
-                            { key: 'Encounter Amount', value: data.Claim_Amount },
+                            { key: 'Claims Amount', value: data.Claim_Amount },
                             { key: 'Provider Address', value: data.BillingProviderAddress },
                             // { key: 'Claim Status', value: data.ClaimStatus },
                             { key: 'ICD Code', value: Claim_Icdcode },
@@ -757,14 +757,14 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
         let columnDefs = this.state.status277CA == "Rejected" ?
             [
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 170 },
                 // { headerName: "X12 Encounter ID", field: "ClaimID", width: 170 },
                 { headerName: "Error Description", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ] : [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Encounter ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 170 },
                 // { headerName: "X12 Encounter ID", field: "ClaimID", width: 170 },
                 { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
@@ -990,10 +990,10 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
 
     _renderClaims() {
         let columnDefs = [
-            { headerName: "Molina Encounter Id", field: "MolinaClaimID", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Encounter Id", field: "ClaimID", width:150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Encounter Date", field: "EncounterDate", width:150 },
-            { headerName: "Encounter Status", field: "BatchClaimStatus", width:150 },
+            { headerName: "Molina Claims Id", field: "MolinaClaimID", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claims Id", field: "ClaimID", width:150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claims Date", field: "EncounterDate", width:150 },
+            { headerName: "Claims Status", field: "BatchClaimStatus", width:150 },
             { headerName: "Error Description", field: "Error_Description", flex:1  ,cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
 
@@ -1022,7 +1022,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
                         rowData={this.state.claims_rowData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Molina Encounter Id') {
+                            if (event.colDef.headerName == 'Molina Claims Id') {
                                 this.setState({
                                     showerror: true,
                                     claimError_Status: event.data.ClaimStatus,
@@ -1062,8 +1062,8 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
             { headerName: "Batch Name", field: "BatchName", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Batch Date", field: "BatchDate", flex: 1 },
             { headerName: "Batch Status", field: "BatchStatus", flex: 1 },
-            { headerName: "Total Encounter", field: "Count", flex: 1 },
-            { headerName: "Errored Encounter", field: "Error", flex: 1 },
+            { headerName: "Total Claims", field: "Count", flex: 1 },
+            { headerName: "Errored Claims", field: "Error", flex: 1 },
         ]
         return (
             <div>
@@ -1112,7 +1112,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
     _ClaimLineTable() {
         if (this.state.claimLineDetails == undefined) { this.state.claimLineDetails = [] }
         let columnDefs = [
-            { headerName: "Encounter Id", field: "ClaimID" },
+            { headerName: "Claims Id", field: "ClaimID" },
             { headerName: "Service line No.", field: "ServiceLineCount" },
             { headerName: "Service date.", field: "ServiceDate" },
             { headerName: "Procedure code", field: "ProcedureDate" },
@@ -1122,7 +1122,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
         return (
             <div>
                 <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Encounter Line Data</h6>
+                    <h6 className="font-size">Claims Line Data</h6>
                     <AgGridReact
                         modules={this.state.modules}
                         columnDefs={columnDefs}
@@ -1155,16 +1155,16 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
         return (
 
             <div>
-                <h2 style={{ fontSize: "18px" }}>Encounter Details</h2>
+                <h2 style={{ fontSize: "18px" }}>Claims Details</h2>
                 <div class="form-row">
 
                     <br></br>
                     <div class="form-group col-md-3">
-                        <label>Encounter Id</label>
+                        <label>Claims Id</label>
                         <input readOnly value={this.state.claimid == null ? '' : this.state.claimid} onChange={(e) => this.onChangeName(e, 'claimid')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
-                        <label>Encounter Date</label>
+                        <label>Claims Date</label>
                         <input readOnly value={this.state.ClaimDate == null ? '' : this.state.ClaimDate} onChange={(e) => this.onChangeName(e, 'ClaimDate')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
@@ -1180,7 +1180,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
                         <input readOnly value={this.state.AdmissionDate == null ? '' : this.state.AdmissionDate} onChange={(e) => this.onChangeName(e, 'AdmissionDate')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
-                        <label>Encounter Amount</label>
+                        <label>Claims Amount</label>
                         <input readOnly value={this.state.Claim_Amount == null ? '' : this.state.Claim_Amount} onChange={(e) => this.onChangeName(e, 'Claim_Amount')} class="form-control" placeholder=""></input>
                     </div>
                     <div class="form-group col-md-3">
@@ -1248,7 +1248,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
 
         return (
             <div>
-                <h5 className="headerText">Encounter Batch Details (Outbound)</h5>
+                <h5 className="headerText">Claims Batch Details (Outbound)</h5>
                 {this._renderTopbar()}
                 {this.MemberInfoDialogbox()}
 
@@ -1260,7 +1260,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
                         {this.state.showerror ? this._renderError() : null}
                         {this.state.showerror ?
                             <table className="table claim-Details border">
-                                {this.renderHeader('Encounter #' + this.state.claimId)}
+                                {this.renderHeader('Claims #' + this.state.claimId)}
 
                                 {this.state.Error_Field != "" ?
                                     <div>
@@ -1291,7 +1291,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
                             {
                                 this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                     <div>
-                                        <h6 style={{ marginTop: '20px', color: "#424242" }}>Encounter Data</h6>
+                                        <h6 style={{ marginTop: '20px', color: "#424242" }}>Claims Data</h6>
                                         <hr />
                                     </div> : null
                             }
@@ -1306,7 +1306,7 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
                             {
                                 this.state.showDetails && this.state.claimDetails && this.state.claimDetails.length > 0 ?
                                     <table className="table claim-Details border">
-                                        {this.renderHeader('Encounter #' + this.state.claimId)}
+                                        {this.renderHeader('Claims #' + this.state.claimId)}
                                         {this.renderRows(this.state.claimDetails)}
                                         <br></br>
                                         {this.state.Icdcodepresent == "ICDCode" || this.state.Icdcodepresent == "AccidentDt" ? this.renderButton() : ""}
