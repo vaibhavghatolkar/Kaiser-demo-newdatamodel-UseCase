@@ -352,7 +352,7 @@ export class ClaimPaymentDetails extends React.Component {
     _ClaimView_Info_Table() {
         if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
         let columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 120 },
             { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
@@ -396,13 +396,54 @@ export class ClaimPaymentDetails extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.Aggrid_Claim_Info_data}
-                        enableCellTextSelection={true}                    >
+                        enableCellTextSelection={true}       
+                         
+                        onCellClicked={(event) => {
+                         
+                            if (event.colDef.headerName == "Claim Id" ) {
+                          
+                                this.setState({
+                                    Filter_ClaimId: event.data.ClaimID
+                                }, () => {
+                                    this.goClaimOutbound()
+                                })                          
+                            } 
+                            
+    
+                        }}
+                        >
                     </AgGridReact>
                 </div>
             </div>
         )
     }
+    goClaimOutbound = (fileId) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+        sessionStorage.setItem('isOutbound', true)
+        let sendData = [
+            {
+                flag: '',
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                status: "",
+                type: type,
+                Filter_ClaimId: this.state.Filter_ClaimId,
+                incoming_fileId: fileId ? fileId : this.state.incoming_fileId
+            },
+        ]
 
+        this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
+            data: sendData
+        })
+
+        window.location.reload()
+    }
     _ClaimServiceLineInfo() {
         if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
         let columnDefs = [
