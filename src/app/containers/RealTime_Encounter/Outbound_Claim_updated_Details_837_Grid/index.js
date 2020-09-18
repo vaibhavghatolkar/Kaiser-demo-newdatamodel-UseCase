@@ -25,6 +25,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log("sssssssssss" , props.location.state.data[0].Filter_ClaimId)
         let condition = props.location.state && props.location.state.data
         this.state = {
             intakeClaims: [],
@@ -34,7 +35,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             HL20: 0,
             HL22: 0,
             HL23: 0,
-            showClaims: false,
+            showClaims: true,
             lineData: [],
             file: [],
             fileDetails: [],
@@ -47,6 +48,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             // MolinaClaimID: condition && props.location.state.data[0] && props.location.state.data[0].MolinaClaimID ? props.location.state.data[0].MolinaClaimID : "",
             enrollment_type: '',
             plan_code: '',
+            fileId:'',
             startDate: condition && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: condition && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             gridflag: condition && props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
@@ -68,7 +70,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             claimLineDetails: [],
             Transaction_Compliance: '',
             providerName: '',
-
+            Filter_ClaimId: props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
             State: condition && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             status: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: condition && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
@@ -232,8 +234,8 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         // }`
 
         let query = `{            
-            OutboundDashboardFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",) {
-                FileID
+            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}") {
+             FileID
             FileName_Outbound
             FileDate_Outbound
             FileStatus_Outbound
@@ -251,24 +253,26 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if (res && res.data && res.data.OutboundDashboardFileDetails) {
+                if (res && res.data && res.data.OutboundClaimsFileDetails) {
 
-                    if (res.data.OutboundDashboardFileDetails.length > 0) {
+                    if (res.data.OutboundClaimsFileDetails.length > 0) {
 
-                        count = Math.floor(res.data.OutboundDashboardFileDetails[0].RecCount / 10)
-                        if (res.data.OutboundDashboardFileDetails[0].RecCount % 10 > 0) {
+                        count = Math.floor(res.data.OutboundClaimsFileDetails[0].RecCount / 10)
+                        if (res.data.OutboundClaimsFileDetails[0].RecCount % 10 > 0) {
                             count = count + 1
                         }
                         this.setState.recount = count;
                     }
 
                     this.setState({
-                        rowData: this.state.gridType == 1 ? res.data.OutboundDashboardFileDetails : [],
-                        intakeClaims: res.data.OutboundDashboardFileDetails,
+                        rowData: this.state.gridType == 1 ? res.data.OutboundClaimsFileDetails : [],
+                        intakeClaims: res.data.OutboundClaimsFileDetails,
                         recount: count,
+                        fileId:  res.data.OutboundClaimsFileDetails[0].FileID
 
 
                     }, () => {
+                        this.getTransactions(this.state.fileId)
                         this.sortData()
                     })
                 }
@@ -382,7 +386,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         }
 
         let query = `{            
-            OutboundEncounterProcessingSummary(FileID: "` + fileId + `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:""){
+            OutboundEncounterProcessingSummary(FileID: "` +fileId+ `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.Filter_ClaimId}"){
                 FileID
                 FileName_Outbound
                 FileDate_Outbound
@@ -1595,7 +1599,6 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             rowData: [],
             claimsAudit: [],
             showerror: false,
-            showClaims: false,
             showDetails: false,
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
@@ -1608,11 +1611,14 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
     }
 
     update = (key, value) => {
+       
         this.setState({
             [key]: value,
             showDetails: false,
             showerror: false,
-            showClaims: false
+        
+        
+            
         }, () => {
             this._refreshScreen()
         })
@@ -1628,7 +1634,10 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                 State={'CA'}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                Filter_ClaimId={this.state.Filter_ClaimId}
                 removeGrid={true}
+                showclaimId={true}
+                isMolina={true}
             />
         )
     }

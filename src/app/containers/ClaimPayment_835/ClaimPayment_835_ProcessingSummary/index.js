@@ -182,6 +182,32 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             data: sendData
         })
     }
+
+    goClaimOutbound = (fileId) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let sendData = [
+            {
+                flag: '',
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                status: "",
+                type: type,
+                Filter_ClaimId: this.state.Filter_ClaimId,
+                incoming_fileId: fileId ? fileId : this.state.incoming_fileId
+            },
+        ]
+
+        this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
+            data: sendData
+        })
+    }
    
     clickNavigation = (event) => {
      
@@ -190,6 +216,13 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 incoming_fileId: event.data.FileID
             }, () => {
                 this.gotoDetails()
+            })
+        }
+        if (event.colDef.headerName == 'Claim Id') {
+            this.setState({
+                Filter_ClaimId: event.data.ClaimID
+            }, () => {
+                this.goClaimOutbound()
             })
         }
     }  
@@ -217,7 +250,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
             { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
-            { headerName: "Claim Id", field: "ClaimID", width: 150 },
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
             { headerName: "Days Aged", field: "Days", width: 70 },
             { headerName: "Patient Name", field: "PatientName", width: 200 },
