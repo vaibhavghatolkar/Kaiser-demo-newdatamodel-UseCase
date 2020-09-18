@@ -189,7 +189,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
         let State = this.state.State ? this.state.State : 'n'
         let type = this.state.type ? this.state.type : ''
-
+        sessionStorage.setItem('isOutbound', true)
         let sendData = [
             {
                 flag: '',
@@ -207,6 +207,8 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid, {
             data: sendData
         })
+
+        window.location.reload()
     }
    
     clickNavigation = (event) => {

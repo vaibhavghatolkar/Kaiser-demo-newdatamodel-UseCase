@@ -25,7 +25,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("sssssssssss" , props.location.state.data[0].Filter_ClaimId)
+        console.log("sssssssssss", props.location.state.data[0].Filter_ClaimId)
         let condition = props.location.state && props.location.state.data
         this.state = {
             intakeClaims: [],
@@ -35,7 +35,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             HL20: 0,
             HL22: 0,
             HL23: 0,
-            showClaims: true,
+            showClaims: false,
             lineData: [],
             file: [],
             fileDetails: [],
@@ -48,7 +48,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             // MolinaClaimID: condition && props.location.state.data[0] && props.location.state.data[0].MolinaClaimID ? props.location.state.data[0].MolinaClaimID : "",
             enrollment_type: '',
             plan_code: '',
-            fileId:'',
+            fileId: '',
             startDate: condition && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: condition && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             gridflag: condition && props.location.state.data[0] && props.location.state.data[0].gridflag ? props.location.state.data[0].gridflag : '',
@@ -71,7 +71,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             Transaction_Compliance: '',
             providerName: '',
             Filter_ClaimId: props.location.state && props.location.state.data[0] && props.location.state.data[0].Filter_ClaimId ? props.location.state.data[0].Filter_ClaimId : '',
-            State: condition && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            State: condition && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : 'CA',
             status: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: condition && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
@@ -150,7 +150,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
 
 
-        
+
             rowData: [],
             rowSelection: 'never',
             rowGroupPanelShow: 'never',
@@ -268,9 +268,8 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                         rowData: this.state.gridType == 1 ? res.data.OutboundClaimsFileDetails : [],
                         intakeClaims: res.data.OutboundClaimsFileDetails,
                         recount: count,
-                        fileId:  res.data.OutboundClaimsFileDetails[0].FileID
-
-
+                        showClaims: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? true : false,
+                        fileId: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? res.data.OutboundClaimsFileDetails[0].FileID : ''
                     }, () => {
                         this.getTransactions(this.state.fileId)
                         this.sortData()
@@ -386,7 +385,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         }
 
         let query = `{            
-            OutboundEncounterProcessingSummary(FileID: "` +fileId+ `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.Filter_ClaimId}"){
+            OutboundEncounterProcessingSummary(FileID: "` + fileId + `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.Filter_ClaimId}"){
                 FileID
                 FileName_Outbound
                 FileDate_Outbound
@@ -420,8 +419,8 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                 if (this.state.gridType) {
                     this.setState({
                         claims_rowData: data,
-                        Ag_grid_FileName: res.data.OutboundEncounterProcessingSummary[0].FileName_Outbound,
-                        Ag_grid_fileDate: res.data.OutboundEncounterProcessingSummary[0].FileDate_Outbound,
+                        Ag_grid_FileName: res.data.OutboundEncounterProcessingSummary && res.data.OutboundEncounterProcessingSummary.length > 0 ? res.data.OutboundEncounterProcessingSummary[0].FileName_Outbound : '',
+                        Ag_grid_fileDate: res.data.OutboundEncounterProcessingSummary && res.data.OutboundEncounterProcessingSummary.length > 0 ? res.data.OutboundEncounterProcessingSummary[0].FileDate_Outbound : '',
                     })
                 } else {
                     this.sortData(fileId, data)
@@ -490,10 +489,10 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
     }
 
     Saved() {
-        var Updatefild=this.state.Updatefild
+        var Updatefild = this.state.Updatefild
 
         if (Updatefild != undefined && Updatefild != "") {
-           var  query = `mutation{
+            var query = `mutation{
                 UpdateOutboundErrorFieldEncounter(FileID :"" ClaimID:""  RefID:` + this.state.RefID + `  ErrorField:"` + this.state.Error_Field + `" ResubmitValue:"` + Updatefild + `" )
               }`
             process.env.NODE_ENV == 'development' && console.log(query);
@@ -564,7 +563,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         this.setState({
             [key]: event.target.value,
             Updatefild: this.state.Error_Field == key ? event.target.value : ''
-            
+
         });
     }
     getDatePicker = () => {
@@ -697,7 +696,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                         seqID: ClaimRefId,
                         fileDataDetails: fileData,
                         lineCount: data ? data.LXCount : 0,
-                        CLM01:data.ClaimID,
+                        CLM01: data.ClaimID,
                         Aggrid_ClaimLineData: res.data.Claim837RTLineDetails,
                         Aggrid_Claim_Info_data: res.data.Claim837RTDetails,
                         ClaimDate: data.ClaimDate,
@@ -1320,13 +1319,13 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
     _renderClaims() {
 
         let columnDefs = [
-            { headerName: "Molina Claims Id", field: "MolinaClaimID", width:160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "File Status", field: "FileStatus_Outbound", width:100 },
-            { headerName: "Claims Date", field: "EncounterDate", width:150 },
-            { headerName: "Claims 999 Status", field: "Encounter99_Status", width:150 },
-            { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width:150 },
-            { headerName: "Payment Status", field: "PaymentStatus", width:150 },
-            { headerName: "Error Description", field: "Error_Description", flex:1  ,cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Molina Claims Id", field: "MolinaClaimID", width: 160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
+            { headerName: "Claims Date", field: "EncounterDate", width: 150 },
+            { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 150 },
+            { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width: 150 },
+            { headerName: "Payment Status", field: "PaymentStatus", width: 150 },
+            { headerName: "Error Description", field: "Error_Description", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
 
             // { headerName: "Error", field: "ClaimLevelErrors" },
@@ -1376,10 +1375,10 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                                 })
                                 if (event.data.Error_Field != "") { $('#MemberInfoDialogbox').modal('show') }
                                 this.get_Error(event.data.ClaimID, event.data.RefID, event.data.FileID)
-                                this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1,event.data.MolinaClaimID)
+                                this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1, event.data.MolinaClaimID)
                                 this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.RefID)
                             }
-                           else if (event.colDef.headerName == "Error Description" && event.data.Error_Description) {
+                            else if (event.colDef.headerName == "Error Description" && event.data.Error_Description) {
                                 this.setState({
                                     clickedError: event.data.Error_Description
                                 }, () => {
@@ -1611,14 +1610,10 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
     }
 
     update = (key, value) => {
-       
         this.setState({
             [key]: value,
             showDetails: false,
             showerror: false,
-        
-        
-            
         }, () => {
             this._refreshScreen()
         })
@@ -1631,7 +1626,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={'CA'}
+                State={this.state.State}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 Filter_ClaimId={this.state.Filter_ClaimId}
