@@ -10,7 +10,7 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Common_835 } from '../../../components/Common_835';
 
 let val = ''
-let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+let isOutbound;
 export class AuditSummary835 extends React.Component {
 
     constructor(props) {
@@ -108,6 +108,10 @@ export class AuditSummary835 extends React.Component {
             pivotPanelShow: 'never',
             rowData: [],
         }
+    }
+
+    componentDidMount(){
+        isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
     }
 
     goto277 = (fileId) => {

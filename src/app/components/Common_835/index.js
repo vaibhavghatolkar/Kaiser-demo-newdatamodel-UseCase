@@ -9,9 +9,7 @@ import { Tiles } from '../Tiles';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../TableTiles';
-let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
-
-
+let isOutbound;
 export class Common_835 extends React.Component {
 
     constructor(props) {
@@ -99,6 +97,7 @@ export class Common_835 extends React.Component {
     }
 
     componentDidMount() {
+        isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
         this._refreshScreen()
     }
 

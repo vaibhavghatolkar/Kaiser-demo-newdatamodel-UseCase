@@ -12,7 +12,7 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Filters } from '../../../components/Filters';
 import { Common_835 } from '../../../components/Common_835';
 
-let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+let isOutbound;
 export class ClaimPaymentDashboard extends React.Component {
 
     constructor(props) {
@@ -131,6 +131,7 @@ export class ClaimPaymentDashboard extends React.Component {
     }
 
     componentDidMount() {
+        isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
         this._refreshScreen()
     }
 

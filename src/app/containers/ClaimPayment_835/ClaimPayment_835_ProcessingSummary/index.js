@@ -11,12 +11,12 @@ import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Common_835 } from '../../../components/Common_835';
 
-let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+let isOutbound;
 export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
     constructor(props) {
         super(props);
-          this.state = {
+        this.state = {
             tradingpartner: [],
             Claim837RTProcessingSummary: [],
             providers: [],
@@ -28,7 +28,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             loaded: 0,
             TotalException: 0,
             selectedTradingPartner: props.location.state && props.location.state.data[0] && props.location.state.data[0].selectedTradingPartner != 'n' ? props.location.state.data[0].selectedTradingPartner : '',
-            State:props.location.state && props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
+            State: props.location.state && props.location.state.data[0] && props.location.state.data[0].State != 'n' ? props.location.state.data[0].State : '',
             startDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].startDate != 'n' ? props.location.state.data[0].startDate : '',
             endDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].endDate != 'n' ? props.location.state.data[0].endDate : '',
             file_id: props.location.state && props.location.state.data[0] && props.location.state.data[0].file_id != 'n' ? props.location.state.data[0].file_id : '',
@@ -84,7 +84,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 { headerName: " Remittance File Status", field: "", suppressMovable: true, },
                 { headerName: "999", field: "", suppressMovable: true, },
                 { headerName: "In HiPaaS", field: "", suppressMovable: true, },
-            
+
 
             ],
 
@@ -122,6 +122,10 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             rowData: [],
         }
 
+    }
+
+    componentWillMount() {
+        isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
     }
 
     _renderStats() {
@@ -210,9 +214,9 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
 
         window.location.reload()
     }
-   
+
     clickNavigation = (event) => {
-     
+
         if (event.colDef.headerName == 'Process Id') {
             this.setState({
                 incoming_fileId: event.data.FileID
@@ -220,16 +224,16 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 this.gotoDetails()
             })
         }
-        if (event.colDef.headerName == 'Claim Id') {
+        if (event.colDef.headerName == 'Claim Id' && !isOutbound) {
             this.setState({
                 Filter_ClaimId: event.data.ClaimID
             }, () => {
                 this.goClaimOutbound()
             })
         }
-    }  
+    }
 
-    
+
     updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
         this.setState({
             fieldType: fieldType,
@@ -252,7 +256,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
             { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
-            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: (isOutbound ? '' : '#139DC9'), cursor: (isOutbound ? '' : 'pointer') } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
             { headerName: "Days Aged", field: "Days", width: 70 },
             { headerName: "Patient Name", field: "PatientName", width: 200 },
@@ -341,8 +345,8 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 endDate={this.state.endDate}
                 showclaimId={true}
                 State={this.state.State}
-               
-                
+
+
             />
         )
     }

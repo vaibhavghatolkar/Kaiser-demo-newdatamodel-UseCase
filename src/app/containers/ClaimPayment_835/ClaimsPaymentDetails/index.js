@@ -14,7 +14,7 @@ import { ServersideGrid } from '../../../components/ServersideGrid';
 
 var val = ''
 const $ = window.$;
-let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+let isOutbound;
 export class ClaimPaymentDetails extends React.Component {
 
     constructor(props) {
@@ -89,9 +89,10 @@ export class ClaimPaymentDetails extends React.Component {
                 filter: true,
 
             },
-        } 
+        }
     }
-    componentDidMount() {     
+    componentWillMount() {
+        isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
     }
     showDetails() {
         this.setState({
@@ -155,10 +156,10 @@ export class ClaimPaymentDetails extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -352,7 +353,7 @@ export class ClaimPaymentDetails extends React.Component {
     _ClaimView_Info_Table() {
         if (this.state.Aggrid_Claim_Info_data == undefined) { this.state.Aggrid_Claim_Info_data = [] }
         let columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: (isOutbound ? '' : '#139DC9'), cursor: (isOutbound ? '' : 'pointer') } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 120 },
             { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "835 Response (RAW)", field: "", width: 120 , cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' }},
@@ -396,22 +397,22 @@ export class ClaimPaymentDetails extends React.Component {
                         paginationPageSize={this.state.paginationPageSize}
                         onGridReady={this.onGridReady}
                         rowData={this.state.Aggrid_Claim_Info_data}
-                        enableCellTextSelection={true}       
-                         
+                        enableCellTextSelection={true}
+
                         onCellClicked={(event) => {
-                         
-                            if (event.colDef.headerName == "Claim Id" ) {
-                          
+
+                            if (event.colDef.headerName == "Claim Id" && !isOutbound) {
+
                                 this.setState({
                                     Filter_ClaimId: event.data.ClaimID
                                 }, () => {
                                     this.goClaimOutbound()
-                                })                          
-                            } 
-                            
-    
+                                })
+                            }
+
+
                         }}
-                        >
+                    >
                     </AgGridReact>
                 </div>
             </div>
@@ -524,7 +525,7 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     postData = (data) => {
-     console.log(data)
+        console.log(data)
         this.setState({
             showClaims: true,
             Ag_grid_FileName: data && data.length > 0 ? data[0].RemittanceFileName : '',
@@ -611,7 +612,7 @@ export class ClaimPaymentDetails extends React.Component {
         )
     }
     _refreshScreen = () => {
-       
+
     }
     update = (key, value) => {
         this.setState({
@@ -647,14 +648,14 @@ export class ClaimPaymentDetails extends React.Component {
             <div>
                 <h5 className="headerText">Payment Details {this.state.subtitle ? <label style={{ fontSize: "14px" }}>({this.state.subtitle})</label> : ""}</h5>
                 {this._renderTopbar()}
-                        <div>
-                            {this._renderList()}
-                            {this.state.showClaims && this.state.selectedFileId ? this._renderClaims() : null}
-                            {this.state.showerror ? this._ClaimView_Info_Table() : null}
-                            {this.state.showerror ? this._ClaimServiceLineInfo() : null}
+                <div>
+                    {this._renderList()}
+                    {this.state.showClaims && this.state.selectedFileId ? this._renderClaims() : null}
+                    {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                    {this.state.showerror ? this._ClaimServiceLineInfo() : null}
 
-                        </div>
-                       
+                </div>
+
                 {this.errorDialog()}
             </div>
         );

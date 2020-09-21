@@ -13,7 +13,7 @@ import { Filters } from '../../components/Filters';
 import { ServersideGrid } from '../../components/ServersideGrid';
 
 var val = ''
-let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+let isOutbound;
 export class Outbound_response_999 extends React.Component {
 
     constructor(props) {
@@ -102,7 +102,7 @@ console.log("fsdfdsf" ,this.props.location)
     }
 
     componentDidMount() {
-        
+        isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
     }
 
     getFileDetails = async (fileId) => {
