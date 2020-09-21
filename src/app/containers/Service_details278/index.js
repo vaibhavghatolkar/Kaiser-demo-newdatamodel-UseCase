@@ -148,7 +148,7 @@ console.log("sadsafc",props.location.state.data[0])
                 <table className="table table-bordered claim-list">
                     <tr className="table-head">
                         <td className="table-head-text list-item-style">Transaction Name</td>
-                        <td className="table-head-text list-item-style">Transaction State</td>
+                        <td className="table-head-text list-item-style">Transaction Date</td>
                         <td className="table-head-text list-item-style">Status</td>
                         <td className="table-head-text list-item-style">Submitter</td>
                         <td className="table-head-text list-item-style">Error Code</td>
