@@ -138,67 +138,67 @@ export class Outbound_Claim_Batch_Click_Details extends React.Component {
     _RenderList(){
        
           let columnDefs = this.state.claimStatus=="Corrected Patient/Insured Name" ? [            
-            { headerName: "Claim ID", field: "MolinaClaimID", width: 150,  },
+            { headerName: "Claims Id", field: "MolinaClaimID", width: 150,  },
             // { headerName: "Payer Name", field: "jobName", flex: 1 },
             // { headerName: "ICD Code", field: "LOB", width:130 },
-            { headerName: "Claim Date", field: "EncounterDate", width:200 },
+            { headerName: "Claims Date", field: "EncounterDate", width:200 },
            // { headerName: "835 Process ID", field: "ProcessID835", width:200 },
           //  { headerName: "Payment Status", field: "", width:200 },
         
-          { headerName: "277 CA Claim Status ", field: "Encounter277CA_Status", width:200 },
+          { headerName: "277 CA Claims Status ", field: "Encounter277CA_Status", width:200 },
           { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
             { headerName: "837 Patient Name", field: "SubscriberFirstName", width:200,cellRenderer: (data) => {
                 return   data.data.SubscriberFirstName + " " + data.data.SubscriberLastName                
             }
         
         },
-            { headerName: "835 Patient Name", field: "Corrected_Patient_Name", width:200 , cellRenderer: (data) => {
+            { headerName: "835 Patient Name", field: "Corrected_Patient_Name", flex:1, cellRenderer: (data) => {
                 return   data.data.SubscriberFirstName + " " + data.data.Corrected_Patient_Name                
             }
         }
             
         ]:
          this.state.claimStatus=="Corrected Priority Payer Name" ? [
-            { headerName: "Claim ID", field: "MolinaClaimID", width: 150,  },
+            { headerName: "Claims Id", field: "MolinaClaimID", width: 150,  },
             // { headerName: "Payer Name", field: "jobName", flex: 1 },
             // { headerName: "ICD Code", field: "LOB", width:130 },
-            { headerName: "Claim Date", field: "EncounterDate", width:200 },
+            { headerName: "Claims Date", field: "EncounterDate", width:200 },
            
-            { headerName: "277 CA Claim Status ", field: "Encounter277CA_Status", width:200 },
+            { headerName: "277 CA Claims Status ", field: "Encounter277CA_Status", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
           //  { headerName: "835 Process ID", field: "ProcessID835", width:200 },
            // { headerName: "Payment Status", field: "", width:200 },
             { headerName: "837 Payer Name", field: "Payername", width:200 },
-            { headerName: "835 Payer Name", field: "Corrected_Payer_Name", width:200 },
+            { headerName: "835 Payer Name", field: "Corrected_Payer_Name",flex:1,},
             
         ] : this.state.claimStatus=="Corrected ICD Code" ? [
-            { headerName: "Claim ID", field: "MolinaClaimID", width: 150,  },
+            { headerName: "Claims Id", field: "MolinaClaimID", width: 150,  },
             // { headerName: "Payer Name", field: "jobName", flex: 1 },
             // { headerName: "ICD Code", field: "LOB", width:130 },
-            { headerName: "Claim Date", field: "EncounterDate", width:200 },
+            { headerName: "Claims Date", field: "EncounterDate", width:200 },
            
-            { headerName: "277 CA Claim Status ", field: "Encounter277CA_Status", width:200 },
+            { headerName: "277 CA Claims Status ", field: "Encounter277CA_Status", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
            // { headerName: "835 Process ID", field: "ProcessID835", width:200 },
            // { headerName: "Payment Status", field: "", width:200 },
             { headerName: "837 Icd Code", field: "ICD_Code", width:200 },
-            { headerName: "835 Icd Code", field: "Corrected_Dignosis_Code", width:200 },
+            { headerName: "835 Icd Code", field: "Corrected_Dignosis_Code",flex:1, },
             
         ]: [
-            { headerName: "Claim ID", field: "MolinaClaimID", width: 150,  },
+            { headerName: "Claims Id", field: "MolinaClaimID", width: 150,  },
             // { headerName: "Payer Name", field: "jobName", flex: 1 },
             // { headerName: "ICD Code", field: "LOB", width:130 },
-            { headerName: "Claim Date", field: "EncounterDate", width:200 },
+            { headerName: "Claims Date", field: "EncounterDate", width:200 },
            // { headerName: "835 Process ID", field: "ProcessID835", width:200 },
           //  { headerName: "Payment Status", field: "", width:200 },
         
-          { headerName: "277 CA Claim Status ", field: "Encounter277CA_Status", width:200 },
+          { headerName: "277 CA Claims Status ", field: "Encounter277CA_Status", width:200 },
           { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
             { headerName: "837 Patient Name", field: "SubscriberFirstName", width:200,cellRenderer: (data) => {
                 return   data.data.SubscriberFirstName + " " + data.data.SubscriberLastName                
             }
         
-        },   { headerName: "835 Patient Name", field: "Corrected_Patient_Name", width:200 , cellRenderer: (data) => {
+        },   { headerName: "835 Patient Name", field: "Corrected_Patient_Name",flex:1, cellRenderer: (data) => {
             return   data.data.SubscriberFirstName + " " + data.data.Corrected_Patient_Name                
         }
     }
