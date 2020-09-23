@@ -980,7 +980,6 @@ export class Outbound_Claim_Batch_Details_837 extends React.Component {
             <Filters
                 isTimeRange={false}
                 update={this.update}
-                State={'CA'}
                 removeSubmitter={true}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}

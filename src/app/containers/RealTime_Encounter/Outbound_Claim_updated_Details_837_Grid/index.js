@@ -1632,7 +1632,6 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={this.state.State}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 Filter_ClaimId={this.state.Filter_ClaimId}

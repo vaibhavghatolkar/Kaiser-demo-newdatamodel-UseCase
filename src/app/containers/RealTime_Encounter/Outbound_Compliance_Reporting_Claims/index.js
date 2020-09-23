@@ -9,7 +9,7 @@ export class Outbound_Compliance_Reporting_Claims extends React.Component {
 
     renderHL7 = () => {
         return(
-            <img src={require('../../../components/Images/compliance.png')} alt="logo" className="compliance_image_style" align="center" />
+            <img src={require('../../../components/Images/claim_compliance.png')} alt="logo" className="compliance_image_style" align="center" />
         )
     }
 

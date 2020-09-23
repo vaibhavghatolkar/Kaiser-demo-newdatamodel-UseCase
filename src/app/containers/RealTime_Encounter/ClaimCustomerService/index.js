@@ -1909,7 +1909,6 @@ export class ClaimCustomerService extends React.Component {
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={'CA'}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
             />

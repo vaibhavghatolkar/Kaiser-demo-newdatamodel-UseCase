@@ -12,6 +12,7 @@ import { getProviders } from '../../../../helpers/getDetails';
 import { StateDropdown } from '../../../components/StateDropdown';
 import { Tiles } from '../../../components/Tiles';
 import { AgGridReact } from 'ag-grid-react';
+
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Link } from 'react-router-dom'
@@ -57,7 +58,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
-
+            payment_status:"Paid",
             X12Count: 0,
             Accepted_Claims: 0,
             Rejected_Claims: 0,
@@ -236,15 +237,21 @@ export class Outbound_Claim_updated_Payment extends React.Component {
             .then(res => {
                 let data = res.data.OutboundPaymentDashboard
                 let condition = data && data.length > 0 ? true : false
+  
                 let summary = [
-                    { name: 'Paid', value: condition ? data[0].Paid : 0 },
-                    { name: 'Denied', value: condition ? data[0].Denied : 0 },
-                    { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
-                    { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0 },
+                    { name: 'Paid', value: condition ? data[0].Paid : 0, color: '#2AC327' },
+                    { name: 'Denied', value: condition ? data[0].Denied : 0 , color: 'red'},
+                    // { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
+                    { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0, color: '#F39C12' },
+                    { name: 'WIP 0-30', value: 500, color: '#1DA3CD' },
+                    { name: 'WIP 30-60', value: 350, color: '#1DA3CD' },
+                    { name: 'WIP >60', value:430 , color: '#1DA3CD'},
+                 
                 ]
 
                 this.setState({
                     summary: summary,
+                    showtable:true,
                 })
             })
             .catch(err => {
@@ -305,7 +312,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
 
         let query = `{            
-            OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}", F99Status:"", F277Status:"", PaymentStatus:"Y", MolinaClaimID:"") {
+            OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}", F99Status:"", F277Status:"", PaymentStatus:"${this.state.payment_status}", MolinaClaimID:"") {
                 RefID
                 FileID
                 FileName_Outbound
@@ -494,7 +501,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
             // { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
             { header: 'Pending', value: this.state.Pending, style: "orange summary-title" },
             { header: 'Paid', value: this.state.Paid },
-            { header: 'Denied', value: this.state.Denide }
+     
         ]
 
         let row = []
@@ -611,13 +618,37 @@ export class Outbound_Claim_updated_Payment extends React.Component {
         let row = []
         array.forEach(item => {
             row.push(
-                <Tiles
-                    isenrollment={true}
-                    isClickable={false}
-                    header_text={item.name ? item.name : ""}
-                    value={item.value}
-                    onClick={item.onClick ? item.onClick : ''}
-                />
+                <Tiles 
+                isClickable={
+                    item.name != 'WIP 0-30' &&
+                    item.name != 'WIP 30-60' &&  item.name != 'Payment Adjustment'  &&  item.name != 'WIP >60'
+
+                }
+                 header_text={item.name}
+                value={item.value} 
+                count_color={item.color}
+                differentTile={true}
+                onClick={() => {                 
+                          if (item.name == 'Paid') {
+                            this.setState({   
+                                payment_status:"Paid" , 
+                                rowData:[]               
+                            }, () => { 
+                             this.getData()
+                             })
+                            }
+                        else if (item.name == 'Denied') {
+                            this.setState({   
+                                payment_status:"Denied" ,
+                                rowData:[]                  
+                            }, () => { 
+                             this.getData()
+                             })
+                            }
+                           
+                 
+                }}       
+      />
 
             )
         });
@@ -726,7 +757,6 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={''}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
@@ -734,13 +764,116 @@ export class Outbound_Claim_updated_Payment extends React.Component {
         )
     }
 
+
+
+    _render_Outbound_Claim_Table = (array) => {
+        let row = []
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let subtitle = ''
+            let availitySent = ''
+            let color = "var(--main-bg-color)"
+            let Status = ''
+            let url = Strings.Outbound_Claim_Batch_Click_Details
+            let Audit = ''
+            let inDHS = ''
+            let Add = ''
+            let inQnxt = ''
+            let flag = ''
+            let MonthlyStatus = ""
+            let status=""
+            if (item.name == 'Corrected Patient/Insured Name') {
+                  color = "var(--green)"
+                  claimStatus="Corrected Patient/Insured Name"
+                  status="patient"
+            } else if (item.name == 'Corrected Priority Payer Name') {
+                claimStatus = 'Corrected Priority Payer Name'
+                status="icd"
+                 color = "var(--main-bg-color)"
+            } else if (item.name == 'Corrected ICD Code') {
+                claimStatus="Corrected ICD Code"
+                status="payer"
+                color = "var(--orange)"
+            }
+
+            let sendData = [
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    transactionId: 'n',
+                    status: Status,
+                    claimStatus: claimStatus,
+                    MaintenanceCode: claimStatus,
+                    type: type,
+                    subtitle: subtitle,
+                    availitySent: availitySent,
+                    incoming_fileId: this.state.selected_FileID,
+                    Audit: Audit,
+                    inDHS: inDHS,
+                    Add: Add,
+                    flag: flag,
+                    inQnxt: inQnxt,
+                    MonthlyStatus: MonthlyStatus
+                },
+            ]
+
+            row.push(
+                <TableTiles
+                    item={item}
+                    url={url}
+                    data={sendData}
+                    color={color}
+                />
+            )
+        })
+
+        return (
+            <div className="col-4 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+                {row}
+            </div>
+        )
+    }
+
+
+    render_Outbound_ClaimDetails = () => {
+  
+        let stage_1 = [
+            { header: '', },
+            { 'name': 'Corrected Patient/Insured Name', 'value': 42, 'isClick': true },
+            { 'name': 'Corrected Priority Payer Name', 'value': 20, 'isClick': true },
+            { 'name': 'Corrected ICD Code', 'value': 27, 'isClick': true },
+       ]
+       
+
+
+
+        return (
+            <div className="row" style={{ marginBottom: '12px' }}>
+                {this._render_Outbound_Claim_Table(stage_1)}
+         
+              
+            </div>
+        )
+    }
     render() {
         return (
             <div>
                 <h5 className="headerText">Claims Payment Dashboard </h5>
                 {this._renderTopbar()}
                 {this._renderSummary(this.state.summary)}
-                {this.state.rowData && this.state.rowData.length > 0 && this.state.gridType ? this._renderTransactions() : null}
+                {/* <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}></h6> */}
+                { this.render_Outbound_ClaimDetails()}
+                { this._renderTransactions()}
             </div>
         );
     }

@@ -449,7 +449,7 @@ export class Outbound_Claim_999_response extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                isEncounter={true}
+                is837={true}
                 isDiffSubmitter={true}
                 transactionType={this.state.transactionType}
                 removeGrid={true}

@@ -80,7 +80,14 @@ export class Tiles extends React.Component {
 
     renderDiffTile = () => {
         return (
-            <div className="summary-diff-tile summary-container-uniform clickable nopadding" style={{ paddingLeft: '16px' }}
+            this.props.isClickable ?
+            <div className="summary-diff-tile summary-container-uniform clickable  nopadding" style={{ paddingLeft: '16px' }}
+                onClick={() => this.props.onClick()}>
+                <div className="summary-header">{this.props.header_text}</div>
+                <div className="summary-title" style={{ color: this.props.count_color }}>
+                    {this.props.value}
+                </div>
+            </div>:<div className="summary-diff-tile summary-container-uniform  nopadding" style={{ paddingLeft: '16px' }}
                 onClick={() => this.props.onClick()}>
                 <div className="summary-header">{this.props.header_text}</div>
                 <div className="summary-title" style={{ color: this.props.count_color }}>

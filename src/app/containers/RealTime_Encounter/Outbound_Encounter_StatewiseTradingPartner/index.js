@@ -35,7 +35,7 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
             Search_PayerID: '',
             Search_PayerName: '',
             Search_State: "",
-            Search_Tran_Type: "834",
+            Search_Tran_Type: "837P",
             direction: 'Outbound',
             orderby: '',
             showTable: false,
@@ -1009,9 +1009,9 @@ export class Outbound_Encounter_StatewiseTradingPartner extends React.Component 
                                     {this._renderList()}
                                     <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Outbound File Generation Scheduled</b></div> 
                                     {this.ScheduleTimeFile()}
-                                    <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Audit File Sequencing</b></div> 
+                                    {/* <div className="general-header" style={{ marginLeft: '3%', marginTop: '12px' }}><b>Audit File Sequencing</b></div> 
                                     {this.AuditFileSeq()}
-                                     {this.state.showTable ? this.AuditFileSeqDetails() : null}
+                                     {this.state.showTable ? this.AuditFileSeqDetails() : null} */}
                                 </div>
                             </div>
                             </div>

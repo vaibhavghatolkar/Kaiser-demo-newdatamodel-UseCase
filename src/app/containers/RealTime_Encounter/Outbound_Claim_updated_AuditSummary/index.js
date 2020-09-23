@@ -732,7 +732,6 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={''}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}

@@ -16,8 +16,8 @@ export class TransactionSetup_New extends React.Component {
             tradingpartner: [],
             LOBList: [],
             TransactionMaster: [],
-            Transaction_Type: '834',
-            Companion_Guide: '834 Medicare',
+            Transaction_Type: '837P',
+            Companion_Guide: '837P Medicaid CA',
             Acceptance_Criteria: '',
             Communication_Type: '1',
             Change_Trading_Partner: '',
@@ -42,7 +42,7 @@ export class TransactionSetup_New extends React.Component {
             daysofweek: '',
             State: '',
             direction: 'Outbound',
-            SelectedTransaction: '834'
+            SelectedTransaction: '837P'
 
         };
 

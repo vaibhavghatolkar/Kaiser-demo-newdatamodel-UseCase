@@ -196,7 +196,7 @@ export class CompanionGuide extends React.Component {
                                 <select onChange={this.ChangeTradingPartner} className="form-control list-header1" id="fao1">
                                     <option>834 Medicare</option>
                                     <option>837I Medicaid CA</option>
-                                    <option>837P Medicaid CA</option>
+                                    <option selected>837P Medicaid CA</option>
                                     <option>Encounters 837I Medicaid CA</option>
                                     <option>Encounters 837P Medicaid CA</option>
                                     <option>270 Medicare</option>
