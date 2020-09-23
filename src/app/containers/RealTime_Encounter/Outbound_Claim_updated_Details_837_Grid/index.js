@@ -1232,11 +1232,16 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State", width:100 ,
+            cellRenderer: (data) => {
+                return   "FL"                
+            }
+        },
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
-            { headerName: "File Status", field: "FileStatus_Outbound", width: 140 },
+            { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
             { headerName: "Payer", field: "", flex: 1,  cellRenderer: (data) => {    return 'Anthem Blue Cross' }},
-            { headerName: "Total Claims", field: "TotalEncounterSent", width: 130 },
+            { headerName: "Total Claims", field: "TotalEncounterSent", width: 100 },
             { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
 

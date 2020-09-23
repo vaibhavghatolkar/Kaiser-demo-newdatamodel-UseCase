@@ -86,6 +86,11 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                 // { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 // { headerName: "Encounter ID", field: "ClaimID", width: 100,},
                 { headerName: "Molina Claim ID", field: "MolinaClaimID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State", width: 100 ,
+                cellRenderer: (data) => {
+                    return   "FL"                
+                }
+        },
                 { headerName: "Payment Status", field: "PaymentStatus", flex: 1 },
                 { headerName: "Claims Date", field: "EncounterDate", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Claims 999 Status", field: "Encounter99_Status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -621,7 +626,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                 <Tiles 
                 isClickable={
                     item.name != 'WIP 0-30' &&
-                    item.name != 'WIP 30-60' &&  item.name != 'Payment Adjustment'  &&  item.name != 'WIP >60'
+                    item.name != 'WIP 30-60'  &&  item.name != 'WIP >60'
 
                 }
                  header_text={item.name}
@@ -637,6 +642,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                              this.getData()
                              })
                             }
+                           
                         else if (item.name == 'Denied') {
                             this.setState({   
                                 payment_status:"Denied" ,
@@ -645,6 +651,14 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                              this.getData()
                              })
                             }
+                            else if (item.name == 'Payment Adjustment') {
+                                this.setState({   
+                                    payment_status:"Payment Adjustment" ,
+                                    rowData:[]                  
+                                }, () => { 
+                                 this.getData()
+                                 })
+                                }
                            
                  
                 }}       
@@ -705,7 +719,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                                     status: "",
                                     type: type,
                                     FileID: event.data.FileID,
-                                    // MolinaClaimID: event.data.MolinaClaimID,
+                                    Filter_ClaimId: event.data.MolinaClaimID,
                                     F99Status: "",
                                     F277Status: ""
                                 },

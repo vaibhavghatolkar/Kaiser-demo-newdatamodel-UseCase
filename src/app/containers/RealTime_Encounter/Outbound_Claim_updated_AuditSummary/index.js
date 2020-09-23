@@ -69,12 +69,18 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
             NotSent999: props.location.state && props.location.state.data && props.location.state.data[0] && props.location.state.data[0].notSent ? props.location.state.data[0].notSent : '',
             columnDefs: [
                 { headerName: "File Name", field: "FileName_Outbound", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State", width: 100,
+                cellRenderer: (data) => {
+                    return   "FL"                
+                }
+            },
                 { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
+        
                 { headerName: "File Status", field: "FileStatus_Outbound", width: 120 },
                 { headerName: "Total Claims Sent", field: "TotalEncounterSent", width: 140 },
-                { headerName: "Batch Name", field: "BatchName", width: 120 },
-                { headerName: "Accepted 999", field: "Accepted999", width: 120 },
-                { headerName: "Rejected 999", field: "Rejected999", width: 120 },
+                { headerName: "Batch Name", field: "BatchName", width: 100 },
+                { headerName: "Accepted 999", field: "Accepted999", width: 100 },
+                { headerName: "Rejected 999", field: "Rejected999", width: 100 },
                 { headerName: "Acepted 277CA", field: "Acepted277CA", width: 130 },
                 { headerName: "Rejected 277CA", field: "Rejected277CA", width: 130 },
                 { headerName: "999", field: "F999", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },

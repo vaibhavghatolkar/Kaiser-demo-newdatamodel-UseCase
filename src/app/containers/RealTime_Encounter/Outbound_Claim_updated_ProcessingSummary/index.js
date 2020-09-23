@@ -82,6 +82,11 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName_Outbound", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "State", field: "State",  width: 100,
+                cellRenderer: (data) => {
+                    return   "FL"                
+                }
+            },
                 { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
                 { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 { headerName: "Claims ID", field: "ClaimID", width: 100, },

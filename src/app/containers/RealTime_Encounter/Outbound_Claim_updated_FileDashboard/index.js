@@ -1168,6 +1168,11 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
     _renderList() {
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State", width: 100 ,
+            cellRenderer: (data) => {
+                return   "FL"                
+            }
+        },
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 140 },
