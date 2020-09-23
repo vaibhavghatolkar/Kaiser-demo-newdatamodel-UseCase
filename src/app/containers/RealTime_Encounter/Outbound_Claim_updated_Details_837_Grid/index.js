@@ -151,7 +151,6 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
 
 
-            rowData: [],
             rowSelection: 'never',
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
@@ -240,6 +239,7 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
             FileDate_Outbound
             FileStatus_Outbound
             TotalEncounterSent
+            Rejected_277CA
            }
        }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -1232,10 +1232,14 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "File Date", field: "FileDate_Outbound", flex: 1, },
-            { headerName: "File Status", field: "FileStatus_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Claims Sent", field: "TotalEncounterSent", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Process ID", field: "FileID", flex: 1 },
+            { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
+            { headerName: "File Status", field: "FileStatus_Outbound", width: 140 },
+            { headerName: "Payer", field: "", flex: 1,  cellRenderer: (data) => {    return 'Anthem Blue Cross' }},
+            { headerName: "Total Claims", field: "TotalEncounterSent", width: 130 },
+            { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
+
 
         return (
             <div>
@@ -1623,6 +1627,8 @@ export class Outbound_Claim_updated_Details_837_Grid extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
+                isPayer={true}
+                removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}

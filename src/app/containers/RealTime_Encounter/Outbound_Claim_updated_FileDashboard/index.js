@@ -36,6 +36,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             stage_4: [],
             stage_5: [],
             stage_6: [],
+            stage_7: [],
             type: "",
             apiflag: this.props.apiflag,
             startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
@@ -92,6 +93,10 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             summary_1: [],
             summary_2: [],
             summary_3: [],
+            Paid:0,
+            Denied:0,
+            Payment_Never_Submitted:0,
+            Payment_Adjustment:0,
 
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -167,7 +172,14 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 Accepted277CA
                 Rejected277CA
                 Resubmit277CA
+                Line_Item_Count
             }
+            OutboundPaymentDashboard {
+                Paid
+                Payment_Adjustment
+                Payment_Never_Submitted
+                Denied
+              }
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -183,8 +195,10 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             .then(res => {
                 let data = res.data.OutboundDashboardBatchTable
                 let _data = res.data.OutboundDashboardFileTable
+                let _data1 = res.data.OutboundPaymentDashboard
                 let condition = data && data.length > 0 ? true : false
                 let _condition = _data && _data.length > 0 ? true : false
+                let _condition1 = _data1 && _data1.length > 0 ? true : false
 
                 let stage_1 = [
                     { 'header': '' },
@@ -202,7 +216,8 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
 
                 let stage_4 = [
                     { 'header': '' },
-                    { 'name': 'Sent', 'value': _condition ? _data[0].TotalEncounterSent : 0, isClick: true },
+                    { 'name': 'X12 Claim Count', 'value': _condition ? _data[0].TotalEncounterSent : 0, isClick: true },
+                    { 'name': 'X12 Claim Line Item Count', 'value': _condition ? _data[0].Line_Item_Count : 0, color : '#139DC9' },
                 ]
                 let stage_5 = [
                     { 'header': '' },
@@ -217,6 +232,14 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                     { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, isClick: true },
                     { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, isClick: true },
                 ]
+                let stage_7 = [
+                    { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color : '#2AC327'  },
+                    { 'name': 'Denied', 'value': _condition1 ? _data1[0].Denied : 0, color : '#FF3B41' },
+                    { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color : '#FA731A'  },
+                    { 'name': 'WIP 0-30', 'value': 500, color : '#139DC9' },
+                    { 'name': 'WIP 30-60', 'value': 350, color : '#139DC9' },
+                    { 'name': 'WIP >60', 'value': 430, color : '#139DC9' },
+                ]
 
 
                 this.setState({
@@ -225,13 +248,56 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                     stage_3: stage_3,
                     stage_4: stage_4,
                     stage_5: stage_5,
-                    stage_6: stage_6
+                    stage_6: stage_6,
+                    stage_7: stage_7,
                 })
             })
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
+
+    // _getPaymentDetails = async () => {
+    //     let query = `{OutboundPaymentDashboard {
+    //         Paid
+    //         Payment_Adjustment
+    //         Payment_Never_Submitted
+    //         Denied
+    //       }}
+    //       `
+    //     if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+    //     fetch(Urls._Encounter, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json',
+    //         },
+    //         body: JSON.stringify({ query: query })
+    //     })
+    //         .then(res => res.json())
+    //         .then(res => {
+    //             let data = res.data.OutboundPaymentDashboard
+    //             let condition = data && data.length > 0 ? true : false
+
+    //             // let summary = [
+    //             //     { name: 'Paid', value: condition ? data[0].Paid : 0 },
+    //             //     { name: 'Denied', value: condition ? data[0].Denied : 0 },
+    //             //     { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
+    //             //     { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0 },
+    //             // ]
+
+    //             this.setState({
+    //                 // summary: summary,
+    //                 Paid: condition ? data[0].Paid : 0,
+    //                 Denied: condition ? data[0].Denied : 0,
+    //                 Payment_Never_Submitted: condition ? data[0].Payment_Never_Submitted : 0,
+    //                 Payment_Adjustment: condition ? data[0].Payment_Adjustment : 0
+    //             })
+    //         })
+    //         .catch(err => {
+    //             process.env.NODE_ENV == 'development' && console.log(err)
+    //         })
+    // }
     _getCounts = async () => {
         let query = `{
             OutboundDashboardCountReadyForBatch {
@@ -281,8 +347,8 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 ]
 
                 let summary_3 = [
-                    { name: 'Files', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
-                    { name: 'Sent To State', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
+                    { name: 'Generated 837 Files', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
+                    { name: 'Sent To Payers', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
                     { name: '999 Accepted', value: _new_condition ? _new_data[0].Accepted999 : 0 },
                     { name: '999 Rejected', value: _new_condition ? _new_data[0].Rejected999 : 0 },
                     { name: '277CA Received', value: _new_condition ? _new_data[0].Accepted999 : 0 },
@@ -353,7 +419,18 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
         let query = `{OutboundFileRejectionPieChart {
             X_Axis
             Y_Axis
-          }}`
+          }
+          barchart : Claim837RTClaimBarchart (Sender:"",State:"",Provider:"", StartDt :"${startDate}", EndDt : "${endDate}", ChartType: "Monthwise", Type : "", RecType: "Inbound") {
+            From
+            MonthNo
+            Year
+            To
+            Amount
+            TotalClaims
+            X_axis
+            Y_axis
+        }
+        }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls._Encounter, {
             method: 'POST',
@@ -366,10 +443,26 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let array = []
-                let ClaimBarChart = res.data.OutboundFileRejectionPieChart
+                let ClaimBarChart = res.data.barchart
                 let claimLabels = []
                 let second_data = this.getPieChartData(res.data.OutboundFileRejectionPieChart)
-                // let pie_data = this.getPieChartData(res.data.piechart)
+                let pieChart = [{
+                    'X_Axis': 'Service Facility Location is not used when reporting ambulance services',
+                    'Y_Axis': "6"
+                },{
+                    'X_Axis': 'Duplicate Occurrence Span Codes not allowed on a claim',
+                    'Y_Axis': "4"
+                },
+                {
+                    'X_Axis': 'When a Diagnosis Code Pointer is 7, a Diagnosis Code in 2300/HI-072 must exist',
+                    'Y_Axis': "2"
+                },
+                {
+                    'X_Axis': 'Admission Date (DTP-01=435) was not found but was expected because this claim is for Inpatient Services',
+                    'Y_Axis': "1"
+                }
+            ]
+                let pie_data = this.getPieChartPaymentData(pieChart)
 
                 let count = 0
                 ClaimBarChart.forEach((d) => {
@@ -384,7 +477,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                     ClaimBarChart: array,
                     claimLabels: claimLabels,
                     second_data: second_data,
-                    // pie_data: pie_data,
+                    pie_data: pie_data,
                 })
             })
             .catch(err => {
@@ -497,7 +590,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
         if (header == 'Top 10 File Level Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
-        } else if (header == 'Top 10 Claims Level Errors') {
+        } else if (header == 'Top 10 Claim Rejected Errors') {
             addon = '/reject'
             generalStatus = 'Rejected'
         }
@@ -526,18 +619,61 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
         )
     }
 
+    getPieChartPaymentData = (pieChart) => {
+        let pieLabel = []
+        let pieData = []
+       
+        pieChart.forEach((d) => {
+            pieLabel.push(d.X_Axis)
+            pieData.push(d.Y_Axis)
+        })
+
+        let pie_data = {
+            labels: pieLabel,
+            datasets: [{
+                data: pieData,
+                backgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DC913',
+                    '#EC6236',
+                    '#C9139D',
+                    'blue',
+                    '#5369e7',
+                    '#b7bf11',
+                    '#8459af',
+                    '#cb662c',
+                ],
+                hoverBackgroundColor: [
+                    '#139DC9',
+                    '#83D2B4',
+                    '#9DC913',
+                    '#EC6236',
+                    '#C9139D',
+                    'blue',
+                    '#5369e7',
+                    '#b7bf11',
+                    '#8459af',
+                    '#cb662c',
+                ]
+            }]
+        }
+       
+        return pie_data
+    }
+
     renderCharts() {
         return (
             <div className="chart-div">
                 <div className="row">
                     <div className="col-6" style={{ paddingRight: '5px' }}>
-                        {this.renderPieChart('Top 10 Claims Errors', this.state.second_data)}
+                        {this.renderPieChart('Top 10 Claim Rejected Errors', this.state.second_data)}
                     </div>
-                    {/* <div className="col-6" style={{ paddingRight: '9px' }}>
-                        {this.renderPieChart('Top 10 Encounter Level Errors', this.state.pie_data)}
-                    </div> */}
+                    <div className="col-6" style={{ paddingRight: '9px' }}>
+                        {this.renderPieChart('Top 10 Claim Payment Errors', this.state.pie_data)}
+                    </div>
                 </div>
-                {/* <div className="row chart-container-full chart">
+                <div className="row chart-container-full chart">
                     <div className="chart-header">Volume Analysis</div>
                     <Line
                         data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
@@ -556,7 +692,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                                 }]
                             }
                         }} />
-                </div> */}
+                </div>
             </div>
         )
     }
@@ -735,13 +871,14 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
 
     getListData = async () => {
         let query = `{
-            OutboundDashboardFileDetails (FileID :"" , F99Status :"" ,F277Status:""){
-              FileID
-              FileName_Outbound
-              FileDate_Outbound
-              FileStatus_Outbound
-              TotalEncounterSent
-            }
+            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:"") {
+                FileID
+               FileName_Outbound
+               FileDate_Outbound
+               FileStatus_Outbound
+               TotalEncounterSent
+               Rejected_277CA
+              }
           }
           `
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -757,7 +894,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             .then(res => {
                 console.log('Look here', res.data.OutboundDashboardFileDetails)
                 this.setState({
-                    claimsList: res.data.OutboundDashboardFileDetails
+                    claimsList: res.data.OutboundClaimsFileDetails
                 })
             })
             .catch(err => {
@@ -914,7 +1051,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
             let F99Status = ''
             let F277Status = ''
 
-            if (item.name == 'Sent') {
+            if (item.name == 'X12 Claim Count') {
                 color = "var(--green)"
             } else if (item.name == '999 Accepted') {
                 F99Status = 'Accepted'
@@ -930,6 +1067,21 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 F277Status = 'Resubmit'
                 color = "var(--green)"
             }
+            // else if (item.name == 'X12 Claim Line Item Count') {
+            //     color = "var(--blue)"
+            // }
+            // else if (item.name == 'WIP 30-60') {
+            //     color = "var(--blue)"
+            // }else if (item.name == 'WIP 0-30') {
+            //     color = "var(--blue)"
+            // }else if (item.name == 'WIP >60') {
+            //     color = "var(--blue)"
+            // }else if (item.name == 'Paid') {
+            //     color = "var(--green)"
+            // }else if (item.name == 'Payment Adjustment') {
+            //     color = "var(--orange)"
+            // }
+            
 
             let sendData = [
                 {
@@ -958,6 +1110,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                     url={Strings.Outbound_Claim_updated_Details_837_Grid}
                     data={sendData}
                     color={color}
+                    unclick={item.color ? item.color : ''}
                 />
             )
         })
@@ -1015,9 +1168,12 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
     _renderList() {
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "File Date", field: "FileDate_Outbound", flex: 1 },
-            { headerName: "File Status", field: "FileStatus_Outbound", flex: 1 },
-            { headerName: "Total Claims", field: "TotalEncounterSent", flex: 1 },
+            { headerName: "Process ID", field: "FileID", flex: 1 },
+            { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
+            { headerName: "File Status", field: "FileStatus_Outbound", width: 140 },
+            { headerName: "Payer", field: "", flex: 1,  cellRenderer: (data) => {    return 'Anthem Blue Cross' }},
+            { headerName: "Total Claims", field: "TotalEncounterSent", width: 130 },
+            { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
 
         return (
@@ -1093,6 +1249,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 {this._renderClaimTables(this.state.stage_4)}
                 {this._renderClaimTables(this.state.stage_5)}
                 {this._renderClaimTables(this.state.stage_6)}
+                {this._renderClaimTables(this.state.stage_7)}
             </div>
         )
     }
@@ -1130,11 +1287,12 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
         return (
             <Filters
                 isTimeRange={true}
+                isPayer={true}
                 removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={'CA'}
+                State={''}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
@@ -1149,7 +1307,7 @@ export class Outbound_Claim_updated_FileDashboard extends React.Component {
                 {this._renderTopbar()}
                 <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>File Status</h6>
                 {this._renderSummary(this.state.summary_3)}
-                <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Claims Status</h6>
+                <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}>Claim Status</h6>
                 {this.renderEncounterDetails()}
                 {this.renderCharts()}
                 <div>

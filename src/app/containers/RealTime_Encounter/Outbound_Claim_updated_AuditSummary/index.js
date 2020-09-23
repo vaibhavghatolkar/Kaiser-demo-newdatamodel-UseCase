@@ -358,8 +358,8 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
 
 
                 let summary_3 = [
-                    { name: 'Files', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
-                    { name: 'Sent To State', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
+                    { name: 'Generated 837 Files', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
+                    { name: 'Sent To Payers', value: _new_condition ? _new_data[0].TotalEncounterSent : 0 },
                     { name: '999 Accepted', value: _new_condition ? _new_data[0].Accepted999 : 0 },
                     { name: '999 Rejected', value: _new_condition ? _new_data[0].Rejected999 : 0 },
                     { name: '277CA Received', value: _new_condition ? _new_data[0].Accepted999 : 0 },
@@ -727,10 +727,12 @@ export class Outbound_Claim_updated_AuditSummary extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
+                isPayer={true}
+                removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={'CA'}
+                State={''}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}

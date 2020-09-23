@@ -721,10 +721,12 @@ export class Outbound_Claim_updated_Payment extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
+                isPayer={true}
+                removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={'CA'}
+                State={''}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}

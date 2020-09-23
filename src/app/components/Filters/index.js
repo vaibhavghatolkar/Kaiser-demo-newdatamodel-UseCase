@@ -323,6 +323,23 @@ export class Filters extends React.Component {
                                     </select>
                                 </div>)
                             : null
+                    }{
+                        this.props.isPayer ? 
+                        <div className="form-group col-2">
+                                    <div className="list-dashboard">Payer</div>
+                                    <select className="form-control list-dashboard" id="TradingPartner"
+                                        value={this.props.payer}
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'payer')
+                                        }}>
+                                        <option value=""></option>
+                                        <option value="Anthem Blue Cross">Anthem Blue Cross</option>
+                                        <option value="Molina Healthcare">Molina Healthcare</option>
+                                        <option value="Blue Shield of California">Blue Shield of California</option>
+                                        <option value="Sharp Health Plan">Sharp Health Plan</option>
+                                        <option value="Health Net">Health Net</option>
+                                    </select>
+                                </div> : null
                     }
                     {
                         this.props.isTimeRange ?

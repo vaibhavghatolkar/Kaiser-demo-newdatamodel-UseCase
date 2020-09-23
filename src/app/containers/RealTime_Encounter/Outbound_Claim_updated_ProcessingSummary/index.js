@@ -29,6 +29,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             stage_4: [],
             stage_5: [],
             stage_6: [],
+            stage_7: [],
             providers: [],
             incoming_fileId: '',
             status277CA: '',
@@ -85,11 +86,26 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                 { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 { headerName: "Claims ID", field: "ClaimID", width: 100, },
                 { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 130, },
-                { headerName: "Claims Date", field: "EncounterDate", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-                { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+                { headerName: "Claims Date", field: "EncounterDate", width: 130, },
+                { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 140, },
                 { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width: 140 },
-                { headerName: "999", field: "F999", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277CA", field: "F277CA", width: 200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "999", field: "F999", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "277CA", field: "F277CA", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                { headerName: "835 Process Id", field: "label", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } , },
+                { headerName: "835", field: "", width: 110, cellRenderer: (data) => {    
+                    if(data.data.MolinaClaimID == "000000000074457A"){ return  "10 | 2"}
+                    if(data.data.MolinaClaimID == "000000000059435"){ return  "2 | 1"}
+                    if(data.data.MolinaClaimID == "000000000059440"){ return '4 | 1'}
+                    if(data.data.MolinaClaimID == "000000000059446"){ return '4 | 1'}
+                    if(data.data.MolinaClaimID == "000000000059450"){ return '2 | 1'}
+                    if(data.data.MolinaClaimID == "000000000059460"){ return '1 | 1'}
+                    if(data.data.MolinaClaimID == "000000000059462"){ return '2 | 0'}
+                    if(data.data.MolinaClaimID == "000000000059465"){ return '2 | 0'}
+                    if(data.data.MolinaClaimID == "000000000059473"){ return '1 | 0'}
+                    if(data.data.MolinaClaimID == "000000000059478"){ return '3 | 0'}
+                  }, 
+                
+                },
             ],
 
             autoGroupColumnDef: {
@@ -174,7 +190,14 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                 Accepted277CA
                 Rejected277CA
                 Resubmit277CA
+                Line_Item_Count
             }
+            OutboundPaymentDashboard {
+                Paid
+                Payment_Adjustment
+                Payment_Never_Submitted
+                Denied
+              }
         }`
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -190,11 +213,14 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             .then(res => {
                 if (res.data) {
                     let _data = res.data.OutboundDashboardFileTable
+                    let _data1 = res.data.OutboundPaymentDashboard
                     let _condition = _data && _data.length > 0 ? true : false
+                    let _condition1 = _data1 && _data1.length > 0 ? true : false
 
                     let stage_4 = [
                         { 'header': '' },
-                        { 'name': 'Sent', 'value': _condition ? _data[0].TotalEncounterSent : 0, isClick: true },
+                        { 'name': 'X12 Claim Count', 'value': _condition ? _data[0].TotalEncounterSent : 0, isClick: true },
+                        { 'name': 'X12 Claim Line Item Count', 'value': _condition ? _data[0].Line_Item_Count : 0, color : '#139DC9' },
                     ]
                     let stage_5 = [
                         { 'header': '' },
@@ -209,11 +235,20 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                         { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, isClick: true },
                         { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, isClick: true },
                     ]
+                    let stage_7 = [
+                        { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color : '#2AC327'  },
+                        { 'name': 'Denied', 'value': _condition1 ? _data1[0].Denied : 0, color : '#FF3B41' },
+                        { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color : '#FA731A'  },
+                        { 'name': 'WIP 0-30', 'value': 500, color : '#139DC9' },
+                        { 'name': 'WIP 30-60', 'value': 350, color : '#139DC9' },
+                        { 'name': 'WIP >60', 'value': 430, color : '#139DC9' },
+                    ]
 
                     this.setState({
                         stage_4: stage_4,
                         stage_5: stage_5,
                         stage_6: stage_6,
+                        stage_7: stage_7,
                     })
                 }
             })
@@ -288,6 +323,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                 Encounter277CA_Status
                 F999
                 F277CA
+                ProcessID835
               }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
@@ -302,6 +338,15 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             .then(res => res.json())
             .then(res => {
                 var data = res.data.OutboundEncounterProcessingSummary
+                if(data[0].MolinaClaimID == "000000000074457A"){data[0].label =  '7655566443354321'}
+                if(data[1].MolinaClaimID == "000000000059435"){ data[1].label = '22333114433555443322'}
+                if(data[2].MolinaClaimID == "000000000059440"){ data[2].label = '45333221144455566688'}
+                if(data[3].MolinaClaimID == "000000000059446"){ data[3].label = '56625423228889991112225555'}
+                if(data[4].MolinaClaimID == "000000000059450"){ data[4].label = '7665554434221211111'}
+                if(data[5].MolinaClaimID == "000000000059460"){ data[5].label = '1237634252525555'}
+                if(data[6].MolinaClaimID == "000000000059462"){ data[6].label = ''}
+                if(data[7].MolinaClaimID == "000000000059465"){ data[7].label = ''}
+
                 if (data && data.length > 0) {
 
                     this.setState({
@@ -500,7 +545,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
             let F99Status = ''
             let F277Status = ''
 
-            if (item.name == 'Sent') {
+            if (item.name == 'X12 Claim Count') {
                 color = "var(--green)"
             } else if (item.name == '999 Accepted') {
                 F99Status = 'Accepted'
@@ -544,6 +589,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                     url={Strings.Outbound_Claim_updated_Details_837_Grid}
                     data={sendData}
                     color={color}
+                    unclick={item.color ? item.color : ''}
                 />
             )
         })
@@ -562,6 +608,7 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                 {this._renderClaimTables(this.state.stage_4)}
                 {this._renderClaimTables(this.state.stage_5)}
                 {this._renderClaimTables(this.state.stage_6)}
+                {this._renderClaimTables(this.state.stage_7)}
             </div>
         )
     }
@@ -602,6 +649,28 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
                                 this.gotoDetails()
                             })
                         }
+                        if (event.colDef.headerName == "835 Process Id" && event.value) {
+                            sessionStorage.setItem('isOutbound', false)
+                            let data = [
+                                {
+                                    apiflag: '0',
+                                    State: 'n',
+                                    selectedTradingPartner: 'n',
+                                    startDate: 'n',
+                                    endDate: 'n',
+                                    transactionId: 'n',
+                                    status: 'n',
+                                    count: 'n',
+                                    incoming_fileId: event.value
+                                }
+                            ]
+                            this.props.history.push('/' + Strings.claimPayment_835_details, {
+                                data: data
+                            })
+                
+                            window.location.reload()
+                
+                        }
                     }}
                 >
                 </AgGridReact>
@@ -638,10 +707,12 @@ export class Outbound_Claim_updated_ProcessingSummary extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
+                isPayer={true}
+                removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
                 update={this.update}
-                State={'CA'}
+                State={''}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
