@@ -142,7 +142,7 @@ import {Outbound_Claim_277CAResponse} from './app/containers/Outbound_Claim_277C
 import {Outbound_Claim_999_response} from './app/containers/Outbound_Claim_999_response'
 import { Outbound_Compliance_Reporting_Claims } from './app/containers/RealTime_Encounter/Outbound_Compliance_Reporting_Claims';
 import { ClaimCustomerService } from './app/containers/RealTime_Encounter/ClaimCustomerService';
-
+import { Outbound_Claim_Batch_Click_Details } from './app/containers/RealTime_Encounter/Outbound_Claim_Batch_Click_Details';
 import Outbound_Encounter_StatewiseTradingPartner_Encounter from './app/containers/EncounterAdmin/Outbound_Encounter_StatewiseTradingPartner'
 import TransactionSetup_Encounter from './app/containers/EncounterAdmin/TransactionSetup'
 import Encounter_view_CustomEditNew_Encounter from './app/containers/EncounterAdmin/Encounter_view_CustomEditNew'
@@ -432,13 +432,15 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.Outbound_Claim_999_response} component={ Outbound_Claim_999_response } /> 
                                 <Route path={'/' + Strings.Outbound_Compliance_Reporting_Claims} component={ Outbound_Compliance_Reporting_Claims } />
                                 <Route path={'/' + Strings.ClaimCustomerService} component={ ClaimCustomerService } /> 
-                                
+                                <Route path={'/' + Strings.Outbound_Claim_Batch_Click_Details} component={Outbound_Claim_Batch_Click_Details} />
                                
                                 {/*  for Sales demo 30545 */}
                                 <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />
                                 <Route path={'/' + Strings.TransactionSetup_New} component={TransactionSetup_New} />
                                 <Route path={'/' + Strings.Encounter_view_CustomEditNew} component={Encounter_view_CustomEditNew} />
                                 <Route path={'/' + Strings.companionGuide} component={CompanionGuide} />
+
+                                
 
                                 
                                 {/*  for Encounter demo 30561 */}

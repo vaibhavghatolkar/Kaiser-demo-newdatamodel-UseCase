@@ -16,8 +16,8 @@ export class Encounter_view_CustomEditNew extends React.Component {
             apiflag: this.props.apiflag,
             tradingpartner: [],
             selectedTradingPartner: '',
-            State: "CA",
-            transaction: '834',
+            State: "",
+            transaction: '837P',
             direction: 'Outbound',
             UpdateCheckBox: '',
             checked: [],
@@ -782,7 +782,7 @@ export class Encounter_view_CustomEditNew extends React.Component {
                                 {this._renderList()}
                             </div>
                             <div className="col-12">
-                                {this._reconcileConfig()}
+                                {/* {this._reconcileConfig()} */}
                             </div>
 
                         </div>

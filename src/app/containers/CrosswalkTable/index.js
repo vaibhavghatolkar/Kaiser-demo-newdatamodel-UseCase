@@ -29,7 +29,7 @@ export class CrosswalkTable extends React.Component {
             providerName: '',
             orderby: "",
             transType: "",
-            State: "CA",
+            State: "",
             PenTotal: 0,
             RejTotal: 0,
             errTotal: 0,
