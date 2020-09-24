@@ -259,6 +259,7 @@ export class Outbound_Claim_Batch_Click_Details extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                Updatebutton={true}
             />
         )
     }

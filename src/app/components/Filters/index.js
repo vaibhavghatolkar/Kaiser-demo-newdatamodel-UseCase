@@ -500,6 +500,14 @@ export class Filters extends React.Component {
                             </div>
                             : null
                     }
+                        {
+                        this.props.Updatebutton ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard"></div>
+                                <button type="submit" className="btn light_blue1 btn-xs" style={{ marginRight: "120px" ,marginTop:"16px" ,height:"32px" }}>Update</button>
+                            </div>
+                            : null
+                    }
 
 
 
