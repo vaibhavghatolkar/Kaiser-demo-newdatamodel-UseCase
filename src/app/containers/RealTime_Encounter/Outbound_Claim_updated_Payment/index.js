@@ -847,6 +847,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
                     url={url}
                     data={sendData}
                     color={color}
+                    unclick={item.color ? item.color : ''}
                 />
             )
         })
@@ -864,7 +865,7 @@ export class Outbound_Claim_updated_Payment extends React.Component {
         let stage_1 = [
             { header: '', },
             { 'name': 'Corrected Patient/Insured Name', 'value': 42, 'isClick': true },
-            { 'name': 'Corrected Priority Payer Name', 'value': 20, 'isClick': true },
+            { 'name': 'Corrected Priority Payer Name', 'value': 20, color: "#139DC9"},
             { 'name': 'Corrected ICD Code', 'value': 27, 'isClick': true },
        ]
        
