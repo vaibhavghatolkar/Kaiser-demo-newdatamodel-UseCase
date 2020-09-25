@@ -302,7 +302,7 @@ export class Filters extends React.Component {
                                     >
                                         <option value="1"></option>
                                         {!this.props.isEncounter ?
-                                        this.props.is837 ? <option value="837Encounters">837</option> : null
+                                        this.props.is837 ? <option value="837Encounters">837</option> : 
                                             
                                         (this.props._is835 ?
                                                 <option value="835">835</option> :
