@@ -209,7 +209,7 @@ td a {
   
   .clickable{
     cursor: pointer;
-    padding: 24px;   
+    /* padding: 24px;    */
   }
   
   .color-style{
