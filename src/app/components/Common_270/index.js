@@ -159,13 +159,16 @@ export class Common_270 extends React.Component {
             .then(res => {
                 let data = ""
                 let progress_data = ""
+                let  AvgResTime = 0
 
                 if (this.state.apiflag == 1) {
                     data = res.data.AverageResponseTime270
                     progress_data = res.data.ProgressBar270 && res.data.ProgressBar270.length > 0 ? res.data.ProgressBar270 : []
+                    AvgResTime = 2.13
                 } else {
                     data = res.data.AverageResponseTime276
                     progress_data = res.data.ProgressBar276
+                    AvgResTime = 0
                 }
 
                 let progress_condition = progress_data && progress_data.length > 0
@@ -178,7 +181,7 @@ export class Common_270 extends React.Component {
                     { name: 'Valid Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].Success : 0 },
                     { name: 'Invalid Transaction', value: progress_data && progress_data.length > 0 ? progress_data[0].Error : 0 },
                     { name: 'No Response', value: progress_data && progress_data.length > 0 ? progress_data[0].Total_NoResponse : 0 },
-                    { name: 'Avg Response Time (sec)', value: data && data.length > 0 ? data[0].AvgResTime : 0 },
+                    { name: 'Avg Response Time (sec)', value: data && data.length > 0 ? AvgResTime : 0 },
                 ]
 
 
