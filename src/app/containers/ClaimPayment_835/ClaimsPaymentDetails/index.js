@@ -102,36 +102,57 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     getDetails(claimId, fileId, RefID, fileData, page) {
-        let query = `{
-            RemittanceViewerClaimDetails (RefID:`+ RefID + `, FileID: "` + fileId + `") {
-                FileID
-                FileName
-                FileDate
-                Organization
-                Payee_IdentificationQL
-                Payee_IdentificationCode
-                CheckEFTNo
-                PayerIdentifier
-                PayerName
-                PayerID
-                CheckEFTDt
-                AccountNo
-                CHECKEFTFlag
-                ClaimID
-                PayerClaimControl
-                ClaimReceivedDate
-                PatientName
-                PatientControlNo
-                TotalChargeAmt
-                TotalClaimPaymentAmt
-                PatietResAMT
-                DigonisCode
-                DGNQty
-                ClaimStatusCode
-                FacilityCode
-                AdjustmentAmt
-            }
-            RemittanceViewerClaimServiceDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `" ,page:${page}) {
+        let query = ''
+        if(isOutbound){
+             query = `{
+                RemittanceViewerClaimDetails (RefID:`+ RefID + `, FileID: "` + fileId + `") {
+                    FileID
+                    FileName
+                    FileDate
+                    Organization
+                    Payee_IdentificationQL
+                    Payee_IdentificationCode
+                    CheckEFTNo
+                    PayerIdentifier
+                    PayerName
+                    PayerID
+                    CheckEFTDt
+                    AccountNo
+                    CHECKEFTFlag
+                    ClaimID
+                    PayerClaimControl
+                    ClaimReceivedDate
+                    PatientName
+                    PatientControlNo
+                    TotalChargeAmt
+                    TotalClaimPaymentAmt
+                    PatietResAMT
+                    DigonisCode
+                    DGNQty
+                    ClaimStatusCode
+                    FacilityCode
+                    AdjustmentAmt
+                }
+                RemittanceViewerClaimServiceDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `" ,page:${page}) {
+                    FileID
+                    ClaimID
+                    ServiceEndDate
+                    ServiceStartDate
+                    AdjudicatedCPT
+                    ChargeAmount
+                    PaidAmt
+                    AdjAmt
+                    SubmittedCPT
+                    LineControlNo
+                    ServiceSupplementalAmount
+                    OriginalUnitsofServiceCount
+                    UnitsofServicePaidCount
+                    RecCount
+                }
+              }
+              `
+        }else{
+            query = `{ RemittanceViewerClaimServiceDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `" ,page:${page}, RefID:${RefID}) {
                 FileID
                 ClaimID
                 ServiceEndDate
@@ -146,9 +167,12 @@ export class ClaimPaymentDetails extends React.Component {
                 OriginalUnitsofServiceCount
                 UnitsofServicePaidCount
                 RecCount
-            }
-          }
-          `
+            }}`
+        }
+//         Submitted Units
+// Allowed Actual
+// Paid Units
+       
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
@@ -527,10 +551,10 @@ export class ClaimPaymentDetails extends React.Component {
             { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },
             { headerName: "Line Item Control #", width: 120, field: "LineControlNo" },
             { headerName: "Adjudicated CPT", width: 120, field: "AdjudicatedCPT" },
-            { headerName: "	Submitted CPT", width: 120, field: "SubmittedCPT" },
-            { headerName: "Submitted Units", width: 120, field: "" },
-            { headerName: "Allowed Actual", width: 120, field: "" },
-            { headerName: "Paid Units", width: 120, field: "" },
+            { headerName: "Submitted CPT", width: 120, field: "SubmittedCPT" },
+            { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
+            { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
+            { headerName: "Claim Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
             { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
             { headerName: "Paid Amount", field: "PaidAmt" },

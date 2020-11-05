@@ -76,7 +76,10 @@ export class InboundClaimPaymentDashboard extends React.Component {
             gridType: 1,
             paginationPageSize: 10,
             domLayout: 'autoHeight',
-
+            FunctionalGroupDetails: false,
+            selectedFileId: "",
+            TransactionSet: false,
+            selectedGSID: "",
             autoGroupColumnDef: {
                 headerName: 'Group',
                 minWidth: 170,
@@ -103,7 +106,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
-            
+
         }
     }
 
@@ -148,8 +151,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-       
-          let  query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+
+        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                 TotalCount
                 Rejected
                 Accepted
@@ -159,7 +162,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 CHK
               }
             }`
-        
+
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
@@ -175,12 +178,12 @@ export class InboundClaimPaymentDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                    let progress_data = res.data.ERA835DashboardCountNew
-                    let progress_condition = progress_data && progress_data.length > 0
-                    let Validated = progress_condition ? Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                    let Error = progress_condition ? Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                    let exception = progress_condition ? Number((progress_data[0].Exception / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                
+                let progress_data = res.data.ERA835DashboardCountNew
+                let progress_condition = progress_data && progress_data.length > 0
+                let Validated = progress_condition ? Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                let Error = progress_condition ? Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                let exception = progress_condition ? Number((progress_data[0].Exception / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+
                 this.setState({
                     progress_Validated: Validated,
                     progress_Error: Error,
@@ -443,11 +446,20 @@ export class InboundClaimPaymentDashboard extends React.Component {
         })
     }
     clickNavigation = (event) => {
-        if (event.colDef.headerName == 'Process Id') {
+        if (event.colDef.headerName == 'File Name') {
             this.setState({
-                incoming_fileId: event.data.FileID
-            }, () => {
-                this.gotoClaimDetails()
+                selectedFileId: event.data.FileID,
+                FunctionalGroupDetails: true,
+                TransactionSet: false,
+
+            })
+        }
+    }
+    clickNavigation1 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                selectedGSID: event.data.GSID,
+                TransactionSet: true
             })
         }
     }
@@ -455,19 +467,15 @@ export class InboundClaimPaymentDashboard extends React.Component {
 
     _renderList() {
 
-   let columnDefs=[
-        { headerName: "File Name", field: "RemittanceFileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
-        { headerName: "File Date", field: "RemittanceSentDate", width: 100 },
-        { headerName: "State", field: "State", width: 70 },
-        { headerName: "File Status", field: "Status", width: 100 },
-        { headerName: "Organization", field: "Organization", width: 150 },
-        { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
-        { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
-        { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-        { headerName: "Total", field: "TotalClaim", width: 100 },
-        { headerName: "Rejected", field: "Rejected", width: 100 },
+        let columnDefs = [
+            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "Status", field: "Status", width: 100 },
+            { headerName: "Submitter", field: "Sender", width: 150 },
+            { headerName: "Receiver", field: "Receiver", width: 70 },
+            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
 
-    ]
+        ]
 
 
 
@@ -481,31 +489,23 @@ export class InboundClaimPaymentDashboard extends React.Component {
             AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
-              RecCount
-              Sender
-              Organization
-              FileID
-              FileName
-              CheckEFTNo
-              FileDate
-              PayerName
-              PayerID
-              AccountNo
-              CHECKEFTFlag
-              CheckEFTDt
-              Receiver
-              ProcessID
-              State
-              RemittanceFileName
-              RemittanceSentDate
-              TotalClaim
-              Rejected
-              Status
+                RecCount
+                Sender
+                FileID
+                FileName
+                FileDate
+                Receiver
+                State
+                RemittanceFileName
+                RemittanceSentDate
+                TotalClaim
+                Status
             }
           }
           `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="general-header">File Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -519,10 +519,142 @@ export class InboundClaimPaymentDashboard extends React.Component {
                     type={this.state.type}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
+                    paginationPageSize={5}
                 />
             </div>
         )
     }
+
+    _renderFunctionalGroupDetails() {
+
+        let columnDefs = [
+            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Application Sender Code", field: "ApplicationSenderCode", width: 100 },
+            { headerName: "Application Receiver Code", field: "ApplicationReceiverCode", width: 150 },
+            { headerName: "Functional Identifier Code", field: "FunctionalIdentifierCode", width: 70 },
+            { headerName: "Group Control Number", field: "GroupControlNumber", width: 70 },
+            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
+
+        ]
+
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let query = `{
+                Dashboard835FunctionalGroupDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
+                 page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"${recType}", 
+                 AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+                 sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+                    RecCount
+                    FileID
+                    FileName
+                    GSID
+                    ApplicationReceiverCode
+                    ApplicationSenderCode
+                    FunctionalIdentifierCode
+                    GroupControlNumber
+                    TotalClaim
+                 }
+               }
+               `
+        return (
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="general-header">Functional Group Information</h6>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
+                    fieldType={'GSID'}
+                    index={'Dashboard835FunctionalGroupDetails'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    type={this.state.type}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation1}
+                    paginationPageSize={5}
+                    selectedFileId={this.state.selectedFileId}
+                />
+            </div>
+        )
+    }
+
+    _renderTransactionSet() {
+
+        let columnDefs = [
+            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
+            { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "Status", field: "Status", width: 100 },
+            { headerName: "Payee", field: "Organization", width: 150 },
+            { headerName: "PayerName", field: "PayerName", width: 150 },
+            { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
+            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
+            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
+            { headerName: "Total", field: "TotalClaim", width: 100 },
+            { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
+
+        ]
+
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let query = `{
+                    Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
+                     page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"${recType}", 
+                     AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+                     sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+                        RecCount
+                        FileId
+                        GSID
+                        STID
+                        PayerName
+                        PayerID
+                        PayerN1
+                        PayeeN1
+                        Organization
+                        FileName
+                        Status
+                        FileDate
+                        TRN01
+                        TRN03
+                        CheckEFTNo
+                        CheckEFTDt
+                        AccountNo
+                        CHECKEFTFlag
+                        TotalBillAmount
+                        TotalClaim
+                     }
+                   }
+                   `
+        return (
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="general-header">Transaction Set Information</h6>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
+                    fieldType={'FileDate'}
+                    index={'Dashboard835TransactionSetHeaderDetails'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    type={this.state.type}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation1}
+                    paginationPageSize={5}
+                    selectedFileId={this.state.selectedGSID}
+                    handleColWidth={120}
+                />
+            </div>
+        )
+    }
+
 
     _refreshScreen = () => {
         this._getPieChartData()
@@ -579,7 +711,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         )
     }
 
-    
+
 
     render() {
         return (
@@ -596,6 +728,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 <div className="row">
                     <div className="col-12">
                         {this._renderList()}
+                        {this.state.FunctionalGroupDetails && this.state.selectedFileId ? this._renderFunctionalGroupDetails() : null}
+                        {this.state.TransactionSet && this.state.selectedGSID ? this._renderTransactionSet() : null}
                     </div>
                 </div>
             </div>
