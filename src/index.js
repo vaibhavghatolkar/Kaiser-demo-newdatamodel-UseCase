@@ -143,6 +143,8 @@ import {Outbound_Claim_999_response} from './app/containers/Outbound_Claim_999_r
 import { Outbound_Compliance_Reporting_Claims } from './app/containers/RealTime_Encounter/Outbound_Compliance_Reporting_Claims';
 import { ClaimCustomerService } from './app/containers/RealTime_Encounter/ClaimCustomerService';
 import { Outbound_Claim_Batch_Click_Details } from './app/containers/RealTime_Encounter/Outbound_Claim_Batch_Click_Details';
+import { Payment_Split_Dashboard } from './app/containers/ClaimPayment_Inbound_835/Payment_Split_Dashboard';
+
 import Outbound_Encounter_StatewiseTradingPartner_Encounter from './app/containers/EncounterAdmin/Outbound_Encounter_StatewiseTradingPartner'
 import TransactionSetup_Encounter from './app/containers/EncounterAdmin/TransactionSetup'
 import Encounter_view_CustomEditNew_Encounter from './app/containers/EncounterAdmin/Encounter_view_CustomEditNew'
@@ -435,6 +437,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ClaimCustomerService} component={ ClaimCustomerService } /> 
                                 <Route path={'/' + Strings.Outbound_Claim_Batch_Click_Details} component={Outbound_Claim_Batch_Click_Details} />
                                 <Route path={'/' + Strings.InboundClaimPaymentDashboard} component={InboundClaimPaymentDashboard} />
+                                <Route path={'/' + Strings.Payment_Split_Dashboard} component={Payment_Split_Dashboard} />
                                 
                                
                                 {/*  for Sales demo 30545 */}
