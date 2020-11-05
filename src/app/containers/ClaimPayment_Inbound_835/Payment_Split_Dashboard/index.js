@@ -10,7 +10,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { PieChart } from '../../../components/PieChart';
 import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Filters } from '../../../components/Filters';
-import { Common_835 } from '../../../components/Common_835';
+import { Common_Split_835 } from '../../../components/Common_Split_835';
 import { Line } from 'react-chartjs-2';
 let isOutbound;
 export class Payment_Split_Dashboard extends React.Component {
@@ -180,14 +180,15 @@ export class Payment_Split_Dashboard extends React.Component {
             .then(res => {
                 let progress_data = res.data.ERA835DashboardCountNew
                 let progress_condition = progress_data && progress_data.length > 0
-                let Validated = progress_condition ? Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                let Error = progress_condition ? Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+              
+                let Validated = progress_condition ?  Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                let Error = progress_condition ?  Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
                 let exception = progress_condition ? Number((progress_data[0].Exception / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-
+              
                 this.setState({
-                    progress_Validated: Validated,
-                    progress_Error: Error,
-                    progress_exception: exception
+                    progress_Validated:Validated>=0 ? Validated:0,
+                    progress_Error: Error>=0 ? Error:0 ,
+                    progress_exception:exception>=0 ? exception :0
                 })
             })
             .catch(err => {
@@ -769,7 +770,7 @@ export class Payment_Split_Dashboard extends React.Component {
 
     renderCommonGroup = () => {
         return (
-            <Common_835
+            <Common_Split_835
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 selectedTradingPartner={this.state.selectedTradingPartner}
