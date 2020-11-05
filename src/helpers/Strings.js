@@ -223,6 +223,7 @@ const Strings = {
     InboundClaimPaymentDashboard:'InboundClaimPaymentDashboard',
     InboundPaymentDetails: 'InboundPaymentDetails',
     Payment_Split_Dashboard:'Payment_Split_Dashboard',
+    TreasuryFileDetails:'TreasuryFileDetails',
 
 // Outbound_Claim_updated_Details_837_Grid
 }

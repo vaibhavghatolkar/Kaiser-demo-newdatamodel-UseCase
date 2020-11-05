@@ -248,7 +248,16 @@ export class InboundClaimPaymentDashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-          
+            barchart : Payment835RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                From
+                MonthNo
+                Year
+                To
+                Amount
+                TotalClaims
+                X_axis
+                Y_axis
+            }
             file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "${recType}") {
                 X_axis
                 Y_axis
@@ -275,22 +284,22 @@ export class InboundClaimPaymentDashboard extends React.Component {
             .then(res => {
                 console.log(res)
                 let array = []
-              
-                // let ClaimBarChart = res.data.barchart
-                // let count = 0
-                // ClaimBarChart.forEach((d) => {
-                //     count++;
-                //     array.push(
-                //         d.Y_axis ? parseFloat(d.Y_axis) : 0
-                //     )
-                //     if (chartType == 'Weekwise') {
-                //         claimLabels.push('week' + count)
-                //     } else {
-                //         claimLabels.push(d.X_axis)
-                //     }
-                // })
-
+                let ClaimBarChart = res.data.barchart
+                let count = 0
                 let claimLabels = []
+                ClaimBarChart.forEach((d) => {
+                    count++;
+                    array.push(
+                        d.Y_axis ? parseFloat(d.Y_axis) : 0
+                    )
+                    if (chartType == 'Weekwise') {
+                        claimLabels.push('week' + count)
+                    } else {
+                        claimLabels.push(d.X_axis)
+                    }
+                })
+
+             
                 let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
                 // let second_data = ""
                 // let pie_data = ""

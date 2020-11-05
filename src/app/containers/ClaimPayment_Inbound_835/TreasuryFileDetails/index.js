@@ -4,14 +4,10 @@ import '../../Claim_276_RealTime/Real_Time_276/style.css'
 import '../../color.css'
 import '../../Files/files-styles.css';
 import moment from 'moment';
-import Urls from '../../../../helpers/Urls';
-import Strings from '../../../../helpers/Strings';
-import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
-
+import Urls from '../../../../helpers/Urls';
 var val = ''
 const $ = window.$;
 let isOutbound;
@@ -20,17 +16,7 @@ export class TreasuryFileDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            domLayout: 'autoHeight',
-            paginationPageSize: 5,
-            selectedFileId: '',
-            defaultColDef: {
-                cellClass: 'cell-wrap-text',
-                autoHeight: true,
-                sortable: true,
-                resizable: true,
-                filter: true,
-
-            },
+            
         }
     }
     componentWillMount() {
@@ -83,9 +69,9 @@ export class TreasuryFileDetails extends React.Component {
                     columnDefs={columnDefs}
                     query={query}
                     paginationPageSize={10}
-                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
+                    url={Urls._transaction835Kaiser}
                     fieldType={'FileDate'}
-                    index={'PaymentProcessingSummaryNew'}
+                    index={'TreasuryFileDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
