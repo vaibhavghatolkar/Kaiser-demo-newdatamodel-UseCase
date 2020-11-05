@@ -245,69 +245,143 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
     }
 
     _renderTransactions() {
-        let columnDefs = [
-            { headerName: "Process Id", field: "ProcessID", width: 300, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Received Date", field: "FileDate", width: 150 },
-            { headerName: "State", field: "State", width: 150 },
-            { headerName: "File Status", field: "Status", width: 150 },
-            { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150 },
-            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 150 },
-            { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
-            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
-            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
-            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
-            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: (isOutbound ? '' : '#139DC9'), cursor: (isOutbound ? '' : 'pointer') } },
-            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
-            { headerName: "Days Aged", field: "Days", width: 70 },
-            { headerName: "Patient Name", field: "PatientName", width: 200 },
-            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
-            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
-            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
-        ]
+        let columnDefs =[]
+        let isOutboundPage = JSON.parse(sessionStorage.getItem('isOutbound'))
+if(isOutboundPage){
+     columnDefs = [
+        { headerName: "Process Id", field: "ProcessID", width: 300, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "Received Date", field: "FileDate", width: 150 },
+        { headerName: "State", field: "State", width: 150 },
+        { headerName: "File Status", field: "Status", width: 150 },
+        { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150 },
+        { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 150 },
+        { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
+        { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
+        { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
+        { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
+        { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: (isOutbound ? '' : '#139DC9'), cursor: (isOutbound ? '' : 'pointer') } },
+        { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
+        { headerName: "Days Aged", field: "Days", width: 70 },
+        { headerName: "Patient Name", field: "PatientName", width: 200 },
+        { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
+        { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
+        { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
+    ]
+}else{
+    columnDefs = [
+        { headerName: "File Name", field: "RemittanceFileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "File Date", field: "RemittanceSentDate", width: 150, },
+        { headerName: "State", field: "State", width: 150 },
+        { headerName: "File Status", field: "Status", width: 150 },
+        { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
+        { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
+        { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
+        { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
+        { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
+        { headerName: "Days Aged", field: "Days", width: 70 },
+        { headerName: "Patient Name", field: "PatientName", width: 200 },
+        { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
+        { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
+        { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
+    ]
+}
+
+        
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-        let query = `{
-            PaymentProcessingSummaryNew(
-                StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
-                RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
-                sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                   startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
-                                
-            ) {
-                RefID
-                RecCount
-                FileID
-                FileName
-                FileDate
-                ClaimID
-                ClaimReceivedDate
-                PatientName
-                PatientControlNo
-                PayerName
-                TotalChargeAmt
-                TotalClaimPaymentAmt
-                Sender
-                Organization
-                TransactionType
-                CheckEFTNo
-                TRN03
-                PayerID
-                CheckEFTDt
-                AccountNo
-                CHECKEFTFlag
-                Receiver
-                TotalAdjustmentAmount
-                TotalBillAmount
-                Days
-                RemittanceFileName
-                RemittanceSentDate
-                State
-                Status
-                ProcessID
-                }
-              }`
+        let query = ''
+        if(isOutboundPage){
+             query = `{
+                PaymentProcessingSummaryNew(
+                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
+                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}                  
+                ) {
+                    RefID
+                    RecCount
+                    FileID
+                    FileName
+                    FileDate
+                    ClaimID
+                    ClaimReceivedDate
+                    PatientName
+                    PatientControlNo
+                    PayerName
+                    TotalChargeAmt
+                    TotalClaimPaymentAmt
+                    Sender
+                    Organization
+                    TransactionType
+                    CheckEFTNo
+                    TRN03
+                    PayerID
+                    CheckEFTDt
+                    AccountNo
+                    CHECKEFTFlag
+                    Receiver
+                    TotalAdjustmentAmount
+                    TotalBillAmount
+                    Days
+                    RemittanceFileName
+                    RemittanceSentDate
+                    State
+                    Status
+                    ProcessID
+                    }
+                  }`
+        }else{
+            query = `{
+                PaymentProcessingSummaryNew(
+                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
+                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                                    
+                )  {
+                    RefID
+                    RecCount
+                    FileID
+                    FileName
+                    FileDate
+                    ClaimID
+                    ClaimReceivedDate
+                    PatientName
+                    PatientControlNo
+                    PayerName
+                    TotalChargeAmt
+                    TotalClaimPaymentAmt
+                    Sender
+                    Organization
+                    TransactionType
+                    CheckEFTNo
+                    TRN03
+                    PayerID
+                    CheckEFTDt
+                    AccountNo
+                    CHECKEFTFlag
+                    Receiver
+                    TotalAdjustmentAmount
+                    TotalBillAmount
+                    Days
+                    RemittanceFileName
+                    RemittanceSentDate
+                    State
+                    Status
+                    ProcessID
+                    Claim_Filing_Indicator_Code
+                    ProviderName
+                    Rendering_ProviderID
+                    DGNQty
+                    FacilityCode
+                    providerID
+                    }
+                  }` 
+        }
+       
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
                 <ServersideGrid

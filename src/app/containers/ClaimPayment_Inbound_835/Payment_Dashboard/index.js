@@ -13,7 +13,7 @@ import { Filters } from '../../../components/Filters';
 import { Common_835 } from '../../../components/Common_835';
 
 let isOutbound;
-export class ClaimPaymentDashboard extends React.Component {
+export class InboundClaimPaymentDashboard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -148,17 +148,8 @@ export class ClaimPaymentDashboard extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-        let query = ''
-        if (isOutbound) {
-            query = `{
-                ERA835DashboardProgressBar(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
-                    Rejected
-                    Accepted
-                    Exception
-                } 
-            }`
-        } else {
-            query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+       
+          let  query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
                 TotalCount
                 Rejected
                 Accepted
@@ -168,10 +159,7 @@ export class ClaimPaymentDashboard extends React.Component {
                 CHK
               }
             }`
-        }
-
-
-
+        
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
@@ -187,24 +175,12 @@ export class ClaimPaymentDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                let Validated = ''
-                let Error = ''
-                let exception = ''
-                if (isOutbound) {
-                    let progress_data = res.data.ERA835DashboardProgressBar
-                    let progress_condition = progress_data && progress_data.length > 0
-                    Validated = progress_condition ? Number(progress_data[0].Accepted).toFixed(2) : 0
-                    Error = progress_condition ? Number(res.data.ERA835DashboardProgressBar[0].Rejected).toFixed(2) : 0
-                    exception = progress_condition ? Number(res.data.ERA835DashboardProgressBar[0].Exception).toFixed(2) : 0
-                } else {
                     let progress_data = res.data.ERA835DashboardCountNew
                     let progress_condition = progress_data && progress_data.length > 0
-                    Validated = progress_condition ? Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                    Error = progress_condition ? Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                    exception = progress_condition ? Number((progress_data[0].Exception / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                }
-
-
+                    let Validated = progress_condition ? Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                    let Error = progress_condition ? Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                    let exception = progress_condition ? Number((progress_data[0].Exception / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                
                 this.setState({
                     progress_Validated: Validated,
                     progress_Error: Error,
@@ -478,26 +454,8 @@ export class ClaimPaymentDashboard extends React.Component {
 
 
     _renderList() {
-  let columnDefs =[]
-  let outbound = JSON.parse(sessionStorage.getItem('isOutbound'))
-if(outbound){
-    columnDefs=[
-        { headerName: "Process Id", field: "ProcessID", width: 200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-        { headerName: "Received Date", field: "FileDate", width: 100 },
-        { headerName: "State", field: "State", width: 70 },
-        { headerName: "File Status", field: "Status", width: 100 },
-        { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-        { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
-        { headerName: "Organization", field: "Organization", width: 150 },
-        { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
-        { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
-        { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-        { headerName: "Total", field: "TotalClaim", width: 100 },
-        { headerName: "Rejected", field: "Rejected", width: 100 },
-    ]
 
-}else{
-    columnDefs=[
+   let columnDefs=[
         { headerName: "File Name", field: "RemittanceFileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
         { headerName: "File Date", field: "RemittanceSentDate", width: 100 },
         { headerName: "State", field: "State", width: 70 },
@@ -510,7 +468,7 @@ if(outbound){
         { headerName: "Rejected", field: "Rejected", width: 100 },
 
     ]
-}
+
 
 
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'

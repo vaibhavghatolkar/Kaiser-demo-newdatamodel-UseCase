@@ -4,6 +4,7 @@
 
 let base_url = 'http://10.0.1.248:30544' //graph
 let _base_url = 'http://10.0.1.248:30528' //local
+let kaiser_base_url = 'http://10.0.1.248:30580'  //kaiser new data model
 let sql_base_url = 'http://10.0.1.248:30506'
 // let base_url = 'http://10.0.1.71:30506' //sql
 //  let base_url = 'http://10.229.4.247:30108' //molina
@@ -59,7 +60,9 @@ const Urls = {
     _transaction834: _base_url + '/transaction834',
     _Payment820: _base_url + '/Payment820',
     _transaction834 : _base_url + '/transaction834',
-    _transaction835: _base_url + '/transaction835',
+    // _transaction835: _base_url + '/transaction835',
+    _transaction835: kaiser_base_url + '/transaction835',
+    
     
     _Response999 : base_url + '/common_data', 
     _inbound_common_data: base_url + '/common_data',

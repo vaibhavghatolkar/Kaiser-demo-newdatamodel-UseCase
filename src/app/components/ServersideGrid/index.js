@@ -13,7 +13,7 @@ export class ServersideGrid extends React.Component {
             columnDefs: this.props.columnDefs,
             defaultColDef: {
                 flex: 1,
-                minWidth: 90,
+                minWidth: this.props.handleColWidth ? this.props.handleColWidth : 90,
                 resizable: true,
                 sortable: true,
                 rowDrag: false,

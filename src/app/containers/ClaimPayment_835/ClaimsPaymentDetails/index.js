@@ -275,7 +275,11 @@ export class ClaimPaymentDetails extends React.Component {
     }
 
     _renderClaims = () => {
-        let columnDefs = [
+        let columnDefs=[]
+        let outboundPage = JSON.parse(sessionStorage.getItem('isOutbound'))
+
+    if(outboundPage){
+        columnDefs = [
             { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -284,52 +288,122 @@ export class ClaimPaymentDetails extends React.Component {
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Days Aged", field: "Days", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
         ]
+    }else{
+        columnDefs = [
+            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: {color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140,  },
+            { headerName: "Patient Name", field: "PatientName", width: 200,  },
+            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120,  },
+            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120,  },
+            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
+            { headerName: "Days Aged", field: "Days", width: 120  },
+            { headerName: "Claim Filling Indicator", field: "Claim_Filing_Indicator_Code", width: 120,},
+            // { headerName: "Provider ID", field: "providerID", width: 120,  },
+            { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120,  },
+            { headerName: "Rendering Provider Name", field: "ProviderName", width: 120,  },
+            { headerName: "Facility Code Value", field: "FacilityCode", width: 120,  },
+            { headerName: "DRG Code", field: "DGNQty", width: 120,  },
+        ]
+        
+    }
+        
+        
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-        let query = `{
-            PaymentProcessingSummaryNew(
-                StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
-                sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                   startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
-            ) {
-                RefID
-                RecCount
-                FileID
-                FileName
-                FileDate
-                ClaimID
-                ClaimReceivedDate
-                PatientName
-                PatientControlNo
-                PayerName
-                TotalChargeAmt
-                TotalClaimPaymentAmt
-                Sender
-                Organization
-                TransactionType
-                CheckEFTNo
-                TRN03
-                PayerID
-                CheckEFTDt
-                AccountNo
-                CHECKEFTFlag
-                Receiver
-                TotalAdjustmentAmount
-                TotalBillAmount
-                Days
-                RemittanceFileName
-                RemittanceSentDate
-                State
-                Status
-                ProcessID
-                }
-              }`
+        let query = ''
+        if(outboundPage){
+             query = `{
+                PaymentProcessingSummaryNew(
+                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
+                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                ) {
+                    RefID
+                    RecCount
+                    FileID
+                    FileName
+                    FileDate
+                    ClaimID
+                    ClaimReceivedDate
+                    PatientName
+                    PatientControlNo
+                    PayerName
+                    TotalChargeAmt
+                    TotalClaimPaymentAmt
+                    Sender
+                    Organization
+                    TransactionType
+                    CheckEFTNo
+                    TRN03
+                    PayerID
+                    CheckEFTDt
+                    AccountNo
+                    CHECKEFTFlag
+                    Receiver
+                    TotalAdjustmentAmount
+                    TotalBillAmount
+                    Days
+                    RemittanceFileName
+                    RemittanceSentDate
+                    State
+                    Status
+                    ProcessID
+                    }
+                  }`
+        }else{
+            query = `{
+                PaymentProcessingSummaryNew(
+                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
+                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
+                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                ) {
+                    RefID
+                    RecCount
+                    FileID
+                    FileName
+                    FileDate
+                    ClaimID
+                    ClaimReceivedDate
+                    PatientName
+                    PatientControlNo
+                    PayerName
+                    TotalChargeAmt
+                    TotalClaimPaymentAmt
+                    Sender
+                    Organization
+                    TransactionType
+                    CheckEFTNo
+                    TRN03
+                    PayerID
+                    CheckEFTDt
+                    AccountNo
+                    CHECKEFTFlag
+                    Receiver
+                    TotalAdjustmentAmount
+                    TotalBillAmount
+                    Days
+                    RemittanceFileName
+                    RemittanceSentDate
+                    State
+                    Status
+                    ProcessID
+                    Claim_Filing_Indicator_Code
+                    ProviderName
+                    Rendering_ProviderID
+                    DGNQty
+                    FacilityCode
+                    providerID
+                    }
+                  }` 
+        }
+       
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="font-size">Remittance Information For <label style={{ color: 'var(--main-bg-color)' }}>(Process Id:-{this.state.Ag_grid_ProcessId})</label></h6>
+                <h6 className="font-size">Remittance Information For <label style={{ color: 'var(--main-bg-color)' }}>{outboundPage ?  this.state.Ag_grid_ProcessId == null ? '(Process Id:- )' : '(Process Id:- ' +this.state.Ag_grid_ProcessId + ')' : '(File Name:-' + this.state.Ag_grid_FileName+ ')'}</label></h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -344,6 +418,7 @@ export class ClaimPaymentDetails extends React.Component {
                     endDate={endDate}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigationClaims}
+                    handleColWidth = {140}
                 />
             </div>
         )
@@ -504,24 +579,27 @@ export class ClaimPaymentDetails extends React.Component {
         })
     }
     clickNavigation = (event) => {
-        if (event.colDef.headerName == 'Process Id') {
-            this.setState({
-                showClaims: true,
-                showerror: false,
-                claims_rowData: [],
-                Ag_grid_FileName: event.data.FileName,
-                Ag_grid_fileDate: event.data.FileDate,
-                Ag_grid_ProcessId: event.data.ProcessID,
-                selectedFileId: event.data.FileID,
-            })
-        } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
-            this.setState({
-                clickedError: event.data.ErrorDescription
-            }, () => {
-                $('#payment_error_modal').modal('show')
-            })
 
-        }
+            if (isOutbound ? event.colDef.headerName == 'Process Id' : event.colDef.headerName == 'File Name') {
+                this.setState({
+                    showClaims: true,
+                    showerror: false,
+                    claims_rowData: [],
+                    Ag_grid_FileName: event.data.FileName,
+                    Ag_grid_fileDate: event.data.FileDate,
+                    Ag_grid_ProcessId: event.data.ProcessID,
+                    selectedFileId: event.data.FileID,
+                })
+            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
+                this.setState({
+                    clickedError: event.data.ErrorDescription
+                }, () => {
+                    $('#payment_error_modal').modal('show')
+                })
+    
+            }
+       
+        
     }
 
     postData = (data) => {
@@ -535,20 +613,39 @@ export class ClaimPaymentDetails extends React.Component {
         })
     }
     _renderList = () => {
-        let columnDefs = [
-            { headerName: "Process Id", field: "ProcessID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Received Date", field: "FileDate", width: 100 },
-            { headerName: "State", field: "State", width: 70 },
-            { headerName: "File Status", field: "Status", width: 100 },
-            { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
-            { headerName: "Organization", field: "Organization", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
-            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-            { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Error Description", field: "ErrorDescription", width: 400, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-        ]
+
+        let columnDefs =[]
+        let outbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+      if(outbound){
+          columnDefs=[
+              { headerName: "Process Id", field: "ProcessID", width: 200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+              { headerName: "Received Date", field: "FileDate", width: 100 },
+              { headerName: "State", field: "State", width: 70 },
+              { headerName: "File Status", field: "Status", width: 100 },
+              { headerName: "Remittance File Name", field: "RemittanceFileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+              { headerName: "Remittance Sent Date", field: "RemittanceSentDate", width: 100 },
+              { headerName: "Organization", field: "Organization", width: 150 },
+              { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
+              { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
+              { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
+              { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 100 },
+              { headerName: "Error Description", field: "ErrorDescription", width: 400, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+          ]
+      
+      }else{
+          columnDefs=[
+              { headerName: "File Name", field: "RemittanceFileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
+              { headerName: "File Date", field: "RemittanceSentDate", width: 100 },
+              { headerName: "State", field: "State", width: 70 },
+              { headerName: "File Status", field: "Status", width: 100 },
+              { headerName: "Organization", field: "Organization", width: 150 },
+              { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
+              { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
+              { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
+              { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 100 },
+              { headerName: "Error Description", field: "ErrorDescription", width: 400, cellStyle: { color: '#139DC9', cursor: 'pointer' } },      
+          ]
+      }
 
         // controller.abort()
         // controller = new AbortController()
@@ -651,7 +748,7 @@ export class ClaimPaymentDetails extends React.Component {
                 <div>
                     {this._renderList()}
                     {this.state.showClaims && this.state.selectedFileId ? this._renderClaims() : null}
-                    {this.state.showerror ? this._ClaimView_Info_Table() : null}
+                    {this.state.showerror && isOutbound ? this._ClaimView_Info_Table() : null}
                     {this.state.showerror ? this._ClaimServiceLineInfo() : null}
 
                 </div>

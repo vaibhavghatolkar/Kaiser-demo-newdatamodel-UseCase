@@ -22,7 +22,7 @@ export class Common_835 extends React.Component {
             second_data: {},
             pie_data: {},
             complaince_data: {},
-            availitySent: '',
+            availitySent: 0,
             progress_exception: 0,
             TotalException: 0,
             type: "",
@@ -105,31 +105,47 @@ export class Common_835 extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-
-        let query = `{
+        let query = ''
+        if (isOutbound) {
+            query = `{
             
-                ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
-                  TotalCount
-                  Rejected
-                  Accepted
-                  AvailitySent
-                  Exception
-                  EFT
-                  CHK
-                }
-                Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
-                    Total999
-                }
-        }`
+        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+          TotalCount
+          Rejected
+          Accepted
+          AvailitySent
+          Exception
+          EFT
+          CHK
+        }
+        Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+            Total999
+        }
+}`
+        } else {
+            query = `{
+            
+        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+          TotalCount
+          Rejected
+          Accepted
+          AvailitySent
+          Exception
+          EFT
+          CHK
+        }
+}`
+        }
+
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -146,7 +162,7 @@ export class Common_835 extends React.Component {
                     { name: 'EFT', value: data ? data.EFT : 0 },
                     { name: 'Check', value: data ? data.CHK : 0 },
                     { name: 'Total Sent To Availity', value: data ? data.AvailitySent : 0 },
-                    { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
+                    { name: '999 Received', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
                 ]
 
                 process.env.NODE_ENV == 'development' && console.log(summary)
@@ -349,10 +365,10 @@ export class Common_835 extends React.Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                    'user-id' : sessionStorage.getItem('user-id'),
-'Cache-Control': 'no-cache, no-store',
-'Expires': 0,
-'Pragma': 'no-cache',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
                 'Accept': 'application/json',
             },
             body: JSON.stringify({ query: query })
@@ -414,11 +430,75 @@ export class Common_835 extends React.Component {
 
     _refreshScreen = () => {
         if (!this.props.removeClaims) {
-            this._getClaimCounts()
+            {isOutbound ? this._getClaimCounts() :this._getClaimCounts_new_version()}
         }
         if (!this.props.removeFiles) {
             this._getCounts()
         }
+    }
+
+    _getClaimCounts_new_version = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let query = `{
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+                X12Count
+                HiPaaSCount
+                MCGLoadCount
+              }
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+                    Accepted
+                    Rejected
+                    FileReject
+                    AvailitySent
+                    TotalError
+                    TotalException
+              }
+              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+                Check
+          }
+          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+            EFT
+      }
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let _data = res.data.ERA835DashboardCountPaymentStatus[0]
+                    let data2 = res.data.ERA835DashboardTable
+                    let data3 = res.data.ERA835DashboardTableCHK[0]
+                    let data4 = res.data.ERA835DashboardTableEFT[0]
+                    console.log("test ", data2)
+                    this.setState({
+                        CheckData: data3 ? data3.Check : 0,
+                        EFTData: data4 ? data4.EFT : 0,
+                        Rejected999: data2 ? data2[0].Rejected==null ? 0 : data2.Rejected : 0,
+                        Accepted999: data2 ? data2[0].Accepted==null ? 0 : data2.Accepted : 0,
+                        QNXT_Generated: _data ? _data.X12Count : 0,
+                        Hipaas_Received: _data ? _data.HiPaaSCount : 0,
+                        AvailitySent: data2 && data2.length>0 ? data2[0].AvailitySent==null ? 0 : data2[0].AvailitySent : 0,
+                        TotalError: data2 && data2.length>0 ? data2[0].TotalError==null ? 0 : data2[0].TotalError : 0,
+                        TotalException: data2 && data2.length>0 ? data2[0].TotalException==null ? 0 : data2[0].TotalException : 0,
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
     }
 
     render() {
