@@ -220,7 +220,8 @@ const Strings = {
     Outbound_Compliance_Reporting_Claims:'Outbound_Compliance_Reporting_Claims',
     ClaimCustomerService:'ClaimCustomerService',
     Outbound_Claim_Batch_Click_Details:'Outbound_Claim_Batch_Click_Details',
-    InboundClaimPaymentDashboard:'InboundClaimPaymentDashboard'
+    InboundClaimPaymentDashboard:'InboundClaimPaymentDashboard',
+    InboundPaymentDetails: 'InboundPaymentDetails'
 
 // Outbound_Claim_updated_Details_837_Grid
 }
