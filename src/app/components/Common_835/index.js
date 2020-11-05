@@ -278,7 +278,7 @@ export class Common_835 extends React.Component {
 
         let stage_1 = [
             { 'header': 'HiPaaS Load Status' },
-            { 'name': 'X12 Count', 'value': this.state.QNXT_Generated },
+            { 'name': 'X12 CLP Count', 'value': this.state.QNXT_Generated },
             { 'name': 'HiPaaS CLP Count', 'value': this.state.Hipaas_Received },
             // { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
             // { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
