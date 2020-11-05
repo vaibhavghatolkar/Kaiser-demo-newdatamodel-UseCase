@@ -11,7 +11,7 @@ import { PieChart } from '../../../components/PieChart';
 import { ServersideGrid } from '../../../components/ServersideGrid';
 import { Filters } from '../../../components/Filters';
 import { Common_835 } from '../../../components/Common_835';
-
+import { Line } from 'react-chartjs-2';
 let isOutbound;
 export class InboundClaimPaymentDashboard extends React.Component {
 
@@ -240,7 +240,12 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let chartType = this.state.chartType
+        if (!chartType) {
+            chartType = "Monthwise"
+        }
         let query = `{
+          
             file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "${recType}") {
                 X_axis
                 Y_axis
@@ -267,7 +272,21 @@ export class InboundClaimPaymentDashboard extends React.Component {
             .then(res => {
                 console.log(res)
                 let array = []
+              
                 // let ClaimBarChart = res.data.barchart
+                // let count = 0
+                // ClaimBarChart.forEach((d) => {
+                //     count++;
+                //     array.push(
+                //         d.Y_axis ? parseFloat(d.Y_axis) : 0
+                //     )
+                //     if (chartType == 'Weekwise') {
+                //         claimLabels.push('week' + count)
+                //     } else {
+                //         claimLabels.push(d.X_axis)
+                //     }
+                // })
+
                 let claimLabels = []
                 let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
                 // let second_data = ""
@@ -356,7 +375,34 @@ export class InboundClaimPaymentDashboard extends React.Component {
             />
         )
     }
-
+    getLineChart(labelArray, dataArray, color) {
+        let _data = {
+            labels: labelArray,
+            datasets: [
+                {
+                    label: '',
+                    fill: true,
+                    cubicInterpolationMode: 'default',
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: color,
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'round',
+                    pointBorderColor: color,
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 3,
+                    pointHitRadius: 1,
+                    data: dataArray
+                }
+            ]
+        }
+        return _data
+    }
     renderAllPieCharts() {
         return (
             <div className="chart-div">
@@ -368,6 +414,26 @@ export class InboundClaimPaymentDashboard extends React.Component {
                     {/* <div className="col-6" style={{ padding: '8px' }}>
                         {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
                     </div> */}
+                     <div className="row chart-container-full chart">
+                    <div className="chart-header">Volume Analysis</div>
+                    <Line
+                        data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
+                        width={20}
+                        height={4}
+                        options={{
+                            legend: {
+                                position: 'bottom',
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        fontSize: 10,
+                                    },
+                                }]
+                            }
+                        }} />
+                </div>
                 </div>
             </div>
         )
@@ -584,7 +650,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText"> Payment Dashboard</h5>
+                <h5 className="headerText"> Payment Dashboard </h5>
                 <div className="row">
                     <div className="col-12">
                         {this._renderTopbar()}

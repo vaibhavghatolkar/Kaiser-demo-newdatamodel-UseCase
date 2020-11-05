@@ -154,7 +154,7 @@ export class Common_835 extends React.Component {
             .then(res => {
                 let summary = []
                 let data = res.data.ERA835DashboardCountNew[0]
-
+                isOutbound ?
                 summary = [
                     { name: 'Received From QNXT', value: data ? data.TotalCount : 0 },
                     { name: 'Vaildated', value: data ? data.Accepted : 0 },
@@ -162,7 +162,19 @@ export class Common_835 extends React.Component {
                     { name: 'EFT', value: data ? data.EFT : 0 },
                     { name: 'Check', value: data ? data.CHK : 0 },
                     { name: 'Total Sent To Availity', value: data ? data.AvailitySent : 0 },
-                    { name: '999 Received', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
+                    { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
+                ] :
+                summary = [
+                    { name: 'Total Files', value: data ? data.TotalCount : 0 },
+                    { name: 'Vaildated', value: data ? data.Accepted : 0 },
+                    { name: 'Files in Error', value: data ? data.Rejected : 0 },
+
+                    // { name: 'Accepted', value: data ? data.Accepted : 0 },
+                    // { name: 'Rejected', value: data ? data.Rejected : 0 },
+                    // { name: 'EFT', value: data ? data.EFT : 0 },
+                    // { name: 'Check', value: data ? data.CHK : 0 },
+                    { name: 'Total Sent To KPHC', value: data ? data.AvailitySent : 0 },
+                    { name: '999 Generated', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
                 ]
 
                 process.env.NODE_ENV == 'development' && console.log(summary)
@@ -174,6 +186,163 @@ export class Common_835 extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
+
+    _renderSummaryDetails_inbound = () => {
+        let row = []
+        let array = this.state.summaryCount
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+        array.forEach(item => {
+            let addon = ''
+            let claimStatus = ''
+            let subtitle = ''
+            let availitySent = ''
+            let EFTCHK = ''
+            let url = ''
+            let data = []
+            if (item.name == 'Vaildated') {
+                addon = '/accept'
+                claimStatus = 'Validated'
+                subtitle = "Validated Files"
+            } else if (item.name == 'Files in Error') {
+                claimStatus = 'Error'
+                subtitle = "Files in Error"
+            } else if (item.name == 'EFT') {
+                EFTCHK = 'ACH'
+                subtitle = "EFT"
+            } else if (item.name == 'Check') {
+                EFTCHK = 'CHK'
+                subtitle = "Check"
+            } else if (item.name == 'Total Sent To KPHC') {
+                availitySent = 'Y'
+                subtitle = "Sent To KPHC"
+            }
+            else if (item.name == 'Total Files') {
+                subtitle = "Total Files"
+            }
+            else {
+                addon = '/other'
+            }
+            data = [
+                {
+                    flag: addon,
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    transactionId: 'n',
+                    status: claimStatus,
+                    type: type,
+                    subtitle: subtitle,
+                    availitySent: availitySent,
+                    EFTCHK: EFTCHK
+                },
+            ]
+
+            if (item.name == '999 Generated') {
+                data = [{
+                    flag999: '0',
+                    type: type,
+                    State: State,
+                    startDate: startDate,
+                    endDate: endDate,
+                }]
+                url = Strings.Inbound_response_999
+            }
+            row.push(
+                <Tiles
+                    isClickable={
+                        item.name != 'Error Resolved'
+                    }
+                    _data={data}
+                    header_text={item.name}
+                    value={item.value}
+                    second_val={item.second_val}
+                    url={url ? url : Strings.claimPayment_835_details}
+                />
+
+            )
+        });
+
+        return (
+            <div className="row padding-left">
+                {row}
+            </div>
+        )
+    }
+
+    renderClaimDetails_inbound = () => {
+
+        let stage_1 = [
+            { 'header': 'HiPaaS Load Status' },
+            { 'name': 'X12 Count', 'value': this.state.QNXT_Generated },
+            { 'name': 'HiPaaS CLP Count', 'value': this.state.Hipaas_Received },
+            // { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
+            // { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
+
+        ]
+        let stage_2 = [
+            { 'header': 'L1 - L3 Status' },
+            { 'name': 'Vaildated CLP', 'value': this.state.Accepted_CLP, 'isClick': true },
+            { 'name': 'Total Error In CLP', 'value': this.state.Rejected_CLP, 'isClick': true },
+        ]
+        let stage_3 = [
+            { 'header': 'HiPaaS Accepted Status' },
+            { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
+        ]
+    
+        let stage_4 = [
+            { 'header': 'KPHC Status' },
+            { 'name': 'Sent to KPHC', 'value': this.state.AvailitySent, 'isClick': true },
+            // { 'name': 'Availity Accepted', 'value': this.state.Accepted999 },
+            // { 'name': 'Availity Rejected', 'value': this.state.Rejected999 },
+        ]
+
+
+        return (
+            <div className="row" style={{ marginBottom: '12px' }}>
+                {this._renderClaimTables(stage_1)}
+                {this._renderClaimTables(stage_2)}
+                {/* {this._renderClaimTables(stage_3)} */}
+                {this._renderClaimTables(stage_4)}
+            </div>
+        )
+    }
+
+    renderClaimDetails = () => {
+
+        let stage_1 = [
+            { 'header': 'HiPaaS Received Status' },
+            { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
+            { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
+            { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
+            { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
+
+        ]
+        let stage_2 = [
+            { 'header': 'HiPaaS Validation Status' },
+            { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
+        ]
+        let stage_3 = [
+            { 'header': 'Availity Status' },
+            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true },
+            { 'name': 'Availity Accepted', 'value': this.state.Accepted999 },
+            { 'name': 'Availity Rejected', 'value': this.state.Rejected999 },
+        ]
+
+
+        return (
+            <div className="row" style={{ marginBottom: '12px' }}>
+                {this._renderClaimTables(stage_1)}
+                {this._renderClaimTables(stage_2)}
+                {this._renderClaimTables(stage_3)}
+            </div>
+        )
+    }
+  
 
     _renderSummaryDetails = () => {
         let row = []
@@ -389,6 +558,7 @@ export class Common_835 extends React.Component {
                         AvailitySent: data2 ? data2.AvailitySent : 0,
                         TotalError: data2 ? data2.TotalError : 0,
                         TotalException: data2 ? data2.TotalException : 0,
+                      
                     })
                 }
             })
@@ -397,36 +567,7 @@ export class Common_835 extends React.Component {
             });
     }
 
-    renderClaimDetails = () => {
 
-        let stage_1 = [
-            { 'header': 'HiPaaS Received Status' },
-            { 'name': 'QNXT Generated', 'value': this.state.QNXT_Generated },
-            { 'name': 'HiPaaS Received ', 'value': this.state.Hipaas_Received },
-            { 'name': 'EFT', 'value': this.state.EFTData, 'isClick': true },
-            { 'name': 'CHK', 'value': this.state.CheckData, 'isClick': true },
-
-        ]
-        let stage_2 = [
-            { 'header': 'HiPaaS Validation Status' },
-            { 'name': 'Total Number of Errors', 'value': this.state.TotalError, 'isClick': true },
-        ]
-        let stage_3 = [
-            { 'header': 'Availity Status' },
-            { 'name': 'Sent to Availity', 'value': this.state.AvailitySent, 'isClick': true },
-            { 'name': 'Availity Accepted', 'value': this.state.Accepted999 },
-            { 'name': 'Availity Rejected', 'value': this.state.Rejected999 },
-        ]
-
-
-        return (
-            <div className="row" style={{ marginBottom: '12px' }}>
-                {this._renderClaimTables(stage_1)}
-                {this._renderClaimTables(stage_2)}
-                {this._renderClaimTables(stage_3)}
-            </div>
-        )
-    }
 
     _refreshScreen = () => {
         if (!this.props.removeClaims) {
@@ -493,6 +634,9 @@ export class Common_835 extends React.Component {
                         AvailitySent: data2 && data2.length>0 ? data2[0].AvailitySent==null ? 0 : data2[0].AvailitySent : 0,
                         TotalError: data2 && data2.length>0 ? data2[0].TotalError==null ? 0 : data2[0].TotalError : 0,
                         TotalException: data2 && data2.length>0 ? data2[0].TotalException==null ? 0 : data2[0].TotalException : 0,
+                        Accepted_CLP: data2 && data2.length>0 ? data2[0].Accepted==null ? 0 : data2[0].Accepted : 0,
+                        Rejected_CLP: data2 && data2.length>0 ? data2[0].Rejected==null ? 0 : data2[0].Rejected : 0,
+                     
                     })
                 }
             })
@@ -504,10 +648,12 @@ export class Common_835 extends React.Component {
     render() {
         return (
             <React.Fragment>
-                {!this.props.removeFiles && this.props.fileHeader ? <div className="general-header" style={{ marginBottom: "10px", marginTop: '12px' }}>Remittance File Level</div> : null}
-                {!this.props.removeFiles ? this._renderSummaryDetails() : null}
+                {!this.props.removeFiles && this.props.fileHeader ? <div className="general-header" style={{ marginBottom: "10px", marginTop: '12px' }}>{isOutbound ? "Remittance File Level" : "File Level" } </div> : null}
+                {/* {!this.props.removeFiles ? this._renderSummaryDetails() : null} */}
+                {!this.props.removeClaims ? isOutbound ? this._renderSummaryDetails() :this._renderSummaryDetails_inbound() : null}
                 {!this.props.removeClaims && this.props.claimHeader ? <div className="general-header">Payment Level</div> : null}
-                {!this.props.removeClaims ? this.renderClaimDetails() : null}
+                {/* {!this.props.removeClaims ? this.renderClaimDetails() : null} */}
+                {!this.props.removeClaims ? isOutbound ? this.renderClaimDetails() :this.renderClaimDetails_inbound() : null}
             </React.Fragment>
         );
     }
