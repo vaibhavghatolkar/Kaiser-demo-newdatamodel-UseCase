@@ -296,22 +296,9 @@ export class InboundPaymentDetails extends React.Component {
     }
 
     _renderClaims = () => {
-        let columnDefs=[]
-        let outboundPage = JSON.parse(sessionStorage.getItem('isOutbound'))
-
-    if(outboundPage){
-        columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Patient Name", field: "PatientName", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Days Aged", field: "Days", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-        ]
-    }else{
-        columnDefs = [
-            { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: {color: '#139DC9', cursor: 'pointer' } },
+       
+        let columnDefs = [
+            { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: {color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140,  },
             { headerName: "Patient Name", field: "PatientName", width: 200,  },
             { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120,  },
@@ -325,57 +312,14 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120,  },
             { headerName: "DRG Code", field: "DGNQty", width: 120,  },
         ]
-        
-    }
-        
+      
         
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-        let query = ''
-        if(outboundPage){
-             query = `{
-                PaymentProcessingSummaryNew(
-                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
-                    sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
-                ) {
-                    RefID
-                    RecCount
-                    FileID
-                    FileName
-                    FileDate
-                    ClaimID
-                    ClaimReceivedDate
-                    PatientName
-                    PatientControlNo
-                    PayerName
-                    TotalChargeAmt
-                    TotalClaimPaymentAmt
-                    Sender
-                    Organization
-                    TransactionType
-                    CheckEFTNo
-                    TRN03
-                    PayerID
-                    CheckEFTDt
-                    AccountNo
-                    CHECKEFTFlag
-                    Receiver
-                    TotalAdjustmentAmount
-                    TotalBillAmount
-                    Days
-                    RemittanceFileName
-                    RemittanceSentDate
-                    State
-                    Status
-                    ProcessID
-                    }
-                  }`
-        }else{
-            query = `{
+       
+        let query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
                     RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
@@ -420,11 +364,11 @@ export class InboundPaymentDetails extends React.Component {
                     providerID
                     }
                   }` 
-        }
+        
        
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="font-size">Remittance Information For <label style={{ color: 'var(--main-bg-color)' }}>File Name:-  {this.state.Ag_grid_FileName} </label></h6>
+                <h6 className="font-size">CLP Information For <label style={{ color: 'var(--main-bg-color)' }}>( File Name:-  {this.state.Ag_grid_FileName} )</label></h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -544,17 +488,17 @@ export class InboundPaymentDetails extends React.Component {
     _ClaimServiceLineInfo() {
         if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
         let columnDefs = [
+            { headerName: "SVC01", width: 120, field: "AdjudicatedCPT" },
+            { headerName: "Line Item Control", width: 120, field: "LineControlNo" },
             { headerName: "Service Start Date", width: 120, field: "ServiceStartDate" },
-            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },
-            { headerName: "Line Item Control #", width: 120, field: "LineControlNo" },
-            { headerName: "Adjudicated CPT", width: 120, field: "AdjudicatedCPT" },
-            { headerName: "Submitted CPT", width: 120, field: "SubmittedCPT" },
-            { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
-            { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
-            { headerName: "Claim Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
+            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },       
+            { headerName: "Composite Medical Procedure", width: 120, field: "SubmittedCPT" },      
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
-            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
             { headerName: "Paid Amount", field: "PaidAmt" },
+            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
+            { headerName: "Claim Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
+            { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
+            { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
 
         ]
 
@@ -627,10 +571,10 @@ export class InboundPaymentDetails extends React.Component {
         console.log(data)
         this.setState({
             showClaims: true,
-            Ag_grid_FileName: data && data.length > 0 ? data[0].RemittanceFileName : '',
-            Ag_grid_fileDate: data && data.length > 0 ? data[0].RemittanceSentDate : '',
+            Ag_grid_FileName: data && data.length > 0 ? data[0].FileName : '',
+            Ag_grid_fileDate: data && data.length > 0 ? data[0].FileDate : '',
             Ag_grid_ProcessId: data && data.length > 0 ? data[0].ProcessID : '',
-            selectedFileId: data && data.length > 0 ? data[0].FileID : ''
+            selectedFileId: data && data.length > 0 ? data[0].STID : ''
         })
     }
     _renderList = () => {
@@ -645,8 +589,8 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-            { headerName: "Total", field: "TotalClaim", width: 100 },
             { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
+            { headerName: "Total CLP", field: "TotalClaim", width: 100 },
 
         ]
         // controller.abort()

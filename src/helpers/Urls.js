@@ -60,7 +60,7 @@ const Urls = {
     _transaction834: _base_url + '/transaction834',
     _Payment820: _base_url + '/Payment820',
     _transaction834 : _base_url + '/transaction834',
-    // _transaction835: _base_url + '/transaction835',
+     _transaction835Kaiser: _base_url + '/transaction835',
     _transaction835: kaiser_base_url + '/transaction835',
     
     
