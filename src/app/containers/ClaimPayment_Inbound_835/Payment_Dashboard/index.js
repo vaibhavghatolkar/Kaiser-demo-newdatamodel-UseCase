@@ -659,8 +659,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
             { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-            { headerName: "Total", field: "TotalClaim", width: 100 },
             { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
+            { headerName: "Total CLP", field: "TotalClaim", width: 100 },
 
         ]
 
