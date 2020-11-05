@@ -541,7 +541,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
     clickNavigation2 = (event) => {
         if (event.colDef.headerName == 'File Name') {
             this.setState({
-                incoming_fileId: event.data.FileID
+                incoming_fileId: event.data.GSID
             }, () => {
                 this.gotoClaimDetails()
             })
