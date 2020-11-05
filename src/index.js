@@ -152,7 +152,7 @@ import CompanionGuide_Encounter from './app/containers/EncounterAdmin/CompanionG
 import {InboundClaimPaymentDashboard} from './app/containers/ClaimPayment_Inbound_835/Payment_Dashboard'
 import {InboundPaymentDetails} from './app/containers/ClaimPayment_Inbound_835/Payment_Details'
 import {LockBoxFlatFileDetails} from './app/containers/ClaimPayment_Inbound_835/LockBox_FlatFile_Details'
-
+import {TreasuryFileDetails} from './app/containers/ClaimPayment_Inbound_835/TreasuryFileDetails'
 
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
@@ -442,6 +442,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.InboundPaymentDetails} component={InboundPaymentDetails} />
                                 <Route path={'/' + Strings.Payment_Split_Dashboard} component={Payment_Split_Dashboard} />
                                 <Route path={'/' + Strings.LockBoxFlatFileDetails} component={LockBoxFlatFileDetails} />
+                                <Route path={'/' + Strings.TreasuryFileDetails} component={TreasuryFileDetails} />
                                 
                                
                                 {/*  for Sales demo 30545 */}
