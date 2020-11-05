@@ -150,6 +150,7 @@ import TransactionSetup_Encounter from './app/containers/EncounterAdmin/Transact
 import Encounter_view_CustomEditNew_Encounter from './app/containers/EncounterAdmin/Encounter_view_CustomEditNew'
 import CompanionGuide_Encounter from './app/containers/EncounterAdmin/CompanionGuide'
 import {InboundClaimPaymentDashboard} from './app/containers/ClaimPayment_Inbound_835/Payment_Dashboard'
+import {InboundPaymentDetails} from './app/containers/ClaimPayment_Inbound_835/Payment_Details'
 
 
 
@@ -437,6 +438,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ClaimCustomerService} component={ ClaimCustomerService } /> 
                                 <Route path={'/' + Strings.Outbound_Claim_Batch_Click_Details} component={Outbound_Claim_Batch_Click_Details} />
                                 <Route path={'/' + Strings.InboundClaimPaymentDashboard} component={InboundClaimPaymentDashboard} />
+                                <Route path={'/' + Strings.InboundPaymentDetails} component={InboundPaymentDetails} />
                                 <Route path={'/' + Strings.Payment_Split_Dashboard} component={Payment_Split_Dashboard} />
                                 
                                

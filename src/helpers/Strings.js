@@ -221,6 +221,7 @@ const Strings = {
     ClaimCustomerService:'ClaimCustomerService',
     Outbound_Claim_Batch_Click_Details:'Outbound_Claim_Batch_Click_Details',
     InboundClaimPaymentDashboard:'InboundClaimPaymentDashboard',
+    InboundPaymentDetails: 'InboundPaymentDetails',
     Payment_Split_Dashboard:'Payment_Split_Dashboard',
 
 // Outbound_Claim_updated_Details_837_Grid
