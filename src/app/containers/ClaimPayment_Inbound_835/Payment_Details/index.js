@@ -281,7 +281,7 @@ export class InboundPaymentDetails extends React.Component {
     }
 
     clickNavigationClaims = (event) => {
-        if (event.colDef.headerName == 'Claim Id') {
+        if (event.colDef.headerName == 'Payer Claim Control Number') {
             this.setState({
 
                 showerror: true,
@@ -305,8 +305,14 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120,  },
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
             { headerName: "Days Aged", field: "Days", width: 120  },
-            { headerName: "Claim Filling Indicator", field: "Claim_Filing_Indicator_Code", width: 120,},
-            // { headerName: "Provider ID", field: "providerID", width: 120,  },
+            { headerName: "Claim Filling Indicator", field: "Claim_Filing_Indicator_Code", width: 120,
+            // cellRenderer: (_data) => {
+            //     if(_data == 12){
+            //         return _data + ': Preferred Provider Organization (PPO)'
+            //     }
+            // } 
+        },
+,
             { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120,  },
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120,  },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120,  },
@@ -368,7 +374,7 @@ export class InboundPaymentDetails extends React.Component {
        
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="font-size">CLP Information For <label style={{ color: 'var(--main-bg-color)' }}>( File Name:-  {this.state.Ag_grid_FileName} )</label></h6>
+                <h6 className="font-size">Claim Payment Information For <label style={{ color: 'var(--main-bg-color)' }}>( File Name:-  {this.state.Ag_grid_FileName} )</label></h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -495,8 +501,8 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Composite Medical Procedure", width: 120, field: "SubmittedCPT" },      
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
             { headerName: "Paid Amount", field: "PaidAmt" },
-            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
-            { headerName: "Claim Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
+            { headerName: "Adjustment Amount", width: 120, field: "AdjAmt" },
+            { headerName: "Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
             { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
             { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
 
@@ -590,7 +596,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
             { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
-            { headerName: "Total CLP", field: "TotalClaim", width: 100 },
+            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
 
         ]
         // controller.abort()
@@ -632,6 +638,7 @@ export class InboundPaymentDetails extends React.Component {
           `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="font-size">Transaction Set Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}

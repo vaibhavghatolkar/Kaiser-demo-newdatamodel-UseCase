@@ -151,6 +151,7 @@ import Encounter_view_CustomEditNew_Encounter from './app/containers/EncounterAd
 import CompanionGuide_Encounter from './app/containers/EncounterAdmin/CompanionGuide'
 import {InboundClaimPaymentDashboard} from './app/containers/ClaimPayment_Inbound_835/Payment_Dashboard'
 import {InboundPaymentDetails} from './app/containers/ClaimPayment_Inbound_835/Payment_Details'
+import {LockBoxFlatFileDetails} from './app/containers/ClaimPayment_Inbound_835/LockBox_FlatFile_Details'
 
 
 
@@ -440,6 +441,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.InboundClaimPaymentDashboard} component={InboundClaimPaymentDashboard} />
                                 <Route path={'/' + Strings.InboundPaymentDetails} component={InboundPaymentDetails} />
                                 <Route path={'/' + Strings.Payment_Split_Dashboard} component={Payment_Split_Dashboard} />
+                                <Route path={'/' + Strings.LockBoxFlatFileDetails} component={LockBoxFlatFileDetails} />
                                 
                                
                                 {/*  for Sales demo 30545 */}

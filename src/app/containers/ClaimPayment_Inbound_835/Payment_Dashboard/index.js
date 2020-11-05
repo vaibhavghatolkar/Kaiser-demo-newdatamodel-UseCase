@@ -477,7 +477,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.claimPayment_835_details, {
+        this.props.history.push('/' + Strings.InboundPaymentDetails, {
             data: sendData
         })
     }
@@ -529,6 +529,15 @@ export class InboundClaimPaymentDashboard extends React.Component {
             })
         }
     }
+    clickNavigation2 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                incoming_fileId: event.data.FileID
+            }, () => {
+                this.gotoClaimDetails()
+            })
+        }
+    }
 
 
     _renderList() {
@@ -571,7 +580,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
           `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="general-header">File Information</h6>
+                <h6 className="font-size">File Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -627,7 +636,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="general-header">Functional Group Information</h6>
+                <h6 className="font-size">Functional Group Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -660,7 +669,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
             { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
-            { headerName: "Total CLP", field: "TotalClaim", width: 100 },
+            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
 
         ]
 
@@ -699,7 +708,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                    `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="general-header">Transaction Set Information</h6>
+                <h6 className="font-size">Transaction Set Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -712,7 +721,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                     endDate={endDate}
                     type={this.state.type}
                     updateFields={this.updateFields}
-                    onClick={this.clickNavigation1}
+                    onClick={this.clickNavigation2}
                     paginationPageSize={5}
                     selectedFileId={this.state.selectedGSID}
                     handleColWidth={120}
