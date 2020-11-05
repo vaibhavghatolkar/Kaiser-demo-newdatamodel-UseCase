@@ -547,18 +547,17 @@ export class ClaimPaymentDetails extends React.Component {
     _ClaimServiceLineInfo() {
         if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
         let columnDefs = [
+            { headerName: "SVC01", width: 120, field: "AdjudicatedCPT" },
+            { headerName: "Line Item Control", width: 120, field: "LineControlNo" },
             { headerName: "Service Start Date", width: 120, field: "ServiceStartDate" },
-            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },
-            { headerName: "Line Item Control #", width: 120, field: "LineControlNo" },
-            { headerName: "Adjudicated CPT", width: 120, field: "AdjudicatedCPT" },
-            { headerName: "Submitted CPT", width: 120, field: "SubmittedCPT" },
-            { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
-            { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
-            { headerName: "Claim Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
+            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },       
+            { headerName: "Composite Medical Procedure", width: 120, field: "SubmittedCPT" },      
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
-            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
             { headerName: "Paid Amount", field: "PaidAmt" },
-
+            { headerName: "Adj Amount", width: 120, field: "AdjAmt" },
+            { headerName: "Claim Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
+            { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
+            { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
         ]
 
         return (
