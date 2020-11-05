@@ -732,7 +732,9 @@ export class InboundClaimPaymentDashboard extends React.Component {
             startDate,
             endDate,
             selected_val,
-            chartType
+            chartType,
+            FunctionalGroupDetails: false,
+            TransactionSet: false
         }, () => {
             this._refreshScreen()
         })
@@ -740,7 +742,9 @@ export class InboundClaimPaymentDashboard extends React.Component {
 
     update = (key, value) => {
         this.setState({
-            [key]: value
+            [key]: value,
+            FunctionalGroupDetails: false,
+            TransactionSet: false
         }, () => {
             this._refreshScreen()
         })
@@ -794,8 +798,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 <div className="row">
                     <div className="col-12">
                         {this._renderList()}
-                        {this.state.FunctionalGroupDetails && this.state.selectedFileId ? this._renderFunctionalGroupDetails() : null}
-                        {this.state.TransactionSet && this.state.selectedGSID ? this._renderTransactionSet() : null}
+                        {this.state.FunctionalGroupDetails ? this._renderFunctionalGroupDetails() : null}
+                        {this.state.TransactionSet ? this._renderTransactionSet() : null}
                     </div>
                 </div>
             </div>
