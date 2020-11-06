@@ -106,7 +106,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
-
+            Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee != 'n' ? props.location.state.data[0].Payee : '',
+            Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer != 'n' ? props.location.state.data[0].Payer : '',
         }
     }
 
@@ -691,7 +692,9 @@ export class InboundClaimPaymentDashboard extends React.Component {
                      page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"${recType}", 
                      AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"",
+                     CLP06:""
+                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"") {
                         RecCount
                         FileId
                         GSID
@@ -780,9 +783,23 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                payerShow = {true}
+                payeeShow = {true}
+                FinancialShow = {true}
+                checkDateShow = {true}
+                renderMethod = {this.renderMethod}
 
             />
         )
+    }
+    renderMethod = () => {
+        this.setState({
+            // PayerNameList:
+        }, () => {
+            // this.TileShowsApi()
+        })
+
+
     }
 
     renderCommonGroup = () => {

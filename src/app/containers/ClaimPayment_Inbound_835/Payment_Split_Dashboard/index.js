@@ -682,7 +682,9 @@ export class Payment_Split_Dashboard extends React.Component {
                      page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"Split", 
                      AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter},  Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"",
+                     CLP06:""
+                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"") {
                         RecCount
                         FileId
                         GSID
@@ -771,6 +773,11 @@ export class Payment_Split_Dashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                payerShow = {true}
+                payeeShow = {true}
+                FinancialShow = {true}
+                checkDateShow = {true}
+                renderMethod = {this.renderMethod}
 
             />
         )

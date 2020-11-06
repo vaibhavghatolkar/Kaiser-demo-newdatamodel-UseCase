@@ -271,7 +271,10 @@ if(isOutboundPage){
      columnDefs = [
         { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: {color: '#139DC9', cursor: 'pointer' } },
         { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140,  },
+        { headerName: "CLP01", field: "CLP01", width: 200,  },
         { headerName: "Patient Name", field: "PatientName", width: 200,  },
+        { headerName: "Patient SubscriberID", field: "PatientSubscriberID", width: 200,  },
+       
         { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120,  },
         { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120,  },
         { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
@@ -352,7 +355,8 @@ if(isOutboundPage){
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
                     RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
+                       ,CLP01:"H1",CLP06:"12",CheckNo:"99",CheckDate:""
                                     
                 )  {
                     RefID
@@ -391,6 +395,8 @@ if(isOutboundPage){
                     DGNQty
                     FacilityCode
                     providerID
+    PatientSubscriberID
+    CLP01
                     }
                   }` 
         }
