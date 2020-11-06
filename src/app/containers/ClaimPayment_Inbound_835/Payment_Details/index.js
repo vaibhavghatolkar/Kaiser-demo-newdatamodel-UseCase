@@ -157,7 +157,7 @@ export class InboundPaymentDetails extends React.Component {
                 ClaimID
                 ServiceEndDate
                 ServiceStartDate
-                AdjudicatedCPT
+                SVC01
                 ChargeAmount
                 PaidAmt
                 AdjAmt
@@ -165,7 +165,7 @@ export class InboundPaymentDetails extends React.Component {
                 LineControlNo
                 ServiceSupplementalAmount
                 OriginalUnitsofServiceCount
-                UnitsofServicePaidCount
+                CAS02
                 RecCount
             }}`
         }
@@ -494,7 +494,7 @@ export class InboundPaymentDetails extends React.Component {
     _ClaimServiceLineInfo() {
         if (this.state.Aggrid_Service_Line_Info == undefined) { this.state.Aggrid_Service_Line_Info = [] }
         let columnDefs = [
-            { headerName: "SVC01", width: 120, field: "AdjudicatedCPT" },
+            { headerName: "SVC01", width: 120, field: "SVC01" },
             { headerName: "Line Item Control", width: 120, field: "LineControlNo" },
             { headerName: "Service Start Date", width: 120, field: "ServiceStartDate" },
             { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },       
@@ -502,7 +502,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
             { headerName: "Paid Amount", field: "PaidAmt" },
             { headerName: "Adjustment Amount", width: 120, field: "AdjAmt" },
-            { headerName: "Adjustment Reason Code", width: 120, field: "UnitsofServicePaidCount" },
+            { headerName: "Adjustment Reason Code", width: 120, field: "CAS02" },
             { headerName: "Original Units of Service Count", width: 120, field: "OriginalUnitsofServiceCount" },
             { headerName: "Service Supplemental Amount", width: 120, field: "ServiceSupplementalAmount" },
 
