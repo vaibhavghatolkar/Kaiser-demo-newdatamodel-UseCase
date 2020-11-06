@@ -530,7 +530,7 @@ export class Filters extends React.Component {
                     {
                         this.props.FinancialShow ?
                             <div className="form-group col-2">
-                                <div className="list-dashboard">Financial Class</div>
+                                <div className="list-dashboard">CLP06</div>
                                 <input
                                     className="form-control list-dashboard"
                                     // value={this.state.Filter_ClaimId}

@@ -268,22 +268,35 @@ if(isOutboundPage){
         { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
     ]
 }else{
-    columnDefs = [
-        { headerName: "File Name", field: "RemittanceFileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-        { headerName: "File Date", field: "RemittanceSentDate", width: 150, },
-        { headerName: "State", field: "State", width: 150 },
-        { headerName: "File Status", field: "Status", width: 150 },
-        { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
-        { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 150 },
-        { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 180 },
-        { headerName: "Total Billed Amount", field: "TotalBillAmount", width: 130 },
-        { headerName: "Claim Id", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-        { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 180 },
-        { headerName: "Days Aged", field: "Days", width: 70 },
-        { headerName: "Patient Name", field: "PatientName", width: 200 },
-        { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120 },
-        { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120 },
-        { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130 },
+     columnDefs = [
+        { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: {color: '#139DC9', cursor: 'pointer' } },
+        { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140,  },
+        { headerName: "Patient Name", field: "PatientName", width: 200,  },
+        { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120,  },
+        { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120,  },
+        { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
+        { headerName: "Days Aged", field: "Days", width: 120  },
+        { headerName: "CLP06", field: "Claim_Filing_Indicator_Code", width: 120,
+        cellRenderer: (data) => {
+            if(data.value == 12){return data.value + ' : Preferred Provider Organization (PPO)'}
+            else if(data.value == 11){return data.value + ' : Other Non-Federal Programs'}
+            else if(data.value == 9){return data.value + ' : Self-pay'}
+            else if(data.value == 13){return data.value + ' : Point of Service (POS)'}
+            else if(data.value == 14){return data.value + ' : Exclusive Provider Organization (EPO)'}
+            else if(data.value == 15){return data.value + ' : Indemnity Insurance'}
+            else if(data.value == 16){return data.value + ' : Health Maintenance Organization (HMO) Medicare Risk'}
+            else if(data.value == "HM"){return data.value + ' : Health Maintenance Organization'}
+            else if(data.value == "MA"){return data.value + ' : Medicare Part A'}
+            else if(data.value == "MB"){return data.value + ' : Medicare Part B'}
+            else if(data.value == "MC"){return data.value + ' : Medicaid'}
+            else { return data.value}
+        } 
+    },
+,
+        { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120,  },
+        { headerName: "Rendering Provider Name", field: "ProviderName", width: 120,  },
+        { headerName: "Facility Code Value", field: "FacilityCode", width: 120,  },
+        { headerName: "DRG Code", field: "DGNQty", width: 120,  },
     ]
 }
 
@@ -397,6 +410,7 @@ if(isOutboundPage){
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
                     filterClaim={this.state.Filter_ClaimId}
+                    handleColWidth={120}
                 />
             </div>
         )
