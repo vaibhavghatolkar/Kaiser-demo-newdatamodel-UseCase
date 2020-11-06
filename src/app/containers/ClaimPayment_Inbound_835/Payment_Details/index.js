@@ -74,6 +74,7 @@ export class InboundPaymentDetails extends React.Component {
             submitterRotation: 180,
             StateList: [],
             Statecode: '',
+            checkDate:"",
             Sender: '',
             Servicelinepage: 1,
             nested_orderby: '',
@@ -593,7 +594,6 @@ export class InboundPaymentDetails extends React.Component {
         })
     }
     _renderList = () => {
-
        
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
@@ -696,8 +696,14 @@ export class InboundPaymentDetails extends React.Component {
                 endDate={this.state.endDate}
                 payerShow = {true}
                 payeeShow = {true}
+                clp06Show={true}
+                claimIdData={true}
+                CLP01Show={true}
+                PatientSubscriberIDList={true}
+                CheckEFTNo={true}
                 FinancialShow = {true}
                 checkDateShow = {true}
+                checkDate={this.state.checkDate}
                 renderMethod = {this.renderMethod}
             />
         )

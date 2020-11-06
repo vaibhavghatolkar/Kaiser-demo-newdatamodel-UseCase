@@ -20,10 +20,16 @@ export class Filters extends React.Component {
         this.state = {
             startDate: this.props.startDate,
             endDate: this.props.endDate,
+            checkDate: this.props.checkDate,
             selectedTradingPartner: '',
             State: this.props.State ? this.props.State : '',
             tradingpartner: [],
             PayerNameList: [],
+            PayeeNameList: [],
+            clp06List: [],
+            claimIdData:[],
+            CLP01List:[],
+            PatientSubscriberIDList:[],
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
@@ -158,6 +164,14 @@ export class Filters extends React.Component {
         })
     }
 
+    handleCheckChange = (date) => {
+        this.setState({
+            checkDate: date
+        }, () => {
+            this.props.update('checkDate', date)
+        })
+    }
+
     onSelect = (event, name) => {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.props.update(name, '')
@@ -177,6 +191,22 @@ export class Filters extends React.Component {
     onSelected1 = (value) => {
         this.props.update('PayeeNameList', value)
     }
+    onSelected2 = (value) => {
+        this.props.update('clp06List', value)
+    }
+    onSelected3 = (value) => {
+        this.props.update('claimIdData', value)
+    }
+    onSelected4 = (value) => {
+        this.props.update('CLP01List', value)
+    }
+    onSelected5 = (value) => {
+        this.props.update('PatientSubscriberIDList', value)
+    }
+    onSelected6 = (value) => {
+        this.props.update('CheckEFTNo', value)
+    }
+    
     onChangeName = (value, name) => {
         this.props.update(name, value)
     }
@@ -286,6 +316,187 @@ export class Filters extends React.Component {
                 });
         }, 300);      
     }
+    onHandleChange2 = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+   
+        val = setTimeout(() => {
+            let query = `{
+                CLP06List (RecType:"Inbound",CLP06:"${providerName}") {
+                    CLP06
+                    Desc
+                }
+              }`
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.CLP06List.forEach(item => {
+                            data.push(item.Desc)
+                            // data.push(item.CLP06)
+                        })
+                       this.setState({
+                        clp06List : data
+                       })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
+    }
+    onHandleChange3 = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+   
+        val = setTimeout(() => {
+            let query = `{
+                ClaimIDList(RecType:"Inbound",ClaimID:"${providerName}") {
+                    ClaimID
+                  }
+              }`
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.ClaimIDList.forEach(item => {
+                            data.push(item.ClaimID)
+                        })
+                       this.setState({
+                        claimIdData : data
+                       })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
+    }
+    onHandleChange4 = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+   
+        val = setTimeout(() => {
+            let query = `{
+                CLP01List(RecType:"Inbound",CLP01:"${providerName}") {
+                    CLP01
+                  }
+              }`
+              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.CLP01List.forEach(item => {
+                            data.push(item.CLP01)
+                        })
+                       this.setState({
+                        CLP01List : data
+                       })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
+    }
+    onHandleChange5 = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+   
+        val = setTimeout(() => {
+            let query = `{
+                PatientSubscriberIDList(RecType:"Inbound",PatientSubscriberID:"${providerName}") {
+                    PatientSubscriberID
+                  }
+              }`
+              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.PatientSubscriberIDList.forEach(item => {
+                            data.push(item.PatientSubscriberID)
+                        })
+                       this.setState({
+                        PatientSubscriberIDList : data
+                       })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
+    }
+    onHandleChange6 = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+   
+        val = setTimeout(() => {
+            let query = `{
+                CheckEFTNoList(RecType:"Inbound",CheckEFTNo:"${providerName}") {
+                    CheckEFTNo
+                  }
+              }`
+              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.CheckEFTNoList.forEach(item => {
+                            data.push(item.CheckEFTNo)
+                        })
+                       this.setState({
+                        CheckEFTNo : data
+                       })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
+    }
+
 
     changeFilterInput = (event) => {
         let passing_val = event.target.value
@@ -597,31 +808,81 @@ export class Filters extends React.Component {
                             flag={1}
                         />
                     </div>: null }
-                    {
-                        this.props.FinancialShow ?
-                            <div className="form-group col-2">
-                                <div className="list-dashboard">CLP06</div>
-                                <input
-                                    className="form-control list-dashboard"
-                                    // value={this.state.Filter_ClaimId}
-                                    // onChange={(event) => {
-                                    //     this.changeFilterInput(event)
-                                    // }}
-                                    ></input>
-                            </div> : null
+
+                    {this.props.clp06Show ?
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">CLP06</div>
+                        <AutoComplete 
+                            list={this.state.clp06List}
+                            onHandleChange={this.onHandleChange2}
+                            onSelected={this.onSelected2}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null 
                     }
+
+                    {this.props.claimIdData ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">Claim Id</div>
+                        <AutoComplete 
+                            list={this.state.claimIdData}
+                            onHandleChange={this.onHandleChange3}
+                            onSelected={this.onSelected3}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null 
+                    }
+                    {this.props.CLP01Show ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">CLP01</div>
+                        <AutoComplete 
+                            list={this.state.CLP01List}
+                            onHandleChange={this.onHandleChange4}
+                            onSelected={this.onSelected4}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null 
+                    }
+                    {this.props.PatientSubscriberIDList ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">Patient Subscriber ID</div>
+                        <AutoComplete 
+                            list={this.state.PatientSubscriberIDList}
+                            onHandleChange={this.onHandleChange5}
+                            onSelected={this.onSelected5}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null 
+                    }
+
+                    {this.props.CheckEFTNo ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">Check/EFT Number</div>
+                        <AutoComplete 
+                            list={this.state.CheckEFTNo}
+                            onHandleChange={this.onHandleChange6}
+                            onSelected={this.onSelected6}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null 
+                    }
+
                     {
                         this.props.checkDateShow ?
                             <div className="form-group col-2">
-                                <div className="list-dashboard">Check Date</div>
-                                <input
-                                    className="form-control list-dashboard"
-                                    // value={this.state.Filter_ClaimId}
-                                    // onChange={(event) => {
-                                    //     this.changeFilterInput(event)
-                                    // }}
-                                    ></input>
-                            </div> : null
+                                <div className="list-dashboard">Check Date (BPR16)</div>
+                                <DatePicker className="form-control list-dashboard"
+                                    selected={this.props.checkDate ? new Date(moment(this.props.checkDate).format('YYYY-MM-DD hh:mm')) : ''}
+                                    onChange={this.handleCheckChange}
+                                />
+                            </div>
+
+                            : null
                     }
                     
                     {
