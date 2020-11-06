@@ -694,12 +694,23 @@ export class InboundPaymentDetails extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                showclaimId={true}
                 payerShow = {true}
+                payeeShow = {true}
                 FinancialShow = {true}
                 checkDateShow = {true}
+                renderMethod = {this.renderMethod}
             />
         )
+    }
+
+    renderMethod = () => {
+        this.setState({
+            // PayerNameList:
+        }, () => {
+            // this.TileShowsApi()
+        })
+
+
     }
 
     render() {

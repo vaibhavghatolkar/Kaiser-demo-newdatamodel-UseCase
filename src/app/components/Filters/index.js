@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import Strings from '../../../helpers/Strings';
 import Urls from '../../../helpers/Urls';
 import { getProviders } from '../../../helpers/getDetails';
-// import { AutoComplete } from '../AutoComplete';
+import { AutoComplete } from '../AutoComplete';
 
 let val = ''
 let val_in = ''
@@ -23,7 +23,7 @@ export class Filters extends React.Component {
             selectedTradingPartner: '',
             State: this.props.State ? this.props.State : '',
             tradingpartner: [],
-            providers: [],
+            PayerNameList: [],
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
@@ -172,7 +172,10 @@ export class Filters extends React.Component {
 
 
     onSelected = (value) => {
-        this.props.update('providerName', value)
+        this.props.update('PayerNameList', value)
+    }
+    onSelected1 = (value) => {
+        this.props.update('PayeeNameList', value)
     }
     onChangeName = (value, name) => {
         this.props.update(name, value)
@@ -211,20 +214,77 @@ export class Filters extends React.Component {
         return row
     }
 
-    onHandleChange = (event) => {
+    onHandleChange = (e) => {
         clearTimeout(val)
-        let providerName = event.target.value
-        let isOutbound = JSON.parse(sessionStorage.getItem('isOutbound'))
+        let providerName = e.target.value
+   
         val = setTimeout(() => {
-            getProviders(isOutbound ? 'Outbound' : 'Inbound', providerName)
-                .then(list => {
-                    this.setState({
-                        providers: list
-                    })
-                }).catch(error => {
-                    process.env.NODE_ENV == 'development' && console.log(error)
+            let query = `{
+                PayerList (RecType:"Inbound",Payer:"${providerName}") {
+                  PayerName
+                }
+              }`
+            //   if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.PayerList.forEach(item => {
+                            data.push(item.PayerName)
+                        })
+                       this.setState({
+                        PayerNameList : data
+                       })
+                    }
                 })
-        }, 300);
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
+    }
+    onHandleChange1 = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+   
+        val = setTimeout(() => {
+            let query = `{
+                PayeeList (RecType:"Inbound",Payee:"${providerName}") {
+                  PayeeName
+                  NPI
+                }
+              }`
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.PayeeList.forEach(item => {
+                            data.push(item.NPI)
+                        })
+                       this.setState({
+                        PayeeNameList : data
+                       })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);      
     }
 
     changeFilterInput = (event) => {
@@ -514,19 +574,29 @@ export class Filters extends React.Component {
                                     </select>
                                 </div> : null
                     }
-                    {
-                        this.props.payerShow ?
-                            <div className="form-group col-2">
-                                <div className="list-dashboard">Payer</div>
-                                <input
-                                    className="form-control list-dashboard"
-                                    // value={this.state.payer}
-                                    // onChange={(event) => {
-                                    //     this.changeFilterInput(event)
-                                    // }}
-                                    ></input>
-                            </div> : null
-                    }
+
+                    {this.props.payerShow ?
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Payer</div>
+                        <AutoComplete 
+                            list={this.state.PayerNameList}
+                            onHandleChange={this.onHandleChange}
+                            onSelected={this.onSelected}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null }
+                    {this.props.payeeShow ?
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">Payee</div>
+                        <AutoComplete 
+                            list={this.state.PayeeNameList}
+                            onHandleChange={this.onHandleChange1}
+                            onSelected={this.onSelected1}
+                            renderMethod={this.props.renderMethod}
+                            flag={1}
+                        />
+                    </div>: null }
                     {
                         this.props.FinancialShow ?
                             <div className="form-group col-2">

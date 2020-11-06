@@ -7,7 +7,8 @@ export class AutoComplete extends React.Component {
         this.state = {
             list: this.props.list,
             showDialog: false,
-            selected_item: ""
+            selected_item: this.props.flag==1 ? sessionStorage.getItem('CIN') ? sessionStorage.getItem('CIN') :"" : this.props.flag==2 ? sessionStorage.getItem('SFHPID') ? sessionStorage.getItem('SFHPID') :"" :"",
+            selected_SFHPID:  sessionStorage.getItem('SFHPID') ? sessionStorage.getItem('SFHPID') :"",
         }
     }
 
@@ -15,20 +16,36 @@ export class AutoComplete extends React.Component {
         return (
             <input className="form-control input-style-autocomplete" type="text"
                 value={this.state.selected_item}
-                onChange={(event) => {
-                    this.setState({
-                        selected_item: event.target.value,
-                        showDialog: event.target.value ? true : false
-                    })
-                    this.props.onHandleChange(event)
-                }}
+                onChange={(e) => this.handleInputChange(e)}
+              
             />
         )
+    }
+    handleInputChange = (e) => {
+        this.setState({
+            selected_item: e.target.value,
+            showDialog: e.target.value ? true : false
+        }) 
+     
+        if(e.target.value=="")
+        {
+          if(this.props.flag==1)
+          {
+            sessionStorage.removeItem("CIN")
+         
+          }
+          else if(this.props.flag==2)
+          {
+            sessionStorage.removeItem("SFHPID")
+          }
+          this.props.renderMethod();
+        }
+           this.props.onHandleChange(e)
     }
 
     renderDialog = () => {
         let list = this.props.list
-        let row = []
+         let row = []
         list.forEach(element => {
             row.push(
                 <div className="dropdown-inner-item">
@@ -38,6 +55,7 @@ export class AutoComplete extends React.Component {
                             showDialog: false
                         })
                         this.props.onSelected(element)
+                     
                     }}>
                         {element}
                     </a>
