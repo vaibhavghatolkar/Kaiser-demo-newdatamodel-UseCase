@@ -19,6 +19,7 @@ export class InboundPaymentDetails extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log("props.location.state",props.location.state.data[0])
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -81,6 +82,8 @@ export class InboundPaymentDetails extends React.Component {
             domLayout: 'autoHeight',
             paginationPageSize: 5,
             selectedFileId: '',
+            Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee != 'n' ? props.location.state.data[0].Payee : '',
+            Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer != 'n' ? props.location.state.data[0].Payer : '',
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
@@ -621,7 +624,9 @@ export class InboundPaymentDetails extends React.Component {
             RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",
             ClaimID:"${this.state.Filter_ClaimId}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"",
+            CLP06:""
+            ,PatientSubscriberID:"",CheckNo:"",CheckDate:"") {
                 RecCount
                 FileId
                 GSID
@@ -642,6 +647,7 @@ export class InboundPaymentDetails extends React.Component {
                 CHECKEFTFlag
                 TotalBillAmount
                 TotalClaim
+    						PayeeNPI
             }
           }
           `
@@ -664,6 +670,8 @@ export class InboundPaymentDetails extends React.Component {
                     type={this.state.type}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
+                    Payer={this.state.Payer}
+                    Payee={this.state.Payee}
                 />
             </div>
         )
@@ -672,7 +680,7 @@ export class InboundPaymentDetails extends React.Component {
 
     }
     update = (key, value) => {
-        this.setState({
+             this.setState({
             [key]: value,
             showDetails: false,
             showerror: false,

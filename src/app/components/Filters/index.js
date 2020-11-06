@@ -172,10 +172,10 @@ export class Filters extends React.Component {
 
 
     onSelected = (value) => {
-        this.props.update('PayerNameList', value)
+        this.props.update('Payer', value)
     }
     onSelected1 = (value) => {
-        this.props.update('PayeeNameList', value)
+        this.props.update('Payee', value)
     }
     onChangeName = (value, name) => {
         this.props.update(name, value)
