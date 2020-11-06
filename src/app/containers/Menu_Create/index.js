@@ -21,7 +21,7 @@ export class MenuCreate extends React.Component {
             isChecked: '',
             menuType: "I",
             // userroleID: localStorage.getItem("role_id"),
-            userroleID:'',
+            userroleID: sessionStorage.getItem("role_id"),
             add_menuID:"",
             menuadd_type:"I",
             AddMenu_Description:"",

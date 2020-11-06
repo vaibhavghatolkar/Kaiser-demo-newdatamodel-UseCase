@@ -356,7 +356,7 @@ if(isOutboundPage){
                     RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
-                       ,CLP01:"H1",CLP06:"12",CheckNo:"99",CheckDate:""
+                       ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:""
                                     
                 )  {
                     RefID
