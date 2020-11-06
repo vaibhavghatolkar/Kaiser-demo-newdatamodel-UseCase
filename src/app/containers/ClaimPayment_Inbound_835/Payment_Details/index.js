@@ -305,7 +305,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120,  },
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
             { headerName: "Days Aged", field: "Days", width: 120  },
-            { headerName: "Claim Filling Indicator", field: "Claim_Filing_Indicator_Code", width: 120,
+            { headerName: "CLP06", field: "Claim_Filing_Indicator_Code", width: 120,
             cellRenderer: (data) => {
                 if(data.value == 12){return data.value + ' : Preferred Provider Organization (PPO)'}
                 else if(data.value == 11){return data.value + ' : Other Non-Federal Programs'}
@@ -695,6 +695,9 @@ export class InboundPaymentDetails extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 showclaimId={true}
+                payerShow = {true}
+                FinancialShow = {true}
+                checkDateShow = {true}
             />
         )
     }
