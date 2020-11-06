@@ -3,6 +3,7 @@ import './style.css';
 import '../color.css'
 import Urls from '../../../helpers/Urls';
 import Strings from '../../../helpers/Strings';
+import { QuerySelector } from 'ag-grid-community';
 const $ = window.$;
 export class MenuCreate extends React.Component {
 
@@ -19,10 +20,13 @@ export class MenuCreate extends React.Component {
             Menucheckall: '',
             isChecked: '',
             menuType: "I",
-            userroleID: localStorage.getItem("role_id"),
-            MenuList:"",
+            // userroleID: localStorage.getItem("role_id"),
+            userroleID:'',
+            add_menuID:"",
             menuadd_type:"I",
-            AddMenu_Description:""
+            AddMenu_Description:"",
+            username:"",
+            add_customList:[]
         }
 
         this.showFile = this.showFile.bind(this)
@@ -31,7 +35,9 @@ export class MenuCreate extends React.Component {
         this.ChangeFunAccess = this.ChangeFunAccess.bind(this)
         this.ChangeMenuAcces = this.ChangeMenuAcces.bind(this)
         this.RenderUserRoleList = this.RenderUserRoleList.bind(this)
-        this.AddUserRole = this.AddUserRole.bind(this)
+        this.Add_menu_ChangeVal = this.Add_menu_ChangeVal.bind(this)
+        
+      
         
     }
 
@@ -44,11 +50,13 @@ export class MenuCreate extends React.Component {
     }
 
     componentDidMount() {
-
+        this.Menu_getData()
         this.getData()
         this.getbinduser()
+      
     }
-    AddUserRole() {
+    AddUserRole=()=> {
+        
         var query = `mutation{
          updateuserrole(roleid: 0 role_description:"`+ this.state.userRoleName + `" is_Active:0 ) {
            Role_id
@@ -85,10 +93,38 @@ export class MenuCreate extends React.Component {
     }
 
     AddMenuList=()=> {
-      alert(this.state.userroleID)
-      alert(this.state.menuadd_type)
-      alert(this.state.MenuList)
-      alert(this.state.AddMenu_Description)
+   
+
+      var query = `mutation{
+        SP_Save_SubMenu(MenuID:${this.state.add_menuID}  MenuType:"${this.state.menuadd_type}"  MenuDescription:"${this.state.AddMenu_Description}"  RoleID:${this.state.userroleID} ) 
+         
+        
+      }`
+       if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+       fetch(Urls.base_url, {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json',
+                   'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
+               'Accept': 'application/json',
+           },
+           body: JSON.stringify({ query: query })
+       })
+           .then(res => res.json())
+           .then(res => {
+                alert(res.data.SP_Save_SubMenu[0])
+            setTimeout(() => {
+                 window.location.reload()
+            }, 1000)
+
+                    
+           })
+           .catch(err => {
+               process.env.NODE_ENV == 'development' && console.log(err)
+           })
     }
     onHandleChange(event, key) {
 
@@ -97,7 +133,7 @@ export class MenuCreate extends React.Component {
         });
     }
 
-    getData() {
+    getData=()=> {
         this.setState({
             customList: [],
             UserAccess: [],
@@ -152,6 +188,71 @@ export class MenuCreate extends React.Component {
 
                 this.setState({
                     customList: array,
+
+
+
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+
+
+
+    }
+
+   Menu_getData=()=> {
+    this.setState({
+        add_customList: [],
+     })
+ 
+    let query = '{UserwiseMenu (role_id:' + this.state.userroleID + ` menutype:"${this.state.menuadd_type}" For:"A") {
+            role_id
+            menu_id
+            menu_description
+            sequence_id
+            parent_node
+            menuflag
+            usermenuflag
+            is_editor      
+            is_editable
+          }}`
+   console.log("sssss",query)
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls.users, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                    'user-id' : sessionStorage.getItem('user-id'),
+'Cache-Control': 'no-cache, no-store',
+'Expires': 0,
+'Pragma': 'no-cache',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                let array = []
+                let menu_add_list=[]
+                let data = res.data.UserwiseMenu
+                let iterator = data
+                process.env.NODE_ENV == 'development' && console.log(res.data);
+                iterator.forEach(item => {
+                    array.push({
+                        loopid: item.menu_description,
+                        parent_node: item.parent_node,
+                        menu_id: item.menu_id,
+                        isChecked: item.usermenuflag,
+                        isAccessValue: item.is_editor,
+                        is_editable: item.is_editable
+
+
+                    })
+                })
+
+                this.setState({
+                    add_customList: array,
 
 
 
@@ -403,22 +504,33 @@ export class MenuCreate extends React.Component {
     }
 
     ChangeVal(event, key) {
+    
         this.setState({
             [key]: event.target.value
         });
-
+        if(key=="menuType")
+        {
+            this.state.menuadd_type=event.target.value;
+        }
+        
         setTimeout(() => {
             this.getData();
+            this.Menu_getData();
         }, 50);
 
     }
 
     Add_menu_ChangeVal(event, key) {
+      
         this.setState({
             [key]: event.target.value
         });
-
-      
+     if(key=="menuadd_type")
+     {
+        setTimeout(() => {
+              this.Menu_getData();
+        }, 50);
+    }
     }
 
 
@@ -612,7 +724,13 @@ export class MenuCreate extends React.Component {
                                 $('#MemberInfoDialogbox').modal('hide')
 
                             }}>
-                            <span class="close clickable1">&times;</span>
+                            <span class="close clickable1"  onClick={() => {
+                                this.setState({
+                                       AddMenu_Description:"",
+                                       add_menuID:""
+                                })
+                               
+                            }}>&times;</span>
                         </div>
                        
                         <div>
@@ -626,7 +744,8 @@ export class MenuCreate extends React.Component {
     }
     getoptions_2 = () => {
         let row = []
-        this.state.customList.forEach(element => {
+        console.log("add_customList",this.state.add_customList)
+        this.state.add_customList.forEach(element => {
          if(element.parent_node==0)
          {
             row.push(<option value={element.menu_id}>{element.loopid}</option>)
@@ -642,34 +761,42 @@ export class MenuCreate extends React.Component {
             <div>
                  <h2 style={{fontSize:"18px"}}>Menu Details</h2>
                 <div class="form-row">
-               
-                    <br></br>
-                    <div class="form-group col-md-3">
-                        <label>Select Menu Type</label>
-                        <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.Add_menu_ChangeVal(e, 'menuadd_type')} defaultValue={'I'}>
-                        <option value="I">Inbound</option>
-                        <option value="O">Outbound</option>
-                        <option value="B">Both</option>
+                  
+                    <div class="form-group col-md-4">
+                        <label>User Role</label>
+                        <select disabled className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
+                        <option value="">Select User Role</option>
+                        {this.getoptions()}
                     </select>
                     </div> 
-                    <div class="form-group col-md-3">
+          
+                    <div class="form-group col-md-4">
+                        <label>Select Menu Type</label>
+                        <select className="form-control list-header-dashboard"  onChange={(e) => this.Add_menu_ChangeVal(e, 'menuadd_type')}>
+                        <option selected={this.state.menuadd_type == "I"} value="I">Inbound</option>
+                        <option  selected={this.state.menuadd_type == "O"} value="O">Outbound</option>
+                        <option  selected={this.state.menuadd_type == "B"}  value="B">Both</option>
+                    </select>                
+                    </div> 
+                    <div class="form-group col-md-4">
                         <label>Menu List</label>            
                         <select className="form-control list-dashboard" 
-                                        value={this.state.MenuList}
+                                        value={this.state.add_menuID}
                                         onChange={(e) => {
-                                            this.Add_menu_ChangeVal(e, 'MenuList')
+                                            this.Add_menu_ChangeVal(e, 'add_menuID')
                                         }}>
                                         <option value=""></option>
                                         {this.getoptions_2()}
                                     </select>             
                              
-                    </div>
-                    <div class="form-group col-md-3">
+                  
+                    </div><br></br>
+                    <div class="form-group col-md-4">
                         <label>Description</label>
-                        <input  value={this.state.AddMenu_Description} onChange={(e) => this.Add_menu_ChangeVal(e, 'AddMenu_Description')} class="form-control"  placeholder=""></input>
+                        <textarea  value={this.state.AddMenu_Description} onChange={(e) => this.Add_menu_ChangeVal(e, 'AddMenu_Description')} class="form-control"  placeholder=""></textarea>
                     </div>
                     <div class="form-group col-md-3">
-                <button  onClick={this.AddMenuList} type="submit"  style={{marginTop:"18px"}} class="btn btn-display">Save</button>  </div>
+                <button  onClick={this.AddMenuList} type="submit"  style={{marginTop:"30px"}} class="btn btn-display">Save</button>  </div>
                     </div>
                    
             </div>
