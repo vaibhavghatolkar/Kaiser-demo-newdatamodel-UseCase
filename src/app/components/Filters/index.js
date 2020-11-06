@@ -346,7 +346,7 @@ export class Filters extends React.Component {
                     if (res.data) {
                         let data = []
                         res.data.CLP06List.forEach(item => {
-                            data.push(item.Desc)
+                            data.push(item.CLP06)
                             // data.push(item.CLP06)
                         })
                        this.setState({
@@ -621,6 +621,21 @@ export class Filters extends React.Component {
                                     </select>
                                 </div> : null
                     }
+
+{
+                        this.props.FileNameKaiser ? 
+                        <div className="form-group col-2">
+                                    <div className="list-dashboard">File Name</div>
+                                    <select className="form-control list-dashboard" id="TradingPartner"
+                                        value={this.props.FileNameData}
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'FileNameData')
+                                        }}>
+                                        <option value=""></option>
+                                        
+                                    </select>
+                                </div> : null
+                    }
                     {
                         this.props.isTimeRange ?
                             <div className="form-group col-2">
@@ -777,20 +792,7 @@ export class Filters extends React.Component {
                             </div>
                             : null
                     }
-                    {
-                        this.props.FileNameKaiser ? 
-                        <div className="form-group col-2">
-                                    <div className="list-dashboard">File Name</div>
-                                    <select className="form-control list-dashboard" id="TradingPartner"
-                                        value={this.props.FileNameData}
-                                        onChange={(event) => {
-                                            this.onSelect(event, 'FileNameData')
-                                        }}>
-                                        <option value=""></option>
-                                        
-                                    </select>
-                                </div> : null
-                    }
+                    
 
                     {this.props.payerShow ?
                     <div className="form-group col-2">
@@ -806,7 +808,7 @@ export class Filters extends React.Component {
                     </div>: null }
                     {this.props.payeeShow ?
                     <div className="form-group col-2">
-                        <div className="list-dashboard">Payee</div>
+                        <div className="list-dashboard">NPI</div>
                         <AutoComplete 
                             list={this.state.PayeeNameList}
                             onHandleChange={this.onHandleChange1}
@@ -815,60 +817,9 @@ export class Filters extends React.Component {
                             flag={"Payee"}
                         />
                     </div>: null }
-
-                    {this.props.clp06Show ?
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">CLP06</div>
-                        <AutoComplete 
-                            list={this.state.clp06List}
-                            onHandleChange={this.onHandleChange2}
-                            onSelected={this.onSelected2}
-                            renderMethod={this.props.renderMethod}
-                            flag={"clp06List"}
-                        />
-                    </div>: null 
-                    }
-
-                    {this.props.claimIdData ?
-                        <div className="form-group col-2">
-                        <div className="list-dashboard">Claim Id</div>
-                        <AutoComplete 
-                            list={this.state.claimIdData}
-                            onHandleChange={this.onHandleChange3}
-                            onSelected={this.onSelected3}
-                            renderMethod={this.props.renderMethod}
-                            flag={"claimIdData"}
-                        />
-                    </div>: null 
-                    }
-                    {this.props.CLP01Show ?
-                        <div className="form-group col-2">
-                        <div className="list-dashboard">CLP01</div>
-                        <AutoComplete 
-                            list={this.state.CLP01List}
-                            onHandleChange={this.onHandleChange4}
-                            onSelected={this.onSelected4}
-                            renderMethod={this.props.renderMethod}
-                            flag={"CLP01List"}
-                        />
-                    </div>: null 
-                    }
-                    {this.props.PatientSubscriberIDList ?
-                        <div className="form-group col-2">
-                        <div className="list-dashboard">Patient Subscriber ID</div>
-                        <AutoComplete 
-                            list={this.state.PatientSubscriberIDList}
-                            onHandleChange={this.onHandleChange5}
-                            onSelected={this.onSelected5}
-                            renderMethod={this.props.renderMethod}
-                            flag={"PatientSubscriberIDList"}
-                        />
-                    </div>: null 
-                    }
-
                     {this.props.CheckEFTNo ?
                         <div className="form-group col-2">
-                        <div className="list-dashboard">Check/EFT Number</div>
+                        <div className="list-dashboard">Check/EFT Number (TRN02)</div>
                         <AutoComplete 
                             list={this.state.CheckEFTNo}
                             onHandleChange={this.onHandleChange6}
@@ -878,7 +829,6 @@ export class Filters extends React.Component {
                         />
                     </div>: null 
                     }
-
                     {
                         this.props.checkDateShow ?
                             <div className="form-group col-2">
@@ -891,6 +841,57 @@ export class Filters extends React.Component {
 
                             : null
                     }
+                    {this.props.claimIdData ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">Payer Claim Control No(CLP07)</div>
+                        <AutoComplete 
+                            list={this.state.claimIdData}
+                            onHandleChange={this.onHandleChange3}
+                            onSelected={this.onSelected3}
+                            renderMethod={this.props.renderMethod}
+                            flag={"claimIdData"}
+                        />
+                    </div>: null 
+                    }
+
+                    {this.props.CLP01Show ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">CLP01</div>
+                        <AutoComplete 
+                            list={this.state.CLP01List}
+                            onHandleChange={this.onHandleChange4}
+                            onSelected={this.onSelected4}
+                            renderMethod={this.props.renderMethod}
+                            flag={"CLP01List"}
+                        />
+                    </div>: null 
+                    }
+                    {this.props.clp06Show ?
+                    <div className="form-group col-2">
+                        <div className="list-dashboard">CLP06</div>
+                        <AutoComplete 
+                            list={this.state.clp06List}
+                            onHandleChange={this.onHandleChange2}
+                            onSelected={this.onSelected2}
+                            renderMethod={this.props.renderMethod}
+                            flag={"clp06List"}
+                        />
+                    </div>: null 
+                    }                    
+                    
+                    {this.props.PatientSubscriberIDList ?
+                        <div className="form-group col-2">
+                        <div className="list-dashboard">Subscriber ID</div>
+                        <AutoComplete 
+                            list={this.state.PatientSubscriberIDList}
+                            onHandleChange={this.onHandleChange5}
+                            onSelected={this.onSelected5}
+                            renderMethod={this.props.renderMethod}
+                            flag={"PatientSubscriberIDList"}
+                        />
+                    </div>: null 
+                    }
+                    
                       {
                         this.props.Clear ?
                             <div className="form-group col-2">

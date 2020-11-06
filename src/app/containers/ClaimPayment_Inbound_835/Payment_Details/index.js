@@ -743,7 +743,7 @@ export class InboundPaymentDetails extends React.Component {
                 PatientSubscriberIDList={true}
                 CheckEFTNo={true}
                 FinancialShow={true}
-                checkDateShow={true}
+                // checkDateShow={true}
                 checkDate={this.state.checkDate}
                 Clear={true}
                 renderMethod={this.renderMethod}
