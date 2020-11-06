@@ -172,6 +172,9 @@ export class Filters extends React.Component {
         })
     }
 
+  
+
+
     onSelect = (event, name) => {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.props.update(name, '')
@@ -205,6 +208,9 @@ export class Filters extends React.Component {
     }
     onSelected6 = (value) => {
         this.props.update('CheckEFTNo', value)
+    }
+    Clear = (value) => {
+        this.props.renderMethod("Clear")
     }
     
     onChangeName = (value, name) => {
@@ -794,7 +800,8 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange}
                             onSelected={this.onSelected}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"Payer"}
+                          
                         />
                     </div>: null }
                     {this.props.payeeShow ?
@@ -805,7 +812,7 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange1}
                             onSelected={this.onSelected1}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"Payee"}
                         />
                     </div>: null }
 
@@ -817,7 +824,7 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange2}
                             onSelected={this.onSelected2}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"clp06List"}
                         />
                     </div>: null 
                     }
@@ -830,7 +837,7 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange3}
                             onSelected={this.onSelected3}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"claimIdData"}
                         />
                     </div>: null 
                     }
@@ -842,7 +849,7 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange4}
                             onSelected={this.onSelected4}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"CLP01List"}
                         />
                     </div>: null 
                     }
@@ -854,7 +861,7 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange5}
                             onSelected={this.onSelected5}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"PatientSubscriberIDList"}
                         />
                     </div>: null 
                     }
@@ -867,7 +874,7 @@ export class Filters extends React.Component {
                             onHandleChange={this.onHandleChange6}
                             onSelected={this.onSelected6}
                             renderMethod={this.props.renderMethod}
-                            flag={1}
+                            flag={"CheckEFTNo"}
                         />
                     </div>: null 
                     }
@@ -884,7 +891,16 @@ export class Filters extends React.Component {
 
                             : null
                     }
-                    
+                      {
+                        this.props.Clear ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard"></div>
+                                <button type="submit" onClick={this.Clear} className="btn light_blue1 btn-xs" style={{ marginRight: "120px" ,marginTop:"16px" ,height:"32px" }}>Clear</button>
+                            </div>
+                            : null
+                    }
+
+
                     {
                         this.props.Updatebutton ?
                             <div className="form-group col-2">

@@ -30,18 +30,19 @@ export class AutoComplete extends React.Component {
         if(e.target.value=="")
         {
           if(this.props.flag==1)
-          {
-            sessionStorage.removeItem("CIN")
-         
+          {           
+            
           }
           else if(this.props.flag==2)
           {
-            sessionStorage.removeItem("SFHPID")
+          
           }
-          this.props.renderMethod();
+          this.props.renderMethod(this.props.flag);
         }
            this.props.onHandleChange(e)
     }
+
+  
 
     renderDialog = () => {
         let list = this.props.list

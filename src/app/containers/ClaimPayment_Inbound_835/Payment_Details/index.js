@@ -19,7 +19,7 @@ export class InboundPaymentDetails extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("props.location.state",props.location.state.data[0])
+        console.log("props.location.state", props.location.state.data[0])
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -75,7 +75,7 @@ export class InboundPaymentDetails extends React.Component {
             submitterRotation: 180,
             StateList: [],
             Statecode: '',
-            checkDate:"",
+            checkDate: "",
             Sender: '',
             Servicelinepage: 1,
             nested_orderby: '',
@@ -85,6 +85,14 @@ export class InboundPaymentDetails extends React.Component {
             selectedFileId: '',
             Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee != 'n' ? props.location.state.data[0].Payee : '',
             Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer != 'n' ? props.location.state.data[0].Payer : '',
+            clp06List: props.location.state && props.location.state.data[0] && props.location.state.data[0].clp06List != 'n' ? props.location.state.data[0].clp06List : '',
+
+            claimIdData: props.location.state && props.location.state.data[0] && props.location.state.data[0].claimIdData != 'n' ? props.location.state.data[0].claimIdData : '',
+            CLP01List: props.location.state && props.location.state.data[0] && props.location.state.data[0].CLP01List != 'n' ? props.location.state.data[0].CLP01List : '',
+            PatientSubscriberIDList: props.location.state && props.location.state.data[0] && props.location.state.data[0].PatientSubscriberIDList != 'n' ? props.location.state.data[0].PatientSubscriberIDList : '',
+            CheckEFTNo: props.location.state && props.location.state.data[0] && props.location.state.data[0].CheckEFTNo != 'n' ? props.location.state.data[0].CheckEFTNo : '',
+            checkDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].checkDate != 'n' ? props.location.state.data[0].checkDate : '',
+
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
@@ -107,8 +115,8 @@ export class InboundPaymentDetails extends React.Component {
 
     getDetails(claimId, fileId, RefID, fileData, page) {
         let query = ''
-        if(isOutbound){
-             query = `{
+        if (isOutbound) {
+            query = `{
                 RemittanceViewerClaimDetails (RefID:`+ RefID + `, FileID: "` + fileId + `") {
                     FileID
                     FileName
@@ -155,8 +163,8 @@ export class InboundPaymentDetails extends React.Component {
                 }
               }
               `
-        }else{
-            query = `{ RemittanceViewerClaimServiceDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `" ,page:${page}, RefID:${RefID}) {
+        } else {
+            query = `{ RemittanceViewerClaimServiceDetails(ClaimID:"` + claimId + `", FileID: "` + fileId + `" ,page:${page}, RefID:${RefID}) {
                 FileID
                 ClaimID
                 ServiceEndDate
@@ -173,7 +181,7 @@ export class InboundPaymentDetails extends React.Component {
                 RecCount
             }}`
         }
-       
+
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
 
@@ -300,50 +308,56 @@ export class InboundPaymentDetails extends React.Component {
     }
 
     _renderClaims = () => {
-       
+
         let columnDefs = [
-            { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: {color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140,  },
-            { headerName: "Patient Name", field: "PatientName", width: 200,  },
-            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120,  },
-            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120,  },
-            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
-            { headerName: "Days Aged", field: "Days", width: 120  },
-            { headerName: "CLP06", field: "Claim_Filing_Indicator_Code", width: 120,
-            cellRenderer: (data) => {
-                if(data.value == 12){return data.value + ' : Preferred Provider Organization (PPO)'}
-                else if(data.value == 11){return data.value + ' : Other Non-Federal Programs'}
-                else if(data.value == 9){return data.value + ' : Self-pay'}
-                else if(data.value == 13){return data.value + ' : Point of Service (POS)'}
-                else if(data.value == 14){return data.value + ' : Exclusive Provider Organization (EPO)'}
-                else if(data.value == 15){return data.value + ' : Indemnity Insurance'}
-                else if(data.value == 16){return data.value + ' : Health Maintenance Organization (HMO) Medicare Risk'}
-                else if(data.value == "HM"){return data.value + ' : Health Maintenance Organization'}
-                else if(data.value == "MA"){return data.value + ' : Medicare Part A'}
-                else if(data.value == "MB"){return data.value + ' : Medicare Part B'}
-                else if(data.value == "MC"){return data.value + ' : Medicaid'}
-                else { return data.value}
-            } 
-        },
-,
-            { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120,  },
-            { headerName: "Rendering Provider Name", field: "ProviderName", width: 120,  },
-            { headerName: "Facility Code Value", field: "FacilityCode", width: 120,  },
-            { headerName: "DRG Code", field: "DGNQty", width: 120,  },
+            { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, },
+            { headerName: "CLP01", field: "CLP01", width: 200, },
+            { headerName: "Patient Name", field: "PatientName", width: 200, },
+            { headerName: "Patient SubscriberID", field: "PatientSubscriberID", width: 200, },
+
+            { headerName: "Total Charge Amount", field: "TotalChargeAmt", width: 120, },
+            { headerName: "Total Paid Amount", field: "TotalClaimPaymentAmt", width: 120, },
+            { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130, },
+            { headerName: "Days Aged", field: "Days", width: 120 },
+            {
+                headerName: "CLP06", field: "Claim_Filing_Indicator_Code", width: 120,
+                cellRenderer: (data) => {
+                    if (data.value == 12) { return data.value + ' : Preferred Provider Organization (PPO)' }
+                    else if (data.value == 11) { return data.value + ' : Other Non-Federal Programs' }
+                    else if (data.value == 9) { return data.value + ' : Self-pay' }
+                    else if (data.value == 13) { return data.value + ' : Point of Service (POS)' }
+                    else if (data.value == 14) { return data.value + ' : Exclusive Provider Organization (EPO)' }
+                    else if (data.value == 15) { return data.value + ' : Indemnity Insurance' }
+                    else if (data.value == 16) { return data.value + ' : Health Maintenance Organization (HMO) Medicare Risk' }
+                    else if (data.value == "HM") { return data.value + ' : Health Maintenance Organization' }
+                    else if (data.value == "MA") { return data.value + ' : Medicare Part A' }
+                    else if (data.value == "MB") { return data.value + ' : Medicare Part B' }
+                    else if (data.value == "MC") { return data.value + ' : Medicaid' }
+                    else { return data.value }
+                }
+            },
+            ,
+            { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120, },
+            { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
+            { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
+            { headerName: "DRG Code", field: "DGNQty", width: 120, },
         ]
-      
-        
+
+
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
         let recType = isOutbound ? 'Outbound' : 'Inbound'
-       
+
         let query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.Filter_ClaimId}",
+                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
+                       CLP06:"${this.state.clp06List}"
+                       ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${this.state.checkDate}"
                 ) {
                     RefID
                     RecCount
@@ -381,10 +395,12 @@ export class InboundPaymentDetails extends React.Component {
                     DGNQty
                     FacilityCode
                     providerID
+    PatientSubscriberID
+    CLP01
                     }
-                  }` 
-        
-       
+                  }`
+
+
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
                 <h6 className="font-size">Claim Payment Information For <label style={{ color: 'var(--main-bg-color)' }}>( File Name:-  {this.state.Ag_grid_FileName} )</label></h6>
@@ -402,7 +418,16 @@ export class InboundPaymentDetails extends React.Component {
                     endDate={endDate}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigationClaims}
-                    handleColWidth = {140}
+                    handleColWidth={140}
+                    Payer={this.state.Payer}
+                    Payee={this.state.Payee}
+                    CLP01List={this.state.CLP01List}
+                    clp06List={this.state.clp06List}
+                    PatientSubscriberIDList={this.state.PatientSubscriberIDList}
+                    CheckEFTNo={this.state.CheckEFTNo}
+                    checkDate={this.state.checkDate}
+                    claimIdData={this.state.claimIdData}
+                    renderMethod={this.renderMethod}
                 />
             </div>
         )
@@ -510,8 +535,8 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "SVC01", width: 120, field: "SVC01" },
             { headerName: "Line Item Control", width: 120, field: "LineControlNo" },
             { headerName: "Service Start Date", width: 120, field: "ServiceStartDate" },
-            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },       
-            { headerName: "Composite Medical Procedure", width: 120, field: "SubmittedCPT" },      
+            { headerName: "Service End Date", width: 120, field: "ServiceEndDate" },
+            { headerName: "Composite Medical Procedure", width: 120, field: "SubmittedCPT" },
             { headerName: "Charge Amount", width: 120, field: "ChargeAmount" },
             { headerName: "Paid Amount", field: "PaidAmt" },
             { headerName: "Adjustment Amount", width: 120, field: "AdjAmt" },
@@ -564,26 +589,26 @@ export class InboundPaymentDetails extends React.Component {
     }
     clickNavigation = (event) => {
 
-            if (isOutbound ? event.colDef.headerName == 'Process Id' : event.colDef.headerName == 'File Name') {
-                this.setState({
-                    showClaims: true,
-                    showerror: false,
-                    claims_rowData: [],
-                    Ag_grid_FileName: event.data.FileName,
-                    Ag_grid_fileDate: event.data.FileDate,
-                    Ag_grid_ProcessId: event.data.ProcessID,
-                    selectedFileId: event.data.STID,
-                })
-            } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
-                this.setState({
-                    clickedError: event.data.ErrorDescription
-                }, () => {
-                    $('#payment_error_modal').modal('show')
-                })
-    
-            }
-       
-        
+        if (isOutbound ? event.colDef.headerName == 'Process Id' : event.colDef.headerName == 'File Name') {
+            this.setState({
+                showClaims: true,
+                showerror: false,
+                claims_rowData: [],
+                Ag_grid_FileName: event.data.FileName,
+                Ag_grid_fileDate: event.data.FileDate,
+                Ag_grid_ProcessId: event.data.ProcessID,
+                selectedFileId: event.data.STID,
+            })
+        } else if (event.colDef.headerName == "Error Description" && event.data.ErrorDescription) {
+            this.setState({
+                clickedError: event.data.ErrorDescription
+            }, () => {
+                $('#payment_error_modal').modal('show')
+            })
+
+        }
+
+
     }
 
     postData = (data) => {
@@ -597,9 +622,9 @@ export class InboundPaymentDetails extends React.Component {
         })
     }
     _renderList = () => {
-       
+
         let columnDefs = [
-            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
+            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 100 },
             { headerName: "Status", field: "Status", width: 100 },
             { headerName: "NPI", field: "PayeeNPI", width: 100 },
@@ -623,11 +648,11 @@ export class InboundPaymentDetails extends React.Component {
             EndDt: "${endDate}",page:1,OrderBy:"${this.state.orderby}" ,
             Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
             RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",
-            ClaimID:"${this.state.Filter_ClaimId}"
+            ClaimID:"${this.state.claimIdData}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"",
-            CLP06:""
-            ,PatientSubscriberID:"",CheckNo:"",CheckDate:"") {
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
+            CLP06:"${this.state.clp06List}"
+            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${this.state.checkDate}") {
                 RecCount
                 FileId
                 GSID
@@ -673,6 +698,13 @@ export class InboundPaymentDetails extends React.Component {
                     onClick={this.clickNavigation}
                     Payer={this.state.Payer}
                     Payee={this.state.Payee}
+                    CLP01List={this.state.CLP01List}
+                    clp06List={this.state.clp06List}
+                    PatientSubscriberIDList={this.state.PatientSubscriberIDList}
+                    CheckEFTNo={this.state.CheckEFTNo}
+                    checkDate={this.state.checkDate}
+                    claimIdData={this.state.claimIdData}
+                    renderMethod={this.renderMethod}
                 />
             </div>
         )
@@ -681,7 +713,7 @@ export class InboundPaymentDetails extends React.Component {
 
     }
     update = (key, value) => {
-             this.setState({
+        this.setState({
             [key]: value,
             showDetails: false,
             showerror: false,
@@ -703,28 +735,40 @@ export class InboundPaymentDetails extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                payerShow = {true}
-                payeeShow = {true}
+                payerShow={true}
+                payeeShow={true}
                 clp06Show={true}
                 claimIdData={true}
                 CLP01Show={true}
                 PatientSubscriberIDList={true}
                 CheckEFTNo={true}
-                FinancialShow = {true}
-                checkDateShow = {true}
+                FinancialShow={true}
+                checkDateShow={true}
                 checkDate={this.state.checkDate}
-                renderMethod = {this.renderMethod}
+                Clear={true}
+                renderMethod={this.renderMethod}
             />
         )
     }
 
-    renderMethod = () => {
-        this.setState({
-            // PayerNameList:
-        }, () => {
-            // this.TileShowsApi()
-        })
+    renderMethod = (flag) => {
+     
+        if (flag == "Clear") {
+           this. renderclear();
+        }
+        else {
+            this.setState({
+                [flag]: ""
+            }, () => {
+                // this.TileShowsApi()
+            })
+        }
 
+
+    }
+
+    renderclear = () => {
+       window.location.reload()
 
     }
 
