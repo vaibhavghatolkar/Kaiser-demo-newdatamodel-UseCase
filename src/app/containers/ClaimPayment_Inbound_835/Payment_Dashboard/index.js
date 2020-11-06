@@ -783,11 +783,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                payerShow = {true}
-                payeeShow = {true}
-                FinancialShow = {true}
-                checkDateShow = {true}
-                renderMethod = {this.renderMethod}
+               
 
             />
         )

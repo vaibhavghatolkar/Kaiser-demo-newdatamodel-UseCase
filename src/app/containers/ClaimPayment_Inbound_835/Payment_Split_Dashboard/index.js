@@ -773,11 +773,7 @@ export class Payment_Split_Dashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                payerShow = {true}
-                payeeShow = {true}
-                FinancialShow = {true}
-                checkDateShow = {true}
-                renderMethod = {this.renderMethod}
+             
 
             />
         )

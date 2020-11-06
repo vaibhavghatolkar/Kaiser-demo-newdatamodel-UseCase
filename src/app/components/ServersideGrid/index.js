@@ -72,7 +72,16 @@ export class ServersideGrid extends React.Component {
             this.props.type != nextProps.type ||
             this.props.selectedFileId != nextProps.selectedFileId||
             this.props.Payer != nextProps.Payer||
-            this.props.Payee != nextProps.Payee
+            this.props.claimIdData != nextProps.claimIdData||
+            this.props.CLP01List != nextProps.CLP01List||
+            this.props.PatientSubscriberIDList != nextProps.PatientSubscriberIDList||
+            this.props.CheckEFTNo != nextProps.CheckEFTNo||
+            this.props.Payee != nextProps.Payee||
+            this.props.clp06List != nextProps.clp06List ||
+            this.props.checkDate != nextProps.checkDate
+            
+
+            
         ) {
             var datasource = this.ServerSideDatasource();
             this.gridApi.setServerSideDatasource(datasource)
