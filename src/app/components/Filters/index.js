@@ -514,6 +514,45 @@ export class Filters extends React.Component {
                                     </select>
                                 </div> : null
                     }
+                    {
+                        this.props.payerShow ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Payer</div>
+                                <input
+                                    className="form-control list-dashboard"
+                                    // value={this.state.payer}
+                                    // onChange={(event) => {
+                                    //     this.changeFilterInput(event)
+                                    // }}
+                                    ></input>
+                            </div> : null
+                    }
+                    {
+                        this.props.FinancialShow ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Financial Class</div>
+                                <input
+                                    className="form-control list-dashboard"
+                                    // value={this.state.Filter_ClaimId}
+                                    // onChange={(event) => {
+                                    //     this.changeFilterInput(event)
+                                    // }}
+                                    ></input>
+                            </div> : null
+                    }
+                    {
+                        this.props.checkDateShow ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Check Date</div>
+                                <input
+                                    className="form-control list-dashboard"
+                                    // value={this.state.Filter_ClaimId}
+                                    // onChange={(event) => {
+                                    //     this.changeFilterInput(event)
+                                    // }}
+                                    ></input>
+                            </div> : null
+                    }
                     
                     {
                         this.props.Updatebutton ?

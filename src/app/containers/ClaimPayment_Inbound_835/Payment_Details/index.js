@@ -695,6 +695,9 @@ export class InboundPaymentDetails extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 showclaimId={true}
+                payerShow = {true}
+                FinancialShow = {true}
+                checkDateShow = {true}
             />
         )
     }
