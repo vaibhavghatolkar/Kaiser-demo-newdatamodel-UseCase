@@ -3,7 +3,7 @@ import './style.css';
 import '../color.css'
 import Urls from '../../../helpers/Urls';
 import Strings from '../../../helpers/Strings';
-
+const $ = window.$;
 export class MenuCreate extends React.Component {
 
     constructor(props) {
@@ -19,7 +19,10 @@ export class MenuCreate extends React.Component {
             Menucheckall: '',
             isChecked: '',
             menuType: "I",
-            userroleID: localStorage.getItem("role_id")
+            userroleID: localStorage.getItem("role_id"),
+            MenuList:"",
+            menuadd_type:"I",
+            AddMenu_Description:""
         }
 
         this.showFile = this.showFile.bind(this)
@@ -29,6 +32,7 @@ export class MenuCreate extends React.Component {
         this.ChangeMenuAcces = this.ChangeMenuAcces.bind(this)
         this.RenderUserRoleList = this.RenderUserRoleList.bind(this)
         this.AddUserRole = this.AddUserRole.bind(this)
+        
     }
 
     componentWillReceiveProps() {
@@ -79,6 +83,13 @@ export class MenuCreate extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
+
+    AddMenuList=()=> {
+      alert(this.state.userroleID)
+      alert(this.state.menuadd_type)
+      alert(this.state.MenuList)
+      alert(this.state.AddMenu_Description)
+    }
     onHandleChange(event, key) {
 
         this.setState({
@@ -122,6 +133,7 @@ export class MenuCreate extends React.Component {
             .then(res => res.json())
             .then(res => {
                 let array = []
+                let menu_add_list=[]
                 let data = res.data.UserwiseMenu
                 let iterator = data
                 process.env.NODE_ENV == 'development' && console.log(res.data);
@@ -401,6 +413,14 @@ export class MenuCreate extends React.Component {
 
     }
 
+    Add_menu_ChangeVal(event, key) {
+        this.setState({
+            [key]: event.target.value
+        });
+
+      
+    }
+
 
     Update() {
         if (this.state.userroleID != 0) {
@@ -510,7 +530,7 @@ export class MenuCreate extends React.Component {
                 <div className="form-group col-3">
                     <div className="list-header-dashboard">Select User Role</div>
                     <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.ChangeVal(e, 'userroleID')}>
-                        <option value="0">Select User Role</option>
+                        <option value="">Select User Role</option>
                         {this.getoptions()}
                     </select>
                 </div>
@@ -533,7 +553,16 @@ export class MenuCreate extends React.Component {
                         Add User Role
                     </button>
                 </div>
+                {this.state.userroleID ?
+                <div className="form-group col-sm-2" style={{marginLeft:"-50px"}}>
+                     <button type="submit" className="btn btn-display"onClick={() => {
+                                    this.setState({
+                                        showMemberInfo: true,
+                                        textbox: true                      })
+                                   $('#MemberInfoDialogbox').modal('show')
 
+                               }}>Menu Add</button>
+                </div> :""}
                 <div className="modal right widthHandling fade" id="myModal" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -563,11 +592,88 @@ export class MenuCreate extends React.Component {
                     </div>
                 </div>
 
-
-
+             
             </div>
 
         )
+    }
+    MemberInfoDialogbox = () => {
+        return (
+            <div class="modal" id="MemberInfoDialogbox" role="dialog" aria-labelledby="myModalLabel2" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog-Memberinfo">
+                    <div className="error-dialog" style={{width:"85%", marginLeft:"70px"}}>
+                        <div
+                            onClick={() => {
+                                this.setState({
+                                    showDetailsEnrollment: true,
+                                    textbox: false
+
+                                })
+                                $('#MemberInfoDialogbox').modal('hide')
+
+                            }}>
+                            <span class="close clickable1">&times;</span>
+                        </div>
+                       
+                        <div>
+                            {this.state.showMemberInfo ? this.renderMemberinfo() : null}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        )
+    }
+    getoptions_2 = () => {
+        let row = []
+        this.state.customList.forEach(element => {
+         if(element.parent_node==0)
+         {
+            row.push(<option value={element.menu_id}>{element.loopid}</option>)
+         }
+        })
+        return row
+    }
+
+    renderMemberinfo() {
+       
+        return (
+           
+            <div>
+                 <h2 style={{fontSize:"18px"}}>Menu Details</h2>
+                <div class="form-row">
+               
+                    <br></br>
+                    <div class="form-group col-md-3">
+                        <label>Select Menu Type</label>
+                        <select className="form-control list-header-dashboard" id="state" onChange={(e) => this.Add_menu_ChangeVal(e, 'menuadd_type')} defaultValue={'I'}>
+                        <option value="I">Inbound</option>
+                        <option value="O">Outbound</option>
+                        <option value="B">Both</option>
+                    </select>
+                    </div> 
+                    <div class="form-group col-md-3">
+                        <label>Menu List</label>            
+                        <select className="form-control list-dashboard" 
+                                        value={this.state.MenuList}
+                                        onChange={(e) => {
+                                            this.Add_menu_ChangeVal(e, 'MenuList')
+                                        }}>
+                                        <option value=""></option>
+                                        {this.getoptions_2()}
+                                    </select>             
+                             
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label>Description</label>
+                        <input  value={this.state.AddMenu_Description} onChange={(e) => this.Add_menu_ChangeVal(e, 'AddMenu_Description')} class="form-control"  placeholder=""></input>
+                    </div>
+                    <div class="form-group col-md-3">
+                <button  onClick={this.AddMenuList} type="submit"  style={{marginTop:"18px"}} class="btn btn-display">Save</button>  </div>
+                    </div>
+                   
+            </div>
+        );
     }
 
     render() {
@@ -585,6 +691,7 @@ export class MenuCreate extends React.Component {
                         <div className="row">
                             <div className="col-7">
                                 {this.renderList()}
+                                {this.MemberInfoDialogbox()}
                             </div>
 
                         </div>
