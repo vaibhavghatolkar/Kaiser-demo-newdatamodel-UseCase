@@ -8,8 +8,8 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { ServersideGrid } from '../../../components/ServersideGrid';
 import Urls from '../../../../helpers/Urls';
-var val = ''
-const $ = window.$;
+import { Filters } from '../../../components/Filters';
+
 let isOutbound;
 export class LockBoxFlatFileDetails extends React.Component {
     constructor(props) {
@@ -68,6 +68,35 @@ export class LockBoxFlatFileDetails extends React.Component {
             </div>
         )
     }
+
+
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                removeSubmitter={true}
+                removeGrid={true}
+                setData={this.setData}
+                changeDefault={true}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                // removeState={true}
+                FileNameKaiser={true}
+            />
+        )
+    }
+
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value,
+        }, () => {
+            // this._refreshScreen()
+        })
+    }
+
     updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
         this.setState({
             fieldType: fieldType,
@@ -81,7 +110,7 @@ export class LockBoxFlatFileDetails extends React.Component {
         return (
             <div>
                 <h5 className="headerText">Lockbox Flat Files Details </h5>
-                {/* {this._renderTopbar()} */}
+                {this._renderTopbar()}
                 <div>
                     {this._renderClaims()}
                 </div>

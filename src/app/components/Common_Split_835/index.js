@@ -70,6 +70,7 @@ export class Common_Split_835 extends React.Component {
             progress_Error: 0,
             AvailitySent: 0,
             TotalError: 0,
+            Rejected_CLP:0
         }
     }
 
@@ -174,7 +175,7 @@ export class Common_Split_835 extends React.Component {
                     // { name: 'EFT', value: data ? data.EFT : 0 },
                     // { name: 'Check', value: data ? data.CHK : 0 },
                     { name: 'Total Sent To KPHC', value: data ? data.AvailitySent : 0 },
-                    { name: '999 Generated', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
+                    { name: '999', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
                 ]
 
                 process.env.NODE_ENV == 'development' && console.log(summary)
@@ -285,9 +286,9 @@ export class Common_Split_835 extends React.Component {
 
         ]
         let stage_2 = [
-            { 'header': 'L1 - L3 Status' },
-            { 'name': 'Vaildated CLP', 'value': this.state.Accepted_CLP, 'isClick': true },
-            { 'name': 'Total Error In CLP', 'value': this.state.Rejected_CLP, 'isClick': true },
+            { 'header': 'HiPaaS Validation Status' },
+            // { 'name': 'Vaildated CLP', 'value': this.state.Accepted_CLP, 'isClick': true },
+            { 'name': 'Total Error ', 'value': this.state.Rejected_CLP, 'isClick': true },
         ]
         let stage_3 = [
             { 'header': 'HiPaaS Accepted Status' },
@@ -627,8 +628,6 @@ export class Common_Split_835 extends React.Component {
                     this.setState({
                         CheckData: data3 ? data3.Check : 0,
                         EFTData: data4 ? data4.EFT : 0,
-                        Rejected999: data2 ? data2[0].Rejected==null ? 0 : data2.Rejected : 0,
-                        Accepted999: data2 ? data2[0].Accepted==null ? 0 : data2.Accepted : 0,
                         QNXT_Generated: _data ? _data.X12Count : 0,
                         Hipaas_Received: _data ? _data.HiPaaSCount : 0,
                         AvailitySent: data2 && data2.length>0 ? data2[0].AvailitySent==null ? 0 : data2[0].AvailitySent : 0,

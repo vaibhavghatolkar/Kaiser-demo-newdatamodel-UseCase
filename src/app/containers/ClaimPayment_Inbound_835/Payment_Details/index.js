@@ -306,11 +306,20 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Total Adjusted Amount", field: "TotalAdjustmentAmount", width: 130,  },
             { headerName: "Days Aged", field: "Days", width: 120  },
             { headerName: "Claim Filling Indicator", field: "Claim_Filing_Indicator_Code", width: 120,
-            // cellRenderer: (_data) => {
-            //     if(_data == 12){
-            //         return _data + ': Preferred Provider Organization (PPO)'
-            //     }
-            // } 
+            cellRenderer: (data) => {
+                if(data.value == 12){return data.value + ' : Preferred Provider Organization (PPO)'}
+                else if(data.value == 11){return data.value + ' : Other Non-Federal Programs'}
+                else if(data.value == 9){return data.value + ' : Self-pay'}
+                else if(data.value == 13){return data.value + ' : Point of Service (POS)'}
+                else if(data.value == 14){return data.value + ' : Exclusive Provider Organization (EPO)'}
+                else if(data.value == 15){return data.value + ' : Indemnity Insurance'}
+                else if(data.value == 16){return data.value + ' : Health Maintenance Organization (HMO) Medicare Risk'}
+                else if(data.value == "HM"){return data.value + ' : Health Maintenance Organization'}
+                else if(data.value == "MA"){return data.value + ' : Medicare Part A'}
+                else if(data.value == "MB"){return data.value + ' : Medicare Part B'}
+                else if(data.value == "MC"){return data.value + ' : Medicaid'}
+                else { return data.value}
+            } 
         },
 ,
             { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120,  },

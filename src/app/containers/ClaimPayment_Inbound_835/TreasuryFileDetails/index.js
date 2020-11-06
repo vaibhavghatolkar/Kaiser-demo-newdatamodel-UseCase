@@ -8,8 +8,8 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { ServersideGrid } from '../../../components/ServersideGrid';
 import Urls from '../../../../helpers/Urls';
-var val = ''
-const $ = window.$;
+import { Filters } from '../../../components/Filters';
+
 let isOutbound;
 export class TreasuryFileDetails extends React.Component {
 
@@ -48,6 +48,7 @@ export class TreasuryFileDetails extends React.Component {
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
                 ) {
+                    RecCount
                     FileName
                     FileDate
                     Tran_Descr
@@ -86,6 +87,32 @@ export class TreasuryFileDetails extends React.Component {
     }
 
 
+    _renderTopbar = () => {
+        return (
+            <Filters
+                isTimeRange={false}
+                removeSubmitter={true}
+                removeGrid={true}
+                setData={this.setData}
+                changeDefault={true}
+                onGridChange={this.onGridChange}
+                update={this.update}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                // removeState={true}
+                FileNameKaiser={true}
+            />
+        )
+    }
+
+    update = (key, value) => {
+        this.setState({
+            [key]: value,
+        }, () => {
+            // this._refreshScreen()
+        })
+    }
+
 
     updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
         this.setState({
@@ -96,8 +123,6 @@ export class TreasuryFileDetails extends React.Component {
             filterArray: filterArray
         })
     }
-
-
     
   
 
@@ -106,7 +131,7 @@ export class TreasuryFileDetails extends React.Component {
         return (
             <div>
                 <h5 className="headerText">Treasury File Details </h5>
-                {/* {this._renderTopbar()} */}
+                {this._renderTopbar()}
                 <div>
                     {this._renderClaims()}
                    

@@ -500,7 +500,22 @@ export class Filters extends React.Component {
                             </div>
                             : null
                     }
-                        {
+                    {
+                        this.props.FileNameKaiser ? 
+                        <div className="form-group col-2">
+                                    <div className="list-dashboard">File Name</div>
+                                    <select className="form-control list-dashboard" id="TradingPartner"
+                                        value={this.props.FileNameData}
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'FileNameData')
+                                        }}>
+                                        <option value=""></option>
+                                        
+                                    </select>
+                                </div> : null
+                    }
+                    
+                    {
                         this.props.Updatebutton ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard"></div>
