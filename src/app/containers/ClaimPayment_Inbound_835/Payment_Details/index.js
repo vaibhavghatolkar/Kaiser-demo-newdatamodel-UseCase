@@ -348,6 +348,7 @@ export class InboundPaymentDetails extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let checkDate = this.state.checkDate ? moment(this.state.checkDate).format('YYYYMMDD') : ""
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
         let query = `{
@@ -357,7 +358,7 @@ export class InboundPaymentDetails extends React.Component {
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
                        CLP06:"${this.state.clp06List}"
-                       ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${this.state.checkDate}"
+                       ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:""
                 ) {
                     RefID
                     RecCount
@@ -642,6 +643,7 @@ export class InboundPaymentDetails extends React.Component {
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let checkDate = this.state.checkDate ? moment(this.state.checkDate).format('YYYYMMDD') : ""
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",
@@ -651,7 +653,7 @@ export class InboundPaymentDetails extends React.Component {
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
             CLP06:"${this.state.clp06List}"
-            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${this.state.checkDate}") {
+            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}") {
                 RecCount
                 FileId
                 GSID
@@ -742,7 +744,7 @@ export class InboundPaymentDetails extends React.Component {
                 PatientSubscriberIDList={true}
                 CheckEFTNo={true}
                 FinancialShow={true}
-                // checkDateShow={true}
+                checkDateShow={true}
                 checkDate={this.state.checkDate}
                 Clear={true}
                 renderMethod={this.renderMethod}
