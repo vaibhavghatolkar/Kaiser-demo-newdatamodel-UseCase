@@ -682,6 +682,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
             { headerName: "File Date", field: "FileDate", width: 100 },
             { headerName: "Status", field: "Status", width: 100 },
+            { headerName: "NPI", field: "PayeeNPI", width: 100 },
             { headerName: "Payee", field: "Organization", width: 150 },
             { headerName: "PayerName", field: "PayerName", width: 150 },
             { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
@@ -724,6 +725,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                         CHECKEFTFlag
                         TotalBillAmount
                         TotalClaim
+                        PayeeNPI
                      }
                    }
                    `

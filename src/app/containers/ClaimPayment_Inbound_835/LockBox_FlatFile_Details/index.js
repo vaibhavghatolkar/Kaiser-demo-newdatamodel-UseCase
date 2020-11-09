@@ -82,7 +82,7 @@ export class LockBoxFlatFileDetails extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                // removeState={true}
+                removeState={true}
                 FileNameKaiser={true}
             />
         )
