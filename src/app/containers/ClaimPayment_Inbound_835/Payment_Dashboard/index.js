@@ -483,6 +483,15 @@ export class InboundClaimPaymentDashboard extends React.Component {
                     status: "",
                     type: type,
                     incoming_fileId: this.state.incoming_fileId,
+                    Payee: "",
+                    Payer: "",
+                    clp06List: "",
+                    claimIdData: "",
+                    CLP01List: "",
+                    PatientSubscriberIDList: "",
+                    CheckEFTNo: "",
+                    checkDate: "",
+        
                 },
             ]
         }
