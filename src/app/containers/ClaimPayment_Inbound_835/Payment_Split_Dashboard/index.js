@@ -106,7 +106,8 @@ export class Payment_Split_Dashboard extends React.Component {
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
-
+            Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee != 'n' ? props.location.state.data[0].Payee : '',
+            Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer != 'n' ? props.location.state.data[0].Payer : '',
         }
     }
 
@@ -180,11 +181,10 @@ export class Payment_Split_Dashboard extends React.Component {
             .then(res => {
                 let progress_data = res.data.ERA835DashboardCountNew
                 let progress_condition = progress_data && progress_data.length > 0
-              
-                let Validated = progress_condition ?  Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-                let Error = progress_condition ?  Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                let Validated = progress_condition ? Number((progress_data[0].Accepted / progress_data[0].TotalCount) * 100).toFixed(2) : 0
+                let Error = progress_condition ? Number((progress_data[0].Rejected / progress_data[0].TotalCount) * 100).toFixed(2) : 0
                 let exception = progress_condition ? Number((progress_data[0].Exception / progress_data[0].TotalCount) * 100).toFixed(2) : 0
-              
+
                 this.setState({
                     progress_Validated:Validated>=0 ? Validated:0,
                     progress_Error: Error>=0 ? Error:0 ,
@@ -249,7 +249,7 @@ export class Payment_Split_Dashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Payment835RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Split") {
+            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "Split") {
                 From
                 MonthNo
                 Year
@@ -299,7 +299,8 @@ export class Payment_Split_Dashboard extends React.Component {
                         claimLabels.push(d.X_axis)
                     }
                 })
-               
+
+             
                 let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
                 // let second_data = ""
                 // let pie_data = ""
@@ -482,11 +483,20 @@ export class Payment_Split_Dashboard extends React.Component {
                     status: "",
                     type: type,
                     incoming_fileId: this.state.incoming_fileId,
+                    Payee: "",
+                    Payer: "",
+                    clp06List: "",
+                    claimIdData: "",
+                    CLP01List: "",
+                    PatientSubscriberIDList: "",
+                    CheckEFTNo: "",
+                    checkDate: "",
+        
                 },
             ]
         }
 
-        this.props.history.push('/' + Strings.claimPayment_835_details, {
+        this.props.history.push('/' + Strings.InboundPaymentDetails, {
             data: sendData
         })
     }
@@ -538,6 +548,15 @@ export class Payment_Split_Dashboard extends React.Component {
             })
         }
     }
+    clickNavigation2 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                incoming_fileId: event.data.GSID
+            }, () => {
+                this.gotoClaimDetails()
+            })
+        }
+    }
 
 
     _renderList() {
@@ -560,8 +579,7 @@ export class Payment_Split_Dashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-            page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"Split", 
-            AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+          Status:"" , FileID:"" ,RecType:"Split",  EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
                 RecCount
@@ -580,7 +598,7 @@ export class Payment_Split_Dashboard extends React.Component {
           `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="general-header">File Information</h6>
+                <h6 className="font-size">File Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -618,8 +636,8 @@ export class Payment_Split_Dashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
                 Dashboard835FunctionalGroupDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                 page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"Split", 
-                 AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+                 Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"Split", 
+                 EFTCHK:"",ClaimID:"",
                  sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                  startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
                     RecCount
@@ -636,7 +654,7 @@ export class Payment_Split_Dashboard extends React.Component {
                `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="general-header">Functional Group Information</h6>
+                <h6 className="font-size">Functional Group Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -669,8 +687,8 @@ export class Payment_Split_Dashboard extends React.Component {
             { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-            { headerName: "Total", field: "TotalClaim", width: 100 },
             { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
+            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
 
         ]
 
@@ -680,10 +698,9 @@ export class Payment_Split_Dashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
                     Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                     page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"Split", 
-                     AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+                    Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"Split", EFTCHK:"",ClaimID:"",
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter},  Payer:"",Payee:"",CLP01:"",
+                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""
                      ,PatientSubscriberID:"",CheckNo:"",CheckDate:"") {
                         RecCount
@@ -712,7 +729,7 @@ export class Payment_Split_Dashboard extends React.Component {
                    `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="general-header">Transaction Set Information</h6>
+                <h6 className="font-size">Transaction Set Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -725,7 +742,7 @@ export class Payment_Split_Dashboard extends React.Component {
                     endDate={endDate}
                     type={this.state.type}
                     updateFields={this.updateFields}
-                    onClick={this.clickNavigation1}
+                    onClick={this.clickNavigation2}
                     paginationPageSize={5}
                     selectedFileId={this.state.selectedGSID}
                     handleColWidth={120}
@@ -775,10 +792,19 @@ export class Payment_Split_Dashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-             
+                removeState={true}
 
             />
         )
+    }
+    renderMethod = () => {
+        this.setState({
+            // PayerNameList:
+        }, () => {
+            // this.TileShowsApi()
+        })
+
+
     }
 
     renderCommonGroup = () => {

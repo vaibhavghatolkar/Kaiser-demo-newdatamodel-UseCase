@@ -249,7 +249,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Payment835RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "Inbound") {
                 From
                 MonthNo
                 Year
@@ -579,8 +579,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-            page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"" ,RecType:"${recType}", 
-            AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+          Status:"" , FileID:"" ,RecType:"${recType}",  EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
                 RecCount
@@ -637,8 +636,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
                 Dashboard835FunctionalGroupDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                 page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"${recType}", 
-                 AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+                 Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"${recType}", 
+                 EFTCHK:"",ClaimID:"",
                  sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                  startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
                     RecCount
@@ -699,8 +698,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
                     Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                     page:1,OrderBy:"${this.state.orderby}" ,Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"${recType}", 
-                     AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"",
+                    Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"${recType}", EFTCHK:"",ClaimID:"",
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                      startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""
@@ -794,7 +792,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-               
+                removeState={true}
 
             />
         )
@@ -819,6 +817,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 State={this.state.State}
                 fileHeader={true}
                 claimHeader={true}
+               
             />
         )
     }

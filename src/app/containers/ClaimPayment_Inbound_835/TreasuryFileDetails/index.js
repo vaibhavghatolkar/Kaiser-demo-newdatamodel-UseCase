@@ -28,14 +28,23 @@ export class TreasuryFileDetails extends React.Component {
         let   columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Company Description", field: "Company_Description", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Transaction Description", field: "Tran_Descr", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Ext Ref ID", field: "Ext_Ref_ID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Bank Date", field: "Bank_Date", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Memo Details", field: "Memo_Details", width: 130, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Kaiser Reference", field: "Kaiser_Reference", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Transaction Code", field: "Tran_Code", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Account Number", field: "Account_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Bank Account Number", field: "Bank_Account_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Transaction Amount", field: "Tran_Amt", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Company Name", field: "Company_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Receiver Name", field: "Receiver_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Receiver Account Number", field: "Receiver_Account_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Trace Number", field: "Trace_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Individual ID", field: "Individual_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Transaction Amount", field: "Tran_Amt", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Federal Tax", field: "Federal_Tax", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+      
         ]    
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
@@ -46,8 +55,9 @@ export class TreasuryFileDetails extends React.Component {
         let   query = `{
             TreasuryFileDetails(                                     
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , CompanyDescription:""
                 ) {
+          
                     RecCount
                     FileName
                     FileDate
@@ -57,8 +67,16 @@ export class TreasuryFileDetails extends React.Component {
                     Memo_Details
                     Kaiser_Reference
                     Tran_Code
-                    Account_Number
                     Tran_Amt
+                    Company_Description
+                    Bank_Account_Number
+                    Company_Name
+                    Receiver_Account_Number
+                    Trace_Number
+                    Federal_Tax
+                    Individual_ID
+                    Receiver_Name
+  
                     }
                   }`
         
