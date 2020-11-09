@@ -29,16 +29,21 @@ export class Filters extends React.Component {
             clp06List: [],
             claimIdData:[],
             CLP01List:[],
+            TreasuryCompanyDescriptionList:[],
+            TreasuryFileNameList:[],
             PatientSubscriberIDList:[],
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
             transOptions: [],
+            LockBoxFileNameList:[]
         }
     }
 
     componentDidMount() {
         this.getCommonData()
+        this.getFileNameData()
+        this.getCompanyDescList()
         this.getTransactiondata()
         if (this.props.isTransType) {
             this.getTransOptions()
@@ -109,6 +114,84 @@ export class Filters extends React.Component {
                 process.env.NODE_ENV == 'development' && console.log(err)
             })
     }
+
+    getFileNameData() {
+        let query=""
+        if(this.props.FileNameLockBox){
+            query = `{      
+                LockBoxFileNameList {
+                    File_Name
+                  }       
+            }`
+        }else{
+            query = `{      
+                TreasuryFileNameList {
+                    File_Name
+                  }         
+            }`
+        }
+       
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction835Kaiser, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if(this.props.FileNameLockBox){
+                    this.setState({
+                        LockBoxFileNameList: res.data.LockBoxFileNameList
+    
+                    })
+                }else{
+                    this.setState({
+                        TreasuryFileNameList: res.data.TreasuryFileNameList
+    
+                    })
+                }
+                
+            })
+
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+    }
+
+    getCompanyDescList() {
+        let query = `{      
+            TreasuryCompanyDescriptionList {
+                Company_Description
+              }        
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction835Kaiser, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                this.setState({
+                    TreasuryCompanyDescriptionList: res.data.TreasuryCompanyDescriptionList
+
+                })
+            })
+
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+    }
+
 
     getTransOptions = () => {
         let query = `{
@@ -223,6 +306,38 @@ export class Filters extends React.Component {
                 return
             }
             row.push(<option value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
+
+    getFileNameDataKaiser = () => {
+        let row = []
+        this.state.TreasuryFileNameList.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option selected={this.props.FileNameData == element.File_Name ? "selected" : ""} value={element.File_Name}>{element.File_Name}</option>)
+        })
+        return row
+    }
+    getCompanyDescKaiser= () => {
+        let row = []
+        this.state.TreasuryCompanyDescriptionList.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option selected={this.props.CompanyDesc == element.Company_Description ? "selected" : ""} value={element.Company_Description}>{element.Company_Description}</option>)
+        })
+        return row
+    }
+
+    getLockboxFileName= () => {
+        let row = []
+        this.state.LockBoxFileNameList.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option selected={this.props.FileNameData == element.File_Name ? "selected" : ""} value={element.File_Name}>{element.File_Name}</option>)
         })
         return row
     }
@@ -634,7 +749,7 @@ export class Filters extends React.Component {
                                             this.onSelect(event, 'FileNameData')
                                         }}>
                                         <option value=""></option>
-                                        
+                                        {this.props.FileNameLockBox ? this.getLockboxFileName() : this.getFileNameDataKaiser()}
                                     </select>
                                 </div> : null
                     }
@@ -893,6 +1008,20 @@ export class Filters extends React.Component {
                             flag={"PatientSubscriberIDList"}
                         />
                     </div>: null 
+                    }
+                    {
+                        this.props.CompanyDescKaiser ? 
+                        <div className="form-group col-2">
+                                    <div className="list-dashboard">Company Description</div>
+                                    <select className="form-control list-dashboard" id="TradingPartner"
+                                        value={this.props.CompanyDesc}
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'CompanyDesc')
+                                        }}>
+                                        <option value=""></option>
+                                        {this.getCompanyDescKaiser()}
+                                    </select>
+                                </div> : null
                     }
                     
                       {
