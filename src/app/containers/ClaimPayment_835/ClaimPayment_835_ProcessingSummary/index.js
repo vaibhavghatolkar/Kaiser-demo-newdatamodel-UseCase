@@ -178,7 +178,15 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 status: "",
                 type: type,
                 Filter_ClaimId: this.state.Filter_ClaimId,
-                incoming_fileId: fileId ? fileId : this.state.incoming_fileId
+                incoming_fileId: fileId ? fileId : this.state.incoming_fileId,
+                Payee: "",
+                Payer: "",
+                clp06List: "",
+                claimIdData: "",
+                CLP01List: "",
+                PatientSubscriberIDList: "",
+                CheckEFTNo: "",
+                checkDate: "",
             },
         ]
 
@@ -187,6 +195,39 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         })
     }
 
+    gotoDetails_2 = (fileId) => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        let State = this.state.State ? this.state.State : 'n'
+        let type = this.state.type ? this.state.type : ''
+
+        let sendData = [
+            {
+                flag: '',
+                State: State,
+                selectedTradingPartner: selectedTradingPartner,
+                startDate: startDate,
+                endDate: endDate,
+                status: "",
+                type: type,
+                Filter_ClaimId: this.state.Filter_ClaimId,
+                incoming_fileId: fileId ? fileId : this.state.incoming_fileId,
+                Payee: "",
+                Payer: "",
+                clp06List: "",
+                claimIdData: "",
+                CLP01List: "",
+                PatientSubscriberIDList: "",
+                CheckEFTNo: "",
+                checkDate: "",
+            },
+        ]
+
+        this.props.history.push('/' + Strings.InboundPaymentDetails, {
+            data: sendData
+        })
+    }
     goClaimOutbound = (fileId) => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
@@ -231,6 +272,14 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 this.goClaimOutbound()
             })
         }
+        if (event.colDef.headerName == 'Payer Claim Control Number') {
+            this.setState({
+                incoming_fileId: event.data.FileID
+            }, () => {
+                this.gotoDetails_2()
+            })
+        }
+       
     }
 
 
