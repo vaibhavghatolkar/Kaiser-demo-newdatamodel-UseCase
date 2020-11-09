@@ -164,7 +164,7 @@ export class InboundPaymentDetails extends React.Component {
               }
               `
         } else {
-            query = `{ RemittanceViewerClaimServiceDetails(ClaimID:"` + claimId + `", FileID: "` + fileId + `" ,page:${page}, RefID:${RefID}) {
+            query = `{ RemittanceViewerClaimServiceDetails( FileID: "` + fileId + `" , RefID:${RefID}) {
                 FileID
                 ClaimID
                 ServiceEndDate
@@ -354,7 +354,7 @@ export class InboundPaymentDetails extends React.Component {
         let query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
+                    RecType:"${recType}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
                        CLP06:"${this.state.clp06List}"
@@ -647,9 +647,8 @@ export class InboundPaymentDetails extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",
-            EndDt: "${endDate}",page:1,OrderBy:"${this.state.orderby}" ,
-            Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
-            RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"${this.state.EFTCHK}",
+            EndDt: "${endDate}", Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
+            RecType:"${recType}",  EFTCHK:"${this.state.EFTCHK}",
             ClaimID:"${this.state.claimIdData}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
@@ -750,6 +749,7 @@ export class InboundPaymentDetails extends React.Component {
                 checkDate={this.state.checkDate}
                 Clear={true}
                 renderMethod={this.renderMethod}
+                removeState={true}
             />
         )
     }

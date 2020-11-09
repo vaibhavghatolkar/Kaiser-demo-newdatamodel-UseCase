@@ -274,7 +274,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
         }
         if (event.colDef.headerName == 'Payer Claim Control Number') {
             this.setState({
-                incoming_fileId: event.data.FileID
+                  incoming_fileId: event.data.GSID
             }, () => {
                 this.gotoDetails_2()
             })
@@ -403,7 +403,7 @@ if(isOutboundPage){
             query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
-                    RecType:"${recType}", AvailitySent:"${this.state.availitySent}", EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                    RecType:"${recType}",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
                        ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:""
@@ -444,9 +444,12 @@ if(isOutboundPage){
                     Rendering_ProviderID
                     DGNQty
                     FacilityCode
-                    providerID
-    PatientSubscriberID
-    CLP01
+                    providerID   
+                    PatientSubscriberID
+                    STID
+                    CLP01
+                    GSID
+ 
                     }
                   }` 
         }
@@ -489,6 +492,7 @@ if(isOutboundPage){
                 endDate={this.state.endDate}
                 showclaimId={true}
                 State={this.state.State}
+                removeState= {isOutbound ? false : true}
 
 
             />
