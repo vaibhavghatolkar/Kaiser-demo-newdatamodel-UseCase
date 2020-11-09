@@ -346,8 +346,10 @@ export class Filters extends React.Component {
                     if (res.data) {
                         let data = []
                         res.data.CLP06List.forEach(item => {
-                            data.push(item.CLP06)
-                            // data.push(item.CLP06)
+                            data.push({
+                                'CLP06Code': item.CLP06,
+                                'desc': item.Desc
+                            })
                         })
                        this.setState({
                         clp06List : data
@@ -871,6 +873,7 @@ export class Filters extends React.Component {
                         <div className="list-dashboard">CLP06</div>
                         <AutoComplete 
                             list={this.state.clp06List}
+                            extraParams={true}
                             onHandleChange={this.onHandleChange2}
                             onSelected={this.onSelected2}
                             renderMethod={this.props.renderMethod}
@@ -894,7 +897,7 @@ export class Filters extends React.Component {
                     
                       {
                         this.props.Clear ?
-                            <div className="form-group col-2">
+                            <div className="form-group col-1">
                                 <div className="list-dashboard"></div>
                                 <button type="submit" onClick={this.Clear} className="btn light_blue1 btn-xs" style={{ marginRight: "120px" ,marginTop:"16px" ,height:"32px" }}>Clear</button>
                             </div>

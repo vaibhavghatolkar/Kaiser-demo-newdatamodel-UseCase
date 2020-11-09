@@ -48,17 +48,18 @@ export class AutoComplete extends React.Component {
         let list = this.props.list
          let row = []
         list.forEach(element => {
+
             row.push(
                 <div className="dropdown-inner-item">
                     <a onClick={() => {
                         this.setState({
-                            selected_item: element,
+                            selected_item: this.props.extraParams ? element.desc : element,
                             showDialog: false
                         })
-                        this.props.onSelected(element)
+                        this.props.onSelected(this.props.extraParams ? element.CLP06Code : element)
                      
                     }}>
-                        {element}
+                        {this.props.extraParams ? element.desc : element}
                     </a>
                 </div>
             )

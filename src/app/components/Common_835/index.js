@@ -228,6 +228,7 @@ export class Common_835 extends React.Component {
             }
             data = [
                 {
+                    
                     flag: addon,
                     State: State,
                     selectedTradingPartner: selectedTradingPartner,
@@ -255,13 +256,14 @@ export class Common_835 extends React.Component {
             row.push(
                 <Tiles
                     isClickable={
-                        item.name != 'Error Resolved'
+                        item.name != '999' &&
+                        item.name != 'Total Sent To KPHC'
                     }
                     _data={data}
                     header_text={item.name}
                     value={item.value}
                     second_val={item.second_val}
-                    url={url ? url : Strings.claimPayment_835_details}
+                    url={url ? url : Strings.InboundPaymentDetails}
                 />
 
             )
@@ -296,7 +298,7 @@ export class Common_835 extends React.Component {
     
         let stage_4 = [
             { 'header': 'KPHC Status' },
-            { 'name': 'Sent to KPHC', 'value': this.state.AvailitySent, 'isClick': true },
+            { 'name': 'Sent to KPHC', 'value': this.state.AvailitySent, },
             // { 'name': 'Availity Accepted', 'value': this.state.Accepted999 },
             // { 'name': 'Availity Rejected', 'value': this.state.Rejected999 },
         ]
@@ -463,6 +465,9 @@ export class Common_835 extends React.Component {
                 EFTCHK = 'CHK'
                 subtitle = "CHK"
                 color = "var(--main-bg-color)"
+            }else  if (item.name == 'Total Error') {
+                claimStatus = 'Error'
+                subtitle = "Files in Error"
             }
 
             let sendData = [
@@ -480,15 +485,26 @@ export class Common_835 extends React.Component {
                     EFTCHK: EFTCHK
                 },
             ]
-
-            row.push(
-                <TableTiles
-                    item={item}
-                    url={Strings.claimPayment_835_details}
-                    data={sendData}
-                    color={color}
-                />
-            )
+            if(isOutbound){
+                row.push(
+                    <TableTiles
+                        item={item}
+                        url={Strings.claimPayment_835_details}
+                        data={sendData}
+                        color={color}
+                    />
+                )
+            }else{
+                row.push(
+                    <TableTiles
+                        item={item}
+                        url={Strings.InboundPaymentDetails}
+                        data={sendData}
+                        color={color}
+                    />
+                )
+            }
+            
         })
 
         return (
