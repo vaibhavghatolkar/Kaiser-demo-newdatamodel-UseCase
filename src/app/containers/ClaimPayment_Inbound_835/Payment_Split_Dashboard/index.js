@@ -240,7 +240,7 @@ export class Payment_Split_Dashboard extends React.Component {
         return second_data
     }
 
-    _getPieChartData = async () => {
+    _getVolumeAnalyasis = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
@@ -259,14 +259,7 @@ export class Payment_Split_Dashboard extends React.Component {
                 X_axis
                 Y_axis
             }
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "Split") {
-                X_axis
-                Y_axis
-            }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"Split") {
-                Type
-                TotalCount
-            }
+            
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
@@ -301,6 +294,56 @@ export class Payment_Split_Dashboard extends React.Component {
                 })
 
              
+               
+
+                this.setState({
+                    ClaimBarChart: array,
+                    claimLabels: claimLabels,
+                    
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+
+    }
+ 
+
+    _getPieChartData = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let chartType = this.state.chartType
+        if (!chartType) {
+            chartType = "Monthwise"
+        }
+        let query = `{
+           
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "Split") {
+                X_axis
+                Y_axis
+            }
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"Split") {
+                Type
+                TotalCount
+            }
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(isOutbound ? Urls.transaction835 : Urls._transaction835, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+             
                 let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
                 // let second_data = ""
                 // let pie_data = ""
@@ -308,8 +351,7 @@ export class Payment_Split_Dashboard extends React.Component {
                 let complaince_data = res.data.CompliancePieChart835 ? this.getComplianceChartData(res.data.CompliancePieChart835) : {}
 
                 this.setState({
-                    ClaimBarChart: array,
-                    claimLabels: claimLabels,
+                   
                     second_data: second_data,
                     complience: complience,
                     complaince_data: complaince_data
@@ -755,6 +797,7 @@ export class Payment_Split_Dashboard extends React.Component {
     _refreshScreen = () => {
         this._getPieChartData()
         this.getProgressData()
+        this._getVolumeAnalyasis()
     }
 
     setData = (startDate, endDate, selected_val, chartType) => {
