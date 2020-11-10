@@ -210,6 +210,7 @@ export class Filters extends React.Component {
         this.props.update('CheckEFTNo', value)
     }
     Clear = (value) => {
+      
         this.props.renderMethod("Clear")
     }
     

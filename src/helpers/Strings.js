@@ -225,6 +225,7 @@ const Strings = {
     Payment_Split_Dashboard:'Payment_Split_Dashboard',
     LockBoxFlatFileDetails:'LockBoxFlatFileDetails',
     TreasuryFileDetails:'TreasuryFileDetails',
+    _InboundPaymentDetails:'_InboundPaymentDetails',
 
 // Outbound_Claim_updated_Details_837_Grid
 }

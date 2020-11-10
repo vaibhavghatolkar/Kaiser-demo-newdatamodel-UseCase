@@ -11,6 +11,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { Filters } from '../../../components/Filters';
 import { ServersideGrid } from '../../../components/ServersideGrid';
+import { Redirect } from 'react-router-dom';
 
 var val = ''
 const $ = window.$;
@@ -19,7 +20,7 @@ export class InboundPaymentDetails extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("props.location.state", props.location.state.data[0])
+      
         this.state = {
             intakeClaims: [],
             page: 1,
@@ -770,7 +771,12 @@ export class InboundPaymentDetails extends React.Component {
     }
 
     renderclear = () => {
-       window.location.reload()
+    
+            this.setState({
+              incoming_fileId: ""
+                })
+        window.location.reload()
+
 
     }
 
