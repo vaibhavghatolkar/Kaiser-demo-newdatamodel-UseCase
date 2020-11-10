@@ -104,6 +104,9 @@ export class RealTimeDashboard_kaiser extends React.Component {
             rowGroupPanelShow: 'never',
             pivotPanelShow: 'never',
             rowData: [],
+            FunctionalGroupDetails: false,
+            selectedFileId: "",
+            TransactionSet: false,
 
         }
 
@@ -462,12 +465,31 @@ export class RealTimeDashboard_kaiser extends React.Component {
     clickNavigation = (event) => {
         if (event.colDef.headerName == 'File Name') {
             this.setState({
-                incoming_fileId: event.data.FileID
+                selectedFileId: event.data.FileID,
+                FunctionalGroupDetails: true,
+                TransactionSet: false,
+
+            })
+        }
+    }
+    clickNavigation1 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                selectedGSID: event.data.GSID,
+                TransactionSet: true
+            })
+        }
+    }
+    clickNavigation2 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                incoming_fileId: event.data.GSID
             }, () => {
                 this.gotoClaimDetails()
             })
         }
     }
+
 
     _renderList() {
       let  columnDefs= [
@@ -511,6 +533,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             }`
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
+                 <h6 className="font-size">File Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -537,7 +560,75 @@ export class RealTimeDashboard_kaiser extends React.Component {
     }
 
     _refreshScreen = () => {
-        this.getData()
+        // this.getData()
+        this._getVolumeAnalyasis()
+    }
+    _getVolumeAnalyasis = async () => {
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
+    
+        let chartType = this.state.chartType
+        if (!chartType) {
+            chartType = "Monthwise"
+        }
+        let query = `{
+            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+                From
+                MonthNo
+                Year
+                To
+                Amount
+                TotalClaims
+                X_axis
+                Y_axis
+            }
+            
+        }`
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction837, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'user-id': sessionStorage.getItem('user-id'),
+                'Cache-Control': 'no-cache, no-store',
+                'Expires': 0,
+                'Pragma': 'no-cache',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                let array = []
+                let ClaimBarChart = res.data.barchart
+                let count = 0
+                let claimLabels = []
+                ClaimBarChart.forEach((d) => {
+                    count++;
+                    array.push(
+                        d.Y_axis ? parseFloat(d.Y_axis) : 0
+                    )
+                    if (chartType == 'Weekwise') {
+                        claimLabels.push('week' + count)
+                    } else {
+                        claimLabels.push(d.X_axis)
+                    }
+                })
+
+             
+               
+
+                this.setState({
+                    ClaimBarChart: array,
+                    claimLabels: claimLabels,
+                    
+                })
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            })
+
     }
 
     setData = (startDate, endDate, selected_val, chartType) => {
@@ -594,7 +685,8 @@ export class RealTimeDashboard_kaiser extends React.Component {
             { headerName: "Application Receiver Code", field: "ApplicationReceiverCode", width: 150 },
             { headerName: "Functional Identifier Code", field: "FunctionalIdentifierCode", width: 70 },
             { headerName: "Group Control Number", field: "GroupControlNumber", width: 70 },
-            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
+            { headerName: "Total CLP Count", field: "total_claim", width: 100 },
+            { headerName: "Rejected Claims", field: "RejectedClaims", width: 100 },
 
         ]
 
@@ -603,11 +695,12 @@ export class RealTimeDashboard_kaiser extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
     
         let query = `{
-                Dashboard835FunctionalGroupDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                 Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"Inbound", 
-                 EFTCHK:"",ClaimID:"",
-                 sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+            Dashboard837FunctionalGroupDetails(sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},                    
+            Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
+            Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
+            FileID: "${this.state.selectedFileId}" ,Type:"${this.state.type}", RecType:"Inbound",
+            LoadStatus:"", MCGStatus:"", Status277CA:"",  Status: "") {
                     RecCount
                     FileID
                     FileName
@@ -616,7 +709,9 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     ApplicationSenderCode
                     FunctionalIdentifierCode
                     GroupControlNumber
-                    TotalClaim
+                    Type
+                    total_claim
+                    RejectedClaims
                  }
                }
                `
@@ -628,7 +723,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     query={query}
                     url={Urls._transaction837}
                     fieldType={'GSID'}
-                    index={'Dashboard835FunctionalGroupDetails'}
+                    index={'Dashboard837FunctionalGroupDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
@@ -647,16 +742,16 @@ export class RealTimeDashboard_kaiser extends React.Component {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
-            { headerName: "File Date", field: "FileDate", width: 100 },
-            { headerName: "Status", field: "Status", width: 100 },
-            { headerName: "NPI", field: "PayeeNPI", width: 100 },
-            { headerName: "Payee", field: "Organization", width: 150 },
-            { headerName: "PayerName", field: "PayerName", width: 150 },
-            { headerName: "Payment Method", field: "CHECKEFTFlag", width: 70 },
-            { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
-            { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
-            { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
-            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
+            // { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "Submitter Name", field: "Submitter_Name", width: 100 },
+            { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
+            { headerName: "GSID", field: "GSID", width: 100 },
+            { headerName: "STID", field: "STID", width: 100 },
+            { headerName: "Rejected Claims", field: "RejectedClaims", width: 150 },
+            { headerName: "Total Claim", field: "total_claim", width: 150 },
+            { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
+            { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
+          
 
         ]
 
@@ -665,33 +760,24 @@ export class RealTimeDashboard_kaiser extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
        
         let query = `{
-                    Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                    Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"Inbound", EFTCHK:"",ClaimID:"",
-                     sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
-                     CLP06:""
-                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"") {
-                        RecCount
-                        FileId
+            Dashboard837TransactionSetHeaderDetails(sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+                    startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},                    
+                    Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
+                    Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
+                    FileID: "${this.state.selectedGSID}" ,Type:"${this.state.type}", RecType:"Inbound",
+                    LoadStatus:"", MCGStatus:"", Status277CA:"",  Status: "") {
+                         RecCount
+                        FileID
+                        FileName
                         GSID
                         STID
-                        PayerName
-                        PayerID
-                        PayerN1
-                        PayeeN1
-                        Organization
-                        FileName
-                        Status
-                        FileDate
-                        TRN01
-                        TRN03
-                        CheckEFTNo
-                        CheckEFTDt
-                        AccountNo
-                        CHECKEFTFlag
-                        TotalBillAmount
-                        TotalClaim
-                        PayeeNPI
+                        Submitter_Name
+                        Receiver_Name
+                        total_claim
+                        RejectedClaims
+                        Submitter_Identification_Code
+                        Receiver_Identification_Code
+                       
                      }
                    }
                    `
@@ -702,8 +788,8 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     columnDefs={columnDefs}
                     query={query}
                     url={Urls._transaction837}
-                    fieldType={'FileDate'}
-                    index={'Dashboard835TransactionSetHeaderDetails'}
+                    fieldType={'FileID'}
+                    index={'Dashboard837TransactionSetHeaderDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
