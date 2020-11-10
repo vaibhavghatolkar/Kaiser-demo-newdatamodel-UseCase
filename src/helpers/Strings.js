@@ -227,6 +227,7 @@ const Strings = {
     TreasuryFileDetails:'TreasuryFileDetails',
     _InboundPaymentDetails:'_InboundPaymentDetails',
     RealTimeDashboard_kaiser:'RealTimeDashboard_kaiser',
+    ClaimProcessingSummary_Kaiser:'ClaimProcessingSummary_Kaiser'
 
 // Outbound_Claim_updated_Details_837_Grid
 }

@@ -154,6 +154,7 @@ import {InboundPaymentDetails} from './app/containers/ClaimPayment_Inbound_835/P
 import {LockBoxFlatFileDetails} from './app/containers/ClaimPayment_Inbound_835/LockBox_FlatFile_Details'
 import {TreasuryFileDetails} from './app/containers/ClaimPayment_Inbound_835/TreasuryFileDetails'
 import {RealTimeDashboard_kaiser} from './app/containers/Claim_837_Kasier_Demo/RealTimeDashboard_kaiser'
+import {ClaimProcessingSummary_Kaiser} from './app/containers/Claim_837_Kasier_Demo/ProcessingSummery_Kaiser'
 
 
 
@@ -448,6 +449,7 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.TreasuryFileDetails} component={TreasuryFileDetails} />
                                 <Route path={'/' + Strings._InboundPaymentDetails} component={InboundPaymentDetails} />
                                 <Route path={'/' + Strings.RealTimeDashboard_kaiser} component={RealTimeDashboard_kaiser} />
+                                <Route path={'/' + Strings.ClaimProcessingSummary_Kaiser} component={ClaimProcessingSummary_Kaiser} />
                                 
                                 
                                 {/*  for Sales demo 30545 */}
