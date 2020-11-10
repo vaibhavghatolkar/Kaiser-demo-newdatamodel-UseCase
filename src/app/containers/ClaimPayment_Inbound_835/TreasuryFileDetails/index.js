@@ -16,7 +16,8 @@ export class TreasuryFileDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+            FileNameData:'',
+            CompanyDesc:''
         }
     }
     componentWillMount() {
@@ -55,7 +56,8 @@ export class TreasuryFileDetails extends React.Component {
         let   query = `{
             TreasuryFileDetails(                                     
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , CompanyDescription:""
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , CompanyDescription:"${this.state.CompanyDesc}",
+                       FileName:"${this.state.FileNameData}", StartDt:"${startDate}" EndDt:"${endDate}"
                 ) {
           
                     RecCount
@@ -94,7 +96,8 @@ export class TreasuryFileDetails extends React.Component {
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
-                    selectedFileId={this.state.selectedFileId}
+                    selectedFileId={this.state.FileNameData}
+                    filterClaim={this.state.CompanyDesc}
                     endDate={endDate}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigationClaims}
@@ -119,6 +122,7 @@ export class TreasuryFileDetails extends React.Component {
                 endDate={this.state.endDate}
                 removeState={true}
                 FileNameKaiser={true}
+                CompanyDescKaiser={true}
             />
         )
     }

@@ -15,6 +15,7 @@ export class LockBoxFlatFileDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            FileNameData:''
         }
     }
     componentWillMount() {
@@ -37,6 +38,7 @@ export class LockBoxFlatFileDetails extends React.Component {
             LockBoxFlatFileDetails(                                     
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter}
+                       FileName:"${this.state.FileNameData}", StartDt:"${startDate}" EndDt:"${endDate}"
                 ) {
                     RecCount
                     FileName
@@ -59,7 +61,7 @@ export class LockBoxFlatFileDetails extends React.Component {
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
-                    selectedFileId={this.state.selectedFileId}
+                    selectedFileId={this.state.FileNameData}
                     endDate={endDate}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigationClaims}
@@ -84,6 +86,7 @@ export class LockBoxFlatFileDetails extends React.Component {
                 endDate={this.state.endDate}
                 removeState={true}
                 FileNameKaiser={true}
+                FileNameLockBox={true}
             />
         )
     }

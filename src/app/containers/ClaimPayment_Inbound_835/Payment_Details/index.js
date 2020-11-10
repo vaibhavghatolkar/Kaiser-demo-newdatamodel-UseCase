@@ -84,15 +84,15 @@ export class InboundPaymentDetails extends React.Component {
             domLayout: 'autoHeight',
             paginationPageSize: 5,
             selectedFileId: '',
-            Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee != 'n' ? props.location.state.data[0].Payee : '',
-            Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer != 'n' ? props.location.state.data[0].Payer : '',
-            clp06List: props.location.state && props.location.state.data[0] && props.location.state.data[0].clp06List != 'n' ? props.location.state.data[0].clp06List : '',
+            Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee  ? props.location.state.data[0].Payee : '',
+            Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer  ? props.location.state.data[0].Payer : '',
+            clp06List: props.location.state && props.location.state.data[0] && props.location.state.data[0].clp06List  ? props.location.state.data[0].clp06List : '',
 
-            claimIdData: props.location.state && props.location.state.data[0] && props.location.state.data[0].claimIdData != 'n' ? props.location.state.data[0].claimIdData : '',
-            CLP01List: props.location.state && props.location.state.data[0] && props.location.state.data[0].CLP01List != 'n' ? props.location.state.data[0].CLP01List : '',
-            PatientSubscriberIDList: props.location.state && props.location.state.data[0] && props.location.state.data[0].PatientSubscriberIDList != 'n' ? props.location.state.data[0].PatientSubscriberIDList : '',
-            CheckEFTNo: props.location.state && props.location.state.data[0] && props.location.state.data[0].CheckEFTNo != 'n' ? props.location.state.data[0].CheckEFTNo : '',
-            checkDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].checkDate != 'n' ? props.location.state.data[0].checkDate : '',
+            claimIdData: props.location.state && props.location.state.data[0] && props.location.state.data[0].claimIdData  ? props.location.state.data[0].claimIdData : '',
+            CLP01List: props.location.state && props.location.state.data[0] && props.location.state.data[0].CLP01List  ? props.location.state.data[0].CLP01List : '',
+            PatientSubscriberIDList: props.location.state && props.location.state.data[0] && props.location.state.data[0].PatientSubscriberIDList  ? props.location.state.data[0].PatientSubscriberIDList : '',
+            CheckEFTNo: props.location.state && props.location.state.data[0] && props.location.state.data[0].CheckEFTNo ? props.location.state.data[0].CheckEFTNo : '',
+            checkDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].checkDate  ? props.location.state.data[0].checkDate : '',
 
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
@@ -719,7 +719,8 @@ export class InboundPaymentDetails extends React.Component {
             [key]: value,
             showDetails: false,
             showerror: false,
-            showClaims: false
+            showClaims: false,
+            selectedFileId: ''
         }, () => {
             this._refreshScreen()
         })
@@ -761,7 +762,8 @@ export class InboundPaymentDetails extends React.Component {
         }
         else {
             this.setState({
-                [flag]: ""
+                [flag]: "",
+                selectedFileId:''
             }, () => {
                 // this.TileShowsApi()
             })
