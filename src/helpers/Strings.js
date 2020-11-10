@@ -226,6 +226,7 @@ const Strings = {
     LockBoxFlatFileDetails:'LockBoxFlatFileDetails',
     TreasuryFileDetails:'TreasuryFileDetails',
     _InboundPaymentDetails:'_InboundPaymentDetails',
+    RealTimeDashboard_kaiser:'RealTimeDashboard_kaiser',
 
 // Outbound_Claim_updated_Details_837_Grid
 }
