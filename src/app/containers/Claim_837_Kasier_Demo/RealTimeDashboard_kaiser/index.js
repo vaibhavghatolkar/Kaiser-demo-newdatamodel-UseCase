@@ -195,7 +195,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls.base_url, {
+        fetch(Urls._transaction837, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -560,8 +560,8 @@ export class RealTimeDashboard_kaiser extends React.Component {
     }
 
     _refreshScreen = () => {
-        // this.getData()
-        this._getVolumeAnalyasis()
+        this.getData()
+        // this._getVolumeAnalyasis()
     }
     _getVolumeAnalyasis = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''

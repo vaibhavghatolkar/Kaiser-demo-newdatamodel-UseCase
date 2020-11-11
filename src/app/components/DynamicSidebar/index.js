@@ -101,7 +101,7 @@ export class DynamicSidebar extends React.Component {
         else if (index == 26) { name = Strings.RealTime276 }
         else if (index == 27) { name = Strings._ElilgibilityDetails276 }
 
-        else if (index == 29) { name = Strings.RealTimeDashboard }
+        else if (index == 29) { name = Strings.RealTimeDashboard_kaiser }
         else if (index == 30) { name = Strings.claimsAudit }
         else if (index == 31) { name = Strings._Claim_Details_837_Grid }
 
