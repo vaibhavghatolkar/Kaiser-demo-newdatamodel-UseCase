@@ -502,16 +502,15 @@ export class Claim_Details_837 extends React.Component {
     }
 
     _renderClaims() {
-        let columnDefs = [
+        let columnDefs= [
             { headerName: "File Name", field: "FileName", cellStyle: {  color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "GSID", field: "GSID", width: 100, },
-            { headerName: "STID", field: "STID", width: 100 },
+            { headerName: "ClaimID", field: "ClaimID", width: 100 },
+            { headerName: "Subscriber Name", field: "SubscriberName", width: 100 },
             { headerName: "Provider Name", field: "ProviderName", width: 100 },
             { headerName: "Provider Address", field: "ProviderAddress", width: 100 },
-            { headerName: "Subscriber Name", field: "SubscriberName", width: 100 },
-            { headerName: "ClaimID", field: "ClaimID", width: 100 },
             { headerName: "Claim Charge Amount", field: "ClaimChargeAmt", width: 100 },
             { headerName: "DRG Code", field: "DRGCode", width: 100 },
+           
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
