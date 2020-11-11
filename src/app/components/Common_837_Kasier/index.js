@@ -239,7 +239,7 @@ export class Common_837_Kasier extends React.Component {
             this.getClaimCounts()
         }
         if (!this.state.removeFiles) {
-            this._get999Count()
+            // this._get999Count()
             setTimeout(() => {
                 this._getCount()
             }, 200);

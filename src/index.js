@@ -155,6 +155,7 @@ import {LockBoxFlatFileDetails} from './app/containers/ClaimPayment_Inbound_835/
 import {TreasuryFileDetails} from './app/containers/ClaimPayment_Inbound_835/TreasuryFileDetails'
 import {RealTimeDashboard_kaiser} from './app/containers/Claim_837_Kasier_Demo/RealTimeDashboard_kaiser'
 import {ClaimProcessingSummary_Kaiser} from './app/containers/Claim_837_Kasier_Demo/ProcessingSummery_Kaiser'
+import {Claim_Details_837} from './app/containers/Claim_837_Kasier_Demo/Claim_Details_837'
 
 
 
@@ -285,7 +286,7 @@ class PrivateRoute extends React.Component {
                                                     :
 
                                                     <Redirect to={{
-                                                        pathname: '/' + Strings.RealTimeDashboard, state: { data }
+                                                        pathname: '/' + Strings.RealTimeDashboard_kaiser, state: { data }
                                                     }} />
                                             ) : <Redirect to="/" />
                                     }
@@ -450,7 +451,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings._InboundPaymentDetails} component={InboundPaymentDetails} />
                                 <Route path={'/' + Strings.RealTimeDashboard_kaiser} component={RealTimeDashboard_kaiser} />
                                 <Route path={'/' + Strings.ClaimProcessingSummary_Kaiser} component={ClaimProcessingSummary_Kaiser} />
-                                
+                                <Route path={'/' + Strings.Claim_Details_837} component={Claim_Details_837} />
+                                <Route path={'/' + Strings._Claim_Details_837} component={Claim_Details_837} />
                                 
                                 {/*  for Sales demo 30545 */}
                                 <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />

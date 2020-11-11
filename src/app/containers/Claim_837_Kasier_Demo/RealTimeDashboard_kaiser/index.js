@@ -447,7 +447,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             ]
         }
 
-        this.props.history.push('/' + Strings.Claim_Details_837_Grid, {
+        this.props.history.push('/' + Strings.Claim_Details_837, {
             data: sendData
         })
     }

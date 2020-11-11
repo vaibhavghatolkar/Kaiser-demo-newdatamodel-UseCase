@@ -103,7 +103,7 @@ export class DynamicSidebar extends React.Component {
 
         else if (index == 29) { name = Strings.RealTimeDashboard_kaiser }
         else if (index == 30) { name = Strings.claimsAudit }
-        else if (index == 31) { name = Strings._Claim_Details_837_Grid }
+        else if (index == 31) { name = Strings._Claim_Details_837 }
 
         else if (index == 94) { name = Strings.Outbound_Claim_updated_Dashboard_New }
         else if (index == 95) { name = Strings.Outbound_Claim_updated_FileDashboard }
@@ -146,7 +146,7 @@ export class DynamicSidebar extends React.Component {
 
         else if (index == 116) { name = Strings.healthCare278 }
         else if (index == 117) { name = Strings.serviceDetails278 }
-        else if (index == 122) { name = Strings._ClaimProcessingSummary }
+        else if (index == 122) { name = Strings.ClaimProcessingSummary_Kaiser }
         else if (index == 124) { name = Strings._Inbound_response_999 }
         else if (index == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
         else if (index == 123) { name = Strings.Outbound_ClaimProcessingSummary }
@@ -311,7 +311,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: index_val, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings._Claim_Details_837_Grid || element.key == Strings.Inbound_EncounterDetails || element.key == Strings._Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings._Claim_Details_837 || element.key == Strings.Inbound_EncounterDetails || element.key == Strings._Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n', gridflag: '', subtitle: '' },
                 ]
