@@ -241,12 +241,10 @@ export class ClaimProcessingSummary_Kaiser extends React.Component {
     _renderTransactions = () => {
         let columnDefs= [
             { headerName: "File Name", field: "FileName", cellStyle: {  color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "GSID", field: "GSID", width: 100, },
-            { headerName: "STID", field: "STID", width: 100 },
+            { headerName: "ClaimID", field: "ClaimID", width: 100 },
+            { headerName: "Subscriber Name", field: "SubscriberName", width: 100 },
             { headerName: "Provider Name", field: "ProviderName", width: 100 },
             { headerName: "Provider Address", field: "ProviderAddress", width: 100 },
-            { headerName: "Subscriber Name", field: "SubscriberName", width: 100 },
-            { headerName: "ClaimID", field: "ClaimID", width: 100 },
             { headerName: "Claim Charge Amount", field: "ClaimChargeAmt", width: 100 },
             { headerName: "DRG Code", field: "DRGCode", width: 100 },
            
