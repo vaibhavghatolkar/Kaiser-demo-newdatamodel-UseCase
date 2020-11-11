@@ -543,6 +543,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
                     endDate={endDate}
+                    paginationPageSize={5}
                     type={this.state.type}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
