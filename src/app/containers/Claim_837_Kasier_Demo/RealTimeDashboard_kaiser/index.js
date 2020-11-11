@@ -500,7 +500,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             { headerName: "Status", field: "Status", width: 80 },
             { headerName: "MCG Status", field: "MCGStatus", width: 100 },
             { headerName: "Sender", field: "Sender", width: 80 },
-            { headerName: "Receiver", field: "Receiver", width: 80 },
+            // { headerName: "Receiver", field: "Receiver", width: 80 },
             { headerName: "Total Claims", field: "Claimcount", width: 100 },                   
             { headerName: "Rejected Claims", field: "RejectedClaims", flex: 1 },
         ]
@@ -755,13 +755,9 @@ export class RealTimeDashboard_kaiser extends React.Component {
              { headerName: "File Status", field: "FileStatus", width: 80 },
              { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
             { headerName: "Sender", field: "Submitter_Name", width: 100 },
-            // { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
-            // { headerName: "GSID", field: "GSID", width: 100 },
-            // { headerName: "STID", field: "STID", width: 100 },
-            { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
+           { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
              { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
-     
-            { headerName: "Total Claim", field: "total_claim", width: 150 },
+             { headerName: "Total Claim", field: "total_claim", width: 150 },
             { headerName: "Rejected Claims", field: "RejectedClaims" , flex:1 },
           
 
