@@ -384,7 +384,7 @@ export class Common_837_Kasier extends React.Component {
                 }
             }
 
-            let geturl = Strings.Claim_Details_837_Grid
+            let geturl = Strings.Claim_Details_837
             if (notSent == 'Y') {
                 geturl = Strings.Outbound_response_999
                 data = [{
@@ -516,7 +516,7 @@ export class Common_837_Kasier extends React.Component {
             row.push(
                 <TableTiles
                     item={item}
-                    url={Strings.Claim_Details_837_Grid}
+                    url={Strings.Claim_Details_837}
                     data={sendData}
                     color={color}
                     unclick={item.color ? item.color : ''}

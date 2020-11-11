@@ -371,6 +371,8 @@ export class Claim_Details_837 extends React.Component {
             { headerName: "State", field: "State", width: 70 },
              { headerName: "File Date", field: "FileDate", width: 100 },
              { headerName: "File Status", field: "FileStatus", width: 80 },
+             { headerName: "Load Status", field: "LoadStatus", width: 80 },
+             
              { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
             { headerName: "Sender", field: "Submitter_Name", width: 100 },
              { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
