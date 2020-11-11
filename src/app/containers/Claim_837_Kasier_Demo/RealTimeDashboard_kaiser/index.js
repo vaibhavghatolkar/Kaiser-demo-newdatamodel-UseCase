@@ -658,6 +658,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
+                SubmitterName={true}
             />
         )
     }
@@ -757,9 +758,8 @@ export class RealTimeDashboard_kaiser extends React.Component {
              { headerName: "File Status", field: "FileStatus", width: 80 },
              { headerName: "Load Status", field: "LoadStatus", width: 80 },
              { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
-            { headerName: "Sender", field: "Submitter_Name", width: 100 },
-           { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
-             { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
+            { headerName: "Submitter", field: "Submitter_Name", width: 100 },
+            { headerName: "Receiver", field: "Receiver_Name", width: 100 },
              { headerName: "Total Claim", field: "total_claim", width: 150 },
             { headerName: "Rejected Claims", field: "RejectedClaims" , flex:1 },
           

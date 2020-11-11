@@ -710,7 +710,7 @@ export class Filters extends React.Component {
                                 </div>
                                 :
                                 <div className="form-group col-2">
-                                    <div className="list-dashboard">Submitter</div>
+                                    <div className="list-dashboard">{this.props.SubmitterName ? 'Sender' : 'Submitter'}</div>
                                     <select className="form-control list-dashboard" id="TradingPartner"
                                         value={this.props.selectedTradingPartner}
                                         onChange={(event) => {

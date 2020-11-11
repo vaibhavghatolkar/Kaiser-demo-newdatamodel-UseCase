@@ -374,9 +374,8 @@ export class Claim_Details_837 extends React.Component {
              { headerName: "Load Status", field: "LoadStatus", width: 80 },
              
              { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
-            { headerName: "Sender", field: "Submitter_Name", width: 100 },
-             { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
-             { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
+            { headerName: "Submitter", field: "Submitter_Name", width: 100 },
+            { headerName: "Receiver", field: "Receiver_Name", width: 100 },
              { headerName: "Total Claim", field: "total_claim", width: 150 },
             { headerName: "Rejected Claims", field: "RejectedClaims" , flex:1 },
           
@@ -505,8 +504,9 @@ export class Claim_Details_837 extends React.Component {
 
     _renderClaims() {
         let columnDefs= [
-            { headerName: "File Name", field: "FileName", cellStyle: {  color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "ClaimID", field: "ClaimID", width: 100 },
+            { headerName: "ClaimID", field: "ClaimID", width: 100, cellStyle: {  color: '#139DC9', cursor: 'pointer' } },
+            // { headerName: "File Name", field: "FileName", width: 100 },
+           
             { headerName: "Subscriber Name", field: "SubscriberName", width: 100 },
             { headerName: "Provider Name", field: "ProviderName", width: 100 },
             { headerName: "Provider Address", field: "ProviderAddress", width: 100 },
@@ -803,9 +803,10 @@ export class Claim_Details_837 extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 Filter_ClaimId={this.state.Filter_ClaimId}
-                showclaimId={true}
+                showclaimId={false}
                 isMolina={true}
                 removeGrid={true}
+                SubmitterName={true}
             />
         )
     }
