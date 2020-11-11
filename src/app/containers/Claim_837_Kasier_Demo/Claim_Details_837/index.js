@@ -359,7 +359,7 @@ export class Claim_Details_837 extends React.Component {
         this.setState({
             showClaims: true,
             Ag_grid_FileName: data && data.length > 0 ? data[0].FileName : '',
-            Ag_grid_fileDate: (data && data.length > 0 && moment(data[0].FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(data[0].FileDateTime).format('YYYY-MM-DD') : '',
+            Ag_grid_fileDate: (data && data.length > 0 && moment(data[0].FileDate).format('YYYY-MM-DD') != 'Invalid date') ? moment(data[0].FileDate).format('YYYY-MM-DD') : '',
             selectedFileId: data && data.length > 0 ? data[0].STID : ''
         })
     }
@@ -368,16 +368,15 @@ export class Claim_Details_837 extends React.Component {
         let columnDefs =
           [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
-            // { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "State", field: "State", width: 70 },
+             { headerName: "File Date", field: "FileDate", width: 100 },
+             { headerName: "File Status", field: "FileStatus", width: 80 },
+             { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
             { headerName: "Sender", field: "Submitter_Name", width: 100 },
-            // { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
-            // { headerName: "GSID", field: "GSID", width: 100 },
-            // { headerName: "STID", field: "STID", width: 100 },
-            { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
+             { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
              { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
-     
-            { headerName: "Total Claim", field: "total_claim", width: 150 },
-            { headerName: "Rejected Claims", field: "RejectedClaims", width: 150 },
+             { headerName: "Total Claim", field: "total_claim", width: 150 },
+            { headerName: "Rejected Claims", field: "RejectedClaims" , flex:1 },
           
             ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
@@ -410,7 +409,12 @@ export class Claim_Details_837 extends React.Component {
                 RejectedClaims
                 Submitter_Identification_Code
                 Receiver_Identification_Code
-                  }
+                FileStatus
+                 State
+                FileDate
+               LoadStatus
+               MCGLoadStatus    
+                          }
                 }`
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
@@ -422,7 +426,7 @@ export class Claim_Details_837 extends React.Component {
                     paginationPageSize={5}
                     index={'Dashboard837TransactionSetHeaderDetails'}
                     State={this.state.State}
-                    fieldType={'FileID'}
+                    fieldType={'FileDate'}
                     postData={this.postData}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}

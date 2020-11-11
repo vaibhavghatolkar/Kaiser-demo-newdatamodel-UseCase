@@ -499,10 +499,9 @@ export class RealTimeDashboard_kaiser extends React.Component {
             { headerName: "File Status", field: "FileStatus", width: 80 },
             { headerName: "Status", field: "Status", width: 80 },
             { headerName: "MCG Status", field: "MCGStatus", width: 100 },
-            { headerName: "Submitter", field: "Sender", width: 80 },
+            { headerName: "Sender", field: "Sender", width: 80 },
             { headerName: "Receiver", field: "Receiver", width: 80 },
-            { headerName: "Total Claims", field: "Claimcount", width: 100 },       
-            
+            { headerName: "Total Claims", field: "Claimcount", width: 100 },                   
             { headerName: "Rejected Claims", field: "RejectedClaims", flex: 1 },
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
@@ -681,12 +680,16 @@ export class RealTimeDashboard_kaiser extends React.Component {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "State", field: "State", width: 70 },
+            { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "File Status", field: "FileStatus", width: 80 },
+            { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
             { headerName: "Application Sender Code", field: "ApplicationSenderCode", width: 100 },
             { headerName: "Application Receiver Code", field: "ApplicationReceiverCode", width: 150 },
             { headerName: "Functional Identifier Code", field: "FunctionalIdentifierCode", width: 70 },
             { headerName: "Group Control Number", field: "GroupControlNumber", width: 70 },
             { headerName: "Total CLP Count", field: "total_claim", width: 100 },
-            { headerName: "Rejected Claims", field: "RejectedClaims", width: 100 },
+            { headerName: "Rejected Claims", field: "RejectedClaims", flex:1 },
 
         ]
 
@@ -712,6 +715,11 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     Type
                     total_claim
                     RejectedClaims
+                    FileStatus
+                    State
+                   FileDate
+                  LoadStatus
+                  MCGLoadStatus    
                  }
                }
                `
@@ -722,7 +730,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     columnDefs={columnDefs}
                     query={query}
                     url={Urls._transaction837}
-                    fieldType={'GSID'}
+                    fieldType={'FileDate'}
                     index={'Dashboard837FunctionalGroupDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
@@ -742,7 +750,10 @@ export class RealTimeDashboard_kaiser extends React.Component {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
-            // { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "State", field: "State", width: 70 },
+             { headerName: "File Date", field: "FileDate", width: 100 },
+             { headerName: "File Status", field: "FileStatus", width: 80 },
+             { headerName: "MCG Status", field: "MCGLoadStatus", width: 100 },
             { headerName: "Sender", field: "Submitter_Name", width: 100 },
             // { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
             // { headerName: "GSID", field: "GSID", width: 100 },
@@ -751,7 +762,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
              { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
      
             { headerName: "Total Claim", field: "total_claim", width: 150 },
-            { headerName: "Rejected Claims", field: "RejectedClaims", width: 150 },
+            { headerName: "Rejected Claims", field: "RejectedClaims" , flex:1 },
           
 
         ]
@@ -767,7 +778,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
                     FileID: "${this.state.selectedGSID}" ,Type:"${this.state.type}", RecType:"Inbound",
                     LoadStatus:"", MCGStatus:"", Status277CA:"",  Status: "") {
-                         RecCount
+                        RecCount
                         FileID
                         FileName
                         GSID
@@ -778,6 +789,11 @@ export class RealTimeDashboard_kaiser extends React.Component {
                         RejectedClaims
                         Submitter_Identification_Code
                         Receiver_Identification_Code
+                        FileStatus
+                         State
+                        FileDate
+                       LoadStatus
+                       MCGLoadStatus    
                        
                      }
                    }
@@ -789,7 +805,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     columnDefs={columnDefs}
                     query={query}
                     url={Urls._transaction837}
-                    fieldType={'FileID'}
+                    fieldType={'FileDate'}
                     index={'Dashboard837TransactionSetHeaderDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
