@@ -365,29 +365,19 @@ export class Claim_Details_837 extends React.Component {
     }
 
     _renderList = () => {
-        let columnDefs = this.state.generalStatus == "File Rejected" || this.state.claimStatus == "Rejected" ? [
+        let columnDefs =
+          [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
             // { headerName: "File Date", field: "FileDate", width: 100 },
-            { headerName: "Submitter Name", field: "Submitter_Name", width: 100 },
-            { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
-            { headerName: "GSID", field: "GSID", width: 100 },
-            { headerName: "STID", field: "STID", width: 100 },
-            { headerName: "Rejected Claims", field: "RejectedClaims", width: 150 },
-            { headerName: "Total Claim", field: "total_claim", width: 150 },
+            { headerName: "Sender", field: "Submitter_Name", width: 100 },
+            // { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
+            // { headerName: "GSID", field: "GSID", width: 100 },
+            // { headerName: "STID", field: "STID", width: 100 },
             { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
-            { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
-          
-        ] : [
-            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
-            // { headerName: "File Date", field: "FileDate", width: 100 },
-            { headerName: "Submitter Name", field: "Submitter_Name", width: 100 },
-            { headerName: "Receiver Name", field: "Receiver_Name", width: 100 },
-            { headerName: "GSID", field: "GSID", width: 100 },
-            { headerName: "STID", field: "STID", width: 100 },
-            { headerName: "Rejected Claims", field: "RejectedClaims", width: 150 },
+             { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
+     
             { headerName: "Total Claim", field: "total_claim", width: 150 },
-            { headerName: "Submitter Identification Code", field: "Submitter_Identification_Code", width: 200 },
-            { headerName: "Receiver Identification Code", field: "Receiver_Identification_Code", flex:1 },
+            { headerName: "Rejected Claims", field: "RejectedClaims", width: 150 },
           
             ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
@@ -424,6 +414,7 @@ export class Claim_Details_837 extends React.Component {
                 }`
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
+             <h6 className="font-size">Transaction Set Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
