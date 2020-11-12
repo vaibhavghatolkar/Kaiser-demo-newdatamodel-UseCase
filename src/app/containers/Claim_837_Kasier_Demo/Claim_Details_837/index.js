@@ -510,8 +510,11 @@ export class Claim_Details_837 extends React.Component {
             { headerName: "Subscriber Name", field: "SubscriberName", width: 100 },
             { headerName: "Provider Name", field: "ProviderName", width: 100 },
             { headerName: "Provider Address", field: "ProviderAddress", width: 100 },
+            { headerName: "Admission Date", field: "AdmissionDate", width: 100 },  
+            { headerName: "Accident Date", field: "AccidentDate", flex:1},
             { headerName: "Claim Charge Amount", field: "ClaimChargeAmt", width: 100 },
             { headerName: "DRG Code", field: "DRGCode", width: 100 },
+         
            
         ]
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
@@ -541,6 +544,8 @@ export class Claim_Details_837 extends React.Component {
                 ClaimID
                 ClaimChargeAmt
                 DRGCode
+                AccidentDate
+                AdmissionDate
             }
           }`
         return (

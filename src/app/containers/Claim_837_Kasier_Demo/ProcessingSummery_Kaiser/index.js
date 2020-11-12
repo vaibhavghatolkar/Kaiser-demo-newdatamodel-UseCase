@@ -247,6 +247,7 @@ export class ClaimProcessingSummary_Kaiser extends React.Component {
             { headerName: "Provider Address", field: "ProviderAddress", width: 100 },
             { headerName: "Claim Charge Amount", field: "ClaimChargeAmt", width: 100 },
             { headerName: "DRG Code", field: "DRGCode", width: 100 },
+       
            
         ]
 
@@ -276,6 +277,8 @@ export class ClaimProcessingSummary_Kaiser extends React.Component {
                 ClaimID
                 ClaimChargeAmt
                 DRGCode
+                AccidentDate
+                AdmissionDate
             }
           }`
         return (
