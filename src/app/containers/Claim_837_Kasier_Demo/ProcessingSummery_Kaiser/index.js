@@ -262,7 +262,7 @@ export class ClaimProcessingSummary_Kaiser extends React.Component {
                     
                     Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
                     Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
-                    FileID: "${this.state.file_id}" , Type:"", RecType:"Inbound",
+                    FileID: "${this.state.file_id}" , Type:"", RecType:"Outbound",
                     FileStatus : "", LoadStatus:"", MCGStatus:"", Status277CA:"", ClaimID:"${this.state.Filter_ClaimId}"
             ) {
                 RecCount

@@ -101,16 +101,17 @@ export class DynamicSidebar extends React.Component {
         else if (index == 26) { name = Strings.RealTime276 }
         else if (index == 27) { name = Strings._ElilgibilityDetails276 }
 
-        else if (index == 29) { name = Strings.RealTimeDashboard_kaiser }
+        else if (index == 29) { name = Strings.RealTimeDashboard }
         else if (index == 30) { name = Strings.claimsAudit }
-        else if (index == 31) { name = Strings._Claim_Details_837 }
+        else if (index == 31) { name = Strings._Claim_Details_837_Grid }
 
         else if (index == 94) { name = Strings.Outbound_Claim_updated_Dashboard_New }
-        else if (index == 95) { name = Strings.Outbound_Claim_updated_FileDashboard }
+        else if (index == 95) { name = Strings.RealTimeDashboard_kaiser }
         else if (index == 123) { name = Strings.Outbound_Claim_updated_Payment }
         else if (index == 96) { name = Strings.Outbound_Claim_updated_AuditSummary }
         else if (index == 97) { name = Strings.Outbound_Claim_updated_ProcessingSummary }
-        else if (index == 98) { name = Strings.Outbound_Claim_updated_Details_837_Grid }
+       else if (index == 98) { name = Strings.Claim_Details_837 }
+        // else if (index == 98) { name = Strings.Outbound_Claim_updated_Details_837_Grid }
         else if (index == 99) { name = Strings.Outbound_Claim_Batch_Details_837 }
         else if (index == 100) { name = Strings.Inbound_Claim_999_response }
         else if (index == 135) { name = Strings.Outbound_Claim_277CAResponse }
@@ -146,7 +147,7 @@ export class DynamicSidebar extends React.Component {
 
         else if (index == 116) { name = Strings.healthCare278 }
         else if (index == 117) { name = Strings.serviceDetails278 }
-        else if (index == 122) { name = Strings.ClaimProcessingSummary_Kaiser }
+        else if (index == 122) { name = Strings.ClaimProcessingSummary }
         else if (index == 124) { name = Strings._Inbound_response_999 }
         else if (index == 129) { name = Strings.Inbound_Encounter_ClaimProcessingSummary }
         else if (index == 123) { name = Strings.Outbound_ClaimProcessingSummary }
@@ -311,7 +312,7 @@ export class DynamicSidebar extends React.Component {
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: index_val, count: 'n' },
                 ]
 
-            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings._Claim_Details_837 || element.key == Strings.Inbound_EncounterDetails || element.key == Strings._Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
+            } else if (element.key == Strings.ClaimDetails837 || element.key == Strings._Claim_Details_837_Grid || element.key == Strings.Inbound_EncounterDetails || element.key == Strings._Load_Exception || element.key == Strings.ClaimPayment_835_Exception) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n', gridflag: '', subtitle: '' },
                 ]
@@ -336,7 +337,7 @@ export class DynamicSidebar extends React.Component {
                 ]
             }
             else if (element.key == Strings.Outbound_Encounter_ClaimDetails837 || element.key == Strings.Outbound_Encounter_BatchDetails837
-                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid
+                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid || element.key==Strings.Claim_Details_837
                 ) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },

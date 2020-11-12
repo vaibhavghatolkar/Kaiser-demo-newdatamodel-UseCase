@@ -394,7 +394,7 @@ export class Claim_Details_837 extends React.Component {
                         Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State ? this.state.State : ''}",
                         Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",
                         Claimstatus:"${this.state.claimStatus ? this.state.claimStatus : ''}", Type : "` + this.state.type + `" , 
-                         RecType: "Inbound",
+                         RecType: "Outbound",
                         LoadStatus:"${this.state.gridflag}", Status:"${this.state.generalStatus}", 
                         MCGStatus:"${this.state.mcgStatus}", FileID: "${this.state.incoming_fileId}", 
                         Status277CA:"${this.state.status277CA}",
@@ -525,7 +525,7 @@ export class Claim_Details_837 extends React.Component {
                     
                    Sender:"${this.state.selectedTradingPartner}", State:"${this.state.State ? this.state.State : ''}",Provider:"${this.state.providerName}",
                     StartDt:"",EndDt:"",Claimstatus:"${this.state.generalStatus}", FileID : "` + this.state.selectedFileId + `", 
-                    Type : "` + this.state.type + `" ,  RecType: "Inbound",
+                    Type : "` + this.state.type + `" ,  RecType: "Outbound",
                     FileStatus : "${this.state.claimStatus ? this.state.claimStatus : ''}", 
                     LoadStatus:"${this.state.gridflag}", MCGStatus: "${this.state.mcgStatus}", 
                     Status277CA:"${this.state.status277CA}" ,ClaimID:"${this.state.Filter_ClaimId}"

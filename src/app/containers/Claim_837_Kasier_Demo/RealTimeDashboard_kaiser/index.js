@@ -175,7 +175,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Outbound") {
                 From
                 MonthNo
                 Year
@@ -185,11 +185,11 @@ export class RealTimeDashboard_kaiser extends React.Component {
                 X_axis
                 Y_axis
             }
-            file_piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+            file_piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", Type : "` + this.state.type + `", RecType: "Outbound") {
                 X_axis
                 Y_axis
             }
-            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Inbound") {
+            piechart:Claim837RTClaimBarchart(Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "Errorwise", Type : "` + this.state.type + `", RecType: "Outbound") {
                 X_axis
                 Y_axis
             }
@@ -513,7 +513,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},                    
                     Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
                     Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
-                    FileID: "" ,Type:"${this.state.type}", RecType:"Inbound",
+                    FileID: "" ,Type:"${this.state.type}", RecType:"Outbound",
                     LoadStatus:"", MCGStatus:"", Status277CA:"",  Status: ""
             ) {
                 RecCount
@@ -572,7 +572,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Inbound") {
+            barchart : Claim837RTClaimBarchart (Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",Provider:"${this.state.providerName}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", Type : "` + this.state.type + `", RecType: "Outbound") {
                 From
                 MonthNo
                 Year
@@ -706,7 +706,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},                    
             Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
             Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
-            FileID: "${this.state.selectedFileId}" ,Type:"${this.state.type}", RecType:"Inbound",
+            FileID: "${this.state.selectedFileId}" ,Type:"${this.state.type}", RecType:"Outbound",
             LoadStatus:"", MCGStatus:"", Status277CA:"",  Status: "") {
                     RecCount
                     FileID
@@ -776,7 +776,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
                     startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},                    
                     Sender:"${this.state.selectedTradingPartner}",State:"${this.state.State}",
                     Provider:"${this.state.providerName}",StartDt:"${startDate}",EndDt:"${endDate}",Claimstatus:"", 
-                    FileID: "${this.state.selectedGSID}" ,Type:"${this.state.type}", RecType:"Inbound",
+                    FileID: "${this.state.selectedGSID}" ,Type:"${this.state.type}", RecType:"Outbound",
                     LoadStatus:"", MCGStatus:"", Status277CA:"",  Status: "") {
                         RecCount
                         FileID
@@ -825,7 +825,7 @@ export class RealTimeDashboard_kaiser extends React.Component {
     render() {
         return (
             <div>
-                <h5 className="headerText">Claims Dashboard</h5>
+                <h5 className="headerText">Claims Submission Dashboard</h5>
                 {this._renderTopbar()}
                 {this.tab()}
                 {this.renderCommonGroup()}
