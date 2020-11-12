@@ -286,7 +286,7 @@ class PrivateRoute extends React.Component {
                                                     :
 
                                                     <Redirect to={{
-                                                        pathname: '/' + Strings.RealTimeDashboard_kaiser, state: { data }
+                                                        pathname: '/' + Strings.RealTimeDashboard, state: { data }
                                                     }} />
                                             ) : <Redirect to="/" />
                                     }
