@@ -342,7 +342,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120, },
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
-            { headerName: "DRG Code", field: "DGNQty", width: 120, },
+            { headerName: "DRG Code", field: "DigonisCode", width: 120, },
         ]
 
 
@@ -399,6 +399,7 @@ export class InboundPaymentDetails extends React.Component {
                     providerID
     PatientSubscriberID
     CLP01
+    DigonisCode
                     }
                   }`
 
