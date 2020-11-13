@@ -313,7 +313,7 @@ export class InboundPaymentDetails extends React.Component {
         let columnDefs = [
             { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, },
-            { headerName: "CLP01", field: "CLP01", width: 200, },
+            { headerName: "CLP01", field: "PatientControlNo", width: 200, },
             { headerName: "Patient Name", field: "PatientName", width: 200, },
             { headerName: "Patient SubscriberID", field: "PatientSubscriberID", width: 200, },
 
