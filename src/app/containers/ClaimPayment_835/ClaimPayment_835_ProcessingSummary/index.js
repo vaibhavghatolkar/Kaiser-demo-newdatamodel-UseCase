@@ -490,7 +490,7 @@ if(isOutboundPage){
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
-                showclaimId={true}
+                showclaimId={isOutbound ? true : false}
                 State={this.state.State}
                 removeState= {isOutbound ? false : true}
 
