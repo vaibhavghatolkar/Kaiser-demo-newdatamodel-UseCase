@@ -318,9 +318,10 @@ if(isOutboundPage){
     ]
 }else{
      columnDefs = [
+   
         { headerName: "Payer Claim Control Number", field: "ClaimID", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Received Date", field: "ClaimReceivedDate", width: 140, },
-            { headerName: "CLP01", field: "CLP01", width: 200, },
+            { headerName: "CLP01", field: "PatientControlNo", width: 200, },
             { headerName: "Patient Name", field: "PatientName", width: 200, },
             { headerName: "Patient SubscriberID", field: "PatientSubscriberID", width: 200, },
 
@@ -349,7 +350,8 @@ if(isOutboundPage){
             { headerName: "Rendering Provider ID", field: "Rendering_ProviderID", width: 120, },
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
-            { headerName: "DRG Code", field: "DGNQty", width: 120, },
+            { headerName: "DRG Code", field: "DigonisCode", width: 120, },
+        
     ]
 }
 
@@ -449,7 +451,7 @@ if(isOutboundPage){
                     STID
                     CLP01
                     GSID
- 
+                    DigonisCode
                     }
                   }` 
         }
