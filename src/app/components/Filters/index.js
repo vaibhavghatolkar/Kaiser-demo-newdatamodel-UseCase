@@ -634,6 +634,18 @@ export class Filters extends React.Component {
         })
     }
 
+    changeFilterInput1 = (event) => {
+        let passing_val = event.target.value
+        this.setState({
+            incoming_837fileId: passing_val
+        }, () => {
+            clearTimeout(val_in)
+            val_in = setTimeout(() => {
+                this.onChangeName(passing_val, 'incoming_837fileId')
+            }, 750);
+        })
+    }
+
     changeTransaction = (event) => {
         clearTimeout(val_trans)
         let passing_val = event.target.value
@@ -859,6 +871,18 @@ export class Filters extends React.Component {
                                     value={this.state.Filter_ClaimId}
                                     onChange={(event) => {
                                         this.changeFilterInput(event)
+                                    }}></input>
+                            </div> : null
+                    }
+                    {
+                        this.props.CLM01 ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">CLM01</div>
+                                <input
+                                    className="form-control list-dashboard"
+                                    value={this.state.incoming_837fileId}
+                                    onChange={(event) => {
+                                        this.changeFilterInput1(event)
                                     }}></input>
                             </div> : null
                     }

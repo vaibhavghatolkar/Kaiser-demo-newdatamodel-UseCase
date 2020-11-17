@@ -76,7 +76,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             status: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: condition && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            incoming_837fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_837fileId ? props.location.state.data[0].incoming_837fileId : '',
+            incoming_837fileId: '',
             errorcode: '',
             FileID: condition && props.location.state.data[0].FileID ? props.location.state.data[0].FileID : '',
             F99Status: condition && props.location.state.data[0].F99Status ? props.location.state.data[0].F99Status : '',
@@ -217,7 +217,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
 
         let query = `{            
-            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.incoming_837fileId}" ClaimID:"${this.state.Filter_ClaimId}") {
+            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}" ClaimID:"${this.state.incoming_837fileId}") {
              FileID
             FileName_Outbound
             FileDate_Outbound
@@ -1267,7 +1267,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             { headerName: "835", field: "PaymentDetails", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
         let query = `{            
-            OutboundEncounterProcessingSummary(FileID: "` + this.state.selectedFileId + `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.incoming_837fileId}", ClaimID:"${this.state.Filter_ClaimId}"
+            OutboundEncounterProcessingSummary(FileID: "` + this.state.selectedFileId + `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.Filter_ClaimId}", ClaimID:"${this.state.incoming_837fileId}"
             sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
             ){
@@ -1308,6 +1308,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                     endDate={this.state.endDate}
                     type={this.state.type}
                     filterClaim={this.state.Filter_ClaimId}
+                    incoming_837fileId={this.state.incoming_837fileId}
                     selectedFileId={this.state.selectedFileId}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
@@ -1683,7 +1684,8 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                 Filter_ClaimId={this.state.Filter_ClaimId}
                 removeGrid={true}
                 showclaimId={true}
-            // isMolina={true}
+            isMolina={true}
+            CLM01={true}
             />
         )
     }
