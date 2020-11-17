@@ -67,7 +67,8 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             ReconciledError_Claims: 0,
             LoadingClaims: 0,
             LoadedErrorClaims: 0,
-
+            stage_2:[],
+            stage_1:[],
             fileNameFlag: 180,
             fileDateFlag: 180,
             extraField2Flag: 180,
@@ -859,22 +860,68 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         )
     }
 
-
+ 
     render_Outbound_ClaimDetails = () => {
-  
-        let stage_1 = [
-            { header: '', },
-            { 'name': 'Corrected Patient/Insured Name', 'value': 42, 'isClick': true },
-            { 'name': 'Corrected Priority Payer Name', 'value': 20, color: "#139DC9"},
-            { 'name': 'Corrected ICD Code', 'value': 27, 'isClick': true },
-       ]
+        let query = `{
+            OutboundClaimsPaymentMissmatchCount  {
+                Another_invoice_service_line_Payment
+    Invoice_Out_of_Balance
+    CPT_Code_sent_on_837_and_2_service_Lines
+    Repeating_Service_Lines_in_835
+    Invoice_Mismatch
+    Payor_Name_and_Member_Name_Mismatch
+    CPT_Code_and_Charge_Amount_Mismatch
+    Revenue_Code_Mismatch_and_Name_Mismatch
+            }
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction837_kaiser, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    let _data = res.data.OutboundClaimsPaymentMissmatchCount
+                    let _condition = _data && _data.length > 0 ? true : false
+                    
+                    let stage_1 = [
+                        { header: '', },
+                        { 'name': 'Another invoice service line Payment included for this Invoice', 'value': _condition ? _data[0].Another_invoice_service_line_Payment : 0,  },
+                        { 'name': 'Invoice Out of Balance', 'value': _condition ? _data[0].Invoice_Out_of_Balance : 0,},
+                        { 'name': '1 CPT Code sent on 837 and 2 service Lines on 835', 'value': _condition ? _data[0].CPT_Code_sent_on_837_and_2_service_Lines : 0,  },
+                        { 'name': 'Repeating Service Lines in 835', 'value': _condition ? _data[0].Repeating_Service_Lines_in_835 : 0,  },
+                   ]
+                   let stage_2 = [
+                    { header: '', },
+                    { 'name': 'Invoice Mismatch', 'value': _condition ? _data[0].Invoice_Mismatch : 0,  },
+                    { 'name': 'Payor Name and Member Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, },
+                    { 'name': 'CPT Code and Charge Amount Mismatch', 'value': _condition ? _data[0].CPT_Code_and_Charge_Amount_Mismatch : 0,  },
+                    { 'name': 'Revenue Code Mismatch and Name Mismatch', 'value': _condition ? _data[0].Revenue_Code_Mismatch_and_Name_Mismatch : 0,  },
+               ]
+                    this.setState({
+                        stage_1: stage_1,
+                        stage_2: stage_2,
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    
        
 
 
 
         return (
             <div className="row" style={{ marginBottom: '12px' }}>
-                {this._render_Outbound_Claim_Table(stage_1)}
+                {this._render_Outbound_Claim_Table(this.state.stage_1)}
+                {this._render_Outbound_Claim_Table(this.state.stage_2)}
          
               
             </div>
@@ -887,6 +934,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 {this._renderTopbar()}
                 {this._renderSummary(this.state.summary)}
                 {/* <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}></h6> */}
+                <label className="general-header" style={{fontSize:"16px"}}>Difference Between 837 And 835</label>
                 { this.render_Outbound_ClaimDetails()}
                 { this._renderTransactions()}
             </div>
