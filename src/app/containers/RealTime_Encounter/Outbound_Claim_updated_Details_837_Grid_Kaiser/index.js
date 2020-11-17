@@ -1246,6 +1246,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
         let columnDefs = [
             { headerName: "Molina Claims Id", field: "MolinaClaimID", width: 160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Claims ID", field: "ClaimID", width: 100, },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
             { headerName: "Claims Date", field: "EncounterDate", width: 150 },
             { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 150 },
