@@ -229,8 +229,13 @@ const Strings = {
     RealTimeDashboard_kaiser:'RealTimeDashboard_kaiser',
     ClaimProcessingSummary_Kaiser:'ClaimProcessingSummary_Kaiser',
     Claim_Details_837:'Claim_Details_837',
-    _Claim_Details_837:'_Claim_Details_837'
-
+    _Claim_Details_837:'_Claim_Details_837',
+    Outbound_Claim_updated_FileDashboard_Kaiser:'Outbound_Claim_updated_FileDashboard_Kaiser',
+    Outbound_Claim_updated_Details_837_Grid_Kaiser:'Outbound_Claim_updated_Details_837_Grid_Kaiser',
+    Outbound_Claim_999_response_Kaiser:'Outbound_Claim_999_response_Kaiser',
+    Outbound_Claim_updated_Payment_Kaiser:'Outbound_Claim_updated_Payment_Kaiser',
+    ClaimCustomerService_Kaiser:'ClaimCustomerService_Kaiser',
+    Outbound_Claim_updated_ProcessingSummary_Kaiser:'Outbound_Claim_updated_ProcessingSummary_Kaiser'
 // Outbound_Claim_updated_Details_837_Grid
 }
 

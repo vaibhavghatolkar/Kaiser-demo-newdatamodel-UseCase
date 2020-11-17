@@ -1,10 +1,10 @@
 // let base_url = 'http://localhost:4000' //local
-// let _base_url = 'http://localhost:4000' //local
+let _base_url = 'http://localhost:4000' //local
 // let kaiser_base_url = 'http://localhost:4000' //local
 
 
 let base_url = 'http://10.0.1.248:30544' //graph
-let _base_url = 'http://10.0.1.248:30528' //local
+// let _base_url = 'http://10.0.1.248:30528' //local
  let kaiser_base_url = 'http://10.0.1.248:30580'  //kaiser new data model
 let sql_base_url = 'http://10.0.1.248:30506'
 // let base_url = 'http://10.0.1.71:30506' //sql
@@ -39,8 +39,10 @@ const Urls = {
     CustomConfiguration: base_url + '/CustomConfiguration',
     transaction275: base_url + '/transaction275',
 
+    // _base_url : 'http://localhost:4000/graphQl', //local
+     _base_url : 'http://10.0.1.248:30528/graphQl', //local
 
-    _base_url : 'http://10.0.1.248:30528/graphQl', //local
+
     _eligibility_url : _base_url + '/eligibility',
     _common_data : _base_url + '/common_data',
     _claimstatus : _base_url + '/claimstatus',
@@ -64,7 +66,8 @@ const Urls = {
      _transaction835Kaiser: _base_url + '/transaction835',
     _transaction835: kaiser_base_url + '/transaction835',
     _transaction837: kaiser_base_url + '/transaction837',
-    
+
+    _transaction837_kaiser: _base_url + '/transaction837',
     _Response999 : base_url + '/common_data', 
     _inbound_common_data: base_url + '/common_data',
     _inbound_Encounter : base_url + '/Encounter',

@@ -88,7 +88,7 @@ import { Encounter_view_CustomEditNew } from './app/containers/RealTime_Encounte
 import { CrosswalkTable } from './app/containers/CrosswalkTable'
 import{Enrollment_Outbound} from './app/containers/Enrollment/Enrollment_Outbound'
 import{Enrollment_Details_Outbound} from './app/containers/Enrollment/Enrollment_Details_Outbound'
-
+//Outbound_Claim_updated_Details_837_Grid_Kaiser
 // import { RDE } from './app/containers/HL7/Medications'
 // import { ORU } from './app/containers/HL7/ORU'
 // import { DFT } from './app/containers/HL7/DFT'
@@ -156,9 +156,12 @@ import {TreasuryFileDetails} from './app/containers/ClaimPayment_Inbound_835/Tre
 import {RealTimeDashboard_kaiser} from './app/containers/Claim_837_Kasier_Demo/RealTimeDashboard_kaiser'
 import {ClaimProcessingSummary_Kaiser} from './app/containers/Claim_837_Kasier_Demo/ProcessingSummery_Kaiser'
 import {Claim_Details_837} from './app/containers/Claim_837_Kasier_Demo/Claim_Details_837'
-
-
-
+import {Outbound_Claim_updated_FileDashboard_Kaiser} from './app/containers/RealTime_Encounter/Outbound_Claim_updated_FileDashboard_Kaiser'
+import {Outbound_Claim_updated_Details_837_Grid_Kaiser} from './app/containers/RealTime_Encounter/Outbound_Claim_updated_Details_837_Grid_Kaiser'
+import {Outbound_Claim_999_response_Kaiser} from './app/containers/Outbound_Claim_999_response_Kaiser'
+import {Outbound_Claim_updated_Payment_Kaiser} from './app/containers/RealTime_Encounter/Outbound_Claim_updated_Payment_Kaiser'
+import {ClaimCustomerService_Kaiser} from './app/containers/RealTime_Encounter/ClaimCustomerService_Kaiser'
+import {Outbound_Claim_updated_ProcessingSummary_Kaiser} from './app/containers/RealTime_Encounter/Outbound_Claim_updated_ProcessingSummary_Kaiser'
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -453,6 +456,12 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ClaimProcessingSummary_Kaiser} component={ClaimProcessingSummary_Kaiser} />
                                 <Route path={'/' + Strings.Claim_Details_837} component={Claim_Details_837} />
                                 <Route path={'/' + Strings._Claim_Details_837} component={Claim_Details_837} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_FileDashboard_Kaiser} component={Outbound_Claim_updated_FileDashboard_Kaiser} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser} component={Outbound_Claim_updated_Details_837_Grid_Kaiser} />
+                                <Route path={'/' + Strings.Outbound_Claim_999_response_Kaiser} component={Outbound_Claim_999_response_Kaiser} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_Payment_Kaiser} component={Outbound_Claim_updated_Payment_Kaiser} />
+                                <Route path={'/' + Strings.ClaimCustomerService_Kaiser} component={ClaimCustomerService_Kaiser} />
+                                <Route path={'/' + Strings.Outbound_Claim_updated_ProcessingSummary_Kaiser} component={Outbound_Claim_updated_ProcessingSummary_Kaiser} />
                                 
                                 {/*  for Sales demo 30545 */}
                                 <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />

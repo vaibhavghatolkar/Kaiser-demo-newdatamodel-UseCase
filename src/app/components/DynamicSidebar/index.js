@@ -106,21 +106,18 @@ export class DynamicSidebar extends React.Component {
         else if (index == 31) { name = Strings._Claim_Details_837_Grid }
 
         else if (index == 94) { name = Strings.Outbound_Claim_updated_Dashboard_New }
-        else if (index == 95) { name = Strings.RealTimeDashboard_kaiser }
-        else if (index == 123) { name = Strings.Outbound_Claim_updated_Payment }
+        else if (index == 95) { name = Strings.Outbound_Claim_updated_FileDashboard_Kaiser }
+        else if (index == 123) { name = Strings.Outbound_Claim_updated_Payment_Kaiser }
         else if (index == 96) { name = Strings.Outbound_Claim_updated_AuditSummary }
-        else if (index == 97) { name = Strings.Outbound_Claim_updated_ProcessingSummary }
-       else if (index == 98) { name = Strings.Claim_Details_837 }
-        // else if (index == 98) { name = Strings.Outbound_Claim_updated_Details_837_Grid }
+        else if (index == 97) { name = Strings.Outbound_Claim_updated_ProcessingSummary_Kaiser }
+       else if (index == 98) { name = Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser }
         else if (index == 99) { name = Strings.Outbound_Claim_Batch_Details_837 }
-        else if (index == 100) { name = Strings.Inbound_Claim_999_response }
+       
+        else if (index == 100) { name = Strings.Outbound_Claim_999_response_Kaiser }
+        
         else if (index == 135) { name = Strings.Outbound_Claim_277CAResponse }
-        else if (index == 209) { name = Strings.ClaimCustomerService }
+        else if (index == 209) { name = Strings.ClaimCustomerService_Kaiser }
         else if (index == 210) { name = Strings.Outbound_Compliance_Reporting_Claims }
-
-        // else if (index == 31) { name = Strings._Load_Exception }
-
-        // else if (index == 31) { name = Strings.ClaimDetails837 }
         else if (index == 32) { name = Strings.claimsError }
         else if (index == 33 || index == 98) { name = Strings.researchQueue }
         else if (index == 34) { name = Strings.matchClaims }
@@ -337,7 +334,7 @@ export class DynamicSidebar extends React.Component {
                 ]
             }
             else if (element.key == Strings.Outbound_Encounter_ClaimDetails837 || element.key == Strings.Outbound_Encounter_BatchDetails837
-                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid || element.key==Strings.Claim_Details_837
+                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser || element.key==Strings.Claim_Details_837
                 ) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },
