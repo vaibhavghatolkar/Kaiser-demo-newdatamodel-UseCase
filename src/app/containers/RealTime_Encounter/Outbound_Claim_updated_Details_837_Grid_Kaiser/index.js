@@ -17,6 +17,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Strings from '../../../../helpers/Strings';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
 
 var val = ''
@@ -75,6 +76,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             status: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: condition && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
+            incoming_837fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_837fileId ? props.location.state.data[0].incoming_837fileId : '',
             errorcode: '',
             FileID: condition && props.location.state.data[0].FileID ? props.location.state.data[0].FileID : '',
             F99Status: condition && props.location.state.data[0].F99Status ? props.location.state.data[0].F99Status : '',
@@ -93,6 +95,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             fileid: '',
             selectedICdCode: '',
             claimid: '',
+            selectedFileId: '',
             Icdcodepresent: '',
             Accidentdate: '',
             nameRotation: 180,
@@ -212,9 +215,9 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             providerName = ''
         }
 
- 
+
         let query = `{            
-            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}") {
+            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.incoming_837fileId}" ClaimID:"${this.state.Filter_ClaimId}") {
              FileID
             FileName_Outbound
             FileDate_Outbound
@@ -234,6 +237,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         })
             .then(res => res.json())
             .then(res => {
+                let data = res.data.OutboundClaimsFileDetails
                 if (res && res.data && res.data.OutboundClaimsFileDetails) {
 
                     if (res.data.OutboundClaimsFileDetails.length > 0) {
@@ -247,12 +251,15 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
                     this.setState({
                         rowData: this.state.gridType == 1 ? res.data.OutboundClaimsFileDetails : [],
+                        Ag_grid_FileName: data && data.length > 0 ? data[0].FileName_Outbound : '',
+                        Ag_grid_fileDate: (data && data.length > 0 && moment(data[0].FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(data[0].FileDateTime).format('YYYY-MM-DD') : '',
+                        selectedFileId: data && data.length > 0 ? data[0].FileID : '',
                         intakeClaims: res.data.OutboundClaimsFileDetails,
                         recount: count,
                         showClaims: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? true : false,
                         fileId: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? res.data.OutboundClaimsFileDetails[0].FileID : ''
                     }, () => {
-                        this.getTransactions(this.state.fileId)
+                        this._renderClaims(this.state.fileId)
                         this.sortData()
                     })
                 }
@@ -496,7 +503,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     getDetails(claimId, fileId, ClaimRefId, fileData, page, MolinaClaimID) {
         let Claim_Icdcode = ""
         let AccidentDate = ""
- 
+
         let query = `{
             Claim837RTDetails(ClaimID:"`+ claimId + `", FileID: "` + fileId + `", SeqID: ${ClaimRefId}) {
               ClaimID
@@ -633,7 +640,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     }
 
     getClaimStages(claimId, fileId, seqId) {
-        
+
         let query = `{
             ClaimStagesInbound(FileID:"${fileId}", ClaimID: "${claimId}", SeqID: ${seqId}) {
               Stage
@@ -1149,15 +1156,16 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State", width:100 ,
-            cellRenderer: (data) => {
-                return   "FL"                
-            }
-        },
+            {
+                headerName: "State", field: "State", width: 100,
+                cellRenderer: (data) => {
+                    return "FL"
+                }
+            },
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
-            { headerName: "Payer", field: "", flex: 1,  cellRenderer: (data) => {    return 'Anthem Blue Cross' }},
+            { headerName: "Payer", field: "", width: 140, cellRenderer: (data) => { return 'Anthem Blue Cross' } },
             { headerName: "Total Claims", field: "TotalEncounterSent", width: 100 },
             { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
@@ -1189,14 +1197,16 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
                             if (event.colDef.headerName == 'File Name') {
+
                                 this.setState({
                                     showClaims: true,
                                     showerror: false,
                                     claims_rowData: [],
-                                    Ag_grid_FileName: '',
-                                    Ag_grid_fileDate: ''
+                                    Ag_grid_FileName: event.data.FileName_Outbound,
+                                    Ag_grid_fileDate: (moment(event.data.FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(event.data.FileDateTime).format('YYYY-MM-DD') : '',
+                                    selectedFileId: event.data.FileID
                                 }, () => {
-                                    this.getTransactions(event.data.FileID)
+                                    // this._renderClaims(event.data.FileID)
                                 })
                             } else if (event.colDef.headerName == "Error Description" && event.data.FileLevelError) {
                                 this.setState({
@@ -1243,6 +1253,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         });
     }
     _renderClaims() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
 
         let columnDefs = [
             { headerName: "Molina Claims Id", field: "MolinaClaimID", width: 160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
@@ -1253,73 +1264,185 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width: 150 },
             { headerName: "Payment Status", field: "PaymentStatus", width: 150 },
             { headerName: "Error Description", field: "Error_Description", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-
-
-            // { headerName: "Error", field: "ClaimLevelErrors" },
+            { headerName: "835", field: "PaymentDetails", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
         ]
+        let query = `{            
+            OutboundEncounterProcessingSummary(FileID: "` + this.state.selectedFileId + `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.incoming_837fileId}", ClaimID:"${this.state.Filter_ClaimId}"
+            sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+            ){
+                RecCount
+                FileID
+                FileName_Outbound
+                FileDate_Outbound
+                FileStatus_Outbound
+                ClaimID
+                MolinaClaimID
+                EncounterDate
+                Encounter99_Status
+                Encounter277CA_Status
+                F999
+                F277CA
+                RefID
+                PaymentStatus
+                Error_Field
+                Error_Description
+                PaymentDetails
+            }
+        }`
 
         return (
-            <div>
-
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <h6 className="font-size">Claims Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.claims_rowData}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Molina Claims Id') {
-                                this.setState({
-                                    claimId: event.data.ClaimID,
-                                    showerror: true,
-                                    claimError_Status: event.data.Encounter277CA_Status,
-                                    Error_data: [],
-                                    Aggrid_ClaimLineData: [],
-                                    Aggrid_Claim_Info_data: [],
-                                    Aggrid_ClaimStage: [],
-                                    RefID: event.data.RefID,
-                                    Error_Field: event.data.Error_Field,
-                                    showMemberInfo: true,
-                                    textbox: true,
-                                    FileID: event.data.FileID
-
-
-                                })
-                                if (event.data.Error_Field != "") { $('#MemberInfoDialogbox').modal('show') }
-                                this.get_Error(event.data.ClaimID, event.data.RefID, event.data.FileID)
-                                this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1, event.data.MolinaClaimID)
-                                this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.RefID)
-                            }
-                            else if (event.colDef.headerName == "Error Description" && event.data.Error_Description) {
-                                this.setState({
-                                    clickedError: event.data.Error_Description
-                                }, () => {
-                                    $('#error_modal').modal('show')
-                                })
-
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="font-size">Claims Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls._transaction837_kaiser}
+                    paginationPageSize={5}
+                    index={'OutboundEncounterProcessingSummary'}
+                    State={this.state.State}
+                    fieldType={'ClaimID'}
+                    // postData={this.postData}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    type={this.state.type}
+                    filterClaim={this.state.Filter_ClaimId}
+                    selectedFileId={this.state.selectedFileId}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
+
+        // return (
+        //     <div>
+
+        //         <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+        //             <h6 className="font-size">Claims Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6>
+        //             <AgGridReact
+        //                 modules={this.state.modules}
+        //                 columnDefs={columnDefs}
+        //                 autoGroupColumnDef={this.state.autoGroupColumnDef}
+        //                 defaultColDef={this.state.defaultColDef}
+        //                 suppressRowClickSelection={true}
+        //                 groupSelectsChildren={true}
+        //                 debug={true}
+        //                 rowSelection={this.state.rowSelection}
+        //                 rowGroupPanelShow={this.state.rowGroupPanelShow}
+        //                 pivotPanelShow={this.state.pivotPanelShow}
+        //                 enableRangeSelection={true}
+        //                 paginationAutoPageSize={false}
+        //                 pagination={true}
+        //                 domLayout={this.state.domLayout}
+        //                 paginationPageSize={this.state.paginationPageSize}
+        //                 onGridReady={this.onGridReady}
+        //                 rowData={this.state.claims_rowData}
+        //                 enableCellTextSelection={true}
+        //                 onCellClicked={(event) => {
+        //                     if (event.colDef.headerName == 'Molina Claims Id') {
+        //                         this.setState({
+        //                             claimId: event.data.ClaimID,
+        //                             showerror: true,
+        //                             claimError_Status: event.data.Encounter277CA_Status,
+        //                             Error_data: [],
+        //                             Aggrid_ClaimLineData: [],
+        //                             Aggrid_Claim_Info_data: [],
+        //                             Aggrid_ClaimStage: [],
+        //                             RefID: event.data.RefID,
+        //                             Error_Field: event.data.Error_Field,
+        //                             showMemberInfo: true,
+        //                             textbox: true,
+        //                             FileID: event.data.FileID
+
+
+        //                         })
+        //                         if (event.data.Error_Field != "") { $('#MemberInfoDialogbox').modal('show') }
+        //                         this.get_Error(event.data.ClaimID, event.data.RefID, event.data.FileID)
+        //                         this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1, event.data.MolinaClaimID)
+        //                         this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.RefID)
+        //                     }
+        //                     else if (event.colDef.headerName == "Error Description" && event.data.Error_Description) {
+        //                         this.setState({
+        //                             clickedError: event.data.Error_Description
+        //                         }, () => {
+        //                             $('#error_modal').modal('show')
+        //                         })
+
+        //                     }
+        //                 }}
+        //             >
+        //             </AgGridReact>
+        //         </div>
+        //     </div>
+        // )
     }
+
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'Molina Claims Id') {
+            this.setState({
+                claimId: event.data.ClaimID,
+                showerror: true,
+                claimError_Status: event.data.Encounter277CA_Status,
+                Error_data: [],
+                Aggrid_ClaimLineData: [],
+                Aggrid_Claim_Info_data: [],
+                Aggrid_ClaimStage: [],
+                RefID: event.data.RefID,
+                Error_Field: event.data.Error_Field,
+                showMemberInfo: true,
+                textbox: true,
+                FileID: event.data.FileID
+
+
+            })
+            if (event.data.Error_Field != "") { $('#MemberInfoDialogbox').modal('show') }
+            this.get_Error(event.data.ClaimID, event.data.RefID, event.data.FileID)
+            this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1, event.data.MolinaClaimID)
+            this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.RefID)
+        }
+        else if (event.colDef.headerName == "Error Description" && event.data.Error_Description) {
+            this.setState({
+                clickedError: event.data.Error_Description
+            }, () => {
+                $('#error_modal').modal('show')
+            })
+
+        }
+        else if (event.colDef.headerName == "835" && event.value) {
+            sessionStorage.setItem('isOutbound', false)
+            let data = [
+                {
+                    apiflag: '0',
+                    State: 'n',
+                    selectedTradingPartner: 'n',
+                    startDate: 'n',
+                    endDate: 'n',
+                    transactionId: 'n',
+                    status: 'n',
+                    count: 'n',
+                    incoming_835fileId: event.data.MolinaClaimID
+                }
+            ]
+            this.props.history.push('/' + Strings.InboundPaymentDetails, {
+                data: data
+            })
+
+            window.location.reload()
+
+        }
+    }
+
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray,
+        })
+    }
+
 
     _renderError() {
         if (this.state.Error_data == undefined) { this.state.Error_data = [] }
@@ -1560,7 +1683,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                 Filter_ClaimId={this.state.Filter_ClaimId}
                 removeGrid={true}
                 showclaimId={true}
-                isMolina={true}
+            // isMolina={true}
             />
         )
     }
