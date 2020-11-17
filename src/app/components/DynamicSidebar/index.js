@@ -111,10 +111,10 @@ export class DynamicSidebar extends React.Component {
         else if (index == 96) { name = Strings.Outbound_Claim_updated_AuditSummary }
         else if (index == 97) { name = Strings.Outbound_Claim_updated_ProcessingSummary_Kaiser }
        else if (index == 98) { name = Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser }
-        else if (index == 99) { name = Strings.Outbound_Claim_Batch_Details_837 }
-       
-        else if (index == 100) { name = Strings.Outbound_Claim_999_response_Kaiser }
-        
+        else if (index == 95) { name = Strings.Outbound_Claim_updated_FileDashboard }
+        else if (index == 123) { name = Strings.Outbound_Claim_updated_Payment }
+        else if (index == 99) { name = Strings.Outbound_Claim_Batch_Details_837 }       
+        else if (index == 100) { name = Strings.Outbound_Claim_999_response_Kaiser }        
         else if (index == 135) { name = Strings.Outbound_Claim_277CAResponse }
         else if (index == 209) { name = Strings.ClaimCustomerService_Kaiser }
         else if (index == 210) { name = Strings.Outbound_Compliance_Reporting_Claims }
