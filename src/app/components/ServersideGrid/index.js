@@ -78,7 +78,9 @@ export class ServersideGrid extends React.Component {
             this.props.CheckEFTNo != nextProps.CheckEFTNo||
             this.props.Payee != nextProps.Payee||
             this.props.clp06List != nextProps.clp06List ||
-            this.props.checkDate != nextProps.checkDate
+            this.props.checkDate != nextProps.checkDate ||
+            this.props.incoming_837fileId != nextProps.incoming_837fileId 
+            
             
 
             

@@ -319,7 +319,7 @@ export class InboundPaymentDetails extends React.Component {
                     transactionId: 'n',
                     status: 'n',
                     count: 'n',
-                    incoming_837fileId: event.value
+                    Filter_ClaimId: event.value
                 }
             ]
             this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
