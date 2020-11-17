@@ -737,7 +737,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
 
     getListData = async () => {
         let query = `{
-            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:"") {
+            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:""  ClaimID:"") {
                 FileID
                FileName_Outbound
                FileDate_Outbound
@@ -848,7 +848,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 url = Strings.Outbound_Claim_999_response_Kaiser
             } else if (item.name == '277CA Received') {
                 F99Status = 'Accepted'
-                url = Strings.Outbound_Claim_999_response_Kaiser
+                // url = Strings.Outbound_Claim_999_response_Kaiser
             }
 
             data = [
@@ -875,8 +875,10 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             let geturl = url ? url : Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser
             row.push(
                 <Tiles
+                isClickable={
+                    item.name != '277CA Received'
+                }
                     isenrollment={true}
-                    isClickable={true}
                     header_text={item.name}
                     value={item.value}
                     _data={data}

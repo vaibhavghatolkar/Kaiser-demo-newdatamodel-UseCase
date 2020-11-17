@@ -408,7 +408,7 @@ if(isOutboundPage){
                     RecType:"${recType}",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
-                       ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:""
+                       ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:"" MolinaClaimID:""
                                     
                 )  {
                     RefID

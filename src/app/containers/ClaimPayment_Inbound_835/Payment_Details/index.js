@@ -93,6 +93,7 @@ export class InboundPaymentDetails extends React.Component {
             PatientSubscriberIDList: props.location.state && props.location.state.data[0] && props.location.state.data[0].PatientSubscriberIDList  ? props.location.state.data[0].PatientSubscriberIDList : '',
             CheckEFTNo: props.location.state && props.location.state.data[0] && props.location.state.data[0].CheckEFTNo ? props.location.state.data[0].CheckEFTNo : '',
             checkDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].checkDate  ? props.location.state.data[0].checkDate : '',
+            incoming_835fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_835fileId  ? props.location.state.data[0].incoming_835fileId : '',
 
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
@@ -306,6 +307,28 @@ export class InboundPaymentDetails extends React.Component {
             })
             this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1)
         }
+        else if (event.colDef.headerName == "837" && event.value) {
+            sessionStorage.setItem('isOutbound', true)
+            let data = [
+                {
+                    apiflag: '0',
+                    State: 'n',
+                    selectedTradingPartner: 'n',
+                    startDate: 'n',
+                    endDate: 'n',
+                    transactionId: 'n',
+                    status: 'n',
+                    count: 'n',
+                    incoming_837fileId: event.value
+                }
+            ]
+            this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
+                data: data
+            })
+
+            window.location.reload()
+
+        }
     }
 
     _renderClaims = () => {
@@ -343,6 +366,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
             { headerName: "DRG Code", field: "DigonisCode", width: 120, },
+            { headerName: "837", field: "MolinaClaimID", width: 120, cellStyle: { color: '#139DC9', cursor: 'pointer' }},
         ]
 
 
@@ -359,7 +383,7 @@ export class InboundPaymentDetails extends React.Component {
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
                        CLP06:"${this.state.clp06List}"
-                       ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:""
+                       ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"" MolinaClaimID:"${this.state.incoming_835fileId}"
                 ) {
                     RefID
                     RecCount
@@ -400,6 +424,7 @@ export class InboundPaymentDetails extends React.Component {
     PatientSubscriberID
     CLP01
     DigonisCode
+    MolinaClaimID
                     }
                   }`
 
@@ -655,7 +680,7 @@ export class InboundPaymentDetails extends React.Component {
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
             CLP06:"${this.state.clp06List}"
-            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}") {
+            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:"${this.state.incoming_835fileId}") {
                 RecCount
                 FileId
                 GSID
