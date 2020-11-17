@@ -17,7 +17,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Strings from '../../../../helpers/Strings';
 import { Filters } from '../../../components/Filters';
-
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
 var val = ''
 var controller = new AbortController()
@@ -122,39 +122,9 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             BillingProviderAddress: "",
             ClaimStatus: "",
             ICDCode: "",
-            AccidentDate: "",
-
-
-            autoGroupColumnDef: {
-                headerName: 'Group',
-                minWidth: 170,
-                field: 'athlete',
-                valueGetter: function (params) {
-                    if (params.node.group) {
-                        return params.node.key;
-                    } else {
-                        return params.data[params.colDef.field];
-                    }
-                },
-                headerCheckboxSelection: true,
-                cellRenderer: 'agGroupCellRenderer',
-                cellRendererParams: { checkbox: true },
-            },
-            defaultColDef: {
-                 cellClass: 'cell-wrap-text',
-                autoHeight: true,
-                sortable: true,
-                resizable: true,
-                filter: true,
-            },
-
-
-
-           
-            rowData: [],
-            rowSelection: 'never',
-            rowGroupPanelShow: 'never',
-            pivotPanelShow: 'never',
+            AccidentDate: "",     
+        
+            rowData: [],       
             showerror: '',
             rowData: [],
             Aggrid_ClaimLineData: ''
@@ -319,7 +289,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             fileId = ""
         }
 
-        let query = `{OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}",F99Status:"",F277Status:"",,PaymentStatus:"",MolinaClaimID:"${this.state.filterClaimId}") {
+        let query = `{OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}",F99Status:"",F277Status:"",PaymentStatus:"",MolinaClaimID:"${this.state.filterClaimId}") {
             RefID
             FileID
             FileName_Outbound
@@ -374,6 +344,15 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
+    }
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray,
+        })
     }
 
     get_Error = (ClaimID, seqid, fileID) => {
@@ -1303,8 +1282,8 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             </div>
         )
     }
-
     _renderClaims() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
         let columnDefs = [
             // { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "State", field: "State", width: 80 },
@@ -1331,54 +1310,85 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             
             
         ]
-        
+        let query = `{            
+            OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}", F99Status: "", F277Status: "", PaymentStatus:"", MolinaClaimID:"", ClaimID:""
+            sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+            ){
+                RecCount
+                RefID
+                FileID
+                FileName_Outbound
+                FileDate_Outbound
+                FileStatus_Outbound
+                ClaimID
+                MolinaClaimID
+                EncounterDate
+                Encounter99_Status
+                Encounter277CA_Status
+                F999
+                F277CA
+                PaymentStatus
+                BatchName
+                BatchDate
+                BatchClaimStatus
+                BatchCreated
+                FileName_Inbound
+                FileCreated
+                Subscriber_ID
+                SubscriberLastName
+                SubscriberFirstName 
+                ClaimStatus
+                ReceivedDate835
+                
+            }
+        }`
+
         return (
-            <div>
-
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    {/* <h6 className="font-size">Encounter Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6> */}
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.claims_rowData}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'Molina Claim Id') {
-                                this.setState({
-
-                                    showerror: true,
-                                    claimError_Status: event.data.ClaimStatus,
-                                    Error_data: [],
-                                    Aggrid_ClaimLineData: [],
-                                    Aggrid_Claim_Info_data: [],
-                                    Aggrid_ClaimStage: [],
-
-                                })
-                                // this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
-                                this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1)
-                                this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.RefID)
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls._transaction837_kaiser}
+                    paginationPageSize={10}
+                    index={'OutboundEncounterProcessingSummary'}
+                    State={this.state.State}
+                    fieldType={'ClaimID'}
+                    // postData={this.postData}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    type={this.state.type}
+                    filterClaim={this.state.Filter_ClaimId}
+                    selectedFileId={this.state.selectedFileId}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                />
             </div>
         )
+
+        
     }
+
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'Molina Claim Id') {
+            this.setState({
+
+                showerror: true,
+                claimError_Status: event.data.ClaimStatus,
+                Error_data: [],
+                Aggrid_ClaimLineData: [],
+                Aggrid_Claim_Info_data: [],
+                Aggrid_ClaimStage: [],
+
+            })
+            // this.get_Error(event.data.ClaimID, event.data.ClaimRefId, event.data.FileID)
+            this.getDetails(event.data.ClaimID, event.data.FileID, event.data.RefID, "", 1)
+            this.getClaimStages(event.data.ClaimID, event.data.FileID, event.data.RefID)
+        }
+       
+    }
+ 
 
     _renderError() {
         if (this.state.Error_data == undefined) { this.state.Error_data = [] }
@@ -1841,6 +1851,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                 update={this.update}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                removeSubmitter={true}
             />
         )
     }
