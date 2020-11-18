@@ -386,6 +386,11 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             X_axis
             Y_axis
         }
+        piechart : Claim837RTClaimBarchart (Sender:"",State:"",Provider:"", StartDt :"${startDate}", EndDt : "${endDate}", ChartType: "Errorwise", Type : "", RecType: "Kaiser") {
+            X_axis
+            Y_axis
+            
+        }
         }`
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls._transaction837_kaiser, {
@@ -402,23 +407,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 let ClaimBarChart = res.data.barchart
                 let claimLabels = []
                 let second_data = this.getPieChartData(res.data.OutboundFileRejectionPieChart)
-                let pieChart = [{
-                    'X_Axis': 'Service Facility Location is not used when reporting ambulance services',
-                    'Y_Axis': "6"
-                },{
-                    'X_Axis': 'Duplicate Occurrence Span Codes not allowed on a claim',
-                    'Y_Axis': "4"
-                },
-                {
-                    'X_Axis': 'When a Diagnosis Code Pointer is 7, a Diagnosis Code in 2300/HI-072 must exist',
-                    'Y_Axis': "2"
-                },
-                {
-                    'X_Axis': 'Admission Date (DTP-01=435) was not found but was expected because this claim is for Inpatient Services',
-                    'Y_Axis': "1"
-                }
-            ]
-                let pie_data = this.getPieChartPaymentData(pieChart)
+                let pie_data = this.getPieChartPaymentData(res.data.piechart)
 
                 let count = 0
                 ClaimBarChart.forEach((d) => {
@@ -548,10 +537,10 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
     getPieChartPaymentData = (pieChart) => {
         let pieLabel = []
         let pieData = []
-       
+    
         pieChart.forEach((d) => {
-            pieLabel.push(d.X_Axis)
-            pieData.push(d.Y_Axis)
+            pieLabel.push(d.X_axis)
+            pieData.push(d.Y_axis)
         })
 
         let pie_data = {
