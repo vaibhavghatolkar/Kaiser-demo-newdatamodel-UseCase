@@ -901,36 +901,36 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             let flag = ""
             let subtittle = ""
             if (item.name == 'Revenue Code Mismatch and Name Mismatch') {
-                color = "var(--green)"
+                // color = "var(--green)"
                 flag = 1;
                 subtittle = "Revenue Code Mismatch and Name Mismatch"
 
             } else if (item.name == 'CPT Code and Charge Amount Mismatch') {
-                color = "var(--orange)"
+                // color = "var(--orange)"
                 flag = 2;
                 subtittle = "CPT Code and Charge Amount Mismatch"
-            } else if (item.name == 'Payor Name and Member Name Mismatch') {
+            } else if (item.name == 'Payer Name and Member Name Mismatch') {
 
 
                 flag = 3;
-                subtittle = "Payor Name and Member Name Mismatch"
+                subtittle = "Payer Name and Member Name Mismatch"
             }
             else if (item.name == 'Invoice Mismatch') {
 
-                color = "var(--orange)"
+                // color = "var(--orange)"
                 flag = 4;
                 subtittle = "Invoice Mismatch"
             }
             else if (item.name == '1 CPT Code sent on 837 and 2 service Lines on 835') {
 
-                color = "var(--green)"
-                flag = 5;
+                // color = "var(--green)"
+                flag = 6;
                 subtittle = "CPT Code sent on 837 and Service Lines on 835"
             }
             else if (item.name == 'Another invoice service line Payment included for this Invoice') {
 
-                color = "var(--orange)"
-                flag = 6;
+                // color = "var(--orange)"
+                flag = 8;
                 subtittle = "Another invoice service line Payment included for this Invoice"
             }
             else if (item.name == 'Invoice Out of Balance') {
@@ -941,8 +941,8 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             }
             else if (item.name == 'Repeating Service Lines in 835') {
 
-                color = "var(--orange)"
-                flag = 8;
+                // color = "var(--orange)"
+                flag = 5;
                 subtittle = "Repeating Service Lines in 835"
             }
 
@@ -965,7 +965,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         })
 
         return (
-            <div className="col-4 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col-5 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )
@@ -1006,7 +1006,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                         { header: '', },
                         { 'name': 'Revenue Code Mismatch and Name Mismatch', 'value': _condition ? _data[0].Revenue_Code_Mismatch_and_Name_Mismatch : 0, 'isClick': true },
                         { 'name': 'CPT Code and Charge Amount Mismatch', 'value': _condition ? _data[0].CPT_Code_and_Charge_Amount_Mismatch : 0, 'isClick': true },
-                        { 'name': 'Payor Name and Member Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, 'isClick': true },
+                        { 'name': 'Payer Name and Member Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, 'isClick': true },
                         { 'name': 'Invoice Mismatch', 'value': _condition ? _data[0].Invoice_Mismatch : 0, 'isClick': true },
 
                     ]

@@ -236,7 +236,8 @@ const Strings = {
     Outbound_Claim_updated_Payment_Kaiser:'Outbound_Claim_updated_Payment_Kaiser',
     ClaimCustomerService_Kaiser:'ClaimCustomerService_Kaiser',
     Outbound_Claim_updated_ProcessingSummary_Kaiser:'Outbound_Claim_updated_ProcessingSummary_Kaiser',
-    Outbound_Claim_277CAResponse_Kaiser:'Outbound_Claim_277CAResponse_Kaiser'
+    Outbound_Claim_277CAResponse_Kaiser:'Outbound_Claim_277CAResponse_Kaiser',
+    Outbound_Payment_Compare_Details:'Outbound_Payment_Compare_Details'
 // Outbound_Claim_updated_Details_837_Grid
 }
 

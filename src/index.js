@@ -163,6 +163,7 @@ import {Outbound_Claim_updated_Payment_Kaiser} from './app/containers/RealTime_E
 import {ClaimCustomerService_Kaiser} from './app/containers/RealTime_Encounter/ClaimCustomerService_Kaiser'
 import {Outbound_Claim_updated_ProcessingSummary_Kaiser} from './app/containers/RealTime_Encounter/Outbound_Claim_updated_ProcessingSummary_Kaiser'
 import {Outbound_Claim_277CAResponse_Kaiser} from './app/containers/Outbound_Claim_277CAResponse_Kaiser'
+import {Outbound_Payment_Compare_Details} from './app/containers/RealTime_Encounter/Outbound_Payment_Compare_Details'
 
 LicenseManager.setLicenseKey('CompanyName=HiPaaS Inc,LicensedApplication=HiPaaS,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=1,AssetReference=AG-007466,ExpiryDate=23_March_2021_[v2]_MTYxNjQ1NzYwMDAwMA==5449f6cc0f6b5dc99cfaad6a2982e250');
 
@@ -464,6 +465,8 @@ class PrivateRoute extends React.Component {
                                 <Route path={'/' + Strings.ClaimCustomerService_Kaiser} component={ClaimCustomerService_Kaiser} />
                                 <Route path={'/' + Strings.Outbound_Claim_updated_ProcessingSummary_Kaiser} component={Outbound_Claim_updated_ProcessingSummary_Kaiser} />
                                 <Route path={'/' + Strings.Outbound_Claim_277CAResponse_Kaiser} component={Outbound_Claim_277CAResponse_Kaiser} />
+                                <Route path={'/' + Strings.Outbound_Payment_Compare_Details} component={Outbound_Payment_Compare_Details} />
+                                
                                 
                                 {/*  for Sales demo 30545 */}
                                 <Route path={'/' + Strings.Outbound_Encounter_StatewiseTradingPartner} component={Outbound_Encounter_StatewiseTradingPartner} />
