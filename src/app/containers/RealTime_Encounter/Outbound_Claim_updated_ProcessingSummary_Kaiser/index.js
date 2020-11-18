@@ -95,21 +95,23 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                 { headerName: "Claims Date", field: "EncounterDate", width: 130, },
                 { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 140, },
                 { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width: 140 },
-                { headerName: "999", field: "F999", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "277CA", field: "F277CA", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "835 Process Id", field: "label", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } , },
-                { headerName: "835", field: "", width: 110, cellRenderer: (data) => {    
-                    if(data.data.MolinaClaimID == "000000000074457A"){ return  "10 | 2"}
-                    if(data.data.MolinaClaimID == "000000000059435"){ return  "2 | 1"}
-                    if(data.data.MolinaClaimID == "000000000059440"){ return '4 | 1'}
-                    if(data.data.MolinaClaimID == "000000000059446"){ return '4 | 1'}
-                    if(data.data.MolinaClaimID == "000000000059450"){ return '2 | 1'}
-                    if(data.data.MolinaClaimID == "000000000059460"){ return '1 | 1'}
-                    if(data.data.MolinaClaimID == "000000000059462"){ return '2 | 0'}
-                    if(data.data.MolinaClaimID == "000000000059465"){ return '2 | 0'}
-                    if(data.data.MolinaClaimID == "000000000059473"){ return '1 | 0'}
-                    if(data.data.MolinaClaimID == "000000000059478"){ return '3 | 0'}
-                  }, 
+                // { headerName: "999", field: "F999", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                // { headerName: "277CA", field: "F277CA", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+                // { headerName: "835 Process Id", field: "label", width: 170, cellStyle: { color: '#139DC9', cursor: 'pointer' } , },
+                { headerName: "835", field: "PaymentDetails", width: 110, 
+                cellStyle: { color: '#139DC9', cursor: 'pointer' } 
+                // cellRenderer: (data) => {    
+                //     if(data.data.MolinaClaimID == "000000000074457A"){ return  "10 | 2"}
+                //     if(data.data.MolinaClaimID == "000000000059435"){ return  "2 | 1"}
+                //     if(data.data.MolinaClaimID == "000000000059440"){ return '4 | 1'}
+                //     if(data.data.MolinaClaimID == "000000000059446"){ return '4 | 1'}
+                //     if(data.data.MolinaClaimID == "000000000059450"){ return '2 | 1'}
+                //     if(data.data.MolinaClaimID == "000000000059460"){ return '1 | 1'}
+                //     if(data.data.MolinaClaimID == "000000000059462"){ return '2 | 0'}
+                //     if(data.data.MolinaClaimID == "000000000059465"){ return '2 | 0'}
+                //     if(data.data.MolinaClaimID == "000000000059473"){ return '1 | 0'}
+                //     if(data.data.MolinaClaimID == "000000000059478"){ return '3 | 0'}
+                //   }, 
                 
                 },
             ],
@@ -698,7 +700,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                 this.gotoDetails()
             })
         }
-        if (event.colDef.headerName == "835 Process Id" && event.value) {
+        else if (event.colDef.headerName == "835" && event.value) {
             sessionStorage.setItem('isOutbound', false)
             let data = [
                 {
@@ -710,15 +712,15 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                     transactionId: 'n',
                     status: 'n',
                     count: 'n',
-                    incoming_fileId: event.value
+                    incoming_835fileId: event.data.MolinaClaimID
                 }
             ]
-            this.props.history.push('/' + Strings.claimPayment_835_details, {
+            this.props.history.push('/' + Strings.InboundPaymentDetails, {
                 data: data
             })
-    
+
             window.location.reload()
-    
+
         }
     }
 
@@ -769,7 +771,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                     paginationPageSize={10}
                     index={'OutboundEncounterProcessingSummary'}
                     State={this.state.State}
-                    fieldType={'ClaimID'}
+                    fieldType={'PaymentDetails'}
                     // postData={this.postData}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={this.state.startDate}
@@ -779,6 +781,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                     selectedFileId={this.state.selectedFileId}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
+                    sorting={true}
                 />
             </div>
         )

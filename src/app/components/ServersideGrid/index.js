@@ -115,7 +115,7 @@ export class ServersideGrid extends React.Component {
                 this.gridApi.showLoadingOverlay();
                 this.props.updateFields(
                     params.request.sortModel && params.request.sortModel.length > 0 ? params.request.sortModel[0].colId : (this.props.fieldType ? this.props.fieldType : ''),
-                    params.request.sortModel && params.request.sortModel.length > 0 ? params.request.sortModel[0].sort : 'desc',
+                    params.request.sortModel && params.request.sortModel.length > 0 ? params.request.sortModel[0].sort : this.props.sorting ? 'asc' : 'desc',
                     params.request.startRow,
                     params.request.endRow - 1,
                     array

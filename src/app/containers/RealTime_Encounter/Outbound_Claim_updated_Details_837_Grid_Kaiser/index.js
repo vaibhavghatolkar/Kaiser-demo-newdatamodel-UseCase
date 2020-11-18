@@ -1301,7 +1301,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                     paginationPageSize={5}
                     index={'OutboundEncounterProcessingSummary'}
                     State={this.state.State}
-                    fieldType={'ClaimID'}
+                    fieldType={'PaymentDetails'}
                     // postData={this.postData}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={this.state.startDate}
@@ -1312,6 +1312,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                     selectedFileId={this.state.selectedFileId}
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
+                    sorting={true}
                 />
             </div>
         )
