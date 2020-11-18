@@ -662,6 +662,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Check/EFT No.", field: "CheckEFTNo", width: 100 },
             { headerName: "Check/EFT Date", field: "CheckEFTDt", width: 100 },
             { headerName: "Total Bill Amount", field: "TotalBillAmount", width: 100 },
+            { headerName: "Parent File Name", field: "Parent_FileName", width: 100 },
             { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
 
         ]
@@ -701,7 +702,8 @@ export class InboundPaymentDetails extends React.Component {
                 CHECKEFTFlag
                 TotalBillAmount
                 TotalClaim
-    						PayeeNPI
+                PayeeNPI
+                Parent_FileName
             }
           }
           `
@@ -733,6 +735,7 @@ export class InboundPaymentDetails extends React.Component {
                     checkDate={this.state.checkDate}
                     claimIdData={this.state.claimIdData}
                     renderMethod={this.renderMethod}
+                    // handleColWidth={120}
                 />
             </div>
         )
