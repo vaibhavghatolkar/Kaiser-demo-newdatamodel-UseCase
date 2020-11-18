@@ -606,6 +606,7 @@ export class Payment_Split_Dashboard extends React.Component {
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "Parent File Name", field: "Parent_FileName", width: 100 },
             { headerName: "Status", field: "Status", width: 100 },
             { headerName: "Submitter", field: "Sender", width: 150 },
             { headerName: "Receiver", field: "Receiver", width: 70 },
@@ -635,6 +636,7 @@ export class Payment_Split_Dashboard extends React.Component {
                 RemittanceSentDate
                 TotalClaim
                 Status
+                Parent_FileName
             }
           }
           `
@@ -664,6 +666,7 @@ export class Payment_Split_Dashboard extends React.Component {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "Parent File Name", field: "Parent_FileName", width: 100 },
             { headerName: "Application Sender Code", field: "ApplicationSenderCode", width: 100 },
             { headerName: "Application Receiver Code", field: "ApplicationReceiverCode", width: 150 },
             { headerName: "Functional Identifier Code", field: "FunctionalIdentifierCode", width: 70 },
@@ -691,6 +694,7 @@ export class Payment_Split_Dashboard extends React.Component {
                     FunctionalIdentifierCode
                     GroupControlNumber
                     TotalClaim
+                    Parent_FileName
                  }
                }
                `
@@ -722,6 +726,7 @@ export class Payment_Split_Dashboard extends React.Component {
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
             { headerName: "File Date", field: "FileDate", width: 100 },
+            { headerName: "Parent File Name", field: "Parent_FileName", width: 100 },
             { headerName: "Status", field: "Status", width: 100 },
             { headerName: "NPI", field: "PayeeNPI", width: 100 },
             { headerName: "Payee", field: "Organization", width: 150 },
@@ -766,6 +771,7 @@ export class Payment_Split_Dashboard extends React.Component {
                         TotalBillAmount
                         TotalClaim
                         PayeeNPI
+                        Parent_FileName
                      }
                    }
                    `
