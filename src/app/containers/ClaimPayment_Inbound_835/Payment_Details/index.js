@@ -379,7 +379,7 @@ export class InboundPaymentDetails extends React.Component {
         let query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                    RecType:"${recType}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
+                    RecType:"", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
                        CLP06:"${this.state.clp06List}"
@@ -675,7 +675,7 @@ export class InboundPaymentDetails extends React.Component {
         let query = `{
             Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",
             EndDt: "${endDate}", Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
-            RecType:"${recType}",  EFTCHK:"${this.state.EFTCHK}",
+            RecType:"",  EFTCHK:"${this.state.EFTCHK}",
             ClaimID:"${this.state.claimIdData}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",

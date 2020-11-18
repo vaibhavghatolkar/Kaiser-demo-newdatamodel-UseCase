@@ -58,7 +58,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             Denide: 0,
             wip90: 0,
             orderby: '',
-            payment_status:"Paid",
+            payment_status: "Paid",
             X12Count: 0,
             Accepted_Claims: 0,
             Rejected_Claims: 0,
@@ -67,8 +67,8 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             ReconciledError_Claims: 0,
             LoadingClaims: 0,
             LoadedErrorClaims: 0,
-            stage_2:[],
-            stage_1:[],
+            stage_2: [],
+            stage_1: [],
             fileNameFlag: 180,
             fileDateFlag: 180,
             extraField2Flag: 180,
@@ -87,11 +87,12 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 // { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 // { headerName: "Encounter ID", field: "ClaimID", width: 100,},
                 { headerName: "Molina Claim ID", field: "MolinaClaimID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "State", field: "State", width: 100 ,
-                cellRenderer: (data) => {
-                    return   "FL"                
-                }
-        },
+                {
+                    headerName: "State", field: "State", width: 100,
+                    cellRenderer: (data) => {
+                        return "FL"
+                    }
+                },
                 { headerName: "Payment Status", field: "PaymentStatus", flex: 1 },
                 { headerName: "Claims Date", field: "EncounterDate", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Claims 999 Status", field: "Encounter99_Status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -243,21 +244,21 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             .then(res => {
                 let data = res.data.OutboundPaymentDashboard
                 let condition = data && data.length > 0 ? true : false
-  
+
                 let summary = [
                     { name: 'Paid', value: condition ? data[0].Paid : 0, color: '#2AC327' },
-                    { name: 'Denied', value: condition ? data[0].Denied : 0 , color: 'red'},
+                    { name: 'Denied', value: condition ? data[0].Denied : 0, color: 'red' },
                     // { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
                     { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0, color: '#F39C12' },
                     { name: 'WIP 0-30', value: 500, color: '#1DA3CD' },
                     { name: 'WIP 30-60', value: 350, color: '#1DA3CD' },
-                    { name: 'WIP >60', value:430 , color: '#1DA3CD'},
-                 
+                    { name: 'WIP >60', value: 430, color: '#1DA3CD' },
+
                 ]
 
                 this.setState({
                     summary: summary,
-                    showtable:true,
+                    showtable: true,
                 })
             })
             .catch(err => {
@@ -507,7 +508,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             // { header: '277 CA', value: this.state.Total277CA, style: "red summary-title" },
             { header: 'Pending', value: this.state.Pending, style: "orange summary-title" },
             { header: 'Paid', value: this.state.Paid },
-     
+
         ]
 
         let row = []
@@ -624,46 +625,46 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         let row = []
         array.forEach(item => {
             row.push(
-                <Tiles 
-                isClickable={
-                    item.name != 'WIP 0-30' &&
-                    item.name != 'WIP 30-60'  &&  item.name != 'WIP >60'
+                <Tiles
+                    isClickable={
+                        item.name != 'WIP 0-30' &&
+                        item.name != 'WIP 30-60' && item.name != 'WIP >60'
 
-                }
-                 header_text={item.name}
-                value={item.value} 
-                count_color={item.color}
-                differentTile={true}
-                onClick={() => {                 
-                          if (item.name == 'Paid') {
-                            this.setState({   
-                                payment_status:"Paid" , 
-                                rowData:[]               
-                            }, () => { 
-                             this.getData()
-                             })
-                            }
-                           
+                    }
+                    header_text={item.name}
+                    value={item.value}
+                    count_color={item.color}
+                    differentTile={true}
+                    onClick={() => {
+                        if (item.name == 'Paid') {
+                            this.setState({
+                                payment_status: "Paid",
+                                rowData: []
+                            }, () => {
+                                this.getData()
+                            })
+                        }
+
                         else if (item.name == 'Denied') {
-                            this.setState({   
-                                payment_status:"Denied" ,
-                                rowData:[]                  
-                            }, () => { 
-                             this.getData()
-                             })
-                            }
-                            else if (item.name == 'Payment Adjustment') {
-                                this.setState({   
-                                    payment_status:"Payment Adjustment" ,
-                                    rowData:[]                  
-                                }, () => { 
-                                 this.getData()
-                                 })
-                                }
-                           
-                 
-                }}       
-      />
+                            this.setState({
+                                payment_status: "Denied",
+                                rowData: []
+                            }, () => {
+                                this.getData()
+                            })
+                        }
+                        else if (item.name == 'Payment Adjustment') {
+                            this.setState({
+                                payment_status: "Payment Adjustment",
+                                rowData: []
+                            }, () => {
+                                this.getData()
+                            })
+                        }
+
+
+                    }}
+                />
 
             )
         });
@@ -790,56 +791,62 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         let type = this.state.type ? this.state.type : ''
 
         array.forEach(item => {
-            let addon = ''
-            let claimStatus = ''
-            let subtitle = ''
-            let availitySent = ''
             let color = "var(--main-bg-color)"
-            let Status = ''
-            let url = Strings.Outbound_Claim_Batch_Click_Details
-            let Audit = ''
-            let inDHS = ''
-            let Add = ''
-            let inQnxt = ''
-            let flag = ''
-            let MonthlyStatus = ""
-            let status=""
-            if (item.name == 'Corrected Patient/Insured Name') {
-                  color = "var(--green)"
-                  claimStatus="Corrected Patient/Insured Name"
-                  status="patient"
-            } else if (item.name == 'Corrected Priority Payer Name') {
-                claimStatus = 'Corrected Priority Payer Name'
-                status="icd"
-                 color = "var(--main-bg-color)"
-            } else if (item.name == 'Corrected ICD Code') {
-                claimStatus="Corrected ICD Code"
-                status="payer"
+            let url = Strings.Outbound_Payment_Compare_Details
+
+            let flag = ""
+            let subtittle = ""
+            if (item.name == 'Revenue Code Mismatch and Name Mismatch') {
+                color = "var(--green)"
+                flag = 1;
+                subtittle = "Revenue Code Mismatch and Name Mismatch"
+
+            } else if (item.name == 'CPT Code and Charge Amount Mismatch') {
                 color = "var(--orange)"
+                flag = 2;
+                subtittle = "CPT Code and Charge Amount Mismatch"
+            } else if (item.name == 'Payor Name and Member Name Mismatch') {
+
+               
+                flag = 3;
+                subtittle = "Payor Name and Member Name Mismatch"
+            }
+            else if (item.name == 'Invoice Mismatch') {
+
+                color = "var(--orange)"
+                flag = 4;
+                subtittle = "Invoice Mismatch"
+            }
+            else if (item.name == '1 CPT Code sent on 837 and 2 service Lines on 835') {
+
+                color = "var(--green)"
+                flag = 5;
+                subtittle = "CPT Code sent on 837 and Service Lines on 835"
+            }
+            else if (item.name == 'Another invoice service line Payment included for this Invoice') {
+
+                color = "var(--orange)"
+                flag = 6;
+                subtittle = "Another invoice service line Payment included for this Invoice"
+            }
+            else if (item.name == 'Invoice Out of Balance') {
+
+               
+                flag = 7;
+                subtittle = "Invoice Out of Balance"
+            }
+            else if (item.name == 'Repeating Service Lines in 835') {
+
+                color = "var(--orange)"
+                flag = 8;
+                subtittle = "Repeating Service Lines in 835"
             }
 
             let sendData = [
                 {
-                    flag: addon,
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    transactionId: 'n',
-                    status: Status,
-                    claimStatus: claimStatus,
-                    MaintenanceCode: claimStatus,
-                    type: type,
-                    subtitle: subtitle,
-                    availitySent: availitySent,
-                    incoming_fileId: this.state.selected_FileID,
-                    Audit: Audit,
-                    inDHS: inDHS,
-                    Add: Add,
                     flag: flag,
-                    inQnxt: inQnxt,
-                    MonthlyStatus: MonthlyStatus
-                },
+                    subtittle: subtittle,
+                 },
             ]
 
             row.push(
@@ -860,7 +867,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         )
     }
 
- 
+
     render_Outbound_ClaimDetails = () => {
         let query = `{
             OutboundClaimsPaymentMissmatchCount  {
@@ -889,21 +896,23 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 if (res.data) {
                     let _data = res.data.OutboundClaimsPaymentMissmatchCount
                     let _condition = _data && _data.length > 0 ? true : false
-                    
+
                     let stage_1 = [
                         { header: '', },
-                        { 'name': 'Another invoice service line Payment included for this Invoice', 'value': _condition ? _data[0].Another_invoice_service_line_Payment : 0,  },
-                        { 'name': 'Invoice Out of Balance', 'value': _condition ? _data[0].Invoice_Out_of_Balance : 0,},
-                        { 'name': '1 CPT Code sent on 837 and 2 service Lines on 835', 'value': _condition ? _data[0].CPT_Code_sent_on_837_and_2_service_Lines : 0,  },
-                        { 'name': 'Repeating Service Lines in 835', 'value': _condition ? _data[0].Repeating_Service_Lines_in_835 : 0,  },
-                   ]
-                   let stage_2 = [
-                    { header: '', },
-                    { 'name': 'Invoice Mismatch', 'value': _condition ? _data[0].Invoice_Mismatch : 0,  },
-                    { 'name': 'Payor Name and Member Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, },
-                    { 'name': 'CPT Code and Charge Amount Mismatch', 'value': _condition ? _data[0].CPT_Code_and_Charge_Amount_Mismatch : 0,  },
-                    { 'name': 'Revenue Code Mismatch and Name Mismatch', 'value': _condition ? _data[0].Revenue_Code_Mismatch_and_Name_Mismatch : 0,  },
-               ]
+                        { 'name': 'Revenue Code Mismatch and Name Mismatch', 'value': _condition ? _data[0].Revenue_Code_Mismatch_and_Name_Mismatch : 0, 'isClick': true },
+                        { 'name': 'CPT Code and Charge Amount Mismatch', 'value': _condition ? _data[0].CPT_Code_and_Charge_Amount_Mismatch : 0, 'isClick': true },
+                        { 'name': 'Payor Name and Member Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, 'isClick': true },
+                        { 'name': 'Invoice Mismatch', 'value': _condition ? _data[0].Invoice_Mismatch : 0, 'isClick': true },
+
+                    ]
+                    let stage_2 = [
+                        { header: '', },
+                        { 'name': '1 CPT Code sent on 837 and 2 service Lines on 835', 'value': _condition ? _data[0].CPT_Code_sent_on_837_and_2_service_Lines : 0, 'isClick': true },
+                        { 'name': 'Another invoice service line Payment included for this Invoice', 'value': _condition ? _data[0].Another_invoice_service_line_Payment : 0, 'isClick': true },
+                        { 'name': 'Invoice Out of Balance', 'value': _condition ? _data[0].Invoice_Out_of_Balance : 0, 'isClick': true },
+
+                        { 'name': 'Repeating Service Lines in 835', 'value': _condition ? _data[0].Repeating_Service_Lines_in_835 : 0, 'isClick': true },
+                    ]
                     this.setState({
                         stage_1: stage_1,
                         stage_2: stage_2,
@@ -913,8 +922,8 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             .catch(err => {
                 process.env.NODE_ENV == 'development' && console.log(err)
             });
-    
-       
+
+
 
 
 
@@ -922,8 +931,8 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             <div className="row" style={{ marginBottom: '12px' }}>
                 {this._render_Outbound_Claim_Table(this.state.stage_1)}
                 {this._render_Outbound_Claim_Table(this.state.stage_2)}
-         
-              
+
+
             </div>
         )
     }
@@ -934,7 +943,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 {this._renderTopbar()}
                 {this._renderSummary(this.state.summary)}
                 {/* <h6 style={{ marginTop: '20px', color: "#424242", flex: 1 }}></h6> */}
-                <label className="general-header" style={{fontSize:"16px"}}>Difference Between 837 And 835</label>
+                <label className="general-header" style={{ fontSize: "16px" }}>Difference Between 837 And 835</label>
                 { this.render_Outbound_ClaimDetails()}
                 { this._renderTransactions()}
             </div>
