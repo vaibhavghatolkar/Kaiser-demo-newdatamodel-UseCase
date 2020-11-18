@@ -1165,7 +1165,17 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
-            { headerName: "Payer", field: "", width: 140, cellRenderer: (data) => { return 'Anthem Blue Cross' } },
+            { headerName: "Payer", field: "", width: 140, cellRenderer: (data) => { return 'Anthem Blue Cross'
+                // if(data.data.FileID == "4409587027123631357"){ return 'KFHP 1000'}
+                // if(data.data.FileID == "2286167938954787192"){ return 'LOS ANGELES COUNTY EMPLOYEES RETIREMENT ASSOC LA COUNTY EMPL'} 
+                // if(data.data.FileID == "7200559299812942294"){ return 'KP UNION FONTANA 7600 LOCAL 7600 STEELWORKERS'} 
+                // if(data.data.FileID == "6689070622461993197"){ return 'TEAMSTERS AND FOOD EMPLOYERS SECURITY TRUST FUND TEAMSTERS'} 
+                // if(data.data.FileID == "2748280693834025238"){ return ''} 
+                // if(data.data.FileID == "589014246074936870"){ return ''} 
+                // if(data.data.FileID == "2039039313281243917"){ return ''} 
+                // if(data.data.FileID == "8609211606044606177"){ return ''} 
+
+            } },
             { headerName: "Total Claims", field: "TotalEncounterSent", width: 100 },
             { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]

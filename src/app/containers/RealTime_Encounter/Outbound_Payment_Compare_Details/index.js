@@ -149,7 +149,7 @@ export class Outbound_Payment_Compare_Details extends React.Component {
             {'fileId':"2286167938954787192", 'fileName':"UseCase2-209CMS1500_COMM_837P_V5010_143184_P091141089861_P09114257786.txt.ediclean_20201106-150108.txt", 'fileDate':"2020-11-17T06:07:15.108Z", 'ClaimId':"P091141089861", 'ClaimDate':"2020-11-17T06:07:15.108Z", 'PaymentStatus':"", '837':"X3936", '835':"Z3936", '837Service':"LX*1~SV1*HC>X3936*119*UN*1***1~DTP*472*D8*20200717~REF*6R*P0911410898611~SVD*1000*88*HC>X3936**1~CAS*CO*45*11~CAS*PR*3*20~DTP*573*D8*20200724~AMT*EAF*20~", '835Service':"SVC*HC>Z3936*1190*0**1~", 'ChargeAmount837':"119", 'ChargeAmount835':"1190"	 },
             
         ]: this.state.Flag == "3" ? [
-            {'fileId':"7200559299812942294", 'fileName':"UseCase3-212CMS1500_COMM_837P_V5010_P12860474521_123783.txt.ediclean_20201109-145007.DEID", 'fileDate':"2020-11-17T06:10:30.050Z", 'ClaimId':"P12860474521", 'ClaimDate':"2020-11-17T06:10:30.050Z", 'PaymentStatus':"", '837':"KP MEDICARE", '835':"HEALTH ADMIN CENTER" },
+            {'fileId':"7200559299812942294", 'fileName':"UseCase3-212CMS1500_COMM_837P_V5010_P12860474521_123783.txt.ediclean_20201109-145007.DEID", 'fileDate':"2020-11-17T06:10:30.050Z", 'ClaimId':"P12860474521", 'ClaimDate':"2020-11-17T06:10:30.050Z", 'PaymentStatus':"", '837':"CIGNA", '835':"HEALTH ADMIN CENTER" },
             
         ]: this.state.Flag == "4" ? [
             {'fileId':"6689070622461993197", 'fileName':"UseCase4-112UB04_SFHH_837I_V5010_176515_SF_HB.txt.ediclean_20201106-150055_H1222867100.txt", 'fileDate':"2020-11-17T06:11:58.726Z", 'ClaimId':"H12228697500", 'ClaimDate':"2020-11-17T06:11:58.726Z", 'PaymentStatus':"", '837':"H12228697500", '835':"H12228m97500", },
