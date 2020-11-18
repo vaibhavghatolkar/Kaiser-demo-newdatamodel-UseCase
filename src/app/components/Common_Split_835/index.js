@@ -110,7 +110,7 @@ export class Common_Split_835 extends React.Component {
         if (isOutbound) {
             query = `{
             
-        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
           TotalCount
           Rejected
           Accepted
@@ -119,14 +119,14 @@ export class Common_Split_835 extends React.Component {
           EFT
           CHK
         }
-        Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+        Total999Response835(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
             Total999
         }
 }`
         } else {
             query = `{
             
-        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
           TotalCount
           Rejected
           Accepted
@@ -520,13 +520,13 @@ export class Common_Split_835 extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
         let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
 
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
                   Accepted
                   Rejected
                   FileReject
@@ -599,12 +599,12 @@ export class Common_Split_835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
                     Accepted
                     Rejected
                     FileReject
@@ -612,10 +612,10 @@ export class Common_Split_835 extends React.Component {
                     TotalError
                     TotalException
               }
-              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
                 Check
           }
-          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "Split") {
+          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
             EFT
       }
         }`
