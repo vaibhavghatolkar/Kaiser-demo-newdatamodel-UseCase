@@ -71,8 +71,8 @@ export class Outbound_Payment_Compare_Details extends React.Component {
             { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
             { headerName: "837 Revenue Code", field: "837", width:200 },
             { headerName: "835 Revenue Code", field: "835", width:200 },
-            { headerName: "837 Service Lines", field: "837Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 Service Lines", field: "835Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} }
+            { headerName: "837 Service Lines", field: "837Service", width:350,  },
+            { headerName: "835 Service Lines", field: "835Service", width:200,  }
         ]: this.state.Flag=="2" ? [  
             { headerName: "File Name", field: "fileName", width: 170, },
             { headerName: "File Date", field: "fileDate", width:130 },          
@@ -81,10 +81,10 @@ export class Outbound_Payment_Compare_Details extends React.Component {
             { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
             { headerName: "837 CPT Code", field: "837", width:200 },
             { headerName: "835 CPT Code", field: "835", width:200 },
-            { headerName: "837 Charge Amount", field: "ChargeAmount837", width:200 },
-            { headerName: "835 Charge Amount", field: "ChargeAmount835", width:200 },
-            { headerName: "837 Service Lines", field: "837Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 Service Lines", field: "835Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
+            { headerName: "837 Charge Amount", field: "ChargeAmount837", width:180 },
+            { headerName: "835 Charge Amount", field: "ChargeAmount835", width:180 },
+            { headerName: "837 Service Lines", field: "837Service", width:350,  },
+            { headerName: "835 Service Lines", field: "835Service", width:200,  },
             
         ] : this.state.Flag=="3" ? [  
             { headerName: "File Name", field: "fileName", width: 130 },
@@ -113,33 +113,33 @@ export class Outbound_Payment_Compare_Details extends React.Component {
             { headerName: "Claims ID", field: "ClaimId", width: 150,  },
             { headerName: "Claims Date", field: "ClaimDate", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:150 },
-            { headerName: "837 Service Lines", field: "837Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 Service Lines", field: "835Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} }
+            { headerName: "837 Service Lines", field: "837Service", width:350,  },
+            { headerName: "835 Service Lines", field: "835Service", width:350,  }
         ] : this.state.Flag=="6" ? [  
             { headerName: "File Name", field: "fileName", width: 130 },
             { headerName: "File Date", field: "fileDate", width:130 },          
             { headerName: "Claims ID", field: "ClaimId", width: 150,  },
             { headerName: "Claims Date", field: "ClaimDate", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:150 },
-            { headerName: "837 Service Lines", field: "837", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 Service Lines", field: "835", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} }
+            { headerName: "837 Service Lines", field: "837", width:350,  },
+            { headerName: "835 Service Lines", field: "835", width:350,  }
         ] : this.state.Flag=="8" ? [  
             { headerName: "File Name", field: "fileName", width: 130 },
             { headerName: "File Date", field: "fileDate", width:130 },          
             { headerName: "Claims ID", field: "ClaimId", width: 150,  },
             { headerName: "Claims Date", field: "ClaimDate", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:150 },
-            { headerName: "837 Service Lines", field: "837Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 Service Lines", field: "835Service", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} }
+            { headerName: "837 Service Lines", field: "837Service", width:350,  },
+            { headerName: "835 Service Lines", field: "835Service", width:350,  }
         ] : this.state.Flag=="7" ? [  
             { headerName: "File Name", field: "fileName", width: 130 },
             { headerName: "File Date", field: "fileDate", width:130 },          
             { headerName: "Claims ID", field: "ClaimId", width: 150,  },
             { headerName: "Claims Date", field: "ClaimDate", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:150 },
-            { headerName: "837 CLM Segment", field: "CLMSegement837", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 Service Lines", field: "Serviceline835", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
-            { headerName: "835 CLP Segement", field: "CLPSegemnt835", width:200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',} },
+            { headerName: "837 CLM Segment", field: "CLMSegement837", width:300,  },
+            { headerName: "835 Service Lines", field: "Serviceline835", width:200,  },
+            { headerName: "835 CLP Segement", field: "CLPSegemnt835", width:350,  },
         ] : null
 
         let CompareData = this.state.Flag == "1" ? [
