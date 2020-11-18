@@ -1313,7 +1313,8 @@ export class ClaimCustomerService_Kaiser extends React.Component {
         let query = `{            
             OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}", F99Status: "", F277Status: "", PaymentStatus:"", MolinaClaimID:"", ClaimID:""
             sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},ClaimStatus:""
+
             ){
                 RecCount
                 RefID

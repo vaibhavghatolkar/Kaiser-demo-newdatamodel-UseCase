@@ -26,7 +26,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
     constructor(props) {
         super(props);
-        console.log("sssssssssss", props.location.state.data[0].Filter_ClaimId)
+        console.log("sssssssssss", props.location.state.data[0].status)
         let condition = props.location.state && props.location.state.data
         this.state = {
             intakeClaims: [],
@@ -217,7 +217,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
 
         let query = `{            
-            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}" ClaimID:"${this.state.incoming_837fileId}") {
+            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}" ClaimID:"${this.state.incoming_837fileId}"  ClaimStatus:"${this.state.claimStatus}") {
              FileID
             FileName_Outbound
             FileDate_Outbound
@@ -1269,7 +1269,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         let query = `{            
             OutboundEncounterProcessingSummary(FileID: "` + this.state.selectedFileId + `" , F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}", PaymentStatus:"", MolinaClaimID:"${this.state.Filter_ClaimId}", ClaimID:"${this.state.incoming_837fileId}"
             sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter}, ClaimStatus:"${this.state.claimStatus}"
             ){
                 RecCount
                 FileID

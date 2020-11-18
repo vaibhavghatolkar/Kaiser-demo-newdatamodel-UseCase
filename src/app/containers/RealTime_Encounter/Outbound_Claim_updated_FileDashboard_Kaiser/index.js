@@ -229,9 +229,9 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 ]
 
                 let stage_6 = [
-                    { 'name': '277CA Accepted', 'value': _condition ? _data[0].Accepted277CA : 0, isClick: true },
-                    { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, isClick: true },
-                    { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, isClick: true },
+                    { 'name': '277CA Accepted', 'value': _condition ? _data[0].Accepted277CA : 0, color : '#2AC327'  },
+                    { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, color : '#FF3B41' },
+                    { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, color : '#139DC9' },
                 ]
                 let stage_7 = [
                     { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color : '#2AC327'  },
@@ -508,7 +508,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         } else if (header == 'Top 10 Claim Payment Errors') {
            
             addon = '/reject'
-            generalStatus = 'Rejected'
+            claimStatus = 'Rejected'
         }
 
         let sendData = [
@@ -530,7 +530,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 header={header}
                 piechart_data={piechart_data}
                 data={sendData}
-                // onClick={this.gotoClaimDetails}
+                onClick={this.gotoClaimDetails}
             />
         )
     }
@@ -716,7 +716,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
 
     getListData = async () => {
         let query = `{
-            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:""  ClaimID:"") {
+            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:""  ClaimID:"" ClaimStatus:"") {
                 FileID
                FileName_Outbound
                FileDate_Outbound
@@ -819,14 +819,14 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             let noApiFlag = false
 
             if (item.name == '999 Accepted') {
-                F99Status = 'Accepted'
+                claimStatus = 'Accepted'
                 url = Strings.Outbound_Claim_999_response_Kaiser
             } else if (item.name == '999 Rejected') {
-                F99Status = 'Rejected'
+                claimStatus = 'Rejected'
                 noApiFlag = true
                 url = Strings.Outbound_Claim_999_response_Kaiser
             } else if (item.name == '277CA Received') {
-                F99Status = 'Accepted'
+                // F99Status = 'Accepted'
                 // url = Strings.Outbound_Claim_999_response_Kaiser
             }
 
@@ -901,17 +901,14 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             if (item.name == 'X12 Claim Count') {
                 color = "var(--green)"
             } else if (item.name == '999 Accepted') {
-                F99Status = 'Accepted'
+                claimStatus = 'Accepted'
                 color = "var(--green)"
             } else if (item.name == '999 Rejected') {
-                F99Status = 'Rejected'
+                claimStatus = 'Rejected'
             } else if (item.name == '277CA Accepted') {
-                F277Status = 'Accepted'
                 color = "var(--green)"
             } else if (item.name == '277CA Rejected') {
-                F277Status = 'Rejected'
             } else if (item.name == 'Resubmit') {
-                F277Status = 'Resubmit'
                 color = "var(--green)"
             }
             // else if (item.name == 'X12 Claim Line Item Count') {
