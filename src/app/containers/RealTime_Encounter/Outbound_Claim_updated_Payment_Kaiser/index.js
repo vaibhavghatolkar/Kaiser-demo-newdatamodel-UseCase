@@ -793,7 +793,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         let query = `{            
             OutboundEncounterProcessingSummary(FileID:"${this.state.file_id}", F99Status:"", F277Status:"", PaymentStatus:"${this.state.payment_status}", MolinaClaimID:"", ClaimID:""
             sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter},
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter}, ClaimStatus:""
             ){
                 RecCount
                 FileID
