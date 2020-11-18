@@ -502,10 +502,11 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         let loadStatus = ''
         let generalStatus = ''
 
-        if (header == 'Top 10 File Level Errors') {
+        if (header == 'Top 10 Claim Rejected Errors') {
             addon = '/accept'
             claimStatus = 'Rejected'
-        } else if (header == 'Top 10 Claim Rejected Errors') {
+        } else if (header == 'Top 10 Claim Payment Errors') {
+           
             addon = '/reject'
             generalStatus = 'Rejected'
         }
@@ -529,7 +530,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 header={header}
                 piechart_data={piechart_data}
                 data={sendData}
-                onClick={this.gotoClaimDetails}
+                // onClick={this.gotoClaimDetails}
             />
         )
     }
@@ -682,6 +683,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
  
 
     gotoClaimDetails = (data) => {
+        console.log("data",data)
         let sendData = []
         if (data && data.length > 0) {
             sendData = data
@@ -692,19 +694,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             let State = this.state.State ? this.state.State : 'n'
             let type = this.state.type ? this.state.type : ''
 
-            sendData = [
-                {
-                    flag: '',
-                    State: State,
-                    selectedTradingPartner: selectedTradingPartner,
-                    startDate: startDate,
-                    endDate: endDate,
-                    status: "",
-                    type: type,
-                    incoming_fileId: this.state.incoming_fileId,
-
-                },
-            ]
+          
         }
 
         this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
