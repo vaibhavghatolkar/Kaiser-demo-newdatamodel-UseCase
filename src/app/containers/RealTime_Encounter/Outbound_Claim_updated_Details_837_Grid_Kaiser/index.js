@@ -168,7 +168,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     }
 
     componentDidMount() {
-        this.getData()
+        // this.getData()
         // this.getListData()
         this.getIcdCode()
     }
@@ -206,68 +206,68 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             });
     }
 
-    getData = () => {
-        let count = 1
-        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
-        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
-        let providerName = this.state.providerName
-        if (!providerName) {
-            providerName = ''
-        }
+    // getData = () => {
+    //     let count = 1
+    //     let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+    //     let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+    //     let providerName = this.state.providerName
+    //     if (!providerName) {
+    //         providerName = ''
+    //     }
 
 
-        let query = `{            
-            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}" ClaimID:"${this.state.incoming_837fileId}"  ClaimStatus:"${this.state.claimStatus}") {
-             FileID
-            FileName_Outbound
-            FileDate_Outbound
-            FileStatus_Outbound
-            TotalEncounterSent
-            Rejected_277CA
-           }
-       }`
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._transaction837_kaiser, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                let data = res.data.OutboundClaimsFileDetails
-                if (res && res.data && res.data.OutboundClaimsFileDetails) {
+    //     let query = `{            
+    //         OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}" ClaimID:"${this.state.incoming_837fileId}"  ClaimStatus:"${this.state.claimStatus}") {
+    //          FileID
+    //         FileName_Outbound
+    //         FileDate_Outbound
+    //         FileStatus_Outbound
+    //         TotalEncounterSent
+    //         Rejected_277CA
+    //        }
+    //    }`
+    //     if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+    //     fetch(Urls._transaction837_kaiser, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json',
+    //         },
+    //         body: JSON.stringify({ query: query })
+    //     })
+    //         .then(res => res.json())
+    //         .then(res => {
+    //             let data = res.data.OutboundClaimsFileDetails
+    //             if (res && res.data && res.data.OutboundClaimsFileDetails) {
 
-                    if (res.data.OutboundClaimsFileDetails.length > 0) {
+    //                 if (res.data.OutboundClaimsFileDetails.length > 0) {
 
-                        count = Math.floor(res.data.OutboundClaimsFileDetails[0].RecCount / 10)
-                        if (res.data.OutboundClaimsFileDetails[0].RecCount % 10 > 0) {
-                            count = count + 1
-                        }
-                        this.setState.recount = count;
-                    }
+    //                     count = Math.floor(res.data.OutboundClaimsFileDetails[0].RecCount / 10)
+    //                     if (res.data.OutboundClaimsFileDetails[0].RecCount % 10 > 0) {
+    //                         count = count + 1
+    //                     }
+    //                     this.setState.recount = count;
+    //                 }
 
-                    this.setState({
-                        rowData: this.state.gridType == 1 ? res.data.OutboundClaimsFileDetails : [],
-                        Ag_grid_FileName: data && data.length > 0 ? data[0].FileName_Outbound : '',
-                        Ag_grid_fileDate: (data && data.length > 0 && moment(data[0].FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(data[0].FileDateTime).format('YYYY-MM-DD') : '',
-                        selectedFileId: data && data.length > 0 ? data[0].FileID : '',
-                        intakeClaims: res.data.OutboundClaimsFileDetails,
-                        recount: count,
-                        showClaims: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? true : false,
-                        fileId: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? res.data.OutboundClaimsFileDetails[0].FileID : ''
-                    }, () => {
-                        this._renderClaims(this.state.fileId)
-                        this.sortData()
-                    })
-                }
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
+    //                 this.setState({
+    //                     rowData: this.state.gridType == 1 ? res.data.OutboundClaimsFileDetails : [],
+    //                     Ag_grid_FileName: data && data.length > 0 ? data[0].FileName_Outbound : '',
+    //                     Ag_grid_fileDate: (data && data.length > 0 && moment(data[0].FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(data[0].FileDateTime).format('YYYY-MM-DD') : '',
+    //                     selectedFileId: data && data.length > 0 ? data[0].FileID : '',
+    //                     intakeClaims: res.data.OutboundClaimsFileDetails,
+    //                     recount: count,
+    //                     showClaims: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? true : false,
+    //                     fileId: res.data.OutboundClaimsFileDetails && res.data.OutboundClaimsFileDetails.length > 0 ? res.data.OutboundClaimsFileDetails[0].FileID : ''
+    //                 }, () => {
+    //                     this._renderClaims(this.state.fileId)
+    //                     this.sortData()
+    //                 })
+    //             }
+    //         })
+    //         .catch(err => {
+    //             process.env.NODE_ENV == 'development' && console.log(err)
+    //         });
+    // }
 
 
     ChangeVal(event, key) {
@@ -901,7 +901,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             [key]: rotation == 0 ? 180 : 0
         })
         setTimeout(() => {
-            this.getData()
+            // this.getData()
         }, 50);
     }
 
@@ -1121,7 +1121,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         })
 
         setTimeout(() => {
-            this.getData()
+            // this.getData()
         }, 50);
     }
 
@@ -1153,6 +1153,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     }
 
     _renderList = () => {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
@@ -1165,74 +1166,150 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
-            { headerName: "Payer", field: "", width: 140, cellRenderer: (data) => { return 'Anthem Blue Cross'
-                // if(data.data.FileID == "4409587027123631357"){ return 'KFHP 1000'}
-                // if(data.data.FileID == "2286167938954787192"){ return 'LOS ANGELES COUNTY EMPLOYEES RETIREMENT ASSOC LA COUNTY EMPL'} 
-                // if(data.data.FileID == "7200559299812942294"){ return 'KP UNION FONTANA 7600 LOCAL 7600 STEELWORKERS'} 
-                // if(data.data.FileID == "6689070622461993197"){ return 'TEAMSTERS AND FOOD EMPLOYERS SECURITY TRUST FUND TEAMSTERS'} 
-                // if(data.data.FileID == "2748280693834025238"){ return ''} 
-                // if(data.data.FileID == "589014246074936870"){ return ''} 
-                // if(data.data.FileID == "2039039313281243917"){ return ''} 
-                // if(data.data.FileID == "8609211606044606177"){ return ''} 
+            {
+                headerName: "Payer", field: "", width: 140, cellRenderer: (data) => {
+                    return 'Anthem Blue Cross'
+                    // if(data.data.FileID == "4409587027123631357"){ return 'KFHP 1000'}
+                    // if(data.data.FileID == "2286167938954787192"){ return 'LOS ANGELES COUNTY EMPLOYEES RETIREMENT ASSOC LA COUNTY EMPL'} 
+                    // if(data.data.FileID == "7200559299812942294"){ return 'KP UNION FONTANA 7600 LOCAL 7600 STEELWORKERS'} 
+                    // if(data.data.FileID == "6689070622461993197"){ return 'TEAMSTERS AND FOOD EMPLOYERS SECURITY TRUST FUND TEAMSTERS'} 
+                    // if(data.data.FileID == "2748280693834025238"){ return ''} 
+                    // if(data.data.FileID == "589014246074936870"){ return ''} 
+                    // if(data.data.FileID == "2039039313281243917"){ return ''} 
+                    // if(data.data.FileID == "8609211606044606177"){ return ''} 
 
-            } },
+                }
+            },
             { headerName: "Total Claims", field: "TotalEncounterSent", width: 100 },
             { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
 
+        let query = `{            
+            OutboundClaimsFileDetails(FileID :"${this.state.FileID}", F99Status :"${this.state.F99Status}",F277Status:"${this.state.F277Status}",MolinaClaimID:"${this.state.Filter_ClaimId}" ClaimID:"${this.state.incoming_837fileId}"  ClaimStatus:"${this.state.claimStatus}"
+            sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter}, 
+            ){
+                FileID
+                FileName_Outbound
+                FileDate_Outbound
+                FileStatus_Outbound
+                TotalEncounterSent
+                Rejected_277CA
+                RecCount
+            }
+        }`
 
         return (
-            <div>
-
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.rowData}
-                        icons={this.state.icons}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'File Name') {
-
-                                this.setState({
-                                    showClaims: true,
-                                    showerror: false,
-                                    claims_rowData: [],
-                                    Ag_grid_FileName: event.data.FileName_Outbound,
-                                    Ag_grid_fileDate: (moment(event.data.FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(event.data.FileDateTime).format('YYYY-MM-DD') : '',
-                                    selectedFileId: event.data.FileID
-                                }, () => {
-                                    // this._renderClaims(event.data.FileID)
-                                })
-                            } else if (event.colDef.headerName == "Error Description" && event.data.FileLevelError) {
-                                this.setState({
-                                    clickedError: event.data.FileLevelError
-                                }, () => {
-                                    $('#error_modal').modal('show')
-                                })
-
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                {/* <h6 className="font-size">Claims Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6> */}
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls._transaction837_kaiser}
+                    paginationPageSize={5}
+                    index={'OutboundClaimsFileDetails'}
+                    State={this.state.State}
+                    fieldType={'FileDate_Outbound'}
+                    postData={this.postData}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    type={this.state.type}
+                    filterClaim={this.state.Filter_ClaimId}
+                    incoming_837fileId={this.state.incoming_837fileId}
+                    // selectedFileId={this.state.selectedFileId}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation1}
+                />
             </div>
         )
+
+
+
+        // return (
+        //     <div>
+
+        //         <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+        //             <AgGridReact
+        //                 modules={this.state.modules}
+        //                 columnDefs={columnDefs}
+        //                 autoGroupColumnDef={this.state.autoGroupColumnDef}
+        //                 defaultColDef={this.state.defaultColDef}
+        //                 suppressRowClickSelection={true}
+        //                 groupSelectsChildren={true}
+        //                 debug={true}
+        //                 rowSelection={this.state.rowSelection}
+        //                 rowGroupPanelShow={this.state.rowGroupPanelShow}
+        //                 pivotPanelShow={this.state.pivotPanelShow}
+        //                 enableRangeSelection={true}
+        //                 paginationAutoPageSize={false}
+        //                 pagination={true}
+        //                 domLayout={this.state.domLayout}
+        //                 paginationPageSize={this.state.paginationPageSize}
+        //                 onGridReady={this.onGridReady}
+        //                 rowData={this.state.rowData}
+        //                 icons={this.state.icons}
+        //                 enableCellTextSelection={true}
+        //                 onCellClicked={(event) => {
+        //                     if (event.colDef.headerName == 'File Name') {
+
+        //                         this.setState({
+        //                             showClaims: true,
+        //                             showerror: false,
+        //                             claims_rowData: [],
+        //                             Ag_grid_FileName: event.data.FileName_Outbound,
+        //                             Ag_grid_fileDate: (moment(event.data.FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(event.data.FileDateTime).format('YYYY-MM-DD') : '',
+        //                             selectedFileId: event.data.FileID
+        //                         }, () => {
+        //                             // this._renderClaims(event.data.FileID)
+        //                         })
+        //                     } else if (event.colDef.headerName == "Error Description" && event.data.FileLevelError) {
+        //                         this.setState({
+        //                             clickedError: event.data.FileLevelError
+        //                         }, () => {
+        //                             $('#error_modal').modal('show')
+        //                         })
+
+        //                     }
+        //                 }}
+        //             >
+        //             </AgGridReact>
+        //         </div>
+        //     </div>
+        // )
     }
+
+    postData = (data) => {
+        this.setState({
+            showClaims: true,
+            Ag_grid_FileName: data && data.length > 0 ? data[0].FileName_Outbound : '',
+            Ag_grid_fileDate: (data && data.length > 0 && moment(data[0].FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(data[0].FileDateTime).format('YYYY-MM-DD') : '',
+            selectedFileId: data && data.length > 0 ? data[0].FileID : '',
+        })
+    }
+    clickNavigation1 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+
+            this.setState({
+                showClaims: true,
+                showerror: false,
+                claims_rowData: [],
+                Ag_grid_FileName: event.data.FileName_Outbound,
+                Ag_grid_fileDate: (moment(event.data.FileDateTime).format('YYYY-MM-DD') != 'Invalid date') ? moment(event.data.FileDateTime).format('YYYY-MM-DD') : '',
+                selectedFileId: event.data.FileID
+            }, () => {
+                // this._renderClaims(event.data.FileID)
+            })
+        } else if (event.colDef.headerName == "Error Description" && event.data.FileLevelError) {
+            this.setState({
+                clickedError: event.data.FileLevelError
+            }, () => {
+                $('#error_modal').modal('show')
+            })
+
+        }
+    }
+
 
     errorDialog = () => {
         return (
@@ -1312,7 +1389,6 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                     index={'OutboundEncounterProcessingSummary'}
                     State={this.state.State}
                     fieldType={'PaymentDetails'}
-                    // postData={this.postData}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={this.state.startDate}
                     endDate={this.state.endDate}
@@ -1651,7 +1727,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     }
 
     _refreshScreen = () => {
-        this.getData()
+        // this.getData()
     }
 
     onGridChange = (event) => {
@@ -1664,9 +1740,9 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
             if (this.state.gridType == 1) {
-                this.getData()
+                // this.getData()
             } else {
-                this.getData()
+                // this.getData()
             }
         })
     }
@@ -1695,8 +1771,8 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                 Filter_ClaimId={this.state.Filter_ClaimId}
                 removeGrid={true}
                 showclaimId={true}
-            isMolina={true}
-            CLM01={true}
+                isMolina={true}
+                CLM01={true}
             />
         )
     }

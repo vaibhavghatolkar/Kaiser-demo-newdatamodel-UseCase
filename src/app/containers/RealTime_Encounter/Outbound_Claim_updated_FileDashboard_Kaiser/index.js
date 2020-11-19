@@ -21,6 +21,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { TableTiles } from '../../../components/TableTiles';
 import { PieChart } from '../../../components/PieChart';
 import { Filters } from '../../../components/Filters';
+import { ServersideGrid } from '../../../components/ServersideGrid';
 
 export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component {
 
@@ -93,10 +94,10 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             summary_1: [],
             summary_2: [],
             summary_3: [],
-            Paid:0,
-            Denied:0,
-            Payment_Never_Submitted:0,
-            Payment_Adjustment:0,
+            Paid: 0,
+            Denied: 0,
+            Payment_Never_Submitted: 0,
+            Payment_Adjustment: 0,
 
             paginationPageSize: 10,
             domLayout: 'autoHeight',
@@ -156,12 +157,12 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
     componentDidMount() {
         this._refreshScreen()
     }
-              // OutboundDashboardBatchTable {
-            //   TotalBatch
-            //   ValidatedBatch
-            //   ValidatedWithErrorsBatch
-            //   ReadyToSendToState
-            // }
+    // OutboundDashboardBatchTable {
+    //   TotalBatch
+    //   ValidatedBatch
+    //   ValidatedWithErrorsBatch
+    //   ReadyToSendToState
+    // }
 
     _getTableData = async () => {
         let query = `{
@@ -197,7 +198,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 let data = ""
                 let _data = res.data.OutboundDashboardFileTable
                 let _data1 = res.data.OutboundPaymentDashboard
-                 let condition = data && data.length > 0 ? true : false
+                let condition = data && data.length > 0 ? true : false
                 let _condition = _data && _data.length > 0 ? true : false
                 let _condition1 = _data1 && _data1.length > 0 ? true : false
 
@@ -218,28 +219,28 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 let stage_4 = [
                     { 'header': '' },
                     { 'name': 'X12 Claim Count', 'value': _condition ? _data[0].TotalEncounterSent : 0, isClick: true },
-                    { 'name': 'X12 Claim Line Item Count', 'value': _condition ? _data[0].Line_Item_Count : 0, color : '#139DC9' },
+                    { 'name': 'X12 Claim Line Item Count', 'value': _condition ? _data[0].Line_Item_Count : 0, color: '#139DC9' },
                 ]
                 let stage_5 = [
                     { 'header': '' },
                     { 'name': '999 Accepted', 'value': _condition ? _data[0].Accepted999 : 0, isClick: true },
-                    { 'name': '999 Rejected', 'value': _condition ? _data[0].Rejected999 : 0 , isClick: true },
+                    { 'name': '999 Rejected', 'value': _condition ? _data[0].Rejected999 : 0, isClick: true },
                     // { 'name': '277CA Accepted', 'value': _condition ? _data[0].Accepted277CA : 0, isClick: true },
                     // { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, isClick: true },
                 ]
 
                 let stage_6 = [
-                    { 'name': '277CA Accepted', 'value': _condition ? _data[0].Accepted277CA : 0, color : '#2AC327'  },
-                    { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, color : '#FF3B41' },
-                    { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, color : '#139DC9' },
+                    { 'name': '277CA Accepted', 'value': _condition ? _data[0].Accepted277CA : 0, color: '#2AC327' },
+                    { 'name': '277CA Rejected', 'value': _condition ? _data[0].Rejected277CA : 0, color: '#FF3B41' },
+                    { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, color: '#139DC9' },
                 ]
                 let stage_7 = [
-                    { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color : '#2AC327'  },
-                    { 'name': 'Denied', 'value': _condition1 ? _data1[0].Denied : 0, color : '#FF3B41' },
-                    { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color : '#FA731A'  },
-                    { 'name': 'WIP 0-30', 'value': 500, color : '#139DC9' },
-                    { 'name': 'WIP 30-60', 'value': 350, color : '#139DC9' },
-                    { 'name': 'WIP >60', 'value': 430, color : '#139DC9' },
+                    { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color: '#2AC327' },
+                    { 'name': 'Denied', 'value': _condition1 ? _data1[0].Denied : 0, color: '#FF3B41' },
+                    { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color: '#FA731A' },
+                    { 'name': 'WIP 0-30', 'value': 500, color: '#139DC9' },
+                    { 'name': 'WIP 30-60', 'value': 350, color: '#139DC9' },
+                    { 'name': 'WIP >60', 'value': 430, color: '#139DC9' },
                 ]
 
 
@@ -258,7 +259,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             })
     }
 
-  
+
     _getCounts = async () => {
         let query = `{
           
@@ -284,7 +285,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         })
             .then(res => res.json())
             .then(res => {
-                let data =""
+                let data = ""
                 let _data = ""
                 let _new_data = res.data.OutboundDashboardFileCount
                 let condition = data && data.length > 0 ? true : false
@@ -506,7 +507,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             addon = '/accept'
             claimStatus = 'Rejected'
         } else if (header == 'Top 10 Claim Payment Errors') {
-           
+
             addon = '/reject'
             claimStatus = 'Rejected'
         }
@@ -538,7 +539,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
     getPieChartPaymentData = (pieChart) => {
         let pieLabel = []
         let pieData = []
-    
+
         pieChart.forEach((d) => {
             pieLabel.push(d.X_axis)
             pieData.push(d.Y_axis)
@@ -574,7 +575,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 ]
             }]
         }
-       
+
         return pie_data
     }
 
@@ -676,14 +677,14 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         this.setState({
             page: page
         }, () => {
-            this.getListData()
+          
         })
     }
 
- 
+
 
     gotoClaimDetails = (data) => {
-        console.log("data",data)
+        console.log("data", data)
         let sendData = []
         if (data && data.length > 0) {
             sendData = data
@@ -694,7 +695,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             let State = this.state.State ? this.state.State : 'n'
             let type = this.state.type ? this.state.type : ''
 
-          
+
         }
 
         this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
@@ -714,38 +715,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         )
     }
 
-    getListData = async () => {
-        let query = `{
-            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:""  ClaimID:"" ClaimStatus:"") {
-                FileID
-               FileName_Outbound
-               FileDate_Outbound
-               FileStatus_Outbound
-               TotalEncounterSent
-               Rejected_277CA
-              }
-          }
-          `
-        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
-        fetch(Urls._transaction837_kaiser, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({ query: query })
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log('Look here', res.data.OutboundDashboardFileDetails)
-                this.setState({
-                    claimsList: res.data.OutboundClaimsFileDetails
-                })
-            })
-            .catch(err => {
-                process.env.NODE_ENV == 'development' && console.log(err)
-            });
-    }
+  
 
     getBatchListData = async () => {
         let query = `{
@@ -790,7 +760,6 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         this.getData()
         this._getCounts()
         this._getTableData()
-        this.getListData()
         // this.getBatchListData()
     }
 
@@ -854,9 +823,9 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             let geturl = url ? url : Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser
             row.push(
                 <Tiles
-                isClickable={
-                    item.name != '277CA Received'
-                }
+                    isClickable={
+                        item.name != '277CA Received'
+                    }
                     isenrollment={true}
                     header_text={item.name}
                     value={item.value}
@@ -925,7 +894,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             // }else if (item.name == 'Payment Adjustment') {
             //     color = "var(--orange)"
             // }
-            
+
 
             let sendData = [
                 {
@@ -1010,76 +979,159 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
     }
 
     _renderList() {
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            { headerName: "State", field: "State", width: 100 ,
-            cellRenderer: (data) => {
-                return   "FL"                
-            }
-        },
+            {
+                headerName: "State", field: "State", width: 100,
+                cellRenderer: (data) => {
+                    return "FL"
+                }
+            },
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 140 },
-            { headerName: "Payer", field: "", flex: 1,  cellRenderer: (data) => {    return 'Anthem Blue Cross' }},
+            { headerName: "Payer", field: "", flex: 1, cellRenderer: (data) => { return 'Anthem Blue Cross' } },
             { headerName: "Total Claims", field: "TotalEncounterSent", width: 130 },
             { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
 
+        let query = `{            
+            OutboundClaimsFileDetails(FileID :"", F99Status :"",F277Status:"",MolinaClaimID:""  ClaimID:"" ClaimStatus:""
+            sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}], 
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter: ${filter}, 
+            ){
+                FileID
+                FileName_Outbound
+                FileDate_Outbound
+                FileStatus_Outbound
+                TotalEncounterSent
+                Rejected_277CA
+                RecCount
+            }
+        }`
+
         return (
-            <div>
-                <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
-                    <AgGridReact
-                        modules={this.state.modules}
-                        columnDefs={columnDefs}
-                        autoGroupColumnDef={this.state.autoGroupColumnDef}
-                        defaultColDef={this.state.defaultColDef}
-                        suppressRowClickSelection={true}
-                        groupSelectsChildren={true}
-                        debug={true}
-                        rowSelection={this.state.rowSelection}
-                        rowGroupPanelShow={this.state.rowGroupPanelShow}
-                        pivotPanelShow={this.state.pivotPanelShow}
-                        enableRangeSelection={true}
-                        paginationAutoPageSize={false}
-                        pagination={true}
-                        domLayout={this.state.domLayout}
-                        paginationPageSize={this.state.paginationPageSize}
-                        onGridReady={this.onGridReady}
-                        rowData={this.state.claimsList}
-                        enableCellTextSelection={true}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName == 'File Name') {
-                                let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
-                                let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
-                                let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
-                                let State = this.state.State ? this.state.State : 'n'
-                                let type = this.state.type ? this.state.type : ''
-
-                                let sendData = [
-                                    {
-                                        flag: '',
-                                        State: State,
-                                        selectedTradingPartner: selectedTradingPartner,
-                                        startDate: startDate,
-                                        endDate: endDate,
-                                        status: "",
-                                        type: type,
-                                        FileID: event.data.FileID,
-                                        F99Status: "",
-                                        F277Status: ""
-                                    },
-                                ]
-
-                                this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
-                                    data: sendData
-                                })
-                            }
-                        }}
-                    >
-                    </AgGridReact>
-                </div>
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                {/* <h6 className="font-size">Claims Information For <label style={{ color: 'var(--main-bg-color)' }}>(File Name:-{this.state.Ag_grid_FileName} , File Date:-{this.state.Ag_grid_fileDate})</label></h6> */}
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={Urls._transaction837_kaiser}
+                    paginationPageSize={5}
+                    index={'OutboundClaimsFileDetails'}
+                    State={this.state.State}
+                    fieldType={'FileDate_Outbound'}
+                    // postData={this.postData}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    type={this.state.type}
+                    filterClaim={this.state.Filter_ClaimId}
+                    incoming_837fileId={this.state.incoming_837fileId}
+                    // selectedFileId={this.state.selectedFileId}
+                    updateFields={this.updateFields}
+                    onClick={this.clickNavigation}
+                    
+                />
             </div>
         )
+
+
+        // return (
+        //     <div>
+        //         <div className="ag-theme-balham" style={{ padding: '0', marginTop: '24px' }}>
+        //             <AgGridReact
+        //                 modules={this.state.modules}
+        //                 columnDefs={columnDefs}
+        //                 autoGroupColumnDef={this.state.autoGroupColumnDef}
+        //                 defaultColDef={this.state.defaultColDef}
+        //                 suppressRowClickSelection={true}
+        //                 groupSelectsChildren={true}
+        //                 debug={true}
+        //                 rowSelection={this.state.rowSelection}
+        //                 rowGroupPanelShow={this.state.rowGroupPanelShow}
+        //                 pivotPanelShow={this.state.pivotPanelShow}
+        //                 enableRangeSelection={true}
+        //                 paginationAutoPageSize={false}
+        //                 pagination={true}
+        //                 domLayout={this.state.domLayout}
+        //                 paginationPageSize={this.state.paginationPageSize}
+        //                 onGridReady={this.onGridReady}
+        //                 rowData={this.state.claimsList}
+        //                 enableCellTextSelection={true}
+        //                 onCellClicked={(event) => {
+        //                     if (event.colDef.headerName == 'File Name') {
+        //                         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+        //                         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+        //                         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+        //                         let State = this.state.State ? this.state.State : 'n'
+        //                         let type = this.state.type ? this.state.type : ''
+
+        //                         let sendData = [
+        //                             {
+        //                                 flag: '',
+        //                                 State: State,
+        //                                 selectedTradingPartner: selectedTradingPartner,
+        //                                 startDate: startDate,
+        //                                 endDate: endDate,
+        //                                 status: "",
+        //                                 type: type,
+        //                                 FileID: event.data.FileID,
+        //                                 F99Status: "",
+        //                                 F277Status: ""
+        //                             },
+        //                         ]
+
+        //                         this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
+        //                             data: sendData
+        //                         })
+        //                     }
+        //                 }}
+        //             >
+        //             </AgGridReact>
+        //         </div>
+        //     </div>
+        // )
+    }
+
+    clickNavigation = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
+            let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
+            let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
+            let State = this.state.State ? this.state.State : 'n'
+            let type = this.state.type ? this.state.type : ''
+
+            let sendData = [
+                {
+                    flag: '',
+                    State: State,
+                    selectedTradingPartner: selectedTradingPartner,
+                    startDate: startDate,
+                    endDate: endDate,
+                    status: "",
+                    type: type,
+                    FileID: event.data.FileID,
+                    F99Status: "",
+                    F277Status: ""
+                },
+            ]
+
+            this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
+                data: sendData
+            })
+        }
+    }
+    updateFields = (fieldType, sortType, startRow, endRow, filterArray) => {
+        this.setState({
+            fieldType: fieldType,
+            sortType: sortType,
+            startRow: startRow,
+            endRow: endRow,
+            filterArray: filterArray,
+        })
     }
 
     renderBatchEncounterDetails = () => {
@@ -1120,7 +1172,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
             rowData: [],
             gridType: event.target.options[event.target.selectedIndex].text == 'Default' ? 0 : 1
         }, () => {
-            this.getListData()
+           
         })
     }
 
