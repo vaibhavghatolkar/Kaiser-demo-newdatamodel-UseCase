@@ -94,7 +94,7 @@ export class InboundPaymentDetails extends React.Component {
             CheckEFTNo: props.location.state && props.location.state.data[0] && props.location.state.data[0].CheckEFTNo ? props.location.state.data[0].CheckEFTNo : '',
             checkDate: props.location.state && props.location.state.data[0] && props.location.state.data[0].checkDate  ? props.location.state.data[0].checkDate : '',
             incoming_835fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_835fileId  ? props.location.state.data[0].incoming_835fileId : '',
-
+            Split: props.location.state && props.location.state.data[0] && props.location.state.data[0].Split  ? props.location.state.data[0].Split : 'Inbound',
             defaultColDef: {
                 cellClass: 'cell-wrap-text',
                 autoHeight: true,
@@ -379,7 +379,7 @@ export class InboundPaymentDetails extends React.Component {
         let query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                    RecType:"", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
+                    RecType:"${this.state.Split}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
                        CLP06:"${this.state.clp06List}"
@@ -437,7 +437,7 @@ export class InboundPaymentDetails extends React.Component {
                     query={query}
                     paginationPageSize={5}
                     url={isOutbound ? Urls.transaction835 : Urls._transaction835}
-                    fieldType={'FileDate'}
+                    fieldType={'MolinaClaimID'}
                     index={'PaymentProcessingSummaryNew'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
@@ -456,6 +456,8 @@ export class InboundPaymentDetails extends React.Component {
                     checkDate={this.state.checkDate}
                     claimIdData={this.state.claimIdData}
                     renderMethod={this.renderMethod}
+                    Split={this.state.Split}
+                    sorting={true}
                 />
             </div>
         )
@@ -676,7 +678,7 @@ export class InboundPaymentDetails extends React.Component {
         let query = `{
             Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",
             EndDt: "${endDate}", Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
-            RecType:"",  EFTCHK:"${this.state.EFTCHK}",
+            RecType:"${this.state.Split}",  EFTCHK:"${this.state.EFTCHK}",
             ClaimID:"${this.state.claimIdData}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
@@ -734,6 +736,7 @@ export class InboundPaymentDetails extends React.Component {
                     CheckEFTNo={this.state.CheckEFTNo}
                     checkDate={this.state.checkDate}
                     claimIdData={this.state.claimIdData}
+                    Split={this.state.Split}
                     renderMethod={this.renderMethod}
                     // handleColWidth={120}
                 />
@@ -780,6 +783,7 @@ export class InboundPaymentDetails extends React.Component {
                 Clear={true}
                 renderMethod={this.renderMethod}
                 removeState={true}
+                Split={true}
             />
         )
     }
