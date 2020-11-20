@@ -906,7 +906,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
     renderClaimsHeader(fileId) {
         return (
             <tr className="table-head">
-                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>Molina Claim Id</a></td>
+                <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.MolinaClaimID", this.state.claimIdRotation, 'claimIdRotation', fileId) }}>HiPaaS Claim Id</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.ClaimStatus", this.state.claimStatusRotation, 'claimStatusRotation', fileId) }}>Claim Status</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Subscriber_ID", this.state.subsciberRotation, 'subsciberRotation', fileId) }}>Subscriber Id</a></td>
                 <td className="table-head-text list-item-style"><a className="clickable" onClick={() => { this.handleInnerSort((localStorage.getItem("DbTech") === "SQL") ? "" : "Order By n.Claim_Amount", this.state.claimAmountRotation, 'claimAmountRotation', fileId) }}>Claim Amount</a></td>
@@ -1287,7 +1287,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
         let columnDefs = [
             // { headerName: "Process Id", field: "ProcessID", width: 100, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             // { headerName: "State", field: "State", width: 80 },
-            { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 150, cellStyle: {   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "HiPaaS Claim Id", field: "MolinaClaimID", width: 150, cellStyle: {   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Date", field: "EncounterDate", width:100, },
             { headerName: "Subscriber Id", field: "Subscriber_ID", width:130, cellStyle: {   'white-space': 'normal' } },
             { headerName: "Inbound File Name", field: "FileName_Inbound", width:150, },
@@ -1372,7 +1372,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
     }
 
     clickNavigation = (event) => {
-        if (event.colDef.headerName == 'Molina Claim Id') {
+        if (event.colDef.headerName == 'HiPaaS Claim Id') {
             this.setState({
 
                 showerror: true,
@@ -1399,14 +1399,14 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "HiPaaS Claim ID", field: "MolinaClaimID", width: 170 },
                 { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
                 { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ] : [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Claim ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "HiPaaS Claim ID", field: "MolinaClaimID", width: 170 },
                 { headerName: "X12 Claim ID", field: "ClaimID", width: 170 },
                 { headerName: "Error Description", field: "ErrorDesc", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
@@ -1455,7 +1455,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
     _ClaimLineTable() {
         if (this.state.Aggrid_ClaimLineData == undefined) { this.state.Aggrid_ClaimLineData = [] }
         let columnDefs = [
-            { headerName: "Molina Claim ID", field: "MolinaClaimID" , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "HiPaaS Claim ID", field: "MolinaClaimID" , cellStyle: {wordBreak: 'break-all',   'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Id", field: "ClaimID" },
 
             { headerName: "Service Line No.", field: "ServiceLineCount" },
@@ -1489,7 +1489,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                         rowData={this.state.Aggrid_ClaimLineData}
                         enableCellTextSelection={true}
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == "Molina Claim ID") {
+                            if (event.colDef.headerName == "HiPaaS Claim ID") {
                                 this.setState({
                                   Encounter_Linedata:true,                                  
                                   LineData_MolinaClaimID:event.data.MolinaClaimID,
@@ -1518,7 +1518,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
             // { headerName: " HL20 Count", field: "HL20Count", width: 80 },
             // { headerName: "HL22 Count", field: "HL22Count", width: 80 },
             // { headerName: "HL23 Count", field: "HL23Count", width: 80 },
-            { headerName: "Molina Claim Id", field: "MolinaClaimID", width: 150,  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "HiPaaS Claim Id", field: "MolinaClaimID", width: 150,  cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claim Id", field: "ClaimID", width: 100 },
             { headerName: "Claim Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName", width: 100 },
@@ -1557,7 +1557,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                         rowData={this.state.Aggrid_Claim_Info_data}
                         enableCellTextSelection={true}   
                         onCellClicked={(event) => {
-                            if (event.colDef.headerName == "Molina Claim Id" ) {
+                            if (event.colDef.headerName == "HiPaaS Claim Id" ) {
                                 this.setState({
                                     MolinaClaimID: event.data.MolinaClaimID,
                                     EncounterId: event.data.ClaimID,
@@ -1644,7 +1644,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                
                     <br></br>
                     <div class="form-group col-md-3">
-                        <label>Molina Claim Id</label>
+                        <label>HiPaaS Claim Id</label>
                         <input  value={this.state.MolinaClaimID == null ? '' : this.state.MolinaClaimID} onChange={(e) => this.onChangeName(e, 'MolinaClaimID')}   class="form-control"  placeholder=""></input>
                     </div> 
                     <div class="form-group col-md-3">
@@ -1719,7 +1719,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                
                     <br></br>
                     <div class="form-group col-md-3">
-                        <label>Molina Claim Id</label>
+                        <label>HiPaaS Claim Id</label>
                         <input  value={this.state.LineData_MolinaClaimID == null ? '' : this.state.LineData_MolinaClaimID} onChange={(e) => this.onChangeName(e, 'MolinaClaimID')}   class="form-control"  placeholder=""></input>
                     </div> 
                     <div class="form-group col-md-3">

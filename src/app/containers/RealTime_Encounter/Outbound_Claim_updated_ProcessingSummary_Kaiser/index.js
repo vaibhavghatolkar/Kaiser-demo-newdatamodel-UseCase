@@ -46,7 +46,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
             State: "",
             type: "",
             providerName: "",
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
@@ -83,15 +83,15 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
             domLayout: 'autoHeight',
             columnDefs: [
                 { headerName: "File Name", field: "FileName_Outbound", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                { headerName: "State", field: "State",  width: 100,
-                cellRenderer: (data) => {
-                    return   "FL"                
-                }
-            },
+            //     { headerName: "State", field: "State",  width: 100,
+            //     cellRenderer: (data) => {
+            //         return   "FL"                
+            //     }
+            // },
                 { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
                 { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 { headerName: "Claims ID", field: "ClaimID", width: 100, },
-                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 130, },
+                { headerName: "HiPaaS Claims ID", field: "MolinaClaimID", width: 130, },
                 { headerName: "Claims Date", field: "EncounterDate", width: 130, },
                 { headerName: "Claims 999 Status", field: "Encounter99_Status", width: 140, },
                 { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", width: 140 },
@@ -816,7 +816,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
         return (
             <Filters
                 isTimeRange={false}
-                isPayer={true}
+                // isPayer={true}
                 removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}

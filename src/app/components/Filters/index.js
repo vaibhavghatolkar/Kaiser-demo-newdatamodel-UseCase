@@ -801,11 +801,11 @@ export class Filters extends React.Component {
                                         this.props.setData(startDate, endDate, selected_val, chartType)
                                     }}
 
-                                    defaultValue={this.props.changeDefault ? 'halfYear' : 'year'}
+                                    defaultValue={this.props.changeDefault ? 'halfYear' :this.props.days90Filter? '3' :  'year'}
                                 >
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>
-                                    <option value="2">Last 90 days</option>
+                                    <option value="3">Last 90 days</option>
                                     <option value="halfYear">Last 180 days</option>
                                     <option value="year">Last year</option>
                                 </select>
@@ -996,7 +996,7 @@ export class Filters extends React.Component {
                     </div>: null 
                     }
 
-                    {this.props.CLP01Show ?
+                    {/* {this.props.CLP01Show ?
                         <div className="form-group col-2">
                         <div className="list-dashboard">CLP01</div>
                         <AutoComplete 
@@ -1007,7 +1007,7 @@ export class Filters extends React.Component {
                             flag={"CLP01List"}
                         />
                     </div>: null 
-                    }
+                    } */}
                     {this.props.clp06Show ?
                     <div className="form-group col-2">
                         <div className="list-dashboard">CLP06</div>
