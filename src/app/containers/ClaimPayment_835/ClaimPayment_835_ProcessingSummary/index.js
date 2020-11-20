@@ -74,7 +74,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             AvailitySent: 0,
             TotalError: 0,
             domLayout: 'autoHeight',
-
+            Split: props.location.state && props.location.state.data[0] && props.location.state.data[0].Split  ? props.location.state.data[0].Split : 'Inbound',
             columnDefs: [
 
                 { headerName: "Remittance File Name", suppressMovable: true, field: "FileName", cellStyle: { color: '#139DC9', cursor: 'pointer' } },
@@ -279,6 +279,26 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                 this.gotoDetails_2()
             })
         }
+         if (event.colDef.headerName == "837" && event.value) {
+            sessionStorage.setItem('isOutbound', true)
+            let data = [
+                {
+                    apiflag: '0',
+                    State: 'n',
+                    selectedTradingPartner: 'n',
+                    startDate: 'n',
+                    endDate: 'n',
+                    transactionId: 'n',
+                    status: 'n',
+                    count: 'n',
+                    Filter_ClaimId: event.value
+                }
+            ]
+            this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
+                data: data
+            })
+        }
+            window.location.reload()
        
     }
 
@@ -289,7 +309,8 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
             sortType: sortType,
             startRow: startRow,
             endRow: endRow,
-            filterArray: filterArray
+            filterArray: filterArray,
+          
         })
     }
 
@@ -351,6 +372,7 @@ if(isOutboundPage){
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
             { headerName: "DRG Code", field: "DigonisCode", width: 120, },
+            { headerName: "837", field: "MolinaClaimID", width: 120, cellStyle: { color: '#139DC9', cursor: 'pointer' }},
         
     ]
 }
@@ -405,7 +427,7 @@ if(isOutboundPage){
             query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
-                    RecType:"",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                    RecType:"${this.state.Split}",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
                        ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:"" MolinaClaimID:""
@@ -452,6 +474,7 @@ if(isOutboundPage){
                     CLP01
                     GSID
                     DigonisCode
+                    MolinaClaimID
                     }
                   }` 
         }
@@ -462,7 +485,7 @@ if(isOutboundPage){
                     columnDefs={columnDefs}
                     query={query}
                     url={isOutbound ? Urls.transaction835 : Urls._transaction835}
-                    fieldType={'FileDate'}
+                    fieldType={'MolinaClaimID'}
                     index={'PaymentProcessingSummaryNew'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
@@ -472,6 +495,8 @@ if(isOutboundPage){
                     onClick={this.clickNavigation}
                     filterClaim={this.state.Filter_ClaimId}
                     handleColWidth={120}
+                    Split={this.state.Split}
+                    sorting={true}
                 />
             </div>
         )
@@ -495,6 +520,7 @@ if(isOutboundPage){
                 showclaimId={isOutbound ? true : false}
                 State={this.state.State}
                 removeState= {isOutbound ? false : true}
+                Split={true}
 
 
             />
@@ -510,6 +536,7 @@ if(isOutboundPage){
                 providerName={this.state.providerName}
                 State={this.state.State}
                 removeFiles={true}
+
             />
         )
     }

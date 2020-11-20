@@ -27,16 +27,16 @@ export class Filters extends React.Component {
             PayerNameList: [],
             PayeeNameList: [],
             clp06List: [],
-            claimIdData:[],
-            CLP01List:[],
-            TreasuryCompanyDescriptionList:[],
-            TreasuryFileNameList:[],
-            PatientSubscriberIDList:[],
+            claimIdData: [],
+            CLP01List: [],
+            TreasuryCompanyDescriptionList: [],
+            TreasuryFileNameList: [],
+            PatientSubscriberIDList: [],
             Filter_ClaimId: this.props.Filter_ClaimId ? this.props.Filter_ClaimId : '',
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
             transOptions: [],
-            LockBoxFileNameList:[]
+            LockBoxFileNameList: []
         }
     }
 
@@ -116,21 +116,21 @@ export class Filters extends React.Component {
     }
 
     getFileNameData() {
-        let query=""
-        if(this.props.FileNameLockBox){
+        let query = ""
+        if (this.props.FileNameLockBox) {
             query = `{      
                 LockBoxFileNameList {
                     File_Name
                   }       
             }`
-        }else{
+        } else {
             query = `{      
                 TreasuryFileNameList {
                     File_Name
                   }         
             }`
         }
-       
+
 
         if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
         fetch(Urls._transaction835Kaiser, {
@@ -143,18 +143,18 @@ export class Filters extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-                if(this.props.FileNameLockBox){
+                if (this.props.FileNameLockBox) {
                     this.setState({
                         LockBoxFileNameList: res.data.LockBoxFileNameList
-    
+
                     })
-                }else{
+                } else {
                     this.setState({
                         TreasuryFileNameList: res.data.TreasuryFileNameList
-    
+
                     })
                 }
-                
+
             })
 
             .catch(err => {
@@ -255,14 +255,14 @@ export class Filters extends React.Component {
         })
     }
 
-  
+
 
 
     onSelect = (event, name) => {
         if (event.target.options[event.target.selectedIndex].text == 'Provider Name' || event.target.options[event.target.selectedIndex].text == 'Trading partner') {
             this.props.update(name, '')
         } else {
-            if (name == 'selectedTradingPartner') {
+            if (name == 'selectedTradingPartner' || name == 'Split') {
                 this.props.update(name, event.target.options[event.target.selectedIndex].value)
             } else {
                 this.props.update(name, event.target.options[event.target.selectedIndex].text)
@@ -293,10 +293,10 @@ export class Filters extends React.Component {
         this.props.update('CheckEFTNo', value)
     }
     Clear = (value) => {
-      
+
         this.props.renderMethod("Clear")
     }
-    
+
     onChangeName = (value, name) => {
         this.props.update(name, value)
     }
@@ -321,7 +321,7 @@ export class Filters extends React.Component {
         })
         return row
     }
-    getCompanyDescKaiser= () => {
+    getCompanyDescKaiser = () => {
         let row = []
         this.state.TreasuryCompanyDescriptionList.forEach(element => {
             if (!element) {
@@ -332,7 +332,7 @@ export class Filters extends React.Component {
         return row
     }
 
-    getLockboxFileName= () => {
+    getLockboxFileName = () => {
         let row = []
         this.state.LockBoxFileNameList.forEach(element => {
             if (!element) {
@@ -369,7 +369,7 @@ export class Filters extends React.Component {
     onHandleChange = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 PayerList (RecType:"Inbound",Payer:"${providerName}") {
@@ -392,20 +392,20 @@ export class Filters extends React.Component {
                         res.data.PayerList.forEach(item => {
                             data.push(item.PayerName)
                         })
-                       this.setState({
-                        PayerNameList : data
-                       })
+                        this.setState({
+                            PayerNameList: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
     onHandleChange1 = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 PayeeList (RecType:"Inbound",Payee:"${providerName}") {
@@ -428,20 +428,20 @@ export class Filters extends React.Component {
                         res.data.PayeeList.forEach(item => {
                             data.push(item.NPI)
                         })
-                       this.setState({
-                        PayeeNameList : data
-                       })
+                        this.setState({
+                            PayeeNameList: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
     onHandleChange2 = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 CLP06List (RecType:"Inbound",CLP06:"${providerName}") {
@@ -467,20 +467,20 @@ export class Filters extends React.Component {
                                 'desc': item.Desc
                             })
                         })
-                       this.setState({
-                        clp06List : data
-                       })
+                        this.setState({
+                            clp06List: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
     onHandleChange3 = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 ClaimIDList(RecType:"Inbound",ClaimID:"${providerName}") {
@@ -502,27 +502,27 @@ export class Filters extends React.Component {
                         res.data.ClaimIDList.forEach(item => {
                             data.push(item.ClaimID)
                         })
-                       this.setState({
-                        claimIdData : data
-                       })
+                        this.setState({
+                            claimIdData: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
     onHandleChange4 = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 CLP01List(RecType:"Inbound",CLP01:"${providerName}") {
                     CLP01
                   }
               }`
-              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             return fetch(Urls._transaction835, {
                 method: 'POST',
                 headers: {
@@ -538,27 +538,27 @@ export class Filters extends React.Component {
                         res.data.CLP01List.forEach(item => {
                             data.push(item.CLP01)
                         })
-                       this.setState({
-                        CLP01List : data
-                       })
+                        this.setState({
+                            CLP01List: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
     onHandleChange5 = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 PatientSubscriberIDList(RecType:"Inbound",PatientSubscriberID:"${providerName}") {
                     PatientSubscriberID
                   }
               }`
-              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             return fetch(Urls._transaction835, {
                 method: 'POST',
                 headers: {
@@ -574,27 +574,27 @@ export class Filters extends React.Component {
                         res.data.PatientSubscriberIDList.forEach(item => {
                             data.push(item.PatientSubscriberID)
                         })
-                       this.setState({
-                        PatientSubscriberIDList : data
-                       })
+                        this.setState({
+                            PatientSubscriberIDList: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
     onHandleChange6 = (e) => {
         clearTimeout(val)
         let providerName = e.target.value
-   
+
         val = setTimeout(() => {
             let query = `{
                 CheckEFTNoList(RecType:"Inbound",CheckEFTNo:"${providerName}") {
                     CheckEFTNo
                   }
               }`
-              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             return fetch(Urls._transaction835, {
                 method: 'POST',
                 headers: {
@@ -610,15 +610,15 @@ export class Filters extends React.Component {
                         res.data.CheckEFTNoList.forEach(item => {
                             data.push(item.CheckEFTNo)
                         })
-                       this.setState({
-                        CheckEFTNo : data
-                       })
+                        this.setState({
+                            CheckEFTNo: data
+                        })
                     }
                 })
                 .catch(err => {
                     process.env.NODE_ENV == 'development' && console.log(err)
                 });
-        }, 300);      
+        }, 300);
     }
 
 
@@ -709,14 +709,14 @@ export class Filters extends React.Component {
                                     >
                                         <option value="1"></option>
                                         {!this.props.isEncounter ?
-                                        this.props.is837 ? <option value="837Encounters">837</option> : 
-                                            
-                                        (this.props._is835 ?
-                                                <option value="835">835</option> :
-                                                <option value="837">837</option>) : null
+                                            this.props.is837 ? <option value="837Encounters">837</option> :
+
+                                                (this.props._is835 ?
+                                                    <option value="835">835</option> :
+                                                    <option value="837">837</option>) : null
                                         }
                                         {this.props.isEncounter ? <option value="837Encounters">837 Encounter</option> : null}
-                                        
+
 
                                     </select>
                                 </div>
@@ -734,37 +734,37 @@ export class Filters extends React.Component {
                                 </div>)
                             : null
                     }{
-                        this.props.isPayer ? 
-                        <div className="form-group col-2">
-                                    <div className="list-dashboard">Payer</div>
-                                    <select className="form-control list-dashboard" id="TradingPartner"
-                                        value={this.props.payer}
-                                        onChange={(event) => {
-                                            this.onSelect(event, 'payer')
-                                        }}>
-                                        <option value=""></option>
-                                        <option value="Anthem Blue Cross">Anthem Blue Cross</option>
-                                        <option value="Molina Healthcare">Molina Healthcare</option>
-                                        <option value="Blue Shield of California">Blue Shield of California</option>
-                                        <option value="Sharp Health Plan">Sharp Health Plan</option>
-                                        <option value="Health Net">Health Net</option>
-                                    </select>
-                                </div> : null
+                        this.props.isPayer ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Payer</div>
+                                <select className="form-control list-dashboard" id="TradingPartner"
+                                    value={this.props.payer}
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'payer')
+                                    }}>
+                                    <option value=""></option>
+                                    <option value="Anthem Blue Cross">Anthem Blue Cross</option>
+                                    <option value="Molina Healthcare">Molina Healthcare</option>
+                                    <option value="Blue Shield of California">Blue Shield of California</option>
+                                    <option value="Sharp Health Plan">Sharp Health Plan</option>
+                                    <option value="Health Net">Health Net</option>
+                                </select>
+                            </div> : null
                     }
 
-{
-                        this.props.FileNameKaiser ? 
-                        <div className="form-group col-2">
-                                    <div className="list-dashboard">File Name</div>
-                                    <select className="form-control list-dashboard" id="TradingPartner"
-                                        value={this.props.FileNameData}
-                                        onChange={(event) => {
-                                            this.onSelect(event, 'FileNameData')
-                                        }}>
-                                        <option value=""></option>
-                                        {this.props.FileNameLockBox ? this.getLockboxFileName() : this.getFileNameDataKaiser()}
-                                    </select>
-                                </div> : null
+                    {
+                        this.props.FileNameKaiser ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">File Name</div>
+                                <select className="form-control list-dashboard" id="TradingPartner"
+                                    value={this.props.FileNameData}
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'FileNameData')
+                                    }}>
+                                    <option value=""></option>
+                                    {this.props.FileNameLockBox ? this.getLockboxFileName() : this.getFileNameDataKaiser()}
+                                </select>
+                            </div> : null
                     }
                     {
                         this.props.isTimeRange ?
@@ -934,42 +934,42 @@ export class Filters extends React.Component {
                             </div>
                             : null
                     }
-                    
+
 
                     {this.props.payerShow ?
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">Payer</div>
-                        <AutoComplete 
-                            list={this.state.PayerNameList}
-                            onHandleChange={this.onHandleChange}
-                            onSelected={this.onSelected}
-                            renderMethod={this.props.renderMethod}
-                            flag={"Payer"}
-                          
-                        />
-                    </div>: null }
+                        <div className="form-group col-2">
+                            <div className="list-dashboard">Payer</div>
+                            <AutoComplete
+                                list={this.state.PayerNameList}
+                                onHandleChange={this.onHandleChange}
+                                onSelected={this.onSelected}
+                                renderMethod={this.props.renderMethod}
+                                flag={"Payer"}
+
+                            />
+                        </div> : null}
                     {this.props.payeeShow ?
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">NPI</div>
-                        <AutoComplete 
-                            list={this.state.PayeeNameList}
-                            onHandleChange={this.onHandleChange1}
-                            onSelected={this.onSelected1}
-                            renderMethod={this.props.renderMethod}
-                            flag={"Payee"}
-                        />
-                    </div>: null }
+                        <div className="form-group col-2">
+                            <div className="list-dashboard">NPI</div>
+                            <AutoComplete
+                                list={this.state.PayeeNameList}
+                                onHandleChange={this.onHandleChange1}
+                                onSelected={this.onSelected1}
+                                renderMethod={this.props.renderMethod}
+                                flag={"Payee"}
+                            />
+                        </div> : null}
                     {this.props.CheckEFTNo ?
                         <div className="form-group col-2">
-                        <div className="list-dashboard">Check/EFT Number (TRN02)</div>
-                        <AutoComplete 
-                            list={this.state.CheckEFTNo}
-                            onHandleChange={this.onHandleChange6}
-                            onSelected={this.onSelected6}
-                            renderMethod={this.props.renderMethod}
-                            flag={"CheckEFTNo"}
-                        />
-                    </div>: null 
+                            <div className="list-dashboard">Check/EFT Number (TRN02)</div>
+                            <AutoComplete
+                                list={this.state.CheckEFTNo}
+                                onHandleChange={this.onHandleChange6}
+                                onSelected={this.onSelected6}
+                                renderMethod={this.props.renderMethod}
+                                flag={"CheckEFTNo"}
+                            />
+                        </div> : null
                     }
                     {
                         this.props.checkDateShow ?
@@ -985,15 +985,15 @@ export class Filters extends React.Component {
                     }
                     {this.props.claimIdData ?
                         <div className="form-group col-2">
-                        <div className="list-dashboard">Payer Claim Control No(CLP07)</div>
-                        <AutoComplete 
-                            list={this.state.claimIdData}
-                            onHandleChange={this.onHandleChange3}
-                            onSelected={this.onSelected3}
-                            renderMethod={this.props.renderMethod}
-                            flag={"claimIdData"}
-                        />
-                    </div>: null 
+                            <div className="list-dashboard">Payer Claim Control No(CLP07)</div>
+                            <AutoComplete
+                                list={this.state.claimIdData}
+                                onHandleChange={this.onHandleChange3}
+                                onSelected={this.onSelected3}
+                                renderMethod={this.props.renderMethod}
+                                flag={"claimIdData"}
+                            />
+                        </div> : null
                     }
 
                     {/* {this.props.CLP01Show ?
@@ -1009,61 +1009,77 @@ export class Filters extends React.Component {
                     </div>: null 
                     } */}
                     {this.props.clp06Show ?
-                    <div className="form-group col-2">
-                        <div className="list-dashboard">CLP06</div>
-                        <AutoComplete 
-                            list={this.state.clp06List}
-                            extraParams={true}
-                            onHandleChange={this.onHandleChange2}
-                            onSelected={this.onSelected2}
-                            renderMethod={this.props.renderMethod}
-                            flag={"clp06List"}
-                        />
-                    </div>: null 
-                    }                    
-                    
+                        <div className="form-group col-2">
+                            <div className="list-dashboard">CLP06</div>
+                            <AutoComplete
+                                list={this.state.clp06List}
+                                extraParams={true}
+                                onHandleChange={this.onHandleChange2}
+                                onSelected={this.onSelected2}
+                                renderMethod={this.props.renderMethod}
+                                flag={"clp06List"}
+                            />
+                        </div> : null
+                    }
+
                     {this.props.PatientSubscriberIDList ?
                         <div className="form-group col-2">
-                        <div className="list-dashboard">Subscriber ID</div>
-                        <AutoComplete 
-                            list={this.state.PatientSubscriberIDList}
-                            onHandleChange={this.onHandleChange5}
-                            onSelected={this.onSelected5}
-                            renderMethod={this.props.renderMethod}
-                            flag={"PatientSubscriberIDList"}
-                        />
-                    </div>: null 
+                            <div className="list-dashboard">Subscriber ID</div>
+                            <AutoComplete
+                                list={this.state.PatientSubscriberIDList}
+                                onHandleChange={this.onHandleChange5}
+                                onSelected={this.onSelected5}
+                                renderMethod={this.props.renderMethod}
+                                flag={"PatientSubscriberIDList"}
+                            />
+                        </div> : null
                     }
                     {
-                        this.props.CompanyDescKaiser ? 
-                        <div className="form-group col-2">
-                                    <div className="list-dashboard">Company Description</div>
-                                    <select className="form-control list-dashboard" id="TradingPartner"
-                                        value={this.props.CompanyDesc}
-                                        onChange={(event) => {
-                                            this.onSelect(event, 'CompanyDesc')
-                                        }}>
-                                        <option value=""></option>
-                                        {this.getCompanyDescKaiser()}
-                                    </select>
-                                </div> : null
+                        this.props.CompanyDescKaiser ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Company Description</div>
+                                <select className="form-control list-dashboard" id="TradingPartner"
+                                    value={this.props.CompanyDesc}
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'CompanyDesc')
+                                    }}>
+                                    <option value=""></option>
+                                    {this.getCompanyDescKaiser()}
+                                </select>
+                            </div> : null
                     }
-                    
-                      {
-                        this.props.Clear ?
-                            <div className="form-group col-1">
-                                <div className="list-dashboard"></div>
-                                <button type="submit" onClick={this.Clear} className="btn light_blue1 btn-xs" style={{ marginRight: "120px" ,marginTop:"16px" ,height:"32px" }}>Clear</button>
+                    {
+                        this.props.Split ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Split File(Y/N)</div>
+                                <select className="form-control list-dashboard"
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'Split')
+                                    }}>
+                                    <option value=""></option>
+                                    <option value="SPLIT">Yes</option>
+                                    <option selected value="Inbound">No</option>
+                                </select>
                             </div>
                             : null
                     }
+
+                    {
+                        this.props.Clear ?
+                            <div className="form-group col-1">
+                                <div className="list-dashboard"></div>
+                                <button type="submit" onClick={this.Clear} className="btn light_blue1 btn-xs" style={{ marginRight: "120px", marginTop: "16px", height: "32px" }}>Clear</button>
+                            </div>
+                            : null
+                    }
+
 
 
                     {
                         this.props.Updatebutton ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard"></div>
-                                <button type="submit" className="btn light_blue1 btn-xs" style={{ marginRight: "120px" ,marginTop:"16px" ,height:"32px" }}>Update</button>
+                                <button type="submit" className="btn light_blue1 btn-xs" style={{ marginRight: "120px", marginTop: "16px", height: "32px" }}>Update</button>
                             </div>
                             : null
                     }
