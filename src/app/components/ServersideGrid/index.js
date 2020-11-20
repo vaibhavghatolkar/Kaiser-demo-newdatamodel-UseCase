@@ -82,8 +82,10 @@ export class ServersideGrid extends React.Component {
             this.props.incoming_837fileId != nextProps.incoming_837fileId ||
             this.props.Split != nextProps.Split ||
             this.props.Parent_File_name != nextProps.Parent_File_name ||
-            this.props.Service != nextProps.Service 
-            
+            this.props.Service != nextProps.Service ||
+            this.props.InvoicePattern != nextProps.InvoicePattern ||
+            this.props.LOB != nextProps.LOB ||
+            this.props.ReferenceID != nextProps.ReferenceID 
             
         ) {
             var datasource = this.ServerSideDatasource();

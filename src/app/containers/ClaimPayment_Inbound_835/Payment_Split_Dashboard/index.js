@@ -838,7 +838,7 @@ export class Payment_Split_Dashboard extends React.Component {
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                      startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""
-                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"" Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}") {
+                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"" Service:"${this.state.Service}" InvoicePattern:"" LOB:"" ReferenceID:"") {
                         RecCount
                         FileId
                         GSID

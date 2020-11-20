@@ -106,6 +106,8 @@ export class InboundPaymentDetails extends React.Component {
            Service: props.location.state && props.location.state.data[0] && props.location.state.data[0].Service  ? props.location.state.data[0].Service : '',
             InvoicePattern: props.location.state && props.location.state.data[0] && props.location.state.data[0].InvoicePattern  ? props.location.state.data[0].InvoicePattern : '',
             LOB: props.location.state && props.location.state.data[0] && props.location.state.data[0].LOB  ? props.location.state.data[0].LOB : '',
+            ReferenceID: props.location.state && props.location.state.data[0] && props.location.state.data[0].ReferenceID  ? props.location.state.data[0].ReferenceID : '',
+            
 
         }
     }
@@ -388,7 +390,7 @@ export class InboundPaymentDetails extends React.Component {
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId}",
                        CLP06:"${this.state.clp06List}"
                        ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"" MolinaClaimID:""
-                       Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}"
+                       Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}"
                 ) {
                     RefID
                     RecCount
@@ -462,6 +464,10 @@ export class InboundPaymentDetails extends React.Component {
                     claimIdData={this.state.claimIdData}
                     renderMethod={this.renderMethod}
                     Split={this.state.Split}
+                    Service={this.state.Service}
+                    InvoicePattern={this.state.InvoicePattern}
+                    LOB={this.state.LOB}
+                    ReferenceID={this.state.ReferenceID}
                     sorting={true}
                 />
             </div>
@@ -689,7 +695,7 @@ export class InboundPaymentDetails extends React.Component {
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId}",
             CLP06:"${this.state.clp06List}"
             ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:""
-            , Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}"
+            , Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}"
             ) {
                 RecCount
                 FileId
@@ -745,6 +751,10 @@ export class InboundPaymentDetails extends React.Component {
                     claimIdData={this.state.claimIdData}
                     Split={this.state.Split}
                     renderMethod={this.renderMethod}
+                    Service={this.state.Service}
+                    InvoicePattern={this.state.InvoicePattern}
+                    LOB={this.state.LOB}
+                    ReferenceID={this.state.ReferenceID}
                     // handleColWidth={120}
                 />
             </div>

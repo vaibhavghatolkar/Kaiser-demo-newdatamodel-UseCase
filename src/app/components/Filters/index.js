@@ -25,8 +25,8 @@ export class Filters extends React.Component {
             State: this.props.State ? this.props.State : '',
             tradingpartner: [],
             PayerNameList: [],
-            InvoicePattern:[],
-            LOB:[],
+            InvoicePattern: [],
+            LOB: [],
             PayeeNameList: [],
             clp06List: [],
             claimIdData: [],
@@ -38,7 +38,9 @@ export class Filters extends React.Component {
             transactionId: this.props.transactionId ? this.props.transactionId : '',
             TransactionMasterList: [],
             transOptions: [],
-            LockBoxFileNameList: []
+            LockBoxFileNameList: [],
+            SelectedLOB: this.props.LOB ? this.props.LOB : "",
+            selectedService: this.props.selectedService ? this.props.selectedService : ""
         }
     }
 
@@ -88,9 +90,9 @@ export class Filters extends React.Component {
             });
     }
     getInvoicePatternApi = async () => {
-        
+
         let query = `{
-            InvoicePatternList(LOB:"${this.state.LOB }") {
+            InvoicePatternList(LOB:"${this.state.SelectedLOB}") {
                 Invoice_Pattern
                 Invoice_Pattern_Value
               }
@@ -119,7 +121,7 @@ export class Filters extends React.Component {
     }
 
     getLOBListApi = async () => {
-        
+
         let query = `{
             LOBList {
                 LOB
@@ -329,6 +331,20 @@ export class Filters extends React.Component {
             if (name == 'selectedTradingPartner' || name == 'Split') {
                 this.props.update(name, event.target.options[event.target.selectedIndex].value)
             } else {
+                if (name == 'LOB') {
+                    this.setState({
+                        SelectedLOB: event.target.options[event.target.selectedIndex].text
+                    }, () => {
+                        this.getInvoicePatternApi()
+                    })
+                }
+                if (name == 'Service') {
+                    this.setState({
+                        selectedService: event.target.options[event.target.selectedIndex].text
+                    }, () => {
+                        //  this.getReferenceIDListApi()
+                    })
+                }
                 this.props.update(name, event.target.options[event.target.selectedIndex].text)
             }
         }
@@ -357,7 +373,7 @@ export class Filters extends React.Component {
         this.props.update('CheckEFTNo', value)
     }
     onSelected7 = (value) => {
-        this.props.update('ReferenceIDData', value)
+        this.props.update('ReferenceID', value)
     }
     Clear = (value) => {
 
@@ -714,10 +730,11 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                ReferenceIDList(RecType:"Inbound" ReferenceID:"${providerName}" Service:"") {
+                ReferenceIDList(RecType:"Inbound" ReferenceID:"${providerName}" Service:"${this.state.selectedService}") {
                     ReferenceID
                   }
               }`
+            if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             return fetch(Urls._transaction835, {
                 method: 'POST',
                 headers: {
@@ -924,7 +941,7 @@ export class Filters extends React.Component {
                                         this.props.setData(startDate, endDate, selected_val, chartType)
                                     }}
 
-                                    defaultValue={this.props.changeDefault ? 'halfYear' :this.props.days90Filter? '3' :  'year'}
+                                    defaultValue={this.props.changeDefault ? 'halfYear' : this.props.days90Filter ? '3' : 'year'}
                                 >
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>
@@ -1058,6 +1075,23 @@ export class Filters extends React.Component {
                             : null
                     }
 
+                    {
+                        this.props.PBHBShow ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">By Service</div>
+                                <select className="form-control list-dashboard" id="ProviderName"
+                                    value={this.props.payer}
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'Service')
+                                    }}>
+                                    <option value=""></option>
+                                    <option value="PB">PB</option>
+                                    <option value="HB">HB</option>
+                                    <option value="PB & HB">PB & HB</option>
+                                </select>
+                            </div>
+                            : null
+                    }
 
                     {this.props.payerShow ?
                         <div className="form-group col-2">
@@ -1106,18 +1140,54 @@ export class Filters extends React.Component {
 
                             : null
                     }
-                    {this.props.claimIdData ?
+
+                    {this.props.ReferenceIDList ?
                         <div className="form-group col-2">
-                            <div className="list-dashboard">Payer Claim Control No(CLP07)</div>
+                            <div className="list-dashboard">Receiver Identification Number</div>
                             <AutoComplete
-                                list={this.state.claimIdData}
-                                onHandleChange={this.onHandleChange3}
-                                onSelected={this.onSelected3}
+                                list={this.state.ReferenceIDData}
+                                onHandleChange={this.getReferenceIDListApi}
+                                onSelected={this.onSelected7}
                                 renderMethod={this.props.renderMethod}
-                                flag={"claimIdData"}
+                                flag={"ReferenceIDData"}
                             />
                         </div> : null
                     }
+
+                    {
+                        this.props.LOBShow ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">LOB</div>
+                                <select className="form-control list-dashboard" id="LOB"
+                                    value={this.props.LOB}
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'LOB')
+                                    }}>
+                                    <option value=""></option>
+                                    {this.getLOBData()}
+                                </select>
+                            </div>
+
+                            : null
+                    }
+
+                    {
+                        this.props.InvoicePatternList ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Invoice Pattern</div>
+                                <select className="form-control list-dashboard" id="InvoicePattern"
+                                    value={this.props.InvoicePattern}
+                                    onChange={(event) => {
+                                        this.onSelect(event, 'InvoicePattern')
+                                    }}>
+                                    <option value=""></option>
+                                    {this.getInvoicePattern()}
+                                </select>
+                            </div>
+
+                            : null
+                    }
+
 
                     {/* {this.props.CLP01Show ?
                         <div className="form-group col-2">
@@ -1145,6 +1215,20 @@ export class Filters extends React.Component {
                         </div> : null
                     }
 
+                    {this.props.claimIdData ?
+                        <div className="form-group col-2">
+                            <div className="list-dashboard">Payer Claim Control No(CLP07)</div>
+                            <AutoComplete
+                                list={this.state.claimIdData}
+                                onHandleChange={this.onHandleChange3}
+                                onSelected={this.onSelected3}
+                                renderMethod={this.props.renderMethod}
+                                flag={"claimIdData"}
+                            />
+                        </div> : null
+                    }
+
+
                     {this.props.PatientSubscriberIDList ?
                         <div className="form-group col-2">
                             <div className="list-dashboard">Guarantor</div>
@@ -1171,23 +1255,11 @@ export class Filters extends React.Component {
                                 </select>
                             </div> : null
                     }
-                    {
-                        this.props.PBHBShow ?
-                            <div className="form-group col-2">
-                                <div className="list-dashboard">Service</div>
-                                <select className="form-control list-dashboard" id="ProviderName"
-                                 value={this.props.payer}
-                                 onChange={(event) => {
-                                     this.onSelect(event, 'Service')
-                                 }}>
-                                    <option value=""></option>
-                                    <option value="PB">PB</option>
-                                    <option value="HB">HB</option>
-                                    <option value="PB and HB">PB and HB</option>
-                                </select>
-                            </div>
-                            : null
-                    }
+
+
+
+
+
                     {
                         this.props.Split ?
                             <div className="form-group col-2">
@@ -1197,58 +1269,12 @@ export class Filters extends React.Component {
                                         this.onSelect(event, 'Split')
                                     }}>
                                     <option value=""></option>
-                                    <option  selected={this.props.Split=="SPLIT" ? true :false}  value="SPLIT">Yes</option>
-                                    <option  selected={this.props.Split=="Inbound" ? true :false } value="Inbound">No</option>
+                                    <option selected={this.props.Split == "SPLIT" ? true : false} value="SPLIT">Yes</option>
+                                    <option selected={this.props.Split == "Inbound" ? true : false} value="Inbound">No</option>
                                 </select>
                             </div>
                             : null
                     }
-                    {this.props.ReferenceIDList ?
-                        <div className="form-group col-2">
-                            <div className="list-dashboard">Receiver Identification Number</div>
-                            <AutoComplete
-                                list={this.state.ReferenceIDData}
-                                onHandleChange={this.getReferenceIDListApi}
-                                onSelected={this.onSelected7}
-                                renderMethod={this.props.renderMethod}
-                                flag={"ReferenceIDData"}
-                            />
-                        </div> : null
-                    }
-
-                    { 
-                        this.props.LOBShow ?
-                    <div className="form-group col-2">
-                                    <div className="list-dashboard">LOB</div>
-                                    <select className="form-control list-dashboard" id="LOB"
-                                        value={this.props.LOB}
-                                        onChange={(event) => {
-                                            this.onSelect(event, 'LOB')
-                                        }}>
-                                        <option value=""></option>
-                                        {this.getLOBData()}
-                                    </select>
-                    </div>
-                                
-                            : null
-                        }
-
-                    { 
-                        this.props.InvoicePatternList ?
-                    <div className="form-group col-2">
-                                    <div className="list-dashboard">Invoice Pattern</div>
-                                    <select className="form-control list-dashboard" id="InvoicePattern"
-                                        value={this.props.InvoicePattern}
-                                        onChange={(event) => {
-                                            this.onSelect(event, 'InvoicePattern')
-                                        }}>
-                                        <option value=""></option>
-                                        {this.getInvoicePattern()}
-                                    </select>
-                    </div>
-                                
-                            : null
-                        }
 
                     {
                         this.props.Clear ?
