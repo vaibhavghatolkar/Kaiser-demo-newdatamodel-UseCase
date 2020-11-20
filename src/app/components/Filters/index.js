@@ -475,11 +475,11 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                PayerList (RecType:"Inbound",Payer:"${providerName}") {
+                PayerList (RecType:"835Link",Payer:"${providerName}" Service:"${this.state.selectedService}") {
                   PayerName
                 }
               }`
-            //   if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+              if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
             return fetch(Urls._transaction835, {
                 method: 'POST',
                 headers: {
@@ -511,7 +511,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                PayeeList (RecType:"Inbound",Payee:"${providerName}") {
+                PayeeList (RecType:"835Link",Payee:"${providerName}" Service:"${this.state.selectedService}") {
                   PayeeName
                   NPI
                 }
@@ -547,7 +547,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                CLP06List (RecType:"Inbound",CLP06:"${providerName}") {
+                CLP06List (RecType:"835Link",CLP06:"${providerName}" Service:"${this.state.selectedService}") {
                     CLP06
                     Desc
                 }
@@ -586,7 +586,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                ClaimIDList(RecType:"Inbound",ClaimID:"${providerName}") {
+                ClaimIDList(RecType:"835Link",ClaimID:"${providerName}" Service:"${this.state.selectedService}") {
                     ClaimID
                   }
               }`
@@ -621,7 +621,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                CLP01List(RecType:"Inbound",CLP01:"${providerName}") {
+                CLP01List(RecType:"835Link",CLP01:"${providerName}" Service:"${this.state.selectedService}") {
                     CLP01
                   }
               }`
@@ -657,7 +657,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                PatientSubscriberIDList(RecType:"Inbound",PatientSubscriberID:"${providerName}") {
+                PatientSubscriberIDList(RecType:"835Link",PatientSubscriberID:"${providerName}" Service:"${this.state.selectedService}") {
                     PatientSubscriberID
                   }
               }`
@@ -693,7 +693,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                CheckEFTNoList(RecType:"Inbound",CheckEFTNo:"${providerName}") {
+                CheckEFTNoList(RecType:"835Link",CheckEFTNo:"${providerName}" Service:"${this.state.selectedService}") {
                     CheckEFTNo
                   }
               }`
@@ -730,7 +730,7 @@ export class Filters extends React.Component {
 
         val = setTimeout(() => {
             let query = `{
-                ReferenceIDList(RecType:"Inbound" ReferenceID:"${providerName}" Service:"${this.state.selectedService}") {
+                ReferenceIDList(RecType:"835Link" ReferenceID:"${providerName}" Service:"${this.state.selectedService}") {
                     ReferenceID
                   }
               }`
@@ -1005,7 +1005,7 @@ export class Filters extends React.Component {
                     {
                         this.props.showclaimId ?
                             <div className="form-group col-2">
-                                <div className="list-dashboard">{this.props.isMolina ? 'Molina Claim Id' : 'Claim Id'}</div>
+                                <div className="list-dashboard">{this.props.isMolina ? 'HiPaaS Claim Id' : 'Claim Id'}</div>
                                 <input
                                     className="form-control list-dashboard"
                                     value={this.state.Filter_ClaimId}
@@ -1149,7 +1149,7 @@ export class Filters extends React.Component {
                                 onHandleChange={this.getReferenceIDListApi}
                                 onSelected={this.onSelected7}
                                 renderMethod={this.props.renderMethod}
-                                flag={"ReferenceIDData"}
+                                flag={"ReferenceID"}
                             />
                         </div> : null
                     }
@@ -1189,7 +1189,7 @@ export class Filters extends React.Component {
                     }
 
 
-                    {/* {this.props.CLP01Show ?
+                    {this.props.CLP01Show ?
                         <div className="form-group col-2">
                         <div className="list-dashboard">CLP01</div>
                         <AutoComplete 
@@ -1200,7 +1200,7 @@ export class Filters extends React.Component {
                             flag={"CLP01List"}
                         />
                     </div>: null 
-                    } */}
+                    }
                     {this.props.clp06Show ?
                         <div className="form-group col-2">
                             <div className="list-dashboard">Financial Class (CLP06)</div>

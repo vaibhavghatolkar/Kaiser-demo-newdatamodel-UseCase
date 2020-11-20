@@ -92,8 +92,8 @@ export class Outbound_Payment_Compare_Details extends React.Component {
             { headerName: "Claims ID", field: "ClaimId", width: 150,  },
             { headerName: "Claims Date", field: "ClaimDate", width:200 },
             { headerName: "Payment Status ", field: "PaymentStatus", width:200 },
-            { headerName: "837 Payer Name", field: "837", width:150 },
-            { headerName: "835 Payer Name", field: "835", flex:1 }
+            { headerName: "837 Payor Name", field: "837", width:150 },
+            { headerName: "835 Payor Name", field: "835", flex:1 }
             
         ]: this.state.Flag=="4" ? [  
             { headerName: "File Name", field: "fileName", width: 130 },

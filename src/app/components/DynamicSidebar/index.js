@@ -334,7 +334,7 @@ export class DynamicSidebar extends React.Component {
                 ]
             }
             else if (element.key == Strings.Outbound_Encounter_ClaimDetails837 || element.key == Strings.Outbound_Encounter_BatchDetails837
-                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser || element.key==Strings.Claim_Details_837
+                || element.key == Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser || element.key==Strings.Claim_Details_837 || element.key==Strings._InboundPaymentDetails
                 ) {
                 data = [
                     { apiflag: '0', State: 'n', selectedTradingPartner: 'n', startDate: 'n', endDate: 'n', transactionId: 'n', status: 'n', count: 'n' },

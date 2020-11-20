@@ -384,10 +384,10 @@ export class InboundPaymentDetails extends React.Component {
 
         let query = `{
                 PaymentProcessingSummaryNew(
-                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
-                    RecType:"${this.state.Split}", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
+                    StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State ? this.state.State : ''}",FileID:"${this.state.selectedFileId}",Status:"${this.state.claimStatus}",
+                    RecType:"835Link", EFTCHK:"${this.state.EFTCHK}",ClaimID:"${this.state.claimIdData}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId}",
+                       startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId=="" ? this.state.CLP01List : this.state.incoming_835fileId}",
                        CLP06:"${this.state.clp06List}"
                        ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"" MolinaClaimID:""
                        Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}"
@@ -689,10 +689,10 @@ export class InboundPaymentDetails extends React.Component {
         let query = `{
             Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",
             EndDt: "${endDate}", Status:"${this.state.claimStatus}" , FileID:"${this.state.incoming_fileId}" ,
-            RecType:"${this.state.Split}",  EFTCHK:"${this.state.EFTCHK}",
+            RecType:"835Link",  EFTCHK:"${this.state.EFTCHK}",
             ClaimID:"${this.state.claimIdData}"
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId}",
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId=="" ? this.state.CLP01List : this.state.incoming_835fileId}",
             CLP06:"${this.state.clp06List}"
             ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:""
             , Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}"
@@ -800,12 +800,12 @@ export class InboundPaymentDetails extends React.Component {
                 Clear={true}
                 renderMethod={this.renderMethod}
                 removeState={true}
-                Split={true}
+                // Split={true}
                 PBHBShow={true}
                 InvoicePatternList={true}
                 LOBShow={true}
                 ReferenceIDList={true}
-                Split={this.state.Split}
+                // Split={this.state.Split}
             />
         )
     }

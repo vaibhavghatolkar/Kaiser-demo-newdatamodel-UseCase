@@ -108,7 +108,7 @@ export class Common_835 extends React.Component {
     _getCounts = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let recType = isOutbound ? 'Outbound' : '835Link'
         let query = ''
         if (isOutbound) {
             query = `{
@@ -523,7 +523,7 @@ export class Common_835 extends React.Component {
 
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let recType = isOutbound ? 'Outbound' : '835Link'
 
         let query = `{
               ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
@@ -603,7 +603,7 @@ export class Common_835 extends React.Component {
     _getClaimCounts_new_version = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
-        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let recType = isOutbound ? 'Outbound' : '835Link'
         let query = `{
               ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"${this.state.Service}") {
                 X12Count

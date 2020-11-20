@@ -544,6 +544,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
               PaidServiceUnitCount
               RecCount
               MolinaClaimID
+              Service_Line_Data
             }
           }
           `
@@ -1598,11 +1599,11 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         let columnDefs = [
             { headerName: "HiPaaS Claims ID", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claims ID", field: "ClaimID" },
-
             { headerName: "Service Line No.", field: "ServiceLineCount" },
-            { headerName: " Service Date", field: "ServiceDate" },
-            { headerName: "Procedure Code", field: "ProcedureDate" },
-            { headerName: "Unit", field: "PaidServiceUnitCount", flex: 1 },
+            { headerName: "Service Line Data", field: "Service_Line_Data", flex: 1 },
+            // { headerName: " Service Date", field: "ServiceDate" },
+            // { headerName: "Procedure Code", field: "ProcedureDate" },
+            // { headerName: "Unit", field: "PaidServiceUnitCount", flex: 1 },
 
         ]
 

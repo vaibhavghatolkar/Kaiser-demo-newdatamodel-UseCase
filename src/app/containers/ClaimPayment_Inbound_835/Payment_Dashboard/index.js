@@ -157,7 +157,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
-        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"${this.state.Service}") {
+        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "835Link" Service:"${this.state.Service}") {
                 TotalCount
                 Rejected
                 Accepted
@@ -253,7 +253,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "Inbound" ,Service:"${this.state.Service}") {
+            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "835Link" ,Service:"${this.state.Service}") {
                 From
                 MonthNo
                 Year
@@ -323,11 +323,11 @@ export class InboundClaimPaymentDashboard extends React.Component {
         }
         let query = `{
            
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "${recType}" Service:"${this.state.Service}") {
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "835Link" Service:"${this.state.Service}") {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"${recType}"  Service:"${this.state.Service}") {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"835Link"  Service:"${this.state.Service}") {
                 Type
                 TotalCount
             }
@@ -646,7 +646,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-          Status:"" , FileID:"${this.state.parent_FileID}" ,RecType:"${recType}",  EFTCHK:"",ClaimID:"",
+          Status:"" , FileID:"${this.state.parent_FileID}" ,RecType:"835Link",  EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Service:"${this.state.Service}"  ParentFile:"") {
                 RecCount
@@ -704,7 +704,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
                 Dashboard835FunctionalGroupDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                 Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"${recType}", 
+                 Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"835Link", 
                  EFTCHK:"",ClaimID:"",
                  sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                  startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}  Service:"${this.state.Service}") {
@@ -766,7 +766,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
                     Dashboard835TransactionSetHeaderDetails(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-                    Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"${recType}", EFTCHK:"",ClaimID:"",
+                    Status:"" , FileID:"${this.state.selectedGSID}" ,RecType:"835Link", EFTCHK:"",ClaimID:"",
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                      startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""

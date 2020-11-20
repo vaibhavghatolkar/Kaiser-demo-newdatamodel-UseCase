@@ -235,8 +235,8 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                     { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, color: '#139DC9' },
                 ]
                 let stage_7 = [
-                    { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color: '#2AC327' },
-                    { 'name': 'Denied', 'value': _condition1 ? _data1[0].Denied : 0, color: '#FF3B41' },
+                    { 'name': 'Paid', 'value': _condition1 ? 75 : 75, color: '#2AC327' },
+                    { 'name': 'Denied', 'value': _condition1 ? 0 : 0, color: '#FF3B41' },
                     // { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color: '#FA731A' },
                     // { 'name': 'WIP 0-30', 'value': 500, color: '#139DC9' },
                     // { 'name': 'WIP 30-60', 'value': 350, color: '#139DC9' },

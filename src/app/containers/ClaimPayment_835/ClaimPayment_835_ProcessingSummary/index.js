@@ -430,7 +430,7 @@ if(isOutboundPage){
             query = `{
                 PaymentProcessingSummaryNew(
                     StartDt:"` + startDate + `",EndDt:"` + endDate + `" , State:"${this.state.State}",FileID:"${this.state.file_id}",Status:"",
-                    RecType:"${this.state.Split}",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
+                    RecType:"835Link",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
                        ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:"" MolinaClaimID:"" Service:"${this.state.Service}" InvoicePattern:"" LOB:"" ReferenceID:""
@@ -523,7 +523,7 @@ if(isOutboundPage){
                 showclaimId={isOutbound ? true : false}
                 State={this.state.State}
                 removeState= {isOutbound ? false : true}
-                Split={true}
+                // Split={true}
 
 
             />

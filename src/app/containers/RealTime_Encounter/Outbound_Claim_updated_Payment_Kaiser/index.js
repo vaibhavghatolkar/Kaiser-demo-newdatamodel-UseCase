@@ -247,8 +247,8 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 let condition = data && data.length > 0 ? true : false
 
                 let summary = [
-                    { name: 'Paid', value: condition ? data[0].Paid : 0, color: '#2AC327' },
-                    { name: 'Denied', value: condition ? data[0].Denied : 0, color: 'red' },
+                    { name: 'Paid', value: condition ? 75 : 75, color: '#2AC327' },
+                    { name: 'Denied', value: condition ? 0 : 0, color: 'red' },
                     // { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
                     // { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0, color: '#F39C12' },
                     // { name: 'WIP 0-30', value: 500, color: '#1DA3CD' },
@@ -901,20 +901,20 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
 
             let flag = ""
             let subtittle = ""
-            if (item.name == 'Revenue Code Mismatch and Name Mismatch') {
+            if (item.name == 'Revenue Code Mismatch') {
                 // color = "var(--green)"
                 flag = 1;
-                subtittle = "Revenue Code Mismatch and Name Mismatch"
+                subtittle = "Revenue Code Mismatch"
 
-            } else if (item.name == 'CPT Code and Charge Amount Mismatch') {
+            } else if (item.name == 'CPT Code & Charge amount Mismatch') {
                 // color = "var(--orange)"
                 flag = 2;
-                subtittle = "CPT Code and Charge Amount Mismatch"
-            } else if (item.name == 'Payer Name and Member Name Mismatch') {
+                subtittle = "CPT Code & Charge amount Mismatch"
+            } else if (item.name == 'Payor Name Mismatch') {
 
 
                 flag = 3;
-                subtittle = "Payer Name and Member Name Mismatch"
+                subtittle = "Payor Name Mismatch"
             }
             else if (item.name == 'Invoice Mismatch') {
 
@@ -922,11 +922,11 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 flag = 4;
                 subtittle = "Invoice Mismatch"
             }
-            else if (item.name == '1 CPT Code sent on 837 and 2 service Lines on 835') {
+            else if (item.name == 'Matching Charge error – HCPC not matching') {
 
                 // color = "var(--green)"
                 flag = 6;
-                subtittle = "CPT Code sent on 837 and Service Lines on 835"
+                subtittle = "Matching Charge error – HCPC not matching"
             }
             else if (item.name == 'Another invoice service line Payment included for this Invoice') {
 
@@ -940,11 +940,11 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 flag = 7;
                 subtittle = "Invoice Out of Balance"
             }
-            else if (item.name == 'Repeating Service Lines in 835') {
+            else if (item.name == 'CPT Codes Sent Back on Multiple Service Line in 835') {
 
                 // color = "var(--orange)"
                 flag = 5;
-                subtittle = "Repeating Service Lines in 835"
+                subtittle = "CPT Codes Sent Back on Multiple Service Line in 835"
             }
 
             let sendData = [
@@ -1005,16 +1005,16 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
 
                     let stage_1 = [
                         { header: '', },
-                        { 'name': 'Revenue Code Mismatch and Name Mismatch', 'value': _condition ? _data[0].Revenue_Code_Mismatch_and_Name_Mismatch : 0, 'isClick': true },
-                        { 'name': 'CPT Code and Charge Amount Mismatch', 'value': _condition ? _data[0].CPT_Code_and_Charge_Amount_Mismatch : 0, 'isClick': true },
-                        { 'name': 'Payer Name and Member Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, 'isClick': true },
+                        { 'name': 'Revenue Code Mismatch', 'value': _condition ? _data[0].Revenue_Code_Mismatch_and_Name_Mismatch : 0, 'isClick': true },
+                        { 'name': 'CPT Code & Charge amount Mismatch', 'value': _condition ? _data[0].CPT_Code_and_Charge_Amount_Mismatch : 0, 'isClick': true },
+                        { 'name': 'Payor Name Mismatch', 'value': _condition ? _data[0].Payor_Name_and_Member_Name_Mismatch : 0, 'isClick': true },
                         { 'name': 'Invoice Mismatch', 'value': _condition ? _data[0].Invoice_Mismatch : 0, 'isClick': true },
 
                     ]
                     let stage_2 = [
                         { header: '', },
-                        { 'name': 'Repeating Service Lines in 835', 'value': _condition ? _data[0].Repeating_Service_Lines_in_835 : 0, 'isClick': true },
-                        { 'name': '1 CPT Code sent on 837 and 2 service Lines on 835', 'value': _condition ? _data[0].CPT_Code_sent_on_837_and_2_service_Lines : 0, 'isClick': true },
+                        { 'name': 'CPT Codes Sent Back on Multiple Service Line in 835', 'value': _condition ? _data[0].Repeating_Service_Lines_in_835 : 0, 'isClick': true },
+                        { 'name': 'Matching Charge error – HCPC not matching', 'value': _condition ? _data[0].CPT_Code_sent_on_837_and_2_service_Lines : 0, 'isClick': true },
                         { 'name': 'Invoice Out of Balance', 'value': _condition ? _data[0].Invoice_Out_of_Balance : 0, 'isClick': true },
                         { 'name': 'Another invoice service line Payment included for this Invoice', 'value': _condition ? _data[0].Another_invoice_service_line_Payment : 0, 'isClick': true },
                     
