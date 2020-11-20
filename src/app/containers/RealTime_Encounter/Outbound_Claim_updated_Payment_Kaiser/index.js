@@ -46,7 +46,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             State: "",
             type: "",
             providerName: "",
-            startDate: moment().subtract(365, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
@@ -87,13 +87,13 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 // { headerName: "File Date", field: "FileDate_Outbound", width: 100 },
                 // { headerName: "File Status", field: "FileStatus_Outbound", width: 105 },
                 // { headerName: "Encounter ID", field: "ClaimID", width: 100,},
-                { headerName: "Molina Claim ID", field: "MolinaClaimID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-                {
-                    headerName: "State", field: "State", width: 100,
-                    cellRenderer: (data) => {
-                        return "FL"
-                    }
-                },
+                { headerName: "HiPaaS Claim ID", field: "MolinaClaimID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+                // {
+                //     headerName: "State", field: "State", width: 100,
+                //     cellRenderer: (data) => {
+                //         return "FL"
+                //     }
+                // },
                 { headerName: "Payment Status", field: "PaymentStatus", flex: 1 },
                 { headerName: "Claims Date", field: "EncounterDate", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Claims 999 Status", field: "Encounter99_Status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -872,7 +872,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
         return (
             <Filters
                 isTimeRange={false}
-                isPayer={true}
+                // isPayer={true}
                 removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}

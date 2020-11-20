@@ -26,7 +26,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
     constructor(props) {
         super(props);
-        console.log("sssssssssss", props.location.state.data[0].status)
+        
         let condition = props.location.state && props.location.state.data
         this.state = {
             intakeClaims: [],
@@ -595,7 +595,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
                     let claimDetails =
                         [
-                            { key: 'Molina Claims Id', value: data.MolinaClaimID },
+                            { key: 'HiPaaS Claims Id', value: data.MolinaClaimID },
                             { key: 'Claims Id', value: data.ClaimID },
                             { key: 'Claims Date', value: data.ClaimDateTime },
                             { key: 'Subscriber First Name', value: data.SubscriberFirstName },
@@ -1157,18 +1157,18 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName_Outbound", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
-            {
-                headerName: "State", field: "State", width: 100,
-                cellRenderer: (data) => {
-                    return "FL"
-                }
-            },
+            // {
+            //     headerName: "State", field: "State", width: 100,
+            //     cellRenderer: (data) => {
+            //         return "FL"
+            //     }
+            // },
             { headerName: "Process ID", field: "FileID", flex: 1 },
             { headerName: "File Date", field: "FileDate_Outbound", width: 120 },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
-            {
-                headerName: "Payer", field: "", width: 140, cellRenderer: (data) => {
-                    return 'Anthem Blue Cross'
+            // {
+            //     headerName: "Payer", field: "", width: 140, cellRenderer: (data) => {
+            //         return 'Anthem Blue Cross'
                     // if(data.data.FileID == "4409587027123631357"){ return 'KFHP 1000'}
                     // if(data.data.FileID == "2286167938954787192"){ return 'LOS ANGELES COUNTY EMPLOYEES RETIREMENT ASSOC LA COUNTY EMPL'} 
                     // if(data.data.FileID == "7200559299812942294"){ return 'KP UNION FONTANA 7600 LOCAL 7600 STEELWORKERS'} 
@@ -1178,8 +1178,8 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                     // if(data.data.FileID == "2039039313281243917"){ return ''} 
                     // if(data.data.FileID == "8609211606044606177"){ return ''} 
 
-                }
-            },
+            //     }
+            // },
             { headerName: "Total Claims", field: "TotalEncounterSent", width: 100 },
             { headerName: "Rejected Claims", field: "Rejected_277CA", flex: 1 },
         ]
@@ -1343,7 +1343,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
 
         let columnDefs = [
-            { headerName: "Molina Claims Id", field: "MolinaClaimID", width: 160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "HiPaaS Claims Id", field: "MolinaClaimID", width: 160, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claims ID", field: "ClaimID", width: 100, },
             { headerName: "File Status", field: "FileStatus_Outbound", width: 100 },
             { headerName: "Claims Date", field: "EncounterDate", width: 150 },
@@ -1467,7 +1467,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     }
 
     clickNavigation = (event) => {
-        if (event.colDef.headerName == 'Molina Claims Id') {
+        if (event.colDef.headerName == 'HiPaaS Claims Id') {
             this.setState({
                 claimId: event.data.ClaimID,
                 showerror: true,
@@ -1540,14 +1540,14 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "HiPaaS Claims ID", field: "MolinaClaimID", width: 170 },
                 { headerName: "X12 Claims ID", field: "ClaimID", width: 170 },
                 { headerName: "277CA Error", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
             ] : [
 
                 { headerName: "Stage", field: "Stage", width: 100 },
-                { headerName: "Molina Claims ID", field: "MolinaClaimID", width: 170 },
+                { headerName: "HiPaaS Claims ID", field: "MolinaClaimID", width: 170 },
                 { headerName: "X12 Claims ID", field: "ClaimID", width: 170 },
                 { headerName: "Error Description", field: "Error_277CA", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
 
@@ -1596,7 +1596,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
     _ClaimLineTable() {
         if (this.state.Aggrid_ClaimLineData == undefined) { this.state.Aggrid_ClaimLineData = [] }
         let columnDefs = [
-            { headerName: "Molina Claims ID", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "HiPaaS Claims ID", field: "MolinaClaimID", cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "Claims ID", field: "ClaimID" },
 
             { headerName: "Service Line No.", field: "ServiceLineCount" },
@@ -1645,7 +1645,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             // { headerName: " HL20 Count", field: "HL20Count", width: 80 },
             // { headerName: "HL22 Count", field: "HL22Count", width: 80 },
             // { headerName: "HL23 Count", field: "HL23Count", width: 80 },
-            { headerName: "Molina Claims Id", field: "MolinaClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "HiPaaS Claims Id", field: "MolinaClaimID", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "X12 Claims Id", field: "ClaimID", width: 100 },
             { headerName: "Claims Date", field: "ClaimDateTime", width: 100 },
             { headerName: "Subscriber First Name", field: "SubscriberFirstName", width: 150 },
@@ -1761,7 +1761,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
         return (
             <Filters
                 isTimeRange={false}
-                isPayer={true}
+                // isPayer={true}
                 removeSubmitter={true}
                 setData={this.setData}
                 onGridChange={this.onGridChange}
