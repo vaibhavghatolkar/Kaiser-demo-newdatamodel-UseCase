@@ -108,6 +108,11 @@ export class Payment_Split_Dashboard extends React.Component {
             rowData: [],
             Payee: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payee != 'n' ? props.location.state.data[0].Payee : '',
             Payer: props.location.state && props.location.state.data[0] && props.location.state.data[0].Payer != 'n' ? props.location.state.data[0].Payer : '',
+            Service: props.location.state && props.location.state.data[0] && props.location.state.data[0].Service  ? props.location.state.data[0].Service : '',
+            InvoicePattern: props.location.state && props.location.state.data[0] && props.location.state.data[0].InvoicePattern  ? props.location.state.data[0].InvoicePattern : '',
+            LOB: props.location.state && props.location.state.data[0] && props.location.state.data[0].LOB  ? props.location.state.data[0].LOB : '',
+            fileinformation: false,
+            Parent_File_name:''
         }
     }
 
@@ -153,7 +158,7 @@ export class Payment_Split_Dashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
-        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
+        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"${this.state.Service}") {
                 TotalCount
                 Rejected
                 Accepted
@@ -249,7 +254,7 @@ export class Payment_Split_Dashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "SPLIT" Service:"") {
+            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "SPLIT" Service:"${this.state.Service}") {
                 From
                 MonthNo
                 Year
@@ -319,11 +324,11 @@ export class Payment_Split_Dashboard extends React.Component {
         }
         let query = `{
            
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "SPLIT" Service:"") {
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "SPLIT" Service:"${this.state.Service}") {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"SPLIT" Service:"") {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"SPLIT" Service:"${this.state.Service}") {
                 Type
                 TotalCount
             }
@@ -574,12 +579,35 @@ export class Payment_Split_Dashboard extends React.Component {
         })
     }
     clickNavigation = (event) => {
-        if (event.colDef.headerName == 'File Name') {
+        if (event.colDef.headerName == 'Split File Name') {
             this.setState({
                 selectedFileId: event.data.FileID,
                 FunctionalGroupDetails: true,
                 TransactionSet: false,
 
+            })
+        }
+         if (event.colDef.headerName == "Parent File Name") {
+             let data = [
+                {
+                    parent_FileID: event.data.parent_FileID
+                }
+            ]
+            this.props.history.push('/' + Strings.InboundClaimPaymentDashboard, {
+                data: data
+            })
+
+            window.location.reload()
+
+        }
+    }
+    clickNavigation3 = (event) => {
+        if (event.colDef.headerName == 'File Name') {
+            this.setState({
+                Parent_File_name: event.data.FileID,
+                fileinformation: true,
+                FunctionalGroupDetails:false,
+                TransactionSet:false
             })
         }
     }
@@ -601,13 +629,11 @@ export class Payment_Split_Dashboard extends React.Component {
         }
     }
 
-
-    _renderList() {
+    _renderInboundFile_List() {
 
         let columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 100 },
-            { headerName: "Parent File Name", field: "Parent_FileName", width: 100 },
             { headerName: "Status", field: "Status", width: 100 },
             { headerName: "Submitter", field: "Sender", width: 150 },
             { headerName: "Receiver", field: "Receiver", width: 70 },
@@ -623,9 +649,9 @@ export class Payment_Split_Dashboard extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
-          Status:"" , FileID:"" ,RecType:"SPLIT",  EFTCHK:"",ClaimID:"",
+          Status:"" , FileID:"" ,RecType:"Inbound",  EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"") {
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"${this.state.Service}" ParentFile:"") {
                 RecCount
                 Sender
                 FileID
@@ -643,7 +669,7 @@ export class Payment_Split_Dashboard extends React.Component {
           `
         return (
             <div style={{ padding: '0', marginTop: '24px' }}>
-                <h6 className="font-size">File Information</h6>
+                <h6 className="font-size">Inbound File Information</h6>
                 <ServersideGrid
                     columnDefs={columnDefs}
                     query={query}
@@ -656,8 +682,70 @@ export class Payment_Split_Dashboard extends React.Component {
                     endDate={endDate}
                     type={this.state.type}
                     updateFields={this.updateFields}
+                    onClick={this.clickNavigation3}
+                    paginationPageSize={5}
+                />
+            </div>
+        )
+    }
+    _renderList() {
+
+        let columnDefs = [
+            { headerName: "Parent File Name", field: "Parent_FileName", width: 100 ,cellStyle: { color: '#139DC9', cursor: 'pointer' }},
+            { headerName: "Split File Name", field: "FileName", width: 150,  cellStyle: { color: '#139DC9', cursor: 'pointer' }},
+            { headerName: "Split File Date", field: "FileDate", width: 100 },        
+            { headerName: "Status", field: "Status", width: 100 },
+            { headerName: "Submitter", field: "Sender", width: 150 },
+            { headerName: "Receiver", field: "Receiver", width: 70 },
+            { headerName: "Total CLP Count", field: "TotalClaim", width: 100 },
+
+        ]
+
+
+
+        let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
+        let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ""
+        let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ""
+        let recType = isOutbound ? 'Outbound' : 'Inbound'
+        let query = `{
+            Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
+          Status:"" , FileID:"" ,RecType:"SPLIT",  EFTCHK:"",ClaimID:"",
+            sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"${this.state.Service}" ParentFile:"${this.state.Parent_File_name}") {
+                RecCount
+                Sender
+                FileID
+                FileName
+                FileDate
+                Receiver
+                State
+                RemittanceFileName
+                RemittanceSentDate
+                TotalClaim
+                Status
+                Parent_FileName
+                parent_FileID
+            }
+          }
+          `
+        return (
+            <div style={{ padding: '0', marginTop: '24px' }}>
+                <h6 className="font-size">File Information</h6>
+                <ServersideGrid
+                    columnDefs={columnDefs}
+                    query={query}
+                    url={isOutbound ? Urls.transaction835 : Urls._transaction835}
+                    fieldType={'FileDate'}
+                    index={'Dashboard835FileDetailsNew'}
+                    State={this.state.State}
+                    selectedTradingPartner={this.state.selectedTradingPartner}
+                    startDate={startDate}
+                    endDate={endDate}
+                    type={this.state.type}                
+                    updateFields={this.updateFields}
                     onClick={this.clickNavigation}
                     paginationPageSize={5}
+                    Parent_File_name={this.state.Parent_File_name}
                 />
             </div>
         )
@@ -685,7 +773,7 @@ export class Payment_Split_Dashboard extends React.Component {
                  Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"SPLIT", 
                  EFTCHK:"",ClaimID:"",
                  sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"") {
+                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"${this.state.Service}") {
                     RecCount
                     FileID
                     FileName
@@ -750,7 +838,7 @@ export class Payment_Split_Dashboard extends React.Component {
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                      startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""
-                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"" Service:"" InvoicePattern:"" LOB:"") {
+                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"" Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}") {
                         RecCount
                         FileId
                         GSID
@@ -837,7 +925,7 @@ export class Payment_Split_Dashboard extends React.Component {
                 removeSubmitter={true}
                 removeGrid={true}
                 setData={this.setData}
-                changeDefault={true}
+                // changeDefault={true}
                 onGridChange={this.onGridChange}
                 update={this.update}
                 startDate={this.state.startDate}
@@ -888,7 +976,8 @@ export class Payment_Split_Dashboard extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-12">
-                        {this._renderList()}
+                    {this._renderInboundFile_List()}
+                        {this.state.fileinformation ? this._renderList() :null}
                         {this.state.FunctionalGroupDetails ? this._renderFunctionalGroupDetails() : null}
                         {this.state.TransactionSet ? this._renderTransactionSet() : null}
                     </div>

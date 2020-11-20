@@ -70,6 +70,7 @@ export class Common_835 extends React.Component {
             progress_Error: 0,
             AvailitySent: 0,
             TotalError: 0,
+            Service:''
         }
     }
 
@@ -79,7 +80,9 @@ export class Common_835 extends React.Component {
             this.props.selectedTradingPartner != nextProps.selectedTradingPartner ||
             this.props.startDate != nextProps.startDate ||
             this.props.endDate != nextProps.endDate ||
-            this.props.type != nextProps.type
+            this.props.type != nextProps.type||
+            this.props.Service != nextProps.Service
+            
         ) {
             this.setState({
                 startDate: nextProps.startDate,
@@ -87,6 +90,7 @@ export class Common_835 extends React.Component {
                 selectedTradingPartner: nextProps.selectedTradingPartner,
                 type: nextProps.type,
                 State: nextProps.State,
+                Service:nextProps.Service,
             }, () => {
                 this._refreshScreen()
             })
@@ -125,7 +129,7 @@ export class Common_835 extends React.Component {
         } else {
             query = `{
             
-        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}"  Service:"" ) {
+        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}"  Service:"${this.state.Service}" ) {
           TotalCount
           Rejected
           Accepted
@@ -601,12 +605,12 @@ export class Common_835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"${this.state.Service}") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"${this.state.Service}") {
                     Accepted
                     Rejected
                     FileReject
@@ -614,10 +618,10 @@ export class Common_835 extends React.Component {
                     TotalError
                     TotalException
               }
-              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"${this.state.Service}") {
                 Check
           }
-          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"${this.state.Service}") {
             EFT
       }
         }`
