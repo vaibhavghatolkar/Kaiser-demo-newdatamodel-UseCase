@@ -33,7 +33,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
@@ -153,7 +153,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
-        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}") {
+        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "${recType}" Service:"") {
                 TotalCount
                 Rejected
                 Accepted
@@ -249,7 +249,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "Inbound") {
+            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "Inbound" ,Service:"") {
                 From
                 MonthNo
                 Year
@@ -293,13 +293,13 @@ export class InboundClaimPaymentDashboard extends React.Component {
                     }
                 })
 
-             
-               
+
+
 
                 this.setState({
                     ClaimBarChart: array,
                     claimLabels: claimLabels,
-                    
+
                 })
             })
             .catch(err => {
@@ -307,7 +307,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             })
 
     }
- 
+
 
     _getPieChartData = async () => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : ''
@@ -319,11 +319,11 @@ export class InboundClaimPaymentDashboard extends React.Component {
         }
         let query = `{
            
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "${recType}") {
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "${recType}" Service:"") {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"${recType}") {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"${recType}"  Service:"") {
                 Type
                 TotalCount
             }
@@ -343,7 +343,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
         })
             .then(res => res.json())
             .then(res => {
-             
+
                 let second_data = res.data.file_piechart && res.data.file_piechart.length > 0 ? this.getPieChartData(res.data.file_piechart) : ''
                 // let second_data = ""
                 // let pie_data = ""
@@ -351,7 +351,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 let complaince_data = res.data.CompliancePieChart835 ? this.getComplianceChartData(res.data.CompliancePieChart835) : {}
 
                 this.setState({
-                   
+
                     second_data: second_data,
                     complience: complience,
                     complaince_data: complaince_data
@@ -426,6 +426,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 header={header}
                 piechart_data={piechart_data}
                 data={sendData}
+                height={19}
                 onClick={header == 'Top 10 File Level Errors' ? this.gotoClaimDetails : ''}
             />
         )
@@ -463,13 +464,33 @@ export class InboundClaimPaymentDashboard extends React.Component {
             <div className="chart-div">
                 <div className="row">
                     <div className="col-6" style={{ padding: '6px' }}>
-                        {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
+                        {this.renderCompliance()}
+                        {/* {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)} */}
                     </div>
-                    {this.renderCompliance()}
+                    {/* {this.renderCompliance()} */}
                     {/* <div className="col-6" style={{ padding: '8px' }}>
-                        {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
+                        <div className="row chart-container-full chart">
+                            <div className="chart-header">Volume Analysis</div>
+                            <Line
+                                data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
+                                width={200}
+                                height={65}
+                                options={{
+                                    legend: {
+                                        position: 'bottom',
+                                        display: false
+                                    },
+                                    scales: {
+                                        xAxes: [{
+                                            ticks: {
+                                                fontSize: 10,
+                                            },
+                                        }]
+                                    }
+                                }} />
+                        </div>
                     </div> */}
-                     <div className="row chart-container-full chart">
+                    <div className="row chart-container-full chart">
                     <div className="chart-header">Volume Analysis</div>
                     <Line
                         data={this.getLineChart(this.state.claimLabels, this.state.ClaimBarChart, "#139DC9")}
@@ -496,7 +517,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
 
     renderCompliance = () => {
         return (
-            <div className="col-6" style={{ padding: '6px' }}>
+            <div className="col" style={{ padding: '6px' }}>
                 {this.renderPieChart('Compliance Ratio', this.state.complaince_data)}
             </div>
         )
@@ -533,7 +554,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                     PatientSubscriberIDList: "",
                     CheckEFTNo: "",
                     checkDate: "",
-        
+
                 },
             ]
         }
@@ -623,7 +644,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
           Status:"" , FileID:"" ,RecType:"${recType}",  EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Service:"") {
                 RecCount
                 Sender
                 FileID
@@ -681,7 +702,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                  Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"${recType}", 
                  EFTCHK:"",ClaimID:"",
                  sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}  Service:"") {
                     RecCount
                     FileID
                     FileName
@@ -720,7 +741,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
     _renderTransactionSet() {
 
         let columnDefs = [
-            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer'  } },
+            { headerName: "File Name", field: "FileName", width: 150, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 100 },
             { headerName: "Status", field: "Status", width: 100 },
             { headerName: "NPI", field: "PayeeNPI", width: 100 },
@@ -744,7 +765,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                      startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""
-                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"") {
+                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"" Service:"" InvoicePattern:"" LOB:"") {
                         RecCount
                         FileId
                         GSID
@@ -836,7 +857,7 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeState={true}
-
+                days90Filter={true}
             />
         )
     }
@@ -860,7 +881,8 @@ export class InboundClaimPaymentDashboard extends React.Component {
                 State={this.state.State}
                 fileHeader={true}
                 claimHeader={true}
-               
+                
+
             />
         )
     }

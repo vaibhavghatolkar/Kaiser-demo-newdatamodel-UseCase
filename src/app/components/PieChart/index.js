@@ -22,7 +22,7 @@ export class PieChart extends React.Component {
                     }
                 }}
                 width={20}
-                height={19} />
+                height={this.props.height ? this.props.height : 19} />
         )
     }
 

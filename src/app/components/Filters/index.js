@@ -1049,6 +1049,23 @@ export class Filters extends React.Component {
                             </div> : null
                     }
                     {
+                        this.props.PBHBShow ?
+                            <div className="form-group col-2">
+                                <div className="list-dashboard">Service</div>
+                                <select className="form-control list-dashboard" id="ProviderName"
+                                 value={this.props.payer}
+                                 onChange={(event) => {
+                                     this.onSelect(event, 'service')
+                                 }}>
+                                    <option value=""></option>
+                                    <option value="PB">PB</option>
+                                    <option value="HB">HB</option>
+                                    <option value="PB and HB">PB and HB</option>
+                                </select>
+                            </div>
+                            : null
+                    }
+                    {
                         this.props.Split ?
                             <div className="form-group col-2">
                                 <div className="list-dashboard">Split File(Y/N)</div>

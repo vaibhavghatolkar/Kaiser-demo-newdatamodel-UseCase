@@ -384,6 +384,7 @@ export class InboundPaymentDetails extends React.Component {
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
                        CLP06:"${this.state.clp06List}"
                        ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"" MolinaClaimID:"${this.state.incoming_835fileId}"
+                       Service:"" InvoicePattern:"" LOB:""
                 ) {
                     RefID
                     RecCount
@@ -683,7 +684,9 @@ export class InboundPaymentDetails extends React.Component {
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
             CLP06:"${this.state.clp06List}"
-            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:"${this.state.incoming_835fileId}") {
+            ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:"${this.state.incoming_835fileId}"
+            , Service:"" InvoicePattern:"" LOB:""
+            ) {
                 RecCount
                 FileId
                 GSID
@@ -784,6 +787,7 @@ export class InboundPaymentDetails extends React.Component {
                 renderMethod={this.renderMethod}
                 removeState={true}
                 Split={true}
+                PBHBShow={true}
             />
         )
     }

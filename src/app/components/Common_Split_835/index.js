@@ -30,7 +30,7 @@ export class Common_Split_835 extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: (this.props.removeFiles || this.props.removeClaims) ? '' : moment().subtract(180, 'd').format('YYYY-MM-DD'),
+            startDate: (this.props.removeFiles || this.props.removeClaims) ? '' : moment().subtract(90, 'd').format('YYYY-MM-DD'),
             endDate: (this.props.removeFiles || this.props.removeClaims) ? '' : moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
@@ -126,7 +126,7 @@ export class Common_Split_835 extends React.Component {
         } else {
             query = `{
             
-        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+        ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
           TotalCount
           Rejected
           Accepted
@@ -174,8 +174,8 @@ export class Common_Split_835 extends React.Component {
                     // { name: 'Rejected', value: data ? data.Rejected : 0 },
                     // { name: 'EFT', value: data ? data.EFT : 0 },
                     // { name: 'Check', value: data ? data.CHK : 0 },
-                    { name: 'Total Sent To KPHC', value: data ? data.AvailitySent : 0 },
-                    { name: '999', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
+                    { name: 'Total Sent To Split', value: data ? data.AvailitySent : 0 },
+                    // { name: '999', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
                 ]
 
                 process.env.NODE_ENV == 'development' && console.log(summary)
@@ -217,9 +217,9 @@ export class Common_Split_835 extends React.Component {
             } else if (item.name == 'Check') {
                 EFTCHK = 'CHK'
                 subtitle = "Check"
-            } else if (item.name == 'Total Sent To KPHC') {
+            } else if (item.name == 'Total Sent To Split') {
                 availitySent = 'Y'
-                subtitle = "Sent To KPHC"
+                subtitle = "Sent To Split"
             }
             else if (item.name == 'Total Files') {
                 subtitle = "Total Files"
@@ -309,7 +309,7 @@ export class Common_Split_835 extends React.Component {
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {/* {this._renderClaimTables(stage_3)} */}
-                {this._renderClaimTables(stage_4)}
+                {/* {this._renderClaimTables(stage_4)} */}
             </div>
         )
     }
@@ -508,7 +508,7 @@ export class Common_Split_835 extends React.Component {
         })
 
         return (
-            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col-4 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )

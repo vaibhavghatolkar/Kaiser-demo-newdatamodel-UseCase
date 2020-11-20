@@ -33,7 +33,7 @@ export class Payment_Split_Dashboard extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(180, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
@@ -153,7 +153,7 @@ export class Payment_Split_Dashboard extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
-        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+        let query = `{ ERA835DashboardCountNew(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
                 TotalCount
                 Rejected
                 Accepted
@@ -249,7 +249,7 @@ export class Payment_Split_Dashboard extends React.Component {
             chartType = "Monthwise"
         }
         let query = `{
-            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "SPLIT") {
+            barchart : Payment835RTClaimBarchart (State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "` + chartType + `", RecType: "SPLIT" Service:"") {
                 From
                 MonthNo
                 Year
@@ -319,11 +319,11 @@ export class Payment_Split_Dashboard extends React.Component {
         }
         let query = `{
            
-            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "SPLIT") {
+            file_piechart:Dashboard835PieChart(State:"${this.state.State}", StartDt :"` + startDate + `", EndDt : "` + endDate + `", ChartType: "FileErrorwise", RecType: "SPLIT" Service:"") {
                 X_axis
                 Y_axis
             }
-            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"SPLIT") {
+            CompliancePieChart835(State:"${this.state.State}",StartDt:"${startDate}",EndDt:"${endDate}",RecType:"SPLIT" Service:"") {
                 Type
                 TotalCount
             }
@@ -463,9 +463,10 @@ export class Payment_Split_Dashboard extends React.Component {
             <div className="chart-div">
                 <div className="row">
                     <div className="col-6" style={{ padding: '6px' }}>
-                        {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)}
-                    </div>
                     {this.renderCompliance()}
+                        {/* {this.renderPieChart('Top 10 File Level Errors', this.state.second_data)} */}
+                    </div>
+                
                     {/* <div className="col-6" style={{ padding: '8px' }}>
                         {this.renderPieChart('Top 10 Payment Level Errors', this.state.pie_data)}
                     </div> */}
@@ -496,7 +497,7 @@ export class Payment_Split_Dashboard extends React.Component {
 
     renderCompliance = () => {
         return (
-            <div className="col-6" style={{ padding: '6px' }}>
+            <div className="col" style={{ padding: '6px' }}>
                 {this.renderPieChart('Compliance Ratio', this.state.complaince_data)}
             </div>
         )
@@ -624,7 +625,7 @@ export class Payment_Split_Dashboard extends React.Component {
             Dashboard835FileDetailsNew(State:"${this.state.State ? this.state.State : ''}",StartDt: "${startDate}",EndDt: "${endDate}",
           Status:"" , FileID:"" ,RecType:"SPLIT",  EFTCHK:"",ClaimID:"",
             sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+            startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"") {
                 RecCount
                 Sender
                 FileID
@@ -684,7 +685,7 @@ export class Payment_Split_Dashboard extends React.Component {
                  Status:"" , FileID:"${this.state.selectedFileId}" ,RecType:"SPLIT", 
                  EFTCHK:"",ClaimID:"",
                  sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
-                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}) {
+                 startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Service:"") {
                     RecCount
                     FileID
                     FileName
@@ -749,7 +750,7 @@ export class Payment_Split_Dashboard extends React.Component {
                      sorting:[{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                      startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter} Payer:"",Payee:"",CLP01:"",
                      CLP06:""
-                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"") {
+                     ,PatientSubscriberID:"",CheckNo:"",CheckDate:"" MolinaClaimID:"" Service:"" InvoicePattern:"" LOB:"") {
                         RecCount
                         FileId
                         GSID
@@ -842,6 +843,7 @@ export class Payment_Split_Dashboard extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeState={true}
+                days90Filter={true}
 
             />
         )
