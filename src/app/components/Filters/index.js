@@ -1010,7 +1010,7 @@ export class Filters extends React.Component {
                     } */}
                     {this.props.clp06Show ?
                         <div className="form-group col-2">
-                            <div className="list-dashboard">CLP06</div>
+                            <div className="list-dashboard">Financial Class (CLP06)</div>
                             <AutoComplete
                                 list={this.state.clp06List}
                                 extraParams={true}
@@ -1024,7 +1024,7 @@ export class Filters extends React.Component {
 
                     {this.props.PatientSubscriberIDList ?
                         <div className="form-group col-2">
-                            <div className="list-dashboard">Subscriber ID</div>
+                            <div className="list-dashboard">Guarantor</div>
                             <AutoComplete
                                 list={this.state.PatientSubscriberIDList}
                                 onHandleChange={this.onHandleChange5}
