@@ -1853,6 +1853,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeSubmitter={true}
+                removeState={true}
             />
         )
     }
@@ -1874,7 +1875,7 @@ export class ClaimCustomerService_Kaiser extends React.Component {
                             
                             {/* {this.state.showerror && (this.state.claimError_Status == "Rejected" || this.state.status277CA == "Rejected") ? this._renderError() : null} */}
                             
-                            {this.state.showerror ? this._ClaimStage() : null}
+                            {/* {this.state.showerror ? this._ClaimStage() : null} */}
                             {this.state.showerror ? this._ClaimView_Info_Table() : null}
                            
                             {this.state.showerror ? this._ClaimLineTable() : null}
