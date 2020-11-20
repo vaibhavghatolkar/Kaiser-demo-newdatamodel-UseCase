@@ -1773,6 +1773,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                 showclaimId={true}
                 isMolina={true}
                 CLM01={true}
+                removeState={true}
             />
         )
     }

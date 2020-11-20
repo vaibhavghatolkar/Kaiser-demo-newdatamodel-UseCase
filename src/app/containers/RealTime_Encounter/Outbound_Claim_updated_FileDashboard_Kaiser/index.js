@@ -237,10 +237,10 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 let stage_7 = [
                     { 'name': 'Paid', 'value': _condition1 ? _data1[0].Paid : 0, color: '#2AC327' },
                     { 'name': 'Denied', 'value': _condition1 ? _data1[0].Denied : 0, color: '#FF3B41' },
-                    { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color: '#FA731A' },
-                    { 'name': 'WIP 0-30', 'value': 500, color: '#139DC9' },
-                    { 'name': 'WIP 30-60', 'value': 350, color: '#139DC9' },
-                    { 'name': 'WIP >60', 'value': 430, color: '#139DC9' },
+                    // { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color: '#FA731A' },
+                    // { 'name': 'WIP 0-30', 'value': 500, color: '#139DC9' },
+                    // { 'name': 'WIP 30-60', 'value': 350, color: '#139DC9' },
+                    // { 'name': 'WIP >60', 'value': 430, color: '#139DC9' },
                 ]
 
 
@@ -583,9 +583,9 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
         return (
             <div className="chart-div">
                 <div className="row">
-                    <div className="col-6" style={{ paddingRight: '5px' }}>
+                    {/* <div className="col-6" style={{ paddingRight: '5px' }}>
                         {this.renderPieChart('Top 10 Claim Rejected Errors', this.state.second_data)}
-                    </div>
+                    </div> */}
                     <div className="col-6" style={{ paddingRight: '9px' }}>
                         {this.renderPieChart('Top 10 Claim Payment Errors', this.state.pie_data)}
                     </div>
@@ -1197,6 +1197,7 @@ export class Outbound_Claim_updated_FileDashboard_Kaiser extends React.Component
                 endDate={this.state.endDate}
                 removeGrid={true}
                 days90Filter={true}
+                removeState={true}
             />
         )
     }

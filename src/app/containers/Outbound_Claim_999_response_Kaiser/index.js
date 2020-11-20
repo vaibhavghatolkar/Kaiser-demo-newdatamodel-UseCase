@@ -447,6 +447,7 @@ export class Outbound_Claim_999_response_Kaiser extends React.Component {
                 isDiffSubmitter={true}
                 transactionType={this.state.transactionType}
                 removeGrid={true}
+                removeState={true}
             />
         )
     }

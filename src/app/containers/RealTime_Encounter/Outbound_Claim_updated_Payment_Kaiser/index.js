@@ -98,7 +98,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 { headerName: "Claims Date", field: "EncounterDate", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Claims 999 Status", field: "Encounter99_Status", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
                 { headerName: "Claims 277CA Status", field: "Encounter277CA_Status", flex: 1 },
-                { headerName: "Received Date", field: "ReceivedDate835", flex: 1 },
+                // { headerName: "Received Date", field: "ReceivedDate835", flex: 1 },
                 // { headerName: "999", field: "F999", width:200, cellStyle: {wordBreak: 'break-all',   'white-space': 'normal' , color: '#139DC9', cursor: 'pointer' } },
                 // { headerName: "277CA", field: "F277CA", width:200, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
             ],
@@ -250,10 +250,10 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                     { name: 'Paid', value: condition ? data[0].Paid : 0, color: '#2AC327' },
                     { name: 'Denied', value: condition ? data[0].Denied : 0, color: 'red' },
                     // { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
-                    { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0, color: '#F39C12' },
-                    { name: 'WIP 0-30', value: 500, color: '#1DA3CD' },
-                    { name: 'WIP 30-60', value: 350, color: '#1DA3CD' },
-                    { name: 'WIP >60', value: 430, color: '#1DA3CD' },
+                    // { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0, color: '#F39C12' },
+                    // { name: 'WIP 0-30', value: 500, color: '#1DA3CD' },
+                    // { name: 'WIP 30-60', value: 350, color: '#1DA3CD' },
+                    // { name: 'WIP >60', value: 430, color: '#1DA3CD' },
 
                 ]
 
@@ -880,6 +880,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 removeGrid={true}
+                removeState={true}
             />
         )
     }
