@@ -685,7 +685,7 @@ export class InboundPaymentDetails extends React.Component {
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.CLP01List}",
             CLP06:"${this.state.clp06List}"
             ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:"${this.state.incoming_835fileId}"
-            , Service:"" InvoicePattern:"" LOB:""
+            , Service:"" InvoicePattern:"" LOB:"" 
             ) {
                 RecCount
                 FileId
@@ -788,6 +788,9 @@ export class InboundPaymentDetails extends React.Component {
                 removeState={true}
                 Split={true}
                 PBHBShow={true}
+                InvoicePatternList={true}
+                LOBShow={true}
+                ReferenceIDList={true}
             />
         )
     }

@@ -25,6 +25,8 @@ export class Filters extends React.Component {
             State: this.props.State ? this.props.State : '',
             tradingpartner: [],
             PayerNameList: [],
+            InvoicePattern:[],
+            LOB:[],
             PayeeNameList: [],
             clp06List: [],
             claimIdData: [],
@@ -45,6 +47,8 @@ export class Filters extends React.Component {
         this.getFileNameData()
         this.getCompanyDescList()
         this.getTransactiondata()
+        this.getInvoicePatternApi()
+        this.getLOBListApi()
         if (this.props.isTransType) {
             this.getTransOptions()
         }
@@ -76,6 +80,66 @@ export class Filters extends React.Component {
                 if (res.data) {
                     this.setState({
                         tradingpartner: res.data.Trading_PartnerList ? res.data.Trading_PartnerList : [],
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+    getInvoicePatternApi = async () => {
+        
+        let query = `{
+            InvoicePatternList(LOB:"${this.state.LOB }") {
+                Invoice_Pattern
+                Invoice_Pattern_Value
+              }
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction835, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        InvoicePattern: res.data.InvoicePatternList ? res.data.InvoicePatternList : [],
+                    })
+                }
+            })
+            .catch(err => {
+                process.env.NODE_ENV == 'development' && console.log(err)
+            });
+    }
+
+    getLOBListApi = async () => {
+        
+        let query = `{
+            LOBList {
+                LOB
+              }
+        }`
+
+        if (Strings.isDev) { process.env.NODE_ENV == 'development' && console.log(query) }
+        fetch(Urls._transaction835, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ query: query })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.data) {
+                    this.setState({
+                        LOB: res.data.LOBList ? res.data.LOBList : [],
                     })
                 }
             })
@@ -292,6 +356,9 @@ export class Filters extends React.Component {
     onSelected6 = (value) => {
         this.props.update('CheckEFTNo', value)
     }
+    onSelected7 = (value) => {
+        this.props.update('ReferenceIDData', value)
+    }
     Clear = (value) => {
 
         this.props.renderMethod("Clear")
@@ -307,6 +374,26 @@ export class Filters extends React.Component {
                 return
             }
             row.push(<option value={element.Trading_Partner_Name}>{element.Trading_Partner_Name}</option>)
+        })
+        return row
+    }
+    getInvoicePattern = () => {
+        let row = []
+        this.state.InvoicePattern.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option value={element.Invoice_Pattern_Value}>{element.Invoice_Pattern}</option>)
+        })
+        return row
+    }
+    getLOBData = () => {
+        let row = []
+        this.state.LOB.forEach(element => {
+            if (!element) {
+                return
+            }
+            row.push(<option value={element.LOB}>{element.LOB}</option>)
         })
         return row
     }
@@ -612,6 +699,42 @@ export class Filters extends React.Component {
                         })
                         this.setState({
                             CheckEFTNo: data
+                        })
+                    }
+                })
+                .catch(err => {
+                    process.env.NODE_ENV == 'development' && console.log(err)
+                });
+        }, 300);
+    }
+
+    getReferenceIDListApi = (e) => {
+        clearTimeout(val)
+        let providerName = e.target.value
+
+        val = setTimeout(() => {
+            let query = `{
+                ReferenceIDList(RecType:"Inbound" ReferenceID:"${providerName}" Service:"") {
+                    ReferenceID
+                  }
+              }`
+            return fetch(Urls._transaction835, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ query: query })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.data) {
+                        let data = []
+                        res.data.ReferenceIDList.forEach(item => {
+                            data.push(item.ReferenceID)
+                        })
+                        this.setState({
+                            ReferenceIDData: data
                         })
                     }
                 })
@@ -1080,6 +1203,52 @@ export class Filters extends React.Component {
                             </div>
                             : null
                     }
+                    {this.props.ReferenceIDList ?
+                        <div className="form-group col-2">
+                            <div className="list-dashboard">Receiver Identification Number</div>
+                            <AutoComplete
+                                list={this.state.ReferenceIDData}
+                                onHandleChange={this.getReferenceIDListApi}
+                                onSelected={this.onSelected7}
+                                renderMethod={this.props.renderMethod}
+                                flag={"ReferenceIDData"}
+                            />
+                        </div> : null
+                    }
+
+                    { 
+                        this.props.LOBShow ?
+                    <div className="form-group col-2">
+                                    <div className="list-dashboard">LOB</div>
+                                    <select className="form-control list-dashboard" id="LOB"
+                                        value={this.props.LOB}
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'LOB')
+                                        }}>
+                                        <option value=""></option>
+                                        {this.getLOBData()}
+                                    </select>
+                    </div>
+                                
+                            : null
+                        }
+
+                    { 
+                        this.props.InvoicePatternList ?
+                    <div className="form-group col-2">
+                                    <div className="list-dashboard">Invoice Pattern</div>
+                                    <select className="form-control list-dashboard" id="InvoicePattern"
+                                        value={this.props.InvoicePattern}
+                                        onChange={(event) => {
+                                            this.onSelect(event, 'InvoicePattern')
+                                        }}>
+                                        <option value=""></option>
+                                        {this.getInvoicePattern()}
+                                    </select>
+                    </div>
+                                
+                            : null
+                        }
 
                     {
                         this.props.Clear ?
