@@ -709,7 +709,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                     transactionId: 'n',
                     status: 'n',
                     count: 'n',
-                    incoming_835fileId: event.data.MolinaClaimID
+                    incoming_835fileId: event.data.ClaimID
                 }
             ]
             this.props.history.push('/' + Strings.InboundPaymentDetails, {

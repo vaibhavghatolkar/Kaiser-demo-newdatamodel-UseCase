@@ -70,7 +70,8 @@ export class Common_Split_835 extends React.Component {
             progress_Error: 0,
             AvailitySent: 0,
             TotalError: 0,
-            Rejected_CLP:0
+            Rejected_CLP:0,
+   
         }
     }
 
@@ -134,6 +135,7 @@ export class Common_Split_835 extends React.Component {
           Exception
           EFT
           CHK
+          ParentFileCount 
         }
 }`
         }
@@ -166,7 +168,8 @@ export class Common_Split_835 extends React.Component {
                     { name: '999 Received', value: res.data.Total999Response835[0].Total999 },
                 ] :
                 summary = [
-                    { name: 'Total Files', value: data ? data.TotalCount : 0 },
+                    { name: 'Total Inbound Files', value: data ? data.ParentFileCount : 0 },
+                    { name: 'Total Split Files', value: data ? data.TotalCount : 0 },
                     { name: 'Vaildated', value: data ? data.Accepted : 0 },
                     { name: 'Files in Error', value: data ? data.Rejected : 0 },
 
@@ -174,7 +177,7 @@ export class Common_Split_835 extends React.Component {
                     // { name: 'Rejected', value: data ? data.Rejected : 0 },
                     // { name: 'EFT', value: data ? data.EFT : 0 },
                     // { name: 'Check', value: data ? data.CHK : 0 },
-                    { name: 'Total Sent To Split', value: data ? data.AvailitySent : 0 },
+                    { name: 'Total Sent To KPHC', value: data ? data.AvailitySent : 0 },
                     // { name: '999', value: res.data.Total999Response835 && res.data.Total999Response835.length > 0 ? res.data.Total999Response835[0].Total999 : 0 },
                 ]
 
@@ -217,12 +220,12 @@ export class Common_Split_835 extends React.Component {
             } else if (item.name == 'Check') {
                 EFTCHK = 'CHK'
                 subtitle = "Check"
-            } else if (item.name == 'Total Sent To Split') {
+            } else if (item.name == 'Total Sent To KPHC') {
                 availitySent = 'Y'
-                subtitle = "Sent To Split"
+                subtitle = "Sent To KPHC"
             }
-            else if (item.name == 'Total Files') {
-                subtitle = "Total Files"
+            else if (item.name == 'Total Split Files') {
+                subtitle = "Total Split Files"
             }
             else {
                 addon = '/other'
@@ -239,7 +242,8 @@ export class Common_Split_835 extends React.Component {
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent,
-                    EFTCHK: EFTCHK
+                    EFTCHK: EFTCHK,
+                    Split:"SPLIT"
                 },
             ]
 
@@ -257,7 +261,8 @@ export class Common_Split_835 extends React.Component {
                 <Tiles
                     isClickable={
                         item.name != '999' &&
-                        item.name != 'Total Sent To KPHC'
+                        item.name != 'Total Sent To KPHC' &&
+                        item.name !='Total Inbound Files'
                     }
                     _data={data}
                     header_text={item.name}
@@ -309,7 +314,7 @@ export class Common_Split_835 extends React.Component {
                 {this._renderClaimTables(stage_1)}
                 {this._renderClaimTables(stage_2)}
                 {/* {this._renderClaimTables(stage_3)} */}
-                {/* {this._renderClaimTables(stage_4)} */}
+                {this._renderClaimTables(stage_4)}
             </div>
         )
     }
@@ -482,7 +487,8 @@ export class Common_Split_835 extends React.Component {
                     type: type,
                     subtitle: subtitle,
                     availitySent: availitySent,
-                    EFTCHK: EFTCHK
+                    EFTCHK: EFTCHK,
+                    Split:"SPLIT"
                 },
             ]
 
@@ -508,7 +514,7 @@ export class Common_Split_835 extends React.Component {
         })
 
         return (
-            <div className="col-4 chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
+            <div className="col chart-container" style={{ paddingTop: "12px", paddingBottom: '12px' }}>
                 {row}
             </div>
         )
@@ -520,7 +526,7 @@ export class Common_Split_835 extends React.Component {
         let recType = isOutbound ? 'Outbound' : 'Inbound'
 
         let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" ) {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
@@ -599,12 +605,12 @@ export class Common_Split_835 extends React.Component {
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : ''
         let recType = isOutbound ? 'Outbound' : 'Inbound'
         let query = `{
-              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+              ERA835DashboardCountPaymentStatus(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
                 X12Count
                 HiPaaSCount
                 MCGLoadCount
               }
-                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+                ERA835DashboardTable(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
                     Accepted
                     Rejected
                     FileReject
@@ -612,10 +618,10 @@ export class Common_Split_835 extends React.Component {
                     TotalError
                     TotalException
               }
-              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+              ERA835DashboardTableCHK(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
                 Check
           }
-          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT") {
+          ERA835DashboardTableEFT(State: "${this.state.State}", StartDt: "${startDate}", EndDt: "${endDate}", RecType: "SPLIT" Service:"") {
             EFT
       }
         }`

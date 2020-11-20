@@ -1178,7 +1178,7 @@ export class Filters extends React.Component {
                                 <select className="form-control list-dashboard" id="ProviderName"
                                  value={this.props.payer}
                                  onChange={(event) => {
-                                     this.onSelect(event, 'service')
+                                     this.onSelect(event, 'Service')
                                  }}>
                                     <option value=""></option>
                                     <option value="PB">PB</option>
@@ -1197,8 +1197,8 @@ export class Filters extends React.Component {
                                         this.onSelect(event, 'Split')
                                     }}>
                                     <option value=""></option>
-                                    <option value="SPLIT">Yes</option>
-                                    <option selected value="Inbound">No</option>
+                                    <option  selected={this.props.Split=="SPLIT" ? true :false}  value="SPLIT">Yes</option>
+                                    <option  selected={this.props.Split=="Inbound" ? true :false } value="Inbound">No</option>
                                 </select>
                             </div>
                             : null
