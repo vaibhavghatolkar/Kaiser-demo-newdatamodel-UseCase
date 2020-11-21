@@ -29,6 +29,7 @@ export class TreasuryFileDetails extends React.Component {
     _renderClaims = () => {            
 
         let   columnDefs = [
+            { headerName: "Trace Number", field: "Trace_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' ,  color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',  } },
             { headerName: "File Date", field: "FileDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Company Description", field: "Company_Description", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -43,7 +44,7 @@ export class TreasuryFileDetails extends React.Component {
             { headerName: "Company Name", field: "Company_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Receiver Name", field: "Receiver_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Receiver Account Number", field: "Receiver_Account_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Trace Number", field: "Trace_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' ,color: '#139DC9', cursor: 'pointer' } },
+         
             { headerName: "Individual ID", field: "Individual_ID", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Transaction Amount", field: "Tran_Amt", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Federal Tax", field: "Federal_Tax", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -103,7 +104,7 @@ export class TreasuryFileDetails extends React.Component {
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
-                    selectedFileId={this.state.FileNameData}
+                    selectedFileId={this.state.FileNameData1}
                     filterClaim={this.state.CompanyDesc}
                     endDate={endDate}
                     updateFields={this.updateFields}
@@ -163,7 +164,7 @@ export class TreasuryFileDetails extends React.Component {
                     query={query}
                     paginationPageSize={10}
                     url={Urls._transaction835Kaiser}
-                    fieldType={'FileDate'}
+                    fieldType={'FileName835'}
                     index={'TreasuryFileLevelDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
@@ -174,7 +175,8 @@ export class TreasuryFileDetails extends React.Component {
                     updateFields={this.updateFields}
                     onClick={this.clickNavigation}
                     handleColWidth = {140}
-                 
+                    sorting={true}
+
                 />
             </div>
         )
@@ -195,7 +197,7 @@ export class TreasuryFileDetails extends React.Component {
        
     }
     clickNavigation1 = (event) => {
-        if (event.colDef.headerName == "Trace Number") {
+        if (event.colDef.headerName == "Trace Number" && event.data.FileName835) {
             let data = [
                {
                 status:'n',
