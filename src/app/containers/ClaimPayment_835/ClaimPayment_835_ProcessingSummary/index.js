@@ -294,7 +294,7 @@ export class ClaimPayment_835_ProcessingSummary extends React.Component {
                     transactionId: 'n',
                     status: 'n',
                     count: 'n',
-                    Filter_ClaimId: event.value
+                    incoming_837fileId: event.data.CLP01
                 }
             ]
             this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
@@ -375,7 +375,7 @@ if(isOutboundPage){
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
             { headerName: "DRG Code", field: "DigonisCode", width: 120, },
-            { headerName: "837", field: "MolinaClaimID", width: 120, cellStyle: { color: '#139DC9', cursor: 'pointer' }},
+            { headerName: "837", field: "Link837", width: 120, cellStyle: { color: '#139DC9', cursor: 'pointer' }},
         
     ]
 }
@@ -424,6 +424,7 @@ if(isOutboundPage){
                     State
                     Status
                     ProcessID
+                    
                     }
                   }`
         }else{
@@ -433,7 +434,7 @@ if(isOutboundPage){
                     RecType:"835Link",EFTCHK:"",ClaimID:"${this.state.Filter_ClaimId}",
                     sorting: [{colId:"${this.state.fieldType}", sort:"${this.state.sortType}"}],
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter},PatientSubscriberID:""
-                       ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:"" MolinaClaimID:"" Service:"${this.state.Service}" InvoicePattern:"" LOB:"" ReferenceID:""
+                       ,CLP01:"",CLP06:"",CheckNo:"",CheckDate:"",Payer:"",Payee:"" MolinaClaimID:"" Service:"${this.state.Service}" InvoicePattern:"" LOB:"" ReferenceID:"" IsDuplicate:""
                                     
                 )  {
                     RefID
@@ -478,6 +479,7 @@ if(isOutboundPage){
                     GSID
                     DigonisCode
                     MolinaClaimID
+                    Link837
                     }
                   }` 
         }

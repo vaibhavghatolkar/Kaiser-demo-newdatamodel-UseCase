@@ -29,7 +29,10 @@ export class TreasuryFileDetails extends React.Component {
     _renderClaims = () => {            
 
         let   columnDefs = [
-            { headerName: "Trace Number", field: "Trace_Number", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' ,  color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "File Name 835", field: "FileName835", flex: 1, cellStyle: { color: '#139DC9', cursor: 'pointer' } },
+            { headerName: "File ID 835", field: "FileID835", flex: 1,  },
+            { headerName: "STID", field: "STID", flex: 1,  },
+            { headerName: "Trace Number", field: "Trace_Number", flex: 1,  },
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal',  } },
             { headerName: "File Date", field: "FileDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Company Description", field: "Company_Description", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
@@ -119,10 +122,10 @@ export class TreasuryFileDetails extends React.Component {
         let   columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Transaction Description", field: "Tran_Descr", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Ext Ref ID", field: "Ext_Ref_ID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Kaiser Reference", field: "Kaiser_Reference", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Transaction Code", field: "Tran_Code", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            { headerName: "Transaction Description", field: "Tran_Descr", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
             { headerName: "Company Name", field: "Company_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
 
         ]    
@@ -197,7 +200,7 @@ export class TreasuryFileDetails extends React.Component {
        
     }
     clickNavigation1 = (event) => {
-        if (event.colDef.headerName == "Trace Number" && event.data.FileName835) {
+        if (event.colDef.headerName == "File Name 835" && event.data.FileName835) {
             let data = [
                {
                 status:'n',

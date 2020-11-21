@@ -46,7 +46,7 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
             State: "",
             type: "",
             providerName: "",
-            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
@@ -244,8 +244,10 @@ export class Outbound_Claim_updated_ProcessingSummary_Kaiser extends React.Compo
                     { 'name': 'Resubmit', 'value': _condition ? _data[0].Resubmit277CA : 0, color : '#139DC9' },
                     ]
                     let stage_7 = [
-                        { 'name': 'Paid', 'value': _condition1 ? 75 : 75, color : '#2AC327'  },
-                        { 'name': 'Denied', 'value': _condition1 ? 0 : 0, color : '#FF3B41' },
+                        { 'name': 'Paid', 'value': _condition1 ? 77 : 77, color: '#139DC9' },
+                        { 'name': 'Denied', 'value': _condition1 ? 0 : 0, color: 'red' },
+                        { 'name': 'Exact Match', 'value': _condition1 ? 5 : 5, color: '#139DC9' },
+                        { 'name': 'Duplicate', 'value': _condition1 ? 72 : 72, color: 'orange' },
                         // { 'name': 'Payment Adjustment', 'value': _condition1 ? _data1[0].Payment_Adjustment : 0, color : '#FA731A'  },
                         // { 'name': 'WIP 0-30', 'value': 500, color : '#139DC9' },
                         // { 'name': 'WIP 30-60', 'value': 350, color : '#139DC9' },

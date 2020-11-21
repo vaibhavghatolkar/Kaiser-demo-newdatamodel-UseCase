@@ -33,7 +33,7 @@ export class Payment_Split_Dashboard extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
@@ -395,7 +395,7 @@ export class Payment_Split_Dashboard extends React.Component {
     }
 
 
-    renderPieChart = (header, piechart_data) => {
+    renderPieChart = (header, SubHeader, piechart_data) => {
         let startDate = this.state.startDate ? moment(this.state.startDate).format('YYYY-MM-DD') : 'n'
         let endDate = this.state.endDate ? moment(this.state.endDate).format('YYYY-MM-DD') : 'n'
         let selectedTradingPartner = this.state.selectedTradingPartner ? this.state.selectedTradingPartner : 'n'
@@ -429,6 +429,7 @@ export class Payment_Split_Dashboard extends React.Component {
         return (
             <PieChart
                 header={header}
+                SubHeader={SubHeader}
                 piechart_data={piechart_data}
                 data={sendData}
                 onClick={header == 'Top 10 File Level Errors' ? this.gotoClaimDetails : ''}
@@ -503,7 +504,7 @@ export class Payment_Split_Dashboard extends React.Component {
     renderCompliance = () => {
         return (
             <div className="col" style={{ padding: '6px' }}>
-                {this.renderPieChart('Compliance Ratio', this.state.complaince_data)}
+                {this.renderPieChart('Compliance Ratio', '( Difference in Claim Received Date (DTM 050)  and Payement Effective Date (BPR16) <=3 then Compliance )',this.state.complaince_data)}
             </div>
         )
     }
@@ -539,6 +540,7 @@ export class Payment_Split_Dashboard extends React.Component {
                     PatientSubscriberIDList: "",
                     CheckEFTNo: "",
                     checkDate: "",
+                    Split:"SPLIT"
         
                 },
             ]

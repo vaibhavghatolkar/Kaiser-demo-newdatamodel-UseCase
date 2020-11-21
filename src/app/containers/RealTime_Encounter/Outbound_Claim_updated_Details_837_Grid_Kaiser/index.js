@@ -76,7 +76,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
             status: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
             transactionId: condition && props.location.state.data[0].transactionId != 'n' ? props.location.state.data[0].transactionId : '',
             claimStatus: condition && props.location.state.data[0].status != 'n' ? props.location.state.data[0].status : '',
-            incoming_837fileId: '',
+            incoming_837fileId: props.location.state && props.location.state.data[0] && props.location.state.data[0].incoming_837fileId ? props.location.state.data[0].incoming_837fileId : '',
             errorcode: '',
             FileID: condition && props.location.state.data[0].FileID ? props.location.state.data[0].FileID : '',
             F99Status: condition && props.location.state.data[0].F99Status ? props.location.state.data[0].F99Status : '',
@@ -1510,7 +1510,7 @@ export class Outbound_Claim_updated_Details_837_Grid_Kaiser extends React.Compon
                     transactionId: 'n',
                     status: 'n',
                     count: 'n',
-                    incoming_835fileId: event.data.MolinaClaimID
+                    incoming_835fileId: event.data.ClaimID
                 }
             ]
             this.props.history.push('/' + Strings.InboundPaymentDetails, {

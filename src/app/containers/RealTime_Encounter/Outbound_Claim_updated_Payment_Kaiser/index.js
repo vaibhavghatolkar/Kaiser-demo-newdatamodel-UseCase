@@ -46,7 +46,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             State: "",
             type: "",
             providerName: "",
-            startDate: moment().subtract(90, 'd').format('YYYY-MM-DD'),
+            startDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
             endDate: moment().format('YYYY-MM-DD'),
             TotalClaims: 0,
             Accepted: 0,
@@ -247,8 +247,11 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                 let condition = data && data.length > 0 ? true : false
 
                 let summary = [
-                    { name: 'Paid', value: condition ? 75 : 75, color: '#2AC327' },
+                    { name: 'Paid', value: condition ? 77 : 77, color: '#139DC9' },
                     { name: 'Denied', value: condition ? 0 : 0, color: 'red' },
+                    { name: 'Exact Match', value: condition ? 5 : 5, color: '#139DC9' },
+                    { name: 'Duplicate', value: condition ? 72 : 72, color: 'orange' },
+                    
                     // { name: 'Payment Never Submitted', value: condition ? data[0].Payment_Never_Submitted : 0 },
                     // { name: 'Payment Adjustment', value: condition ? data[0].Payment_Adjustment : 0, color: '#F39C12' },
                     // { name: 'WIP 0-30', value: 500, color: '#1DA3CD' },
@@ -625,6 +628,7 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
     _renderSummary(array) {
         let row = []
         array.forEach(item => {
+            
             row.push(
                 <Tiles
                     isClickable={
@@ -662,6 +666,9 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
                                 this.getData()
                             })
                         }
+                        else if (item.name == 'Duplicate') {
+                            this.Inbound835()                       
+                   }
 
 
                     }}
@@ -676,6 +683,28 @@ export class Outbound_Claim_updated_Payment_Kaiser extends React.Component {
             </div>
         )
     }
+
+    Inbound835 = async () => {
+        sessionStorage.setItem('isOutbound', false)
+        let data = [
+            {
+                apiflag: '0',
+                State: 'n',
+                selectedTradingPartner: 'n',
+                startDate: 'n',
+                endDate: 'n',
+                transactionId: 'n',
+                status: 'n',
+                count: 'n',
+                IsDuplicate: "Yes", 
+            }
+        ]
+        this.props.history.push('/' + Strings.InboundPaymentDetails, {
+            data: data
+        })    
+        window.location.reload()
+    }
+
     // _renderTransactions() {
     //     return (
     //         <div className="ag-theme-balham" style={{ height: '400px', padding: '0px', marginLeft: '1px' }}>

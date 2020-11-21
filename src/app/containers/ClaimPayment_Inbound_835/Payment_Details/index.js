@@ -107,7 +107,7 @@ export class InboundPaymentDetails extends React.Component {
             InvoicePattern: props.location.state && props.location.state.data[0] && props.location.state.data[0].InvoicePattern  ? props.location.state.data[0].InvoicePattern : '',
             LOB: props.location.state && props.location.state.data[0] && props.location.state.data[0].LOB  ? props.location.state.data[0].LOB : '',
             ReferenceID: props.location.state && props.location.state.data[0] && props.location.state.data[0].ReferenceID  ? props.location.state.data[0].ReferenceID : '',
-            
+            IsDuplicate: props.location.state && props.location.state.data[0] && props.location.state.data[0].IsDuplicate  ? props.location.state.data[0].IsDuplicate : '',
 
         }
     }
@@ -325,7 +325,7 @@ export class InboundPaymentDetails extends React.Component {
                     transactionId: 'n',
                     status: 'n',
                     count: 'n',
-                    Filter_ClaimId: event.value
+                    incoming_837fileId: event.data.CLP01
                 }
             ]
             this.props.history.push('/' + Strings.Outbound_Claim_updated_Details_837_Grid_Kaiser, {
@@ -372,7 +372,7 @@ export class InboundPaymentDetails extends React.Component {
             { headerName: "Rendering Provider Name", field: "ProviderName", width: 120, },
             { headerName: "Facility Code Value", field: "FacilityCode", width: 120, },
             { headerName: "DRG Code", field: "DigonisCode", width: 120, },
-            { headerName: "837", field: "MolinaClaimID", width: 120, cellStyle: { color: '#139DC9', cursor: 'pointer' }},
+            { headerName: "837", field: "Link837", width: 120, cellStyle: { color: '#139DC9', cursor: 'pointer' }},
         ]
 
 
@@ -390,7 +390,7 @@ export class InboundPaymentDetails extends React.Component {
                        startRow: ${this.state.startRow}, endRow:  ${this.state.endRow},Filter: ${filter} , Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId=="" ? this.state.CLP01List : this.state.incoming_835fileId}",
                        CLP06:"${this.state.clp06List}"
                        ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"" MolinaClaimID:""
-                       Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}"
+                       Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}" IsDuplicate:"${this.state.IsDuplicate}"
                 ) {
                     RefID
                     RecCount
@@ -432,6 +432,7 @@ export class InboundPaymentDetails extends React.Component {
     CLP01
     DigonisCode
     MolinaClaimID
+    Link837
                     }
                   }`
 
@@ -695,7 +696,7 @@ export class InboundPaymentDetails extends React.Component {
             startRow: ${this.state.startRow}, endRow: ${this.state.endRow},Filter:${filter}, Payer:"${this.state.Payer}",Payee:"${this.state.Payee}",CLP01:"${this.state.incoming_835fileId=="" ? this.state.CLP01List : this.state.incoming_835fileId}",
             CLP06:"${this.state.clp06List}"
             ,PatientSubscriberID:"${this.state.PatientSubscriberIDList}",CheckNo:"${this.state.CheckEFTNo}",CheckDate:"${checkDate}" MolinaClaimID:""
-            , Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}"
+            , Service:"${this.state.Service}" InvoicePattern:"${this.state.InvoicePattern}" LOB:"${this.state.LOB}" ReferenceID:"${this.state.ReferenceID}" IsDuplicate:"${this.state.IsDuplicate}"
             ) {
                 RecCount
                 FileId

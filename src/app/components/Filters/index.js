@@ -941,7 +941,7 @@ export class Filters extends React.Component {
                                         this.props.setData(startDate, endDate, selected_val, chartType)
                                     }}
 
-                                    defaultValue={this.props.changeDefault ? 'halfYear' : this.props.days90Filter ? '3' : 'year'}
+                                    defaultValue={this.props.changeDefault ? 'halfYear' : this.props.days90Filter ? '2' : 'year'}
                                 >
                                     <option value="1">Last week</option>
                                     <option value="2">Last 30 days</option>

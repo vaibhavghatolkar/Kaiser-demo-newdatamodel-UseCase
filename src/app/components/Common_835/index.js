@@ -30,7 +30,7 @@ export class Common_835 extends React.Component {
             tradingpartner: [],
             pielabels: [],
             pievalues: [],
-            startDate: (this.props.removeFiles || this.props.removeClaims) ? '' : moment().subtract(90, 'd').format('YYYY-MM-DD'),
+            startDate: (this.props.removeFiles || this.props.removeClaims) ? '' : moment().subtract(30, 'd').format('YYYY-MM-DD'),
             endDate: (this.props.removeFiles || this.props.removeClaims) ? '' : moment().format('YYYY-MM-DD'),
             providerName: '',
             chartType: 'Monthwise',
