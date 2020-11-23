@@ -102,7 +102,7 @@ export class TreasuryFileDetails extends React.Component {
                     query={query}
                     paginationPageSize={10}
                     url={Urls._transaction835Kaiser}
-                    fieldType={'FileDate'}
+                    fieldType={'FileName835'}
                     index={'TreasuryFileDetails'}
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
@@ -113,6 +113,7 @@ export class TreasuryFileDetails extends React.Component {
                     updateFields={this.updateFields}
                      handleColWidth = {140}
                      onClick={this.clickNavigation1}
+                     sorting={true}
                 />
             </div>
         )
@@ -122,11 +123,11 @@ export class TreasuryFileDetails extends React.Component {
         let   columnDefs = [
             { headerName: "File Name", field: "FileName", width: 150, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal', color: '#139DC9', cursor: 'pointer' } },
             { headerName: "File Date", field: "FileDate", width: 140, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Ext Ref ID", field: "Ext_Ref_ID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Kaiser Reference", field: "Kaiser_Reference", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Transaction Code", field: "Tran_Code", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Transaction Description", field: "Tran_Descr", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
-            { headerName: "Company Name", field: "Company_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            // { headerName: "Ext Ref ID", field: "Ext_Ref_ID", width: 120, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            // { headerName: "Kaiser Reference", field: "Kaiser_Reference", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            // { headerName: "Transaction Code", field: "Tran_Code", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            // { headerName: "Transaction Description", field: "Tran_Descr", width: 200, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
+            // { headerName: "Company Name", field: "Company_Name", flex: 1, cellStyle: { wordBreak: 'break-all', 'white-space': 'normal' } },
 
         ]    
         let filter = this.state.filterArray && this.state.filterArray.length > 0 ? JSON.stringify(this.state.filterArray).replace(/"([^"]*)":/g, '$1:') : '[]'
@@ -145,15 +146,7 @@ export class TreasuryFileDetails extends React.Component {
                     RecCount
                     FileName
                     FileDate
-                    Tran_Descr
-                    Ext_Ref_ID
-                    Kaiser_Reference
-                    Tran_Code
-                    Company_Name
-                    Trace_Number
-                    FileName835
-                    FileID835
-                    STID
+                   
                   
                     }
                   }`
@@ -172,7 +165,7 @@ export class TreasuryFileDetails extends React.Component {
                     State={this.state.State}
                     selectedTradingPartner={this.state.selectedTradingPartner}
                     startDate={startDate}
-                  
+                    selectedFileId={this.state.FileNameData}
                     filterClaim={this.state.CompanyDesc}
                     endDate={endDate}
                     updateFields={this.updateFields}
@@ -233,6 +226,7 @@ export class TreasuryFileDetails extends React.Component {
                 removeState={true}
                 FileNameKaiser={true}
                 CompanyDescKaiser={true}
+                CompanyDesc={this.state.CompanyDesc}
             />
         )
     }
@@ -240,6 +234,7 @@ export class TreasuryFileDetails extends React.Component {
     update = (key, value) => {
         this.setState({
             [key]: value,
+            showdetails: false
         }, () => {
             // this._refreshScreen()
         })
